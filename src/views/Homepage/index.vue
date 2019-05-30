@@ -6,67 +6,90 @@
     <el-row class="main-card" :gutter="50">
       <el-col style="margin-left: 50px;" :span="8">
         <h3 style="font-size: 20px;">运营监控</h3>
-        <div class="tab-con">
+        <div class="tab-con" @click="goToContral">
         </div>
       </el-col>
       <el-col :span="7">
         <h3 style="font-size: 20px;">调度运营分析</h3>
         <div class="tab-ans">
-          <el-row :gutter="24" style="margin-top: 20px;">
-            <el-col :span="8" v-for="(item, index) in operationAnalysis" :key="index">
-              <p style="text-align: center; font-size: 16px;">{{item.name}}</p>
-            </el-col>
-          </el-row>
+          <ul class="item-fam">
+            <li class="item-font" v-for="(item, index) in operationAnalysis" :key="index" @click="goToChart(item.path)">
+              <div class="inside-font">
+                <img :src="item.icon" width="30" height="30" class="img-font"/>
+              </div>
+              <p style="text-align: center; font-size: 13px;">{{item.name}}</p>
+            </li>
+          </ul>
+          <div class="simple-font">
+            <div class="simple-inside-font">
+              <img :src="simple.icon" width="40" height="40" class="simple-img-font"/>
+            </div>
+            <p style="text-align: center; font-size: 16px;">{{simple.name}}</p>
+          </div>
         </div>
       </el-col>
       <el-col :span="7">
-        <el-card class="tab-ans" shadow="hover">
-          <h3 style="font-size: 20px;">疲劳监测</h3>
-          <el-row :gutter="24" style="margin-top: 20px;">
-            <el-col :span="8" v-for="(item, index) in tiredContral" :key="index">
-              <el-button class="ans-button" plain type="info">
-                <i :class="item.icon" class="icon-item"></i>
-              </el-button>
-              <p style="text-align: center; font-size: 16px;">{{item.name}}</p>
-            </el-col>
-          </el-row>
-        </el-card>
+        <h3 style="font-size: 20px;">疲劳监测</h3>
+        <div class="tab-contral">
+          <ul class="item-fam">
+            <li class="item-font" v-for="(item, index) in tiredContral" :key="index" @click="goToAlarm(item.path)">
+              <div class="inside-font">
+                <img :src="item.icon" width="40" height="40" class="img-font"/>
+              </div>
+              <p style="text-align: center; font-size: 13px;">{{item.name}}</p>
+            </li>
+          </ul>
+        </div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { Row, Col, Button, Card } from 'element-ui'
+import iconHomeKlfx from '../../assets/images/homeIcon/klfx.png'
+import iconHomeFctc from '../../assets/images/homeIcon/fctc.png'
+import iconHomeMzl from '../../assets/images/homeIcon/mzl.png'
+import iconHomeXlzd from '../../assets/images/homeIcon/xlzd.png'
+import iconHomeYlyl from '../../assets/images/homeIcon/ylyl.png'
+import iconHomeKlgf from '../../assets/images/homeIcon/klgf.png'
+import iconHomeYxsj from '../../assets/images/homeIcon/yxsj.png'
+import iconHomeBjfx from '../../assets/images/homeIcon/bjfx.png'
+import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
+import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
+import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
 export default {
   name: 'Dashboard',
   data () {
     return {
       operationAnalysis: [
-        { name: '客流高峰时刻分析', icon: 'el-icon-s-marketing' },
-        { name: '车辆发车趟次时序图', icon: 'el-icon-sort-up' },
-        { name: '区间满载率查询', icon: 'el-icon-document-checked' },
-        { name: '线路站点登降量查询', icon: 'el-icon-folder-checked' },
-        { name: '客流运力运量分析', icon: 'el-icon-s-unfold' },
-        // { name: 'CAN总线数据实时监测', icon: 'el-icon-view' },
-        // { name: '智能时刻表推荐', icon: 'el-icon-document-copy' },
-        { name: '线路客流高峰断面分析', icon: 'el-icon-pie-chart' },
-        // { name: '视频监控与报警中心', icon: 'el-icon-s-operation' },
-        { name: '线路站间运行时间分析', icon: 'el-icon-time' }
+        { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/operation-analysis/timeTable-analysis' },
+        { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/operation-analysis/trip-order' },
+        { name: '区间满载率查询', icon: iconHomeMzl, path: '/operation-analysis/full-load-rate' },
+        { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/operation-analysis/landing-volume' },
+        { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/operation-analysis/passenger-transport-capacity' },
+        { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/operation-analysis/section-analysis' }
       ],
+      simple: { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/operation-analysis/runtime-analysis' },
       tiredContral: [
-        { name: '报警中心', icon: 'el-icon-warning' },
-        { name: '设备状态', icon: 'el-icon-s-management' },
-        { name: '报警分析', icon: 'el-icon-data-analysis' },
-        { name: '报警类型管理', icon: 'el-icon-s-grid' }
+        { name: '报警中心', icon: iconHomeBjzx, path: '/fatigue-monitoring/alarm-center' },
+        { name: '设备状态', icon: iconHomeBjzt, path: '/fatigue-monitoring/device-status' },
+        { name: '报警分析', icon: iconHomeBjfx, path: '/fatigue-monitoring/alarm-analysis' },
+        { name: '报警类型管理', icon: iconHomeBjlx, path: '/fatigue-monitoring/alarm-management' }
       ]
     }
   },
   components: {
-    'el-row': Row,
-    'el-col': Col,
-    'el-button': Button,
-    'el-card': Card
+  },
+  methods: {
+    goToContral () {
+      this.$router.push('/chart-analysis/chart-analysis')
+    },
+    goToChart (path) {
+      this.$router.push(path)
+    },
+    goToAlarm (path) {
+      this.$router.push(path)
+    }
   }
 }
 </script>
@@ -93,34 +116,96 @@ export default {
       background-size: 100% 100%;
       color: #fff;
       background-color: #409EFF;
-      .con-button {
-        border: 3px solid #fff;
-        display: block;
-        margin: 0 auto;
-        .icon  {
-          font-size: 100px;
-          color: #fff;
-        }
-      }
+      border-radius: 12px;
+    }
+    .tab-con:hover {
+      box-shadow: 5px 5px 5px #000
     }
     .tab-ans {
-      width: 400px;
+      width: 450px;
       height: 400px;
       color: #fff;
-      background-color: #409EFF;
-      .ans-button {
-        border: 3px solid #fff;
-        display: block;
-        margin: 0 auto;
-        .icon-item {
-          font-size: 50px;
-          color: #000;
+      .item-fam {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .item-font {
+          width: 32%;
+          height: 133px;
+          background-color: #409EFF;
+          margin-bottom: 8px;
+          border-radius: 6px;
+          .inside-font {
+            width: 100%;
+            height: 80px;
+            position:relative;
+            .img-font {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              margin-left: -15px;
+              margin-top: 10px;
+            }
+          }
+        }
+        .item-font:hover{
+          box-shadow: 5px 5px 5px #000
         }
       }
+      .simple-font {
+        width: 100%;
+        height: 118px;
+        background-color: #409EFF;
+        border-radius: 6px;
+        .simple-inside-font {
+          width: 100%;
+          height: 60px;
+          position:relative;
+          .simple-img-font {
+            position: absolute;
+            left: 50%;
+            margin-left: -20px;
+            margin-top: 20px;
+          }
+        }
+      }
+      .simple-font:hover {
+        box-shadow: 5px 5px 5px #000
+      }
     }
-    .tab-ser {
+    .tab-contral {
+       width: 450px;
+      height: 400px;
       color: #fff;
-      background: #E6A23C
+      .item-fam {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .item-font {
+          width: 48%;
+          height: 195px;
+          background-color: #53a8ff;
+          margin-bottom: 8px;
+          border-radius: 6px;
+          .inside-font {
+            width: 100%;
+            height: 120px;
+            position:relative;
+            .img-font {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              margin-left: -20px;
+              margin-top: 10px;
+            }
+          }
+        }
+        .item-font:hover {
+          box-shadow: 5px 5px 5px #000
+        }
+      }
     }
   }
 }
