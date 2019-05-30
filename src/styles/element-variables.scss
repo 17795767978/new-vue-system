@@ -1,0 +1,14 @@
+/**
+ *
+ *
+ **/
+
+ $--color-primary: #2196F3;
+
+ $--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+ @import "~element-ui/packages/theme-chalk/src/index";
+
+ :export {
+   theme: $--color-primary;
+ }

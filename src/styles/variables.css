@@ -1,0 +1,18 @@
+/**
+ *
+ *
+ **/
+:export {
+  dark: #212121;
+  light: #f2f2f2;
+  white: #fff;
+  red: #F44336;
+  blue: #03A9F4;
+  indigo: #3F51B5;
+  green: #4CAF50;
+  gray: #9E9E9E;
+  headerHeight: 35px;
+  headerTagHeight: 30px;
+  sidebarMinWidth: 60px;
+  sidebarMaxWidth: 220px;
+}

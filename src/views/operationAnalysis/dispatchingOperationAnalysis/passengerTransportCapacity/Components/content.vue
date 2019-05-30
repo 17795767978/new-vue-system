@@ -1,0 +1,92 @@
+<template>
+  <div class="content-wrapper">
+    <el-row class="up-content">
+      <h3 class="title">
+        {{busLine}}客流运力运量分析（上行）
+      </h3>
+      <div class="heat-chart-wrapper">
+        <upChart :selectData="selectData" :isUpdateUp="isUpdateUp" @isUpdateToUp="isUpdateToUp"></upChart>
+      </div>
+    </el-row>
+    <el-row class="down-content">
+      <h3 class="title">
+        {{busLine}}客流运力运量分析（下行）
+      </h3>
+      <div class="heat-chart-wrapper">
+        <downChart :selectData="selectData" :isUpdateDown="isUpdateDown" @isUpdateToDown="isUpdateToDown"></downChart>
+      </div>
+    </el-row>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+import { Row } from 'element-ui'
+import upChart from './charts/upChart'
+import downChart from './charts/downChart'
+export default {
+  props: {
+    selectData: {
+      type: Object
+    },
+    isUpdateUp: {
+      type: Boolean
+    },
+    isUpdateDown: {
+      type: Boolean
+    }
+  },
+  data () {
+    return {
+      busLine: '1路'
+    }
+  },
+  components: {
+    upChart,
+    downChart,
+    'el-row': Row
+  },
+  created () {},
+  methods: {
+    isUpdateToUp () {
+      this.$emit('isUpdateFaUp', false)
+    },
+    isUpdateToDown () {
+      this.$emit('isUpdateFaDown', false)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.content-wrapper {
+  width: 100%;
+  padding: 20px 20px;
+  box-sizing: border-box;
+  .title {
+    color: #928f8d;
+    text-align: center;
+    margin: 10px 0;
+  }
+  .up-content {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0;
+    // padding-bottom: 5%;
+    .heat-chart-wrapper {
+      width: 80%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+  }
+  .down-content {
+    width: 100%;
+    margin-bottom: 0;
+    // padding-bottom: 10%;
+    .heat-chart-wrapper {
+      width: 80%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+  }
+}
+</style>
