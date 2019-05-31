@@ -115,11 +115,12 @@ export default {
       background-repeat: no-repeat;
       background-size: 100% 100%;
       color: #fff;
-      background-color: #409EFF;
+      background-color: #4fa3e4;
       border-radius: 12px;
     }
     .tab-con:hover {
-      box-shadow: 5px 5px 5px #000
+      background-color: #2089db;
+      transform: scale(0.99)
     }
     .tab-ans {
       width: 450px;
@@ -133,7 +134,7 @@ export default {
         .item-font {
           width: 32%;
           height: 133px;
-          background-color: #409EFF;
+          background-color:  #4fa3e4;
           margin-bottom: 8px;
           border-radius: 6px;
           .inside-font {
@@ -150,13 +151,14 @@ export default {
           }
         }
         .item-font:hover{
-          box-shadow: 5px 5px 5px #000
+          background-color: #2089db;
+          transform: scale(0.96)
         }
       }
       .simple-font {
         width: 100%;
         height: 118px;
-        background-color: #409EFF;
+        background-color:  #4fa3e4;
         border-radius: 6px;
         .simple-inside-font {
           width: 100%;
@@ -171,7 +173,8 @@ export default {
         }
       }
       .simple-font:hover {
-        box-shadow: 5px 5px 5px #000
+        background-color: #2089db;
+        transform: scale(0.97)
       }
     }
     .tab-contral {
@@ -186,7 +189,7 @@ export default {
         .item-font {
           width: 48%;
           height: 195px;
-          background-color: #53a8ff;
+          background-color:  #4fa3e4;
           margin-bottom: 8px;
           border-radius: 6px;
           .inside-font {
@@ -203,7 +206,8 @@ export default {
           }
         }
         .item-font:hover {
-          box-shadow: 5px 5px 5px #000
+          background-color: #2089db;
+          transform: scale(0.97)
         }
       }
     }

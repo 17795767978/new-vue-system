@@ -100,20 +100,16 @@ export default {
         if (valid) {
           if (!this.form.plUuid) {
             this.$api['tiredMonitoring.createWarntype'](this.form).then(res => {
-              if (res.data.head.code === '200') {
-                this.$message.success('创建成功')
-                this.$emit('updateTable')
-                this.dialogFormVisible = false
-              }
+              this.$message.success('创建成功')
+              this.$emit('updateTable')
+              this.dialogFormVisible = false
             })
           } else {
             console.log(this.form)
             this.$api['tiredMonitoring.updateWarntype'](this.form).then(res => {
-              if (res.data.head.code === '200') {
-                this.$message.success('修改成功')
-                this.$emit('updateTable')
-                this.dialogFormVisible = false
-              }
+              this.$message.success('修改成功')
+              this.$emit('updateTable')
+              this.dialogFormVisible = false
             })
           }
         } else {

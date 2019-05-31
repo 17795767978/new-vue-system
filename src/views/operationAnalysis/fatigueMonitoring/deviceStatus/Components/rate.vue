@@ -41,8 +41,8 @@ export default {
   methods: {
     _onLineRate () {
       this.$api['tiredMonitoring.getDeviceStatus']().then(res => {
-        this.deviceCount = res.data.data.deviceCount
-        this.onlineDeviceCount = res.data.data.onlineDeviceCount
+        this.deviceCount = res.deviceCount
+        this.onlineDeviceCount = res.onlineDeviceCount
       })
     }
   },

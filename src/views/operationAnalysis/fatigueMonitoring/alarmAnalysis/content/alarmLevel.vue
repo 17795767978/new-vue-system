@@ -12,6 +12,7 @@
 <script type="type/ecmascript-6">
 // import { levelRate } from 'server/interface'
 import elementResizeDetector from 'element-resize-detector'
+import moment from 'moment'
 export default {
   props: {
     selectData: {
@@ -21,20 +22,38 @@ export default {
   data () {
     return {
       levelData: [],
-      observer: null
+      observer: null,
+      legendData: [],
+      echartData: [
+        {
+          name: '一级',
+          value: 0
+        },
+        {
+          name: '二级',
+          value: 0
+        },
+        {
+          name: '三级',
+          value: 0
+        }
+      ]
     }
   },
   components: {
   },
   created () {
+    let start = new Date()
+    let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
     this._levelRate({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,
       busPlateNumber: this.selectData.busPlateNumber,
       // startTime: this.selectData.valueTime[0], // 默认7天，昨天开始.时间格式
       // endTime: this.selectData.valueTime[1],
-      startTime: '',
-      endTime: ''
+      startTime,
+      endTime
     })
   },
   mounted () {
@@ -51,8 +70,8 @@ export default {
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
           busPlateNumber: this.selectData.busPlateNumber,
-          startTime: '',
-          endTime: ''
+          startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:MM:SS'),
+          endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:MM:SS')
         })
       }
     }
@@ -60,10 +79,23 @@ export default {
   methods: {
     _levelRate (params) {
       this.$api['tiredMonitoring.getWarnPie'](params).then(res => {
-        this.levelData = res.data.data
-        if (this.levelData) {
-          this.drawLine()
+        this.levelData = res
+        this.levelData = this.levelData.sort((prev, next) => parseInt(prev.warnLevel) - parseInt(next.warnLevel))
+        if (res.length > 0) {
+          this.legendData = this.levelData.map(item => item.warnLevel)
+          this.levelData.forEach(list => {
+            if (list.warnLevel === '1') {
+              this.echartData[0].value = list.warnNum
+            } else if (list.warnLevel === '2') {
+              this.echartData[1].value = list.warnNum
+            } else if (list.warnLevel === '3') {
+              this.echartData[2].value = list.warnNum
+            }
+          })
+        } else {
+          this.echartData = [{ name: '一级', value: 0 }, { name: '二级', value: 0 }, { name: '三级', value: 0 }]
         }
+        this.drawLine()
       })
     },
     drawLine () {
@@ -82,7 +114,7 @@ export default {
         legend: {
           orient: 'vertical',
           x: 'right',
-          data: ['等级1', '等级2', '等级3']
+          data: ['一级', '二级', '三级']
         },
         series: [
           {
@@ -102,11 +134,7 @@ export default {
                 }
               }
             },
-            data: [
-              { value: this.levelData[0].warnNum, name: '等级1' },
-              { value: this.levelData[1].warnNum, name: '等级2' },
-              { value: this.levelData[2].warnNum, name: '等级3' }
-            ]
+            data: this.echartData
           }
         ]
       })

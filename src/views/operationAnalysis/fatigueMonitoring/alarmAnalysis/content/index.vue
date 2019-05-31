@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <el-row :gutter="24">
+    <el-row :gutter="24" style="margin-bottom: 20px;">
       <el-col :span="12">
         <alarmLevel :selectData="selectData"></alarmLevel>
       </el-col>
@@ -24,7 +24,6 @@ import alarmLevel from './alarmLevel'
 import alarmRealTime from './alarmRealTime'
 import alarmTable from './alarmTable'
 import alarmTerm from './alarmTerm'
-import { Row, Col } from 'element-ui'
 export default {
   props: {
     selectData: {
@@ -40,9 +39,7 @@ export default {
     alarmLevel,
     alarmRealTime,
     alarmTable,
-    alarmTerm,
-    'el-row': Row,
-    'el-col': Col
+    alarmTerm
   },
   watch: {
   },

@@ -28,7 +28,7 @@ const selectData = {
           lineName: ''
         }).then(res => {
           let list = []
-          res.data.data.forEach(item => {
+          res.forEach(item => {
             list.push({
               label: item.lineName,
               value: item.lineUuid
@@ -44,7 +44,7 @@ const selectData = {
     getStationList ({ commit }) {
       return new Promise((resolve, reject) => {
         api['wholeInformation.getStation']().then(res => {
-          commit('STATION_DATA', res.data.data.list)
+          commit('STATION_DATA', res)
           resolve(res)
         }).catch(error => {
           reject(error)
@@ -58,7 +58,7 @@ const selectData = {
           orgName: ''
         }).then(res => {
           let list = []
-          res.data.data.forEach(item => {
+          res.forEach(item => {
             list.push({
               label: item.orgName,
               value: item.orgUuid

@@ -254,7 +254,7 @@ export default {
   methods: {
     _alarmType (params) {
       this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
-        let dataArr = res.data.data
+        let dataArr = res
         this.warnOptions = []
         dataArr.forEach((list, index) => {
           this.warnOptions[index] = {
@@ -266,8 +266,9 @@ export default {
     },
     _tableList (params) {
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
-        this.tableData = res.data.data.list
-        this.total = res.data.data.total
+        console.log(res)
+        this.tableData = res.list
+        this.total = res.total
         this.json_data = this.tableData
       })
     },
@@ -353,7 +354,8 @@ export default {
     },
     onSave () {
       this.$api['tiredMonitoring.warnExpert'](this.formInline).then(res => {
-        if (res.data.data.url.length > 0) {
+        console.log(res)
+        if (res.url.length > 0) {
           let url = `http:/${res.data.data.url}`
           // window.location.href = url;
           window.open(url)

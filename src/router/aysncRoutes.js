@@ -169,7 +169,7 @@ export const aysncRoutesMap = [
       },
       {
         path: 'alarm-content',
-        component: _import_('operationAnalysis/fatigueMonitoring/alarmContent/index'),
+        component: _import_('operationAnalysis/fatigueMonitoring/alarmCenter/alarmContent/index'),
         name: 'alarmContent',
         hidden: true,
         meta: {

@@ -57,6 +57,7 @@
 <script type="type/ecmascript-6">
 // import {alarmTableAna} from 'server/interface';
 import { Pagination, Table } from 'element-ui'
+import moment from 'moment'
 export default {
   props: {
     selectData: {
@@ -75,14 +76,15 @@ export default {
     'el-table': Table
   },
   created () {
+    let start = new Date()
+    let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
     this._alarmTableAna({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,
       busPlateNumber: this.selectData.busPlateNumber,
-      // startTime: this.selectData.valueTime[0], // 默认7天，昨天开始.时间格式
-      // endTime: this.selectData.valueTime[1],
-      startTime: '',
-      endTime: '',
+      startTime,
+      endTime,
       pageSize: 10,
       pageNum: this.currentPage
     })
@@ -95,8 +97,8 @@ export default {
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
           busPlateNumber: this.selectData.busPlateNumber,
-          startTime: '',
-          endTime: '',
+          startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:MM:SS'),
+          endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:MM:SS'),
           pageSize: 10,
           pageNum: this.currentPage
         })
@@ -106,8 +108,8 @@ export default {
   methods: {
     _alarmTableAna (params) {
       this.$api['tiredMonitoring.getWarnLevelList'](params).then(res => {
-        this.tableData = res.data.data.list
-        this.total = res.data.data.total
+        this.tableData = res.list
+        this.total = res.total
         this.tableData.forEach((item, index) => {
           item.total = Number(item.warnLevel1Num) + Number(item.warnLevel2Num) + Number(item.warnLevel3Num)
         })

@@ -153,7 +153,7 @@ export default {
   methods: {
     _statusTable (params) {
       this.$api['tiredMonitoring.getLineDeviceStatusPage'](params).then(res => {
-        this.tableData = res.data.data.list
+        this.tableData = res.list
         this.total = res.data.data.total
       })
     },
@@ -177,8 +177,8 @@ export default {
         lineId: row.lineUuid
       }).then(res => {
         this.dialogTableVisible = true
-        this.lineTableData = res.data.data.list
-        this.lineTotal = res.data.data.total
+        this.lineTableData = res.list
+        this.lineTotal = res.total
       })
     },
     // 外层table
@@ -200,8 +200,8 @@ export default {
         lineId: this.lineId
       }).then(res => {
         this.dialogTableVisible = true
-        this.lineTableData = res.data.data.list
-        this.lineTotal = res.data.data.total
+        this.lineTableData = res.list
+        this.lineTotal = res.total
       })
     },
     getRow (row) {

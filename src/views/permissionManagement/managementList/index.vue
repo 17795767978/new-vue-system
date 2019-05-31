@@ -13,12 +13,12 @@
         style="width: 100%">
         <el-table-column align="center" label="账号">
           <template slot-scope="scope">
-            <span>{{scope.row.account}}</span>
+            <span>{{scope.row.userAccount}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="管理员姓名">
           <template slot-scope="scope">
-            <span>{{scope.row.name}}</span>
+            <span>{{scope.row.userReallName}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="角色">
@@ -26,10 +26,9 @@
             <span>{{scope.row.roleName}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="创建时间">
-          <template slot-scope="scope">
-            <span>{{scope.row.createTime}}</span>
-          </template>
+        <el-table-column align="center" label="创建时间" :formatter="forMatterCreateTime">
+        </el-table-column>
+        <el-table-column align="center" label="更新时间" :formatter="forMatterUpdateTime">
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
@@ -40,12 +39,12 @@
               <el-button
                 size="mini"
                 type="primary"
-                @click="handleEditAdmin(scope.row.id)"
+                @click="handleEditAdmin(scope.row.userId)"
               >编辑</el-button>
               <el-button
                 size="mini"
                 type="primary"
-                @click="handleRemoveAdmin(scope.row.id)"
+                @click="handleRemoveAdmin(scope.row.userId)"
               >删除</el-button>
             </div>
           </template>
@@ -66,33 +65,46 @@
       :visible.sync="dialogVisible"
       width="420px">
       <el-form label-width="100px" :model="adminForm" ref="adminForm" :rules="rules">
-        <el-form-item label="账号：" prop="account">
+        <el-form-item label="账号：" prop="userAccount">
           <el-input
             style="width: 240px"
             :disabled="isDisable"
             placeholder="请输入账号"
-            v-model="adminForm.account"></el-input>
+            v-model="adminForm.userAccount"></el-input>
         </el-form-item>
-        <el-form-item label="密码：" prop="password">
+        <el-form-item label="密码：" prop="userPassword">
           <el-input
             type="password"
             style="width: 240px"
             placeholder="请输入密码"
-            v-model="adminForm.password"></el-input>
+            v-model="adminForm.userPassword"></el-input>
         </el-form-item>
-        <el-form-item label="姓名：" prop="name">
+        <el-form-item label="姓名：" prop="userReallName">
           <el-input
             style="width: 240px"
             placeholder="请输入姓名"
-            v-model="adminForm.name"></el-input>
+            v-model="adminForm.userReallName"></el-input>
         </el-form-item>
-        <el-form-item label="角色：" prop="roleId">
+        <el-form-item label="是否禁用：" prop="enabled">
           <el-select
             style="width: 240px"
-            v-model="adminForm.roleId"
+            v-model="adminForm.enabled"
             placeholder="请选择">
             <el-option
-              v-for="item in roleOptions"
+              v-for="item in enableOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="性别：" prop="userGender">
+          <el-select
+            style="width: 240px"
+            v-model="adminForm.userGender"
+            placeholder="请选择">
+            <el-option
+              v-for="item in maleOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -108,6 +120,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: 'Admin',
   data () {
@@ -120,33 +133,57 @@ export default {
       total: 0,
       dialogVisible: false,
       adminForm: {
-        account: '',
-        password: '',
-        name: '',
-        roleId: ''
+        userAccount: '',
+        userPassword: '',
+        userReallName: '',
+        userGender: '',
+        enabled: ''
+        // roleId: ''
       },
       rules: {
-        account: [
+        userAccount: [
           { required: true, message: '请输入账号', trigger: 'blur' }
         ],
-        password: [
+        userPassword: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ],
-        name: [
+        userReallName: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
         ],
-        roleId: [
+        userGender: [
+          { required: true, message: '请选择', trigger: 'blur' }
+        ],
+        enabled: [
           { required: true, message: '请选择', trigger: 'blur' }
         ]
       },
-      roleOptions: [],
-      adminId: '',
+      enableOptions: [
+        {
+          value: 1,
+          label: '启用'
+        },
+        {
+          value: 2,
+          label: '禁用'
+        }
+      ],
+      maleOptions: [
+        {
+          label: '男',
+          value: 1
+        },
+        {
+          label: '女',
+          value: 2
+        }
+      ],
+      userId: '',
       isAdd: true,
       isDisable: false
     }
   },
   created () {
-    this.getAdminList('sys/user/page', {
+    this.getAdminList({
       current: 1,
       size: 10
     })
@@ -162,14 +199,11 @@ export default {
     // })
   },
   methods: {
-    getAdminList (url, params) {
-      // getSysAdminList(url, params).then(res => {
-      //   if (res.code === 0) {
-      //     this.list = res.data.records
-      //     this.current = res.data.current
-      //     this.total = res.data.total
-      //   }
-      // })
+    getAdminList (params) {
+      this.$api['permission.userList'](params).then(res => {
+        // console.log(res)
+        this.list = res
+      })
     },
     onSearch () {
       this.getAdminList('sys/user/page', {
@@ -201,16 +235,14 @@ export default {
       this.$refs['adminForm'].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
-            // addSysAdmin('sys/user/add', this.adminForm).then(res => {
-            //   if (res.code === 0) {
-            //     this.dialogVisible = false
-            //     this.$message.success('添加成功！')
-            //     this.getAdminList('sys/user/page', {
-            //       current: 1,
-            //       size: 10
-            //     })
-            //   }
-            // })
+            this.$api['permission.add'](this.adminForm).then(res => {
+              this.dialogVisible = false
+              this.$message.success('添加成功！')
+              this.getAdminList('sys/user/page', {
+                current: 1,
+                size: 10
+              })
+            })
           } else {
             // editSysAdmin('sys/user/update', {
             //   id: this.adminId,
@@ -245,24 +277,28 @@ export default {
       // })
     },
     handleEditAdmin (id) {
-      this.$refs['adminForm'].resetFields()
+      // this.$refs['adminForm'].resetFields()
       this.dialogVisible = true
       this.isAdd = false
-      this.adminId = id
+      this.userId = id
       this.isDisable = true
-      // getAdminInfoById('sys/user/info/id', {
-      //   id
-      // }).then(res => {
-      //   if (res.code === 0) {
-      //     Object.keys(this.adminForm).forEach(key => {
-      //       if (res.data.sysUser.hasOwnProperty(key)) {
-      //         this.adminForm[key] = res.data.sysUser[key]
-      //       }
-      //     })
-      //     this.adminForm.roleId = res.data.sysRoleId
-      //     this.adminForm.password = ''
-      //   }
-      // })
+      this.$api['permission.detail']({
+        id
+      }).then(res => {
+        // Object.keys(this.adminForm).forEach(key => {
+        //   if (res.data.sysUser.hasOwnProperty(key)) {
+        //     this.adminForm[key] = res.data.sysUser[key]
+        //   }
+        // })
+        this.adminForm.roleId = res.sysRoleId
+        this.adminForm.password = ''
+      })
+    },
+    forMatterCreateTime (row) {
+      return moment(row.createTime).format('YYYY-MM-DD HH:MM:SS')
+    },
+    forMatterUpdateTime (row) {
+      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:SS')
     }
   }
 }

@@ -13,6 +13,7 @@
 // import { alarmTimeChart } from 'server/interface'
 import { max } from '../../../../../utils/max'
 import elementResizeDetector from 'element-resize-detector'
+import moment from 'moment'
 export default {
   props: {
     selectData: {
@@ -35,14 +36,15 @@ export default {
   components: {
   },
   created () {
+    let start = new Date()
+    let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
     this._alarmTimeChart({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,
       busPlateNumber: this.selectData.busPlateNumber,
-      // startTime: this.selectData.valueTime[0], // 默认7天，昨天开始.时间格式
-      // endTime: this.selectData.valueTime[1],
-      startTime: '',
-      endTime: '',
+      startTime,
+      endTime,
       warnUuid: ''
     })
   },
@@ -57,23 +59,20 @@ export default {
       deep: true,
       handler () {
         this.echartName = `(${this.warnObj.warnTypeName})报警次数时间趋势`
-        this._alarmTimeChart({
-          orgId: this.selectData.orgId,
-          lineId: this.selectData.lineId,
-          busPlateNumber: this.selectData.busPlateNumber,
-          // startTime: this.selectData.valueTime[0], // 默认7天，昨天开始.时间格式
-          // endTime: this.selectData.valueTime[1],
-          startTime: '',
-          endTime: '',
-          warnUuid: this.warnObj.warnUuid
-        })
+        this.getNewChart()
+      }
+    },
+    selectData: {
+      deep: true,
+      handler () {
+        this.getNewChart()
       }
     }
   },
   methods: {
     _alarmTimeChart (params) {
       this.$api['tiredMonitoring.getWarnLine'](params).then(res => {
-        this.listData = res.data.data.list
+        this.listData = res
         this.countData = this.listData.map(list => Number(list.count))
         this.contrastCountData = this.listData.map(list => Number(list.contrastCount))
         this.xAise = this.listData.map(list => list.xdate)
@@ -81,6 +80,20 @@ export default {
         if (this.listData.length > 0) {
           this.drawLine()
         }
+      })
+    },
+    getNewChart () {
+      let start = new Date()
+      let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
+      let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
+      console.log(this.selectData)
+      this._alarmTimeChart({
+        orgId: this.selectData.orgId,
+        lineId: this.selectData.lineId,
+        busPlateNumber: this.selectData.busPlateNumber,
+        startTime: this.selectData.startTime || startTime,
+        endTime: this.selectData.endTime || endTime,
+        warnUuid: this.warnObj.warnUuid
       })
     },
     drawLine () {
@@ -121,6 +134,7 @@ export default {
             name: '次数',
             type: 'line',
             data: this.countData,
+            smooth: true,
             lineStyle: {
               normal: {
                 color: 'rgba(80,141,255)'
@@ -145,6 +159,7 @@ export default {
           {
             name: '环比上周',
             type: 'line',
+            smooth: true,
             data: this.contrastCountData,
             lineStyle: {
               normal: {

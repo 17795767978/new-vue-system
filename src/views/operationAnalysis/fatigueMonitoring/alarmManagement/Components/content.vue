@@ -1,6 +1,6 @@
 <template>
   <div class="alarm-table">
-    <el-row>
+    <el-row style="margin-bottom: 20px;">
       <el-button type="success" @click="AddAlarm">新增报警类型</el-button>
     </el-row>
     <el-table
@@ -109,9 +109,9 @@ export default {
   methods: {
     _alarmManageTable (params) {
       this.$api['tiredMonitoring.getWarnTypeList'](params).then(res => {
-        let tableArr = res.data.data.list
+        let tableArr = res.list
         this.tableData = tableArr.sort((prev, next) => next.plSort - prev.plSort)
-        this.total = res.data.data.total
+        this.total = res.total
       })
     },
     handleBan (row) {
@@ -119,12 +119,10 @@ export default {
         plUuid: row.plUuid,
         plIsvalid: 1
       }).then(res => {
-        if (res.data.head.code === '200') {
-          this._alarmManageTable({
-            pageSize: 10,
-            pageNum: this.currentPage
-          })
-        }
+        this._alarmManageTable({
+          pageSize: 10,
+          pageNum: this.currentPage
+        })
       })
     },
     handleOpen (row) {
@@ -132,12 +130,10 @@ export default {
         plUuid: row.plUuid,
         plIsvalid: 0
       }).then(res => {
-        if (res.data.head.code === '200') {
-          this._alarmManageTable({
-            pageSize: 10,
-            pageNum: this.currentPage
-          })
-        }
+        this._alarmManageTable({
+          pageSize: 10,
+          pageNum: this.currentPage
+        })
       })
     },
     handleClick (row) {

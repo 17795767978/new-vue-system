@@ -31,7 +31,6 @@ import personDetail from './Components/personDetail'
 import picDetail from './Components/picDetail'
 import videoDetail from './Components/videoDetail'
 import mapDetail from './Components/mapDetail'
-import { Row, Col, Cal } from 'element-ui'
 // import moment from 'moment';
 export default {
   name: 'alarmContent',
@@ -45,10 +44,7 @@ export default {
     personDetail,
     picDetail,
     videoDetail,
-    mapDetail,
-    'el-row': Row,
-    'el-col': Col,
-    'el-card': Cal
+    mapDetail
   },
   created () {
     this._warnInfoDetail({
@@ -59,7 +55,7 @@ export default {
   methods: {
     _warnInfoDetail (params) {
       this.$api['tiredMonitoring.getWarnDetail'](params).then(res => {
-        this.busDetails = res.data.data
+        this.busDetails = res
       })
     }
   }

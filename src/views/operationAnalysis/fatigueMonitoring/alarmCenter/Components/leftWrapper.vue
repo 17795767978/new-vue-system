@@ -59,10 +59,10 @@ export default {
   methods: {
     _lineTree () {
       this.$api['tiredMonitoring.getLineBusTree']().then(res => {
-        let levelOne = res.data.data.filter(list => list.levelsType === '0')
-        let levelTwo = res.data.data.filter(list => list.levelsType === '1')
-        let levelThree = res.data.data.filter(list => list.levelsType === '2')
-        let levelFour = res.data.data.filter(list => list.levelsType === '3')
+        let levelOne = res.filter(list => list.levelsType === '0')
+        let levelTwo = res.filter(list => list.levelsType === '1')
+        let levelThree = res.filter(list => list.levelsType === '2')
+        let levelFour = res.filter(list => list.levelsType === '3')
         this.lineList = []
         this.lineList.length = levelOne.length
         levelOne.forEach((level, index) => {

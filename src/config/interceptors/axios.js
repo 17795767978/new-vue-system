@@ -17,7 +17,7 @@ export function axiosRequestSucessFunc (config) {
   // config.headers['Content-type'] = 'application/x-www-form-urlencoded'
   const token = store.getters.token
   if (token) {
-    config.headers['Authorization'] = token
+    config.headers.common['authorization'] = token
   }
   return config
 }

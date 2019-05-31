@@ -1,5 +1,5 @@
 import { getToken, setToken, removeToken } from '@/service/expands/auth'
-// import api from '@/plugins/api'
+import api from '@/plugins/api'
 /**
  * User STORE
  */
@@ -19,9 +19,9 @@ const user = {
 
   mutations: {
     SET_TOKEN (state, data) {
-      // this.userInfo = data.userInfo
+      state.userInfo = data.userInfo
       // state.userId = data.userInfo.userId
-      state.token = data
+      state.token = data.token
       setToken(data.token)
     },
     REMOVE_TOKEN (state, data) {
@@ -57,14 +57,14 @@ const user = {
      */
     userLogin ({ commit, state }, params) {
       return new Promise((resolve, reject) => {
-        commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
-        resolve()
-        // api['user.login'](params).then(res => {
-        //   commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
-        //   resolve()
-        // }).catch(err => {
-        //   reject(err)
-        // })
+        // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
+        // resolve()
+        api['user.login'](params).then(res => {
+          commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+          resolve()
+        }).catch(err => {
+          reject(err)
+        })
       })
     },
     /**

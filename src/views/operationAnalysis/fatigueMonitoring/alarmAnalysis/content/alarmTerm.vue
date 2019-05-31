@@ -13,6 +13,7 @@
 // import {alartTerm} from 'server/interface';
 import { max } from '../../../../../utils/max'
 import elementResizeDetector from 'element-resize-detector'
+import moment from 'moment'
 export default {
   props: {
     selectData: {
@@ -30,12 +31,15 @@ export default {
   components: {
   },
   created () {
+    let start = new Date()
+    let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
     this._alartTerm({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,
       busPlateNumber: this.selectData.busPlateNumber,
-      startTime: '',
-      endTime: ''
+      startTime,
+      endTime
     })
   },
   mounted () {
@@ -44,10 +48,37 @@ export default {
       this.$echarts.init(document.getElementById('echart-term')).resize()
     })
   },
+  watch: {
+    selectData: {
+      deep: true,
+      handler () {
+        let start = new Date()
+        let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
+        let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
+        if (this.selectData.valueTime.length !== 0) {
+          this._alartTerm({
+            orgId: this.selectData.orgId,
+            lineId: this.selectData.lineId,
+            busPlateNumber: this.selectData.busPlateNumber,
+            startTime: this.selectData.valueTime[0],
+            endTime: this.selectData.valueTime[1]
+          })
+        } else {
+          this._alartTerm({
+            orgId: this.selectData.orgId,
+            lineId: this.selectData.lineId,
+            busPlateNumber: this.selectData.busPlateNumber,
+            startTime,
+            endTime
+          })
+        }
+      }
+    }
+  },
   methods: {
     _alartTerm (params) {
       this.$api['tiredMonitoring.getWarnSort'](params).then(res => {
-        let arr = res.data.data
+        let arr = res
         this.listData = arr.sort((i, k) => k.count - i.count)
         this.echartsData = this.listData.map(list => Number(list.count))
         this.xAxise = this.listData.map(list => list.warnTypeName)
@@ -89,7 +120,7 @@ export default {
         yAxis: [
           {
             type: 'value',
-            max: this.maxNum + this.maxNum / 6,
+            max: Math.ceil(this.maxNum + this.maxNum / 6),
             min: 0
           }
         ],

@@ -45,6 +45,7 @@
 // import moment from 'moment';
 // import { lineList, comList } from 'server/interface';
 import { Form, Button, DatePicker, Input, Select } from 'element-ui'
+import moment from 'moment'
 export default {
   data () {
     return {
@@ -82,6 +83,11 @@ export default {
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
+    let start = new Date()
+    this.formInline.endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
+    this.formInline.startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
+    this.formInline.valueTime = [this.formInline.startTime, this.formInline.endTime]
+    console.log(this.formInline)
   },
   methods: {
     onSubmit () {
