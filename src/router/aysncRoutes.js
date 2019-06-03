@@ -16,7 +16,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '运营监控',
       icon: 'nocturne icon-dash',
-      role: ['user']
+      roles: ['/chart-analysis']
     },
     children: [{
       path: 'chart-analysis',
@@ -25,7 +25,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '运营监控',
         icon: 'nocturne icon-dash',
-        role: ['user']
+        roles: ['/chart-analysis']
       }
     }]
   },
@@ -35,7 +35,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '运营分析',
       icon: 'nocturne icon-dash',
-      role: ['admin']
+      roles: ['/operation-analysis', '/safety-supervision', '/fatigue-monitoring']
     },
     children: [{
       path: '/operation-analysis',
@@ -44,7 +44,8 @@ export const aysncRoutesMap = [
       meta: {
         title: '调度运营分析',
         icon: 'nocturne icon-dash',
-        role: ['admin']
+        path: 'runtime-analysis',
+        roles: ['/timeTable-analysis', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity']
       },
       children: [{
         path: 'timeTable-analysis',
@@ -52,7 +53,8 @@ export const aysncRoutesMap = [
         name: 'timeTableAnalysis',
         meta: {
           title: '客流高峰时刻分析',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/timeTable-analysis']
         }
       },
       {
@@ -61,7 +63,8 @@ export const aysncRoutesMap = [
         name: 'sectionAnalysis',
         meta: {
           title: '客流高峰断面分析',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/section-analysis']
         }
       },
       {
@@ -70,7 +73,8 @@ export const aysncRoutesMap = [
         name: 'tripOrder',
         meta: {
           title: '发车趟次时序图',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/trip-order']
         }
       },
       {
@@ -79,7 +83,8 @@ export const aysncRoutesMap = [
         name: 'fullLoadRate',
         meta: {
           title: '区间满载率查询',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/full-load-rate']
         }
       },
       {
@@ -88,7 +93,8 @@ export const aysncRoutesMap = [
         name: 'landingVolume',
         meta: {
           title: '站点登降量查询',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/landing-volume']
         }
       },
       {
@@ -97,7 +103,8 @@ export const aysncRoutesMap = [
         name: 'runtimeAnalysis',
         meta: {
           title: '站间运行时间分析',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/runtime-analysis']
         }
       },
       {
@@ -106,7 +113,8 @@ export const aysncRoutesMap = [
         name: 'passengerTransportCapacity',
         meta: {
           title: '客流运力运量分析',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/passenger-transport-capacity']
         }
       }
       ]
@@ -118,7 +126,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '安全监管',
         icon: 'nocturne icon-dash',
-        role: ['admin']
+        roles: ['/vehicle-fault-alarm', '/real-time-dashboard']
       },
       children: [{
         path: 'vehicle-fault-alarm',
@@ -126,7 +134,8 @@ export const aysncRoutesMap = [
         name: 'vehicleFaultAlarm',
         meta: {
           title: '车辆故障报警',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/vehicle-fault-alarm']
         }
       },
       {
@@ -135,7 +144,8 @@ export const aysncRoutesMap = [
         name: 'realTimeDashboard',
         meta: {
           title: '实时仪表盘',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/real-time-dashboard']
         }
       }
       ]
@@ -147,7 +157,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '疲劳监测',
         icon: 'nocturne icon-dash',
-        role: ['admin']
+        roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management']
       },
       children: [{
         path: 'alarm-center',
@@ -155,7 +165,8 @@ export const aysncRoutesMap = [
         name: 'alarmCenter',
         meta: {
           title: '报警中心',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/alarm-center']
         }
       },
       {
@@ -165,7 +176,8 @@ export const aysncRoutesMap = [
         hidden: true,
         meta: {
           title: '报警中心详情',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/alarm-content']
         }
       },
       {
@@ -174,7 +186,8 @@ export const aysncRoutesMap = [
         name: 'deviceStatus',
         meta: {
           title: '设备状态',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/device-status']
         }
       },
       {
@@ -183,7 +196,8 @@ export const aysncRoutesMap = [
         name: 'alarmAnalysis',
         meta: {
           title: '报警分析',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/alarm-analysis']
         }
       },
       {
@@ -192,7 +206,8 @@ export const aysncRoutesMap = [
         name: 'alarmManagement',
         meta: {
           title: '报警类型管理',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/alarm-management']
         }
       }
       ]
@@ -206,7 +221,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '权限管理',
       icon: 'nocturne icon-dash',
-      role: ['admin']
+      roles: ['/management-list', '/role-list']
     },
     children: [
       {
@@ -215,7 +230,8 @@ export const aysncRoutesMap = [
         name: 'managementList',
         meta: {
           title: '管理员列表',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/management-list']
         }
       },
       {
@@ -224,7 +240,8 @@ export const aysncRoutesMap = [
         name: 'roleList',
         meta: {
           title: '角色列表',
-          icon: 'nocturne icon-dash'
+          icon: 'nocturne icon-dash',
+          roles: ['/role-list']
         }
       }
       // {
