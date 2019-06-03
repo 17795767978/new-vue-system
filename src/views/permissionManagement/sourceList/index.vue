@@ -107,7 +107,7 @@
           :data="treeData"
           ref="tree"
           show-checkbox
-          node-key="resourceId"
+          node-key="id"
           :default-checked-keys="defaultTreeData"
           :props="defaultProps">
         </el-tree>
@@ -172,7 +172,7 @@ export default {
       updateWrapper: false,
       roleName: '',
       enabled: '',
-      roleId: '',
+      allotId: '',
       adminForm: {
         roleId: '',
         roleSort: '',
@@ -206,7 +206,7 @@ export default {
       ],
       defaultProps: {
         children: 'children',
-        label: 'name'
+        label: 'label'
       },
       treeData: [],
       defaultTreeData: [],
@@ -216,7 +216,6 @@ export default {
   },
   created () {
     this.getSysRoleList()
-    this.getSourceList()
   },
   methods: {
     getSysRoleList () {
@@ -225,37 +224,6 @@ export default {
         pageNumber: this.currentPage
       }).then(res => {
         this.list = res.list
-      })
-    },
-    getSourceList () {
-      this.$api['resource.list']().then(res => {
-        let list = []
-        let data = []
-        res.forEach((item, index) => {
-          list[index] = {
-            resourceId: item.resourceId,
-            resourceParentId: item.resourceParentId,
-            name: item.resourceTitle
-          }
-        })
-        data = list.filter(item => item.resourceParentId === null)
-        data.forEach((item, index) => {
-          this.treeData[index] = {
-            resourceId: item.resourceId,
-            name: item.name,
-            children: []
-          }
-        })
-        console.log(this.treeData)
-        this.treeData.forEach((tree, index) => {
-          tree.children = list.filter(i => i.resourceParentId === tree.resourceId)
-        })
-        this.treeData.forEach((tree, index) => {
-          tree.children.forEach(child => {
-            child.children = list.filter(i => i.resourceParentId === child.resourceId)
-          })
-        })
-        console.log(this.treeData)
       })
     },
     onRoleSubmit () {
@@ -296,7 +264,7 @@ export default {
     },
     handleAllot (id) {
       this.dialogRoleVisible = true
-      this.roleId = id
+      this.allotId = id
       // queryPermission('sys/function/function/query', {
       //   roleId: id
       // }).then(res => {
@@ -307,12 +275,6 @@ export default {
       // })
     },
     onAllotubmit () {
-      let allresourceIds = []
-      allresourceIds = this.$refs.tree.getHalfCheckedNodes().map(item => item.resourceId)
-
-      allresourceIds = [...allresourceIds, ...this.$refs.tree.getCheckedKeys()]
-      console.log(allresourceIds)
-      // getHalfCheckedNodes
       // const checkedKeys = this.$refs.tree.getCheckedKeys()
       // updateSysRole('sys/role/function/update', {
       //   checkedKeys: checkedKeys.join(','),
@@ -323,14 +285,6 @@ export default {
       //     this.$message.success('分配成功！')
       //   }
       // })
-      const resourceIds = allresourceIds
-      this.$api['resource.updateRole']({
-        resourceIds,
-        roleId: this.roleId
-      }).then(res => {
-        this.dialogRoleVisible = false
-        this.$message.success('分配成功！')
-      })
     },
     handleCheck (id) {
       this.updateWrapper = true

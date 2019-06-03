@@ -158,14 +158,14 @@ export default {
       })
     },
     formatterTime (row) {
-      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:SS')
+      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:ss')
     },
     formatterRate (row) {
       let num = (row.onlineDeviceCount / row.deviceCount) * 100
       return JSON.stringify(num).substring(0, 5)
     },
     formatterTimeInside (row) {
-      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:SS')
+      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:ss')
     },
     handleClick (row) {
       // console.log(row);

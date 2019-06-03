@@ -44,8 +44,8 @@ export default {
   },
   created () {
     let start = new Date()
-    let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
-    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
+    let endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:s')
     this._levelRate({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,
@@ -70,8 +70,8 @@ export default {
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
           busPlateNumber: this.selectData.busPlateNumber,
-          startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:MM:SS'),
-          endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:MM:SS')
+          startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:MM:ss'),
+          endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:MM:ss')
         })
       }
     }

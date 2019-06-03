@@ -82,7 +82,7 @@ export default {
           this.$store
             .dispatch('userLogin', { ...this.loginForm })
             .then(() => {
-              this.$router.push('/')
+              this.$router.push('/homepage/home')
             })
             .finally(() => {
               this.isLoginning = false

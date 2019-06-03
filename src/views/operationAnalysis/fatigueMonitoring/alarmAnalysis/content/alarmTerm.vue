@@ -32,8 +32,8 @@ export default {
   },
   created () {
     let start = new Date()
-    let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
-    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
+    let endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
     this._alartTerm({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,
@@ -53,8 +53,8 @@ export default {
       deep: true,
       handler () {
         let start = new Date()
-        let endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
-        let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
+        let endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
+        let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
         if (this.selectData.valueTime.length !== 0) {
           this._alartTerm({
             orgId: this.selectData.orgId,

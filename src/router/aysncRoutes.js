@@ -11,25 +11,12 @@ const _import_ = file => () => import('@/views/' + file + '.vue')
  */
 export const aysncRoutesMap = [
   {
-    path: '/homepage',
-    component: Layout,
-    meta: { title: 'Homepage', icon: 'iconfont icon-yunzhuomian', role: ['admin', 'user'] },
-    children: [
-      {
-        path: 'home',
-        name: 'Homepage',
-        component: _import_('Homepage/index'),
-        meta: { title: '首页', icon: 'nocturne icon-home', isHome: true }
-      }
-    ]
-  },
-  {
     path: '/chart-analysis',
     component: Layout,
     meta: {
       title: '运营监控',
       icon: 'nocturne icon-dash',
-      role: ['admin', 'user']
+      role: ['user']
     },
     children: [{
       path: 'chart-analysis',
@@ -37,7 +24,8 @@ export const aysncRoutesMap = [
       name: 'chartAnalysis',
       meta: {
         title: '运营监控',
-        icon: 'nocturne icon-dash'
+        icon: 'nocturne icon-dash',
+        role: ['user']
       }
     }]
   },
@@ -47,7 +35,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '运营分析',
       icon: 'nocturne icon-dash',
-      role: ['admin', 'user']
+      role: ['admin']
     },
     children: [{
       path: '/operation-analysis',
@@ -55,7 +43,8 @@ export const aysncRoutesMap = [
       component: _import_('operationAnalysis/dispatchingOperationAnalysis/index'),
       meta: {
         title: '调度运营分析',
-        icon: 'nocturne icon-dash'
+        icon: 'nocturne icon-dash',
+        role: ['admin']
       },
       children: [{
         path: 'timeTable-analysis',
@@ -128,7 +117,8 @@ export const aysncRoutesMap = [
       name: 'safetySupervision',
       meta: {
         title: '安全监管',
-        icon: 'nocturne icon-dash'
+        icon: 'nocturne icon-dash',
+        role: ['admin']
       },
       children: [{
         path: 'vehicle-fault-alarm',
@@ -156,7 +146,8 @@ export const aysncRoutesMap = [
       name: 'fatigueMonitoring',
       meta: {
         title: '疲劳监测',
-        icon: 'nocturne icon-dash'
+        icon: 'nocturne icon-dash',
+        role: ['admin']
       },
       children: [{
         path: 'alarm-center',
@@ -214,7 +205,8 @@ export const aysncRoutesMap = [
     name: 'permissionManagement',
     meta: {
       title: '权限管理',
-      icon: 'nocturne icon-dash'
+      icon: 'nocturne icon-dash',
+      role: ['admin']
     },
     children: [
       {
@@ -235,6 +227,15 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash'
         }
       }
+      // {
+      //   path: 'source-list',
+      //   component: _import_('permissionManagement/sourceList/index'),
+      //   name: 'sourceList',
+      //   meta: {
+      //     title: '资源列表',
+      //     icon: 'nocturne icon-dash'
+      //   }
+      // }
     ]
   }
   // {

@@ -37,7 +37,8 @@ export default {
   data () {
     return {
       busDetails: {},
-      isClear: false
+      isClear: false,
+      warnUuid: ''
     }
   },
   components: {
@@ -47,14 +48,17 @@ export default {
     mapDetail
   },
   created () {
-    this._warnInfoDetail({
-      warnUuid: this.$route.query.warnUuid
-    })
+    this.$route.query.id = JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
+    this._warnInfoDetail()
+  },
+  activated () {
   },
   watch: {},
   methods: {
-    _warnInfoDetail (params) {
-      this.$api['tiredMonitoring.getWarnDetail'](params).then(res => {
+    _warnInfoDetail () {
+      this.$api['tiredMonitoring.getWarnDetail']({
+        warnUuid: JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
+      }).then(res => {
         this.busDetails = res
       })
     }

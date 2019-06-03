@@ -11,6 +11,8 @@
         fit
         highlight-current-row
         style="width: 100%">
+        <el-table-column align="center" label="序号" type="index">
+        </el-table-column>
         <el-table-column align="center" label="账号">
           <template slot-scope="scope">
             <span>{{scope.row.userAccount}}</span>
@@ -18,12 +20,22 @@
         </el-table-column>
         <el-table-column align="center" label="管理员姓名">
           <template slot-scope="scope">
-            <span>{{scope.row.userReallName}}</span>
+            <span>{{scope.row.userRealName}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="角色">
           <template slot-scope="scope">
             <span>{{scope.row.roleName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="性别">
+          <template slot-scope="scope">
+            <span>{{scope.row.userGender === '1' ? '男' : '女'}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="状态">
+          <template slot-scope="scope">
+            <span>{{scope.row.enabled === '1' ? '启用' : '禁用'}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="创建时间" :formatter="forMatterCreateTime">
@@ -79,11 +91,11 @@
             placeholder="请输入密码"
             v-model="adminForm.userPassword"></el-input>
         </el-form-item>
-        <el-form-item label="姓名：" prop="userReallName">
+        <el-form-item label="姓名：" prop="userRealName">
           <el-input
             style="width: 240px"
             placeholder="请输入姓名"
-            v-model="adminForm.userReallName"></el-input>
+            v-model="adminForm.userRealName"></el-input>
         </el-form-item>
         <el-form-item label="是否禁用：" prop="enabled">
           <el-select
@@ -105,6 +117,21 @@
             placeholder="请选择">
             <el-option
               v-for="item in maleOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="角色：" prop="roleId">
+          <el-select
+            style="width: 240px"
+            v-model="adminForm.roleIds"
+            multiple
+            collapse-tags
+            placeholder="请选择">
+            <el-option
+              v-for="item in roleOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -135,9 +162,10 @@ export default {
       adminForm: {
         userAccount: '',
         userPassword: '',
-        userReallName: '',
+        userRealName: '',
         userGender: '',
-        enabled: ''
+        enabled: '',
+        roleIds: []
         // roleId: ''
       },
       rules: {
@@ -147,36 +175,37 @@ export default {
         userPassword: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ],
-        userReallName: [
+        userRealName: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
         ],
         userGender: [
-          { required: true, message: '请选择', trigger: 'blur' }
+          { required: true, message: '请选择性别', trigger: 'blur' }
         ],
         enabled: [
-          { required: true, message: '请选择', trigger: 'blur' }
+          { required: true, message: '请选择状态', trigger: 'blur' }
         ]
       },
       enableOptions: [
         {
-          value: 1,
+          value: '1',
           label: '启用'
         },
         {
-          value: 2,
+          value: '0',
           label: '禁用'
         }
       ],
       maleOptions: [
         {
           label: '男',
-          value: 1
+          value: '1'
         },
         {
           label: '女',
-          value: 2
+          value: '2'
         }
       ],
+      roleOptions: [],
       userId: '',
       isAdd: true,
       isDisable: false
@@ -184,40 +213,50 @@ export default {
   },
   created () {
     this.getAdminList({
-      current: 1,
-      size: 10
+      pageNumber: this.current,
+      pageSize: 10
     })
-    // getRoleList('sys/role/list').then(res => {
-    //   if (res.code === 0) {
-    //     this.roleOptions = res.data.map(item => {
-    //       return {
-    //         label: item.name,
-    //         value: item.id
-    //       }
-    //     })
-    //   }
-    // })
+    this.getRoleList()
   },
   methods: {
     getAdminList (params) {
       this.$api['permission.userList'](params).then(res => {
         // console.log(res)
-        this.list = res
+        this.list = res.list
+        this.total = res.total
+      })
+    },
+    getRoleList () {
+      this.$api['role.list']().then(res => {
+        console.log(res)
+        let list = []
+        if (res.list) {
+          list = res.list
+        } else {
+          list = res
+        }
+        list.forEach((i, index) => {
+          this.roleOptions[index] = {
+            value: i.roleId,
+            label: i.roleName
+          }
+        })
+        // this.list = res
       })
     },
     onSearch () {
       this.getAdminList('sys/user/page', {
         name: this.form.name,
-        current: 1,
-        size: 10
+        pageNumber: this.current,
+        pageSize: 10
       })
     },
     handleCurrentChange (val) {
       this.current = val
       this.getAdminList('sys/user/page', {
         name: this.form.name,
-        current: this.current,
-        size: 10
+        pageNumber: this.current,
+        pageSize: 10
       })
     },
     addAdmin () {
@@ -239,45 +278,48 @@ export default {
               this.dialogVisible = false
               this.$message.success('添加成功！')
               this.getAdminList('sys/user/page', {
-                current: 1,
-                size: 10
+                pageNumber: this.current,
+                pageSize: 10
               })
             })
           } else {
-            // editSysAdmin('sys/user/update', {
-            //   id: this.adminId,
-            //   name: this.adminForm.name,
-            //   password: this.adminForm.password,
-            //   roleId: this.adminForm.roleId
-            // }).then(res => {
-            //   if (res.code === 0) {
-            //     this.dialogVisible = false
-            //     this.$message.success('编辑成功！')
-            //     this.getAdminList('sys/user/page', {
-            //       current: 1,
-            //       size: 10
-            //     })
-            //   }
-            // })
+            console.log(this.adminForm)
+            this.adminForm.userId = this.userId
+            this.$api['permission.update'](this.adminForm).then(res => {
+              this.dialogVisible = false
+              this.$message.success('修改成功！')
+              this.getAdminList('sys/user/page', {
+                pageNumber: this.current,
+                pageSize: 10
+              })
+            })
           }
         }
       })
     },
     handleRemoveAdmin (id) {
-      // deleteSysAdmin('sys/user/delete', {
-      //   id
-      // }).then(res => {
-      //   if (res.code === 0) {
-      //     this.$message.success('删除成功！')
-      //     this.getAdminList('sys/user/page', {
-      //       current: 1,
-      //       size: 10
-      //     })
-      //   }
-      // })
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api['permission.delete']({
+          id
+        }).then(res => {
+          this.$message.success('删除成功！')
+          this.getAdminList('sys/user/page', {
+            pageNumber: this.current,
+            pageSize: 10
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     handleEditAdmin (id) {
-      // this.$refs['adminForm'].resetFields()
       this.dialogVisible = true
       this.isAdd = false
       this.userId = id
@@ -285,20 +327,20 @@ export default {
       this.$api['permission.detail']({
         id
       }).then(res => {
-        // Object.keys(this.adminForm).forEach(key => {
-        //   if (res.data.sysUser.hasOwnProperty(key)) {
-        //     this.adminForm[key] = res.data.sysUser[key]
-        //   }
-        // })
-        this.adminForm.roleId = res.sysRoleId
-        this.adminForm.password = ''
+        this.adminForm.userAccount = res.userAccount
+        this.adminForm.userPassword = res.userPassword
+        this.adminForm.userRealName = res.userRealName
+        this.adminForm.userGender = res.userGender
+        this.adminForm.enabled = res.enabled
+        this.userId = res.userId
+        this.addAdmin.roleIds = res.roleIds
       })
     },
     forMatterCreateTime (row) {
-      return moment(row.createTime).format('YYYY-MM-DD HH:MM:SS')
+      return moment(row.createTime).format('YYYY-MM-DD HH:MM:ss')
     },
     forMatterUpdateTime (row) {
-      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:SS')
+      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:ss')
     }
   }
 }

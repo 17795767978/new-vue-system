@@ -21,12 +21,12 @@ export function routerBeforeEachFunc (to, from, next) {
             .then(context => {
               router.addRoutes(context.addRoutes)
               // 每次刷新页面都回到dash页面
-              const reg = new RegExp(context.homepage.path + '$')
-              if (!reg.test(to.path) || to.path !== '/') {
-                next({ name: context.homepage.name, replace: true })
-              } else {
-                next({ ...to, replace: true })
-              }
+              // const reg = new RegExp(context.homepage.path + '$')
+              // if (!reg.test(to.path) || to.path !== '/') {
+              //   next({ name: context.homepage.name, replace: true })
+              // } else {
+              next({ ...to, replace: true })
+              // }
             })
         })
         // 未刷新页面,在系统中跳转路由

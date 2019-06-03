@@ -84,8 +84,8 @@ export default {
       this.comOptions = res
     })
     let start = new Date()
-    this.formInline.endTime = moment(start).format('YYYY-MM-DD HH:MM:SS')
-    this.formInline.startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:SS')
+    this.formInline.endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
+    this.formInline.startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
     this.formInline.valueTime = [this.formInline.startTime, this.formInline.endTime]
     console.log(this.formInline)
   },

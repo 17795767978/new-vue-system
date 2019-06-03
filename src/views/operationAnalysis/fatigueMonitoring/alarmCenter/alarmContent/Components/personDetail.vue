@@ -106,7 +106,7 @@ export default {
   },
   computed: {
     timeFormat () {
-      return moment(this.busDetails.warnTime).format('YYYY-MM-DD HH:MM:SS')
+      return moment(this.busDetails.warnTime).format('YYYY-MM-DD HH:MM:ss')
     }
   },
   methods: {

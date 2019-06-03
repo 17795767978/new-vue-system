@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken } from '@/service/expands/auth'
 import api from '@/plugins/api'
+// import { constantRouterMap } from '@/router/staticRoutes'
 /**
  * User STORE
  */
@@ -14,6 +15,11 @@ const user = {
     userInfo: {},
     // avatar: '../static/myAvatar200.png', // static
     token: getToken(),
+    // routers: {
+    //   addRouters: [],
+    //   router: constantRouterMap,
+    //   homepage: '/homepage/home'
+    // },
     roles: null // 权限应该是返回个数组对象
   },
 
@@ -44,6 +50,10 @@ const user = {
       // state.avatar = ''
       state.roles = null
     }
+    // SET_ROUTERS (state, router) {
+    //   state.routers.addRouters = router
+    //   state.routers.router = constantRouterMap.concat(router)
+    // }
   },
 
   actions: {
@@ -60,7 +70,9 @@ const user = {
         // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
         // resolve()
         api['user.login'](params).then(res => {
+          console.log(res.userResource)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+          // commit('SET_ROUTERS', res.userResource)
           resolve()
         }).catch(err => {
           reject(err)

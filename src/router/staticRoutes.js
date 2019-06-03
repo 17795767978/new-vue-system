@@ -7,9 +7,26 @@ const _import_ = file => () => import('@/views/' + file + '.vue')
  */
 export const constantRouterMap = [
   {
+    path: '/',
+    redirect: '/Homepage/home'
+  },
+  {
     path: '/login',
     component: _import_('Login/index'),
     hidden: true
+  },
+  {
+    path: '/homepage',
+    component: Layout,
+    meta: { title: 'Homepage', icon: 'iconfont icon-yunzhuomian' },
+    children: [
+      {
+        path: 'home',
+        name: 'Homepage',
+        component: _import_('Homepage/index'),
+        meta: { title: '首页', icon: 'nocturne icon-home', isHome: true }
+      }
+    ]
   },
   {
     path: '',

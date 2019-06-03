@@ -75,19 +75,19 @@
           prop="orgName"
           align="center"
           label="所属公司"
-          width="150">
+          width="100">
         </el-table-column>
         <el-table-column
           align="center"
           prop="lineName"
           label="所属路线"
-          width="150">
+          width="100">
         </el-table-column>
         <el-table-column
           align="center"
           prop="busPlateNumber"
           label="车牌号"
-          width="150">
+          width="120">
         </el-table-column>
         <el-table-column
           align="center"
@@ -103,8 +103,14 @@
         </el-table-column>
         <el-table-column
           align="center"
+          prop="warnTypeName"
+          label="报警类型"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          align="center"
           label="报警级别"
-          width="150">
+          width="100">
           <template slot-scope="scope">
             {{scope.row.warnLevel}}级
           </template>
@@ -212,8 +218,8 @@ export default {
   mounted () {
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
-    let timeStart = moment(endTime).format('YYYY-MM-DD HH:MM:SS')
-    let timeEnd = moment(dataNow).format('YYYY-MM-DD HH:MM:SS')
+    let timeStart = moment(endTime).format('YYYY-MM-DD HH:MM:ss')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD HH:MM:ss')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
@@ -226,7 +232,7 @@ export default {
         // 车偏号 联动
         this.changeBusPlateNumber()
         this.formInline.timeValue.forEach(time => {
-          time = moment(time).format('YYYY-MM-DD HH:MM:SS')
+          time = moment(time).format('YYYY-MM-DD HH:MM:ss')
         })
         this._tableList({
           orgId: this.formInline.orgId, // 组织机构id
@@ -289,7 +295,7 @@ export default {
       }
     },
     formatterTime (row) {
-      return moment(row.warnTime).format('YYYY-MM-DD HH:MM:SS')
+      return moment(row.warnTime).format('YYYY-MM-DD HH:MM:ss')
     },
     handleCurrentChange (val) {
       this._tableList({
@@ -308,17 +314,17 @@ export default {
       })
     },
     handleClick (row) {
-      console.log(row)
+      sessionStorage.setItem('id', row.warnUuid)
       this.$router.push({
         name: 'alarmContent',
         query: {
-          warnUuid: row.warnUuid
+          id: row.warnUuid
         }
       })
     },
     onSubmit () {
       this.formInline.timeValue = this.formInline.timeValue.map(time => {
-        return moment(time).format('YYYY-MM-DD HH:MM:SS')
+        return moment(time).format('YYYY-MM-DD HH:MM:ss')
       })
       this._tableList({
         orgId: this.formInline.orgId, // 组织机构id
@@ -348,7 +354,7 @@ export default {
         busSelfCode: '',
         warnLevel: '',
         warnTypeId: [],
-        timeValue: [moment(endTime).format('YYYY-MM-DD HH:MM:SS'), moment(dataNow).format('YYYY-MM-DD HH:MM:SS')]
+        timeValue: [moment(endTime).format('YYYY-MM-DD HH:MM:ss'), moment(dataNow).format('YYYY-MM-DD HH:MM:ss')]
       }
       this.$emit('clear')
     },

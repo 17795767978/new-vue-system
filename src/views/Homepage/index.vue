@@ -58,7 +58,7 @@ import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
 import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
 import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
 export default {
-  name: 'Dashboard',
+  name: 'Homepage',
   data () {
     return {
       operationAnalysis: [
@@ -109,7 +109,7 @@ export default {
   }
   .main-card {
     .tab-con {
-      width: 500px;
+      width: 100%;
       height: 400px;
       background-image: url(../../assets/images/yunying.png);
       background-repeat: no-repeat;
@@ -123,7 +123,7 @@ export default {
       transform: scale(0.99)
     }
     .tab-ans {
-      width: 450px;
+      width: 100%;
       height: 400px;
       color: #fff;
       .item-fam {
@@ -178,7 +178,7 @@ export default {
       }
     }
     .tab-contral {
-       width: 450px;
+       width: 100%;
       height: 400px;
       color: #fff;
       .item-fam {
