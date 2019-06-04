@@ -6,7 +6,7 @@ export const PlatformApi = {
       path: '/api/base/user/getPermissionsByUserId',
       mockPath: '/api/base/user/getPermissionsByUserId',
       params: {
-        role: []
+        id: ''
       },
       desc: '获取菜单列表'
     },

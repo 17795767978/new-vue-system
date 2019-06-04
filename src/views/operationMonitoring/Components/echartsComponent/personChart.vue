@@ -42,8 +42,8 @@ export default {
   methods: {
     _realTimePassengeFlow (params) {
       this.$api['passengerFlow.getRealTimePassengerFlow'](params).then(res => {
-        this.timeInterval = res.data.data.map(item => item.timeInterval)
-        this.personCount = res.data.data.map(item => parseInt(item.personCount))
+        this.timeInterval = res.map(item => item.timeInterval)
+        this.personCount = res.map(item => parseInt(item.personCount))
         this.personCountMax = max(this.personCount)
         this.drawLine()
         this.loading = false

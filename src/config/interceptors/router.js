@@ -17,7 +17,7 @@ export function routerBeforeEachFunc (to, from, next) {
         // TODO 还没有权限部分 获取权限列表
         store.dispatch('getUserInfo').then(res => {
           // 根据获取到的用户权限来构建动态路由表,或者做其他事情;
-          store.dispatch('generateRouters', res.roles)
+          store.dispatch('generateRouters', res)
             .then(context => {
               router.addRoutes(context.addRoutes)
               // 每次刷新页面都回到dash页面

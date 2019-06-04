@@ -42,6 +42,7 @@
             end: '24:00'
           }">
         </el-time-select>
+        -
         <el-time-select
           placeholder="结束时间"
           v-model="formInline.endTime"
@@ -62,7 +63,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { Form, Select, DatePicker, Button, TimeSelect } from 'element-ui'
 import moment from 'moment'
 export default {
   data () {
@@ -116,19 +116,17 @@ export default {
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
     })
+    let data = new Date()
+    this.formInline.date = moment(data).format('YYYY-MM-DD')
   },
   methods: {
     onSubmit () {
-      this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
+      console.log(this.formInline)
+      // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
       this.$emit('configType', this.formInline)
     }
   },
   components: {
-    'el-form': Form,
-    'el-select': Select,
-    'el-date-picker': DatePicker,
-    'el-button': Button,
-    'el-time-select': TimeSelect
   }
 }
 </script>

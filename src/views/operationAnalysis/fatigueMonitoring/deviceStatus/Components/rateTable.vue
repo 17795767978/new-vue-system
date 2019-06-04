@@ -154,7 +154,7 @@ export default {
     _statusTable (params) {
       this.$api['tiredMonitoring.getLineDeviceStatusPage'](params).then(res => {
         this.tableData = res.list
-        this.total = res.data.data.total
+        this.total = res.total
       })
     },
     formatterTime (row) {

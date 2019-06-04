@@ -2,12 +2,11 @@
   <div>
     <div id="chart-wrapper"
      ref="chartWrapper"
-     v-if="echartDatas.length > 0"
      :style="{width: '100%', height: '600px'}"></div>
     <div
       v-cloak
       ref="animationDom"
-      v-if="echartDatas.length === 0"
+      v-show="echartDatas.length === 0"
       class="anim"
       style="width: 100%; height: 330px; line-height:300px;text-align:center">
       暂无数据
@@ -52,6 +51,7 @@ export default {
     selectData: {
       deep: true,
       handler () {
+        console.log(this.selectData.date)
         this._tripOrder({
           lineId: this.selectData.value,
           dateTime: this.selectData.date,
@@ -63,6 +63,7 @@ export default {
     },
     isUpdate () {
       console.log(this.isUpdate)
+      console.log(this.selectData.date)
       if (this.isUpdate) {
         this._tripOrder({
           lineId: this.selectData.value,
@@ -78,9 +79,9 @@ export default {
   methods: {
     _tripOrder (params) {
       this.$api['schedulingAnalysis.getSequenceChartDatas'](params).then(res => {
-        this.echartDatas = res.data.data.datas
-        this.legendNames = res.data.data.legendNames
-        this.xAxisNames = res.data.data.xAxisNames
+        this.echartDatas = res.datas
+        this.legendNames = res.legendNames
+        this.xAxisNames = res.xAxisNames
         let abs = []
         this.echartDatas.forEach(item => {
           item.forEach(item => {

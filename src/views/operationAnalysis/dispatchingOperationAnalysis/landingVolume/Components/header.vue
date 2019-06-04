@@ -117,13 +117,13 @@ export default {
       //   })
       // })
       this.$store.dispatch('getLineList').then(res => {
-        let arr = res
-        arr.forEach(item => {
-          this.lineOptions.push({
-            value: item.lineUuid,
-            label: item.lineName
-          })
-        })
+        this.lineOptions = res
+        // arr.forEach(item => {
+        //   this.lineOptions.push({
+        //     value: item.lineUuid,
+        //     label: item.lineName
+        //   })
+        // })
       })
     },
     _stationList () {
@@ -137,19 +137,19 @@ export default {
       //   })
       // })
       this.$store.dispatch('getStationList').then(res => {
-        let arr = res.data.data.list
+        let arr = res
         arr.forEach(item => {
           this.stationOptions.push({
-            value: item.lineUuid,
-            label: item.lineName
+            value: item.staUuid,
+            label: item.staName
           })
         })
       })
     },
     _lineStation (params) {
       this.$api['schedulingAnalysis.getStationOnOffTableDatas'](params).then(res => {
-        if (res.data.data.length !== 0) {
-          this.tableData = res.data.data
+        if (res.length !== 0) {
+          this.tableData = res
           this.$emit('configTableData', this.tableData)
         }
       })

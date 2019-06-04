@@ -60,22 +60,22 @@ export default {
   methods: {
     _realTimeMileage (params) {
       this.$api['dispatch.getRealtimeMileage'](params).then(res => {
-        this.realTimeMileage = res.data.data.map(item => parseInt(item.realtimeMileage))
-        this.orgNameMileage = res.data.data.map(item => item.orgName)
+        this.realTimeMileage = res.map(item => parseInt(item.realtimeMileage))
+        this.orgNameMileage = res.map(item => item.orgName)
         this.realTimeMileageMax = max(this.realTimeMileage)
       })
     },
     _realTimeTrips (params) {
       this.$api['dispatch.getRealtimeTrips'](params).then(res => {
-        this.realTimeTrips = res.data.data.map(item => parseInt(item.realtimeTrips))
-        this.orgNameTrips = res.data.data.map(item => item.orgName)
+        this.realTimeTrips = res.map(item => parseInt(item.realtimeTrips))
+        this.orgNameTrips = res.map(item => item.orgName)
         this.realTimeTripsMax = max(this.realTimeTrips)
       })
     },
     _realTimeShift (params) {
       this.$api['dispatch.getRealtimeClasses'](params).then(res => {
-        this.realTimeShift = res.data.data.map(item => parseInt(item.realtimeClasses))
-        this.orgNameShift = res.data.data.map(item => item.orgName)
+        this.realTimeShift = res.map(item => parseInt(item.realtimeClasses))
+        this.orgNameShift = res.map(item => item.orgName)
         this.realTimeShiftMax = max(this.realTimeShift)
       })
     },

@@ -32,8 +32,8 @@ export default {
         //   return b.fullLoadRate - a.fullLoadRate;
         // });
         // console.log(dataArr);
-        this.lineName = res.data.data.map(item => item.lineName)
-        this.fullLoadRate = res.data.data.map(item => item.fullLoadRate)
+        this.lineName = res.map(item => item.lineName)
+        this.fullLoadRate = res.map(item => item.fullLoadRate)
       })
     },
     drawLine () {

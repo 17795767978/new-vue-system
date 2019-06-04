@@ -89,13 +89,7 @@ export default {
   methods: {
     _lineList () {
       this.$store.dispatch('getLineList').then(res => {
-        let arr = res.data.data
-        arr.forEach(item => {
-          this.lineOptions.push({
-            value: item.lineUuid,
-            label: item.lineName
-          })
-        })
+        this.lineOptions = res
       })
     },
     onSubmit () {

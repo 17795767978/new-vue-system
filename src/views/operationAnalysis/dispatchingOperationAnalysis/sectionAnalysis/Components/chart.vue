@@ -4,11 +4,10 @@
       ref="chartWrapper"
       :style="{width: '100%', height: '700px'}"
       v-loading="loading"
-      v-if="echartsData.length > 0"
       element-loading-background="rgba(255, 255, 255, 0.5)"
     >
     </div>
-    <div v-if="echartsData.length === 0" style="width: 100%; height: 300px; line-height:300px;text-align:center">
+    <div v-show="echartsData.length === 0" style="width: 100%; height: 300px; line-height:300px;text-align:center">
       暂无数据
     </div>
   </div>
@@ -17,6 +16,7 @@
 <script type="text/ecmascript-6">
 // import { sectionAnalysis } from 'server/interface'
 import moment from 'moment'
+import { setTimeout } from 'timers'
 export default {
   name: 'sectionAnalysis',
   props: {
@@ -57,6 +57,8 @@ export default {
             type: this.checkData.turn,
             month: moment(this.checkData.date).format('YYYY-MM')
           })
+        } else {
+          this.$message.error('请选择线路')
         }
       }
     },
@@ -75,15 +77,18 @@ export default {
     _sectionAnalysis (params) {
       this.$api['schedulingAnalysis.getAnalysisDatasByWarnLeave'](params).then(res => {
         // console.log(res);
-        this.xAxisData = res.data.data.xAxisNames
-        this.yAxisData = res.data.data.yAxisNames
-        this.echartsData = res.data.data.datas
+        this.xAxisData = res.xAxisNames
+        this.yAxisData = res.yAxisNames
+        this.echartsData = res.datas
         if (this.echartsData.length > 0) {
-          this.drawLine()
+          setTimeout(() => {
+            this.drawLine()
+          }, 1000)
           this.loading = false
           this.$refs.chartWrapper.style.display = 'block'
         } else {
           this.$refs.chartWrapper.style.display = 'none'
+          this.$message.warning('暂无数据')
         }
       })
     },
@@ -144,7 +149,7 @@ export default {
           // name: 'Punch Card',
           type: 'scatter',
           symbolSize: function (val) {
-            return val[2] * 0.4
+            return val[2] * 5
           },
           data: data,
           animationDelay: function (idx) {

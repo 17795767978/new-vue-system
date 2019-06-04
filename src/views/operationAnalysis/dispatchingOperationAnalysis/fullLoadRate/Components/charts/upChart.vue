@@ -4,7 +4,6 @@
       v-cloak
       ref="upChartWrapper"
       id="up-chart-wrapper"
-      v-if="xAxisData.length > 0"
       :style="{width: '100%', height: '330px'}"
       v-loading="loading"
       element-loading-background="rgba(255, 255, 255, 0.5)"
@@ -13,7 +12,7 @@
     <div
       v-cloak
       ref="animationDom"
-      v-if="xAxisData.length === 0"
+      v-show="xAxisData.length === 0"
       class="anim"
       style="width: 100%; height: 330px; line-height:300px;text-align:center">
       暂无数据
@@ -107,8 +106,8 @@ export default {
   methods: {
     _fullRateAnalysisUp (params) {
       this.$api['schedulingAnalysis.getUpLineStationChartDatas'](params).then(res => {
-        this.dataSource = res.data.data.datas
-        this.xAxisData = res.data.data.xAxisNames
+        this.dataSource = res.datas
+        this.xAxisData = res.xAxisNames
         this.seeType()
         if (this.xAxisData.length > 0) {
           this.$refs.upChartWrapper.style.display = 'block'

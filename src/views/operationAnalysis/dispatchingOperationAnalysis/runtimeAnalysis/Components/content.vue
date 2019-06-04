@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="echart-wrapper" ref="echartWrapper" v-if="echartData.length > 0" :style="{width: '100%', height: '500px'}"></div>
-    <div v-if="echartData.length === 0" class="anim" style="width: 100%; height: 300px; line-height:300px;text-align:center">
+    <div id="echart-wrapper" ref="echartWrapper" :style="{width: '100%', height: '500px'}"></div>
+    <div v-show="echartData.length === 0" class="anim" style="width: 100%; height: 300px; line-height:300px;text-align:center">
       暂无数据
     </div>
   </div>
@@ -64,9 +64,9 @@ export default {
   methods: {
     _runtimeAnalysis (params) {
       this.$api['schedulingAnalysis.getLineBetweenStationsRunningTimeChartDatas'](params).then(res => {
-        this.echartData = res.data.data.datas
-        this.legendNames = res.data.data.legendNames
-        this.xAxisNames = res.data.data.xAxisNames
+        this.echartData = res.datas
+        this.legendNames = res.legendNames
+        this.xAxisNames = res.xAxisNames
         if (this.echartData.length > 0) {
           let maxBefore = []
           this.echartData.forEach(item => {

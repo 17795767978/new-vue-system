@@ -54,10 +54,10 @@ export default {
     _getWeather () {
       console.log(this.$api['weather.getWeather'])
       this.$api['weather.getWeather']().then(res => {
-        let lowTemperature = res.data.data.result.templow
-        let heightTemperature = res.data.data.result.temphigh
+        let lowTemperature = res.result.templow
+        let heightTemperature = res.result.temphigh
         this.temperature = `${lowTemperature}-${heightTemperature} °C`
-        this.weather = res.data.data.result.weather
+        this.weather = res.result.weather
       })
     }
   },

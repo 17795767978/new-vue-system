@@ -17,8 +17,8 @@ function hasPermission (roles, route) {
   // admin is the super user
   // if (roles.indexOf('admin') >= 0) return true
   // 跳转路由不包含meta.role,则表示不需要验证权限
-  if (route.meta && route.meta.role) {
-    return roles.some(role => route.meta.role.indexOf(role) >= 0)
+  if (route.meta && route.meta.roles) {
+    return roles.some(role => route.meta.roles.indexOf(role) >= 0)
   } else {
     return true
   }
@@ -115,6 +115,24 @@ function generateNewRoutes (remoteRoutes) {
   return addRouters
 }
 
+// 递归roles
+
+function getRoles (roles) {
+  let roleData = []
+  function filterRoles (roles) {
+    roles.forEach(role => {
+      role.roles.forEach(i => {
+        roleData.push(i)
+      })
+      if (role.children && role.children.length > 0) {
+        filterRoles(role.children)
+      }
+    })
+  }
+  filterRoles(roles)
+  return roleData
+}
+
 const routers = {
   //
   state: {
@@ -131,8 +149,8 @@ const routers = {
       state.homepage = homePageRoute.length
         ? homePageRoute[0]
         : {
-          name: 'Dashboard',
-          path: 'dashboard'
+          name: 'Homepage',
+          path: '/Homepage/home'
         }
     },
     RESET_ROUTERS: (state, router) => {
@@ -148,7 +166,9 @@ const routers = {
       if (ROUTER_DEFAULT_CONFIG.isUseStaticRouter) {
         return new Promise((resolve, reject) => {
           // 这里通过权限来过滤出该权限所拥有的动态路由表,然后再SET_ROUTERS
-          const addRoutes = filterAsyncRoutes(aysncRoutesMap, roles)
+          let rolesData = getRoles(roles)
+          console.log(getRoles(roles))
+          const addRoutes = filterAsyncRoutes(aysncRoutesMap, rolesData)
           context.commit('SET_ROUTERS', { addRoutes, routerRawData: null })
           resolve({
             addRoutes,

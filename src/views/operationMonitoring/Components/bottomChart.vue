@@ -51,7 +51,7 @@ export default {
   methods: {
     _badDrivingBehavior (params) {
       this.$api['homeTired.getBadDrivingBehaviorTable'](params).then(res => {
-        this.alermData = res.data.data
+        this.alermData = res
       })
     }
   },

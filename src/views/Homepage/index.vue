@@ -62,32 +62,40 @@ export default {
   data () {
     return {
       operationAnalysis: [
-        { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/operation-analysis/timeTable-analysis' },
-        { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/operation-analysis/trip-order' },
-        { name: '区间满载率查询', icon: iconHomeMzl, path: '/operation-analysis/full-load-rate' },
-        { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/operation-analysis/landing-volume' },
-        { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/operation-analysis/passenger-transport-capacity' },
-        { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/operation-analysis/section-analysis' }
+        { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis' },
+        { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order' },
+        { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate' },
+        { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume' },
+        { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity' },
+        { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis' }
       ],
-      simple: { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/operation-analysis/runtime-analysis' },
+      simple: { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis' },
       tiredContral: [
-        { name: '报警中心', icon: iconHomeBjzx, path: '/fatigue-monitoring/alarm-center' },
-        { name: '设备状态', icon: iconHomeBjzt, path: '/fatigue-monitoring/device-status' },
-        { name: '报警分析', icon: iconHomeBjfx, path: '/fatigue-monitoring/alarm-analysis' },
-        { name: '报警类型管理', icon: iconHomeBjlx, path: '/fatigue-monitoring/alarm-management' }
+        { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center' },
+        { name: '设备状态', icon: iconHomeBjzt, path: '/device-status' },
+        { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis' },
+        { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management' }
       ]
     }
   },
   components: {
   },
+  computed: {
+    // ...mapGetters(['roles'])
+  },
+  mounted () {
+    console.log(this.$store.getters)
+  },
   methods: {
     goToContral () {
       this.$router.push('/chart-analysis/chart-analysis')
     },
-    goToChart (path) {
+    goToChart (pat) {
+      let path = `/operation-analysis${pat}`
       this.$router.push(path)
     },
-    goToAlarm (path) {
+    goToAlarm (pat) {
+      let path = `/fatigue-monitoring${pat}`
       this.$router.push(path)
     }
   }

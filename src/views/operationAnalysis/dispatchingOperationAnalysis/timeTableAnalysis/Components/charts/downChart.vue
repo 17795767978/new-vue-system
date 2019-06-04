@@ -3,13 +3,11 @@
     <div class="down-chart-wrapper"
       ref="downChartWrapper"
       id="down-chart-wrapper"
-      v-if="echartsData.length > 0"
       :style="{width: '100%', height: '400px'}"
-      v-loading="loading"
       element-loading-background="rgba(255, 255, 255, 0.5)"
     >
     </div>
-    <div v-if="echartsData.length === 0" style="width: 100%; height: 300px; line-height:300px;text-align:center">
+    <div v-show="echartsData.length === 0" style="width: 100%; height: 300px; line-height:300px;text-align:center">
       暂无数据
     </div>
   </div>
@@ -45,11 +43,6 @@ export default {
     })
   },
   mounted () {
-    setTimeout(() => {
-      this.drawLine()
-      this.drawLine()
-      this.loading = false
-    }, 2000)
   },
   watch: {
     headerParams: {
@@ -93,10 +86,9 @@ export default {
   methods: {
     _timeTableAnalysisDown (params) {
       this.$api['schedulingAnalysis.getDownRushHourLinePassengerChartDatas'](params).then(res => {
-        // console.log(res);
-        this.xAxisData = res.data.data.xAxisNames
-        this.yAxisData = res.data.data.yAxisNames
-        this.echartsData = res.data.data.datas
+        this.xAxisData = res.xAxisNames
+        this.yAxisData = res.yAxisNames
+        this.echartsData = res.datas
         this.maxNum = max(this.echartsData.map(item => item[2]))
         if (this.echartsData.length > 0) {
           this.$refs.downChartWrapper.style.display = 'block'
@@ -104,6 +96,7 @@ export default {
           this.loading = false
         } else {
           this.$refs.downChartWrapper.style.display = 'none'
+          this.$message.warning('暂无数据')
         }
       })
     },
@@ -164,7 +157,7 @@ export default {
           bottom: '16%'
         },
         series: [{
-          name: 'Punch Card',
+          name: '热力值',
           type: 'heatmap',
           data: data,
           label: {

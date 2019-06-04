@@ -194,7 +194,11 @@ const platform = {
       //  防止多次提交相同颜色
       if (theme === state.theme && handler) return
       //
+      if (theme === null) {
+        theme = '#409EFF'
+      }
       const themeCluster = getClusterColor(theme.replace('#', ''))
+      // const themeCluster = ''
 
       const updateThemeStyleText = (styleText, originalCluster, themeCluster) => {
         let newStyleText = styleText

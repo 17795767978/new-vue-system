@@ -4,7 +4,7 @@
       <headerNav @configType="configType"></headerNav>
     </header>
     <div class="content">
-      <h2 class="title"><span style="color: #f00">{{busLine}}{{station}}</span>车次时序图</h2>
+      <h2 class="title">发车趟次时序图</h2>
       <h4 class="title time">刷新时间：{{timeNow}}</h4>
       <contentWrapper :selectData="selectData" :isUpdate='isUpdate' @isUpdateTo="isUpdateTo"></contentWrapper>
       <!-- <Chart></Chart> -->

@@ -3,20 +3,18 @@
     <div class="up-chart-wrapper"
       ref="upChartWrapper"
       id="up-chart-wrapper"
-      v-if="echartsData.length > 0"
       :style="{width: '100%', height: '400px'}"
-      v-loading="loading"
       element-loading-background="rgba(255, 255, 255, 0.5)"
     >
     </div>
-    <div v-if="echartsData.length === 0" style="width: 100%; height: 300px; line-height:300px;text-align:center">
+    <div v-show="echartsData.length === 0" style="width: 100%; height: 300px; line-height:300px;text-align:center">
       暂无数据
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-// import { timeTableAnalysisUp } from 'server/interface';
+// import elementResizeDetector from 'element-resize-detector'
 import { max } from '../../../../../../utils/max'
 import moment from 'moment'
 export default {
@@ -45,8 +43,18 @@ export default {
     })
   },
   mounted () {
+    // let listenResize = elementResizeDetector()
+    // listenResize.listenTo(this.$refs.upChartWrapper, (el) => {
+    //   this.$echarts.init(document.getElementById('up-chart-wrapper')).resize()
+    // })
   },
   watch: {
+    // echartsData: {
+    //   deep: true,
+    //   handler () {
+    //     this.drawLine()
+    //   }
+    // },
     headerParams: {
       deep: true,
       immediate: false,
@@ -67,7 +75,6 @@ export default {
       }
     },
     isUpdateUp () {
-      console.log(this.isUpdateUp)
       if (this.isUpdateUp) {
         let month = ''
         if (this.headerParams.date && this.headerParams.date === 'Invalid date') {
@@ -89,16 +96,17 @@ export default {
   methods: {
     _timeTableAnalysisUp (params) {
       this.$api['schedulingAnalysis.getUpRushHourLinePassengerChartDatas'](params).then(res => {
-        this.xAxisData = res.data.data.xAxisNames
-        this.yAxisData = res.data.data.yAxisNames
-        this.echartsData = res.data.data.datas
+        this.xAxisData = res.xAxisNames
+        this.yAxisData = res.yAxisNames
+        this.echartsData = res.datas
         this.maxNum = max(this.echartsData.map(item => item[2]))
         if (this.echartsData.length > 0) {
-          this.$refs.upChartWrapper.style.display = 'block'
           this.drawLine()
           this.loading = false
+          this.$refs.upChartWrapper.style.display = 'block'
         } else {
           this.$refs.upChartWrapper.style.display = 'none'
+          this.$message.warning('暂无数据')
         }
       })
     },
@@ -159,7 +167,7 @@ export default {
           bottom: '16%'
         },
         series: [{
-          name: 'Punch Card',
+          name: '热力值',
           type: 'heatmap',
           data: data,
           label: {

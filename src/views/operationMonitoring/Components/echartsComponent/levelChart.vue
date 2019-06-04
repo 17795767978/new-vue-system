@@ -33,9 +33,9 @@ export default {
   methods: {
     _getLevelList (params) {
       this.$api['homeTired.getAnalysisDatasByWarnLeave'](params).then(res => {
-        this.changeData = res.data.data
-        let dataArrValue = res.data.data.map(item => item.warnLabel)
-        let dataArrNumber = res.data.data.map(item => item.warnNumber)
+        this.changeData = res
+        let dataArrValue = res.map(item => item.warnLabel)
+        let dataArrNumber = res.map(item => item.warnNumber)
         for (let i = 0; i < dataArrValue.length; i++) {
           this.getLevelList[i] = {
             name: dataArrValue[i],

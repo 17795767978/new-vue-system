@@ -72,6 +72,7 @@ export default {
   mounted () {
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
+      console.log(res)
     })
   },
   methods: {

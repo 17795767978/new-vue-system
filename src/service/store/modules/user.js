@@ -49,6 +49,9 @@ const user = {
       state.userStatus = ''
       // state.avatar = ''
       state.roles = null
+    },
+    SET_ROLES: (state, roles) => {
+      state.roles = roles
     }
     // SET_ROUTERS (state, router) {
     //   state.routers.addRouters = router
@@ -70,8 +73,8 @@ const user = {
         // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
         // resolve()
         api['user.login'](params).then(res => {
-          console.log(res.userResource)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+          localStorage.setItem('id', res.userInfo.userId)
           // commit('SET_ROUTERS', res.userResource)
           resolve()
         }).catch(err => {
@@ -97,6 +100,7 @@ const user = {
         // 重置权限路由表, 该mutation 访问 store/asyncRouter.js
         commit('RESET_ROUTERS')
         //
+        localStorage.removeItem('id')
         resolve()
       })
     },
@@ -110,20 +114,26 @@ const user = {
      */
     getUserInfo ({ commit, state }, params) {
       return new Promise((resolve, reject) => {
-        if (state.userInfo) {
-          if (!state.userInfo.roles) {
-            state.userInfo.roles = ['admin', 'user']
+        // if (state.userInfo) {
+        //   if (!state.userInfo.roles) {
+        //     state.userInfo.roles = ['admin', 'user']
+        //   }
+        //   commit('SET_USERINFO', state.userInfo)
+        //   resolve(state.userInfo)
+        // } else {
+        //   reject(state.userInfo)
+        // }
+        api['platformMenu.list']({
+          id: localStorage.getItem('id')
+        }).then(res => {
+          const data = res
+          if (data && data.length > 0) {
+            commit('SET_ROLES', data)
           }
-          commit('SET_USERINFO', state.userInfo)
-          resolve(state.userInfo)
-        } else {
-          reject(state.userInfo)
-        }
-        // api['user.info']({ userId: state.userId }).then(res => {
-
-        // }).catch(err => {
-        //   reject(err)
-        // })
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
       })
     }
   }

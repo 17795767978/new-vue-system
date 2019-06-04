@@ -2,7 +2,7 @@
   <div class="content-wrapper">
     <el-row class="up-content">
       <h3 class="title">
-        {{busLine}}客流运力运量分析（上行）
+        客流运力运量分析（上行）
       </h3>
       <div class="heat-chart-wrapper">
         <upChart :selectData="selectData" :isUpdateUp="isUpdateUp" @isUpdateToUp="isUpdateToUp"></upChart>
@@ -10,7 +10,7 @@
     </el-row>
     <el-row class="down-content">
       <h3 class="title">
-        {{busLine}}客流运力运量分析（下行）
+        客流运力运量分析（下行）
       </h3>
       <div class="heat-chart-wrapper">
         <downChart :selectData="selectData" :isUpdateDown="isUpdateDown" @isUpdateToDown="isUpdateToDown"></downChart>

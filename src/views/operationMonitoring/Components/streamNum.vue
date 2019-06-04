@@ -105,19 +105,19 @@ export default {
   methods: {
     _passengeFlow (params) {
       this.$api['passengerFlow.getTotalPassengerFlow'](params).then(res => {
-        this.passengeFlowNum = res.data.data.personCount
+        this.passengeFlowNum = res.personCount
       })
     },
     _realTimePassengeFlow (params) {
       this.$api['passengerFlow.getRealTimePersoncountAndFullLoadRate'](params).then(res => {
-        this.totelPerson = res.data.data.personCount
-        this.totelFullLoadRate = res.data.data.fullLoadRate
+        this.totelPerson = res.personCount
+        this.totelFullLoadRate = res.fullLoadRate
       })
     },
     _operateLines (params) {
       this.$api['passengerFlow.getRealTimeOperLines'](params).then(res => {
-        this.operLines = res.data.data.operLines
-        this.totalLines = res.data.data.totalLines
+        this.operLines = res.operLines
+        this.totalLines = res.totalLines
       })
     },
     _onLineCarNum (params) {
@@ -129,7 +129,7 @@ export default {
         //   let num = parseInt(item);
         //   this.onLineCarNum += num;
         // });
-        this.onLineCarNum = res.data.data.onlineBusNumber
+        this.onLineCarNum = res.onlineBusNumber
       })
     },
     _realTimeFullRate (params) {
@@ -145,12 +145,12 @@ export default {
         //   let num = parseInt(item);
         //   this.operateCarNum += num;
         // });
-        this.operateCarNum = res.data.data.operateBusNumber
+        this.operateCarNum = res.operateBusNumber
       })
     },
     _outgoingCarNum (params) {
       this.$api['dispatch.getTypeCarNumber'](params).then(res => {
-        this.outgoingCarNum = res.data.data.nooperateBusNumber
+        this.outgoingCarNum = res.nooperateBusNumber
       })
     }
   },

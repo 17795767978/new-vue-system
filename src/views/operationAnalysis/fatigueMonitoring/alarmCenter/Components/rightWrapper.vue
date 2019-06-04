@@ -362,7 +362,7 @@ export default {
       this.$api['tiredMonitoring.warnExpert'](this.formInline).then(res => {
         console.log(res)
         if (res.url.length > 0) {
-          let url = `http:/${res.data.data.url}`
+          let url = `http:/${res.url}`
           // window.location.href = url;
           window.open(url)
           this.$message.success('正在加载。。。')

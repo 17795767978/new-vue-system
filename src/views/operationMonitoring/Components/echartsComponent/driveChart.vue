@@ -41,9 +41,9 @@ export default {
   methods: {
     _badDrivingBehavior (params) {
       this.$api['homeTired.getBadDrivingBehaviorDatas'](params).then(res => {
-        this.changeData = res.data.data
-        let dataArrValue = res.data.data.map(item => item.warnLabel)
-        let dataArrNumber = res.data.data.map(item => item.warnNumber)
+        this.changeData = res
+        let dataArrValue = res.map(item => item.warnLabel)
+        let dataArrNumber = res.map(item => item.warnNumber)
         for (let i = 0; i < dataArrValue.length; i++) {
           this.badDrivingBehavior[i] = {
             name: dataArrValue[i],

@@ -2,7 +2,7 @@
   <div class="content-wrapper">
     <el-row class="up-content">
       <h3 class="title">
-        路线{{busLine}}客流高峰时刻分析（上行）
+        客流高峰时刻分析（上行）
       </h3>
       <div class="heat-chart-wrapper">
         <upChart :checkData="checkData" :tabTypeData="tabTypeData" :isUpdateUp="isUpdateUp" @isUpdateToUp="isUpdateToUp"></upChart>
@@ -10,7 +10,7 @@
     </el-row>
     <el-row class="down-content">
       <h3 class="title">
-        路线{{busLine}}客流高峰时刻分析（下行）
+        客流高峰时刻分析（下行）
       </h3>
       <div class="heat-chart-wrapper">
         <downChart :checkData="checkData" :tabTypeData="tabTypeData" :isUpdateDown="isUpdateDown" @isUpdateToDown="isUpdateToDown"></downChart>

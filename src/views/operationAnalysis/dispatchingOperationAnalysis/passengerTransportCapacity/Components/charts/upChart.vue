@@ -4,7 +4,6 @@
       ref="upChartWrapper"
       id="up-chart-wrapper"
       :style="{width: '100%', height: '300px'}"
-      v-if="echartsData.length > 0"
       v-loading="loading"
       element-loading-background="rgba(255, 255, 255, 0.5)"
     >
@@ -12,7 +11,7 @@
     <div
       v-cloak
       ref="animationDom"
-      v-if="echartsData.length === 0"
+      v-show="echartsData.length === 0"
       class="anim"
       style="width: 100%; height: 330px; line-height:300px;text-align:center">
       暂无数据
@@ -80,9 +79,9 @@ export default {
   methods: {
     _numberAnalysisUp (params) {
       this.$api['schedulingAnalysis.getUpLineCapacityChartDatas'](params).then(res => {
-        this.xAxisData = res.data.data.xAxisNames
-        this.echartsData = res.data.data.datas
-        this.legendNames = res.data.data.legendNames
+        this.xAxisData = res.xAxisNames
+        this.echartsData = res.datas
+        this.legendNames = res.legendNames
         if (this.echartsData.length > 0) {
           this.echartsDataMax = max([max(this.echartsData[0]), max(this.echartsData[1]), max(this.echartsData[2])])
         }

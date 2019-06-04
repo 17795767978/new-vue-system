@@ -23,7 +23,6 @@ import apis from '@/service/api'
 class ApiCounstructor {
   //
   constructor (options) {
-    console.log(options)
     this.api = Object.create(null)
     this.debugApi = []
     this.apiBuilder(options)

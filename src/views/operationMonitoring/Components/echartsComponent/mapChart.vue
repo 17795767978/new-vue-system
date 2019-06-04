@@ -150,14 +150,14 @@ export default {
   methods: {
     _positionRating (params) {
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
-        this.markers = res.data.data
+        this.markers = res
       })
     },
     _hotDataLine (params) {
       this.$api['homeMap.getBusHeatmapDatas'](params).then(res => {
-        let dataArrCount = res.data.data.map(item => parseInt(item.getOnNumber))
-        let dataArrLat = res.data.data.map(item => item.lat)
-        let dataArrLng = res.data.data.map(item => item.lng)
+        let dataArrCount = res.map(item => parseInt(item.getOnNumber))
+        let dataArrLat = res.map(item => item.lat)
+        let dataArrLng = res.map(item => item.lng)
         for (let i = 0; i < dataArrCount.length; i++) {
           this.hotdata[i] = {
             lng: +dataArrLng[i],
