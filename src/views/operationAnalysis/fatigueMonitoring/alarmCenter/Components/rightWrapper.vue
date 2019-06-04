@@ -197,6 +197,13 @@ export default {
     }
   },
   created () {
+    let dataNow = new Date()
+    let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
+    let timeStart = moment(endTime).format('YYYY-MM-DD HH:MM:ss')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD HH:MM:ss')
+    setTimeout(() => {
+      this.formInline.timeValue = [timeStart, timeEnd]
+    }, 20)
     this._alarmType({
       warnLevel: '1'
     })
