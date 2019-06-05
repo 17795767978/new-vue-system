@@ -4,13 +4,13 @@
      <el-row :gutter="24">
        <el-col :span="8" class="data-style">
          <span style="margin-right: 30px;">{{dataNow}}</span>
-         <!-- <i v-if="weather.indexOf('晴') !== -1" class="iconfont icon-tianqi-qing" style="color: #ff0"></i>
+         <i v-if="weather.indexOf('晴') !== -1" class="iconfont icon-tianqi-qing" style="color: #ff0"></i>
          <i v-else-if="weather.indexOf('雨') !== -1" class="iconfont icon-tianqi-yu"></i>
          <i v-else-if="weather.indexOf('阴') !== -1" class="iconfont icon-tianqi-yin"></i>
          <i v-else-if="weather.indexOf('雷') !== -1" class="iconfont icon-tianqi-leiyu"></i>
-         <i v-else-if="weather.indexOf('多云') !== -1" class="iconfont icon-tianqi-icon-tianqi-duoyun"></i> -->
-         <!-- <i v-else-if="weather.indexOf('雪') !== -1" class="iconfont icon-tianqi-daxue"></i> -->
-         <i class="iconfont icon-tianqi-daxue"></i>
+         <i v-else-if="weather.indexOf('多云') !== -1" class="iconfont icon-tianqi-icon-tianqi-duoyun"></i>
+         <i v-else-if="weather.indexOf('雪') !== -1" class="iconfont icon-tianqi-daxue"></i>
+         <!-- <i  class="iconfont icon-tianqi-daxue"></i> -->
          <span style="margin-left: 10px;">{{weather}}</span>
          <span style="margin-left: 30px;">{{temperature}}</span>
        </el-col>
@@ -54,10 +54,17 @@ export default {
     _getWeather () {
       console.log(this.$api['weather.getWeather'])
       this.$api['weather.getWeather']().then(res => {
-        let lowTemperature = res.result.templow
-        let heightTemperature = res.result.temphigh
-        this.temperature = `${lowTemperature}-${heightTemperature} °C`
-        this.weather = res.result.weather
+        if (res.result) {
+          let lowTemperature = res.result.templow
+          let heightTemperature = res.result.temphigh
+          this.temperature = `${lowTemperature}-${heightTemperature} °C`
+          this.weather = res.result.weather
+          setTimeout(() => {
+            this._getWeather()
+          }, 10 * 60 * 1000)
+        } else {
+          this.$message.warning('暂无数据')
+        }
       })
     }
   },

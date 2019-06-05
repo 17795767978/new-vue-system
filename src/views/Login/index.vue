@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!-- <canvas id="loginAni"></canvas> -->
-    <div class="img-wrapper"></div>
+    <div class="img-wrapper animate-bounce-up"></div>
     <div class="login-wrapper">
       <h3 class="title">邢台公交管理综合分析决策系统</h3>
       <div class="login-block">
@@ -45,9 +45,6 @@
 </template>
 
 <script>
-import { Form, FormItem, Input, Button } from 'element-ui'
-// import { startAnimation } from './loginAni'
-
 export default {
   name: 'Login',
   data () {
@@ -97,10 +94,6 @@ export default {
     }
   },
   components: {
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button
   }
 }
 </script>
@@ -125,6 +118,22 @@ export default {
     background-image: url('../../assets/images/lg-tb.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
+  }
+  @keyframes bounce-up {
+    25% {
+      transform: translateY(30px);
+    }
+    50%, 100% {
+      transform: translateY(0);
+    }
+    75% {
+      transform: translateY(-30px);
+    }
+  }
+
+  .animate-bounce-up{
+    -webkit-animation: bounce-up 4s linear infinite;
+    animation: bounce-up 4s linear infinite;
   }
   .login-wrapper {
     .title {

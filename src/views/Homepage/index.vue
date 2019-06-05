@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container cont-container">
     <el-row>
-      <span class="main-title">大数据平台软件系统</span>
+      <span class="main-title">邢台公交管理综合分析决策系统</span>
     </el-row>
     <el-row class="main-card" :gutter="50">
       <el-col style="margin-left: 50px;" :span="8">
@@ -57,25 +57,28 @@ import iconHomeBjfx from '../../assets/images/homeIcon/bjfx.png'
 import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
 import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
 import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
+const PER_ANA = [
+  { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis' },
+  { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order' },
+  { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate' },
+  { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume' },
+  { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity' },
+  { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis' }
+]
+const SIMPLE = { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis' }
+const RIRED_CONTRAL = [
+  { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center' },
+  { name: '设备状态', icon: iconHomeBjzt, path: '/device-status' },
+  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis' },
+  { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management' }
+]
 export default {
   name: 'Homepage',
   data () {
     return {
-      operationAnalysis: [
-        { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis' },
-        { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order' },
-        { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate' },
-        { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume' },
-        { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity' },
-        { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis' }
-      ],
-      simple: { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis' },
-      tiredContral: [
-        { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center' },
-        { name: '设备状态', icon: iconHomeBjzt, path: '/device-status' },
-        { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis' },
-        { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management' }
-      ]
+      operationAnalysis: [],
+      simple: {},
+      tiredContral: []
     }
   },
   components: {
@@ -84,7 +87,12 @@ export default {
     // ...mapGetters(['roles'])
   },
   mounted () {
-    console.log(this.$store.getters)
+    // console.log(this.$store.getters)
+    let roles = this.$store.getters.roles
+    console.log(roles)
+    this.operationAnalysis = PER_ANA
+    this.simple = SIMPLE
+    this.tiredContral = RIRED_CONTRAL
   },
   methods: {
     goToContral () {

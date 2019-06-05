@@ -27,7 +27,8 @@ export const dispatchApi = {
       path: '/zhfxpt/getRealtimeTrips',
       mockPath: '/zhfxpt/getRealtimeTrips',
       params: {
-        orgId: ''
+        orgId: '',
+        lineId: ''
       },
       desc: '实时趟次'
     },
@@ -48,7 +49,8 @@ export const dispatchApi = {
       path: '/zhfxpt/getRealtimeClasses',
       mockPath: '/zhfxpt/getRealtimeClasses',
       params: {
-        orgId: ''
+        orgId: '',
+        lineId: ''
       },
       desc: '实时班次'
     },

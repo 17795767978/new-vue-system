@@ -52,16 +52,7 @@
 </template>
 
 <script>
-// import {
-//   passengeFlow,
-//   realTimePassengeFlow,
-//   operateLines,
-//   onLineCarNum,
-//   realTimeFullRate,
-//   operateCarNum,
-//   outgoingCarNum
-// } from 'server/interface'
-import { Row, Col, Card } from 'element-ui'
+const TIME = 1 * 60 * 1000
 export default {
   data () {
     return {
@@ -105,19 +96,43 @@ export default {
   methods: {
     _passengeFlow (params) {
       this.$api['passengerFlow.getTotalPassengerFlow'](params).then(res => {
-        this.passengeFlowNum = res.personCount
+        console.log(res)
+        if (res.personCount) {
+          this.passengeFlowNum = res.personCount
+        } else {
+          this.passengeFlowNum = '--'
+        }
+        setTimeout(() => {
+          this._passengeFlow()
+        }, TIME)
       })
     },
     _realTimePassengeFlow (params) {
       this.$api['passengerFlow.getRealTimePersoncountAndFullLoadRate'](params).then(res => {
-        this.totelPerson = res.personCount
-        this.totelFullLoadRate = res.fullLoadRate
+        if (res && res.personCount && res.fullLoadRate) {
+          this.totelPerson = res.personCount
+          this.totelFullLoadRate = res.fullLoadRate
+        } else {
+          this.totelPerson = '--'
+          this.totelFullLoadRate = '--'
+        }
+        setTimeout(() => {
+          this._realTimePassengeFlow()
+        }, TIME)
       })
     },
     _operateLines (params) {
       this.$api['passengerFlow.getRealTimeOperLines'](params).then(res => {
-        this.operLines = res.operLines
-        this.totalLines = res.totalLines
+        if (res && res.operLines && res.totalLines) {
+          this.operLines = res.operLines
+          this.totalLines = res.totalLines
+        } else {
+          this.operLines = '--'
+          this.totalLines = '--'
+        }
+        setTimeout(() => {
+          this._operateLines()
+        }, TIME)
       })
     },
     _onLineCarNum (params) {
@@ -129,7 +144,14 @@ export default {
         //   let num = parseInt(item);
         //   this.onLineCarNum += num;
         // });
-        this.onLineCarNum = res.onlineBusNumber
+        if (res && res.onlineBusNumber) {
+          this.onLineCarNum = res.onlineBusNumber
+        } else {
+          this.onLineCarNum = '--'
+        }
+        setTimeout(() => {
+          this._onLineCarNum()
+        }, TIME)
       })
     },
     _realTimeFullRate (params) {
@@ -145,19 +167,30 @@ export default {
         //   let num = parseInt(item);
         //   this.operateCarNum += num;
         // });
-        this.operateCarNum = res.operateBusNumber
+        if (res && res.operateBusNumber) {
+          this.operateCarNum = res.operateBusNumber
+        } else {
+          this.operateCarNum = '--'
+        }
+        setTimeout(() => {
+          this._operateCarNum()
+        }, TIME)
       })
     },
     _outgoingCarNum (params) {
       this.$api['dispatch.getTypeCarNumber'](params).then(res => {
-        this.outgoingCarNum = res.nooperateBusNumber
+        if (res && res.nooperateBusNumber) {
+          this.outgoingCarNum = res.nooperateBusNumber
+        } else {
+          this.outgoingCarNum = '--'
+        }
+        setTimeout(() => {
+          this._outgoingCarNum()
+        }, TIME)
       })
     }
   },
   components: {
-    'el-row': Row,
-    'el-col': Col,
-    'el-card': Card
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="pic-detail-content">
     <h3 class="demonstration">报警图片<span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{imgList && imgList.length || 0}}张</span></h3>
-    <el-carousel v-if="imgList && imgList.length > 0" type="card" height="200px" trigger="click">
+    <el-carousel v-if="imgList && imgList.length > 0" type="card" height="200px" trigger="click" :autoplay="false">
       <el-carousel-item v-for="(item, index) in imgList" :key="index">
         <img :src="item.url" width="100%" height="100%" />
       </el-carousel-item>

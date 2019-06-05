@@ -2,26 +2,32 @@
   <div class="chart-complete-wrapper">
     <el-row style="height: 200px" :gutter="5">
       <el-col style="height: 100%;" :span="8">
-        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '80%', height: '200px',margin: '0 auto'}"></div>
-        <!-- <noEcharts style="display: none" :eChartsTitle="'实时里程'"></noEcharts> -->
+        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '95%', height: '200px',margin: '0 auto'}"></div>
+        <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'实时里程'"></noEcharts>
+        <!-- <div v-show="realTimeMileage.length === 0" class="warning">
+          <h2 style="text-align:center; color: #fff">暂无数据</h2>
+        </div> -->
       </el-col>
-      <el-col :span="8" style="border-left: 1px #214e74 solid;border-right: 1px #214e74 solid;height: 100%">
-        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '80%', height: '200px', margin: '0 auto'}">
+      <el-col :span="8" style="border-left: 1px #fff solid;border-right: 1px #fff solid;height: 100%">
+        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '95%', height: '200px', margin: '0 auto'}">
         </div>
-        <!-- <noEcharts v-else :eChartsTitle="'实时趟次'"></noEcharts> -->
+        <!-- <div v-show="realTimeMileage.length === 0" class="warning">
+          <h2 style="text-align:center; color: #fff">暂无数据</h2>
+        </div> -->
+        <noEcharts v-show="realTimeTrips.length === 0" :eChartsTitle="'实时趟次'"></noEcharts>
       </el-col>
       <el-col style="height: 100%" :span="8">
-        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-right" :style="{width: '80%', height: '200px', margin: '0 auto'}"></div>
-        <!-- <noEcharts v-else :eChartsTitle="'实时换班'"></noEcharts> -->
+        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-right" :style="{width: '95%', height: '200px', margin: '0 auto'}"></div>
+        <noEcharts v-show="realTimeShift.length === 0" :eChartsTitle="'实时换班'"></noEcharts>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-// import { realTimeMileage, realTimeTrips, realTimeShift } from 'server/interface'
 import { max } from '../../../utils/max.js'
-import { Row, Col } from 'element-ui'
+import noEcharts from './echartsComponent/noEcharts'
+const TIME = 5 * 60 * 1000
 export default {
   data () {
     return {
@@ -60,9 +66,14 @@ export default {
   methods: {
     _realTimeMileage (params) {
       this.$api['dispatch.getRealtimeMileage'](params).then(res => {
-        this.realTimeMileage = res.map(item => parseInt(item.realtimeMileage))
-        this.orgNameMileage = res.map(item => item.orgName)
-        this.realTimeMileageMax = max(this.realTimeMileage)
+        if (res) {
+          this.realTimeMileage = res.map(item => parseInt(item.realtimeMileage))
+          this.orgNameMileage = res.map(item => item.orgName)
+          this.realTimeMileageMax = max(this.realTimeMileage)
+        }
+        setTimeout(() => {
+          this._realTimeMileage(params)
+        }, TIME)
       })
     },
     _realTimeTrips (params) {
@@ -70,6 +81,9 @@ export default {
         this.realTimeTrips = res.map(item => parseInt(item.realtimeTrips))
         this.orgNameTrips = res.map(item => item.orgName)
         this.realTimeTripsMax = max(this.realTimeTrips)
+        setTimeout(() => {
+          this._realTimeTrips(params)
+        }, TIME)
       })
     },
     _realTimeShift (params) {
@@ -77,6 +91,9 @@ export default {
         this.realTimeShift = res.map(item => parseInt(item.realtimeClasses))
         this.orgNameShift = res.map(item => item.orgName)
         this.realTimeShiftMax = max(this.realTimeShift)
+        setTimeout(() => {
+          this._realTimeShift(params)
+        }, TIME)
       })
     },
     drawLineLeft () {
@@ -264,7 +281,7 @@ export default {
             name: '实时趟次',
             type: 'bar',
             // barGap: '-100%',
-            barWidth: '15',
+            barWidth: '20',
             data: this.realTimeTrips,
             itemStyle: {
               emphasis: {
@@ -348,7 +365,7 @@ export default {
             name: '实时班次',
             type: 'bar',
             // barGap: '-100%',
-            barWidth: '15',
+            barWidth: '20',
             data: this.realTimeShift,
             itemStyle: {
               emphasis: {
@@ -378,8 +395,7 @@ export default {
     }
   },
   components: {
-    'el-row': Row,
-    'el-col': Col
+    noEcharts
   }
 }
 </script>
@@ -387,7 +403,7 @@ export default {
 <style lang="scss" scoped>
 .chart-complete-wrapper {
   width: 100%;
-  padding: 10px 50px;
+  padding: 10px 10px;
   box-sizing: border-box;
   background-color: rgba(0,0,0, 0.65);
   border-radius: 6px;

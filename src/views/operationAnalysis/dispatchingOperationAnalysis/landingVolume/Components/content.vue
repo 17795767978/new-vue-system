@@ -1,7 +1,7 @@
 <template>
   <div class="content-wrapper">
     <el-row :gutter="24">
-      <el-col :span="12">
+      <el-col :span="12" style="height: 691px">
         <el-table
           :data="upTableData"
           border
@@ -10,7 +10,7 @@
           class="inside-table"
           @expand-change="rowData"
           style="width: 100%;"
-          max-height="691"
+          height="691"
           >
           <el-table-column type="expand" width="60" fixed>
             <template slot-scope="props">
@@ -40,7 +40,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  v-if="emptyStations.length > 0"
+                  v-show="emptyStations.length > 0"
                   align="center"
                   v-for="emptyStation in emptyStations"
                   :key="emptyStation"
@@ -52,7 +52,7 @@
                 </el-table-column>
                 <el-table-column
                   align="center"
-                  width="59"
+                  width="99"
                   label="总数"
                   fixed="right"
                   prop="totle">
@@ -70,7 +70,7 @@
           <!-- 有数据的station -->
           <el-table-column
             align="center"
-            v-if="stations.length > 0"
+            v-show="stations.length > 0"
             v-for="(station, index) in stations"
             :key="index"
             :label="station"
@@ -81,7 +81,7 @@
           </el-table-column>
           <!-- emptyStations -->
           <el-table-column
-            v-if="emptyStations.length > 0"
+            v-show="emptyStations.length > 0"
             align="center"
             v-for="emptyStation in emptyStations"
             :key="emptyStation"
@@ -95,6 +95,7 @@
             align="center"
             label="总数"
             fixed="right"
+            :width="stations.length > 0 ? '100' : ''"
             prop="totle">
           </el-table-column>
         </el-table>
@@ -108,7 +109,7 @@
           @expand-change="rowData"
           class="inside-table"
           style="width: 100%"
-          max-height="691"
+          height="691"
           >
           <el-table-column type="expand" width="60" fixed>
             <template slot-scope="props">
@@ -129,7 +130,7 @@
                 </el-table-column>
                 <el-table-column
                   align="center"
-                  v-if="mptyStations.length > 0"
+                  v-show="stations.length > 0"
                   v-for="(station, index) in stations"
                   :key="index"
                   :label="station"
@@ -139,7 +140,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  v-if="emptyStations.length > 0"
+                  v-show="emptyStations.length > 0"
                   align="center"
                   v-for="emptyStation in emptyStations"
                   :key="emptyStation"
@@ -151,7 +152,7 @@
                 </el-table-column>
                 <el-table-column
                   align="center"
-                  width="59"
+                  width="99"
                   label="总数"
                   fixed="right"
                   prop="totle">
@@ -169,7 +170,7 @@
           <!-- 有数据的station -->
           <el-table-column
             align="center"
-            v-if="emptyStations.length > 0"
+            v-show="stations.length > 0"
             v-for="(station, index) in stations"
             :key="index"
             :label="station"
@@ -180,7 +181,7 @@
           </el-table-column>
           <!-- emptyStations -->
           <el-table-column
-            v-if="emptyStations.length > 0"
+            v-show="emptyStations.length > 0"
             align="center"
             v-for="emptyStation in emptyStations"
             :key="emptyStation"
@@ -194,6 +195,7 @@
             align="center"
             label="总数"
             fixed="right"
+            :width="stations.length > 0 ? '100' : ''"
             prop="totle">
           </el-table-column>
         </el-table>
@@ -205,7 +207,6 @@
 <script type="text/ecmascript-6">
 import { uniq } from '../../../../../utils/removal'
 import { getArrDifference } from '../../../../../utils/diffConcat'
-import { Table, TableColumn, Row, Col } from 'element-ui'
 export default {
   props: {
     selectData: {
@@ -229,7 +230,6 @@ export default {
     }
   },
   components: {
-    'el-table': Table, 'el-table-column': TableColumn, 'el-row': Row, 'el-col': Col
   },
   computed: {
   },
@@ -455,5 +455,21 @@ export default {
   .el-table__expanded-cell[class*=cell] {
     padding: 0 !important;
   }
+}
+.inside-table::scrollbar {
+  width: 10px;
+  position: absolute;
+}
+.inside-table::scrollbar-track {
+  background-color: rgba(0, 0, 0, 1.9);
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius:2em;
+}
+.inside-table::scrollbar-thumb {
+  background: rgba(23, 114, 218, 0.3);
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius:  2em;
 }
 </style>

@@ -10,8 +10,8 @@
 </template>
 
 <script>
-// import { realTimeFullRate } from 'server/interface'
 import { max } from '../../../../utils/max.js'
+const TIME = 5 * 60 * 1000
 export default {
   data () {
     return {
@@ -51,6 +51,9 @@ export default {
         this.fullLoadRateMax = max(this.fullLoadRate)
         this.drawLine()
         this.loading = false
+        setTimeout(() => {
+          this._realTimeFullRate(params)
+        }, TIME)
       })
     },
     drawLine () {
@@ -111,7 +114,7 @@ export default {
             // name: '水量',
             min: 0,
             max: this.busLoadNumberMax,
-            interval: this.busLoadNumberMax / 6,
+            interval: Math.ceil(this.busLoadNumberMax / 6),
             // axisLabel: {
             //     formatter: '{value} ml'
             // },

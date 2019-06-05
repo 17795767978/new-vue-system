@@ -6,7 +6,7 @@
 </template>
 
 <script>
-// import { lineRateTen } from 'server/interface'
+const TIME = 5 * 60 * 1000
 export default {
   data () {
     return {
@@ -17,7 +17,7 @@ export default {
   },
   created () {
     this._lineRateTen({
-      orgId: '1'
+      orgId: ''
     })
   },
   mounted () {
@@ -34,6 +34,9 @@ export default {
         // console.log(dataArr);
         this.lineName = res.map(item => item.lineName)
         this.fullLoadRate = res.map(item => item.fullLoadRate)
+        setTimeout(() => {
+          this._lineRateTen(params)
+        }, TIME)
       })
     },
     drawLine () {

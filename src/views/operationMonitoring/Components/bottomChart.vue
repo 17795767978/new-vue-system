@@ -11,7 +11,10 @@
           <h3 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h3>
           <vueSeamless  class="scroll-wrapper" :class-option="allOptions" :data="alermData">
             <p class="list-font" v-for="(list, index) in alermData" :key="index">
-              {{list}}
+              <span>{{list[0]}}：</span>
+              <!-- <span v-if="index / 2 === parseInt(index / 2)" style="color: #eadf00">{{list[1]}}</span>
+              <span v-else-if="index / 3 === parseInt(index / 3) && index / 2 === parseInt(index / 2)" style="color: #dc39ea">{{list[1]}}</span> -->
+              <span style="color: #7cf0e4;">{{list[1]}}</span>
             </p>
           </vueSeamless>
         </div>
@@ -22,9 +25,9 @@
 
 <script>
 import rankingChart from './echartsComponent/rankingChart.vue'
-// import { badDrivingBehavior } from 'server/interface.js'
 import vueSeamless from 'vue-seamless-scroll'
 import { Row, Col } from 'element-ui'
+const TIME = 5 * 60 * 1000
 export default {
   data () {
     return {
@@ -51,7 +54,14 @@ export default {
   methods: {
     _badDrivingBehavior (params) {
       this.$api['homeTired.getBadDrivingBehaviorTable'](params).then(res => {
-        this.alermData = res
+        this.alermData = []
+        res.forEach(alert => {
+          this.alermData.push(alert.split('：'))
+        })
+        console.log(this.alermData)
+        setTimeout(() => {
+          this._badDrivingBehavior()
+        }, TIME)
       })
     }
   },

@@ -11,7 +11,7 @@ export const homeTiredApi = {
       desc: '不良驾驶行为数据(按分公司)'
     },
     {
-      name: 'getBusHeatmapDatas',
+      name: 'getStatisticDatasByWarnType',
       method: 'POST',
       path: '/zhfxpt/getStatisticDatasByWarnType',
       mockPath: '/zhfxpt/getStatisticDatasByWarnType',

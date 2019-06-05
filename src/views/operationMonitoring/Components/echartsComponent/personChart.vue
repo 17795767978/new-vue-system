@@ -10,9 +10,9 @@
 </template>
 
 <script>
-// import { realTimePassengeFlow } from 'server/interface'
 import noEcharts from './noEcharts.vue'
 import { max } from '../../../../utils/max.js'
+const TIME = 5 * 60 * 1000
 export default {
   data () {
     return {
@@ -47,6 +47,9 @@ export default {
         this.personCountMax = max(this.personCount)
         this.drawLine()
         this.loading = false
+        setTimeout(() => {
+          this._realTimePassengeFlow(params)
+        }, TIME)
       })
     },
     drawLine () {

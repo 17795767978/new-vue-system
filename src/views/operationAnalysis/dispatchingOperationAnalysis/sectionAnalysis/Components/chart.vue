@@ -149,7 +149,7 @@ export default {
           // name: 'Punch Card',
           type: 'scatter',
           symbolSize: function (val) {
-            return val[2] * 5
+            return val[2] * 0.5
           },
           data: data,
           animationDelay: function (idx) {

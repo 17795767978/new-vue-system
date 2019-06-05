@@ -26,9 +26,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import { positionRating, hotDataLine } from 'server/interface.js'
 import { BaiduMap, BmMarker, BmlHeatmap } from 'vue-baidu-map'
 import iconCar from '../../../../assets/images/bus.png'
+const TIME = 5 * 60 * 1000
 export default {
   data () {
     return {
@@ -151,6 +151,9 @@ export default {
     _positionRating (params) {
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
         this.markers = res
+        setTimeout(() => {
+          this._positionRating(params)
+        }, TIME)
       })
     },
     _hotDataLine (params) {
@@ -166,6 +169,9 @@ export default {
           }
         }
         this.max = 4000
+        setTimeout(() => {
+          this._hotDataLine(params)
+        }, TIME)
       })
     },
     handler ({ BMap, map }) {

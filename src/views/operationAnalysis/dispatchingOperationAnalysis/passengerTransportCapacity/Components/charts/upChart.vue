@@ -112,6 +112,8 @@ export default {
           bottom: '3%',
           containLabel: true
         },
+        color: ['#eadf00', '#fa8a96', '#8bb4ea'],
+        // 250,138,150
         // toolbox: {
         //     feature: {
         //         saveAsImage: {}
@@ -132,17 +134,62 @@ export default {
           {
             name: '运力',
             type: 'line',
-            data: this.echartsData[0]
+            data: this.echartsData[0],
+            areaStyle: {
+              normal: {
+              // 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                  offset: 0,
+                  color: 'rgba(234,223,0,0.39)'
+                }, {
+                  offset: 0.34,
+                  color: 'rgba(234,223,0,0.25)'
+                }, {
+                  offset: 1,
+                  color: 'rgba(234,223,0,0.00)'
+                }])
+              }
+            }
           },
           {
             name: '运量',
             type: 'line',
-            data: this.echartsData[1]
+            data: this.echartsData[1],
+            areaStyle: {
+              normal: {
+              // 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                  offset: 0,
+                  color: 'rgba(250,138,150,0.39)'
+                }, {
+                  offset: 0.34,
+                  color: 'rgba(250,138,150,0.25)'
+                }, {
+                  offset: 1,
+                  color: 'rgba(250,138,150,0.00)'
+                }])
+              }
+            }
           },
           {
             name: '车内人数',
             type: 'line',
-            data: this.echartsData[2]
+            data: this.echartsData[2],
+            areaStyle: {
+              normal: {
+              // 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                  offset: 0,
+                  color: 'rgba(139,180,234,0.39)'
+                }, {
+                  offset: 0.34,
+                  color: 'rgba(139,180,234,0.25)'
+                }, {
+                  offset: 1,
+                  color: 'rgba(139,180,234,0.00)'
+                }])
+              }
+            }
           }
         ]
       })

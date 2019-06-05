@@ -182,6 +182,14 @@ export default {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
+          },
+          formatter: function (params, ticket, callback) {
+            console.log(params)
+            let valueRate = params[3].value
+            let valueUpPersonNum = params[0].value
+            let valueDownPersonNum = params[1].value
+            let passengerFlow = params[2].value
+            return params[0].name + '<br>' + '上车人数：' + valueUpPersonNum + '<br>' + '下车人数：' + valueDownPersonNum + '<br>' + '断面客流：' + passengerFlow + '<br>' + '满载率：' + valueRate + '%'
           }
         },
         // color: ['#0490b3', '#6e9724', '#b22679', '#0468b2'],

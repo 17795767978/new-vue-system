@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top: -200px;">
     <h3 class="title">{{eChartsTitle}}</h3>
     <h5 class="content">暂无数据</h5>
   </div>
@@ -23,6 +23,8 @@ export default {
 .title {
   color: #fff;
   text-align: center;
+  font-size: 20px;
+  margin-top: 0px;
 }
 .content {
   color: #fff;

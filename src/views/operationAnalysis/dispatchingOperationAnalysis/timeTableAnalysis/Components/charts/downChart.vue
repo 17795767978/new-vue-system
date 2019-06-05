@@ -3,7 +3,7 @@
     <div class="down-chart-wrapper"
       ref="downChartWrapper"
       id="down-chart-wrapper"
-      :style="{width: '100%', height: '400px'}"
+      :style="{width: '100%', height: '320px'}"
       element-loading-background="rgba(255, 255, 255, 0.5)"
     >
     </div>

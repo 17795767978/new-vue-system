@@ -72,7 +72,7 @@ export default {
           this.echartData.forEach(item => {
             maxBefore.push(max(item))
           })
-          this.maxData = max(maxBefore) * this.echartData.length
+          this.maxData = max(maxBefore) * this.echartData.length / 3
           this.$refs.echartWrapper.style.display = 'block'
           this.dawnLine()
         } else {

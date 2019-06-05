@@ -1,5 +1,5 @@
 <template>
-  <div id="level-chart" :style="{width: '90%', height: '230px',padding: '10px 0', margin: '0 auto'}"
+  <div id="level-chart" :style="{width: '90%', height: '200px',padding: '10px 0', margin: '0 auto'}"
     v-loading="loading"
     element-loading-background="rgba(0, 0, 0, 0)"
   >
@@ -7,13 +7,22 @@
 </template>
 
 <script>
-// import { getLevelList } from 'server/interface'
+const TIME = 5 * 60 * 1000
 export default {
   data () {
     return {
       loading: true,
       changeData: [],
-      getLevelList: []
+      getLevelList: [
+        {
+          name: '一级',
+          value: 0
+        },
+        {
+          name: '二级',
+          value: 0
+        }
+      ]
     }
   },
   created () {
@@ -34,16 +43,28 @@ export default {
     _getLevelList (params) {
       this.$api['homeTired.getAnalysisDatasByWarnLeave'](params).then(res => {
         this.changeData = res
-        let dataArrValue = res.map(item => item.warnLabel)
-        let dataArrNumber = res.map(item => item.warnNumber)
-        for (let i = 0; i < dataArrValue.length; i++) {
-          this.getLevelList[i] = {
-            name: dataArrValue[i],
-            value: dataArrNumber[i]
-          }
-        }
+        console.log(this.changeData)
+        // let dataArrValue = res.map(item => item.warnLabel)
+        // let dataArrNumber = res.map(item => item.warnNumber)
+        // for (let i = 0; i < this.changeData.length; i++) {
+        //   if () {}
+        //   this.getLevelList[i] = {
+        //     name: dataArrValue[i],
+        //     value: dataArrNumber[i]
+        //   }
+        // }
+        this.changeData.forEach(data => {
+          this.getLevelList.forEach(list => {
+            if (data.warnLabel === list.name) {
+              list.value = data.warnNumber
+            }
+          })
+        })
         this.drawLine()
         this.loading = false
+        setTimeout(() => {
+          this._getLevelList(params)
+        }, TIME)
       })
     },
     drawLine () {
@@ -60,18 +81,22 @@ export default {
         legend: {
           x: 'center',
           y: 'bottom',
-          data: ['一般', '预警', '严重'],
+          data: ['一级', '二级'],
           bottom: 20,
           textStyle: {
             color: '#fff'
           }
         },
-        color: ['#2bacd0', '#fedd00', '#f98e00'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        color: ['#2bacd0', '#fedd00'],
         series: [
           {
             name: '面积模式',
             type: 'pie',
-            radius: [0, 60],
+            radius: '50%',
             center: ['50%', '50%'],
             roseType: 'radius',
             label: {

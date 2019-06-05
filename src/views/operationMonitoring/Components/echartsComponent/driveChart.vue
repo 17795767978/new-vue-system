@@ -2,7 +2,7 @@
 <div>
   <div
     id="drive-chart"
-    :style="{width: '90%', height: '230px',padding: '10px 0', margin: '0 auto'}"
+    :style="{width: '90%', height: '200px',padding: '10px 0', margin: '0 auto'}"
     v-loading="loading"
     element-loading-background="rgba(0, 0, 0, 0)"
     >
@@ -11,8 +11,7 @@
 </template>
 
 <script>
-// import { badDrivingBehavior } from 'server/interface'
-// import noEcharts from './noEcharts.vue';
+const TIME = 5 * 60 * 1000
 export default {
   data () {
     return {
@@ -40,7 +39,7 @@ export default {
   },
   methods: {
     _badDrivingBehavior (params) {
-      this.$api['homeTired.getBadDrivingBehaviorDatas'](params).then(res => {
+      this.$api['homeTired.getStatisticDatasByWarnType'](params).then(res => {
         this.changeData = res
         let dataArrValue = res.map(item => item.warnLabel)
         let dataArrNumber = res.map(item => item.warnNumber)
@@ -50,9 +49,12 @@ export default {
             value: dataArrNumber[i]
           }
         }
+        console.log(this.badDrivingBehavior)
         this.drawLine()
         this.loading = false
-        console.log(this.badDrivingBehavior)
+        setTimeout(() => {
+          this._badDrivingBehavior(params)
+        }, TIME)
       })
     },
     drawLine () {
@@ -66,11 +68,16 @@ export default {
             'color': '#fff'
           }
         },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        color: ['#ffa45e', '#c8e49d', '#fedd00', '#7ce1de', '#f3b3cc', '#dc3971'],
         series: [
           {
             name: '面积模式',
             type: 'pie',
-            radius: [0, 60],
+            radius: '50%',
             center: ['50%', '60%'],
             roseType: 'radius',
             data: this.badDrivingBehavior

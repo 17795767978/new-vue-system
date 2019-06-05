@@ -12,7 +12,7 @@
           indicator-position="none"
           :autoplay="false"
           trigger="click">
-          <el-carousel-item v-for="(item, index) in videoList" :key="index">
+          <el-carousel-item v-for="(item, index) in videoList" :key="index" >
             <video :src="item.url" width="100%" height="100%" controls></video>
           </el-carousel-item>
         </el-carousel>

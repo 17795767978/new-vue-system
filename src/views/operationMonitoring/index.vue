@@ -50,7 +50,7 @@ export default {
   width: 100%;
   min-height: calc(100vh);
   overflow: auto;
-  background: url(../../assets/images/space.jpg);
+  background: url(../../assets/images/space.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   z-index: 1002;
