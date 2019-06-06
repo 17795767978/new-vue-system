@@ -1,6 +1,6 @@
 <template>
   <div class="header-wrapper">
-    <header>
+    <header style="margin-bottom: 10px">
      <el-row :gutter="24">
        <el-col :span="8" class="data-style">
          <span style="margin-right: 30px;">{{dataNow}}</span>
@@ -15,7 +15,7 @@
          <span style="margin-left: 30px;">{{temperature}}</span>
        </el-col>
        <el-col :span="8">
-        <h2 class="font">{{title}}</h2>
+        <h1 class="font">{{title}}</h1>
        </el-col>
        <el-col :span="8">
        </el-col>
@@ -34,7 +34,7 @@ export default {
   data () {
     return {
       dataNow: '',
-      title: '邢台市公交运营监控系统',
+      title: '邢台公交管理综合分析决策系统',
       timer: null,
       temperature: '',
       weather: ''
@@ -79,7 +79,7 @@ export default {
 .header-wrapper {
   width: 100%;
   .data-style {
-    line-height: 67px;
+    line-height: 50px;
     font-size: 16px;
     color: #fff;
     font-weight: bold;
@@ -87,6 +87,9 @@ export default {
   .font {
     color: #fff;
     text-align: center;
+    font-size: 20px;
+    margin: 0px;
+    line-height:  50px;
   }
 }
 </style>

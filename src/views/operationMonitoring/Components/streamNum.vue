@@ -84,14 +84,8 @@ export default {
     this._realTimeFullRate({
       orgId: ''
     })
-    this._operateCarNum({
-      orgId: '',
-      type: '1'
-    })
-    this._outgoingCarNum({
-      orgId: '',
-      type: '0'
-    })
+    this._operateCarNum()
+    this._outgoingCarNum()
   },
   methods: {
     _passengeFlow (params) {
@@ -103,7 +97,7 @@ export default {
           this.passengeFlowNum = '--'
         }
         setTimeout(() => {
-          this._passengeFlow()
+          this._passengeFlow(params)
         }, TIME)
       })
     },
@@ -117,7 +111,7 @@ export default {
           this.totelFullLoadRate = '--'
         }
         setTimeout(() => {
-          this._realTimePassengeFlow()
+          this._realTimePassengeFlow(params)
         }, TIME)
       })
     },
@@ -131,7 +125,7 @@ export default {
           this.totalLines = '--'
         }
         setTimeout(() => {
-          this._operateLines()
+          this._operateLines(params)
         }, TIME)
       })
     },
@@ -150,7 +144,7 @@ export default {
           this.onLineCarNum = '--'
         }
         setTimeout(() => {
-          this._onLineCarNum()
+          this._onLineCarNum(params)
         }, TIME)
       })
     },
@@ -159,8 +153,8 @@ export default {
         console.log(res)
       })
     },
-    _operateCarNum (params) {
-      this.$api['dispatch.getTypeCarNumber'](params).then(res => {
+    _operateCarNum () {
+      this.$api['dispatch.getOnCarNumber']().then(res => {
         // let dataArr = res.data.data;
         // let numArr = dataArr.map(item => item.operateBusNumber);
         // numArr.forEach(item => {
@@ -177,8 +171,8 @@ export default {
         }, TIME)
       })
     },
-    _outgoingCarNum (params) {
-      this.$api['dispatch.getTypeCarNumber'](params).then(res => {
+    _outgoingCarNum () {
+      this.$api['dispatch.getOffCarNumber']().then(res => {
         if (res && res.nooperateBusNumber) {
           this.outgoingCarNum = res.nooperateBusNumber
         } else {
@@ -211,6 +205,18 @@ export default {
       font-size: 20px;
       font-weight: bold;
       height: 30px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.bg-style {
+  .el-card__body {
+    padding: 10px 20px;
+    box-sizing: border-box;
+    .font-style {
+      height: 20px !important;
+      font-size: 15px !important;
     }
   }
 }

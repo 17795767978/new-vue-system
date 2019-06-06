@@ -108,7 +108,7 @@ export default {
             'color': '#fff'
           }
         },
-        // color: ['#242d78', '#03abd0', '#ff30a0'],
+        color: ['#ff30a0', '#242d78', '#03abd0'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -219,7 +219,7 @@ export default {
             'color': '#fff'
           }
         },
-        // color: ['#03abd0', '#fedd00', '#8fc31f'],
+        color: [ '#fedd00', '#8fc31f', '#03abd0' ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -288,8 +288,7 @@ export default {
                 barBorderRadius: 20
               },
               normal: {
-                barBorderRadius: 20,
-                color: '#8fc31f'
+                barBorderRadius: 20
               }
             }
           }
@@ -307,7 +306,7 @@ export default {
             'color': '#fff'
           }
         },
-        color: ['#8957a1', '#f39800', '#00ffff'],
+        color: [ '#00ffff', '#8957a1', '#f39800' ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {

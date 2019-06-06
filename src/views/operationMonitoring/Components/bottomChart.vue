@@ -88,11 +88,11 @@ export default {
 <style lang="scss" scoped>
 .main-chart-wrapper {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 10px;
   box-sizing: border-box;
   .left-wrapper {
     width: 100%;
-    height: 220px;
+    height: 210px;
     background-color: rgba(0,0,0, 0.65);
     border-radius: 6px;
     box-shadow: -4px -5px 10px #409EFF;
@@ -100,7 +100,7 @@ export default {
   }
   .right-wrapper {
     width: 100%;
-    height: 220px;
+    height: 210px;
     background-color: rgba(0,0,0, 0.65);
     border-radius: 6px;
     box-shadow: -4px -5px 10px #409EFF;

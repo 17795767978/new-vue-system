@@ -29,17 +29,29 @@ function hasPermission (roles, route) {
  * @param {*} asyncRoutesMap
  * @param {*} roles
  */
-function filterAsyncRoutes (asyncRoutesMap, roles) {
-  const filterRoutes = asyncRoutesMap.filter(route => {
+// function filterAsyncRoutes (asyncRoutesMap, roles) {
+//   const filterRoutes = asyncRoutesMap.filter(route => {
+//     if (hasPermission(roles, route)) {
+//       if (route.children && route.children.length) {
+//         filterAsyncRoutes(route.children, roles)
+//       }
+//       return true
+//     }
+//     return false
+//   })
+//   return filterRoutes
+// }
+function filterAsyncRoutes (asyncRouterMap, roles) {
+  const accessedRouters = asyncRouterMap.filter(route => {
     if (hasPermission(roles, route)) {
       if (route.children && route.children.length) {
-        filterAsyncRoutes(route.children, roles)
+        route.children = filterAsyncRoutes(route.children, roles)
       }
       return true
     }
     return false
   })
-  return filterRoutes
+  return accessedRouters
 }
 
 /**
@@ -167,8 +179,9 @@ const routers = {
         return new Promise((resolve, reject) => {
           // 这里通过权限来过滤出该权限所拥有的动态路由表,然后再SET_ROUTERS
           let rolesData = getRoles(roles)
-          console.log(getRoles(roles))
+          console.log(rolesData)
           const addRoutes = filterAsyncRoutes(aysncRoutesMap, rolesData)
+          console.log(addRoutes)
           context.commit('SET_ROUTERS', { addRoutes, routerRawData: null })
           resolve({
             addRoutes,

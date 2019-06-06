@@ -57,7 +57,7 @@ export default {
 <style lang="scss" scoped>
 .main-chart-wrapper {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 10px;
   .left-wrapper {
     width: 100%;
     height: 460px;

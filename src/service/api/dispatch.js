@@ -11,15 +11,26 @@ export const dispatchApi = {
       desc: '在线车辆数'
     },
     {
-      name: 'getTypeCarNumber',
+      name: 'getOnCarNumber',
       method: 'POST',
       path: '/zhfxpt/getOperateBusNumber',
       mockPath: '/zhfxpt/getOperateBusNumber',
-      params: {
+      params: { // 0：待发 ；1：运营
         orgId: '',
-        type: '' // 0：待发 ；1：运营
+        type: '1'
       },
-      desc: '运营待发车辆数'
+      desc: '运营车辆数'
+    },
+    {
+      name: 'getOffCarNumber',
+      method: 'POST',
+      path: '/zhfxpt/getOperateBusNumber',
+      mockPath: '/zhfxpt/getOperateBusNumber',
+      params: { // 0：待发 ；1：运营
+        orgId: '',
+        type: '0'
+      },
+      desc: '运营车辆数'
     },
     {
       name: 'getRealtimeTrips',

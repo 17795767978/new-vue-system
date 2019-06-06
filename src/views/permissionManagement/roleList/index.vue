@@ -42,10 +42,7 @@
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
-            <div v-if="scope.row.roleName === '超级管理员'">
-              ----
-            </div>
-            <div v-else>
+            <div>
               <el-button
                 size="mini"
                 type="primary"

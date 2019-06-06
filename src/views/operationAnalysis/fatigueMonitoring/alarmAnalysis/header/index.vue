@@ -44,7 +44,6 @@
 <script type="text/ecmascript-6">
 // import moment from 'moment';
 // import { lineList, comList } from 'server/interface';
-import { Form, Button, DatePicker, Input, Select } from 'element-ui'
 import moment from 'moment'
 export default {
   data () {
@@ -81,18 +80,24 @@ export default {
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
-    let start = new Date()
-    this.formInline.endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
-    this.formInline.startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
-    this.formInline.valueTime = [this.formInline.startTime, this.formInline.endTime]
-    console.log(this.formInline)
+    // let start = new Date()
+    // this.formInline.endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
+    // this.formInline.startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
+    // this.formInline.valueTime = [this.formInline.startTime, this.formInline.endTime]
+    // console.log(this.formInline)
+    let dataNow = new Date()
+    let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
+    let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
+    setTimeout(() => {
+      this.formInline.valueTime = [timeStart, timeEnd]
+    }, 20)
   },
   mounted () {
   },
   methods: {
     onSubmit () {
       // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD');
-      console.log(this.formInline)
       this.$emit('configCheck', this.formInline)
     },
     onclear () {
@@ -109,19 +114,16 @@ export default {
       this.$store.dispatch('getComList').then(res => {
         this.comOptions = res
       })
-      let start = new Date()
-      this.formInline.endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
-      this.formInline.startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
-      this.formInline.valueTime = [this.formInline.startTime, this.formInline.endTime]
-      console.log(this.formInline)
+      let dataNow = new Date()
+      let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
+      let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
+      let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
+      setTimeout(() => {
+        this.formInline.valueTime = [timeStart, timeEnd]
+      }, 20)
     }
   },
   components: {
-    'el-form': Form,
-    'el-button': Button,
-    'el-date-picker': DatePicker,
-    'el-input': Input,
-    'el-select': Select
   }
 }
 </script>

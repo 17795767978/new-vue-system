@@ -60,7 +60,7 @@ export default {
           lineId: this.headerParams.value,
           // lineId: '0103',
           month,
-          type: '1'
+          type: '2'
         })
       }
     },
@@ -77,7 +77,7 @@ export default {
           lineId: this.headerParams.value,
           // lineId: '0103',
           month,
-          type: '1'
+          type: '2'
         })
         this.$emit('isUpdateToDown', false)
       }

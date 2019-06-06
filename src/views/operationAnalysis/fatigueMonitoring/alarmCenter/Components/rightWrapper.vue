@@ -150,7 +150,6 @@
 // import { tableList, alarmType, downLoad } from 'server/interface'
 // import downloadExcel from 'vue-json-excel';
 import moment from 'moment'
-import { Pagination, Table, Form, Select, Input } from 'element-ui'
 export default {
   props: {
     selectCarData: {
@@ -159,11 +158,6 @@ export default {
   },
   components: {
     // downloadExcel
-    'el-pagination': Pagination,
-    'el-table': Table,
-    'el-form': Form,
-    'el-select': Select,
-    'el-input': Input
   },
   data () {
     return {
@@ -199,13 +193,13 @@ export default {
   created () {
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
-    let timeStart = moment(endTime).format('YYYY-MM-DD HH:MM:ss')
-    let timeEnd = moment(dataNow).format('YYYY-MM-DD HH:MM:ss')
+    let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
     this._alarmType({
-      warnLevel: '1'
+      warnLevel: ''
     })
     this._tableList({
       orgId: this.formInline.orgId, // 组织机构id
@@ -225,8 +219,8 @@ export default {
   mounted () {
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
-    let timeStart = moment(endTime).format('YYYY-MM-DD HH:MM:ss')
-    let timeEnd = moment(dataNow).format('YYYY-MM-DD HH:MM:ss')
+    let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
@@ -239,7 +233,7 @@ export default {
         // 车偏号 联动
         this.changeBusPlateNumber()
         this.formInline.timeValue.forEach(time => {
-          time = moment(time).format('YYYY-MM-DD HH:MM:ss')
+          time = moment(time).format('YYYY-MM-DD HH:mm:ss')
         })
         this._tableList({
           orgId: this.formInline.orgId, // 组织机构id
@@ -279,7 +273,6 @@ export default {
     },
     _tableList (params) {
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
-        console.log(res)
         this.tableData = res.list
         this.total = res.total
         this.json_data = this.tableData
@@ -299,10 +292,15 @@ export default {
         this.formInline.busUuid = ''
         this.formInline.lineId = ''
         this.formInline.orgId = this.selectCarData.id
+      } else if (this.selectCarData.levelsType === '0') {
+        this.formInline.busPlateNumber = ''
+        this.formInline.busUuid = ''
+        this.formInline.lineId = ''
+        this.formInline.orgId = ''
       }
     },
     formatterTime (row) {
-      return moment(row.warnTime).format('YYYY-MM-DD HH:MM:ss')
+      return moment(row.warnTime).format('YYYY-MM-DD HH:mm:ss')
     },
     handleCurrentChange (val) {
       this._tableList({
@@ -330,9 +328,11 @@ export default {
       })
     },
     onSubmit () {
-      this.formInline.timeValue = this.formInline.timeValue.map(time => {
-        return moment(time).format('YYYY-MM-DD HH:MM:ss')
+      let dateArr = []
+      this.formInline.timeValue.forEach(time => {
+        dateArr.push(moment(time).format('YYYY-MM-DD HH:mm:ss'))
       })
+      console.log(dateArr)
       this._tableList({
         orgId: this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -342,12 +342,11 @@ export default {
         busSelfCode: this.formInline.busSelfCode, // 自编号
         warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
         warnTypeId: this.formInline.warnTypeId, // 报警类型
-        startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
-        endTime: this.formInline.timeValue[1],
+        startTime: dateArr[0], // 时间格式   开始结束默认查近7天的
+        endTime: dateArr[1],
         pageSize: 10,
         pageNum: 1
       })
-      console.log(this.formInline.timeValue)
     },
     onClear () {
       let dataNow = new Date()
@@ -361,7 +360,7 @@ export default {
         busSelfCode: '',
         warnLevel: '',
         warnTypeId: [],
-        timeValue: [moment(endTime).format('YYYY-MM-DD HH:MM:ss'), moment(dataNow).format('YYYY-MM-DD HH:MM:ss')]
+        timeValue: [moment(endTime).format('YYYY-MM-DD 00:00:00'), moment(dataNow).format('YYYY-MM-DD 23:59:59')]
       }
       this.$emit('clear')
     },

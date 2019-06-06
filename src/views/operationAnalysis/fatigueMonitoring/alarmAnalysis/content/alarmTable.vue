@@ -77,8 +77,8 @@ export default {
   },
   created () {
     let start = new Date()
-    let endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
-    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
+    let endTime = moment(start).format('YYYY-MM-DD 23:59:59')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD 00:00:00')
     this._alarmTableAna({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,
@@ -97,8 +97,8 @@ export default {
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
           busPlateNumber: this.selectData.busPlateNumber,
-          startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:MM:ss'),
-          endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:MM:ss'),
+          startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:mm:ss'),
+          endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:mm:ss'),
           pageSize: 10,
           pageNum: this.currentPage
         })

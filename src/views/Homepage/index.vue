@@ -6,21 +6,21 @@
     <el-row class="main-card" :gutter="50">
       <el-col style="margin-left: 50px;" :span="8">
         <h3 style="font-size: 20px;">运营监控</h3>
-        <div class="tab-con" @click="goToContral">
+        <div class="tab-con" @click="goToContral()">
         </div>
       </el-col>
       <el-col :span="7">
         <h3 style="font-size: 20px;">调度运营分析</h3>
         <div class="tab-ans">
           <ul class="item-fam">
-            <li class="item-font" v-for="(item, index) in operationAnalysis" :key="index" @click="goToChart(item.path)">
+            <li class="item-font" :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in operationAnalysis" :key="index" @click="goToChart(item)">
               <div class="inside-font">
                 <img :src="item.icon" width="30" height="30" class="img-font"/>
               </div>
               <p style="text-align: center; font-size: 13px;">{{item.name}}</p>
             </li>
           </ul>
-          <div class="simple-font">
+          <div class="simple-font" :class="simple.admin ? '' : 'simple-font-dis'"  @click="goToTimeAna(simple)">
             <div class="simple-inside-font">
               <img :src="simple.icon" width="40" height="40" class="simple-img-font"/>
             </div>
@@ -32,7 +32,7 @@
         <h3 style="font-size: 20px;">疲劳监测</h3>
         <div class="tab-contral">
           <ul class="item-fam">
-            <li class="item-font" v-for="(item, index) in tiredContral" :key="index" @click="goToAlarm(item.path)">
+            <li class="item-font"  :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in tiredContral" :key="index" @click="goToAlarm(item)">
               <div class="inside-font">
                 <img :src="item.icon" width="40" height="40" class="img-font"/>
               </div>
@@ -58,19 +58,19 @@ import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
 import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
 import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
 const PER_ANA = [
-  { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis' },
-  { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order' },
-  { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate' },
-  { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume' },
-  { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity' },
-  { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis' }
+  { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis', admin: false },
+  { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order', admin: false },
+  { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate', admin: false },
+  { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume', admin: false },
+  { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity', admin: false },
+  { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false }
 ]
-const SIMPLE = { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis' }
-const RIRED_CONTRAL = [
-  { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center' },
-  { name: '设备状态', icon: iconHomeBjzt, path: '/device-status' },
-  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis' },
-  { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management' }
+const SIMPLE = { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false }
+const TIRED_CONTRAL = [
+  { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center', admin: false },
+  { name: '设备状态', icon: iconHomeBjzt, path: '/device-status', admin: false },
+  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false },
+  { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management', admin: false }
 ]
 export default {
   name: 'Homepage',
@@ -78,33 +78,91 @@ export default {
     return {
       operationAnalysis: [],
       simple: {},
-      tiredContral: []
+      tiredContral: [],
+      rolesTem: []
     }
   },
   components: {
   },
   computed: {
-    // ...mapGetters(['roles'])
   },
   mounted () {
-    // console.log(this.$store.getters)
     let roles = this.$store.getters.roles
-    console.log(roles)
-    this.operationAnalysis = PER_ANA
-    this.simple = SIMPLE
-    this.tiredContral = RIRED_CONTRAL
+    this.getRoles(roles)
+    this.checkRoles()
+    console.log(this.rolesTem)
   },
   methods: {
+    getRoles (roles) {
+      let roleData = []
+      function filterRoles (roles) {
+        roles.forEach(role => {
+          role.roles.forEach(i => {
+            roleData.push(i)
+          })
+          if (role.children && role.children.length > 0) {
+            filterRoles(role.children)
+          }
+        })
+      }
+      filterRoles(roles)
+      this.rolesTem = roleData
+    },
+    checkRoles () {
+      let anaPer = PER_ANA
+      let simple = SIMPLE
+      let tired = TIRED_CONTRAL
+      anaPer.forEach(item => {
+        let isPer = this.rolesTem.some(role => item.path === role)
+        if (isPer) {
+          item.admin = true
+        } else {
+          item.admin = false
+        }
+      })
+      if (this.rolesTem.some(role => simple.path === role)) {
+        simple.admin = true
+      } else {
+        simple.admin = false
+      }
+      tired.forEach(item => {
+        let isPer = this.rolesTem.some(role => item.path === role)
+        if (isPer) {
+          item.admin = true
+        } else {
+          item.admin = false
+        }
+      })
+      this.operationAnalysis = anaPer
+      this.simple = simple
+      this.tiredContral = tired
+    },
     goToContral () {
       this.$router.push('/chart-analysis/chart-analysis')
     },
-    goToChart (pat) {
-      let path = `/operation-analysis${pat}`
-      this.$router.push(path)
+    goToChart (e) {
+      if (e.admin) {
+        let path = `/operation-analysis${e.path}`
+        this.$router.push(path)
+      } else {
+        this.$message.warning('权限不足，无法进入此页面')
+      }
     },
-    goToAlarm (pat) {
-      let path = `/fatigue-monitoring${pat}`
-      this.$router.push(path)
+    goToTimeAna (e) {
+      if (e.admin) {
+        let path = `/operation-analysis${e.path}`
+        this.$router.push(path)
+      } else {
+        this.$message.warning('权限不足，无法进入此页面')
+      }
+    },
+    goToAlarm (e) {
+      if (e.admin) {
+        let path = `/fatigue-monitoring${e.path}`
+        this.$router.push(path)
+      } else {
+        this.$message.warning('权限不足，无法进入此页面')
+      }
     }
   }
 }
@@ -166,8 +224,15 @@ export default {
             }
           }
         }
+        .item-font-dis {
+          background-color: #999 !important
+        }
         .item-font:hover{
           background-color: #2089db;
+          transform: scale(0.96)
+        }
+        .item-font-dis:hover {
+          background-color: #666;
           transform: scale(0.96)
         }
       }
@@ -188,8 +253,15 @@ export default {
           }
         }
       }
+      .simple-font-dis {
+        background-color: #999 !important
+      }
       .simple-font:hover {
         background-color: #2089db;
+        transform: scale(0.97)
+      }
+      .simple-font-dis:hover {
+        background-color: #666;
         transform: scale(0.97)
       }
     }
@@ -221,9 +293,16 @@ export default {
             }
           }
         }
+        .item-font-dis {
+          background-color: #999 !important
+        }
         .item-font:hover {
           background-color: #2089db;
           transform: scale(0.97)
+        }
+        .item-font-dis:hover {
+          background-color: #666;
+          transform: scale(0.96)
         }
       }
     }

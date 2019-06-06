@@ -16,8 +16,6 @@
 
 <script type="text/ecmascript-6">
 // import moment from 'moment';
-// import { onLineRate } from 'server/interface'
-import { Row, Col } from 'element-ui'
 export default {
   data () {
     return {
@@ -47,8 +45,6 @@ export default {
     }
   },
   components: {
-    'el-row': Row,
-    'el-col': Col
   }
 }
 </script>

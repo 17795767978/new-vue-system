@@ -32,10 +32,6 @@ export default {
         {
           name: '二级',
           value: 0
-        },
-        {
-          name: '三级',
-          value: 0
         }
       ]
     }
@@ -44,12 +40,12 @@ export default {
   },
   created () {
     let start = new Date()
-    let endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
-    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:s')
+    let endTime = moment(start).format('YYYY-MM-DD 23:59:59')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD 00:00:00')
     this._levelRate({
-      orgId: this.selectData.orgId,
-      lineId: this.selectData.lineId,
-      busPlateNumber: this.selectData.busPlateNumber,
+      orgId: this.selectData.orgId || '',
+      lineId: this.selectData.lineId || '',
+      busPlateNumber: this.selectData.busPlateNumber || '',
       // startTime: this.selectData.valueTime[0], // 默认7天，昨天开始.时间格式
       // endTime: this.selectData.valueTime[1],
       startTime,
@@ -70,8 +66,8 @@ export default {
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
           busPlateNumber: this.selectData.busPlateNumber,
-          startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:MM:ss'),
-          endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:MM:ss')
+          startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:mm:ss'),
+          endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
         })
       }
     }
@@ -88,12 +84,10 @@ export default {
               this.echartData[0].value = list.warnNum
             } else if (list.warnLevel === '2') {
               this.echartData[1].value = list.warnNum
-            } else if (list.warnLevel === '3') {
-              this.echartData[2].value = list.warnNum
             }
           })
         } else {
-          this.echartData = [{ name: '一级', value: 0 }, { name: '二级', value: 0 }, { name: '三级', value: 0 }]
+          this.echartData = [{ name: '一级', value: 0 }, { name: '二级', value: 0 }]
         }
         this.drawLine()
       })
@@ -114,7 +108,7 @@ export default {
         legend: {
           orient: 'vertical',
           x: 'right',
-          data: ['一级', '二级', '三级']
+          data: ['一级', '二级']
         },
         series: [
           {

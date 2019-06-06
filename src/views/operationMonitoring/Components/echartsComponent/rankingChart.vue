@@ -1,5 +1,5 @@
 <template>
-  <div id="ranking-chart" :style="{width: '100%', height: '240px',padding: '10px', margin: '0 auto', boxSizing: 'border-box'}"
+  <div id="ranking-chart" :style="{width: '100%', height: '100%',padding: '10px', margin: '0 auto', boxSizing: 'border-box'}"
     v-loading="loading"
     element-loading-background="rgba(0, 0, 0, 0)">
   </div>
@@ -65,6 +65,7 @@ export default {
             axisPointer: {
               type: 'shadow'
             },
+            offset: 30,
             splitLine: {
               show: false
             },

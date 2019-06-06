@@ -32,8 +32,8 @@ export default {
   },
   created () {
     let start = new Date()
-    let endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
-    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
+    let endTime = moment(start).format('YYYY-MM-DD 23:59:59')
+    let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD 00:00:00')
     this._alartTerm({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,
@@ -53,8 +53,8 @@ export default {
       deep: true,
       handler () {
         let start = new Date()
-        let endTime = moment(start).format('YYYY-MM-DD HH:MM:ss')
-        let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD HH:MM:ss')
+        let endTime = moment(start).format('YYYY-MM-DD 23:59:59')
+        let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD 00:00:00')
         if (this.selectData.valueTime.length !== 0) {
           this._alartTerm({
             orgId: this.selectData.orgId,
@@ -83,6 +83,7 @@ export default {
         this.echartsData = this.listData.map(list => Number(list.count))
         this.xAxise = this.listData.map(list => list.warnTypeName)
         this.maxNum = max(this.echartsData)
+        this.$emit('getWarnId', this.listData[0])
         if (this.maxNum >= 0) {
           this.drawLine()
         }

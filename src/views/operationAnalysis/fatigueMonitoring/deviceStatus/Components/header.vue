@@ -12,10 +12,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择路线">
-        <el-select class="font-style" v-model="formInline.lineUuid" placeholder="请选择">
+        <el-select class="font-style" multiple
+            collapse-tags v-model="formInline.lineUuid" placeholder="请选择">
           <el-option
-            multiple
-            collapse-tags
             v-for="item in lineOptions"
             :key="item.value"
             :label="item.label"
@@ -33,7 +32,6 @@
 
 <script type="text/ecmascript-6">
 // import moment from 'moment';
-import { Form, FormItem, Select, Option, Button } from 'element-ui'
 export default {
   data () {
     return {
@@ -46,8 +44,6 @@ export default {
     }
   },
   created () {
-    // this._lineList();
-    // this._comList();
   },
   mounted () {
     this.$store.dispatch('getLineList').then(res => {
@@ -62,10 +58,13 @@ export default {
       this.$emit('selectConfig', this.formInline)
     },
     onclear () {
+      this.formInline = {
+        lineUuid: [],
+        orgUuid: ''
+      }
     }
   },
   components: {
-    'el-form': Form, 'el-form-item': FormItem, 'el-select': Select, 'el-option': Option, 'el-button': Button
   }
 }
 </script>

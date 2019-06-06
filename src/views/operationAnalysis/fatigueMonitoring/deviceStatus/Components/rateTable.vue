@@ -100,8 +100,6 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
-import { Dialog, Table, Pagination, TableColumn, Popover, Button } from 'element-ui'
-// import { statusTable, lineStatus } from 'server/interface'
 import mapWrapper from './map'
 export default {
   props: {
@@ -128,20 +126,14 @@ export default {
     }
   },
   components: {
-    mapWrapper,
-    'el-dialog': Dialog,
-    'el-table': Table,
-    'el-pagination': Pagination,
-    'el-table-column': TableColumn,
-    'el-popover': Popover,
-    'el-button': Button
+    mapWrapper
   },
   created () {
     this._statusTable({
       pageNum: this.outCurrentPage,
       pageSize: 10,
-      lineUuid: [''], // 线路id，可多选
-      orgUuid: '1' // 组织机构
+      lineUuid: [], // 线路id，可多选
+      orgUuid: '' // 组织机构
     })
   },
   computed: {},
@@ -150,11 +142,22 @@ export default {
       reload: this.reload
     }
   },
+  watch: {
+    selectData: {
+      deep: true,
+      handler () {
+        this._statusTable(this.selectData)
+      }
+    }
+  },
   methods: {
     _statusTable (params) {
       this.$api['tiredMonitoring.getLineDeviceStatusPage'](params).then(res => {
         this.tableData = res.list
         this.total = res.total
+        if (res.list.length === 0) {
+          this.$message.warning('无列表数据')
+        }
       })
     },
     formatterTime (row) {
@@ -187,8 +190,8 @@ export default {
       this._statusTable({
         pageNum: this.outCurrentPage,
         pageSize: 10,
-        lineUuid: [''], // 线路id，可多选
-        orgUuid: '1' // 组织机构
+        lineUuid: [], // 线路id，可多选
+        orgUuid: '' // 组织机构
       })
     },
     // 内层table

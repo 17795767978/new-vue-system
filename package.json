@@ -16,6 +16,7 @@
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "progressbar.js": "^1.0.1",
+    "screenfull": "^4.2.0",
     "v-charts": "^1.19.0",
     "vue": "^2.6.10",
     "vue-baidu-map": "^0.21.20",

@@ -51,8 +51,8 @@ export default {
     return {
       isLoginning: false,
       loginForm: {
-        userAccount: 'xpguo',
-        userPassword: '123456'
+        userAccount: 'admin',
+        userPassword: 'zhx@yyjk2019'
       },
       loginRules: {
         userAccount: [
