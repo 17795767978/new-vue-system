@@ -55,7 +55,6 @@ export default {
         } else if (this.headerParams.date && this.headerParams.date !== 'Invalid date') {
           month = moment(this.headerParams.date).format('YYYY-MM')
         }
-        console.log(this.headerParams.date)
         this._timeTableAnalysisDown({
           lineId: this.headerParams.value,
           // lineId: '0103',
@@ -65,7 +64,6 @@ export default {
       }
     },
     isUpdateDown () {
-      console.log(this.isUpdateDown)
       if (this.isUpdateDown) {
         let month = ''
         if (this.headerParams.date && this.headerParams.date === 'Invalid date') {

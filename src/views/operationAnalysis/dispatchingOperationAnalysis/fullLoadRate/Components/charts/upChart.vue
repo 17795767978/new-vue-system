@@ -160,7 +160,6 @@ export default {
         }
       }
       if (this.dataSource.length > 0) {
-        console.log(this.upPersonNum)
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
         this.maxRate = max(this.fullRate)
       }
@@ -184,7 +183,6 @@ export default {
             type: 'shadow'
           },
           formatter: function (params, ticket, callback) {
-            console.log(params)
             let valueRate = params[3].value
             let valueUpPersonNum = params[0].value
             let valueDownPersonNum = params[1].value

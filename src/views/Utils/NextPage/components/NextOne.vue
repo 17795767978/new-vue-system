@@ -40,8 +40,6 @@ export default {
           abc: '123'
         },
         beforeClose: (comp, params) => {
-          console.log(comp)
-          console.log(params)
         },
         cache: true,
         component: NextTwo

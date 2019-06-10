@@ -23,7 +23,6 @@ export default {
     }
   },
   mounted () {
-    console.log('mount map')
   },
   methods: {
     initMap ({ BMap, map }) {

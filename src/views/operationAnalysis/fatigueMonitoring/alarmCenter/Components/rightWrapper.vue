@@ -332,7 +332,6 @@ export default {
       this.formInline.timeValue.forEach(time => {
         dateArr.push(moment(time).format('YYYY-MM-DD HH:mm:ss'))
       })
-      console.log(dateArr)
       this._tableList({
         orgId: this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -366,7 +365,6 @@ export default {
     },
     onSave () {
       this.$api['tiredMonitoring.warnExpert'](this.formInline).then(res => {
-        console.log(res)
         if (res.url.length > 0) {
           let url = `http:/${res.url}`
           // window.location.href = url;

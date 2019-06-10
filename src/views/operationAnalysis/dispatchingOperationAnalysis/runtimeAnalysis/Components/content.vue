@@ -72,7 +72,7 @@ export default {
           this.echartData.forEach(item => {
             maxBefore.push(max(item))
           })
-          this.maxData = max(maxBefore) * this.echartData.length / 3
+          this.maxData = max(maxBefore) * this.echartData.length / 3.5
           this.$refs.echartWrapper.style.display = 'block'
           this.dawnLine()
         } else {
@@ -98,15 +98,50 @@ export default {
               show: true,
               position: 'inside'
             }
+          },
+          itemStyle: {
+            normal: {
+              label: {
+                formatter: function (params) {
+                  if (params.value) {
+                    // 图表中的数据格式化
+                    let num = params.value / 60
+                    return `${num.toFixed(2)}`
+                  } else {
+                    return 0
+                  }
+                }
+              }
+            }
           }
         })
       })
-      console.log(series)
       chart.setOption({
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          },
+          extraCssText: 'width:350px; white-space:pre-wrap',
+          formatter: function (params, ticket, callback) {
+            let res = params[0].axisValue + '时' + '<br/>'
+            let index = params[0].dataIndex
+            let myseries = series
+            console.log(params)
+            for (var i = 0; i < params.length; i++) {
+              for (var j = 0; j < myseries.length; j++) {
+                if (params[i].seriesName === myseries[j].name) {
+                  if (myseries[j].data[index] !== null) {
+                    let num = myseries[j].data[index] / 60
+                    num = num.toFixed(2)
+                    res += `<span style="width: 10px; height: 10px; border-radius: 50%;display:inline-block; background: ${params[i].color}; margin:0 5px;"></span>` + params[i].seriesName + '：' + num + 'min' + ';'
+                  } else {
+                    res += `<span style="width: 10px; height: 10px; border-radius: 50%;display:inline-block; background: ${params[i].color};margin:0 5px;"></span>` + params[i].seriesName + '：' + '无数据' + ';'
+                  }
+                }
+              }
+            }
+            return res
           }
         },
         legend: {
@@ -122,7 +157,7 @@ export default {
           type: 'value',
           max: this.maxData,
           min: 0,
-          interval: Math.floor(this.maxData / 10)
+          interval: Math.floor(this.maxData / 20)
         },
         yAxis: {
           type: 'category',

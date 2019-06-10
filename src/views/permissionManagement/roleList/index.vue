@@ -51,7 +51,7 @@
               <el-button
                 size="mini"
                 type="warning"
-                @click="handleAllot(scope.row.roleId)"
+                @click="handleAllot(scope.row)"
               >分配权限</el-button>
               <el-button
                 size="mini"
@@ -215,6 +215,14 @@ export default {
     this.getSysRoleList()
     this.getSourceList()
   },
+  watch: {
+    dialogRoleVisible (newValue) {
+      if (newValue === false) {
+        this.defaultTreeDate = []
+        this.$refs.tree.setCheckedNodes(this.defaultTreeDate)
+      }
+    }
+  },
   methods: {
     getSysRoleList () {
       this.$api['role.list']({
@@ -243,7 +251,6 @@ export default {
             children: []
           }
         })
-        console.log(this.treeData)
         this.treeData.forEach((tree, index) => {
           tree.children = list.filter(i => i.resourceParentId === tree.resourceId)
         })
@@ -252,7 +259,6 @@ export default {
             child.children = list.filter(i => i.resourceParentId === child.resourceId)
           })
         })
-        console.log(this.treeData)
       })
     },
     onRoleSubmit () {
@@ -291,35 +297,31 @@ export default {
         })
       })
     },
-    handleAllot (id) {
+    handleAllot (row) {
+      console.log(this.defaultTreeData)
+      let arr = []
       this.dialogRoleVisible = true
-      this.roleId = id
-      // queryPermission('sys/function/function/query', {
-      //   roleId: id
-      // }).then(res => {
-      //   if (res.code === 0) {
-      //     this.treeData = res.data.allTreeMapList
-      //     this.defaultTreeData = res.data.checkNodeIds
-      //   }
-      // })
+      this.roleId = row.roleId
+      arr = row.resources.filter(item => item.resourceId !== '47' &&
+        item.resourceId !== '48' &&
+        item.resourceId !== '353' &&
+        item.resourceId !== '350' &&
+        item.resourceId !== '359' &&
+        item.resourceId !== '362'
+      )
+      if (arr.length > 0) {
+        arr = arr.map(res => res.resourceId)
+        this.defaultTreeData = Array.from(new Set(arr))
+        this.defaultTreeData = this.defaultTreeData.sort((prev, next) => prev - next)
+      } else {
+        this.defaultTreeData = []
+      }
     },
     onAllotubmit () {
       let allresourceIds = []
       allresourceIds = this.$refs.tree.getHalfCheckedNodes().map(item => item.resourceId)
 
       allresourceIds = [...allresourceIds, ...this.$refs.tree.getCheckedKeys()]
-      console.log(allresourceIds)
-      // getHalfCheckedNodes
-      // const checkedKeys = this.$refs.tree.getCheckedKeys()
-      // updateSysRole('sys/role/function/update', {
-      //   checkedKeys: checkedKeys.join(','),
-      //   sysRoleId: this.allotId
-      // }).then(res => {
-      //   if (res.code === 0) {
-      //     this.dialogRoleVisible = false
-      //     this.$message.success('分配成功！')
-      //   }
-      // })
       const resourceIds = allresourceIds
       this.$api['resource.updateRole']({
         resourceIds,
@@ -327,6 +329,7 @@ export default {
       }).then(res => {
         this.dialogRoleVisible = false
         this.$message.success('分配成功！')
+        this.defaultTreeData = []
       })
     },
     handleCheck (id) {
@@ -356,10 +359,10 @@ export default {
       this.dialogVisible = true
     },
     getCreateTime (row) {
-      return moment(row.createTime).format('YYYY-MM-DD HH:MM:ss')
+      return moment(row.createTime).format('YYYY-MM-DD HH:mm:ss')
     },
     getUpdateTime (row) {
-      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:ss')
+      return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }

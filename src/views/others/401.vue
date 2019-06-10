@@ -17,7 +17,6 @@ export default {
   },
   methods: {
     backToHome () {
-      console.log(this.homepage.name)
       this.$router.push({
         name: this.homepage.name,
         replace: true

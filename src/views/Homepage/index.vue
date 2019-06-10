@@ -88,9 +88,13 @@ export default {
   },
   mounted () {
     let roles = this.$store.getters.roles
-    this.getRoles(roles)
-    this.checkRoles()
-    console.log(this.rolesTem)
+    if (roles !== 'error') {
+      this.getRoles(roles)
+      this.checkRoles()
+    } else {
+      window.location.reload()
+      this.$store.dispatch('userLogout')
+    }
   },
   methods: {
     getRoles (roles) {

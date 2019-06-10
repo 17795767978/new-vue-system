@@ -51,7 +51,6 @@ export default {
     selectData: {
       deep: true,
       handler () {
-        console.log(this.selectData.date)
         this._tripOrder({
           lineId: this.selectData.value,
           dateTime: this.selectData.date,
@@ -62,8 +61,6 @@ export default {
       }
     },
     isUpdate () {
-      console.log(this.isUpdate)
-      console.log(this.selectData.date)
       if (this.isUpdate) {
         this._tripOrder({
           lineId: this.selectData.value,

@@ -26,7 +26,6 @@
 <script>
 import rankingChart from './echartsComponent/rankingChart.vue'
 import vueSeamless from 'vue-seamless-scroll'
-import { Row, Col } from 'element-ui'
 const TIME = 5 * 60 * 1000
 export default {
   data () {
@@ -58,7 +57,6 @@ export default {
         res.forEach(alert => {
           this.alermData.push(alert.split('：'))
         })
-        console.log(this.alermData)
         setTimeout(() => {
           this._badDrivingBehavior()
         }, TIME)
@@ -78,9 +76,7 @@ export default {
   },
   components: {
     rankingChart,
-    vueSeamless,
-    'el-row': Row,
-    'el-col': Col
+    vueSeamless
   }
 }
 </script>

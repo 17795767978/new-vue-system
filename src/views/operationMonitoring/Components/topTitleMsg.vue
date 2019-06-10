@@ -52,7 +52,6 @@ export default {
   },
   methods: {
     _getWeather () {
-      console.log(this.$api['weather.getWeather'])
       this.$api['weather.getWeather']().then(res => {
         if (res.result) {
           let lowTemperature = res.result.templow

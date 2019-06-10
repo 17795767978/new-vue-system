@@ -313,10 +313,10 @@ export default {
       this.dialogVisible = true
     },
     getCreateTime (row) {
-      return moment(row.createTime).format('YYYY-MM-DD HH:MM:ss')
+      return moment(row.createTime).format('YYYY-MM-DD HH:mm:ss')
     },
     getUpdateTime (row) {
-      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:ss')
+      return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }

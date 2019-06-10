@@ -90,7 +90,6 @@ export default {
   methods: {
     _passengeFlow (params) {
       this.$api['passengerFlow.getTotalPassengerFlow'](params).then(res => {
-        console.log(res)
         if (res.personCount) {
           this.passengeFlowNum = res.personCount
         } else {
@@ -131,7 +130,6 @@ export default {
     },
     _onLineCarNum (params) {
       this.$api['dispatch.getOnlineCarNumber'](params).then(res => {
-        // console.log(res);
         // let dataArr = res.data.data;
         // let numArr = dataArr.map(item => item.onlineBusNumber);
         // numArr.forEach(item => {

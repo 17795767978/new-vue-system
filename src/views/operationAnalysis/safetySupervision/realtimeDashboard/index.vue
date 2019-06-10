@@ -31,7 +31,6 @@ export default {
     // floorWrapper
   },
   mounted () {
-    console.log(123)
   }
 }
 </script>

@@ -49,7 +49,6 @@ export default {
             value: dataArrNumber[i]
           }
         }
-        console.log(this.badDrivingBehavior)
         this.drawLine()
         this.loading = false
         setTimeout(() => {

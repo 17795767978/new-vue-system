@@ -175,7 +175,6 @@ export default {
       })
     },
     handler ({ BMap, map }) {
-      // console.log(BMap)
       this.center.lng = '114.520486813'
       this.center.lat = '37.0695311969'
       this.zoom = 13
@@ -183,7 +182,6 @@ export default {
       map.setMapStyle(this.mapStyle)
     },
     handleMarkerClick () {
-      console.log(123)
     }
   }
 }

@@ -11,7 +11,7 @@
         fit
         highlight-current-row
         style="width: 100%">
-        <el-table-column align="center" label="序号" type="index">
+        <el-table-column align="center" label="序号" type="index" width="60">
         </el-table-column>
         <el-table-column align="center" label="账号">
           <template slot-scope="scope">
@@ -55,7 +55,7 @@
               >编辑</el-button>
               <el-button
                 size="mini"
-                type="primary"
+                type="danger"
                 @click="handleRemoveAdmin(scope.row.userId)"
               >删除</el-button>
             </div>
@@ -221,14 +221,12 @@ export default {
   methods: {
     getAdminList (params) {
       this.$api['permission.userList'](params).then(res => {
-        // console.log(res)
         this.list = res.list
         this.total = res.total
       })
     },
     getRoleList () {
       this.$api['role.list']().then(res => {
-        console.log(res)
         let list = []
         if (res.list) {
           list = res.list
@@ -283,7 +281,6 @@ export default {
               })
             })
           } else {
-            console.log(this.adminForm)
             this.adminForm.userId = this.userId
             this.$api['permission.update'](this.adminForm).then(res => {
               this.dialogVisible = false
@@ -337,10 +334,10 @@ export default {
       })
     },
     forMatterCreateTime (row) {
-      return moment(row.createTime).format('YYYY-MM-DD HH:MM:ss')
+      return moment(row.createTime).format('YYYY-MM-DD HH:mm:ss')
     },
     forMatterUpdateTime (row) {
-      return moment(row.updateTime).format('YYYY-MM-DD HH:MM:ss')
+      return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }

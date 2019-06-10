@@ -34,7 +34,6 @@ export default {
     contentWrapper
   },
   mounted () {
-    console.log(123)
   },
   watch: {
     headerParams: {

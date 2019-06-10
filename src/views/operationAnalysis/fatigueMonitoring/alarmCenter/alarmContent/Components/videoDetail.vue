@@ -3,10 +3,12 @@
     <el-row :gutter="1">
       <el-col :span="3">
         <h3 class="demonstration">报警视频</h3>
-        <h5><span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{videoList.length}}部</span></h5>
+        <h5>
+          <span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{videoList && videoList.length || 0}}部</span>
+        </h5>
       </el-col>
       <el-col :span="21">
-        <el-carousel v-if="videoList.length > 0"
+        <el-carousel v-if="videoList && videoList.length > 0"
           height="270px"
           style="width: 80%; margin-left: 5%"
           indicator-position="none"
@@ -23,10 +25,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import leftWrapper from './Components/leftWrapper';
-// import rightWrapper from './Components/rightWrapper';
-// import moment from 'moment';
-import { Col, Row, Carousel, CarouselItem } from 'element-ui'
 export default {
   name: 'alarmContent',
   props: {
@@ -42,10 +40,6 @@ export default {
     }
   },
   components: {
-    'el-col': Col,
-    'el-row': Row,
-    'el-carousel': Carousel,
-    'el-carousel-item': CarouselItem
   },
   created () {
   },

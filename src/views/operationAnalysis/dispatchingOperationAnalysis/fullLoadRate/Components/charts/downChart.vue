@@ -77,7 +77,6 @@ export default {
       this.seeType()
     },
     isUpdateDown () {
-      console.log(this.isUpdateDown)
       if (this.isUpdateDown) {
         if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
           this._fullRateAnalysisDown({
@@ -170,7 +169,6 @@ export default {
             type: 'shadow'
           },
           formatter: function (params, ticket, callback) {
-            console.log(params)
             let valueRate = params[3].value
             let valueUpPersonNum = params[0].value
             let valueDownPersonNum = params[1].value

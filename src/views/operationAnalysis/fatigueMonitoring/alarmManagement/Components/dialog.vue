@@ -105,7 +105,6 @@ export default {
               this.dialogFormVisible = false
             })
           } else {
-            console.log(this.form)
             this.$api['tiredMonitoring.updateWarntype'](this.form).then(res => {
               this.$message.success('修改成功')
               this.$emit('updateTable')

@@ -31,7 +31,6 @@ export default {
         // let dataArr = res.data.data.sort((a, b) => {
         //   return b.fullLoadRate - a.fullLoadRate;
         // });
-        // console.log(dataArr);
         this.lineName = res.map(item => item.lineName)
         this.fullLoadRate = res.map(item => item.fullLoadRate)
         setTimeout(() => {
@@ -44,7 +43,7 @@ export default {
       window.addEventListener('resize', () => { rankingLine.resize() })
       rankingLine.setOption({
         title: {
-          text: '路线满载率排行TOP10',
+          text: '线路满载率排行TOP10',
           left: 'center',
           textStyle: {
             'color': '#fff'

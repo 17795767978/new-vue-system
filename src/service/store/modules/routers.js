@@ -179,9 +179,7 @@ const routers = {
         return new Promise((resolve, reject) => {
           // 这里通过权限来过滤出该权限所拥有的动态路由表,然后再SET_ROUTERS
           let rolesData = getRoles(roles)
-          console.log(rolesData)
           const addRoutes = filterAsyncRoutes(aysncRoutesMap, rolesData)
-          console.log(addRoutes)
           context.commit('SET_ROUTERS', { addRoutes, routerRawData: null })
           resolve({
             addRoutes,

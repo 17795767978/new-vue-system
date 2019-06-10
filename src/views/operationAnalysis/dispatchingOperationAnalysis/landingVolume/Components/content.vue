@@ -334,7 +334,6 @@ export default {
       this.stations.forEach((itm, index) => {
         dataOptions[index] = data.filter(sta => sta.staName === itm)
       })
-      console.log(dataOptions)
       dataOptions.forEach(option => {
         if (option.length !== 0) {
           hoursArr = option.map(item => item.timeHour)

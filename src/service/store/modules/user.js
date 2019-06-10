@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken } from '@/service/expands/auth'
 import api from '@/plugins/api'
+
 // import { constantRouterMap } from '@/router/staticRoutes'
 /**
  * User STORE
@@ -26,7 +27,6 @@ const user = {
   mutations: {
     SET_TOKEN (state, data) {
       state.userInfo = data.userInfo
-      // state.userId = data.userInfo.userId
       state.token = data.token
       setToken(data.token)
     },
@@ -35,12 +35,7 @@ const user = {
       removeToken()
     },
     SET_USERINFO (state, data) {
-      // state.userId = data.userId
-      state.userAccount = data.userAccount
-      state.userName = data.userName
-      state.userStatus = data.userStatus
-      state.roles = data.roles // static roles
-      // state.avatar = data.avatar
+      state.userName = localStorage.getItem('userName')
     },
     RESET_USERINFO (state, data) {
       // state.userId = ''
@@ -73,9 +68,9 @@ const user = {
         // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
         // resolve()
         api['user.login'](params).then(res => {
+          localStorage.setItem('userName', res.userInfo.userRealName)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
           localStorage.setItem('id', res.userInfo.userId)
-          // commit('SET_ROUTERS', res.userResource)
           resolve()
         }).catch(err => {
           reject(err)
@@ -99,8 +94,9 @@ const user = {
         commit('REMOVE_ALL_VISITED')
         // 重置权限路由表, 该mutation 访问 store/asyncRouter.js
         commit('RESET_ROUTERS')
-        //
+        // 清除用户的id 清除权限
         localStorage.removeItem('id')
+        localStorage.removeItem('userName')
         resolve()
       })
     },
@@ -114,21 +110,17 @@ const user = {
      */
     getUserInfo ({ commit, state }, params) {
       return new Promise((resolve, reject) => {
-        // if (state.userInfo) {
-        //   if (!state.userInfo.roles) {
-        //     state.userInfo.roles = ['admin', 'user']
-        //   }
-        //   commit('SET_USERINFO', state.userInfo)
-        //   resolve(state.userInfo)
-        // } else {
-        //   reject(state.userInfo)
-        // }
         api['platformMenu.list']({
           id: localStorage.getItem('id')
         }).then(res => {
           const data = res
           if (data && data.length > 0) {
             commit('SET_ROLES', data)
+            commit('SET_USERINFO')
+          } else {
+            alert('管理员请先设置权限再登录')
+            commit('SET_USERINFO')
+            commit('SET_ROLES', 'error')
           }
           resolve(res)
         }).catch(err => {
