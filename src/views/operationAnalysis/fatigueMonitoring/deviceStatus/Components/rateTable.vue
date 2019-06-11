@@ -35,7 +35,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="在线率"
+        label="在线率(%)"
         :formatter="formatterRate"
         >
       </el-table-column>
@@ -71,7 +71,7 @@
               placement="left"
               trigger="click"
               >
-              <mapWrapper v-if="isReload" :rowData="rowData"/>
+              <mapWrapper v-if="isReload" :rowData="rowData" :isReload="isReload"/>
               <el-button type="success" icon="el-icon-location-outline" slot="reference" circle @click="getRow(scope.row)"></el-button>
             </el-popover>
           </template>
@@ -114,7 +114,7 @@ export default {
       total: 0,
       lineTotal: 0,
       dialogTableVisible: false,
-      isReload: true,
+      isReload: false,
       lineId: '',
       lineName: '',
       center: {},
@@ -137,11 +137,6 @@ export default {
     })
   },
   computed: {},
-  provide () {
-    return {
-      reload: this.reload
-    }
-  },
   watch: {
     selectData: {
       deep: true,
@@ -171,7 +166,6 @@ export default {
       return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
     },
     handleClick (row) {
-      // console.log(row);
       this.lineId = row.lineUuid
       this.lineName = row.lineName
       this.$api['tiredMonitoring.getLinelineStatusPage']({
@@ -208,13 +202,8 @@ export default {
       })
     },
     getRow (row) {
+      this.isReload = true
       this.rowData = row
-    },
-    reload () {
-      this.isreload = false
-      this.$nextTick(function () {
-        this.isreload = true
-      })
     }
     // map
   }

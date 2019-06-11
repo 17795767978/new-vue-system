@@ -52,6 +52,7 @@ export default {
     this._warnInfoDetail()
   },
   activated () {
+    this._warnInfoDetail()
   },
   watch: {},
   methods: {

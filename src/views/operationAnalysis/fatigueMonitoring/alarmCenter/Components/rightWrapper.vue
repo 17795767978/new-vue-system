@@ -45,14 +45,14 @@
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
           <el-button type="warning" @click="onClear">重置</el-button>
-          <!-- <downloadExcel
+          <downloadExcel
             :data= "json_data"
             type="csv"
+            style="display: inline-block; margin-left: 10px;"
             name= "报警中心报表.xls"
-            @click="onSave"
-          > -->
+          >
           <el-button type="success" @click="onSave">导出</el-button>
-          <!-- </downloadExcel> -->
+          </downloadExcel>
         </el-form-item>
       </el-form>
     </div>
@@ -148,7 +148,7 @@
 
 <script type="text/ecmascript-6">
 // import { tableList, alarmType, downLoad } from 'server/interface'
-// import downloadExcel from 'vue-json-excel';
+import downloadExcel from 'vue-json-excel'
 import moment from 'moment'
 export default {
   props: {
@@ -157,7 +157,7 @@ export default {
     }
   },
   components: {
-    // downloadExcel
+    downloadExcel
   },
   data () {
     return {
@@ -187,6 +187,7 @@ export default {
       warnOptions: [],
       tableData: [],
       total: 100,
+      pageNum: 1,
       json_data: []
     }
   },
@@ -213,7 +214,7 @@ export default {
       startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
       endTime: this.formInline.timeValue[1],
       pageSize: 10,
-      pageNum: 1
+      pageNum: this.pageNum
     })
   },
   mounted () {
@@ -225,6 +226,8 @@ export default {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
     // console.log(this.formInline);
+  },
+  activeted () {
   },
   watch: {
     selectCarData: {
@@ -247,7 +250,7 @@ export default {
           startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
           endTime: this.formInline.timeValue[1],
           pageSize: 10,
-          pageNum: 1
+          pageNum: this.pageNum
         })
       }
     },
@@ -275,7 +278,21 @@ export default {
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
         this.tableData = res.list
         this.total = res.total
-        this.json_data = this.tableData
+        let excelArr = []
+        res.list.forEach((item, index) => {
+          item.warnTime = moment(item.warnTime).format('YYYY-MM-DD HH:mm:ss')
+          excelArr[index] = {
+            '所属公司': item.orgName,
+            '所属线路': item.lineName,
+            '车牌号': item.busPlateNumber,
+            '车辆自编号': item.busSelfCode,
+            '设备编号': item.devCode,
+            '报警级别(级)': item.warnLevel,
+            '报警类型': item.warnTypeName,
+            '报警时间': item.warnTime
+          }
+        })
+        this.json_data = excelArr
       })
     },
     changeBusPlateNumber () {
@@ -303,9 +320,10 @@ export default {
       return moment(row.warnTime).format('YYYY-MM-DD HH:mm:ss')
     },
     handleCurrentChange (val) {
+      this.pageNum = val
       this._tableList({
         orgId: this.formInline.orgId, // 组织机构id
-        lineId: this.formInline.line, // 线路id
+        lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号
         busPlateNumber: this.formInline.busPlateNumber, // 车牌号
@@ -315,7 +333,7 @@ export default {
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
         pageSize: 10,
-        pageNum: val
+        pageNum: this.pageNum
       })
     },
     handleClick (row) {
@@ -344,7 +362,7 @@ export default {
         startTime: dateArr[0], // 时间格式   开始结束默认查近7天的
         endTime: dateArr[1],
         pageSize: 10,
-        pageNum: 1
+        pageNum: this.pageNum
       })
     },
     onClear () {
@@ -364,16 +382,7 @@ export default {
       this.$emit('clear')
     },
     onSave () {
-      this.$api['tiredMonitoring.warnExpert'](this.formInline).then(res => {
-        if (res.url.length > 0) {
-          let url = `http:/${res.url}`
-          // window.location.href = url;
-          window.open(url)
-          this.$message.success('正在加载。。。')
-        } else {
-          this.$message.error('服务器请求失败')
-        }
-      })
+      this.$message.success('正在下载中。。。')
     }
   }
 }

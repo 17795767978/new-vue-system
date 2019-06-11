@@ -24,6 +24,9 @@ export default {
   props: {
     rowData: {
       type: Object
+    },
+    isReload: {
+      type: Boolean
     }
   },
   data () {
@@ -43,16 +46,29 @@ export default {
     rowData: {
       deep: true,
       handler () {
+        setTimeout(() => {
+          this.data = this.rowData
+          this.center.lat = this.data.lat
+          this.center.lng = this.data.lng
+          this.position.lat = this.data.lat
+          this.position.lng = this.data.lng
+          this.zoom = 15
+        }, 200)
+      }
+    }
+  },
+  mounted () {
+    if (this.isReload) {
+      setTimeout(() => {
         this.data = this.rowData
         this.center.lat = this.data.lat
         this.center.lng = this.data.lng
         this.position.lat = this.data.lat
         this.position.lng = this.data.lng
-        this.zoom = 20
-      }
+        this.zoom = 15
+      }, 500)
     }
   },
-  mounted () {},
   methods: {}
 }
 </script>

@@ -208,7 +208,11 @@ export default {
       treeData: [],
       defaultTreeData: [],
       total: '',
-      currentPage: 1
+      currentPage: 1,
+      rolesIndexArr: [],
+      rolesNameArr: [],
+      currentSort: '',
+      currentName: ''
     }
   },
   created () {
@@ -229,7 +233,11 @@ export default {
         pageSize: 10,
         pageNumber: this.currentPage
       }).then(res => {
-        this.list = res.list
+        this.list = res.list.sort((prev, next) => prev.roleSort - next.roleSort)
+        if (this.list.length > 0) {
+          this.rolesIndexArr = this.list.map(sort => sort.roleSort)
+          this.rolesNameArr = this.list.map(name => name.roleName)
+        }
       })
     },
     getSourceList () {
@@ -263,16 +271,21 @@ export default {
     },
     onRoleSubmit () {
       if (this.roleName.length > 0) {
-        this.$api['role.add']({
-          roleName: this.roleName,
-          enabled: this.enabled
-        }).then(res => {
-          this.getSysRoleList()
-          this.$message.success('添加成功!')
-          this.dialogVisible = false
-        })
+        if (!this.rolesNameArr.some(item => item === this.roleName)) {
+          this.$api['role.add']({
+            roleName: this.roleName,
+            enabled: this.enabled
+          }).then(res => {
+            this.getSysRoleList()
+            this.adminForm.roleName = this.roleName
+            this.$message.success('添加成功!')
+            this.dialogVisible = false
+          })
+        } else {
+          this.$message.error('角色名称已存在')
+        }
       } else {
-        this.$message.error('请输入角色名称')
+        this.$message.error('角色名称未输入')
       }
     },
     handleDeleteRole (id) {
@@ -298,7 +311,6 @@ export default {
       })
     },
     handleAllot (row) {
-      console.log(this.defaultTreeData)
       let arr = []
       this.dialogRoleVisible = true
       this.roleId = row.roleId
@@ -320,7 +332,6 @@ export default {
     onAllotubmit () {
       let allresourceIds = []
       allresourceIds = this.$refs.tree.getHalfCheckedNodes().map(item => item.resourceId)
-
       allresourceIds = [...allresourceIds, ...this.$refs.tree.getCheckedKeys()]
       const resourceIds = allresourceIds
       this.$api['resource.updateRole']({
@@ -330,6 +341,7 @@ export default {
         this.dialogRoleVisible = false
         this.$message.success('分配成功！')
         this.defaultTreeData = []
+        this.getSysRoleList()
       })
     },
     handleCheck (id) {
@@ -342,17 +354,30 @@ export default {
         this.adminForm.describes = res.describes
         this.adminForm.roleSort = res.roleSort
         this.adminForm.enabled = res.enabled
+        this.currentSort = res.roleSort
+        this.currentName = res.roleName
+        console.log(this.currentSort)
+        console.log(this.currentSort === this.adminForm.roleSort)
+        console.log(!this.rolesIndexArr.some(sort => sort === this.adminForm.roleSort))
       })
     },
     onSubmitUpdate () {
-      this.$api['role.update'](this.adminForm).then(res => {
-        this.getSysRoleList({
-          pageSize: 10,
-          pageNumber: this.currentPage
-        })
-        this.$message.success('修改成功！')
-        this.updateWrapper = false
-      })
+      if (this.currentName === this.adminForm.roleName || !this.rolesNameArr.some(name => name === this.adminForm.roleName)) {
+        if (this.currentSort === Number(this.adminForm.roleSort) || !this.rolesIndexArr.some(sort => sort === Number(this.adminForm.roleSort))) {
+          this.$api['role.update'](this.adminForm).then(res => {
+            this.getSysRoleList({
+              pageSize: 10,
+              pageNumber: this.currentPage
+            })
+            this.$message.success('修改成功！')
+            this.updateWrapper = false
+          })
+        } else {
+          this.$message.error('角色序号已存在')
+        }
+      } else {
+        this.$message.error('角色名已存在')
+      }
     },
     handleAddRole () {
       this.roleName = ''

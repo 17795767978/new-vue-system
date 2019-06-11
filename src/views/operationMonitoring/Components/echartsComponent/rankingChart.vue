@@ -113,7 +113,7 @@ export default {
         series: [
           {
             type: 'bar',
-            name: '路线满载率',
+            name: '线路满载率',
             data: this.fullLoadRate,
             barWidth: 7,
             itemStyle: {

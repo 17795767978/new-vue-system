@@ -99,6 +99,7 @@ export default {
       return data.name.indexOf(value) !== -1
     },
     handleNodeClick (data) {
+      console.log(data)
       this.$emit('selectCar', data)
     }
   }

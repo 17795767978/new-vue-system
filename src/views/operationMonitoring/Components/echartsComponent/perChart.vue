@@ -111,7 +111,6 @@ export default {
         yAxis: [
           {
             type: 'value',
-            // name: '水量',
             min: 0,
             max: this.busLoadNumberMax,
             interval: Math.ceil(this.busLoadNumberMax / 6),
@@ -141,7 +140,7 @@ export default {
             type: 'value',
             min: 0,
             max: this.fullLoadRateMax + 10,
-            interval: Math.floor(this.fullLoadRateMax / 3),
+            interval: Math.floor(this.fullLoadRateMax / 2),
             axisLine: {
               show: false
             },
