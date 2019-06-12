@@ -50,7 +50,7 @@ export default {
       this.checkData = data
       let oldTime = this.timeNow
       this.timeNow = moment(Date.now()).valueOf()
-      if (this.timeNow - oldTime < 5000) {
+      if (this.timeNow - oldTime < 10) {
         this.$message.warning('短时间内请勿重复操作')
       } else {
         this.isUpdateUp = true

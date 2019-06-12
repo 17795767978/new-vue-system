@@ -73,12 +73,20 @@ export default {
         },
         color: ['#ffa45e', '#c8e49d', '#fedd00', '#7ce1de', '#f3b3cc', '#dc3971'],
         series: [
+          // {
+          //   name: '面积模式',
+          //   type: 'pie',
+          //   radius: '50%',
+          //   center: ['50%', '60%'],
+          //   roseType: 'radius',
+          //   data: this.badDrivingBehavior
+          // },
           {
             name: '面积模式',
             type: 'pie',
             radius: '50%',
             center: ['50%', '60%'],
-            roseType: 'radius',
+            roseType: 'area',
             data: this.badDrivingBehavior
           }
         ]

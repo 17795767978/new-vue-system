@@ -1,6 +1,6 @@
 <template>
   <div class="data-wrapper">
-    <el-button type="success" @click="fullScreen" style="position: absolute; right: 20px; top: 15px; z-index: 1003">退出</el-button>
+    <el-button type="success" @click="fullScreen" size="small" style="position: absolute; right: 20px; top: 20px; z-index: 1003" icon="el-icon-video-camera"></el-button>
     <div class="content-wrapper">
      <TopTitleMsg></TopTitleMsg>
      <StreamNum></StreamNum>

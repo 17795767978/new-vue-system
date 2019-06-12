@@ -6,8 +6,8 @@ const selectData = {
   state: {
     lineData: [],
     stationData: [],
-    comData: []
-    // carData: []
+    comData: [],
+    carData: []
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -18,6 +18,9 @@ const selectData = {
     },
     COM_DATA: (state, comData) => {
       state.comData = comData
+    },
+    CAR_DATA: (state, carData) => {
+      state.comData = carData
     }
   },
   actions: {
@@ -65,6 +68,26 @@ const selectData = {
             })
           })
           commit('COM_DATA', list)
+          resolve(list)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    getCarList ({ commit }) {
+      return new Promise((resolve, reject) => {
+        api['wholeInformation.getCar']({
+          orgId: '',
+          orgName: ''
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.busPlateNumber,
+              value: item.busUuid
+            })
+          })
+          commit('CAR_DATA', list)
           resolve(list)
         }).catch(error => {
           reject(error)

@@ -1,7 +1,7 @@
 <template>
   <div class="stream-wrapper">
-    <header style="margin-bottom: 20px;">
-     <el-row :gutter="10">
+    <header style="margin-bottom: 10px;">
+     <el-row :gutter="20">
        <el-col :span="4">
         <el-card class="bg-style" shadow="always">
           <h3 class="title-style">
@@ -41,7 +41,7 @@
         </el-card>
        </el-col>
        <el-col :span="3">
-        <el-card class="bg-style" shadow="always">
+        <el-card class="bg-style" shadow="hover">
           <h3 class="title-style">待发车辆数</h3>
           <p class="font-style" style="color: #a308b2">{{outgoingCarNum}}</p>
         </el-card>
@@ -116,7 +116,7 @@ export default {
     },
     _operateLines (params) {
       this.$api['passengerFlow.getRealTimeOperLines'](params).then(res => {
-        if (res && res.operLines && res.totalLines) {
+        if (res) {
           this.operLines = res.operLines
           this.totalLines = res.totalLines
         } else {
@@ -148,7 +148,7 @@ export default {
     },
     _realTimeFullRate (params) {
       this.$api['passengerFlow.getRealTimeFullLoadRate'](params).then(res => {
-        console.log(res)
+        // console.log(res)
       })
     },
     _operateCarNum () {
@@ -192,17 +192,17 @@ export default {
   width: 100%;
   .bg-style {
     background-color: rgba(0,0,0, 0.6);
-    box-shadow: -4px -5px 10px #409EFF;
+    height: 80px;
     .title-style {
       margin-top: 0px;
-      font-size: 14px;
+      font-size: 16px;
+      margin-bottom: 10px;
       color: #fff;
     }
     .font-style {
       margin: 0;
-      font-size: 20px;
+      font-size: 22px !important;
       font-weight: bold;
-      height: 30px;
     }
   }
 }

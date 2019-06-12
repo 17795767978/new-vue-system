@@ -14,7 +14,11 @@
               <span>{{list[0]}}：</span>
               <!-- <span v-if="index / 2 === parseInt(index / 2)" style="color: #eadf00">{{list[1]}}</span>
               <span v-else-if="index / 3 === parseInt(index / 3) && index / 2 === parseInt(index / 2)" style="color: #dc39ea">{{list[1]}}</span> -->
-              <span style="color: #7cf0e4;">{{list[1]}}</span>
+              <span v-if="list[1] === '打电话。'" style="color: #eadf00;">{{list[1]}}</span>
+              <span v-show="list[1] === '抽烟。'" style="color: #fa8a96;">{{list[1]}}</span>
+              <span v-show="list[1] === '分神驾驶报警。'" style="color: #e9a475;">{{list[1]}}</span>
+              <span v-show="list[1] === '疲劳驾驶。'" style="color: #dc3971;">{{list[1]}}</span>
+              <span v-show="list[1] === '驾驶员异常报警。'" style="color: #e8f19c;">{{list[1]}}</span>
             </p>
           </vueSeamless>
         </div>
@@ -32,7 +36,8 @@ export default {
     return {
       alermData: [],
       topY: 40,
-      timer: null
+      timer: null,
+      alarmType: []
     }
   },
   computed: {
@@ -57,6 +62,8 @@ export default {
         res.forEach(alert => {
           this.alermData.push(alert.split('：'))
         })
+        let typeData = new Set(this.alermData.map(item => item[1]))
+        this.alarmType = [...typeData]
         setTimeout(() => {
           this._badDrivingBehavior()
         }, TIME)
@@ -91,7 +98,6 @@ export default {
     height: 210px;
     background-color: rgba(0,0,0, 0.65);
     border-radius: 6px;
-    box-shadow: -4px -5px 10px #409EFF;
     box-sizing: border-box;
   }
   .right-wrapper {
@@ -99,7 +105,6 @@ export default {
     height: 210px;
     background-color: rgba(0,0,0, 0.65);
     border-radius: 6px;
-    box-shadow: -4px -5px 10px #409EFF;
     padding: 15px;
     box-sizing: border-box;
     overflow: hidden;

@@ -86,7 +86,7 @@ export default {
   .font {
     color: #fff;
     text-align: center;
-    font-size: 20px;
+    font-size: 25px;
     margin: 0px;
     line-height:  50px;
   }

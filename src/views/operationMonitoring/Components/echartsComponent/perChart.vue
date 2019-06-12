@@ -113,7 +113,7 @@ export default {
             type: 'value',
             min: 0,
             max: this.busLoadNumberMax,
-            interval: Math.ceil(this.busLoadNumberMax / 6),
+            interval: Math.ceil(this.busLoadNumberMax / 2),
             // axisLabel: {
             //     formatter: '{value} ml'
             // },
@@ -162,7 +162,7 @@ export default {
           {
             name: '定员数',
             type: 'bar',
-            barWidth: '10',
+            barWidth: '5  ',
             barGap: '-100%',
             itemStyle: {
               emphasis: {
@@ -177,7 +177,7 @@ export default {
           {
             name: '通过量',
             type: 'bar',
-            barWidth: '10',
+            barWidth: '5',
             data: this.personCount
           },
           {

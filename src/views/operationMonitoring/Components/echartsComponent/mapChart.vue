@@ -1,7 +1,8 @@
 <template>
   <div class="map-chart">
     <baidu-map
-      :style="{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0, 0.5)'}"
+      ref="baiduMapWrapper"
+      :style="{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0, 0.5)', borderRadius: '6px'}"
       :zoom="zoom"
       :ak="ak"
       :center="center"
@@ -42,86 +43,141 @@ export default {
             'featureType': 'water',
             'elementType': 'all',
             'stylers': {
-              'color': '#044161'
+              'color': '#021019'
+            }
+          },
+          {
+            'featureType': 'highway',
+            'elementType': 'geometry.fill',
+            'stylers': {
+              'color': '#000000'
+            }
+          },
+          {
+            'featureType': 'highway',
+            'elementType': 'geometry.stroke',
+            'stylers': {
+              'color': '#147a92'
+            }
+          },
+          {
+            'featureType': 'arterial',
+            'elementType': 'geometry.fill',
+            'stylers': {
+              'color': '#000000'
+            }
+          },
+          {
+            'featureType': 'arterial',
+            'elementType': 'geometry.stroke',
+            'stylers': {
+              'color': '#0b3d51'
+            }
+          },
+          {
+            'featureType': 'local',
+            'elementType': 'geometry',
+            'stylers': {
+              'color': '#000000'
             }
           },
           {
             'featureType': 'land',
             'elementType': 'all',
             'stylers': {
-              'color': '#132b3e'
+              'color': '#08304b'
             }
           },
           {
             'featureType': 'railway',
+            'elementType': 'geometry.fill',
+            'stylers': {
+              'color': '#000000'
+            }
+          },
+          {
+            'featureType': 'railway',
+            'elementType': 'geometry.stroke',
+            'stylers': {
+              'color': '#08304b'
+            }
+          },
+          {
+            'featureType': 'subway',
+            'elementType': 'geometry',
+            'stylers': {
+              'lightness': -70
+            }
+          },
+          {
+            'featureType': 'building',
+            'elementType': 'geometry.fill',
+            'stylers': {
+              'color': '#000000'
+            }
+          },
+          {
+            'featureType': 'all',
+            'elementType': 'labels.text.fill',
+            'stylers': {
+              'color': '#857f7f'
+            }
+          },
+          {
+            'featureType': 'all',
+            'elementType': 'labels.text.stroke',
+            'stylers': {
+              'color': '#000000'
+            }
+          },
+          {
+            'featureType': 'building',
+            'elementType': 'geometry',
+            'stylers': {
+              'color': '#022338'
+            }
+          },
+          {
+            'featureType': 'green',
+            'elementType': 'geometry',
+            'stylers': {
+              'color': '#062032'
+            }
+          },
+          {
+            'featureType': 'boundary',
             'elementType': 'all',
             'stylers': {
-              'visibility': 'off'
+              'color': '#1e1c1c'
             }
           },
           {
-            'featureType': 'highway',
+            'featureType': 'manmade',
             'elementType': 'geometry',
             'stylers': {
-              'color': '#004981'
-            }
-          },
-          {
-            'featureType': 'highway',
-            'elementType': 'geometry.fill',
-            'stylers': {
-              'color': '#005b96',
-              'lightness': 1
-            }
-          },
-          {
-            'featureType': 'arterial',
-            'elementType': 'geometry',
-            'stylers': {
-              'color': '#004981'
-            }
-          },
-          {
-            'featureType': 'arterial',
-            'elementType': 'geometry.fill',
-            'stylers': {
-              'color': '#00508b'
+              'color': '#022338'
             }
           },
           {
             'featureType': 'poi',
             'elementType': 'all',
             'stylers': {
-              'color': '#000'
-            }
-          },
-          {
-            'featureType': 'green',
-            'elementType': 'all',
-            'stylers': {
-              'color': '#056197',
               'visibility': 'off'
             }
           },
           {
-            'featureType': 'manmade',
-            'elementType': 'all',
+            'featureType': 'all',
+            'elementType': 'labels.icon',
             'stylers': {
               'visibility': 'off'
             }
           },
           {
-            'featureType': 'local',
-            'elementType': 'all',
+            'featureType': 'all',
+            'elementType': 'labels.text.fill',
             'stylers': {
-              'color': '#000'
-            }
-          },
-          {
-            'featureType': 'building',
-            'elementType': 'all',
-            'stylers': {
-              'color': '#1a5787'
+              'color': '#2da0c6',
+              'visibility': 'on'
             }
           }
         ]
@@ -180,6 +236,7 @@ export default {
       this.zoom = 13
       this.isLoading = false
       map.setMapStyle(this.mapStyle)
+      this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
     },
     handleMarkerClick () {
     }
@@ -191,5 +248,6 @@ export default {
 .map-chart {
   width: 100%;
   height: 100%;
+  border-radius: 6px;
 }
 </style>

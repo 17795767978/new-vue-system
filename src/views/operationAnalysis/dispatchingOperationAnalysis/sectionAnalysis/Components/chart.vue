@@ -17,6 +17,7 @@
 // import { sectionAnalysis } from 'server/interface'
 import moment from 'moment'
 import { setTimeout } from 'timers'
+import { max } from '../../../../../utils/max'
 export default {
   name: 'sectionAnalysis',
   props: {
@@ -31,7 +32,8 @@ export default {
     return {
       loading: true,
       yAxisData: [],
-      echartsData: []
+      echartsData: [],
+      valueNum: []
     }
   },
   created () {
@@ -82,6 +84,7 @@ export default {
         this.echartsData = res.datas
         if (this.echartsData.length > 0) {
           setTimeout(() => {
+            this.valueNum = []
             this.drawLine()
           }, 1000)
           this.loading = false
@@ -103,6 +106,7 @@ export default {
       data = data.map(function (item) {
         return [item[1], item[0], item[2]]
       })
+      this.valueNum = max(data.map(item => item[2]))
       let options = {
         tooltip: {
           position: 'top',
@@ -148,12 +152,22 @@ export default {
         series: [{
           // name: 'Punch Card',
           type: 'scatter',
-          symbolSize: function (val) {
-            return val[2] * 0.5
+          symbolSize: (val) => {
+            if (this.valueNum < 50) {
+              return val[2] * 0.5
+            } else if (this.valueNum > 50 && this.valueNum < 100) {
+              return val[2] * 0.4
+            } else if (this.valueNum > 100 && this.valueNum < 150) {
+              return val[2] * 0.3
+            } else if (this.valueNum > 150 && this.valueNum < 200) {
+              return val[2] * 0.2
+            } else {
+              return val[2] * 0.1
+            }
           },
           data: data,
           animationDelay: function (idx) {
-            return idx * 6
+            return idx * 2
           }
         }]
       }

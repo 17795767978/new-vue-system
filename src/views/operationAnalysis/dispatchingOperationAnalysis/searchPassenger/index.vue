@@ -1,15 +1,13 @@
 <template>
-  <div class="passenger-transport-capacity">
+  <div class="passenger-search">
     <header>
-      <headerNav @configCheck="configCheck"></headerNav>
+      <header-nav @configCheck="configCheck"/>
     </header>
     <div class="content">
       <contentWrapper
         :selectData="selectData"
-        :isUpdateUp="isUpdateUp"
-        :isUpdateDown="isUpdateDown"
-        @isUpdateFaUp="isUpdateFaUp"
-        @isUpdateFaDown="isUpdateFaDown"
+        :isUpdate="isUpdate"
+        @isUpdateTo="isUpdateTo"
       ></contentWrapper>
     </div>
   </div>
@@ -25,8 +23,7 @@ export default {
     return {
       selectData: {},
       nowTime: '',
-      isUpdateUp: false,
-      isUpdateDown: false
+      isUpdate: false
     }
   },
   components: {
@@ -51,22 +48,19 @@ export default {
       if (this.nowTime - oldTime < 10) {
         this.$message.warning('短时间内请勿重复操作')
       } else {
-        this.isUpdateUp = true
-        this.isUpdateDown = true
+        this.isUpdate = true
       }
     },
-    isUpdateFaUp () {
-      this.isUpdateUp = false
-    },
-    isUpdateFaDown () {
-      this.isUpdateDown = false
+    isUpdateTo () {
+      console.log(this.isUpdate)
+      this.isUpdate = false
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.passenger-transport-capacity {
+.passenger-search {
   width: 100%;
 }
 </style>

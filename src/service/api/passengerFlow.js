@@ -67,7 +67,14 @@ export const passengerFlowApi = {
       path: '/api/passenger/flow/result/list',
       mockPath: '/api/passenger/flow/result/list',
       params: {
-        orgId: ''
+        orgId: '',
+        lineId: '',
+        busNumber: '',
+        lineType: '',
+        startTime: '',
+        endTime: '',
+        pageSize: '',
+        pageNumber: ''
       },
       desc: '客流数据查询'
     }

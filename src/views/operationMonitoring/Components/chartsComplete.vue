@@ -34,11 +34,14 @@ export default {
       loading: true,
       orgNameTrips: [],
       realTimeTrips: [],
+      planTrips: [],
       realTimeTripsMax: '',
       orgNameShift: [],
       realTimeShift: [],
+      planClasses: [],
       realTimeShiftMax: '',
       realTimeMileage: [],
+      planMileage: [],
       orgNameMileage: [],
       realTimeMileageMax: ''
     }
@@ -66,10 +69,11 @@ export default {
   methods: {
     _realTimeMileage (params) {
       this.$api['dispatch.getRealtimeMileage'](params).then(res => {
-        if (res) {
+        if (res && res.length > 0) {
           this.realTimeMileage = res.map(item => parseInt(item.realtimeMileage))
+          this.planMileage = res.map(item => parseInt(item.planMileage))
           this.orgNameMileage = res.map(item => item.orgName)
-          this.realTimeMileageMax = max(this.realTimeMileage)
+          this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
         }
         setTimeout(() => {
           this._realTimeMileage(params)
@@ -78,9 +82,12 @@ export default {
     },
     _realTimeTrips (params) {
       this.$api['dispatch.getRealtimeTrips'](params).then(res => {
-        this.realTimeTrips = res.map(item => parseInt(item.realtimeTrips))
-        this.orgNameTrips = res.map(item => item.orgName)
-        this.realTimeTripsMax = max(this.realTimeTrips)
+        if (res && res.length > 0) {
+          this.realTimeTrips = res.map(item => parseInt(item.realtimeTrips))
+          this.planTrips = res.map(item => parseInt(item.planTrips))
+          this.orgNameTrips = res.map(item => item.orgName)
+          this.realTimeTripsMax = max([max(this.realTimeTrips), max(this.planTrips)])
+        }
         setTimeout(() => {
           this._realTimeTrips(params)
         }, TIME)
@@ -88,9 +95,12 @@ export default {
     },
     _realTimeShift (params) {
       this.$api['dispatch.getRealtimeClasses'](params).then(res => {
-        this.realTimeShift = res.map(item => parseInt(item.realtimeClasses))
-        this.orgNameShift = res.map(item => item.orgName)
-        this.realTimeShiftMax = max(this.realTimeShift)
+        if (res && res.length > 0) {
+          this.realTimeShift = res.map(item => parseInt(item.realtimeClasses))
+          this.planClasses = res.map(item => parseInt(item.planClasses))
+          this.orgNameShift = res.map(item => item.orgName)
+          this.realTimeShiftMax = max([max(this.realTimeShift), max(this.planClasses)])
+        }
         setTimeout(() => {
           this._realTimeShift(params)
         }, TIME)
@@ -102,26 +112,26 @@ export default {
       // let dataAxis = ['一公司', '二公司', '三公司', '四公司', '五公司', '六公司', '七公司'];
       leftChart.setOption({
         title: {
-          text: '实时里程',
+          text: '实际里程',
           left: 'center',
           textStyle: {
             'color': '#fff'
           }
         },
-        color: ['#ff30a0', '#242d78', '#03abd0'],
+        color: ['#ff30a0', '#03abd0'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
           }
         },
-        // legend: {
-        //   data: ['当日计划总里程', '计划完成', '实际完成'],
-        //   bottom: 10,
-        //   textStyle: {
-        //     color: '#fff'
-        //   }
-        // },
+        legend: {
+          data: ['计划里程', '实际里程'],
+          bottom: 10,
+          textStyle: {
+            color: '#fff'
+          }
+        },
         calculable: true,
         xAxis: [
           {
@@ -143,9 +153,9 @@ export default {
           }
         ],
         yAxis: {
-          max: this.realTimeMileageMax + 10,
+          max: this.realTimeMileageMax,
           min: 0,
-          interval: Math.floor(this.realTimeMileageMax / 4),
+          interval: Math.floor(this.realTimeMileageMax / 2),
           axisLine: {
             show: false
           },
@@ -163,10 +173,25 @@ export default {
         },
         series: [
           {
-            name: '实时里程',
+            name: '计划里程',
             type: 'bar',
-            // barGap: '-100%',
             barWidth: '20',
+            barGap: '-100%',
+            data: this.planMileage,
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 20
+              },
+              normal: {
+                barBorderRadius: 20
+              }
+            }
+          },
+          {
+            name: '实际里程',
+            type: 'bar',
+            barWidth: '20',
+            barGap: '-100%',
             data: this.realTimeMileage,
             itemStyle: {
               emphasis: {
@@ -177,20 +202,6 @@ export default {
               }
             }
           }
-        // {
-        //     name: '计划完成',
-        //     type: 'bar',
-        //     barWidth: '20',
-        //     data: [2800, 2500, 2400, 2200, 3100, 2900, 2000],
-        //     itemStyle: {
-        //       emphasis: {
-        //         barBorderRadius: 20
-        //       },
-        //       normal: {
-        //         barBorderRadius: 20
-        //       }
-        //     }
-        // },
         // {
         //     name: '实际完成',
         //     type: 'bar',
@@ -226,13 +237,13 @@ export default {
             type: 'shadow'
           }
         },
-        // legend: {
-        //   data: ['当日计划总趟次', '计划完成', '实际完成'],
-        //   bottom: 10,
-        //   textStyle: {
-        //     color: '#fff'
-        //   }
-        // },
+        legend: {
+          data: ['计划趟次', '实际趟次'],
+          bottom: 10,
+          textStyle: {
+            color: '#fff'
+          }
+        },
         calculable: true,
         xAxis: [
           {
@@ -257,9 +268,9 @@ export default {
           }
         ],
         yAxis: {
-          max: this.realTimeTripsMax + 10,
+          max: this.realTimeTripsMax,
           min: 0,
-          interval: Math.floor(this.realTimeTripsMax / 4),
+          interval: Math.floor(this.realTimeTripsMax / 2),
           axisLine: {
             show: false
           },
@@ -278,11 +289,27 @@ export default {
         series: [
           {
             // name: '当日计划总趟次',
-            name: '实时趟次',
+            name: '实际趟次',
             type: 'bar',
-            // barGap: '-100%',
+            barGap: '-100%',
             barWidth: '20',
             data: this.realTimeTrips,
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 20
+              },
+              normal: {
+                barBorderRadius: 20
+              }
+            }
+          },
+          {
+            // name: '当日计划总趟次',
+            name: '计划趟次',
+            type: 'bar',
+            barGap: '-100%',
+            barWidth: '20',
+            data: this.planTrips,
             itemStyle: {
               emphasis: {
                 barBorderRadius: 20
@@ -313,13 +340,13 @@ export default {
             type: 'shadow'
           }
         },
-        // legend: {
-        //   data: ['当日计划总班次', '计划完成', '实际完成'],
-        //   bottom: 10,
-        //   textStyle: {
-        //     color: '#fff'
-        //   }
-        // },
+        legend: {
+          data: ['计划换班', '实际换班'],
+          bottom: 10,
+          textStyle: {
+            color: '#fff'
+          }
+        },
         calculable: true,
         xAxis: [
           {
@@ -341,9 +368,9 @@ export default {
           }
         ],
         yAxis: {
-          max: this.realTimeShiftMax + 10,
+          max: this.realTimeShiftMax,
           min: 0,
-          interval: Math.floor(this.realTimeShiftMax / 4),
+          interval: Math.floor(this.realTimeShiftMax / 2),
           axisLine: {
             show: false
           },
@@ -361,9 +388,23 @@ export default {
         },
         series: [
           {
-            name: '实时班次',
+            name: '计划换班',
             type: 'bar',
-            // barGap: '-100%',
+            barGap: '-100%',
+            barWidth: '20',
+            data: this.planClasses,
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 20
+              },
+              normal: {
+                barBorderRadius: 20
+              }
+            }
+          },
+          {
+            name: '实际换班',
+            type: 'bar',
             barWidth: '20',
             data: this.realTimeShift,
             itemStyle: {
@@ -406,6 +447,5 @@ export default {
   box-sizing: border-box;
   background-color: rgba(0,0,0, 0.65);
   border-radius: 6px;
-  box-shadow: -4px -5px 10px #409EFF;
 }
 </style>

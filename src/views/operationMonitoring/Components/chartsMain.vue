@@ -1,6 +1,6 @@
 <template>
   <div class="main-chart-wrapper">
-    <el-row :gutter="24">
+    <el-row :gutter="10">
       <el-col :span="6" class="data-style">
         <div class="left-wrapper">
           <div class="person-chart-wrapper">
@@ -60,47 +60,42 @@ export default {
   margin-top: 10px;
   .left-wrapper {
     width: 100%;
-    height: 460px;
+    height: 450px;
     .person-chart-wrapper {
       width: 100%;
       height: 220px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       background-color: rgba(0,0,0, 0.65);
       border-radius: 6px;
-      box-shadow: -4px -5px 10px #409EFF;
     }
     .per-chart-wrapper {
       width: 100%;
       height: 220px;
       background-color: rgba(0,0,0, 0.65);
       border-radius: 6px;
-      box-shadow: -4px -5px 10px #409EFF;
     }
   }
   .middel-wrapper {
     width: 100%;
-    height: 460px;
+    height: 450px;
     background-color: rgba(0,0,0, 0.65);
     border-radius: 6px;
-    box-shadow: -4px -5px 10px #409EFF;
   }
   .right-wrapper {
     width: 100%;
-    height: 460px;
+    height: 450px;
     .drive-chart-wrapper {
       width: 100%;
       height: 220px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       background-color: rgba(0,0,0, 0.65);
       border-radius: 6px;
-      box-shadow: -4px -5px 10px #409EFF;
     }
     .level-chart-wrapper {
       width: 100%;
       height: 220px;
       background-color: rgba(0,0,0, 0.65);
       border-radius: 6px;
-      box-shadow: -4px -5px 10px #409EFF;
     }
   }
 }
