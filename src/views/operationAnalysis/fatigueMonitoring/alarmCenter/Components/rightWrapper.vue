@@ -80,7 +80,7 @@
         <el-table-column
           align="center"
           prop="lineName"
-          label="所属路线"
+          label="所属线路"
           width="100">
         </el-table-column>
         <el-table-column
@@ -195,7 +195,7 @@ export default {
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:00:00')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
@@ -221,7 +221,7 @@ export default {
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:00:00')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)

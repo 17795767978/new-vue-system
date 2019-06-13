@@ -59,11 +59,11 @@
     </div>
     <!-- 弹出框 -->
     <el-dialog :title="lineName" width="80%" :visible.sync="dialogTableVisible">
-      <el-table :data="lineTableData" border height="600px" style="margin-bottom: 40px;">
+      <el-table size="mini" :data="lineTableData" border height="600px" style="margin-bottom: 40px;">
         <el-table-column type="index" align="center" label="序号" width="60"></el-table-column>
         <!-- <el-table-column property="date" label="设备编号"></el-table-column> -->
         <el-table-column align="center" property="deviceCode" label="设备型号"></el-table-column>
-        <el-table-column align="center" property="lineName" label="路线"></el-table-column>
+        <el-table-column align="center" property="lineName" label="线路"></el-table-column>
         <el-table-column align="center" property="busPlateNum" label="车辆"></el-table-column>
         <el-table-column align="center" label="当前位置">
           <template slot-scope="scope">
@@ -166,12 +166,13 @@ export default {
       return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
     },
     handleClick (row) {
-      this.lineId = row.lineUuid
+      this.lineId = row.lineId
       this.lineName = row.lineName
+      console.log(this.lineId)
       this.$api['tiredMonitoring.getLinelineStatusPage']({
         pageNum: this.inCurrentPage,
         pageSize: 10,
-        lineId: row.lineUuid
+        lineId: this.lineId
       }).then(res => {
         this.dialogTableVisible = true
         this.lineTableData = res.list

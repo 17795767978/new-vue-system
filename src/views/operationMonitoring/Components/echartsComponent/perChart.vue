@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="per-chart" :style="{width: '100%', height: '220px',padding: '10px', margin: '0 auto'}"
+    <div id="per-chart" :style="{width: '100%', height: '220px',padding: '10px', margin: '0 auto', boxSizing: 'border-box'}"
       v-loading="loading"
       element-loading-background="rgba(0, 0, 0, 0)"
       >
@@ -32,10 +32,6 @@ export default {
     })
   },
   mounted () {
-    // setTimeout(() => {
-    //   this.drawLine();
-    //   this.loading = false;
-    // }, 3000);
   },
   activated () {
     this.drawLine()
@@ -139,7 +135,7 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: this.fullLoadRateMax + 10,
+            max: this.fullLoadRateMax + 2,
             interval: Math.floor(this.fullLoadRateMax / 2),
             axisLine: {
               show: false

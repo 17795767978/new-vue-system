@@ -33,13 +33,16 @@ export default {
       legendNames: [],
       xAxisNames: [],
       maxDate: '',
-      minDate: ''
+      minDate: '',
+      beforeDate: false
     }
   },
   created () {
+    let data = new Date()
+    data = moment(data).format('YYYY-MM-DD')
     this._tripOrder({
       lineId: '0103',
-      dateTime: '2019-05-13',
+      dateTime: data,
       type: '1',
       startHour: '08',
       endHour: '12'
@@ -51,6 +54,7 @@ export default {
     selectData: {
       deep: true,
       handler () {
+        this.selectData.date = moment(this.selectData.date).format('YYYY-MM-DD')
         this._tripOrder({
           lineId: this.selectData.value,
           dateTime: this.selectData.date,
@@ -76,7 +80,20 @@ export default {
   methods: {
     _tripOrder (params) {
       this.$api['schedulingAnalysis.getSequenceChartDatas'](params).then(res => {
+        this.beforeDate = false
         this.echartDatas = res.datas
+        this.echartDatas.forEach((date, index) => {
+          this.echartDatas[index] = date.map(num => {
+            if (num !== null && num !== undefined) {
+              return num * 1000
+            }
+          })
+        })
+        if (this.echartDatas.length > 0 && this.echartDatas[0][0] === undefined) {
+          this.beforeDate = true
+          this.echartDatas[0][0] = moment(this.selectData.date + ' ' + this.selectData.startTime + '00').valueOf()
+          console.log(this.echartDatas[0][0])
+        }
         this.legendNames = res.legendNames
         this.xAxisNames = res.xAxisNames
         let abs = []
@@ -104,7 +121,7 @@ export default {
         chart.resize()
       })
       let series = []
-      for (var i = 0; i < this.echartDatas.length; i++) {
+      for (var i = 0; i < this.echartDatas.length - 1; i++) {
         series.push({
           type: 'line',
           data: this.echartDatas[i]
@@ -120,6 +137,27 @@ export default {
           bottom: '3%',
           containLabel: true
         },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: (params) => {
+            console.log(params)
+            let station = params[0].axisValueLabel + '<br />' + '发车时序:' + '<br />'
+            if (this.beforeDate) {
+              if (params[0].axisValueLabel === this.xAxisNames[0]) {
+                params[0].value = undefined
+              }
+            }
+            params.forEach(list => {
+              if (list.value !== undefined) {
+                station += moment(list.value).format('HH:mm:ss') + '<br />'
+              }
+            })
+            return station
+          }
+        },
         xAxis: {
           type: 'category',
           data: this.xAxisNames,
@@ -134,7 +172,7 @@ export default {
         yAxis: {
           type: 'value',
           min: this.minDate,
-          max: this.maxDate + 1000,
+          max: this.maxDate,
           splitLine: { // y轴刻度线
             'show': true
           },
@@ -148,7 +186,7 @@ export default {
               color: '#666'
             },
             formatter: function (val) {
-              return moment(val * 1000).format('HH:mm:ss')
+              return moment(val).format('YYYY-MM-DD HH:mm:ss')
             }
           }
         },

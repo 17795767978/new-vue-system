@@ -46,7 +46,7 @@ export default {
       let oldTime = moment(this.nowTime).valueOf()
       this.nowTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
       let newTime = moment(this.nowTime).valueOf()
-      if (newTime - oldTime < 10) {
+      if (newTime - oldTime < 1) {
         this.$message.warning('短时间内请勿重复操作')
       } else {
         this.isUpdate = true
@@ -67,10 +67,19 @@ export default {
     width: 100%;
     padding: 10px 50px;
     box-sizing: border-box;
+    animation: trans 2s linear; /*linear匀速行驶*/
+    animation-fill-mode: forwards; /*保持最后一帧状态*/
     .title {
       text-align: center;
       margin-bottom: -20px;
     }
+  }
+  @keyframes trans {
+    0% {margin-left: -800px;}
+    25% {margin-left: -600px;}
+    50% {margin-left: -400px;}
+    75% {margin-left: -200px;}
+    100% {margin-left: 0px;}
   }
 }
 </style>

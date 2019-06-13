@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
-      <el-form-item label="选择组织">
+      <el-form-item label="选择机构">
         <el-select class="font-style" v-model="formInline.orgUuid" placeholder="请选择">
           <el-option
             v-for="item in comOptions"
@@ -11,7 +11,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择路线">
+      <el-form-item label="选择线路">
         <el-select class="font-style" multiple
             collapse-tags v-model="formInline.lineUuid" placeholder="请选择">
           <el-option

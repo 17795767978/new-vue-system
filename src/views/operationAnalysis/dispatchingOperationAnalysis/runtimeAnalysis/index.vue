@@ -4,7 +4,7 @@
       <headerNav @configCheck="configCheck"></headerNav>
     </header>
     <div class="content">
-      <h2 class="title">站间运行时间分析</h2>
+      <h2 class="title">线路站间运行时间分析</h2>
       <contentWrapper :selectData="selectData" :isUpdate="isUpdate" @isUpdateTo="isUpdateTo"></contentWrapper>
     </div>
   </div>
@@ -37,7 +37,7 @@ export default {
       this.selectData = data
       let oldTime = this.timeNow
       this.timeNow = moment(Date.now()).valueOf()
-      if (this.timeNow - oldTime < 10) {
+      if (this.timeNow - oldTime < 1) {
         this.$message.warning('短时间内请勿重复操作')
       } else {
         this.isUpdate = true

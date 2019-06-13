@@ -1,9 +1,10 @@
 <template>
   <div class="stream-wrapper">
-    <header style="margin-bottom: 10px;">
+    <header style="margin-bottom: 20px;">
      <el-row :gutter="20">
        <el-col :span="4">
         <el-card class="bg-style" shadow="always">
+          <i class="el-icon-user-solid icon"></i>
           <h3 class="title-style">
             当日累计客流（人数）
           </h3>
@@ -12,36 +13,42 @@
        </el-col>
        <el-col :span="4">
         <el-card class="bg-style" shadow="always">
+          <i class="el-icon-s-custom icon"></i>
           <h3 class="title-style">实时载客（人）</h3>
           <p class="font-style" style="color: #00f4f5">{{totelPerson}}</p>
         </el-card>
        </el-col>
        <el-col :span="3">
         <el-card class="bg-style" shadow="always">
-          <h3 class="title-style">运营路线</h3>
+          <i class="el-icon-s-unfold icon"></i>
+          <h3 class="title-style">运营线路</h3>
           <p class="font-style" style="color: #acf50f">{{operLines}}/{{totalLines}}</p>
         </el-card>
        </el-col>
        <el-col :span="4">
         <el-card class="bg-style" shadow="always">
+          <i class="el-icon-data-line icon"></i>
           <h3 class="title-style">在线车辆数</h3>
           <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}</p>
         </el-card>
        </el-col>
        <el-col :span="3">
         <el-card class="bg-style" shadow="always">
+          <i class="el-icon-s-data icon"></i>
           <h3 class="title-style">实时满载率</h3>
           <p class="font-style" style="color: #d52d8c">{{totelFullLoadRate}}%</p>
         </el-card>
        </el-col>
        <el-col :span="3">
         <el-card class="bg-style" shadow="always">
+          <i class="el-icon-ship icon"></i>
           <h3 class="title-style">运营车辆数</h3>
           <p class="font-style" style="color: #d5d40c">{{operateCarNum}}</p>
         </el-card>
        </el-col>
        <el-col :span="3">
         <el-card class="bg-style" shadow="hover">
+          <i class="el-icon-loading icon"></i>
           <h3 class="title-style">待发车辆数</h3>
           <p class="font-style" style="color: #a308b2">{{outgoingCarNum}}</p>
         </el-card>
@@ -102,7 +109,8 @@ export default {
     },
     _realTimePassengeFlow (params) {
       this.$api['passengerFlow.getRealTimePersoncountAndFullLoadRate'](params).then(res => {
-        if (res && res.personCount && res.fullLoadRate) {
+        console.log(res)
+        if (res) {
           this.totelPerson = res.personCount
           this.totelFullLoadRate = res.fullLoadRate
         } else {
@@ -191,8 +199,15 @@ export default {
 .stream-wrapper {
   width: 100%;
   .bg-style {
-    background-color: rgba(0,0,0, 0.6);
+    background-color: rgba(0,0,0, 0.8);
+    box-shadow: 2px 2px 10px 2px #066898;
     height: 80px;
+    .icon {
+      font-size: 21px;
+      float: left;
+      margin-right: 7px;
+      color: #fff;
+    }
     .title-style {
       margin-top: 0px;
       font-size: 16px;
@@ -217,5 +232,9 @@ export default {
       font-size: 15px !important;
     }
   }
+}
+.el-card {
+  border: hidden;
+  border-radius: 6px;
 }
 </style>

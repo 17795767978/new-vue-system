@@ -120,6 +120,7 @@ export default {
           right: 18,
           containLabel: true
         },
+        // color: ['#61bff0', '#4ddefd', '#bcfbd3', '#fdf182', '#fdbca0', '#fd95b2', '#fcd6fd'],
         xAxis: {
           type: 'category',
           data: positions,
@@ -152,6 +153,7 @@ export default {
         series: [{
           // name: 'Punch Card',
           type: 'scatter',
+          // type: 'effectScatter',
           symbolSize: (val) => {
             if (this.valueNum < 50) {
               return val[2] * 0.5
@@ -167,44 +169,21 @@ export default {
           },
           data: data,
           animationDelay: function (idx) {
-            return idx * 2
+            return idx * 5
+          },
+          itemStyle: {
+            normal: {
+              color: function (val) {
+                if (val.dataIndex % 2 === 0) {
+                  return '#61bff0'
+                } else if (val.dataIndex % 2 === 1) {
+                  return '#fd95b2'
+                }
+              }
+            }
           }
         }]
       }
-      //   this.$echarts.util.each(times, function (time, idx) {
-      //     options.title.push({
-      //         textBaseline: 'middle',
-      //         // 多少条数据
-      //         top: (idx + 0.5) * 100 / index + '%',
-      //         text: time
-      //     });
-      //     options.singleAxis.push({
-      //         left: 100,
-      //         type: 'category',
-      //         boundaryGap: false,
-      //         data: positions,
-      //         // 多少条数据
-      //         top: (idx * 100 / index + 5) + '%',
-      //         height: (100 / index - 10) + '%',
-      //         axisLabel: {
-      //             interval: 1
-      //         }
-      //     });
-      //     options.series.push({
-      //         singleAxisIndex: idx,
-      //         coordinateSystem: 'singleAxis',
-      //         type: 'scatter',
-      //         data: [],
-      //         // 圆圈大小
-      //         symbolSize: function (dataItem) {
-      //             return dataItem[1] * 0.8;
-      //         }
-      //     });
-      // });
-
-      // this.$echarts.util.each(data, function (dataItem) {
-      //     options.series[dataItem[0]].data.push([dataItem[1], dataItem[2]]);
-      // });
       chartLine.setOption(options)
     }
   }

@@ -97,7 +97,7 @@ export default {
             type: 'pie',
             radius: '50%',
             center: ['50%', '50%'],
-            roseType: 'radius',
+            // roseType: 'radius',
             label: {
               normal: {
                 show: false

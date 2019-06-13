@@ -3,7 +3,7 @@
     <div class="down-chart-wrapper"
       ref="downChartWrapper"
       id="down-chart-wrapper"
-      :style="{width: '100%', height: '320px'}"
+      :style="{width: '100%', height: '340px'}"
       element-loading-background="rgba(255, 255, 255, 0.5)"
     >
     </div>
@@ -152,7 +152,7 @@ export default {
           calculable: true,
           orient: 'horizontal',
           left: 'center',
-          bottom: '16%'
+          bottom: '5%'
         },
         series: [{
           name: '热力值',

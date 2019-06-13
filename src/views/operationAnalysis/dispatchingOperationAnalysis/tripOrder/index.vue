@@ -5,7 +5,7 @@
     </header>
     <div class="content">
       <h2 class="title">发车趟次时序图</h2>
-      <h4 class="title time">刷新时间：{{timeNow}}</h4>
+      <!-- <h4 class="title time">刷新时间：{{timeNow}}</h4> -->
       <contentWrapper :selectData="selectData" :isUpdate='isUpdate' @isUpdateTo="isUpdateTo"></contentWrapper>
       <!-- <Chart></Chart> -->
     </div>
@@ -47,7 +47,7 @@ export default {
       let oldTime = moment(this.timeNow).valueOf()
       this.timeNow = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
       let newTime = moment(this.timeNow).valueOf()
-      if (newTime - oldTime < 10) {
+      if (newTime - oldTime < -1) {
         this.$message.warning('短时间内请勿重复操作')
       } else {
         this.isUpdate = true

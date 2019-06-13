@@ -3,7 +3,7 @@
     <div class="up-chart-wrapper"
       ref="upChartWrapper"
       id="up-chart-wrapper"
-      :style="{width: '100%', height: '320px'}"
+      :style="{width: '100%', height: '330px'}"
       element-loading-background="rgba(255, 255, 255, 0.5)"
     >
     </div>
@@ -164,7 +164,7 @@ export default {
           calculable: true,
           orient: 'horizontal',
           left: 'center',
-          bottom: '16%'
+          bottom: '5%'
         },
         series: [{
           name: '热力值',

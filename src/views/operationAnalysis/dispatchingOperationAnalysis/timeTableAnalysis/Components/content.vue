@@ -79,6 +79,7 @@ export default {
   .down-content {
     width: 100%;
     margin-bottom: 0;
+    margin-top: 10px;
     // padding-bottom: 10%;
     .heat-chart-wrapper {
       width: 80%;

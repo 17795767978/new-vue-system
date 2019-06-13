@@ -11,7 +11,7 @@
           :picker-options="pickerOptions">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="选择路线">
+      <el-form-item label="选择线路">
         <el-select v-model="formInline.value" class="font-style" placeholder="请选择">
           <el-option
             v-for="item in lineOptions"
@@ -68,11 +68,11 @@ export default {
   data () {
     return {
       formInline: {
-        value: '',
+        value: '0103',
         date: '',
-        turn: '',
-        startTime: '',
-        endTime: ''
+        turn: '1',
+        startTime: '08:00',
+        endTime: '12:00'
       },
       lineOptions: [{
         value: '0103',
@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     onSubmit () {
-      // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
+      this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
       this.$emit('configType', this.formInline)
     }
   },

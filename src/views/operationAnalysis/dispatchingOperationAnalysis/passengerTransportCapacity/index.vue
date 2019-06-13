@@ -48,7 +48,7 @@ export default {
       this.selectData = data
       let oldTime = this.nowTime
       this.nowTime = moment(Date.now()).valueOf()
-      if (this.nowTime - oldTime < 10) {
+      if (this.nowTime - oldTime < 1) {
         this.$message.warning('短时间内请勿重复操作')
       } else {
         this.isUpdateUp = true

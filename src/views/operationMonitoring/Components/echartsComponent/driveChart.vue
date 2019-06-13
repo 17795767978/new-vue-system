@@ -84,9 +84,9 @@ export default {
           {
             name: '面积模式',
             type: 'pie',
-            radius: '50%',
+            radius: '55%',
             center: ['50%', '60%'],
-            roseType: 'area',
+            // roseType: 'area',
             data: this.badDrivingBehavior
           }
         ]

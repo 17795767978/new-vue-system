@@ -9,7 +9,7 @@
           :disabled="true">
         </el-input>
         </el-form-item>
-        <el-form-item label="路线">
+        <el-form-item label="线路">
           <el-input
             placeholder="请输入内容"
             v-model="formInline.selectLine"
@@ -52,7 +52,7 @@
       <el-table-column
         prop="province"
         align="center"
-        label="路线">
+        label="线路">
       </el-table-column>
       <el-table-column
         prop="city"

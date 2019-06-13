@@ -327,7 +327,7 @@ export default {
       window.addEventListener('resize', () => { rightChart.resize() })
       rightChart.setOption({
         title: {
-          text: '实时换班',
+          text: '实时排班',
           left: 'center',
           textStyle: {
             'color': '#fff'
@@ -341,7 +341,7 @@ export default {
           }
         },
         legend: {
-          data: ['计划换班', '实际换班'],
+          data: ['计划排班', '实际排班'],
           bottom: 10,
           textStyle: {
             color: '#fff'
@@ -388,7 +388,7 @@ export default {
         },
         series: [
           {
-            name: '计划换班',
+            name: '计划排班',
             type: 'bar',
             barGap: '-100%',
             barWidth: '20',
@@ -403,7 +403,7 @@ export default {
             }
           },
           {
-            name: '实际换班',
+            name: '实际排班',
             type: 'bar',
             barWidth: '20',
             data: this.realTimeShift,

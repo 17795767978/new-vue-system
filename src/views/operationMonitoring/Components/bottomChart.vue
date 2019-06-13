@@ -8,7 +8,7 @@
       </el-col>
       <el-col :span="12">
         <div class="right-wrapper">
-          <h3 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h3>
+          <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
           <vueSeamless  class="scroll-wrapper" :class-option="allOptions" :data="alermData">
             <p class="list-font" v-for="(list, index) in alermData" :key="index">
               <span>{{list[0]}}：</span>
