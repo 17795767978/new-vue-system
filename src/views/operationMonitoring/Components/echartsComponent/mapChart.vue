@@ -10,14 +10,15 @@
       @ready="handler"
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
+      <!-- animation="BMAP_ANIMATION_BOUNCE" -->
       <bm-marker
         v-for="marker in markers"
         :key="marker.busId"
         :position="{lng: marker.lng, lat: marker.lat}"
         @click="handleMarkerClick(marker)"
         :title="`${marker.lineName}-${marker.busNumber}`"
-        :icon="{url: `${iconCar}`, size: {width: 30, height: 30}}"
-        animation="BMAP_ANIMATION_BOUNCE"
+        :icon="getIcon(marker)"
+        animation="BMAP_ANIMATION_DROP"
         >
       </bm-marker>
       <bml-heatmap :data="hotdata" :max="max" :radius="20">
@@ -28,7 +29,10 @@
 
 <script type="text/ecmascript-6">
 import { BaiduMap, BmMarker, BmlHeatmap } from 'vue-baidu-map'
-import iconCar from '../../../../assets/images/bus.png'
+import iconCarOrange from '../../../../assets/images/bus-orange.png'
+import iconCarRed from '../../../../assets/images/bus-red.png'
+import iconCarYellow from '../../../../assets/images/bus-yellow.png'
+import iconCarGreen from '../../../../assets/images/bus-green.png'
 const TIME = 5 * 60 * 1000
 export default {
   data () {
@@ -184,8 +188,7 @@ export default {
       },
       markers: [],
       hotdata: [],
-      max: 100,
-      iconCar: iconCar
+      max: 100
     }
   },
   components: {
@@ -202,6 +205,21 @@ export default {
     })
   },
   mounted () {
+  },
+  computed: {
+    getIcon () {
+      return function (marker) {
+        if (Number(marker.fullLoadRate) < 25) {
+          return { url: `${iconCarGreen}`, size: { width: 30, height: 30 } }
+        } else if (Number(marker.fullLoadRate) >= 25 && Number(marker.fullLoadRate) < 50) {
+          return { url: `${iconCarYellow}`, size: { width: 30, height: 30 } }
+        } else if (Number(marker.fullLoadRate) >= 50 && Number(marker.fullLoadRate) < 75) {
+          return { url: `${iconCarOrange}`, size: { width: 30, height: 30 } }
+        } else if (Number(marker.fullLoadRate) >= 75 && Number(marker.fullLoadRate) < 100) {
+          return { url: `${iconCarRed}`, size: { width: 30, height: 30 } }
+        }
+      }
+    }
   },
   methods: {
     _positionRating (params) {

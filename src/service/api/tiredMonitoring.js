@@ -15,9 +15,7 @@ export const tiredMonitoringApi = {
         warnLevel: '', // 报警等级  （一级：1；二级：2；三级：3）
         warnTypeId: [], // 报警类型
         startTime: '', // 时间格式   开始结束默认查近7天的
-        endTime: '',
-        pageSize: 10,
-        pageNum: 1
+        endTime: ''
       },
       desc: '报警中心-列表'
     },

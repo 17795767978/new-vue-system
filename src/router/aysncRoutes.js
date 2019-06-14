@@ -124,42 +124,42 @@ export const aysncRoutesMap = [
         meta: {
           title: '客流数据查询',
           icon: 'nocturne icon-dash',
-          roles: ['/passenger-transport-capacity']
+          roles: ['/search-passenger']
         }
       }
       ]
     },
-    {
-      path: '/safety-supervision',
-      component: _import_('operationAnalysis/safetySupervision/index'),
-      name: 'safetySupervision',
-      meta: {
-        title: '安全监管',
-        icon: 'nocturne icon-dash',
-        roles: ['/vehicle-fault-alarm', '/real-time-dashboard']
-      },
-      children: [{
-        path: 'vehicle-fault-alarm',
-        component: _import_('operationAnalysis/safetySupervision/vehicleFaultAlarm/index'),
-        name: 'vehicleFaultAlarm',
-        meta: {
-          title: '车辆故障报警',
-          icon: 'nocturne icon-dash',
-          roles: ['/vehicle-fault-alarm']
-        }
-      },
-      {
-        path: 'real-time-dashboard',
-        component: _import_('operationAnalysis/safetySupervision/realtimeDashboard/index'),
-        name: 'realTimeDashboard',
-        meta: {
-          title: '实时仪表盘',
-          icon: 'nocturne icon-dash',
-          roles: ['/real-time-dashboard']
-        }
-      }
-      ]
-    },
+    // {
+    //   path: '/safety-supervision',
+    //   component: _import_('operationAnalysis/safetySupervision/index'),
+    //   name: 'safetySupervision',
+    //   meta: {
+    //     title: '安全监管',
+    //     icon: 'nocturne icon-dash',
+    //     roles: ['/vehicle-fault-alarm', '/real-time-dashboard']
+    //   },
+    //   children: [{
+    //     path: 'vehicle-fault-alarm',
+    //     component: _import_('operationAnalysis/safetySupervision/vehicleFaultAlarm/index'),
+    //     name: 'vehicleFaultAlarm',
+    //     meta: {
+    //       title: '车辆故障报警',
+    //       icon: 'nocturne icon-dash',
+    //       roles: ['/vehicle-fault-alarm']
+    //     }
+    //   },
+    //   {
+    //     path: 'real-time-dashboard',
+    //     component: _import_('operationAnalysis/safetySupervision/realtimeDashboard/index'),
+    //     name: 'realTimeDashboard',
+    //     meta: {
+    //       title: '实时仪表盘',
+    //       icon: 'nocturne icon-dash',
+    //       roles: ['/real-time-dashboard']
+    //     }
+    //   }
+    //   ]
+    // },
     {
       path: '/fatigue-monitoring',
       component: _import_('operationAnalysis/fatigueMonitoring/index'),

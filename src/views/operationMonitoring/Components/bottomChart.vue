@@ -16,9 +16,9 @@
               <span v-else-if="index / 3 === parseInt(index / 3) && index / 2 === parseInt(index / 2)" style="color: #dc39ea">{{list[1]}}</span> -->
               <span v-if="list[1] === '打电话。'" style="color: #eadf00;">{{list[1]}}</span>
               <span v-show="list[1] === '抽烟。'" style="color: #fa8a96;">{{list[1]}}</span>
-              <span v-show="list[1] === '分神驾驶报警。'" style="color: #e9a475;">{{list[1]}}</span>
+              <span v-show="list[1] === '分神驾驶。'" style="color: #e9a475;">{{list[1]}}</span>
               <span v-show="list[1] === '疲劳驾驶。'" style="color: #dc3971;">{{list[1]}}</span>
-              <span v-show="list[1] === '驾驶员异常报警。'" style="color: #e8f19c;">{{list[1]}}</span>
+              <span v-show="list[1] === '驾驶员异常。'" style="color: #e8f19c;">{{list[1]}}</span>
             </p>
           </vueSeamless>
         </div>

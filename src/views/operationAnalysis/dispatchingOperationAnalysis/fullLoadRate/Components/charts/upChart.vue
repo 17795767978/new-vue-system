@@ -113,6 +113,7 @@ export default {
           this.$refs.upChartWrapper.style.display = 'block'
           this.drawLine()
           this.loading = false
+          this.$message.success('数据已更新')
         } else {
           // this.$refs.animationDom.addClassList('anim');
           this.$message.warning('暂无数据')

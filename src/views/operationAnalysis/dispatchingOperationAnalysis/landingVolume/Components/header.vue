@@ -77,7 +77,7 @@ export default {
       formInline: {
         station: [{
           label: '火车站',
-          value: '081faf17f7ef4e94aad0,144edc478cdf4ee8a402,14a954a9df1345b4b4d3,2fa4156ad52444038e73,38f023d49d6d487fa0c8,44ab3f8794934e8f9b00,7669c40cd18a4bf993c9,d089160bf03a48ad9315,dbd8ef27294e4422b0fc,e5fd384bbfc54f4f89e1'
+          value: '081faf17f7ef4e94aad0,144edc478cdf4ee8a402'
         }],
         date: ['2019-04-01', '2019-05-01'],
         startTime: '00:00',

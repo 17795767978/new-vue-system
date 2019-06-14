@@ -75,6 +75,7 @@ export default {
           this.maxData = max(maxBefore) * this.echartData.length / 3.5
           this.$refs.echartWrapper.style.display = 'block'
           this.dawnLine()
+          this.$message.success('数据已更新')
         } else {
           this.$message.warning('暂无数据')
           this.$refs.echartWrapper.style.display = 'none'

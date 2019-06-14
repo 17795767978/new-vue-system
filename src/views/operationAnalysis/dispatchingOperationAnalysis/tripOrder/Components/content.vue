@@ -92,7 +92,6 @@ export default {
         if (this.echartDatas.length > 0 && this.echartDatas[0][0] === undefined) {
           this.beforeDate = true
           this.echartDatas[0][0] = moment(this.selectData.date + ' ' + this.selectData.startTime + '00').valueOf()
-          console.log(this.echartDatas[0][0])
         }
         this.legendNames = res.legendNames
         this.xAxisNames = res.xAxisNames
@@ -108,6 +107,7 @@ export default {
           this.$refs.chartWrapper.style.display = 'block'
           this.drawLine()
           this.loading = false
+          this.$message.success('数据已更新')
         } else {
           // this.$refs.animationDom.addClassList('anim');
           this.$message.warning('暂无数据')

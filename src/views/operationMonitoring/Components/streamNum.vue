@@ -6,7 +6,7 @@
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-user-solid icon"></i>
           <h3 class="title-style">
-            当日累计客流（人数）
+            当日累计客流（人次）
           </h3>
           <p class="font-style" style="color: #e9e404">{{passengeFlowNum}}</p>
         </el-card>

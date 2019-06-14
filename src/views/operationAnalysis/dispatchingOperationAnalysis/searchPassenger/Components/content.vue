@@ -154,6 +154,7 @@ export default {
       this.$api['passengerFlow.list'](params).then(res => {
         this.tableData = res.list
         this.total = res.total
+        this.$message.success('数据已更新')
       })
     },
     gerDate (row) {

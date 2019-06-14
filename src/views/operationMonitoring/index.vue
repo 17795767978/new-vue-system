@@ -1,6 +1,8 @@
 <template>
   <div class="data-wrapper">
-    <el-button type="success" @click="fullScreen" size="small" style="position: absolute; right: 20px; top: 20px; z-index: 1003" icon="el-icon-video-camera"></el-button>
+    <el-button type="success" @click="fullScreen" size="mini" style="position: absolute; right: 20px; top: 20px; z-index: 1003">
+      <i class="el-icon-video-camera" style="font-size: 22px;"></i>
+    </el-button>
     <div class="content-wrapper">
      <TopTitleMsg></TopTitleMsg>
      <StreamNum></StreamNum>

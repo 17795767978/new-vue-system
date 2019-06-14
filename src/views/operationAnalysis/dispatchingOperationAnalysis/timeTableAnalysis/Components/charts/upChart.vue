@@ -101,6 +101,7 @@ export default {
         this.echartsData = res.datas
         this.maxNum = max(this.echartsData.map(item => item[2]))
         if (this.echartsData.length > 0) {
+          this.$message.success('数据已更新')
           this.drawLine()
           this.loading = false
           this.$refs.upChartWrapper.style.display = 'block'

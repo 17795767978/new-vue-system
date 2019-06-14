@@ -20,12 +20,14 @@
               <p style="text-align: center; font-size: 13px;">{{item.name}}</p>
             </li>
           </ul>
-          <div class="simple-font" :class="simple.admin ? '' : 'simple-font-dis'"  @click="goToTimeAna(simple)">
-            <div class="simple-inside-font">
-              <img :src="simple.icon" width="40" height="40" class="simple-img-font"/>
-            </div>
-            <p style="text-align: center; font-size: 16px;">{{simple.name}}</p>
-          </div>
+          <ul class="item-fam">
+            <li class="item-font" :class="item.admin ? '' : 'simple-font-dis'" v-for="(item, index) in simple" :key="index"  @click="goToTimeAna(item)">
+              <div class="inside-font">
+                <img :src="item.icon" width="30" height="30" class="img-font"/>
+              </div>
+              <p style="text-align: center; font-size: 13px;">{{item.name}}</p>
+            </li>
+          </ul>
         </div>
       </el-col>
       <el-col :span="7">
@@ -65,7 +67,10 @@ const PER_ANA = [
   { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity', admin: false },
   { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false }
 ]
-const SIMPLE = { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false }
+const SIMPLE = [
+  { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false },
+  { name: '客流数据查询', icon: iconHomeYxsj, path: '/search-passenger', admin: false }
+]
 const TIRED_CONTRAL = [
   { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center', admin: false },
   { name: '设备状态', icon: iconHomeBjzt, path: '/device-status', admin: false },
@@ -77,7 +82,7 @@ export default {
   data () {
     return {
       operationAnalysis: [],
-      simple: {},
+      simple: [],
       tiredContral: [],
       rolesTem: []
     }
@@ -124,11 +129,14 @@ export default {
           item.admin = false
         }
       })
-      if (this.rolesTem.some(role => simple.path === role)) {
-        simple.admin = true
-      } else {
-        simple.admin = false
-      }
+      simple.forEach(item => {
+        let isSimple = this.rolesTem.some(role => item.path === role)
+        if (isSimple) {
+          item.admin = true
+        } else {
+          item.admin = false
+        }
+      })
       tired.forEach(item => {
         let isPer = this.rolesTem.some(role => item.path === role)
         if (isPer) {
@@ -245,13 +253,16 @@ export default {
         height: 118px;
         background-color:  #4fa3e4;
         border-radius: 6px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
         .simple-inside-font {
-          width: 100%;
+          width: 49%;
           height: 60px;
           position:relative;
           .simple-img-font {
             position: absolute;
-            left: 50%;
+            // left: 50%;
             margin-left: -20px;
             margin-top: 20px;
           }

@@ -54,7 +54,7 @@ export default {
         // }
         this.changeData.forEach(data => {
           this.getLevelList.forEach(list => {
-            if (data.warnLabel === list.name) {
+            if (data.warnLevelLabel === list.name) {
               list.value = data.warnNumber
             }
           })

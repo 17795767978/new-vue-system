@@ -53,11 +53,17 @@ export default {
       handler (newData) {
         // console.log(this.checkData.date);
         // this.checkData.date = moment(this.checkData.date).format('YYYY-MM');
-        if (this.checkData.value !== '' && this.checkData.turn !== '' && this.checkData.date !== '') {
+        // console.log(newData)
+        if (newData.date.length > 0) {
+          newData.date = moment(this.checkData.date).format('YYYY-MM')
+        } else {
+          newData.date = ''
+        }
+        if (newData.value !== '') {
           this._sectionAnalysis({
-            lineId: this.checkData.value,
-            type: this.checkData.turn,
-            month: moment(this.checkData.date).format('YYYY-MM')
+            lineId: newData.value,
+            type: newData.turn,
+            month: newData.date
           })
         } else {
           this.$message.error('请选择线路')
@@ -86,6 +92,7 @@ export default {
           setTimeout(() => {
             this.valueNum = []
             this.drawLine()
+            this.$message.success('数据已更新')
           }, 1000)
           this.loading = false
           this.$refs.chartWrapper.style.display = 'block'

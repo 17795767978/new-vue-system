@@ -5,6 +5,7 @@
         <el-table
           :data="upTableData"
           border
+          stripe
           :summary-method="getSummariesUp"
           show-summary
           class="inside-table"
@@ -18,6 +19,7 @@
                 :show-header="false"
                 :data="props.row.tableData"
                 ref="insideTable"
+                stripe
                 style="width: 100%;"
                 >
                 <el-table-column
@@ -104,6 +106,7 @@
         <el-table
           :data="downTableData"
           border
+          stripe
           :summary-method="getSummariesDown"
           show-summary
           @expand-change="rowData"
@@ -117,6 +120,7 @@
                 :show-header="false"
                 :data="props.row.tableData"
                 ref="insideTable"
+                stripe
                 style="width: 100%;"
                 >
                 <el-table-column

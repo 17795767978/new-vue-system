@@ -46,6 +46,7 @@
           <el-button type="primary" @click="onSubmit">查询</el-button>
           <el-button type="warning" @click="onClear">重置</el-button>
           <downloadExcel
+            @click="getJsonData"
             :data= "json_data"
             type="csv"
             style="display: inline-block; margin-left: 10px;"
@@ -278,21 +279,6 @@ export default {
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
         this.tableData = res.list
         this.total = res.total
-        let excelArr = []
-        res.list.forEach((item, index) => {
-          item.warnTime = moment(item.warnTime).format('YYYY-MM-DD HH:mm:ss')
-          excelArr[index] = {
-            '所属公司': item.orgName,
-            '所属线路': item.lineName,
-            '车牌号': item.busPlateNumber,
-            '车辆自编号': item.busSelfCode,
-            '设备编号': item.devCode,
-            '报警级别(级)': item.warnLevel,
-            '报警类型': item.warnTypeName,
-            '报警时间': item.warnTime
-          }
-        })
-        this.json_data = excelArr
       })
     },
     changeBusPlateNumber () {
@@ -382,7 +368,40 @@ export default {
       this.$emit('clear')
     },
     onSave () {
-      this.$message.success('正在下载中。。。')
+      this.$api['tiredMonitoring.getWarnList']({
+        orgId: this.formInline.orgId, // 组织机构id
+        lineId: this.formInline.lineId, // 线路id
+        busUuid: this.formInline.busUuid, // 车辆id
+        devCode: this.formInline.devCode, // 设备号
+        busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+        busSelfCode: this.formInline.busSelfCode, // 自编号
+        warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+        warnTypeId: this.formInline.warnTypeId, // 报警类型
+        startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+        endTime: this.formInline.timeValue[1],
+        pageSize: 10000,
+        pageNum: 10000
+      }).then(res => {
+        let excelArr = []
+        res.list.forEach((item, index) => {
+          item.warnTime = moment(item.warnTime).format('YYYY-MM-DD HH:mm:ss')
+          excelArr[index] = {
+            '所属公司': item.orgName,
+            '所属线路': item.lineName,
+            '车牌号': item.busPlateNumber,
+            '车辆自编号': item.busSelfCode,
+            '设备编号': item.devCode,
+            '报警级别(级)': item.warnLevel,
+            '报警类型': item.warnTypeName,
+            '报警时间': item.warnTime
+          }
+        })
+        this.json_data = excelArr
+        this.$message.success('正在下载中。。。')
+      })
+    },
+    getJsonData () {
+      console.log(123)
     }
   }
 }
