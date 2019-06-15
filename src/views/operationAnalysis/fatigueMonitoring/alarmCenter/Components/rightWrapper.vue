@@ -45,15 +45,7 @@
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
           <el-button type="warning" @click="onClear">重置</el-button>
-          <downloadExcel
-            @click="getJsonData"
-            :data= "json_data"
-            type="csv"
-            style="display: inline-block; margin-left: 10px;"
-            name= "报警中心报表.xls"
-          >
           <el-button type="success" @click="onSave">导出</el-button>
-          </downloadExcel>
         </el-form-item>
       </el-form>
     </div>
@@ -144,6 +136,24 @@
         <span class="demonstration" style="float: right; margin-top: 20px; line-height: 36px;">共{{total}}条</span>
       </div>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <span>请确认是否下载报警中心报表</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <downloadExcel
+          :data= "json_data"
+          type="csv"
+          style="display: inline-block; margin-left: 10px;"
+          name= "报警中心报表.xls"
+        >
+        <el-button type="primary" @click="getExcel">确 定</el-button>
+        </downloadExcel>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -189,7 +199,8 @@ export default {
       tableData: [],
       total: 100,
       pageNum: 1,
-      json_data: []
+      json_data: [],
+      centerDialogVisible: false
     }
   },
   created () {
@@ -368,6 +379,7 @@ export default {
       this.$emit('clear')
     },
     onSave () {
+      console.log(this.formInline)
       this.$api['tiredMonitoring.getWarnList']({
         orgId: this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -397,11 +409,12 @@ export default {
           }
         })
         this.json_data = excelArr
-        this.$message.success('正在下载中。。。')
+        this.centerDialogVisible = true
       })
     },
-    getJsonData () {
-      console.log(123)
+    getExcel () {
+      this.centerDialogVisible = false
+      this.$message.success('正在下载中。。。')
     }
   }
 }
