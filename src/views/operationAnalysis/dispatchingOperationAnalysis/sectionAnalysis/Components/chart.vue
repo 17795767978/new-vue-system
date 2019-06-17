@@ -182,9 +182,9 @@ export default {
             normal: {
               color: function (val) {
                 if (val.dataIndex % 2 === 0) {
-                  return '#61bff0'
+                  return '#1985D8'
                 } else if (val.dataIndex % 2 === 1) {
-                  return '#fd95b2'
+                  return '#1985D8'
                 }
               }
             }

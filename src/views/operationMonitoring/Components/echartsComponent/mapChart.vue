@@ -18,6 +18,7 @@
         @click="handleMarkerClick(marker)"
         :title="`${marker.lineName}-${marker.busNumber}`"
         :icon="getIcon(marker)"
+        class="arrow_box"
         animation="BMAP_ANIMATION_DROP"
         >
       </bm-marker>
@@ -267,5 +268,16 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 6px;
+}
+.arrow_box{animation: glow 800ms ease-out infinite alternate; }
+@keyframes glow {
+    0% {
+        border-color: #393;
+        box-shadow: 0 0 5px rgba(0,255,0,.2), inset 0 0 5px rgba(0,255,0,.1), 0 1px 0 #393;
+    }
+    100% {
+        border-color: #6f6;
+        box-shadow: 0 0 20px rgba(0,255,0,.6), inset 0 0 10px rgba(0,255,0,.4), 0 1px 0 #6f6;
+    }
 }
 </style>

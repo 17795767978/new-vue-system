@@ -35,10 +35,12 @@ const user = {
       removeToken()
     },
     SET_USERINFO (state, data) {
+      state.userId = data
       state.userName = localStorage.getItem('userName')
     },
     RESET_USERINFO (state, data) {
-      // state.userId = ''
+      console.log(data)
+      state.userId = ''
       state.userAccount = ''
       state.userName = ''
       state.userStatus = ''
@@ -68,7 +70,7 @@ const user = {
         // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
         // resolve()
         api['user.login'](params).then(res => {
-          localStorage.setItem('userName', res.userInfo.userRealName)
+          localStorage.setItem('userName', res.userInfo.userAccount)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
           localStorage.setItem('id', res.userInfo.userId)
           resolve()
@@ -114,15 +116,15 @@ const user = {
           id: localStorage.getItem('id')
         }).then(res => {
           const data = res
-          if (data && data.length > 0) {
-            commit('SET_ROLES', data)
-            commit('SET_USERINFO')
+          if (data && data.resourceTree.length > 0) {
+            commit('SET_ROLES', data.resourceTree)
+            commit('SET_USERINFO', data.userOrgId)
           } else {
             alert('管理员请先设置权限再登录')
-            commit('SET_USERINFO')
+            commit('SET_USERINFO', '')
             commit('SET_ROLES', 'error')
           }
-          resolve(res)
+          resolve(res.resourceTree)
         }).catch(err => {
           reject(err)
         })

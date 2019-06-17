@@ -106,7 +106,10 @@ export default {
       this.formInline.valueTime = [timeStart, timeEnd]
     }, 20)
   },
+  computed: {
+  },
   mounted () {
+    console.log(this.$store.getters.userId)
   },
   methods: {
     onSubmit () {

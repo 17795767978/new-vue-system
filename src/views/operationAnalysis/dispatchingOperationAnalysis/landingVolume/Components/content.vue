@@ -1,8 +1,10 @@
 <template>
   <div class="content-wrapper">
     <el-row :gutter="24">
-      <el-col :span="12" style="height: 691px">
+      <el-col :span="12" style="height: 730px; background: #f6f6f6">
+        <p class="before-title" style="font-size: 18px;font-weight:600;display: inline-block;">上行人数</p>
         <el-table
+          :header-cell-style="{background:'#e9f5fe'}"
           :data="upTableData"
           border
           stripe
@@ -11,7 +13,7 @@
           class="inside-table"
           @expand-change="rowData"
           style="width: 100%;"
-          height="691"
+          height="650"
           >
           <el-table-column type="expand" width="60" fixed>
             <template slot-scope="props">
@@ -102,8 +104,10 @@
           </el-table-column>
         </el-table>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" style="height: 730px; background: #f6f6f6">
+        <p class="before-title" style="font-size: 18px; font-weight:bold">下行人数</p>
         <el-table
+          :header-cell-style="{background:'#e9f5fe'}"
           :data="downTableData"
           border
           stripe
@@ -112,7 +116,7 @@
           @expand-change="rowData"
           class="inside-table"
           style="width: 100%"
-          height="691"
+          height="650"
           >
           <el-table-column type="expand" width="60" fixed>
             <template slot-scope="props">
@@ -424,6 +428,16 @@ export default {
 .content-wrapper {
   width: 100%;
   box-sizing: border-box;
+  .before-title::before {
+    content: ' ';
+    width: 5px;
+    height: 20px;
+    background-color: #249cf9;
+    display: inline-flex;
+    margin-right: 10px;
+    margin-top: -2px;
+    vertical-align: middle;
+  }
   .Summaries {
     width: 50%;
     height: 40px;
@@ -458,21 +472,19 @@ export default {
   .el-table__expanded-cell[class*=cell] {
     padding: 0 !important;
   }
-}
-.inside-table::scrollbar {
-  width: 10px;
-  position: absolute;
-}
-.inside-table::scrollbar-track {
-  background-color: rgba(0, 0, 0, 1.9);
-  -webkit-border-radius: 2em;
-  -moz-border-radius: 2em;
-  border-radius:2em;
-}
-.inside-table::scrollbar-thumb {
-  background: rgba(23, 114, 218, 0.3);
-  -webkit-border-radius: 2em;
-  -moz-border-radius: 2em;
-  border-radius:  2em;
+  .el-table__body-wrapper::-webkit-scrollbar {
+    width: 6px;
+    background-color: #ebeef5;
+  }
+  .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: #ccc;
+    height: 120px;
+  }
+  .el-table__body-wrapper::-webkit-scrollbar-track {
+    box-shodow: inset 0 0 5px rgba(0,0,0, 0.2);
+    border-radius: 3px;
+    background-color: rgba(255,255,255, 1)
+  }
 }
 </style>

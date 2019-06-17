@@ -146,7 +146,7 @@
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <downloadExcel
           :data= "json_data"
-          type="csv"
+          type="xls"
           style="display: inline-block; margin-left: 10px;"
           name= "报警中心报表.xls"
         >

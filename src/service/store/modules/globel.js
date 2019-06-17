@@ -1,4 +1,5 @@
 import api from '@/plugins/api'
+import store from '@/plugins/store'
 /**
  * Globel STORE
  */
@@ -26,22 +27,43 @@ const selectData = {
   actions: {
     getLineList ({ commit }) {
       return new Promise((resolve, reject) => {
-        api['wholeInformation.getLine']({
-          lineId: '',
-          lineName: ''
-        }).then(res => {
-          let list = []
-          res.forEach(item => {
-            list.push({
-              label: item.lineName,
-              value: item.lineUuid
+        if (store.getters.userId !== '1') {
+          api['wholeInformation.getLine']({
+            lineId: '',
+            lineName: '',
+            orgId: store.getters.userId
+          }).then(res => {
+            let list = []
+            res.forEach(item => {
+              list.push({
+                label: item.lineName,
+                value: item.lineUuid
+              })
             })
+            commit('LINE_DATA', list)
+            resolve(list)
+          }).catch(error => {
+            reject(error)
           })
-          commit('LINE_DATA', list)
-          resolve(list)
-        }).catch(error => {
-          reject(error)
-        })
+        } else {
+          api['wholeInformation.getLine']({
+            lineId: '',
+            lineName: '',
+            orgId: ''
+          }).then(res => {
+            let list = []
+            res.forEach(item => {
+              list.push({
+                label: item.lineName,
+                value: item.lineUuid
+              })
+            })
+            commit('LINE_DATA', list)
+            resolve(list)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
     getStationList ({ commit }) {

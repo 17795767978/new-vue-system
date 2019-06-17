@@ -9,6 +9,7 @@ const getters = {
   // 用户
   userAccount: state => state.user.userAccount,
   userName: state => state.user.userName,
+  userId: state => state.user.userId,
   // userId: state => state.user.userId,
   avatar: state => state.user.avatar,
   token: state => state.user.token,

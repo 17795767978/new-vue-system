@@ -105,7 +105,7 @@ export default {
         legend: {
           data: this.legendNames
         },
-        color: ['#eadf00', '#fa8a96', '#8bb4ea'],
+        color: ['#1985d8', '#fdb628', '#67e0e3'],
         grid: {
           left: '3%',
           right: '4%',
@@ -133,13 +133,13 @@ export default {
               // 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
                 color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                   offset: 0,
-                  color: 'rgba(234,223,0,0.39)'
+                  color: 'rgba(25,133,216,0.39)'
                 }, {
                   offset: 0.34,
-                  color: 'rgba(234,223,0,0.25)'
+                  color: 'rgba(25,133,216,0.25)'
                 }, {
                   offset: 1,
-                  color: 'rgba(234,223,0,0.00)'
+                  color: 'rgba(25,133,216,0.00)'
                 }])
               }
             }
@@ -153,13 +153,13 @@ export default {
               // 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
                 color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                   offset: 0,
-                  color: 'rgba(250,138,150,0.39)'
+                  color: 'rgba(253,182,40,0.39)'
                 }, {
                   offset: 0.34,
-                  color: 'rgba(250,138,150,0.25)'
+                  color: 'rgba(253,182,40,0.25)'
                 }, {
                   offset: 1,
-                  color: 'rgba(250,138,150,0.00)'
+                  color: 'rgba(253,182,40,0.00)'
                 }])
               }
             }
@@ -173,13 +173,13 @@ export default {
               // 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
                 color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                   offset: 0,
-                  color: 'rgba(139,180,234,0.39)'
+                  color: 'rgba(103,224,227,0.39)'
                 }, {
                   offset: 0.34,
-                  color: 'rgba(139,180,234,0.25)'
+                  color: 'rgba(103,224,227,0.25)'
                 }, {
                   offset: 1,
-                  color: 'rgba(139,180,234,0.00)'
+                  color: 'rgba(103,224,227,0.00)'
                 }])
               }
             }

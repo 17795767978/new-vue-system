@@ -112,6 +112,7 @@ export default {
           x: 'right',
           data: ['一级', '二级']
         },
+        color: ['#eb6f49', '#fdb628'],
         series: [
           {
             name: '报警等级',

@@ -123,7 +123,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="角色：" prop="roleId">
+        <el-form-item label="角色：" prop="roleIds">
           <el-select
             style="width: 240px"
             v-model="adminForm.roleIds"
@@ -132,6 +132,19 @@
             placeholder="请选择">
             <el-option
               v-for="item in roleOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属机构：" prop="userOrgUuid">
+          <el-select
+            style="width: 240px"
+            v-model="adminForm.userOrgUuid"
+            placeholder="请选择">
+            <el-option
+              v-for="item in orgOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -165,7 +178,8 @@ export default {
         userRealName: '',
         userGender: '',
         enabled: '',
-        roleIds: []
+        roleIds: [],
+        userOrgUuid: ''
         // roleId: ''
       },
       rules: {
@@ -183,6 +197,12 @@ export default {
         ],
         enabled: [
           { required: true, message: '请选择状态', trigger: 'blur' }
+        ],
+        roleIds: [
+          { required: true, message: '请选择角色', trigger: 'blur' }
+        ],
+        userOrgUuid: [
+          { required: true, message: '请选择所属机构', trigger: 'blur' }
         ]
       },
       enableOptions: [
@@ -206,6 +226,7 @@ export default {
         }
       ],
       roleOptions: [],
+      orgOptions: [],
       userId: '',
       isAdd: true,
       isDisable: false
@@ -217,6 +238,7 @@ export default {
       pageSize: 10
     })
     this.getRoleList()
+    this.getOrgList()
   },
   methods: {
     getAdminList (params) {
@@ -240,6 +262,11 @@ export default {
           }
         })
         // this.list = res
+      })
+    },
+    getOrgList (params) {
+      this.$store.dispatch('getComList').then(res => {
+        this.orgOptions = res
       })
     },
     onSearch () {
@@ -331,6 +358,7 @@ export default {
         this.adminForm.enabled = res.enabled
         this.userId = res.userId
         this.addAdmin.roleIds = res.roleIds
+        this.adminForm.userOrgUuid = res.userOrgUuid
       })
     },
     forMatterCreateTime (row) {
