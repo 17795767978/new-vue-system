@@ -1,11 +1,13 @@
 <template>
   <div>
     <baidu-map
+    ref="bdMap"
     :style="{width: '500px', height: '400px', backgroundColor: 'rgba(0,0,0, 0.5)'}"
     :zoom="zoom"
     :center="center"
     :ak="ak"
     :scroll-wheel-zoom="true"
+    @ready="handler"
     >
     <!-- animation="BMAP_ANIMATION_DROP" -->
     <bm-marker
@@ -45,7 +47,7 @@ export default {
   watch: {
     rowData: {
       deep: true,
-      handler () {
+      handler (newValue) {
         setTimeout(() => {
           this.data = this.rowData
           this.center.lat = this.data.lat
@@ -53,23 +55,26 @@ export default {
           this.position.lat = this.data.lat
           this.position.lng = this.data.lng
           this.zoom = 15
-        }, 200)
+        }, 500)
       }
     }
   },
   mounted () {
-    if (this.isReload) {
-      setTimeout(() => {
-        this.data = this.rowData
-        this.center.lat = this.data.lat
-        this.center.lng = this.data.lng
-        this.position.lat = this.data.lat
-        this.position.lng = this.data.lng
-        this.zoom = 15
-      }, 500)
-    }
   },
-  methods: {}
+  methods: {
+    handler ({ BMap, map }) {
+      if (this.isReload) {
+        setTimeout(() => {
+          this.data = this.rowData
+          this.center.lat = this.data.lat
+          this.center.lng = this.data.lng
+          this.position.lat = this.data.lat
+          this.position.lng = this.data.lng
+          this.zoom = 15
+        }, 500)
+      }
+    }
+  }
 }
 </script>
 

@@ -39,7 +39,6 @@ const user = {
       state.userName = localStorage.getItem('userName')
     },
     RESET_USERINFO (state, data) {
-      console.log(data)
       state.userId = ''
       state.userAccount = ''
       state.userName = ''

@@ -68,11 +68,14 @@
         <el-table-column align="center" label="当前位置">
           <template slot-scope="scope">
             <el-popover
+              ref="elPopover"
               placement="left"
               trigger="click"
               >
-              <mapWrapper v-if="isReload" :rowData="rowData" :isReload="isReload"/>
-              <el-button type="success" icon="el-icon-location-outline" slot="reference" circle @click="getRow(scope.row)"></el-button>
+              <template>
+                <mapWrapper v-if="isReload" :rowData="rowData" :isReload="isReload"/>
+                <el-button type="success" icon="el-icon-location-outline" slot="reference" circle @click="getRow(scope.row)"></el-button>
+              </template>
             </el-popover>
           </template>
         </el-table-column>
@@ -150,6 +153,7 @@ export default {
       this.$api['tiredMonitoring.getLineDeviceStatusPage'](params).then(res => {
         this.tableData = res.list
         this.total = res.total
+        this.$message.success('数据更新')
         if (res.list.length === 0) {
           this.$message.warning('无列表数据')
         }
@@ -177,6 +181,7 @@ export default {
         this.dialogTableVisible = true
         this.lineTableData = res.list
         this.lineTotal = res.total
+        this.$message.success('数据更新')
       })
     },
     // 外层table
@@ -205,6 +210,7 @@ export default {
     getRow (row) {
       this.isReload = true
       this.rowData = row
+      console.log(this.$refs.elPopover)
     }
     // map
   }

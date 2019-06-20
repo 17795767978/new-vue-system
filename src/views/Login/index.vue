@@ -81,6 +81,9 @@ export default {
             .then(() => {
               this.$router.push('/homepage/home')
             })
+            .catch((err) => {
+              this.$message.error(err.message)
+            })
             .finally(() => {
               this.isLoginning = false
             })

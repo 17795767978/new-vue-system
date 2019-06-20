@@ -51,22 +51,13 @@ export default {
     checkData: {
       deep: true,
       handler (newData) {
-        // console.log(this.checkData.date);
-        // this.checkData.date = moment(this.checkData.date).format('YYYY-MM');
-        // console.log(newData)
-        if (newData.date.length > 0) {
-          newData.date = moment(this.checkData.date).format('YYYY-MM')
-        } else {
-          newData.date = ''
-        }
+        newData.date = moment(this.checkData.date).format('YYYY-MM')
         if (newData.value !== '') {
           this._sectionAnalysis({
             lineId: newData.value,
             type: newData.turn,
             month: newData.date
           })
-        } else {
-          this.$message.error('请选择线路')
         }
       }
     },

@@ -472,19 +472,19 @@ export default {
   .el-table__expanded-cell[class*=cell] {
     padding: 0 !important;
   }
-  .el-table__body-wrapper::-webkit-scrollbar {
-    width: 6px;
-    background-color: #ebeef5;
-  }
-  .el-table__body-wrapper::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background-color: #ccc;
-    height: 120px;
-  }
-  .el-table__body-wrapper::-webkit-scrollbar-track {
-    box-shodow: inset 0 0 5px rgba(0,0,0, 0.2);
-    border-radius: 3px;
-    background-color: rgba(255,255,255, 1)
-  }
+  // .el-table__body-wrapper::-webkit-scrollbar {
+  //   width: 6px;
+  //   background-color: #ebeef5;
+  // }
+  // .el-table__body-wrapper::-webkit-scrollbar-thumb {
+  //   border-radius: 3px;
+  //   background-color: #ccc;
+  //   height: 120px;
+  // }
+  // .el-table__body-wrapper::-webkit-scrollbar-track {
+  //   box-shodow: inset 0 0 5px rgba(0,0,0, 0.2);
+  //   border-radius: 3px;
+  //   background-color: rgba(255,255,255, 1)
+  // }
 }
 </style>

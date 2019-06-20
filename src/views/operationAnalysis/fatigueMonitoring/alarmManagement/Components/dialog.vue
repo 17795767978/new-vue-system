@@ -29,7 +29,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="onCancel('ruleForm')">取 消</el-button>
         <el-button type="primary" @click="handleOperation('ruleForm')">确 定</el-button>
       </div>
     </el-dialog>
@@ -37,9 +37,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import moment from 'moment';
-// import { alarmManageCheck, alarmManageAdd } from 'server/interface'
-import { Form, Select, FormItem, Button, Input, Dialog } from 'element-ui'
 export default {
   name: 'alarmManagement',
   props: {
@@ -82,15 +79,17 @@ export default {
     }
   },
   components: {
-    'el-form': Form, 'el-select': Select, 'el-form-item': FormItem, 'el-button': Button, 'el-input': Input, 'el-dialog': Dialog
   },
   mounted () {
+  },
+  updated () {
+    this.$refs['ruleForm'].clearValidate()
   },
   watch: {
     rowData: {
       deep: true,
-      handler () {
-        this.form = this.rowData
+      handler (newValue) {
+        this.form = newValue
       }
     }
   },
@@ -115,6 +114,10 @@ export default {
           return false
         }
       })
+    },
+    onCancel (ruleForm) {
+      this.dialogFormVisible = false
+      this.$emit('updateTable')
     }
   }
 }

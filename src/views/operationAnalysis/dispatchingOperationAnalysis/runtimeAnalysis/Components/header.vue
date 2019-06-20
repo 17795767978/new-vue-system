@@ -55,32 +55,7 @@ export default {
       }, {
         value: '2',
         label: '下行'
-      }],
-      pickerOptions: {
-        disabledDate (time) {
-          return time.getTime() > Date.now()
-        },
-        shortcuts: [{
-          text: '今天',
-          onClick (picker) {
-            picker.$emit('pick', new Date())
-          }
-        }, {
-          text: '昨天',
-          onClick (picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick (picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
-      }
+      }]
     }
   },
   created () {
@@ -98,9 +73,9 @@ export default {
     },
     onClear () {
       this.formInline = {
-        value: '0103',
-        date: '2019-05',
-        turn: '1'
+        value: '',
+        date: '',
+        turn: ''
       }
       this.$emit('configCheck', this.formInline)
     }

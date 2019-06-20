@@ -69,14 +69,11 @@
       </el-pagination>
       <span class="demonstration" style="float: right; margin-top: 20px; line-height: 36px;">共{{total}}条</span>
     </div>
-    <dialogWrapper :rowData="rowData" @updateTable="updateTable"></dialogWrapper>
+    <dialogWrapper :rowData="rowData" @updateTable="updateTable" ref="formName"></dialogWrapper>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-// import moment from 'moment';
-// import { alarmManageTable, alarmManageIsuse } from 'server/interface'
-import { Pagination, Table, TableColumn, Button, Row } from 'element-ui'
 import dialogWrapper from './dialog'
 export default {
   name: 'alarmManagement',
@@ -89,12 +86,7 @@ export default {
     }
   },
   components: {
-    dialogWrapper,
-    'el-pagination': Pagination,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-    'el-button': Button,
-    'el-row': Row
+    dialogWrapper
   },
   created () {
     this._alarmManageTable({

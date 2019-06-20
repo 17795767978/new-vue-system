@@ -8,11 +8,12 @@
       :center="center"
       :scroll-wheel-zoom="true"
       @ready="handler"
+      v-loading="loading"
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
       <bm-marker
-        v-for="marker in markers"
+        v-for="marker in markersMin"
         :key="marker.busId"
         :position="{lng: marker.lng, lat: marker.lat}"
         @click="handleMarkerClick(marker)"
@@ -189,7 +190,9 @@ export default {
       },
       markers: [],
       hotdata: [],
-      max: 100
+      markersMin: [],
+      max: 100,
+      loading: true
     }
   },
   components: {
@@ -210,22 +213,65 @@ export default {
   computed: {
     getIcon () {
       return function (marker) {
-        if (Number(marker.fullLoadRate) < 25) {
-          return { url: `${iconCarGreen}`, size: { width: 30, height: 30 } }
-        } else if (Number(marker.fullLoadRate) >= 25 && Number(marker.fullLoadRate) < 50) {
-          return { url: `${iconCarYellow}`, size: { width: 30, height: 30 } }
-        } else if (Number(marker.fullLoadRate) >= 50 && Number(marker.fullLoadRate) < 75) {
-          return { url: `${iconCarOrange}`, size: { width: 30, height: 30 } }
-        } else if (Number(marker.fullLoadRate) >= 75 && Number(marker.fullLoadRate) < 100) {
-          return { url: `${iconCarRed}`, size: { width: 30, height: 30 } }
+        // if (Number(marker.num) < 50) {
+        //   return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
+        // } else if (Number(marker.num) >= 50 && Number(marker.num) < 100) {
+        //   return { url: `${iconCarYellow}`, size: { width: 13, height: 15 } }
+        // } else if (Number(marker.num) >= 100 && Number(marker.num) < 200) {
+        //   return { url: `${iconCarOrange}`, size: { width: 13, height: 15 } }
+        // } else if (Number(marker.num) >= 200 && Number(marker.num) < 400) {
+        //   return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
+        // } else {
+        //   return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
+        // }
+        if (this.zoom >= 13) {
+          if (marker.warnInfo) {
+            return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
+          } else {
+            return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
+          }
+        } else {
+          if (Number(marker.num) < 100) {
+            return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
+          } else if (Number(marker.num) >= 10 && Number(marker.num) < 300) {
+            return { url: `${iconCarYellow}`, size: { width: 13, height: 15 } }
+          } else if (Number(marker.num) >= 300) {
+            return { url: `${iconCarOrange}`, size: { width: 13, height: 15 } }
+          }
         }
+      }
+    }
+  },
+  watch: {
+    markers: {
+      deep: true,
+      handler () {
+        if (this.markers.length > 0) {
+          this.getCarNum()
+        }
+      }
+    },
+    zoom (newValue) {
+      if (newValue < 13) {
+        this._positionRating({
+          orgId: ''
+        })
       }
     }
   },
   methods: {
     _positionRating (params) {
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
-        this.markers = res
+        this.markersMin = []
+        if (this.zoom >= 13) {
+          this.loading = true
+          this.markersMin = res
+          this.loading = false
+        } else {
+          this.markers = res
+          this.loading = false
+          this.getCarNum()
+        }
         setTimeout(() => {
           this._positionRating(params)
         }, TIME)
@@ -249,13 +295,50 @@ export default {
         }, TIME)
       })
     },
+    getCarNum () {
+      console.log(this.markers)
+      let r = 6371.393 // 地球半径千米
+      let lng = Number(this.markers[0].lng)
+      let lat = Number(this.markers[0].lat)
+      let dlng = 2 * Math.asin(Math.sin(0.1 / (2 * r)) / Math.cos(lat * Math.PI / 180))
+      dlng = dlng * 180 / Math.PI// 角度转为弧度
+      let dlat = 5 / r
+      dlat = dlat * 180 / Math.PI
+      let minlat = lat - dlat
+      let maxlat = lat + dlat
+      let minlng = lng - dlng
+      let maxlng = lng + dlng
+      let latDis = maxlat - minlat
+      let lngDis = maxlng - minlng
+      console.log(latDis)
+      console.log(lngDis)
+      this.markersMin.push({
+        lat,
+        lng,
+        num: this.markers.filter(list => Number(list.lat) - lat < latDis && Number(list.lng) - lng < lngDis).length
+      })
+      this.markers = this.markers.filter(item => Number(item.lat) - lat >= latDis || Number(item.lng) - lng >= lngDis)
+      console.log(this.markersMin)
+    },
     handler ({ BMap, map }) {
       this.center.lng = '114.520486813'
       this.center.lat = '37.0695311969'
-      this.zoom = 13
+      this.zoom = 12
       this.isLoading = false
       map.setMapStyle(this.mapStyle)
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
+      this.$refs.baiduMapWrapper.$el.children[0].addEventListener('mousewheel', (e) => {
+        this.zoom = map.getZoom()
+        this._positionRating({
+          orgId: ''
+        })
+      })
+      this.$refs.baiduMapWrapper.$el.children[0].addEventListener('click', (e) => {
+        this.zoom = map.getZoom()
+        this._positionRating({
+          orgId: ''
+        })
+      })
     },
     handleMarkerClick () {
     }

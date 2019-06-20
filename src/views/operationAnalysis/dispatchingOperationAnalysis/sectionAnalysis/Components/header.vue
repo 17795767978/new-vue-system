@@ -25,7 +25,6 @@
         <el-date-picker
           v-model="formInline.date"
           type="month"
-          format="yyyy-MM"
           placeholder="选择月">
         </el-date-picker>
       </el-form-item>
@@ -38,7 +37,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { Form, Select, DatePicker, Button } from 'element-ui'
 import moment from 'moment'
 export default {
   data () {
@@ -58,32 +56,7 @@ export default {
       }, {
         value: '2',
         label: '下行'
-      }],
-      pickerOptions: {
-        disabledDate (time) {
-          return time.getTime() > Date.now()
-        },
-        shortcuts: [{
-          text: '今天',
-          onClick (picker) {
-            picker.$emit('pick', new Date())
-          }
-        }, {
-          text: '昨天',
-          onClick (picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick (picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
-      }
+      }]
     }
   },
   mounted () {
@@ -93,11 +66,8 @@ export default {
   },
   methods: {
     onSubmit () {
-      if (this.formInline.date && this.formInline.date !== 'Invalid date') {
-        this.formInline.date = moment(this.formInline.date).format('YYYY-MM')
-      } else {
-        this.formInline.date = ''
-      }
+      console.log(this.formInline.date)
+      this.formInline.date = moment(this.formInline.date).format('YYYY-MM')
       this.$emit('configCheck', this.formInline)
     },
     onClear () {
@@ -105,12 +75,6 @@ export default {
       this.formInline.value = ''
       this.formInline.turn = ''
     }
-  },
-  components: {
-    'el-form': Form,
-    'el-select': Select,
-    'el-date-picker': DatePicker,
-    'el-button': Button
   }
 }
 </script>

@@ -60,7 +60,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
-        <el-button type="warning" @click="onSubmit">重置</el-button>
+        <el-button type="warning" @click="onClear">重置</el-button>
       </el-form-item>
       </el-row>
     </el-form>
@@ -68,17 +68,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { Row, Button, Form, TimeSelect, DatePicker, Select, FormItem, Option } from 'element-ui'
-// import { lineStation, lineList, stationList } from 'server/interface'
 import moment from 'moment'
 export default {
   data () {
     return {
       formInline: {
-        station: [{
-          label: '火车站',
-          value: '081faf17f7ef4e94aad0,144edc478cdf4ee8a402'
-        }],
+        station: [],
         date: ['2019-04-01', '2019-05-01'],
         startTime: '00:00',
         endTime: '23:00'
@@ -95,47 +90,25 @@ export default {
   mounted () {
     this._lineList()
     this._stationList()
-    this._lineStation({
-      startDate: this.formInline.date[0],
-      endDate: this.formInline.date[1],
-      stationIds: this.formInline.station,
-      startHour: this.formInline.startTime.substring(0, 2),
-      endHour: this.formInline.endTime.substring(0, 2)
-    })
+    if (this.formInline.station.length > 0) {
+      this._lineStation({
+        startDate: this.formInline.date[0],
+        endDate: this.formInline.date[1],
+        stationIds: this.formInline.station,
+        startHour: this.formInline.startTime.substring(0, 2),
+        endHour: this.formInline.endTime.substring(0, 2)
+      })
+    }
   },
   watch: {
   },
   methods: {
     _lineList () {
-      // this.$api['wholeInformation.getLine'].then(res => {
-      //   let arr = res.data.data
-      //   arr.forEach(item => {
-      //     this.lineOptions.push({
-      //       value: item.lineUuid,
-      //       label: item.lineName
-      //     })
-      //   })
-      // })
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
-        // arr.forEach(item => {
-        //   this.lineOptions.push({
-        //     value: item.lineUuid,
-        //     label: item.lineName
-        //   })
-        // })
       })
     },
     _stationList () {
-      // this.$api['wholeInformation.getStation'].then(res => {
-      //   let arr = res.data.data
-      //   arr.forEach(item => {
-      //     this.stationOptions.push({
-      //       value: item.staUuid,
-      //       label: item.staName
-      //     })
-      //   })
-      // })
       this.$store.dispatch('getStationList').then(res => {
         let arr = res
         arr.forEach(item => {
@@ -189,17 +162,17 @@ export default {
         startHour: this.formInline.startTime.substring(0, 2),
         endHour: this.formInline.endTime.substring(0, 2)
       })
+    },
+    onClear () {
+      this.formInline = {
+        station: [],
+        date: [],
+        startTime: '',
+        endTime: ''
+      }
     }
   },
   components: {
-    'el-row': Row,
-    'el-button': Button,
-    'el-form': Form,
-    'el-time-select': TimeSelect,
-    'el-date-picker': DatePicker,
-    'el-select': Select,
-    'el-form-item': FormItem,
-    'el-option': Option
   }
 }
 </script>
