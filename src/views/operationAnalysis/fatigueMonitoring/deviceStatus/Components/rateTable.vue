@@ -2,7 +2,8 @@
   <div class="table-wrapper">
     <h4 style="margin-top: 10px;">
       <i class="fa fa-fort-awesome"></i>
-      <span>设备状态</span>
+      <span style="font-size: 16px;">设备状态</span>
+      <span v-show="outsideTime" style="margin-left: 20px">更新时间：{{outsideTime}}</span>
     </h4>
     <el-table
       :data="tableData"
@@ -39,12 +40,12 @@
         :formatter="formatterRate"
         >
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         align="center"
         label="更新时间"
         :formatter="formatterTime"
         >
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <div class="block">
       <el-pagination
@@ -125,7 +126,8 @@ export default {
       position: {},
       rowData: {},
       outCurrentPage: 1,
-      inCurrentPage: 1
+      inCurrentPage: 1,
+      outsideTime: ''
     }
   },
   components: {
@@ -153,21 +155,23 @@ export default {
       this.$api['tiredMonitoring.getLineDeviceStatusPage'](params).then(res => {
         this.tableData = res.list
         this.total = res.total
+        this.outsideTime = res.list.length > 0 && moment(res.list[0].updateTime).format('YYYY-MM-DD HH:mm:ss')
         this.$message.success('数据更新')
         if (res.list.length === 0) {
           this.$message.warning('无列表数据')
         }
       })
     },
-    formatterTime (row) {
-      return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
-    },
     formatterRate (row) {
       let num = (row.onlineDeviceCount / row.deviceCount) * 100
       return JSON.stringify(num).substring(0, 5)
     },
     formatterTimeInside (row) {
-      return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
+      if (row.updateTime) {
+        return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        return '-'
+      }
     },
     handleClick (row) {
       this.lineId = row.lineId

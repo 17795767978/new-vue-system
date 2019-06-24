@@ -2,7 +2,7 @@
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-form-item label="选择线路">
-        <el-select v-model="formInline.value" placeholder="请选择">
+        <el-select v-model="formInline.value" placeholder="请选择" filterable>
           <el-option
             v-for="item in lineOptions"
             :key="item.value"

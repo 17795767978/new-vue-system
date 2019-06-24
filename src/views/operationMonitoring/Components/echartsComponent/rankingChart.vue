@@ -16,8 +16,9 @@ export default {
     }
   },
   created () {
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._lineRateTen({
-      orgId: ''
+      orgId
     })
   },
   mounted () {

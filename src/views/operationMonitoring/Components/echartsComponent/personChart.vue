@@ -26,8 +26,9 @@ export default {
     noEcharts
   },
   created () {
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._realTimePassengeFlow({
-      orgId: ''
+      orgId
     })
   },
   mounted () {

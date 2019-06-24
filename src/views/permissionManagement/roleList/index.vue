@@ -28,7 +28,7 @@
         </el-table-column>
         <el-table-column align="center" label="创建人" width="120">
           <template slot-scope="scope">
-            <span>{{scope.row.createName}}</span>
+            <span>{{scope.row.createUser}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="状态" width="80">
@@ -289,7 +289,7 @@ export default {
       }
     },
     handleDeleteRole (id) {
-      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该角色和角色绑定的权限, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -302,6 +302,8 @@ export default {
             pageNumber: this.currentPage
           })
           this.$message.success('删除成功！')
+        }).catch((err) => {
+          this.$message.error(`${err.message}绑定了角色，不能删除`)
         })
       }).catch(() => {
         this.$message({
@@ -362,22 +364,28 @@ export default {
       })
     },
     onSubmitUpdate () {
-      if (this.currentName === this.adminForm.roleName || !this.rolesNameArr.some(name => name === this.adminForm.roleName)) {
-        if (this.currentSort === Number(this.adminForm.roleSort) || !this.rolesIndexArr.some(sort => sort === Number(this.adminForm.roleSort))) {
-          this.$api['role.update'](this.adminForm).then(res => {
-            this.getSysRoleList({
-              pageSize: 10,
-              pageNumber: this.currentPage
-            })
-            this.$message.success('修改成功！')
-            this.updateWrapper = false
-          })
+      this.$refs['adminForm'].validate((valid) => {
+        if (valid) {
+          if (this.currentName === this.adminForm.roleName || !this.rolesNameArr.some(name => name === this.adminForm.roleName)) {
+            if (this.currentSort === Number(this.adminForm.roleSort) || !this.rolesIndexArr.some(sort => sort === Number(this.adminForm.roleSort))) {
+              this.$api['role.update'](this.adminForm).then(res => {
+                this.getSysRoleList({
+                  pageSize: 10,
+                  pageNumber: this.currentPage
+                })
+                this.$message.success('修改成功！')
+                this.updateWrapper = false
+              })
+            } else {
+              this.$message.error('角色序号已存在')
+            }
+          } else {
+            this.$message.error('角色名已存在')
+          }
         } else {
-          this.$message.error('角色序号已存在')
+          return false
         }
-      } else {
-        this.$message.error('角色名已存在')
-      }
+      })
     },
     handleAddRole () {
       this.roleName = ''

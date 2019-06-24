@@ -121,7 +121,7 @@ export default {
           type: 'value',
           max: this.echartsDataMax + 100,
           min: 0,
-          interval: 100
+          interval: Math.ceil(this.echartsDataMax / 6)
         },
         series: [
           {

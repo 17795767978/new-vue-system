@@ -90,7 +90,9 @@ export default {
           this.echartData = [{ name: '一级', value: 0 }, { name: '二级', value: 0 }]
           this.$message.warning('暂无数据')
         }
-        this.drawLine()
+        setTimeout(() => {
+          this.drawLine()
+        }, 500)
         this.$message.success('数据已更新')
       })
     },

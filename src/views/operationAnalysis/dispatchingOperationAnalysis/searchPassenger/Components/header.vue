@@ -2,7 +2,7 @@
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-form-item label="选择机构">
-        <el-select class="font-style" v-model="formInline.orgId" placeholder="请选择">
+        <el-select class="font-style" v-model="formInline.orgId" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptions"
             :key="item.value"
@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择线路">
-        <el-select class="font-style" v-model="formInline.lineId" placeholder="请选择">
+        <el-select class="font-style" filterable v-model="formInline.lineId" placeholder="请选择">
           <el-option
             v-for="item in lineOptions"
             :key="item.value"
@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择车辆">
-        <el-select class="font-style" v-model="formInline.busNumber" placeholder="请选择">
+        <el-select class="font-style" v-model="formInline.busNumber" filterable placeholder="请选择">
           <el-option
             v-for="item in carOptions"
             :key="item.value"
@@ -87,13 +87,11 @@ export default {
     }
   },
   created () {
-    // this._lineList();
-    // this._comList();
-    this.$store.dispatch('getLineList').then(res => {
-      this.lineOptions = res
-    })
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
+    })
+    this.$store.dispatch('getLineList').then(res => {
+      this.lineOptions = res
     })
     this.$store.dispatch('getCarList').then(res => {
       this.carOptions = res
@@ -109,7 +107,45 @@ export default {
   computed: {
   },
   mounted () {
-    console.log(this.$store.getters.userId)
+  },
+  watch: {
+    'formInline.orgId': {
+      handler (newValue) {
+        let orgId = newValue === '1' ? '' : newValue
+        this.$api['wholeInformation.getLine']({
+          lineId: '',
+          lineName: '',
+          orgId: orgId
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.lineName,
+              value: item.lineUuid
+            })
+          })
+          this.lineOptions = list
+        })
+      }
+    },
+    'formInline.lineId': {
+      handler (newValue) {
+        this.$api['wholeInformation.getCar']({
+          lineId: newValue,
+          lineName: '',
+          orgId: ''
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.busPlateNumber,
+              value: item.busUuid
+            })
+          })
+          this.carOptions = list
+        })
+      }
+    }
   },
   methods: {
     onSubmit () {

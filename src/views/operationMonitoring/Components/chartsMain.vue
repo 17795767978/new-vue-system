@@ -36,7 +36,6 @@ import perChart from './echartsComponent/perChart.vue'
 import driveChart from './echartsComponent/driveChart.vue'
 import levelChart from './echartsComponent/levelChart.vue'
 import mapChart from './echartsComponent/mapChart.vue'
-import { Row, Col } from 'element-ui'
 export default {
   data () {
     return {
@@ -47,9 +46,7 @@ export default {
     perChart,
     driveChart,
     levelChart,
-    mapChart,
-    'el-row': Row,
-    'el-col': Col
+    mapChart
   }
 }
 </script>

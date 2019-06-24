@@ -12,7 +12,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="选择线路">
-        <el-select v-model="formInline.value" class="font-style" placeholder="请选择">
+        <el-select v-model="formInline.value" class="font-style" placeholder="请选择" filterable>
           <el-option
             v-for="item in lineOptions"
             :key="item.value"

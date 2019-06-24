@@ -158,7 +158,7 @@ export default {
       })
     },
     gerDate (row) {
-      return moment(row.pfrTripDate).format('YYYY-MM-DD HH:mm:ss')
+      return moment(row.pfrTripDate).format('YYYY-MM-DD')
     },
     handleCurrentChange (val) {
       this.selectData.pageNumber = val

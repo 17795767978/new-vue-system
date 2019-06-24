@@ -3,7 +3,7 @@
     <el-row style="height: 200px" :gutter="5">
       <el-col style="height: 100%;" :span="8">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '95%', height: '200px',margin: '0 auto'}"></div>
-        <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'实时里程'"></noEcharts>
+        <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'-'"></noEcharts>
         <!-- <div v-show="realTimeMileage.length === 0" class="warning">
           <h2 style="text-align:center; color: #fff">暂无数据</h2>
         </div> -->
@@ -14,11 +14,11 @@
         <!-- <div v-show="realTimeMileage.length === 0" class="warning">
           <h2 style="text-align:center; color: #fff">暂无数据</h2>
         </div> -->
-        <noEcharts v-show="realTimeTrips.length === 0" :eChartsTitle="'实时趟次'"></noEcharts>
+        <noEcharts v-show="realTimeTrips.length === 0" :eChartsTitle="'-'"></noEcharts>
       </el-col>
       <el-col style="height: 100%" :span="8">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-right" :style="{width: '95%', height: '200px', margin: '0 auto'}"></div>
-        <noEcharts v-show="realTimeShift.length === 0" :eChartsTitle="'实时换班'"></noEcharts>
+        <noEcharts v-show="realTimeShift.length === 0" :eChartsTitle="'-'"></noEcharts>
       </el-col>
     </el-row>
   </div>
@@ -47,14 +47,15 @@ export default {
     }
   },
   created () {
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._realTimeMileage({
-      orgId: ''
+      orgId
     })
     this._realTimeTrips({
-      orgId: ''
+      orgId
     })
     this._realTimeShift({
-      orgId: ''
+      orgId
     })
   },
   mounted () {
@@ -112,7 +113,7 @@ export default {
       // let dataAxis = ['一公司', '二公司', '三公司', '四公司', '五公司', '六公司', '七公司'];
       leftChart.setOption({
         title: {
-          text: '实际里程',
+          text: '里程完成情况',
           left: 'center',
           textStyle: {
             'color': '#fff'
@@ -224,7 +225,7 @@ export default {
       window.addEventListener('resize', () => { middleChart.resize() })
       middleChart.setOption({
         title: {
-          text: '实时趟次',
+          text: '趟次完成情况',
           left: 'center',
           textStyle: {
             'color': '#fff'
@@ -289,11 +290,11 @@ export default {
         series: [
           {
             // name: '当日计划总趟次',
-            name: '实际趟次',
+            name: '计划趟次',
             type: 'bar',
             barGap: '-100%',
             barWidth: '20',
-            data: this.realTimeTrips,
+            data: this.planTrips,
             itemStyle: {
               emphasis: {
                 barBorderRadius: 20
@@ -305,11 +306,11 @@ export default {
           },
           {
             // name: '当日计划总趟次',
-            name: '计划趟次',
+            name: '实际趟次',
             type: 'bar',
             barGap: '-100%',
             barWidth: '20',
-            data: this.planTrips,
+            data: this.realTimeTrips,
             itemStyle: {
               emphasis: {
                 barBorderRadius: 20
@@ -327,7 +328,7 @@ export default {
       window.addEventListener('resize', () => { rightChart.resize() })
       rightChart.setOption({
         title: {
-          text: '实时排班',
+          text: '排班完成情况',
           left: 'center',
           textStyle: {
             'color': '#fff'

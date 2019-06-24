@@ -357,7 +357,7 @@ export default {
         this.adminForm.userGender = res.userGender
         this.adminForm.enabled = res.enabled
         this.userId = res.userId
-        this.addAdmin.roleIds = res.roleIds
+        this.adminForm.roleIds = res.roleIds
         this.adminForm.userOrgUuid = res.userOrgUuid
       })
     },

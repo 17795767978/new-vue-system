@@ -76,20 +76,21 @@ export default {
     }
   },
   created () {
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._passengeFlow({
-      orgId: ''
+      orgId
     })
     this._realTimePassengeFlow({
-      orgId: ''
+      orgId
     })
     this._operateLines({
-      orgId: ''
+      orgId
     })
     this._onLineCarNum({
-      orgId: ''
+      orgId
     })
     this._realTimeFullRate({
-      orgId: ''
+      orgId
     })
     this._operateCarNum()
     this._outgoingCarNum()
@@ -109,7 +110,6 @@ export default {
     },
     _realTimePassengeFlow (params) {
       this.$api['passengerFlow.getRealTimePersoncountAndFullLoadRate'](params).then(res => {
-        console.log(res)
         if (res) {
           this.totelPerson = res.personCount
           this.totelFullLoadRate = res.fullLoadRate

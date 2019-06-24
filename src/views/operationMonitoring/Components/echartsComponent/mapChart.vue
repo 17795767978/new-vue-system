@@ -13,7 +13,7 @@
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
       <bm-marker
-        v-for="marker in markersMin"
+        v-for="marker in markers"
         :key="marker.busId"
         :position="{lng: marker.lng, lat: marker.lat}"
         @click="handleMarkerClick(marker)"
@@ -31,9 +31,9 @@
 
 <script type="text/ecmascript-6">
 import { BaiduMap, BmMarker, BmlHeatmap } from 'vue-baidu-map'
-import iconCarOrange from '../../../../assets/images/bus-orange.png'
+// import iconCarOrange from '../../../../assets/images/bus-orange.png'
 import iconCarRed from '../../../../assets/images/bus-red.png'
-import iconCarYellow from '../../../../assets/images/bus-yellow.png'
+// import iconCarYellow from '../../../../assets/images/bus-yellow.png'
 import iconCarGreen from '../../../../assets/images/bus-green.png'
 const TIME = 5 * 60 * 1000
 export default {
@@ -201,11 +201,12 @@ export default {
     BmMarker
   },
   created () {
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._positionRating({
-      orgId: ''
+      orgId
     })
     this._hotDataLine({
-      orgId: ''
+      orgId
     })
   },
   mounted () {
@@ -224,54 +225,36 @@ export default {
         // } else {
         //   return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
         // }
-        if (this.zoom >= 13) {
-          if (marker.warnInfo) {
-            return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
-          } else {
-            return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
-          }
+        if (marker.warnInfo) {
+          return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
         } else {
-          if (Number(marker.num) < 100) {
-            return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
-          } else if (Number(marker.num) >= 10 && Number(marker.num) < 300) {
-            return { url: `${iconCarYellow}`, size: { width: 13, height: 15 } }
-          } else if (Number(marker.num) >= 300) {
-            return { url: `${iconCarOrange}`, size: { width: 13, height: 15 } }
-          }
+          return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
         }
       }
     }
   },
   watch: {
-    markers: {
-      deep: true,
-      handler () {
-        if (this.markers.length > 0) {
-          this.getCarNum()
-        }
-      }
-    },
-    zoom (newValue) {
-      if (newValue < 13) {
-        this._positionRating({
-          orgId: ''
-        })
-      }
-    }
+    // markers: {
+    //   deep: true,
+    //   handler () {
+    //     if (this.markers.length > 0) {
+    //       this.getCarNum()
+    //     }
+    //   }
+    // },
+    // zoom (newValue) {
+    //   if (newValue < 13) {
+    //     this._positionRating({
+    //       orgId: ''
+    //     })
+    //   }
+    // }
   },
   methods: {
     _positionRating (params) {
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
-        this.markersMin = []
-        if (this.zoom >= 13) {
-          this.loading = true
-          this.markersMin = res
-          this.loading = false
-        } else {
-          this.markers = res
-          this.loading = false
-          this.getCarNum()
-        }
+        this.markers = res
+        this.loading = false
         setTimeout(() => {
           this._positionRating(params)
         }, TIME)
@@ -295,31 +278,31 @@ export default {
         }, TIME)
       })
     },
-    getCarNum () {
-      console.log(this.markers)
-      let r = 6371.393 // 地球半径千米
-      let lng = Number(this.markers[0].lng)
-      let lat = Number(this.markers[0].lat)
-      let dlng = 2 * Math.asin(Math.sin(0.1 / (2 * r)) / Math.cos(lat * Math.PI / 180))
-      dlng = dlng * 180 / Math.PI// 角度转为弧度
-      let dlat = 5 / r
-      dlat = dlat * 180 / Math.PI
-      let minlat = lat - dlat
-      let maxlat = lat + dlat
-      let minlng = lng - dlng
-      let maxlng = lng + dlng
-      let latDis = maxlat - minlat
-      let lngDis = maxlng - minlng
-      console.log(latDis)
-      console.log(lngDis)
-      this.markersMin.push({
-        lat,
-        lng,
-        num: this.markers.filter(list => Number(list.lat) - lat < latDis && Number(list.lng) - lng < lngDis).length
-      })
-      this.markers = this.markers.filter(item => Number(item.lat) - lat >= latDis || Number(item.lng) - lng >= lngDis)
-      console.log(this.markersMin)
-    },
+    // getCarNum () {
+    //   console.log(this.markers)
+    //   let r = 6371.393 // 地球半径千米
+    //   let lng = Number(this.markers[0].lng)
+    //   let lat = Number(this.markers[0].lat)
+    //   let dlng = 2 * Math.asin(Math.sin(0.1 / (2 * r)) / Math.cos(lat * Math.PI / 180))
+    //   dlng = dlng * 180 / Math.PI// 角度转为弧度
+    //   let dlat = 5 / r
+    //   dlat = dlat * 180 / Math.PI
+    //   let minlat = lat - dlat
+    //   let maxlat = lat + dlat
+    //   let minlng = lng - dlng
+    //   let maxlng = lng + dlng
+    //   let latDis = maxlat - minlat
+    //   let lngDis = maxlng - minlng
+    //   console.log(latDis)
+    //   console.log(lngDis)
+    //   this.markersMin.push({
+    //     lat,
+    //     lng,
+    //     num: this.markers.filter(list => Number(list.lat) - lat < latDis && Number(list.lng) - lng < lngDis).length
+    //   })
+    //   this.markers = this.markers.filter(item => Number(item.lat) - lat >= latDis || Number(item.lng) - lng >= lngDis)
+    //   console.log(this.markersMin)
+    // },
     handler ({ BMap, map }) {
       this.center.lng = '114.520486813'
       this.center.lat = '37.0695311969'

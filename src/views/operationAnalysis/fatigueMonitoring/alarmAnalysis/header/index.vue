@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择线路">
-        <el-select class="font-style" v-model="formInline.lineId" placeholder="请选择">
+        <el-select filterable class="font-style" v-model="formInline.lineId" placeholder="请选择">
           <el-option
             v-for="item in lineOptions"
             :key="item.value"
@@ -89,6 +89,27 @@ export default {
     }, 20)
   },
   mounted () {
+  },
+  watch: {
+    'formInline.orgId': {
+      handler (newValue) {
+        let orgId = newValue === '1' ? '' : newValue
+        this.$api['wholeInformation.getLine']({
+          lineId: '',
+          lineName: '',
+          orgId: orgId
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.lineName,
+              value: item.lineUuid
+            })
+          })
+          this.lineOptions = list
+        })
+      }
+    }
   },
   methods: {
     onSubmit () {

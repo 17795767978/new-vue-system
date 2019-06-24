@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="选择线路">
         <el-select class="font-style" multiple
-            collapse-tags v-model="formInline.lineUuid" placeholder="请选择">
+            collapse-tags filterable v-model="formInline.lineUuid" placeholder="请选择">
           <el-option
             v-for="item in lineOptions"
             :key="item.value"
@@ -52,6 +52,27 @@ export default {
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
+  },
+  watch: {
+    'formInline.orgUuid': {
+      handler (newValue) {
+        let orgId = newValue === '1' ? '' : newValue
+        this.$api['wholeInformation.getLine']({
+          lineId: '',
+          lineName: '',
+          orgId: orgId
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.lineName,
+              value: item.lineUuid
+            })
+          })
+          this.lineOptions = list
+        })
+      }
+    }
   },
   methods: {
     onSubmit () {

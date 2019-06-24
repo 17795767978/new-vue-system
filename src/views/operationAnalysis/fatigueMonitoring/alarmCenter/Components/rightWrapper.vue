@@ -223,8 +223,8 @@ export default {
       busSelfCode: this.formInline.busSelfCode, // 自编号
       warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
       warnTypeId: this.formInline.warnTypeId, // 报警类型
-      startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
-      endTime: this.formInline.timeValue[1],
+      startTime: this.formInline.timeValue[0] || timeStart, // 时间格式   开始结束默认查近7天的
+      endTime: this.formInline.timeValue[1] || timeEnd,
       pageSize: 10,
       pageNum: this.pageNum
     })
@@ -292,6 +292,7 @@ export default {
         this.total = res.total
       })
     },
+    // 左侧点击是否显示右侧搜索内容，0 机构 1 公司 2 线路 3 车牌号
     changeBusPlateNumber () {
       if (this.selectCarData.levelsType === '3') {
         this.formInline.busPlateNumber = this.selectCarData.name
@@ -379,7 +380,6 @@ export default {
       this.$emit('clear')
     },
     onSave () {
-      console.log(this.formInline)
       this.$api['tiredMonitoring.getWarnList']({
         orgId: this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -414,7 +414,11 @@ export default {
     },
     getExcel () {
       this.centerDialogVisible = false
-      this.$message.success('正在下载中。。。')
+      if (this.json_data.length > 0) {
+        this.$message.success('正在下载中。。。')
+      } else {
+        this.$message.warning('暂无数据')
+      }
     }
   }
 }
