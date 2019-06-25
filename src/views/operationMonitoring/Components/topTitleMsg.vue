@@ -48,7 +48,6 @@ export default {
   },
   destroyed () {
     clearInterval(this.timer)
-    console.log(this.timer)
     this.timer = null
   },
   methods: {

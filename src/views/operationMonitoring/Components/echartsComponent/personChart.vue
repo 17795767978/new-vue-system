@@ -32,10 +32,6 @@ export default {
     })
   },
   mounted () {
-    // setTimeout(() => {
-    //   this.drawLine();
-    //   this.loading = false;
-    // }, 2000);
   },
   activated () {
     this.drawLine()
@@ -43,11 +39,11 @@ export default {
   methods: {
     _realTimePassengeFlow (params) {
       this.$api['passengerFlow.getRealTimePassengerFlow'](params).then(res => {
+        this.loading = false
         this.timeInterval = res.map(item => item.timeInterval)
         this.personCount = res.map(item => parseInt(item.personCount))
         this.personCountMax = max(this.personCount)
         this.drawLine()
-        this.loading = false
         setTimeout(() => {
           this._realTimePassengeFlow(params)
         }, TIME)

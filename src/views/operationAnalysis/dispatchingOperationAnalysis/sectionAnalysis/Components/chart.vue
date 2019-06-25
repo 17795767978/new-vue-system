@@ -52,22 +52,32 @@ export default {
       deep: true,
       handler (newData) {
         newData.date = moment(this.checkData.date).format('YYYY-MM')
-        if (newData.value !== '') {
+        if (newData.value !== '' && newData.turn !== '' && newData.date !== '') {
           this._sectionAnalysis({
             lineId: newData.value,
             type: newData.turn,
             month: newData.date
           })
         }
+        if (newData.value === '' && newData.turn !== '' && newData.date !== '') {
+          this.$message.warning('请选择线路')
+        }
       }
     },
     isUpdate () {
       if (this.isUpdate) {
-        this._sectionAnalysis({
-          lineId: this.checkData.value,
-          type: this.checkData.turn,
-          month: moment(this.checkData.date).format('YYYY-MM')
-        })
+        if (this.checkData.value !== '' && this.checkData.turn !== '' && this.checkData.date !== '') {
+          this._sectionAnalysis({
+            lineId: this.checkData.value,
+            type: this.checkData.turn,
+            month: moment(this.checkData.date).format('YYYY-MM')
+          })
+        } else {
+          return
+        }
+        if (this.checkData.value === '' && this.checkData.turn !== '' && this.checkData.date !== '') {
+          this.$message.warning('请选择线路')
+        }
         this.$emit('isUpdateTo')
       }
     }

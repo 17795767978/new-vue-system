@@ -7,20 +7,22 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <div class="right-wrapper">
-          <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
-          <vueSeamless  class="scroll-wrapper" :class-option="allOptions" :data="alermData">
-            <p class="list-font" v-for="(list, index) in alermData" :key="index">
-              <span>{{list[0]}}：</span>
-              <!-- <span v-if="index / 2 === parseInt(index / 2)" style="color: #eadf00">{{list[1]}}</span>
-              <span v-else-if="index / 3 === parseInt(index / 3) && index / 2 === parseInt(index / 2)" style="color: #dc39ea">{{list[1]}}</span> -->
-              <span v-if="list[1] === '打电话。'" style="color: #eadf00;">{{list[1]}}</span>
-              <span v-show="list[1] === '抽烟。'" style="color: #fa8a96;">{{list[1]}}</span>
-              <span v-show="list[1] === '分神驾驶。'" style="color: #e9a475;">{{list[1]}}</span>
-              <span v-show="list[1] === '疲劳驾驶。'" style="color: #dc3971;">{{list[1]}}</span>
-              <span v-show="list[1] === '驾驶员异常。'" style="color: #e8f19c;">{{list[1]}}</span>
-            </p>
-          </vueSeamless>
+        <div v-for="(arrData, index) in diffArrData" :key="index">
+          <div class="right-wrapper" v-if="Math.floor(timer / 3000) ===  index">
+            <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
+            <vueSeamless  class="scroll-wrapper" :class-option="allOptions" :data="arrData">
+              <p class="list-font" v-for="(list, index) in arrData" :key="index">
+                <span>{{list[0]}}：</span>
+                <!-- <span v-if="index / 2 === parseInt(index / 2)" style="color: #eadf00">{{list[1]}}</span>
+                <span v-else-if="index / 3 === parseInt(index / 3) && index / 2 === parseInt(index / 2)" style="color: #dc39ea">{{list[1]}}</span> -->
+                <span v-if="list[1] === '打电话。'" style="color: #eadf00;">{{list[1]}}</span>
+                <span v-if="list[1] === '抽烟。'" style="color: #fa8a96;">{{list[1]}}</span>
+                <span v-if="list[1] === '分神驾驶。'" style="color: #e9a475;">{{list[1]}}</span>
+                <span v-if="list[1] === '疲劳驾驶。'" style="color: #dc3971;">{{list[1]}}</span>
+                <span v-if="list[1] === '驾驶员异常。'" style="color: #e8f19c;">{{list[1]}}</span>
+              </p>
+            </vueSeamless>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -37,7 +39,8 @@ export default {
       alermData: [],
       topY: 40,
       timer: null,
-      alarmType: []
+      alarmType: [],
+      diffArrData: []
     }
   },
   computed: {
@@ -60,15 +63,32 @@ export default {
     _badDrivingBehavior (params) {
       this.$api['homeTired.getBadDrivingBehaviorTable'](params).then(res => {
         this.alermData = []
+        this.diffArrData = []
         res.forEach(alert => {
           this.alermData.push(alert.split('：'))
         })
+        this.getNumberArry()
+        console.log(this.diffArrData)
+        this.alermData = Object.freeze(this.alermData).slice(10000)
+
         let typeData = new Set(this.alermData.map(item => item[1]))
         this.alarmType = [...typeData]
+        setInterval(() => {
+          this.timer += 1
+        }, 1000)
         setTimeout(() => {
           this._badDrivingBehavior()
         }, TIME)
       })
+    },
+    getNumberArry () {
+      if (this.alermData.length > 3000) {
+        for (let i = 0; i < this.alermData.length; i += 3000) {
+          this.diffArrData[Math.floor(i / 3000)] = this.alermData.slice(i, i + 3000)
+        }
+      } else {
+        this.diffArrData[1] = this.alermData
+      }
     }
   },
   watch: {
@@ -81,6 +101,10 @@ export default {
       //   }
       // }, 1000);
     }
+  },
+  destroyed () {
+    clearInterval(this.timer)
+    this.timer = null
   },
   components: {
     rankingChart,

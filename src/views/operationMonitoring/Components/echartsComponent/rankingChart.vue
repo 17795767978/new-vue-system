@@ -29,11 +29,10 @@ export default {
   methods: {
     _lineRateTen (params) {
       this.$api['passengerFlow.getRealTimeFullRateTop10'](params).then(res => {
-        // let dataArr = res.data.data.sort((a, b) => {
-        //   return b.fullLoadRate - a.fullLoadRate;
-        // });
+        this.loading = false
         this.lineName = res.map(item => item.lineName)
         this.fullLoadRate = res.map(item => item.fullLoadRate)
+        this.drawLine()
         setTimeout(() => {
           this._lineRateTen(params)
         }, TIME)
@@ -129,12 +128,6 @@ export default {
           }
         ]
       })
-    }
-  },
-  watch: {
-    fullLoadRate () {
-      this.drawLine()
-      this.loading = false
     }
   }
 }

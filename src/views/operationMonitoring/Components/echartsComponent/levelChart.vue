@@ -43,16 +43,8 @@ export default {
   methods: {
     _getLevelList (params) {
       this.$api['homeTired.getAnalysisDatasByWarnLeave'](params).then(res => {
+        this.loading = false
         this.changeData = res
-        // let dataArrValue = res.map(item => item.warnLabel)
-        // let dataArrNumber = res.map(item => item.warnNumber)
-        // for (let i = 0; i < this.changeData.length; i++) {
-        //   if () {}
-        //   this.getLevelList[i] = {
-        //     name: dataArrValue[i],
-        //     value: dataArrNumber[i]
-        //   }
-        // }
         this.changeData.forEach(data => {
           this.getLevelList.forEach(list => {
             if (data.warnLevelLabel === list.name) {
@@ -61,7 +53,6 @@ export default {
           })
         })
         this.drawLine()
-        this.loading = false
         setTimeout(() => {
           this._getLevelList(params)
         }, TIME)

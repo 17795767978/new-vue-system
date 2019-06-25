@@ -41,6 +41,7 @@ export default {
   methods: {
     _badDrivingBehavior (params) {
       this.$api['homeTired.getStatisticDatasByWarnType'](params).then(res => {
+        this.loading = false
         this.changeData = res
         let dataArrValue = res.map(item => item.warnLabel)
         let dataArrNumber = res.map(item => item.warnNumber)
@@ -51,7 +52,6 @@ export default {
           }
         }
         this.drawLine()
-        this.loading = false
         setTimeout(() => {
           this._badDrivingBehavior(params)
         }, TIME)

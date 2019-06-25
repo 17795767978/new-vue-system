@@ -46,8 +46,8 @@ export default {
       let oldTime = moment(this.nowTime).valueOf()
       this.nowTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
       let newTime = moment(this.nowTime).valueOf()
-      if (newTime - oldTime < 1) {
-        this.$message.warning('短时间内请勿重复操作')
+      if (newTime - oldTime < 0) {
+        console.log(newTime - oldTime)
       } else {
         this.isUpdate = true
       }

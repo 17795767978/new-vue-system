@@ -1,5 +1,5 @@
 <template>
-  <div class="data-wrapper">
+  <div class="data-wrapper" id="full-wrapper">
     <el-button type="success" @click="fullScreen" size="mini" style="position: absolute; right: 20px; top: 20px; z-index: 1003">
       <i class="el-icon-video-camera" style="font-size: 22px;"></i>
     </el-button>
@@ -60,8 +60,9 @@ export default {
   },
   methods: {
     fullScreen () {
+      let ele = document.getElementById('full-wrapper')
       if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
-        if (document.documentElement.requestFullscreen) {
+        if (ele.requestFullscreen) {
           document.documentElement.requestFullscreen()
         } else if (document.documentElement.mozRequestFullScreen) {
           document.documentElement.mozRequestFullScreen()

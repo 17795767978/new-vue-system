@@ -40,6 +40,7 @@ export default {
   methods: {
     _realTimeFullRate (params) {
       this.$api['passengerFlow.getRealTimeFullLoadRate'](params).then(res => {
+        this.loading = false
         this.busLoadNumber = res.map(item => +item.busLoadNumber)
         this.fullLoadRate = res.map(item => +item.fullLoadRate)
         this.personCount = res.map(item => +item.personCount)
@@ -47,7 +48,6 @@ export default {
         this.busLoadNumberMax = max(this.busLoadNumber)
         this.fullLoadRateMax = max(this.fullLoadRate)
         this.drawLine()
-        this.loading = false
         setTimeout(() => {
           this._realTimeFullRate(params)
         }, TIME)

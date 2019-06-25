@@ -70,12 +70,14 @@ export default {
   methods: {
     _realTimeMileage (params) {
       this.$api['dispatch.getRealtimeMileage'](params).then(res => {
+        this.loading = false
         if (res && res.length > 0) {
           this.realTimeMileage = res.map(item => parseInt(item.realtimeMileage))
           this.planMileage = res.map(item => parseInt(item.planMileage))
           this.orgNameMileage = res.map(item => item.orgName)
           this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
         }
+        this.drawLineLeft()
         setTimeout(() => {
           this._realTimeMileage(params)
         }, TIME)
@@ -83,12 +85,14 @@ export default {
     },
     _realTimeTrips (params) {
       this.$api['dispatch.getRealtimeTrips'](params).then(res => {
+        this.loading = false
         if (res && res.length > 0) {
           this.realTimeTrips = res.map(item => parseInt(item.realtimeTrips))
           this.planTrips = res.map(item => parseInt(item.planTrips))
           this.orgNameTrips = res.map(item => item.orgName)
           this.realTimeTripsMax = max([max(this.realTimeTrips), max(this.planTrips)])
         }
+        this.drawLineMiddle()
         setTimeout(() => {
           this._realTimeTrips(params)
         }, TIME)
@@ -96,12 +100,14 @@ export default {
     },
     _realTimeShift (params) {
       this.$api['dispatch.getRealtimeClasses'](params).then(res => {
+        this.loading = false
         if (res && res.length > 0) {
           this.realTimeShift = res.map(item => parseInt(item.realtimeClasses))
           this.planClasses = res.map(item => parseInt(item.planClasses))
           this.orgNameShift = res.map(item => item.orgName)
           this.realTimeShiftMax = max([max(this.realTimeShift), max(this.planClasses)])
         }
+        this.drawLineRight()
         setTimeout(() => {
           this._realTimeShift(params)
         }, TIME)
@@ -203,20 +209,6 @@ export default {
               }
             }
           }
-        // {
-        //     name: '实际完成',
-        //     type: 'bar',
-        //     barWidth: '20',
-        //     data: [1300, 1200, 1400, 2000, 3000, 2100, 1000],
-        //     itemStyle: {
-        //       emphasis: {
-        //         barBorderRadius: 20
-        //       },
-        //       normal: {
-        //         barBorderRadius: 20
-        //       }
-        //     }
-        // }
         ]
       })
     },

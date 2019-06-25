@@ -283,13 +283,6 @@ export default {
             data: this.upPersonNum
           },
           {
-            name: '断面客流',
-            type: 'line',
-            yAxisIndex: 0,
-            barWidth: '10',
-            data: this.passengerFlow
-          },
-          {
             name: '下车人数',
             type: 'bar',
             barWidth: '10',
@@ -303,6 +296,13 @@ export default {
               }
             },
             data: this.downPersonNum
+          },
+          {
+            name: '断面客流',
+            type: 'line',
+            yAxisIndex: 0,
+            barWidth: '10',
+            data: this.passengerFlow
           },
           {
             name: '满载率',
