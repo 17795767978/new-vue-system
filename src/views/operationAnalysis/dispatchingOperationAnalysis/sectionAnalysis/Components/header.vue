@@ -2,7 +2,7 @@
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-form-item label="选择线路">
-        <el-select v-model="formInline.value" placeholder="请选择" filterable>
+        <el-select v-model="formInline.lineId" placeholder="请选择" filterable>
           <el-option
             v-for="item in lineOptions"
             :key="item.value"
@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="方向">
-        <el-select v-model="formInline.turn" placeholder="请选择">
+        <el-select v-model="formInline.type" placeholder="请选择">
           <el-option
             v-for="item in turnOptions"
             :key="item.value"
@@ -23,7 +23,7 @@
       </el-form-item>
       <el-form-item label="月份">
         <el-date-picker
-          v-model="formInline.date"
+          v-model="formInline.month"
           type="month"
           placeholder="选择月">
         </el-date-picker>
@@ -42,9 +42,9 @@ export default {
   data () {
     return {
       formInline: {
-        value: '',
-        turn: '',
-        date: ''
+        lineId: '',
+        type: '',
+        month: ''
       },
       lineOptions: [{
         value: '0103',
@@ -66,14 +66,17 @@ export default {
   },
   methods: {
     onSubmit () {
-      console.log(this.formInline.date)
-      this.formInline.date = moment(this.formInline.date).format('YYYY-MM')
-      this.$emit('configCheck', this.formInline)
+      this.formInline.month = moment(this.formInline.month).format('YYYY-MM')
+      if (this.formInline.lineId === '') {
+        this.$message.error('请选择线路')
+      } else {
+        this.$emit('configCheck', this.formInline)
+      }
     },
     onClear () {
-      this.formInline.date = ''
-      this.formInline.value = ''
-      this.formInline.turn = ''
+      this.formInline.month = ''
+      this.formInline.lineId = ''
+      this.formInline.type = ''
     }
   }
 }

@@ -15,7 +15,7 @@
 
 <script type="text/ecmascript-6">
 // import { sectionAnalysis } from 'server/interface'
-import moment from 'moment'
+// import moment from 'moment'
 import { setTimeout } from 'timers'
 import { max } from '../../../../../utils/max'
 export default {
@@ -26,6 +26,9 @@ export default {
     },
     isUpdate: {
       type: Boolean
+    },
+    chartData: {
+      type: Object
     }
   },
   data () {
@@ -37,71 +40,42 @@ export default {
     }
   },
   created () {
-    // this.echartsData = [];
     this.xAxisData = []
-    this._sectionAnalysis({
+    this.$store.dispatch('getSectionData', {
       lineId: '0103',
       type: '1',
       month: ''
+    }).then(res => {
+      this._sectionAnalysis(res)
     })
   },
   mounted () {
   },
   watch: {
-    checkData: {
+    chartData: {
       deep: true,
-      handler (newData) {
-        newData.date = moment(this.checkData.date).format('YYYY-MM')
-        if (newData.value !== '' && newData.turn !== '' && newData.date !== '') {
-          this._sectionAnalysis({
-            lineId: newData.value,
-            type: newData.turn,
-            month: newData.date
-          })
-        }
-        if (newData.value === '' && newData.turn !== '' && newData.date !== '') {
-          this.$message.warning('请选择线路')
-        }
-      }
-    },
-    isUpdate () {
-      if (this.isUpdate) {
-        if (this.checkData.value !== '' && this.checkData.turn !== '' && this.checkData.date !== '') {
-          this._sectionAnalysis({
-            lineId: this.checkData.value,
-            type: this.checkData.turn,
-            month: moment(this.checkData.date).format('YYYY-MM')
-          })
-        } else {
-          return
-        }
-        if (this.checkData.value === '' && this.checkData.turn !== '' && this.checkData.date !== '') {
-          this.$message.warning('请选择线路')
-        }
-        this.$emit('isUpdateTo')
+      handler (newValue) {
+        this._sectionAnalysis(newValue)
       }
     }
   },
   methods: {
-    _sectionAnalysis (params) {
-      this.$api['schedulingAnalysis.getAnalysisDatasByWarnLeave'](params).then(res => {
-        // console.log(res);
-        this.xAxisData = res.xAxisNames
-        this.yAxisData = res.yAxisNames
-        this.echartsData = res.datas
-        if (this.echartsData.length > 0) {
-          setTimeout(() => {
-            this.valueNum = []
-            this.drawLine()
-            this.$message.success('数据已更新')
-          }, 1000)
-          this.loading = false
-          this.$refs.chartWrapper.style.display = 'block'
-        } else {
-          this.$refs.chartWrapper.style.display = 'none'
-          this.$message.warning('暂无数据')
-        }
-      })
+    _sectionAnalysis (res) {
+      this.xAxisData = res.xAxisNames
+      this.yAxisData = res.yAxisNames
+      this.echartsData = res.datas
+      if (this.echartsData.length > 0) {
+        setTimeout(() => {
+          this.valueNum = []
+          this.drawLine()
+          this.$message.success('数据已更新')
+        }, 1000)
+        this.loading = false
+        this.$refs.chartWrapper.style.display = 'block'
+      } else {
+        this.$refs.chartWrapper.style.display = 'none'
+        this.$message.warning('暂无数据')
+      }
     },
     drawLine () {
       let chartLine = this.$echarts.init(document.getElementById('chart-wrapper'))

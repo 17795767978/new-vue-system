@@ -6,7 +6,7 @@
     <div class="content">
       <!-- <contentWrapper></contentWrapper> -->
       <h2 class="title">客流高峰断面分析</h2>
-      <Chart :checkData="checkData" :isUpdate="isUpdate" @isUpdateTo="isUpdateTo"></Chart>
+      <Chart :chartData="chartData"></Chart>
     </div>
   </div>
 </template>
@@ -15,13 +15,14 @@
 import headerNav from './Components/header'
 import Chart from './Components/chart'
 // import contentWrapper from './Components/content';
-import moment from 'moment'
+// import moment from 'moment'
 export default {
   name: 'sectionAnalysis',
   data () {
     return {
       busLine: '1路',
       checkData: {},
+      chartData: {},
       isUpdate: false,
       nowTime: ''
     }
@@ -34,27 +35,13 @@ export default {
   mounted () {
   },
   watch: {
-    checkData: {
-      deep: true,
-      handler (oldData, newData) {
-        this.nowTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-      }
-    }
   },
   methods: {
     configCheck (data) {
-      let oldTime = moment(this.nowTime).valueOf()
-      this.nowTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-      let newTime = moment(this.nowTime).valueOf()
-      if (newTime - oldTime < 0) {
-        console.log(newTime - oldTime)
-      } else {
-        this.isUpdate = true
-      }
-      this.checkData = data
-    },
-    isUpdateTo () {
-      this.isUpdate = false
+      console.log(data)
+      this.$store.dispatch('getSectionData', data).then((res) => {
+        this.chartData = res
+      })
     }
   }
 }
