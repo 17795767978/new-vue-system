@@ -192,7 +192,9 @@ export default {
       hotdata: [],
       markersMin: [],
       max: 100,
-      loading: true
+      loading: true,
+      timerRate: null,
+      timerHot: null
     }
   },
   components: {
@@ -255,7 +257,7 @@ export default {
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
         this.markers = res
         this.loading = false
-        setTimeout(() => {
+        this.timerRate = setTimeout(() => {
           this._positionRating(params)
         }, TIME)
       })
@@ -273,7 +275,7 @@ export default {
           }
         }
         this.max = 4000
-        setTimeout(() => {
+        this.timerHot = setTimeout(() => {
           this._hotDataLine(params)
         }, TIME)
       })
@@ -325,6 +327,12 @@ export default {
     },
     handleMarkerClick () {
     }
+  },
+  destroyed () {
+    clearTimeout(this.timerRate)
+    clearTimeout(this.timerHot)
+    this.timerRate = null
+    this.timerHot = null
   }
 }
 </script>

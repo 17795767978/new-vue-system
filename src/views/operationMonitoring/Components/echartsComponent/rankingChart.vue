@@ -12,7 +12,8 @@ export default {
     return {
       loading: true,
       lineName: [],
-      fullLoadRate: []
+      fullLoadRate: [],
+      timer: null
     }
   },
   created () {
@@ -33,7 +34,7 @@ export default {
         this.lineName = res.map(item => item.lineName)
         this.fullLoadRate = res.map(item => item.fullLoadRate)
         this.drawLine()
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this._lineRateTen(params)
         }, TIME)
       })
@@ -129,6 +130,10 @@ export default {
         ]
       })
     }
+  },
+  destroyed () {
+    clearTimeout(this.timer)
+    this.timer = null
   }
 }
 </script>

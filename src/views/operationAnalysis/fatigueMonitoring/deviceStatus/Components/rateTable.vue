@@ -109,6 +109,9 @@ export default {
   props: {
     selectData: {
       type: Object
+    },
+    isUpdate: {
+      type: Boolean
     }
   },
   data () {
@@ -143,11 +146,17 @@ export default {
   },
   computed: {},
   watch: {
-    selectData: {
-      deep: true,
-      handler () {
+    // selectData: {
+    //   deep: true,
+    //   handler () {
+    //     this._statusTable(this.selectData)
+    //   }
+    // },
+    isUpdate () {
+      if (this.isUpdate) {
         this._statusTable(this.selectData)
       }
+      this.$emit('isUpdateTo')
     }
   },
   methods: {

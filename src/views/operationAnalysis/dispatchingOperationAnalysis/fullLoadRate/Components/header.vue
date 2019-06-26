@@ -79,15 +79,7 @@ export default {
         // typeFullRate: ''
       },
       tabType: ['上车人数', '下车人数', '断面客流', '满载率'],
-      lineOptions: [{
-        value: '0103',
-        label: '103路'
-      },
-      {
-        value: '0104',
-        label: '104路'
-      }
-      ],
+      lineOptions: [],
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() > Date.now()
@@ -142,6 +134,7 @@ export default {
         startTime: '',
         endTime: ''
       }
+      console.log(this.formInline)
     },
     changeType () {
       this.$emit('tabTypeCheck', this.tabType)

@@ -19,7 +19,6 @@ import StreamNum from './Components/streamNum.vue'
 import chartsComplete from './Components/chartsComplete.vue'
 import chartsMain from './Components/chartsMain.vue'
 import bottomChart from './Components/bottomChart.vue'
-// import screenFull from 'screenfull'
 export default {
   name: 'chartAnalysis',
   data () {
@@ -31,22 +30,22 @@ export default {
     // 监听全屏事件 根据高度计算是否退出
     document.addEventListener('fullscreenchange', (e) => {
       if (window.innerHeight - window.outerHeight < -50) {
-        this.$router.push('/homepage/home')
+        this.noCache()
       }
     })
     document.addEventListener('mozfullscreenchange', (e) => {
       if (window.innerHeight - window.outerHeight < -50) {
-        this.$router.push('/homepage/home')
+        this.noCache()
       }
     })
     document.addEventListener('webkitfullscreenchange', (e) => {
       if (window.innerHeight - window.outerHeight < -50) {
-        this.$router.push('/homepage/home')
+        this.noCache()
       }
     })
     document.addEventListener('msfullscreenchange', (e) => {
       if (window.innerHeight - window.outerHeight < -50) {
-        this.$router.push('/homepage/home')
+        this.noCache()
       }
     })
   },
@@ -70,7 +69,7 @@ export default {
           document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)
         }
       } else {
-        this.$router.push('/homepage/home')
+        this.noCache()
         if (document.cancelFullScreen) {
           document.cancelFullScreen()
         } else if (document.mozCancelFullScreen) {
@@ -79,10 +78,14 @@ export default {
           document.webkitCancelFullScreen()
         }
       }
+    },
+    noCache () {
+      this.$router.replace('/homepage/home')
+      let viewsArr = this.$store.state.views.visitedViews.filter(item => item.name !== 'chartAnalysis')
+      let cachedViews = this.$store.state.views.cachedViews.filter(item => item !== 'chartAnalysis')
+      this.$store.state.views.visitedViews = viewsArr
+      this.$store.state.views.cachedViews = cachedViews
     }
-    // closeWrapper () {
-    //   this.$router.push('/homepage/home')
-    // }
   },
   components: {
     TopTitleMsg,

@@ -51,18 +51,18 @@ export default {
   mounted () {
   },
   watch: {
-    selectData: {
-      deep: true,
-      handler () {
-        if (this.selectData.value !== '' && this.selectData.date !== '') {
-          this._numberAnalysisUp({
-            lineId: this.selectData.value,
-            dateTime: moment(this.selectData.date).format('YYYY-MM-DD'),
-            type: '1'
-          })
-        }
-      }
-    },
+    // selectData: {
+    //   deep: true,
+    //   handler () {
+    //     if (this.selectData.value !== '' && this.selectData.date !== '') {
+    //       this._numberAnalysisUp({
+    //         lineId: this.selectData.value,
+    //         dateTime: moment(this.selectData.date).format('YYYY-MM-DD'),
+    //         type: '1'
+    //       })
+    //     }
+    //   }
+    // },
     isUpdateUp () {
       if (this.isUpdateUp) {
         if (this.selectData.value !== '' && this.selectData.date !== '') {

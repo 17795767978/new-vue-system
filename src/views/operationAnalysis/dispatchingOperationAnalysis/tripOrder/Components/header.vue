@@ -12,7 +12,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="选择线路">
-        <el-select v-model="formInline.value" class="font-style" placeholder="请选择" filterable>
+        <el-select v-model="formInline.lineId" class="font-style" placeholder="请选择" filterable>
           <el-option
             v-for="item in lineOptions"
             :key="item.value"
@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="上下行">
-        <el-select  class="font-style" v-model="formInline.turn" placeholder="请选择">
+        <el-select  class="font-style" v-model="formInline.type" placeholder="请选择">
           <el-option
             v-for="item in turnOptions"
             :key="item.value"
@@ -35,7 +35,7 @@
         <el-time-select
           placeholder="起始时间"
           class="font-style"
-          v-model="formInline.startTime"
+          v-model="formInline.startHour"
           :picker-options="{
             start: '06:00',
             step: '01:00',
@@ -45,13 +45,13 @@
         -
         <el-time-select
           placeholder="结束时间"
-          v-model="formInline.endTime"
+          v-model="formInline.endHour"
           class="font-style"
           :picker-options="{
             start: '06:00',
             step: '01:00',
             end: '24:00',
-            minTime: formInline.startTime
+            minTime: formInline.startHour
           }">
         </el-time-select>
       </el-form-item>
@@ -68,11 +68,11 @@ export default {
   data () {
     return {
       formInline: {
-        value: '0103',
-        date: '',
-        turn: '1',
-        startTime: '08:00',
-        endTime: '12:00'
+        lineId: '0103',
+        dateTime: '',
+        type: '1',
+        startHour: '08:00',
+        endHour: '12:00'
       },
       lineOptions: [{
         value: '0103',
@@ -117,11 +117,11 @@ export default {
       this.lineOptions = res
     })
     let data = new Date()
-    this.formInline.date = moment(data).format('YYYY-MM-DD')
+    this.formInline.dateTime = moment(data).format('YYYY-MM-DD')
   },
   methods: {
     onSubmit () {
-      this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
+      this.formInline.dateTime = moment(this.formInline.dateTime).format('YYYY-MM-DD')
       this.$emit('configType', this.formInline)
     }
   },

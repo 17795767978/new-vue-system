@@ -72,7 +72,14 @@ export default {
       totelFullLoadRate: '',
       realTimeFullRate: '',
       operateCarNum: 0,
-      outgoingCarNum: ''
+      outgoingCarNum: '',
+      timerTotalPassage: null,
+      timerFullRate: null,
+      timerLine: null,
+      timerOnlineCar: null,
+      timerLoadRate: null,
+      timerGetOnCar: null,
+      timerGetOffCar: null
     }
   },
   created () {
@@ -103,7 +110,7 @@ export default {
         } else {
           this.passengeFlowNum = '--'
         }
-        setTimeout(() => {
+        this.timerTotalPassage = setTimeout(() => {
           this._passengeFlow(params)
         }, TIME)
       })
@@ -117,7 +124,7 @@ export default {
           this.totelPerson = '--'
           this.totelFullLoadRate = '--'
         }
-        setTimeout(() => {
+        this.timerFullRate = setTimeout(() => {
           this._realTimePassengeFlow(params)
         }, TIME)
       })
@@ -131,7 +138,7 @@ export default {
           this.operLines = '--'
           this.totalLines = '--'
         }
-        setTimeout(() => {
+        this.timerLine = setTimeout(() => {
           this._operateLines(params)
         }, TIME)
       })
@@ -149,7 +156,7 @@ export default {
         } else {
           this.onLineCarNum = '--'
         }
-        setTimeout(() => {
+        this.timerOnlineCar = setTimeout(() => {
           this._onLineCarNum(params)
         }, TIME)
       })
@@ -172,7 +179,7 @@ export default {
         } else {
           this.operateCarNum = '--'
         }
-        setTimeout(() => {
+        this.timerGetOnCar = setTimeout(() => {
           this._operateCarNum()
         }, TIME)
       })
@@ -184,13 +191,27 @@ export default {
         } else {
           this.outgoingCarNum = '--'
         }
-        setTimeout(() => {
+        this.timerGetOffCar = setTimeout(() => {
           this._outgoingCarNum()
         }, TIME)
       })
     }
   },
   components: {
+  },
+  destroyed () {
+    clearTimeout(this.timerTotalPassage)
+    clearTimeout(this.timerFullRate)
+    clearTimeout(this.timerLine)
+    clearTimeout(this.timerOnlineCar)
+    clearTimeout(this.timerGetOnCar)
+    clearTimeout(this.timerGetOffCar)
+    this.timerTotalPassage = null
+    this.timerFullRate = null
+    this.timerLine = null
+    this.timerOnlineCar = null
+    this.timerGetOnCar = null
+    this.timerGetOffCar = null
   }
 }
 </script>

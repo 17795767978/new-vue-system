@@ -19,7 +19,8 @@ export default {
       loading: true,
       timeInterval: [],
       personCount: [],
-      personCountMax: ''
+      personCountMax: '',
+      timer: null
     }
   },
   components: {
@@ -44,7 +45,7 @@ export default {
         this.personCount = res.map(item => parseInt(item.personCount))
         this.personCountMax = max(this.personCount)
         this.drawLine()
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this._realTimePassengeFlow(params)
         }, TIME)
       })
@@ -117,6 +118,10 @@ export default {
   watch: {
     personCountMax () {
     }
+  },
+  destroyed () {
+    clearTimeout(this.timer)
+    this.timer = null
   }
 }
 </script>

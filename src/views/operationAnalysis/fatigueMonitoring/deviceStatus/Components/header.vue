@@ -56,6 +56,7 @@ export default {
   watch: {
     'formInline.orgUuid': {
       handler (newValue) {
+        this.formInline.lineUuid = []
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
           lineId: '',

@@ -93,6 +93,7 @@ export default {
   watch: {
     'formInline.orgId': {
       handler (newValue) {
+        this.formInline.lineId = ''
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
           lineId: '',

@@ -42,7 +42,7 @@
           :picker-options="{
             start: '00:00',
             step: '01:00',
-            end: '23:59'
+            end: '24:00'
           }">
         </el-time-select>
         -
@@ -53,7 +53,7 @@
           :picker-options="{
             start: '00:00',
             step: '01:00',
-            end: '23:59',
+            end: '24:00',
             minTime: formInline.startTime
           }">
         </el-time-select>
@@ -74,9 +74,9 @@ export default {
     return {
       formInline: {
         station: [],
-        date: ['2019-04-01', '2019-05-01'],
+        date: [],
         startTime: '00:00',
-        endTime: '23:00'
+        endTime: '24:00'
       },
       loading: false,
       searchStation: '',

@@ -46,12 +46,12 @@ export default {
     }
   },
   created () {
-    // let dataNow = new Date();
-    // let dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD');
+    let dataNow = new Date()
+    let dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
     this._fullRateAnalysisDown({
       lineId: '0103',
       type: '2',
-      dateTime: '2019-04-24',
+      dateTime: dataBefore,
       startHour: '00',
       endHour: '24'
     })
@@ -59,20 +59,22 @@ export default {
   mounted () {
   },
   watch: {
-    checkData: {
-      deep: true,
-      handler () {
-        if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
-          this._fullRateAnalysisDown({
-            lineId: this.checkData.value,
-            type: '1',
-            dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
-            startHour: this.checkData.startTime.substring(0, 2),
-            endHour: this.checkData.endTime.substring(0, 2)
-          })
-        }
-      }
-    },
+    // checkData: {
+    //   deep: true,
+    //   handler () {
+    //     if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
+    //       this._fullRateAnalysisDown({
+    //         lineId: this.checkData.value,
+    //         type: '2',
+    //         dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
+    //         startHour: this.checkData.startTime.substring(0, 2),
+    //         endHour: this.checkData.endTime.substring(0, 2)
+    //       })
+    //     } else {
+    //       this.$message.error('请添加查询条件')
+    //     }
+    //   }
+    // },
     tabTypeData () {
       this.seeType()
     },
@@ -81,11 +83,13 @@ export default {
         if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
           this._fullRateAnalysisDown({
             lineId: this.checkData.value,
-            type: '1',
+            type: '2',
             dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
             startHour: this.checkData.startTime.substring(0, 2),
             endHour: this.checkData.endTime.substring(0, 2)
           })
+        } else {
+          this.$message.error('请添加完整的查询条件')
         }
         this.$emit('isUpdateToDown', false)
       }
@@ -202,10 +206,11 @@ export default {
             },
             axisLabel: {
               inside: false,
+              showMaxLabel: true,
               interval: 2,
               textStyle: {
                 color: '#000',
-                fontSize: '16',
+                fontSize: '10',
                 borderRadius: '6'
               }
             }

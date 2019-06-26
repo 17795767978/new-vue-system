@@ -51,33 +51,33 @@ export default {
     }
   },
   created () {
-    // let dataNow = new Date();
-    // let dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD');
+    const dataNow = new Date()
+    const dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
     this._fullRateAnalysisUp({
       lineId: '0103',
       type: '1',
-      dateTime: '2019-04-24',
+      dateTime: dataBefore,
       startHour: '00',
-      endHour: '23'
+      endHour: '24'
     })
   },
   mounted () {
   },
   watch: {
-    checkData: {
-      deep: true,
-      handler () {
-        if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
-          this._fullRateAnalysisUp({
-            lineId: this.checkData.value,
-            type: '1',
-            dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
-            startHour: this.checkData.startTime.substring(0, 2),
-            endHour: this.checkData.endTime.substring(0, 2)
-          })
-        }
-      }
-    },
+    // checkData: {
+    //   deep: true,
+    //   handler () {
+    //     if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
+    //       this._fullRateAnalysisUp({
+    //         lineId: this.checkData.value,
+    //         type: '1',
+    //         dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
+    //         startHour: this.checkData.startTime.substring(0, 2),
+    //         endHour: this.checkData.endTime.substring(0, 2)
+    //       })
+    //     }
+    //   }
+    // },
     tabTypeData () {
       // this._fullRateAnalysisUp({
       //   lineId: this.checkData.value,
@@ -98,6 +98,8 @@ export default {
             startHour: this.checkData.startTime.substring(0, 2),
             endHour: this.checkData.endTime.substring(0, 2)
           })
+        } else {
+          this.$message.error('请添加完整的查询条件')
         }
         this.$emit('isUpdateToUp', false)
       }
@@ -218,10 +220,13 @@ export default {
             axisLabel: {
               inside: false,
               interval: 2,
+              showMaxLabel: true,
               textStyle: {
                 color: '#000',
-                fontSize: '16',
-                borderRadius: '6'
+                fontSize: '10',
+                borderRadius: '6',
+                display: 'block',
+                transform: 'scale(0.8)'
               }
             }
           }

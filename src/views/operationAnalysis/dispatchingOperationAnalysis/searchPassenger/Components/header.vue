@@ -111,6 +111,8 @@ export default {
   watch: {
     'formInline.orgId': {
       handler (newValue) {
+        this.formInline.lineId = ''
+        this.formInline.busNumber = ''
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
           lineId: '',
@@ -130,6 +132,7 @@ export default {
     },
     'formInline.lineId': {
       handler (newValue) {
+        this.formInline.busNumber = ''
         this.$api['wholeInformation.getCar']({
           lineId: newValue,
           lineName: '',
@@ -138,8 +141,8 @@ export default {
           let list = []
           res.forEach(item => {
             list.push({
-              label: item.busPlateNumber,
-              value: item.busUuid
+              value: item.busPlateNumber,
+              label: item.busPlateNumber
             })
           })
           this.carOptions = list
@@ -156,9 +159,11 @@ export default {
     },
     onclear () {
       this.formInline = {
-        value: '',
-        date: '',
-        type: '',
+        orgId: '',
+        lineId: '',
+        busNumber: '',
+        valueTime: [],
+        lineType: '',
         startTime: '',
         endTime: ''
       }

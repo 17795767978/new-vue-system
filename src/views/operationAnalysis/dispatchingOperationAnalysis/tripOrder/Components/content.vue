@@ -38,11 +38,11 @@ export default {
     }
   },
   created () {
-    let data = new Date()
-    data = moment(data).format('YYYY-MM-DD')
+    let date = new Date()
+    date = moment(date).format('YYYY-MM-DD')
     this._tripOrder({
       lineId: '0103',
-      dateTime: data,
+      dateTime: date,
       type: '1',
       startHour: '08',
       endHour: '12'
@@ -51,27 +51,27 @@ export default {
   mounted () {
   },
   watch: {
-    selectData: {
-      deep: true,
-      handler () {
-        this.selectData.date = moment(this.selectData.date).format('YYYY-MM-DD')
-        this._tripOrder({
-          lineId: this.selectData.value,
-          dateTime: this.selectData.date,
-          type: this.selectData.turn,
-          startHour: this.selectData.startTime.substring(0, 2),
-          endHour: this.selectData.endTime.substring(0, 2)
-        })
-      }
-    },
+    // selectData: {
+    //   deep: true,
+    //   handler () {
+    //     this.selectData.date = moment(this.selectData.date).format('YYYY-MM-DD')
+    //     this._tripOrder({
+    //       lineId: this.selectData.value,
+    //       dateTime: this.selectData.date,
+    //       type: this.selectData.turn,
+    //       startHour: this.selectData.startTime.substring(0, 2),
+    //       endHour: this.selectData.endTime.substring(0, 2)
+    //     })
+    //   }
+    // },
     isUpdate () {
       if (this.isUpdate) {
         this._tripOrder({
-          lineId: this.selectData.value,
-          dateTime: this.selectData.date,
-          type: this.selectData.turn,
-          startHour: this.selectData.startTime.substring(0, 2),
-          endHour: this.selectData.endTime.substring(0, 2)
+          lineId: this.selectData.lineId,
+          dateTime: this.selectData.dateTime,
+          type: this.selectData.type,
+          startHour: this.selectData.startHour.substring(0, 2),
+          endHour: this.selectData.endHour.substring(0, 2)
         })
       }
       this.$emit('isUpdateTo', false)

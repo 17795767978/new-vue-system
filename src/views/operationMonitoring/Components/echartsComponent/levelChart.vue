@@ -22,7 +22,8 @@ export default {
           name: '二级',
           value: 0
         }
-      ]
+      ],
+      timer: null
     }
   },
   created () {
@@ -53,7 +54,7 @@ export default {
           })
         })
         this.drawLine()
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this._getLevelList(params)
         }, TIME)
       })
@@ -115,6 +116,10 @@ export default {
   watch: {
     changeData () {
     }
+  },
+  destroyed () {
+    clearTimeout(this.timer)
+    this.timer = null
   }
 }
 </script>

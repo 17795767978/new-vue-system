@@ -21,7 +21,8 @@ export default {
       personCount: 0,
       timeInterval: '',
       busLoadNumberMax: 0,
-      fullLoadRateMax: ''
+      fullLoadRateMax: '',
+      timer: null
     }
   },
   components: {
@@ -48,7 +49,7 @@ export default {
         this.busLoadNumberMax = max(this.busLoadNumber)
         this.fullLoadRateMax = max(this.fullLoadRate)
         this.drawLine()
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this._realTimeFullRate(params)
         }, TIME)
       })
@@ -190,6 +191,10 @@ export default {
   watch: {
     busLoadNumberMax () {
     }
+  },
+  destroyed () {
+    clearTimeout(this.timer)
+    this.timer = null
   }
 }
 </script>

@@ -134,16 +134,18 @@ export default {
     })
   },
   watch: {
-    selectData: {
-      deep: true,
-      handler (newValue) {
-        this.selectData.pageNumber = this.pageNumber
-        this.selectData.pageSize = 10
-        this._passengerFlow({ ...this.selectData })
-      }
-    },
+    // selectData: {
+    //   deep: true,
+    //   handler (newValue) {
+    //     this.selectData.pageNumber = this.pageNumber
+    //     this.selectData.pageSize = 10
+    //     this._passengerFlow({ ...this.selectData })
+    //   }
+    // },
     isUpdate () {
       if (this.isUpdate) {
+        this.selectData.pageNumber = this.pageNumber
+        this.selectData.pageSize = 10
         this._passengerFlow(this.selectData)
         this.$emit('isUpdateTo')
       }

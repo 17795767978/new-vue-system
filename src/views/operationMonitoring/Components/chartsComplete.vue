@@ -43,7 +43,10 @@ export default {
       realTimeMileage: [],
       planMileage: [],
       orgNameMileage: [],
-      realTimeMileageMax: ''
+      realTimeMileageMax: '',
+      timerLeft: null,
+      timerMiddle: null,
+      timerRight: null
     }
   },
   created () {
@@ -77,10 +80,10 @@ export default {
           this.orgNameMileage = res.map(item => item.orgName)
           this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
         }
-        this.drawLineLeft()
-        setTimeout(() => {
+        this.timerLeft = setTimeout(() => {
           this._realTimeMileage(params)
         }, TIME)
+        this.drawLineLeft()
       })
     },
     _realTimeTrips (params) {
@@ -92,10 +95,10 @@ export default {
           this.orgNameTrips = res.map(item => item.orgName)
           this.realTimeTripsMax = max([max(this.realTimeTrips), max(this.planTrips)])
         }
-        this.drawLineMiddle()
-        setTimeout(() => {
+        this.timerMiddle = setTimeout(() => {
           this._realTimeTrips(params)
         }, TIME)
+        this.drawLineMiddle()
       })
     },
     _realTimeShift (params) {
@@ -107,10 +110,10 @@ export default {
           this.orgNameShift = res.map(item => item.orgName)
           this.realTimeShiftMax = max([max(this.realTimeShift), max(this.planClasses)])
         }
-        this.drawLineRight()
-        setTimeout(() => {
+        this.timerRight = setTimeout(() => {
           this._realTimeShift(params)
         }, TIME)
+        this.drawLineRight()
       })
     },
     drawLineLeft () {
@@ -182,30 +185,30 @@ export default {
           {
             name: '计划里程',
             type: 'bar',
-            barWidth: '20',
+            barWidth: '15',
             barGap: '-100%',
             data: this.planMileage,
             itemStyle: {
               emphasis: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               },
               normal: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               }
             }
           },
           {
             name: '实际里程',
             type: 'bar',
-            barWidth: '20',
+            barWidth: '15',
             barGap: '-100%',
             data: this.realTimeMileage,
             itemStyle: {
               emphasis: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               },
               normal: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               }
             }
           }
@@ -285,14 +288,14 @@ export default {
             name: '计划趟次',
             type: 'bar',
             barGap: '-100%',
-            barWidth: '20',
+            barWidth: '15',
             data: this.planTrips,
             itemStyle: {
               emphasis: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               },
               normal: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               }
             }
           },
@@ -301,14 +304,14 @@ export default {
             name: '实际趟次',
             type: 'bar',
             barGap: '-100%',
-            barWidth: '20',
+            barWidth: '15',
             data: this.realTimeTrips,
             itemStyle: {
               emphasis: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               },
               normal: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               }
             }
           }
@@ -384,28 +387,28 @@ export default {
             name: '计划排班',
             type: 'bar',
             barGap: '-100%',
-            barWidth: '20',
+            barWidth: '15',
             data: this.planClasses,
             itemStyle: {
               emphasis: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               },
               normal: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               }
             }
           },
           {
             name: '实际排班',
             type: 'bar',
-            barWidth: '20',
+            barWidth: '15',
             data: this.realTimeShift,
             itemStyle: {
               emphasis: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               },
               normal: {
-                barBorderRadius: 20
+                barBorderRadius: 15
               }
             }
           }
@@ -429,6 +432,14 @@ export default {
   },
   components: {
     noEcharts
+  },
+  destroyed () {
+    clearTimeout(this.timerLeft)
+    clearTimeout(this.timerMiddle)
+    clearTimeout(this.timerRight)
+    this.timerLeft = null
+    this.timermiddle = null
+    this.timerRight = null
   }
 }
 </script>

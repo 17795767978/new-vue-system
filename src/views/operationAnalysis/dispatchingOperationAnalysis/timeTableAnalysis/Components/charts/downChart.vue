@@ -45,24 +45,22 @@ export default {
   mounted () {
   },
   watch: {
-    headerParams: {
-      deep: true,
-      immediate: false,
-      handler () {
-        let month = ''
-        if (this.headerParams.date && this.headerParams.date === 'Invalid date') {
-          month = ''
-        } else if (this.headerParams.date && this.headerParams.date !== 'Invalid date') {
-          month = moment(this.headerParams.date).format('YYYY-MM')
-        }
-        this._timeTableAnalysisDown({
-          lineId: this.headerParams.value,
-          // lineId: '0103',
-          month,
-          type: '2'
-        })
-      }
-    },
+    // headerParams: {
+    // handler () {
+    //   let month = ''
+    //   if (this.headerParams.date && this.headerParams.date === 'Invalid date') {
+    //     month = ''
+    //   } else if (this.headerParams.date && this.headerParams.date !== 'Invalid date') {
+    //     month = moment(this.headerParams.date).format('YYYY-MM')
+    //   }
+    //   this._timeTableAnalysisDown({
+    //     lineId: this.headerParams.value,
+    //     // lineId: '0103',
+    //     month,
+    //     type: '2'
+    //   })
+    // }
+    // },
     isUpdateDown () {
       if (this.isUpdateDown) {
         let month = ''

@@ -7,7 +7,7 @@
       <rateWrapper></rateWrapper>
     </div>
     <div class="table-wrapper">
-      <tableWrapper :selectData="selectData"></tableWrapper>
+      <tableWrapper :selectData="selectData" :isUpdate="isUpdate" @isUpdateTo="isUpdateTo"></tableWrapper>
     </div>
   </div>
 </template>
@@ -21,7 +21,8 @@ export default {
   name: 'deviceStatus',
   data () {
     return {
-      selectData: {}
+      selectData: {},
+      isUpdate: false
     }
   },
   components: {
@@ -37,6 +38,10 @@ export default {
   methods: {
     selectConfig (data) {
       this.selectData = data
+      this.isUpdate = true
+    },
+    isUpdateTo () {
+      this.isUpdate = false
     }
   }
 }

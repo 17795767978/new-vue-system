@@ -17,7 +17,8 @@ export default {
     return {
       loading: true,
       changeData: [],
-      badDrivingBehavior: []
+      badDrivingBehavior: [],
+      timer: null
     }
   },
   components: {
@@ -52,7 +53,7 @@ export default {
           }
         }
         this.drawLine()
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this._badDrivingBehavior(params)
         }, TIME)
       })
@@ -97,6 +98,10 @@ export default {
   watch: {
     changeData () {
     }
+  },
+  destroyed () {
+    clearTimeout(this.timer)
+    this.timer = null
   }
 }
 </script>

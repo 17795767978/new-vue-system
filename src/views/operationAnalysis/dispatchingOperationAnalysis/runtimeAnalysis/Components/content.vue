@@ -36,18 +36,18 @@ export default {
     })
   },
   watch: {
-    selectData: {
-      deep: true,
-      handler () {
-        if (this.selectData.value !== '' && this.selectData.turn !== '' && this.selectData.month !== '') {
-          this._runtimeAnalysis({
-            lineId: this.selectData.value,
-            type: this.selectData.turn,
-            month: moment(this.selectData.date).format('YYYY-MM')
-          })
-        }
-      }
-    },
+    // selectData: {
+    //   deep: true,
+    //   handler () {
+    //     if (this.selectData.value !== '' && this.selectData.turn !== '' && this.selectData.month !== '') {
+    //       this._runtimeAnalysis({
+    //         lineId: this.selectData.value,
+    //         type: this.selectData.turn,
+    //         month: moment(this.selectData.date).format('YYYY-MM')
+    //       })
+    //     }
+    //   }
+    // },
     isUpdate () {
       if (this.isUpdate) {
         if (this.selectData.value !== '' && this.selectData.turn !== '' && this.selectData.month !== '') {

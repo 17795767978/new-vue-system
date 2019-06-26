@@ -49,31 +49,22 @@ export default {
     // })
   },
   watch: {
-    // echartsData: {
-    //   deep: true,
-    //   handler () {
-    //     this.drawLine()
+    // headerParams: {
+    // handler () {
+    //   let month = ''
+    //   if (this.headerParams.date && this.headerParams.date === 'Invalid date') {
+    //     month = ''
+    //   } else if (this.headerParams.date && this.headerParams.date !== 'Invalid date') {
+    //     month = moment(this.headerParams.date).format('YYYY-MM')
     //   }
+    //   this._timeTableAnalysisUp({
+    //     lineId: this.headerParams.value,
+    //     // lineId: '0103',
+    //     month,
+    //     type: '1'
+    //   })
+    // }
     // },
-    headerParams: {
-      deep: true,
-      immediate: false,
-      handler () {
-        let month = ''
-        if (this.headerParams.date && this.headerParams.date === 'Invalid date') {
-          month = ''
-        } else if (this.headerParams.date && this.headerParams.date !== 'Invalid date') {
-          month = moment(this.headerParams.date).format('YYYY-MM')
-        }
-        console.log(this.headerParams.date)
-        this._timeTableAnalysisUp({
-          lineId: this.headerParams.value,
-          // lineId: '0103',
-          month,
-          type: '1'
-        })
-      }
-    },
     isUpdateUp () {
       if (this.isUpdateUp) {
         let month = ''
@@ -82,7 +73,6 @@ export default {
         } else if (this.headerParams.date && this.headerParams.date !== 'Invalid date') {
           month = moment(this.headerParams.date).format('YYYY-MM')
         }
-        console.log(this.headerParams.date)
         this._timeTableAnalysisUp({
           lineId: this.headerParams.value,
           // lineId: '0103',

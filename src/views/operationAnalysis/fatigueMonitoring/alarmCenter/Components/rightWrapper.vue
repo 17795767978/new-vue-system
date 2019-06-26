@@ -197,7 +197,7 @@ export default {
       ],
       warnOptions: [],
       tableData: [],
-      total: 100,
+      total: 0,
       pageNum: 1,
       json_data: [],
       centerDialogVisible: false

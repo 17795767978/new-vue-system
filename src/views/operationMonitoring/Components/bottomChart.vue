@@ -7,10 +7,11 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <div v-for="(arrData, index) in diffArrData" :key="index">
-          <div class="right-wrapper" v-if="Math.floor(timer / 3000) ===  index">
+        <div>
+          <div class="right-wrapper">
             <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
-            <vueSeamless  class="scroll-wrapper" :class-option="allOptions" :data="arrData">
+            <div  v-for="(arrData, index) in diffArrData" :key="index">
+            <vueSeamless  v-if="Math.floor(timer / 3000) ===  index"  class="scroll-wrapper" :class-option="allOptions" :data="arrData">
               <p class="list-font" v-for="(list, index) in arrData" :key="index">
                 <span>{{list[0]}}：</span>
                 <!-- <span v-if="index / 2 === parseInt(index / 2)" style="color: #eadf00">{{list[1]}}</span>
@@ -22,6 +23,7 @@
                 <span v-if="list[1] === '驾驶员异常。'" style="color: #e8f19c;">{{list[1]}}</span>
               </p>
             </vueSeamless>
+            </div>
           </div>
         </div>
       </el-col>
@@ -40,7 +42,8 @@ export default {
       topY: 40,
       timer: null,
       alarmType: [],
-      diffArrData: []
+      diffArrData: [],
+      timerOption: null
     }
   },
   computed: {
@@ -76,7 +79,7 @@ export default {
         setInterval(() => {
           this.timer += 1
         }, 1000)
-        setTimeout(() => {
+        this.timerOption = setTimeout(() => {
           this._badDrivingBehavior()
         }, TIME)
       })
@@ -87,7 +90,7 @@ export default {
           this.diffArrData[Math.floor(i / 3000)] = this.alermData.slice(i, i + 3000)
         }
       } else {
-        this.diffArrData[1] = this.alermData
+        this.diffArrData[0] = this.alermData
       }
     }
   },
@@ -104,7 +107,9 @@ export default {
   },
   destroyed () {
     clearInterval(this.timer)
+    clearTimeout(this.timerOption)
     this.timer = null
+    this.timerOption = null
   },
   components: {
     rankingChart,
