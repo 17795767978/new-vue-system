@@ -101,6 +101,8 @@ export default {
             abs.push(item)
           })
         })
+        abs = abs.filter(num => !isNaN(num))
+        // console.log(abs.map((a) => moment(a).format('YYYY-MM-DD HH:mm:ss')))
         this.maxDate = max(abs)
         this.minDate = min(abs)
         if (this.echartDatas.length > 0) {
@@ -138,24 +140,14 @@ export default {
           containLabel: true
         },
         tooltip: {
-          trigger: 'axis',
+          trigger: 'item',
           axisPointer: {
             type: 'shadow'
           },
           formatter: (params) => {
             console.log(params)
-            let station = params[0].axisValueLabel + '<br />' + '发车时序:' + '<br />'
-            if (this.beforeDate) {
-              if (params[0].axisValueLabel === this.xAxisNames[0]) {
-                params[0].value = undefined
-              }
-            }
-            params.forEach(list => {
-              if (list.value !== undefined) {
-                station += moment(list.value).format('HH:mm:ss') + '<br />'
-              }
-            })
-            return station
+            // station = params[0].axisValueLabel + '<br />' + '发车时序:' + '<br />'
+            return `${params.name}<br />${moment(params.value).format('YYYY-MM-DD HH:mm:ss')}`
           }
         },
         xAxis: {
@@ -186,7 +178,7 @@ export default {
               color: '#666'
             },
             formatter: function (val) {
-              return moment(val).format('YYYY-MM-DD HH:mm:ss')
+              return moment(val).format('HH:mm:ss')
             }
           }
         },

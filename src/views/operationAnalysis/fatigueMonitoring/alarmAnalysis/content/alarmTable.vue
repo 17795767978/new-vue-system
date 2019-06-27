@@ -12,6 +12,9 @@
         align="center"
         label="序号"
         width="60">
+        <template slot-scope="scope">
+          <span> {{scope.$index + (currentPage - 1) * pageSize + 1}} </span>
+        </template>
       </el-table-column>
       <el-table-column
         align="center"
@@ -68,7 +71,8 @@ export default {
     return {
       tableData: [],
       currentPage: 1,
-      total: 0
+      total: 0,
+      pageSize: 10
     }
   },
   components: {

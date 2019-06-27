@@ -4,7 +4,7 @@
       <el-form-item label="行车日期">
         <el-date-picker
           class="font-style"
-          v-model="formInline.date"
+          v-model="formInline.dateTime"
           align="right"
           type="date"
           placeholder="选择日期"
@@ -122,6 +122,7 @@ export default {
   methods: {
     onSubmit () {
       this.formInline.dateTime = moment(this.formInline.dateTime).format('YYYY-MM-DD')
+      console.log(this.formInline)
       this.$emit('configType', this.formInline)
     }
   },

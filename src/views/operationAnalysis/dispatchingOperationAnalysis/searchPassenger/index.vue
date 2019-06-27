@@ -52,7 +52,6 @@ export default {
       }
     },
     isUpdateTo () {
-      console.log(this.isUpdate)
       this.isUpdate = false
     }
   }

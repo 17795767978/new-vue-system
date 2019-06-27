@@ -1,6 +1,6 @@
 <template>
   <div class="header-wrapper">
-    <header style="margin-bottom: 10px">
+    <header>
      <el-row :gutter="24">
        <el-col :span="8" class="data-style">
          <span style="margin-right: 30px;">{{dataNow}}</span>

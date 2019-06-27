@@ -69,7 +69,7 @@ const PER_ANA = [
 ]
 const SIMPLE = [
   { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false },
-  { name: '客流数据查询', icon: iconHomeYxsj, path: '/search-passenger', admin: false }
+  { name: '客流数据查询', icon: iconHomeMzl, path: '/search-passenger', admin: false }
 ]
 const TIRED_CONTRAL = [
   { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center', admin: false },

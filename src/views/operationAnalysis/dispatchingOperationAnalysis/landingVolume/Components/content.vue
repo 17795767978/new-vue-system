@@ -2,7 +2,7 @@
   <div class="content-wrapper">
     <el-row :gutter="24">
       <el-col :span="12" style="height: 730px; background: #f6f6f6">
-        <p class="before-title" style="font-size: 18px;font-weight:600;display: inline-block;">上行人数</p>
+        <p class="before-title" style="font-size: 18px;font-weight:600;display: inline-block;">上车人数</p>
         <el-table
           :header-cell-style="{background:'#e9f5fe'}"
           :data="upTableData"
@@ -105,7 +105,7 @@
         </el-table>
       </el-col>
       <el-col :span="12" style="height: 730px; background: #f6f6f6">
-        <p class="before-title" style="font-size: 18px; font-weight:bold">下行人数</p>
+        <p class="before-title" style="font-size: 18px; font-weight:bold">下车人数</p>
         <el-table
           :header-cell-style="{background:'#e9f5fe'}"
           :data="downTableData"

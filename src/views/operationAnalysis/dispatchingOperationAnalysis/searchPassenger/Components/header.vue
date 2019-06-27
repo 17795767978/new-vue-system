@@ -133,20 +133,22 @@ export default {
     'formInline.lineId': {
       handler (newValue) {
         this.formInline.busNumber = ''
-        this.$api['wholeInformation.getCar']({
-          lineId: newValue,
-          lineName: '',
-          orgId: ''
-        }).then(res => {
-          let list = []
-          res.forEach(item => {
-            list.push({
-              value: item.busPlateNumber,
-              label: item.busPlateNumber
+        if (newValue !== '') {
+          this.$api['wholeInformation.getCar']({
+            lineId: newValue,
+            lineName: '',
+            orgId: ''
+          }).then(res => {
+            let list = []
+            res.forEach(item => {
+              list.push({
+                value: item.busPlateNumber,
+                label: item.busPlateNumber
+              })
             })
+            this.carOptions = list
           })
-          this.carOptions = list
-        })
+        }
       }
     }
   },

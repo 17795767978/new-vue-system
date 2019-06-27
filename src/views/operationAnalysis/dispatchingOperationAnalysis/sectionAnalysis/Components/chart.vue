@@ -102,7 +102,6 @@ export default {
           right: 18,
           containLabel: true
         },
-        // color: ['#61bff0', '#4ddefd', '#bcfbd3', '#fdf182', '#fdbca0', '#fd95b2', '#fcd6fd'],
         xAxis: {
           type: 'category',
           data: positions,

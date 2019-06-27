@@ -312,18 +312,18 @@ export default {
       this.isLoading = false
       map.setMapStyle(this.mapStyle)
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
-      this.$refs.baiduMapWrapper.$el.children[0].addEventListener('mousewheel', (e) => {
-        this.zoom = map.getZoom()
-        this._positionRating({
-          orgId: ''
-        })
-      })
-      this.$refs.baiduMapWrapper.$el.children[0].addEventListener('click', (e) => {
-        this.zoom = map.getZoom()
-        this._positionRating({
-          orgId: ''
-        })
-      })
+      // this.$refs.baiduMapWrapper.$el.children[0].addEventListener('mousewheel', (e) => {
+      //   this.zoom = map.getZoom()
+      //   this._positionRating({
+      //     orgId: ''
+      //   })
+      // })
+      // this.$refs.baiduMapWrapper.$el.children[0].addEventListener('click', (e) => {
+      //   this.zoom = map.getZoom()
+      //   this._positionRating({
+      //     orgId: ''
+      //   })
+      // })
     },
     handleMarkerClick () {
     }

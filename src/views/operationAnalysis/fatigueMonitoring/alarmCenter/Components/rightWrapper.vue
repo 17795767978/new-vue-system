@@ -56,6 +56,7 @@
         stripe
         border
         height="580"
+        v-loading="loading"
         size="mini"
         style="width: 100%">
         <el-table-column
@@ -63,6 +64,9 @@
           type="index"
           label="序列"
           width="60">
+          <template slot-scope="scope">
+            <span> {{scope.$index + (pageNum - 1) * pageSize + 1}} </span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="orgName"
@@ -199,8 +203,10 @@ export default {
       tableData: [],
       total: 0,
       pageNum: 1,
+      pageSize: 10,
       json_data: [],
-      centerDialogVisible: false
+      centerDialogVisible: false,
+      loading: true
     }
   },
   created () {
@@ -287,9 +293,11 @@ export default {
       })
     },
     _tableList (params) {
+      this.loading = true
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
         this.tableData = res.list
         this.total = res.total
+        this.loading = false
       })
     },
     // 左侧点击是否显示右侧搜索内容，0 机构 1 公司 2 线路 3 车牌号

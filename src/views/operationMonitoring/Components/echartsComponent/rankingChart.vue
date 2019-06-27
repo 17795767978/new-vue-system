@@ -1,5 +1,5 @@
 <template>
-  <div id="ranking-chart" :style="{width: '100%', height: '100%',padding: '10px', margin: '0 auto', boxSizing: 'border-box'}"
+  <div id="ranking-chart" :style="{width: '100%', height: '110%',padding: '10px', margin: '0 auto', boxSizing: 'border-box'}"
     v-loading="loading"
     element-loading-background="rgba(0, 0, 0, 0)">
   </div>
@@ -65,7 +65,6 @@ export default {
             axisPointer: {
               type: 'shadow'
             },
-            offset: 30,
             splitLine: {
               show: false
             },
@@ -105,7 +104,7 @@ export default {
               interval: 0,
               textStyle: {
                 color: '#fff',
-                fontSize: '10',
+                fontSize: '8',
                 borderRadius: '6'
               }
             }
@@ -119,11 +118,11 @@ export default {
             barWidth: 7,
             itemStyle: {
               emphasis: {
-                barBorderRadius: 20
+                barBorderRadius: 5
               },
               normal: {
                 color: '#03abd0',
-                barBorderRadius: 20
+                barBorderRadius: 5
               }
             }
           }

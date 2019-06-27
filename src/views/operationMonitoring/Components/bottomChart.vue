@@ -8,10 +8,10 @@
       </el-col>
       <el-col :span="12">
         <div>
-          <div class="right-wrapper">
+          <div  v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" class="right-wrapper">
             <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
-            <div  v-for="(arrData, index) in diffArrData" :key="index">
-            <vueSeamless  v-if="Math.floor(timer / 3000) ===  index"  class="scroll-wrapper" :class-option="allOptions" :data="arrData">
+            <div v-for="(arrData, index) in diffArrData" :key="index">
+            <vueSeamless  v-if="Math.floor(codeNum / 500) ===  index"  class="scroll-wrapper" :class-option="allOptions" :data="arrData">
               <p class="list-font" v-for="(list, index) in arrData" :key="index">
                 <span>{{list[0]}}：</span>
                 <!-- <span v-if="index / 2 === parseInt(index / 2)" style="color: #eadf00">{{list[1]}}</span>
@@ -43,7 +43,9 @@ export default {
       timer: null,
       alarmType: [],
       diffArrData: [],
-      timerOption: null
+      timerOption: null,
+      loading: true,
+      codeNum: 0
     }
   },
   computed: {
@@ -65,6 +67,14 @@ export default {
   methods: {
     _badDrivingBehavior (params) {
       this.$api['homeTired.getBadDrivingBehaviorTable'](params).then(res => {
+        console.log(this.timer)
+        this.codeNum = 0
+        if (this.timer !== null) {
+          this.timer = null
+          clearInterval(this.timer)
+        }
+        console.log(this.timer)
+        clearInterval(this.timer)
         this.alermData = []
         this.diffArrData = []
         res.forEach(alert => {
@@ -72,22 +82,21 @@ export default {
         })
         this.getNumberArry()
         console.log(this.diffArrData)
-        this.alermData = Object.freeze(this.alermData).slice(10000)
-
+        this.loading = false
         let typeData = new Set(this.alermData.map(item => item[1]))
         this.alarmType = [...typeData]
-        setInterval(() => {
-          this.timer += 1
-        }, 1000)
+        this.timer = setInterval(() => {
+          this.codeNum += 1
+        }, 2000)
         this.timerOption = setTimeout(() => {
           this._badDrivingBehavior()
         }, TIME)
       })
     },
     getNumberArry () {
-      if (this.alermData.length > 3000) {
-        for (let i = 0; i < this.alermData.length; i += 3000) {
-          this.diffArrData[Math.floor(i / 3000)] = this.alermData.slice(i, i + 3000)
+      if (this.alermData.length > 500) {
+        for (let i = 0; i < this.alermData.length; i += 500) {
+          this.diffArrData[Math.floor(i / 500)] = this.alermData.slice(i, i + 500)
         }
       } else {
         this.diffArrData[0] = this.alermData

@@ -323,7 +323,7 @@ export default {
       window.addEventListener('resize', () => { rightChart.resize() })
       rightChart.setOption({
         title: {
-          text: '排班完成情况',
+          text: '班次完成情况',
           left: 'center',
           textStyle: {
             'color': '#fff'

@@ -11,6 +11,9 @@
         label="序号"
         align="center"
       >
+      <template slot-scope="scope">
+        <span> {{scope.$index + (pageNumber - 1) * pageSize + 1}} </span>
+      </template>
       </el-table-column>
       <el-table-column
         align="center"
@@ -93,6 +96,7 @@
       :current-page="pageNumber"
       @current-change="handleCurrentChange"
       layout="prev, pager, next"
+      :page-size="pageSize"
       :total="total">
     </el-pagination>
     <span class="demonstration" style="float: right; margin-top: 20px; line-height: 36px;">共{{total}}条</span>
@@ -114,7 +118,8 @@ export default {
     return {
       tableData: [],
       total: 0,
-      pageNumber: 1
+      pageNumber: 1,
+      pageSize: 15
     }
   },
   mounted () {
@@ -129,7 +134,7 @@ export default {
       busNumber: '',
       startTime: timeStart,
       endTime: timeEnd,
-      pageSize: 10,
+      pageSize: 15,
       pageNumber: this.pageNumber
     })
   },
@@ -145,7 +150,7 @@ export default {
     isUpdate () {
       if (this.isUpdate) {
         this.selectData.pageNumber = this.pageNumber
-        this.selectData.pageSize = 10
+        this.selectData.pageSize = 15
         this._passengerFlow(this.selectData)
         this.$emit('isUpdateTo')
       }
@@ -164,7 +169,8 @@ export default {
     },
     handleCurrentChange (val) {
       this.selectData.pageNumber = val
-      this.selectData.pageSize = 10
+      this.selectData.pageSize = 15
+      this.pageNumber = val
       this._passengerFlow({ ...this.selectData })
     }
   }

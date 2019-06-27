@@ -173,6 +173,13 @@ export default {
             emphasis: {
               shadowBlur: 10,
               shadowColor: 'rgba(0, 0, 0, 0.5)'
+            },
+            normal: {
+              label: {
+                textStyle: {
+                  fontSize: 9
+                }
+              }
             }
           }
         }]
