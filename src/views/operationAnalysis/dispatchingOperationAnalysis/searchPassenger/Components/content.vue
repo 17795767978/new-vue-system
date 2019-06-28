@@ -10,6 +10,7 @@
         type="index"
         label="序号"
         align="center"
+        width="100"
       >
       <template slot-scope="scope">
         <span> {{scope.$index + (pageNumber - 1) * pageSize + 1}} </span>
@@ -162,6 +163,8 @@ export default {
         this.tableData = res.list
         this.total = res.total
         this.$message.success('数据已更新')
+      }).catch(() => {
+        this.$message.error('服务端错误')
       })
     },
     gerDate (row) {

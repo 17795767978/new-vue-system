@@ -122,6 +122,15 @@ export default {
         // },
         xAxis: {
           type: 'category',
+          // axisLine: {
+          //   show: false
+          // },
+          // axisTick: {
+          //   show: false
+          // },
+          // splitLine: {
+          //   show: false
+          // },
           boundaryGap: false,
           data: this.xAxisData
         },
@@ -129,6 +138,9 @@ export default {
           type: 'value',
           max: this.echartsDataMax + 100,
           min: 0,
+          splitLine: {
+            show: false
+          },
           interval: Math.ceil(this.echartsDataMax / 6)
         },
         series: [

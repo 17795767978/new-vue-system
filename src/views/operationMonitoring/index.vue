@@ -29,22 +29,28 @@ export default {
   created () {
     // 监听全屏事件 根据高度计算是否退出
     document.addEventListener('fullscreenchange', (e) => {
-      if (window.innerHeight - window.outerHeight < -50) {
+      console.log(123123)
+      console.log(window.innerHeight - window.outerHeight)
+      if (window.innerHeight - window.outerHeight < -80) {
+        console.log(window.innerHeight - window.outerHeight)
         this.noCache()
       }
     })
     document.addEventListener('mozfullscreenchange', (e) => {
-      if (window.innerHeight - window.outerHeight < -50) {
+      if (window.innerHeight - window.outerHeight < -80) {
+        console.log(window.innerHeight - window.outerHeight)
         this.noCache()
       }
     })
     document.addEventListener('webkitfullscreenchange', (e) => {
-      if (window.innerHeight - window.outerHeight < -50) {
+      if (window.innerHeight - window.outerHeight < -80) {
+        console.log(window.innerHeight - window.outerHeight)
         this.noCache()
       }
     })
     document.addEventListener('msfullscreenchange', (e) => {
-      if (window.innerHeight - window.outerHeight < -50) {
+      if (window.innerHeight - window.outerHeight < -80) {
+        console.log(window.innerHeight - window.outerHeight)
         this.noCache()
       }
     })

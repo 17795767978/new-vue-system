@@ -155,10 +155,10 @@ export default {
           calculable: true,
           orient: 'horizontal',
           left: 'center',
-          bottom: '5%',
-          inRange: {
-            color: ['#8ccdff', '#004579']
-          }
+          bottom: '5%'
+          // inRange: {
+          //   color: ['#8ccdff', '#004579']
+          // }
         },
         series: [{
           name: '热力值',

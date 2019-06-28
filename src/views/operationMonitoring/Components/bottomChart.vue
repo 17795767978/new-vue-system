@@ -10,7 +10,7 @@
         <div>
           <div  v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" class="right-wrapper">
             <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
-            <div v-for="(arrData, index) in diffArrData" :key="index">
+            <div v-for="(arrData, index) in diffArrData" :key="index"  @click="getIndex(index)">
             <vueSeamless  v-if="Math.floor(codeNum / 500) ===  index"  class="scroll-wrapper" :class-option="allOptions" :data="arrData">
               <p class="list-font" v-for="(list, index) in arrData" :key="index">
                 <span>{{list[0]}}：</span>
@@ -66,28 +66,26 @@ export default {
   },
   methods: {
     _badDrivingBehavior (params) {
+      this.codeNum = 0
+      console.log(this.codeNum)
+      console.log(this.timer)
       this.$api['homeTired.getBadDrivingBehaviorTable'](params).then(res => {
-        console.log(this.timer)
-        this.codeNum = 0
-        if (this.timer !== null) {
-          this.timer = null
-          clearInterval(this.timer)
-        }
-        console.log(this.timer)
-        clearInterval(this.timer)
         this.alermData = []
         this.diffArrData = []
         res.forEach(alert => {
           this.alermData.push(alert.split('：'))
         })
         this.getNumberArry()
-        console.log(this.diffArrData)
         this.loading = false
         let typeData = new Set(this.alermData.map(item => item[1]))
         this.alarmType = [...typeData]
         this.timer = setInterval(() => {
           this.codeNum += 1
-        }, 2000)
+          if (this.codeNum === 300) {
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
         this.timerOption = setTimeout(() => {
           this._badDrivingBehavior()
         }, TIME)
@@ -101,6 +99,9 @@ export default {
       } else {
         this.diffArrData[0] = this.alermData
       }
+    },
+    getIndex (index) {
+      console.log(index)
     }
   },
   watch: {
