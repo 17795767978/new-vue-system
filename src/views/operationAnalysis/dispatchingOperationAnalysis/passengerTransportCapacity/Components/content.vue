@@ -20,7 +20,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { Row } from 'element-ui'
 import upChart from './charts/upChart'
 import downChart from './charts/downChart'
 export default {
@@ -42,8 +41,7 @@ export default {
   },
   components: {
     upChart,
-    downChart,
-    'el-row': Row
+    downChart
   },
   created () {},
   methods: {

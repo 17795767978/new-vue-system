@@ -28,7 +28,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { Form, Select, DatePicker, Button } from 'element-ui'
 import moment from 'moment'
 export default {
   data () {
@@ -60,10 +59,6 @@ export default {
     }
   },
   components: {
-    'el-form': Form,
-    'el-select': Select,
-    'el-date-picker': DatePicker,
-    'el-button': Button
   }
 }
 </script>

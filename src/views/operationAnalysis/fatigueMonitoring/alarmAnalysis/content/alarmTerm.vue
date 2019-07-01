@@ -107,6 +107,7 @@ export default {
           left: '3%',
           right: '4%',
           bottom: '3%',
+          show: true,
           containLabel: true
         },
         xAxis: [
@@ -114,7 +115,7 @@ export default {
             type: 'category',
             data: this.xAxise,
             axisTick: {
-              alignWithLabel: true
+              alignWithLabel: false
             }
           }
         ],

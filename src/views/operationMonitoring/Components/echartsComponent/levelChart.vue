@@ -53,6 +53,7 @@ export default {
             }
           })
         })
+        console.log(this.getLevelList)
         this.drawLine()
         this.timer = setTimeout(() => {
           this._getLevelList(params)

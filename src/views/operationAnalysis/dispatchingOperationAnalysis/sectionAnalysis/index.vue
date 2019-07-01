@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     configCheck (data) {
-      console.log(data)
       this.$store.dispatch('getSectionData', data).then((res) => {
         this.chartData = res
       })

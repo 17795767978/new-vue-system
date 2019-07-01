@@ -93,8 +93,8 @@ export default {
         orgId: this.selectData.orgId,
         lineId: this.selectData.lineId,
         busPlateNumber: this.selectData.busPlateNumber,
-        startTime: this.selectData.startTime || startTime,
-        endTime: this.selectData.endTime || endTime,
+        startTime: (this.selectData.valueTime && this.selectData.valueTime[0]) || startTime,
+        endTime: (this.selectData.valueTime && this.selectData.valueTime[1]) || endTime,
         warnUuid: this.warnObj.warnUuid
       })
     },

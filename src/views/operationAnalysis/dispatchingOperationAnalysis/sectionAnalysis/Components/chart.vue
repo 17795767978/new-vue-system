@@ -144,8 +144,12 @@ export default {
               return val[2] * 0.3
             } else if (this.valueNum > 150 && this.valueNum < 200) {
               return val[2] * 0.2
+            } else if (this.valueNum > 200 && this.valueNum < 1000) {
+              return val[2] * 0.05
+            } else if (this.valueNum > 100 && this.valueNum < 5000) {
+              return val[2] * 0.015
             } else {
-              return val[2] * 0.1
+              return val[2] * 0.005
             }
           },
           data: data,

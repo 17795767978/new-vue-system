@@ -115,6 +115,7 @@ export default {
   methods: {
     onSubmit () {
       // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD');
+      console.log(this.formInline)
       this.$emit('configCheck', this.formInline)
     },
     onclear () {

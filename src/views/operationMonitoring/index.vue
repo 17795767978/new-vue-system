@@ -57,6 +57,8 @@ export default {
   },
   mounted () {
     // this.fullScreen()
+    console.log(this.$set)
+    console.log(this.$delete)
   },
   activated () {
     this.fullScreen()
