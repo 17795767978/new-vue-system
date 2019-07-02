@@ -86,7 +86,10 @@ export default {
           this.echartsDataMax = max([max(this.echartsData[0]), max(this.echartsData[1]), max(this.echartsData[2])])
         }
         if (this.echartsData.length > 0) {
-          this.drawLine()
+          setTimeout(() => {
+            this.drawLine()
+          }, 20)
+          // this.drawLine()
           this.loading = false
           this.$refs.downChartWrapper.style.display = 'block'
         } else {

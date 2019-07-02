@@ -87,7 +87,10 @@ export default {
         }
         if (this.echartsData.length > 0) {
           this.$refs.upChartWrapper.style.display = 'block'
-          this.drawLine()
+          setTimeout(() => {
+            this.drawLine()
+          }, 20)
+          // this.drawLine()
           this.loading = false
           this.$message.success('数据已更新')
         } else {

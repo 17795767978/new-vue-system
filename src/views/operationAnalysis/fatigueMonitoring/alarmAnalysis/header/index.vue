@@ -120,11 +120,10 @@ export default {
     },
     onclear () {
       this.formInline = {
-        value: '',
-        date: '',
-        type: '',
-        startTime: '',
-        endTime: ''
+        orgId: '',
+        lineId: '',
+        busPlateNumber: '',
+        valueTime: []
       }
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res

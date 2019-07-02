@@ -73,6 +73,16 @@ export default {
   methods: {
     _levelRate (params) {
       this.$api['tiredMonitoring.getWarnPie'](params).then(res => {
+        this.echartData = [
+          {
+            name: '一级',
+            value: 0
+          },
+          {
+            name: '二级',
+            value: 0
+          }
+        ]
         this.levelData = res
         this.levelData = this.levelData.sort((prev, next) => parseInt(prev.warnLevel) - parseInt(next.warnLevel))
         if (res.length > 0) {
