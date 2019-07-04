@@ -185,7 +185,6 @@ export default {
     handleClick (row) {
       this.lineId = row.lineId
       this.lineName = row.lineName
-      console.log(this.lineId)
       this.$api['tiredMonitoring.getLinelineStatusPage']({
         pageNum: this.inCurrentPage,
         pageSize: 10,

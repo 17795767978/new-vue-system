@@ -1,13 +1,16 @@
 <template>
   <div class="passenger-search">
     <header>
-      <header-nav @configCheck="configCheck"/>
+      <header-nav @configCheck="configCheck" @isDownload="isDownload" :excelData="excelData"/>
     </header>
     <div class="content">
       <contentWrapper
         :selectData="selectData"
         :isUpdate="isUpdate"
+        :isDownLoad="isDownLoad"
         @isUpdateTo="isUpdateTo"
+        @isDownLoadTo="isDownLoadTo"
+        @getData="getData"
       ></contentWrapper>
     </div>
   </div>
@@ -23,7 +26,9 @@ export default {
     return {
       selectData: {},
       nowTime: '',
-      isUpdate: false
+      isUpdate: false,
+      isDownLoad: false,
+      excelData: []
     }
   },
   components: {
@@ -53,6 +58,15 @@ export default {
     },
     isUpdateTo () {
       this.isUpdate = false
+    },
+    isDownload () {
+      this.isDownLoad = true
+    },
+    isDownLoadTo () {
+      this.isDownLoad = false
+    },
+    getData (data) {
+      this.excelData = data
     }
   }
 }

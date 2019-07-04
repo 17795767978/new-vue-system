@@ -36,9 +36,11 @@ export default {
     }
   },
   created () {
+    let date = new Date() - 3600 * 24 * 30 * 1000
+    date = moment(date).format('YYYY-MM')
     this._timeTableAnalysisUp({
-      lineId: '',
-      month: '',
+      lineId: '0103',
+      month: date,
       type: '1'
     })
   },

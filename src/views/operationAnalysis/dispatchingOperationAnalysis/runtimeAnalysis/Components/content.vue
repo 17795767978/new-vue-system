@@ -29,10 +29,12 @@ export default {
     }
   },
   created () {
+    let date = new Date() - 3600 * 1000 * 24 * 30
+    date = moment(date).format('YYYY-MM')
     this._runtimeAnalysis({
       lineId: '0103',
       type: '1',
-      month: '2019-05'
+      month: date
     })
   },
   watch: {

@@ -75,8 +75,8 @@ export default {
       formInline: {
         station: [],
         date: [],
-        startTime: '00:00',
-        endTime: '24:00'
+        startTime: '07:00',
+        endTime: '09:00'
       },
       loading: false,
       searchStation: '',
@@ -84,8 +84,14 @@ export default {
       lineOptions: [],
       stationOptions: [],
       searchStationOptions: [],
-      tableData: {}
+      tableData: []
     }
+  },
+  created () {
+    let endTime = new Date()
+    let startTime = new Date() - 3600 * 1000 * 24
+    this.formInline.date[0] = moment(startTime).format('YYYY-MM-DD')
+    this.formInline.date[1] = moment(endTime).format('YYYY-MM-DD')
   },
   mounted () {
     this._lineList()
@@ -124,6 +130,12 @@ export default {
         if (res.length !== 0) {
           this.tableData = res
           this.$emit('configTableData', this.tableData)
+          this.$message.success('数据更新')
+        } else {
+          this.selectStation = {}
+          this.tableData = []
+          this.$emit('configTableData', this.tableData)
+          this.$message.warning('暂无数据')
         }
       })
     },
@@ -149,19 +161,28 @@ export default {
       // console.log(this.selectStation);
     },
     onSubmit () {
-      this.formInline.date[0] = moment(this.formInline.date[0]).format('YYYY-MM-DD')
-      this.formInline.date[1] = moment(this.formInline.date[1]).format('YYYY-MM-DD')
-      this.selectStation = this.formInline.station.map(item => item.label)
-      let idArry = this.formInline.station.map(item => item.value)
-      // console.log(this.selectStation);
-      this.$emit('selectStation', this.selectStation)
-      this._lineStation({
-        startDate: this.formInline.date[0],
-        endDate: this.formInline.date[1],
-        stationIds: idArry,
-        startHour: this.formInline.startTime.substring(0, 2),
-        endHour: this.formInline.endTime.substring(0, 2)
-      })
+      console.log(this.formInline.date)
+      if (this.formInline.date.length === 0 ||
+        this.formInline.station.length === 0 ||
+        this.formInline.startTime === '' ||
+        this.formInline.endTime === ''
+      ) {
+        this.$message.error('请填写完整的查询信息')
+      } else {
+        this.formInline.date[0] = moment(this.formInline.date[0]).format('YYYY-MM-DD')
+        this.formInline.date[1] = moment(this.formInline.date[1]).format('YYYY-MM-DD')
+        this.selectStation = this.formInline.station.map(item => item.label)
+        let idArry = this.formInline.station.map(item => item.value)
+        // console.log(this.selectStation);
+        this.$emit('selectStation', this.selectStation)
+        this._lineStation({
+          startDate: this.formInline.date[0],
+          endDate: this.formInline.date[1],
+          stationIds: idArry,
+          startHour: this.formInline.startTime.substring(0, 2),
+          endHour: this.formInline.endTime.substring(0, 2)
+        })
+      }
     },
     onClear () {
       this.formInline = {

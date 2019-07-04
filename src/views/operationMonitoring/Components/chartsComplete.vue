@@ -337,7 +337,7 @@ export default {
           }
         },
         legend: {
-          data: ['计划排班', '实际排班'],
+          data: ['计划班次', '实际班次'],
           bottom: 10,
           textStyle: {
             color: '#fff'
@@ -384,7 +384,7 @@ export default {
         },
         series: [
           {
-            name: '计划排班',
+            name: '计划班次',
             type: 'bar',
             barGap: '-100%',
             barWidth: '15',
@@ -399,7 +399,7 @@ export default {
             }
           },
           {
-            name: '实际排班',
+            name: '实际班次',
             type: 'bar',
             barWidth: '15',
             data: this.realTimeShift,

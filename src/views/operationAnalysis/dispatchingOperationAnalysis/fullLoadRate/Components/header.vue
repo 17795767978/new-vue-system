@@ -112,8 +112,8 @@ export default {
     let dataBefore = new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)
     this.formInline.value = '0103'
     this.formInline.date = moment(dataBefore).format('YYYY-MM-DD')
-    this.formInline.startTime = '00:00'
-    this.formInline.endTime = '24:00'
+    this.formInline.startTime = '07:00'
+    this.formInline.endTime = '09:00'
   },
   mounted () {
     this.$store.dispatch('getLineList').then(res => {
@@ -122,9 +122,16 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
-      this.$emit('configCheck', this.formInline)
-      this.$emit('tabTypeCheck', this.tabType)
+      if (this.formInline.date === '' ||
+        this.formInline.value === '' ||
+        this.formInline.startTime === '' ||
+        this.formInline.endTime === '') {
+        this.$message.error('请添加完整的查询条件')
+      } else {
+        this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
+        this.$emit('configCheck', this.formInline)
+        this.$emit('tabTypeCheck', this.tabType)
+      }
     },
     onclear () {
       this.formInline = {

@@ -53,16 +53,42 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear">重置</el-button>
+        <el-button type="success" @click="onSave">导出</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog
+      title="提示"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <span>请确认是否下载报警中心报表</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <downloadExcel
+          :data= "excelData"
+          type="xls"
+          style="display: inline-block; margin-left: 10px;"
+          name= "报警中心报表.xls"
+        >
+        <el-button type="primary" @click="getExcel">确 定</el-button>
+        </downloadExcel>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 // import moment from 'moment';
 // import { lineList, comList } from 'server/interface';
+import downloadExcel from 'vue-json-excel'
 import moment from 'moment'
+
 export default {
+  props: {
+    excelData: {
+      type: Array
+    }
+  },
   data () {
     return {
       formInline: {
@@ -83,7 +109,8 @@ export default {
         label: '下行'
       }],
       lineOptions: [],
-      carOptions: []
+      carOptions: [],
+      centerDialogVisible: false
     }
   },
   created () {
@@ -182,9 +209,23 @@ export default {
       setTimeout(() => {
         this.formInline.valueTime = [timeStart, timeEnd]
       }, 20)
+    },
+    onSave () {
+      this.$emit('isDownload')
+      this.centerDialogVisible = true
+    },
+    getExcel () {
+      this.centerDialogVisible = false
+      if (this.excelData.length > 0) {
+        console.log(this.excelData)
+        this.$message.success('正在下载中。。。')
+      } else {
+        this.$message.warning('暂无数据')
+      }
     }
   },
   components: {
+    downloadExcel
   }
 }
 </script>

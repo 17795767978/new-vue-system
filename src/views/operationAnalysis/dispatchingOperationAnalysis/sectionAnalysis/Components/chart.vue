@@ -15,7 +15,7 @@
 
 <script type="text/ecmascript-6">
 // import { sectionAnalysis } from 'server/interface'
-// import moment from 'moment'
+import moment from 'moment'
 import { setTimeout } from 'timers'
 import { max } from '../../../../../utils/max'
 export default {
@@ -41,10 +41,12 @@ export default {
   },
   created () {
     this.xAxisData = []
+    let date = new Date() - 24 * 3600 * 1000 * 30
+    date = moment(date).format('YYYY-MM')
     this.$store.dispatch('getSectionData', {
       lineId: '0103',
       type: '1',
-      month: ''
+      month: date
     }).then(res => {
       this._sectionAnalysis(res)
     })

@@ -34,7 +34,7 @@ export const API_DEFAULT_CONFIG = {
  * AXIOS默认参数配置
  */
 export const AXIOS_DEFAULT_CONFIG = {
-  timeout: 30000
+  timeout: 180000
 }
 
 /**

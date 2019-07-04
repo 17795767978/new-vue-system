@@ -248,6 +248,7 @@ export default {
     selectData: {
       deep: true,
       handler () {
+        console.log(this.selectData)
         this.upTableData = this.getTableData(true)
         this.downTableData = this.getTableData(false)
       }

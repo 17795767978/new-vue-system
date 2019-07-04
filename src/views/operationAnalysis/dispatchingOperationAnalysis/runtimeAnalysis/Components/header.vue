@@ -44,7 +44,7 @@ export default {
     return {
       formInline: {
         value: '0103',
-        date: '2019-05',
+        date: '',
         turn: '1'
       },
       lineOptions: [],
@@ -59,6 +59,8 @@ export default {
   },
   created () {
     this._lineList()
+    let date = new Date() - 3600 * 1000 * 24 * 30
+    this.formInline.date = moment(date).format('YYYY-MM')
   },
   methods: {
     _lineList () {
@@ -67,8 +69,12 @@ export default {
       })
     },
     onSubmit () {
-      this.formInline.date = moment(this.formInline.date).format('YYYY-MM')
-      this.$emit('configCheck', this.formInline)
+      if (this.formInline.date === '' || this.formInline.value === '' || this.formInline.turn === '') {
+        this.$message.error('请添加完整的查询条件')
+      } else {
+        this.formInline.date = moment(this.formInline.date).format('YYYY-MM')
+        this.$emit('configCheck', this.formInline)
+      }
     },
     onClear () {
       this.formInline = {

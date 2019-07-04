@@ -134,6 +134,7 @@
           style="float: right; margin-top: 20px;"
           background
           @current-change="handleCurrentChange"
+          :current-page.sync="pageNum"
           layout="prev, pager, next"
           :total="total">
         </el-pagination>
@@ -211,9 +212,9 @@ export default {
   },
   created () {
     let dataNow = new Date()
-    let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
+    let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:00:00')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
@@ -232,14 +233,14 @@ export default {
       startTime: this.formInline.timeValue[0] || timeStart, // 时间格式   开始结束默认查近7天的
       endTime: this.formInline.timeValue[1] || timeEnd,
       pageSize: 10,
-      pageNum: this.pageNum
+      pageNum: 1
     })
   },
   mounted () {
     let dataNow = new Date()
-    let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
+    let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:00:00')
+    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
@@ -268,7 +269,7 @@ export default {
           startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
           endTime: this.formInline.timeValue[1],
           pageSize: 10,
-          pageNum: this.pageNum
+          pageNum: 1
         })
       }
     },
@@ -356,6 +357,7 @@ export default {
       this.formInline.timeValue.forEach(time => {
         dateArr.push(moment(time).format('YYYY-MM-DD HH:mm:ss'))
       })
+      this.pageNum = 1
       this._tableList({
         orgId: this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -368,12 +370,12 @@ export default {
         startTime: dateArr[0], // 时间格式   开始结束默认查近7天的
         endTime: dateArr[1],
         pageSize: 10,
-        pageNum: this.pageNum
+        pageNum: 1
       })
     },
     onClear () {
       let dataNow = new Date()
-      let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
+      let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
       this.formInline = {
         orgId: '',
         lineId: '',
@@ -399,8 +401,8 @@ export default {
         warnTypeId: this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
-        pageSize: 10000,
-        pageNum: 10000
+        pageSize: 100000,
+        pageNum: 1
       }).then(res => {
         let excelArr = []
         res.list.forEach((item, index) => {

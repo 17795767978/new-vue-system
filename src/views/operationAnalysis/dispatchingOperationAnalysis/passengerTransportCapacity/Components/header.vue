@@ -35,12 +35,9 @@ export default {
     return {
       formInline: {
         value: '0103',
-        date: '2019-04-24'
+        date: ''
       },
-      lineOptions: [{
-        value: '0103',
-        label: '103路'
-      }],
+      lineOptions: [],
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() > Date.now()
@@ -69,14 +66,20 @@ export default {
     }
   },
   mounted () {
+    let date = new Date() - 3600 * 1000 * 24
+    this.formInline.date = moment(date).format('YYYY-MM-DD')
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
     })
   },
   methods: {
     onSubmit () {
-      this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
-      this.$emit('configCheck', this.formInline)
+      if (this.formInline.date === '' || this.formInline.value === '') {
+        this.$message.error('请填写完整的查询条件')
+      } else {
+        this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')
+        this.$emit('configCheck', this.formInline)
+      }
     },
     onClear () {
       this.formInline = {

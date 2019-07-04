@@ -71,8 +71,8 @@ export default {
         lineId: '0103',
         dateTime: '',
         type: '1',
-        startHour: '08:00',
-        endHour: '12:00'
+        startHour: '07:00',
+        endHour: '09:00'
       },
       lineOptions: [{
         value: '0103',
@@ -116,7 +116,7 @@ export default {
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
     })
-    let data = new Date()
+    let data = new Date() - 1000 * 3600 * 24
     this.formInline.dateTime = moment(data).format('YYYY-MM-DD')
   },
   methods: {

@@ -113,6 +113,9 @@ export default {
     },
     isUpdate: {
       type: Boolean
+    },
+    isDownLoad: {
+      type: Boolean
     }
   },
   data () {
@@ -120,7 +123,8 @@ export default {
       tableData: [],
       total: 0,
       pageNumber: 1,
-      pageSize: 15
+      pageSize: 15,
+      downLoadData: []
     }
   },
   mounted () {
@@ -155,6 +159,14 @@ export default {
         this._passengerFlow(this.selectData)
         this.$emit('isUpdateTo')
       }
+    },
+    isDownLoad () {
+      if (this.isDownLoad) {
+        this.selectData.pageNumber = 1
+        this.selectData.pageSize = 20000
+        this.downLoadList(this.selectData)
+        this.$emit('isDownLoadTo')
+      }
     }
   },
   methods: {
@@ -164,7 +176,32 @@ export default {
         this.total = res.total
         this.$message.success('数据已更新')
       }).catch(() => {
-        this.$message.error('服务端错误')
+        this.$message.error('不支持查询10万条以上数据')
+      })
+    },
+    downLoadList (params) {
+      this.downLoadData = []
+      this.$api['passengerFlow.list'](params).then(res => {
+        res.list.forEach((item, index) => {
+          item.pfrTripDate = moment(item.pfrTripDate).format('YYYY-MM-DD')
+          this.downLoadData[index] = {
+            '机构名称': item.orgName,
+            '线路': item.pfrLineName,
+            '车辆': item.prfBusPlateNumber,
+            '站序': item.pfrStationSeq,
+            '站点名称': item.pfrStationName,
+            '客流时间': item.pfrTripDate,
+            '上车人数': item.pfrGetOnNumber,
+            '下车人数': item.pfrGetOffNumber,
+            '前门上车人数': item.prfGetFOnNumber,
+            '前门下车人数': item.prfGetFOffNumber,
+            '后门上车人数': item.prfGetEOnNumber,
+            '后门下车人数': item.prfGetEOffNumber
+          }
+        })
+        this.$emit('getData', this.downLoadData)
+        console.log(this.downLoadData)
+        // this.$message.success('数据已更新')
       })
     },
     gerDate (row) {

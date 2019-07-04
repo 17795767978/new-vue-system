@@ -42,9 +42,11 @@ export default {
     }
   },
   created () {
+    let date = new Date() - 3600 * 1000 * 24
+    date = moment(date).format('YYYY-MM-DD')
     this._numberAnalysisUp({
       lineId: '0103',
-      dateTime: '2019-04-24',
+      dateTime: date,
       type: '1'
     })
   },

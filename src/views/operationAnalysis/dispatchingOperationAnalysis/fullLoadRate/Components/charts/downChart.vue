@@ -52,8 +52,8 @@ export default {
       lineId: '0103',
       type: '2',
       dateTime: dataBefore,
-      startHour: '00',
-      endHour: '24'
+      startHour: '07',
+      endHour: '09'
     })
   },
   mounted () {
@@ -88,8 +88,6 @@ export default {
             startHour: this.checkData.startTime.substring(0, 2),
             endHour: this.checkData.endTime.substring(0, 2)
           })
-        } else {
-          this.$message.error('请添加完整的查询条件')
         }
         this.$emit('isUpdateToDown', false)
       }

@@ -84,6 +84,7 @@ export default {
         lineUuid: [],
         orgUuid: ''
       }
+      this.$emit('selectConfig', this.formInline)
     }
   },
   components: {

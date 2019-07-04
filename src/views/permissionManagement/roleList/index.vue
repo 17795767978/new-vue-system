@@ -121,7 +121,7 @@
         <el-form-item label="排序：" prop="roleSort">
           <el-input
             style="width: 240px"
-            placeholder="请输入账号"
+            placeholder="请输入排序"
             v-model="adminForm.roleSort"></el-input>
         </el-form-item>
         <el-form-item label="角色名称：" prop="roleName">

@@ -33,25 +33,28 @@ export default {
   data () {
     return {
       formInline: {
-        value: '',
+        value: '0103',
         date: ''
       },
-      lineOptions: [{
-        value: '0103',
-        label: '103'
-      }]
+      lineOptions: []
     }
   },
   mounted () {
+    let date = new Date() - 3600 * 24 * 30 * 1000
+    this.formInline.date = moment(date).format('YYYY-MM')
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
     })
   },
   methods: {
     onCheck () {
-      this.formInline.date = moment(this.formInline.date).format('YYYY-MM')
-      // console.log(this.formInline);
-      this.$emit('configCheck', this.formInline)
+      if (this.formInline.date === '' || this.formInline.value === '') {
+        this.$message.error('请添加完整的查询条件')
+      } else {
+        this.formInline.date = moment(this.formInline.date).format('YYYY-MM')
+        // console.log(this.formInline);
+        this.$emit('configCheck', this.formInline)
+      }
     },
     onClear () {
       this.formInline.value = ''

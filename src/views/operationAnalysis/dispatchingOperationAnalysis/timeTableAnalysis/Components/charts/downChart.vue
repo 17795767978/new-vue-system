@@ -36,10 +36,11 @@ export default {
     }
   },
   created () {
-    console.log(this.headerParams.value)
+    let date = new Date() - 3600 * 24 * 30 * 1000
+    date = moment(date).format('YYYY-MM')
     this._timeTableAnalysisDown({
-      fileId: '',
-      month: '',
+      lineId: '0103',
+      month: date,
       type: '2'
     })
   },

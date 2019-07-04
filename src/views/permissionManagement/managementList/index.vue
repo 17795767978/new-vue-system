@@ -269,16 +269,9 @@ export default {
         this.orgOptions = res
       })
     },
-    onSearch () {
-      this.getAdminList('sys/user/page', {
-        name: this.form.name,
-        pageNumber: this.current,
-        pageSize: 10
-      })
-    },
     handleCurrentChange (val) {
       this.current = val
-      this.getAdminList('sys/user/page', {
+      this.getAdminList({
         name: this.form.name,
         pageNumber: this.current,
         pageSize: 10
