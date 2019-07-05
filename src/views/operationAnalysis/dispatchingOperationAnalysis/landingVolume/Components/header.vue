@@ -165,7 +165,9 @@ export default {
       if (this.formInline.date.length === 0 ||
         this.formInline.station.length === 0 ||
         this.formInline.startTime === '' ||
-        this.formInline.endTime === ''
+        this.formInline.startTime === null ||
+        this.formInline.endTime === '' ||
+        this.formInline.endTime === null
       ) {
         this.$message.error('请填写完整的查询信息')
       } else {

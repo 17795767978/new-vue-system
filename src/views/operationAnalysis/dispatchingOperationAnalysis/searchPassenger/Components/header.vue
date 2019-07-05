@@ -61,16 +61,16 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-      <span>请确认是否下载报警中心报表</span>
+      <span>由于数据量可能过大，请耐心等待(如果数据量超过10000条，默认下载前10000条信息)</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <downloadExcel
           :data= "excelData"
           type="xls"
           style="display: inline-block; margin-left: 10px;"
-          name= "报警中心报表.xls"
+          name= "客流查询报表.xls"
         >
-        <el-button type="primary" @click="getExcel">确 定</el-button>
+        <el-button type="primary" @click="getExcel" :loading="laoding">{{code}}</el-button>
         </downloadExcel>
       </span>
     </el-dialog>
@@ -87,6 +87,9 @@ export default {
   props: {
     excelData: {
       type: Array
+    },
+    totle: {
+      type: Number
     }
   },
   data () {
@@ -110,7 +113,9 @@ export default {
       }],
       lineOptions: [],
       carOptions: [],
-      centerDialogVisible: false
+      centerDialogVisible: false,
+      laoding: true,
+      code: '加载中'
     }
   },
   created () {
@@ -177,6 +182,18 @@ export default {
           })
         }
       }
+    }
+  },
+  updated () {
+    if (this.totle <= 10000 && this.totle > 0 && this.excelData.length === this.totle) {
+      this.laoding = false
+      this.code = '下载'
+    } else if (this.totle > 10000 && this.excelData.length === 10000) {
+      this.laoding = false
+      this.code = '下载'
+    } else {
+      this.laoding = true
+      this.code = '加载中'
     }
   },
   methods: {

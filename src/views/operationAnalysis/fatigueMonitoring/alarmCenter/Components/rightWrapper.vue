@@ -146,7 +146,7 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-      <span>请确认是否下载报警中心报表</span>
+      <span>数据量可能过大，请耐心等待(如果数据量超过10000条，默认下载前10000条信息)</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <downloadExcel
@@ -155,7 +155,7 @@
           style="display: inline-block; margin-left: 10px;"
           name= "报警中心报表.xls"
         >
-        <el-button type="primary" @click="getExcel">确 定</el-button>
+        <el-button type="primary" @click="getExcel" :loading="downloadLoading">{{code}}</el-button>
         </downloadExcel>
       </span>
     </el-dialog>
@@ -207,7 +207,9 @@ export default {
       pageSize: 10,
       json_data: [],
       centerDialogVisible: false,
-      loading: true
+      loading: true,
+      downloadLoading: true,
+      code: '加载中'
     }
   },
   created () {
@@ -401,7 +403,7 @@ export default {
         warnTypeId: this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
-        pageSize: 100000,
+        pageSize: 10000,
         pageNum: 1
       }).then(res => {
         let excelArr = []
@@ -419,6 +421,8 @@ export default {
           }
         })
         this.json_data = excelArr
+        this.downloadLoading = false
+        this.code = '下载'
         this.centerDialogVisible = true
       })
     },

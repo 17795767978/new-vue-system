@@ -91,7 +91,7 @@ export default {
           this.$refs.upChartWrapper.style.display = 'block'
           setTimeout(() => {
             this.drawLine()
-          }, 20)
+          }, 100)
           // this.drawLine()
           this.loading = false
           this.$message.success('数据已更新')

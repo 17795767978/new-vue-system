@@ -56,7 +56,7 @@ export default {
   .content {
     .title {
       text-align: center;
-      margin: 50px 0;
+      margin: 20px 0;
     }
   }
 }

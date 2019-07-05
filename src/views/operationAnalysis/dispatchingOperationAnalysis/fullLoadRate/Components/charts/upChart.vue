@@ -110,9 +110,11 @@ export default {
         this.xAxisData = res.xAxisNames
         this.seeType()
         if (this.xAxisData.length > 0) {
-          this.$refs.upChartWrapper.style.display = 'block'
-          this.drawLine()
+          setTimeout(() => {
+            this.drawLine()
+          }, 100)
           this.loading = false
+          this.$refs.upChartWrapper.style.display = 'block'
           this.$message.success('数据已更新')
         } else {
           // this.$refs.animationDom.addClassList('anim');
@@ -164,12 +166,17 @@ export default {
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
         this.maxRate = max(this.fullRate)
       }
-      this.drawLine()
+      setTimeout(() => {
+        this.drawLine()
+      }, 100)
     },
     drawLine () {
+      this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
       let upChart = this.$echarts.init(document.getElementById('up-chart-wrapper'))
       let timeInterval = this.xAxisData
-      window.addEventListener('resize', () => { upChart.resize() })
+      window.addEventListener('resize', () => {
+        upChart.resize()
+      })
       upChart.setOption({
         // title: {
         //   text: '实时满载率',

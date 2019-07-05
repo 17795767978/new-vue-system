@@ -69,7 +69,7 @@ export default {
       })
     },
     onSubmit () {
-      if (this.formInline.date === '' || this.formInline.value === '' || this.formInline.turn === '') {
+      if (this.formInline.date === '' || this.formInline.date === null || this.formInline.value === '' || this.formInline.turn === '') {
         this.$message.error('请添加完整的查询条件')
       } else {
         this.formInline.date = moment(this.formInline.date).format('YYYY-MM')

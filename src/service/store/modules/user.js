@@ -115,7 +115,7 @@ const user = {
           id: localStorage.getItem('id')
         }).then(res => {
           const data = res
-          if (data && data.resourceTree.length > 0) {
+          if (data.resourceTree && data.resourceTree.length > 0) {
             commit('SET_ROLES', data.resourceTree)
             commit('SET_USERINFO', data.userOrgId)
           } else {

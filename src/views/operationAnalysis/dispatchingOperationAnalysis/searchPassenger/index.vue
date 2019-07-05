@@ -1,7 +1,7 @@
 <template>
   <div class="passenger-search">
     <header>
-      <header-nav @configCheck="configCheck" @isDownload="isDownload" :excelData="excelData"/>
+      <header-nav @configCheck="configCheck" @isDownload="isDownload" :excelData="excelData" :totle="totle"/>
     </header>
     <div class="content">
       <contentWrapper
@@ -28,7 +28,8 @@ export default {
       nowTime: '',
       isUpdate: false,
       isDownLoad: false,
-      excelData: []
+      excelData: [],
+      totle: 0
     }
   },
   components: {
@@ -65,8 +66,9 @@ export default {
     isDownLoadTo () {
       this.isDownLoad = false
     },
-    getData (data) {
-      this.excelData = data
+    getData (list, num) {
+      this.excelData = list
+      this.totle = num
     }
   }
 }

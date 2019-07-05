@@ -46,9 +46,17 @@ export default {
       this.lineOptions = res
     })
   },
+  watch: {
+    'formInline.date': {
+      handler (newValue) {
+        console.log(newValue)
+      }
+    }
+  },
   methods: {
     onCheck () {
-      if (this.formInline.date === '' || this.formInline.value === '') {
+      console.log(this.formInline)
+      if (this.formInline.date === '' || this.formInline.value === '' || this.formInline.date === 'Invalid date' || this.formInline.date === null) {
         this.$message.error('请添加完整的查询条件')
       } else {
         this.formInline.date = moment(this.formInline.date).format('YYYY-MM')

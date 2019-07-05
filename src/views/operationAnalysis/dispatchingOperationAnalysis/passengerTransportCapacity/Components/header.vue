@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     onSubmit () {
-      if (this.formInline.date === '' || this.formInline.value === '') {
+      if (this.formInline.date === '' || this.formInline.date === null || this.formInline.value === '') {
         this.$message.error('请填写完整的查询条件')
       } else {
         this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD')

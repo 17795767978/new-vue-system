@@ -101,7 +101,9 @@ export default {
         this.seeType()
         if (this.xAxisData.length > 0) {
           this.$refs.downChartWrapper.style.display = 'block'
-          this.drawLine()
+          setTimeout(() => {
+            this.drawLine()
+          }, 100)
           this.loading = false
         } else {
           this.$message.warning('暂无数据')
@@ -151,9 +153,12 @@ export default {
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
         this.maxRate = max(this.fullRate)
       }
-      this.drawLine()
+      setTimeout(() => {
+        this.drawLine()
+      }, 100)
     },
     drawLine () {
+      this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
       let downChart = this.$echarts.init(document.getElementById('down-chart-wrapper'))
       let timeInterval = this.xAxisData
       window.addEventListener('resize', () => { downChart.resize() })

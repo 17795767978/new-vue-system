@@ -90,7 +90,7 @@ export default {
         if (this.echartsData.length > 0) {
           setTimeout(() => {
             this.drawLine()
-          }, 20)
+          }, 100)
           // this.drawLine()
           this.loading = false
           this.$refs.downChartWrapper.style.display = 'block'

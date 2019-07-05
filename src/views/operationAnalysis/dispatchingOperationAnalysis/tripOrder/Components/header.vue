@@ -120,10 +120,20 @@ export default {
     this.formInline.dateTime = moment(data).format('YYYY-MM-DD')
   },
   methods: {
+    // formInline: {
+    //     lineId: '0103',
+    //     dateTime: '',
+    //     type: '1',
+    //     startHour: '07:00',
+    //     endHour: '09:00'
+    //   },
     onSubmit () {
-      this.formInline.dateTime = moment(this.formInline.dateTime).format('YYYY-MM-DD')
-      console.log(this.formInline)
-      this.$emit('configType', this.formInline)
+      if (this.formInline.lineId === '' || this.formInline.dateTime === '' || this.formInline.dateTime === null || this.formInline.type === '' || this.formInline.startHour === null || this.formInline.endHour === null) {
+        this.$message.error('请填写完整的查询条件')
+      } else {
+        this.formInline.dateTime = moment(this.formInline.dateTime).format('YYYY-MM-DD')
+        this.$emit('configType', this.formInline)
+      }
     }
   },
   components: {

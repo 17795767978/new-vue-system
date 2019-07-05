@@ -76,7 +76,7 @@ export default {
     margin-bottom: 0;
     // padding-bottom: 5%;
     .heat-chart-wrapper {
-      width: 90%;
+      width: 100%;
       margin: 0 auto;
       box-sizing: border-box;
     }
@@ -86,7 +86,7 @@ export default {
     margin-bottom: 0;
     // padding-bottom: 10%;
     .heat-chart-wrapper {
-      width: 90%;
+      width: 100%;
       margin: 0 auto;
       box-sizing: border-box;
     }

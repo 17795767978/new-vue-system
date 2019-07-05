@@ -123,8 +123,11 @@ export default {
   methods: {
     onSubmit () {
       if (this.formInline.date === '' ||
+        this.formInline.date === null ||
         this.formInline.value === '' ||
         this.formInline.startTime === '' ||
+        this.formInline.startTime === null ||
+        this.formInline.endTime === null ||
         this.formInline.endTime === '') {
         this.$message.error('请添加完整的查询条件')
       } else {

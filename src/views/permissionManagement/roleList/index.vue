@@ -77,6 +77,22 @@
         </el-input>
         </el-row>
         <el-row style="margin-top: 20px">
+        <span>角色排序：</span>
+        <el-input
+          style="width: 200px"
+          v-model="sort"
+          placeholder="请输入排序">
+        </el-input>
+        </el-row>
+        <el-row style="margin-top: 20px">
+        <span>角色描述：</span>
+         <el-input
+          style="width: 200px"
+          placeholder="角色描述"
+          v-model="describes">
+        </el-input>
+        </el-row>
+        <el-row style="margin-top: 20px">
         <span>是否禁用：</span>
         <el-select
           style="width: 200px"
@@ -168,7 +184,9 @@ export default {
       dialogRoleVisible: false,
       updateWrapper: false,
       roleName: '',
-      enabled: '',
+      enabled: '1',
+      sort: '',
+      describes: '',
       roleId: '',
       adminForm: {
         roleId: '',
@@ -230,7 +248,7 @@ export default {
   methods: {
     getSysRoleList () {
       this.$api['role.list']({
-        pageSize: 10,
+        pageSize: 1000,
         pageNumber: this.currentPage
       }).then(res => {
         this.list = res.list.sort((prev, next) => prev.roleSort - next.roleSort)
@@ -270,11 +288,14 @@ export default {
       })
     },
     onRoleSubmit () {
-      if (this.roleName.length > 0) {
-        if (!this.rolesNameArr.some(item => item === this.roleName)) {
+      console.log(this.rolesIndexArr.some(item => item === Number(this.sort)))
+      if (this.roleName.length > 0 && this.sort !== '' && this.describes !== '') {
+        if (!this.rolesNameArr.some(item => item === this.roleName) && !this.rolesIndexArr.some(item => item === Number(this.sort))) {
           this.$api['role.add']({
             roleName: this.roleName,
-            enabled: this.enabled
+            enabled: this.enabled,
+            roleSort: this.sort,
+            describes: this.describes
           }).then(res => {
             this.getSysRoleList()
             this.adminForm.roleName = this.roleName
@@ -282,10 +303,10 @@ export default {
             this.dialogVisible = false
           })
         } else {
-          this.$message.error('角色名称已存在')
+          this.$message.error('角色名称已存在，或者角色排序已存在')
         }
       } else {
-        this.$message.error('角色名称未输入')
+        this.$message.error('请填写所有信息')
       }
     },
     handleDeleteRole (id) {
@@ -298,7 +319,7 @@ export default {
           id: id
         }).then(res => {
           this.getSysRoleList({
-            pageSize: 10,
+            pageSize: 1000,
             pageNumber: this.currentPage
           })
           this.$message.success('删除成功！')
@@ -358,9 +379,6 @@ export default {
         this.adminForm.enabled = res.enabled
         this.currentSort = res.roleSort
         this.currentName = res.roleName
-        console.log(this.currentSort)
-        console.log(this.currentSort === this.adminForm.roleSort)
-        console.log(!this.rolesIndexArr.some(sort => sort === this.adminForm.roleSort))
       })
     },
     onSubmitUpdate () {
@@ -370,7 +388,7 @@ export default {
             if (this.currentSort === Number(this.adminForm.roleSort) || !this.rolesIndexArr.some(sort => sort === Number(this.adminForm.roleSort))) {
               this.$api['role.update'](this.adminForm).then(res => {
                 this.getSysRoleList({
-                  pageSize: 10,
+                  pageSize: 1000,
                   pageNumber: this.currentPage
                 })
                 this.$message.success('修改成功！')

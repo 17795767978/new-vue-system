@@ -132,14 +132,16 @@ function generateNewRoutes (remoteRoutes) {
 function getRoles (roles) {
   let roleData = []
   function filterRoles (roles) {
-    roles.forEach(role => {
-      role.roles.forEach(i => {
-        roleData.push(i)
+    if (roles && roles.length > 0) {
+      roles.forEach(role => {
+        role.roles.forEach(i => {
+          roleData.push(i)
+        })
+        if (role.children && role.children.length > 0) {
+          filterRoles(role.children)
+        }
       })
-      if (role.children && role.children.length > 0) {
-        filterRoles(role.children)
-      }
-    })
+    }
   }
   filterRoles(roles)
   return roleData

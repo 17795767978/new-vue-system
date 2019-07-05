@@ -12,6 +12,9 @@
         highlight-current-row
         style="width: 100%">
         <el-table-column align="center" label="序号" type="index" width="60">
+          <template slot-scope="scope">
+            <span> {{scope.$index + (current - 1) * pageSize + 1}} </span>
+          </template>
         </el-table-column>
         <el-table-column align="center" label="账号">
           <template slot-scope="scope">
@@ -229,7 +232,8 @@ export default {
       orgOptions: [],
       userId: '',
       isAdd: true,
-      isDisable: false
+      isDisable: false,
+      pageSize: 10
     }
   },
   created () {

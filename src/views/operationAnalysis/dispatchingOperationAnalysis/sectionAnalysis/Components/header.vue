@@ -67,8 +67,8 @@ export default {
   methods: {
     onSubmit () {
       this.formInline.month = moment(this.formInline.month).format('YYYY-MM')
-      if (this.formInline.lineId === '') {
-        this.$message.error('请选择线路')
+      if (this.formInline.lineId === '' || this.formInline.type === '' || this.formInline.month === 'Invalid date' || this.formInline.month === null) {
+        this.$message.error('请添加完整的查询条件')
       } else {
         this.$emit('configCheck', this.formInline)
       }

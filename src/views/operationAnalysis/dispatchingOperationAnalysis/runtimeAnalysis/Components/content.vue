@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="echart-wrapper" ref="echartWrapper" :style="{width: '100%', height: '500px'}"></div>
-    <div v-show="echartData.length === 0" class="anim" style="width: 100%; height: 300px; line-height:300px;text-align:center">
+    <div id="echart-wrapper" ref="echartWrapper" :style="{width: '100%', height: '700px'}"></div>
+    <div v-show="echartData.length === 0" class="anim" style="width: 100%; height: 400px; line-height:300px;text-align:center">
       暂无数据
     </div>
   </div>
@@ -65,18 +65,23 @@ export default {
   },
   methods: {
     _runtimeAnalysis (params) {
+      this.echartData = []
+      this.legendNames = []
+      this.xAxisNames = []
       this.$api['schedulingAnalysis.getLineBetweenStationsRunningTimeChartDatas'](params).then(res => {
         this.echartData = res.datas
         this.legendNames = res.legendNames
         this.xAxisNames = res.xAxisNames
         if (this.echartData.length > 0) {
           let maxBefore = []
-          this.echartData.forEach(item => {
-            maxBefore.push(max(item))
+          this.recheckArr(this.echartData).forEach(item => {
+            maxBefore.push(this.addNum(item))
           })
-          this.maxData = max(maxBefore) * this.echartData.length / 3.5
+          this.maxData = max(maxBefore) + 100
           this.$refs.echartWrapper.style.display = 'block'
-          this.dawnLine()
+          setTimeout(() => {
+            this.drawLine()
+          }, 100)
           this.$message.success('数据已更新')
         } else {
           this.$message.warning('暂无数据')
@@ -85,7 +90,30 @@ export default {
         }
       })
     },
-    dawnLine () {
+    recheckArr (arr) {
+      let newArr = []
+      // let newArr = new Array(arr[0].length)
+      // arr
+      arr[0].forEach((i, index) => {
+        newArr[index] = []
+      })
+      newArr.forEach((i, iIndex) => {
+        arr.forEach((item, itemIndex) => {
+          i.push(item[iIndex])
+        })
+      })
+      // console.log(newArr)
+      return newArr
+    },
+    addNum (arr) {
+      let totleNum = 0
+      arr = arr.filter(i => i !== null)
+      arr.forEach(i => {
+        totleNum += i
+      })
+      return totleNum
+    },
+    drawLine () {
       let chart = this.$echarts.init(document.getElementById('echart-wrapper'))
       window.addEventListener('resize', () => { chart.resize() })
       let series = []
@@ -99,7 +127,8 @@ export default {
           label: {
             normal: {
               show: true,
-              position: 'inside'
+              position: 'inside',
+              fontSize: 8
             }
           },
           itemStyle: {
@@ -121,30 +150,30 @@ export default {
       })
       chart.setOption({
         tooltip: {
-          trigger: 'axis',
+          trigger: 'item',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           },
-          extraCssText: 'width:350px; white-space:pre-wrap',
+          // extraCssText: 'width:350px; white-space:pre-wrap'
           formatter: function (params, ticket, callback) {
-            let res = params[0].axisValue + '时' + '<br/>'
-            let index = params[0].dataIndex
-            let myseries = series
-            console.log(params)
-            for (var i = 0; i < params.length; i++) {
-              for (var j = 0; j < myseries.length; j++) {
-                if (params[i].seriesName === myseries[j].name) {
-                  if (myseries[j].data[index] !== null) {
-                    let num = myseries[j].data[index] / 60
-                    num = num.toFixed(2)
-                    res += `<span style="width: 10px; height: 10px; border-radius: 50%;display:inline-block; background: ${params[i].color}; margin:0 5px;"></span>` + params[i].seriesName + '：' + num + 'min' + ';'
-                  } else {
-                    res += `<span style="width: 10px; height: 10px; border-radius: 50%;display:inline-block; background: ${params[i].color};margin:0 5px;"></span>` + params[i].seriesName + '：' + '无数据' + ';'
-                  }
-                }
-              }
-            }
-            return res
+            // let res = params[0].axisValue + '时' + '<br/>'
+            // let index = params[0].dataIndex
+            // let myseries = series
+            // for (var i = 0; i < params.length; i++) {
+            //   for (var j = 0; j < myseries.length; j++) {
+            //     if (params[i].seriesName === myseries[j].name) {
+            //       if (myseries[j].data[index] !== null) {
+            //         let num = myseries[j].data[index] / 60
+            //         num = num.toFixed(2)
+            //         res += `<span style="width: 10px; height: 10px; border-radius: 50%;display:inline-block; background: ${params[i].color}; margin:0 5px;"></span>` + params[i].seriesName + '：' + num + 'min' + ';'
+            //       } else {
+            //         res += `<span style="width: 10px; height: 10px; border-radius: 50%;display:inline-block; background: ${params[i].color};margin:0 5px;"></span>` + params[i].seriesName + '：' + '无数据' + ';'
+            //       }
+            //     }
+            //   }
+            // }
+            // return res
+            return params.seriesName + '<br/>' + params.name + '时：' + (params.value / 60).toFixed(2) + '分钟'
           }
         },
         legend: {
@@ -154,6 +183,7 @@ export default {
           left: '3%',
           right: '4%',
           bottom: '5%',
+          top: '12%',
           containLabel: true
         },
         xAxis: {
@@ -167,7 +197,7 @@ export default {
           data: this.xAxisNames
         },
         series
-      })
+      }, true)
     }
   }
 }

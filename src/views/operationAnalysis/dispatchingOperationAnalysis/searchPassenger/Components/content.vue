@@ -1,7 +1,9 @@
 <template>
   <div class="table-wrapper">
     <el-table
+      v-loading="loading"
       :data="tableData"
+      element-loading-text="拼命加载中"
       border
       stripe
       size="small"
@@ -124,7 +126,8 @@ export default {
       total: 0,
       pageNumber: 1,
       pageSize: 15,
-      downLoadData: []
+      downLoadData: [],
+      loading: true
     }
   },
   mounted () {
@@ -163,7 +166,7 @@ export default {
     isDownLoad () {
       if (this.isDownLoad) {
         this.selectData.pageNumber = 1
-        this.selectData.pageSize = 20000
+        this.selectData.pageSize = 10000
         this.downLoadList(this.selectData)
         this.$emit('isDownLoadTo')
       }
@@ -175,12 +178,13 @@ export default {
         this.tableData = res.list
         this.total = res.total
         this.$message.success('数据已更新')
+        this.loading = false
       }).catch(() => {
-        this.$message.error('不支持查询10万条以上数据')
+        this.$message.error('不支持查询1000万条以上数据')
       })
     },
     downLoadList (params) {
-      this.downLoadData = []
+      this.$emit('getData', [], 0)
       this.$api['passengerFlow.list'](params).then(res => {
         res.list.forEach((item, index) => {
           item.pfrTripDate = moment(item.pfrTripDate).format('YYYY-MM-DD')
@@ -199,8 +203,8 @@ export default {
             '后门下车人数': item.prfGetEOffNumber
           }
         })
-        this.$emit('getData', this.downLoadData)
         console.log(this.downLoadData)
+        this.$emit('getData', this.downLoadData, this.total)
         // this.$message.success('数据已更新')
       })
     },

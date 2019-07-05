@@ -90,7 +90,9 @@ export default {
         this.maxNum = max(this.echartsData.map(item => item[2]))
         if (this.echartsData.length > 0) {
           this.$refs.downChartWrapper.style.display = 'block'
-          this.drawLine()
+          setTimeout(() => {
+            this.drawLine()
+          }, 100)
           this.loading = false
         } else {
           this.$refs.downChartWrapper.style.display = 'none'

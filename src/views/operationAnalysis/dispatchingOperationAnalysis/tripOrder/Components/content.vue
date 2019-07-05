@@ -107,7 +107,9 @@ export default {
         this.minDate = min(abs)
         if (this.echartDatas.length > 0) {
           this.$refs.chartWrapper.style.display = 'block'
-          this.drawLine()
+          setTimeout(() => {
+            this.drawLine()
+          }, 100)
           this.loading = false
           this.$message.success('数据已更新')
         } else {
