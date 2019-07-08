@@ -204,7 +204,11 @@ export default {
           }
         })
         console.log(this.downLoadData)
-        this.$emit('getData', this.downLoadData, this.total)
+        if (this.total > 0) {
+          this.$emit('getData', this.downLoadData, this.total)
+        } else {
+          this.$message.warning('暂无数据，无法导出')
+        }
         // this.$message.success('数据已更新')
       })
     },

@@ -16,11 +16,11 @@ export const PLATFORM_PREFIX_NAME = 'NOCTURNE_UI'
 export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://192.168.10.241:3000/mock/325',
   // mockBaseUrl: 'http://192.168.10.233:8089',
-  // mockBaseUrl: 'http://117.34.118.30:8089',
+  mockBaseUrl: 'http://117.34.118.30:8089',
   // mockBaseUrl: 'http://192.168.10.233:8089',
   // 'http://117.34.10.233:8089',
   // mockBaseUrl: 'http://192.168.10.23:8089',
-  mockBaseUrl: 'http://192.168.10.81:8081',
+  // mockBaseUrl: 'http://192.168.10.81:8081',
   // prodBaseUrl: 'http://localhost:3000',
   // 10.233 8089
   prodBaseUrl: 'http://192.168.10.233:8089',

@@ -47,7 +47,7 @@
                 size="mini"
                 type="primary"
                 @click="handleCheck(scope.row.roleId)"
-              >操作</el-button>
+              >编辑</el-button>
               <el-button
                 size="mini"
                 type="warning"
@@ -64,7 +64,7 @@
       </el-table>
     </div>
     <el-dialog
-      title="提示"
+      title="新增"
       :visible.sync="dialogVisible"
       width="330px">
       <div>
@@ -80,7 +80,7 @@
         <span>角色排序：</span>
         <el-input
           style="width: 200px"
-          v-model="sort"
+          v-model.number="sort"
           placeholder="请输入排序">
         </el-input>
         </el-row>
@@ -130,7 +130,7 @@
       </span>
     </el-dialog>
     <el-dialog
-      title="提示"
+      title="编辑"
       :visible.sync="updateWrapper"
       width="420px">
       <el-form label-width="100px" :model="adminForm" ref="adminForm" :rules="rules">
@@ -138,7 +138,7 @@
           <el-input
             style="width: 240px"
             placeholder="请输入排序"
-            v-model="adminForm.roleSort"></el-input>
+            v-model.number="adminForm.roleSort"></el-input>
         </el-form-item>
         <el-form-item label="角色名称：" prop="roleName">
           <el-input
@@ -197,7 +197,7 @@ export default {
       },
       rules: {
         roleSort: [
-          { required: true, message: '请输入序号', trigger: 'blur' }
+          { type: 'number', required: true, message: '请输入序号(数字)', trigger: 'blur' }
         ],
         roleName: [
           { required: true, message: '请输入角色名称', trigger: 'blur' }
@@ -248,6 +248,7 @@ export default {
   methods: {
     getSysRoleList () {
       this.$api['role.list']({
+        enabled: '',
         pageSize: 1000,
         pageNumber: this.currentPage
       }).then(res => {
@@ -288,7 +289,6 @@ export default {
       })
     },
     onRoleSubmit () {
-      console.log(this.rolesIndexArr.some(item => item === Number(this.sort)))
       if (this.roleName.length > 0 && this.sort !== '' && this.describes !== '') {
         if (!this.rolesNameArr.some(item => item === this.roleName) && !this.rolesIndexArr.some(item => item === Number(this.sort))) {
           this.$api['role.add']({
@@ -407,6 +407,8 @@ export default {
     },
     handleAddRole () {
       this.roleName = ''
+      this.sort = ''
+      this.describes = ''
       this.dialogVisible = true
     },
     getCreateTime (row) {

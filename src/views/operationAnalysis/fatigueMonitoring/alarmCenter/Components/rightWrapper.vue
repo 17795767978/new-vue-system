@@ -285,8 +285,10 @@ export default {
   methods: {
     _alarmType (params) {
       this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
+        console.log(res)
         let dataArr = res
         this.warnOptions = []
+        this.formInline.warnTypeId = []
         dataArr.forEach((list, index) => {
           this.warnOptions[index] = {
             label: list.value,

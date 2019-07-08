@@ -76,7 +76,7 @@
       </el-pagination>
     </div>
     <el-dialog
-      title="提示"
+      :title="titleMsg"
       :visible.sync="dialogVisible"
       width="420px">
       <el-form label-width="100px" :model="adminForm" ref="adminForm" :rules="rules">
@@ -233,7 +233,8 @@ export default {
       userId: '',
       isAdd: true,
       isDisable: false,
-      pageSize: 10
+      pageSize: 10,
+      titleMsg: ''
     }
   },
   created () {
@@ -252,7 +253,9 @@ export default {
       })
     },
     getRoleList () {
-      this.$api['role.list']().then(res => {
+      this.$api['role.list']({
+        enabled: '1'
+      }).then(res => {
         let list = []
         if (res.list) {
           list = res.list
@@ -282,6 +285,7 @@ export default {
       })
     },
     addAdmin () {
+      this.titleMsg = '新增'
       this.dialogVisible = true
       this.isAdd = true
       this.isDisable = false
@@ -341,6 +345,7 @@ export default {
       })
     },
     handleEditAdmin (id) {
+      this.titleMsg = '编辑'
       this.dialogVisible = true
       this.isAdd = false
       this.userId = id

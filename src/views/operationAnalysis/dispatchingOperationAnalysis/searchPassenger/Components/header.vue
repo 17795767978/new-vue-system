@@ -61,7 +61,8 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-      <span>由于数据量可能过大，请耐心等待(如果数据量超过10000条，默认下载前10000条信息)</span>
+       <p style="font-weight: bold">1.如果数据量过大加载时间可能过长，请耐心等待，默认下载前10000条信息</p>
+       <p style="color: #f00; font-weight: bold">2.如果没有数据，请点击取消按钮</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <downloadExcel
@@ -90,6 +91,9 @@ export default {
     },
     totle: {
       type: Number
+    },
+    isClose: {
+      type: Boolean
     }
   },
   data () {
@@ -185,10 +189,10 @@ export default {
     }
   },
   updated () {
-    if (this.totle <= 10000 && this.totle > 0 && this.excelData.length === this.totle) {
+    if (this.totle <= 10000 && this.totle > 0 && this.excelData.length === this.totle && !this.isClose) {
       this.laoding = false
       this.code = '下载'
-    } else if (this.totle > 10000 && this.excelData.length === 10000) {
+    } else if (this.totle > 10000 && this.excelData.length === 10000 && !this.isClose) {
       this.laoding = false
       this.code = '下载'
     } else {
