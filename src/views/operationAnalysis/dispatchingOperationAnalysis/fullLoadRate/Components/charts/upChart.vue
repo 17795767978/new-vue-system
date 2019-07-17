@@ -24,6 +24,7 @@
 // import { fullRateAnalysisUp } from 'server/interface'
 import moment from 'moment'
 import { max } from '../../../../../../utils/max'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     checkData: {
@@ -50,11 +51,14 @@ export default {
       maxRate: ''
     }
   },
+  computed: {
+    ...mapGetters(['initLineId'])
+  },
   created () {
     const dataNow = new Date()
     const dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
     this._fullRateAnalysisUp({
-      lineId: '0103',
+      lineId: this.initLineId,
       type: '1',
       dateTime: dataBefore,
       startHour: '07',

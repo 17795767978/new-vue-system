@@ -18,7 +18,6 @@ export const schedulingAnalysisApi = {
       path: '/zhfxpt/analysis/getDownRushHourLinePassengerChartDatas',
       mockPath: '/zhfxpt/analysis/getDownRushHourLinePassengerChartDatas',
       params: {
-        fileId: '',
         month: '',
         type: ''
       },

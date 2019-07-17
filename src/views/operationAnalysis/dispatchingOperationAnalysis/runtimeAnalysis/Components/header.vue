@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       formInline: {
-        value: '0103',
+        value: '',
         date: '',
         turn: '1'
       },
@@ -66,6 +66,7 @@ export default {
     _lineList () {
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
+        this.formInline.value = this.lineOptions[0].value
       })
     },
     onSubmit () {

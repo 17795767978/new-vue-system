@@ -26,14 +26,16 @@ export default {
       headerParams: {},
       isUpdateUp: false,
       isUpdateDown: false,
-      timeNow: ''
+      timeNow: '',
+      initLine: ''
     }
   },
   components: {
     headerNav,
     contentWrapper
   },
-  mounted () {
+  created () {
+    this.getInitLineid()
   },
   watch: {
     headerParams: {
@@ -60,6 +62,8 @@ export default {
     },
     isUpdateFaDown () {
       this.isUpdateDown = false
+    },
+    getInitLineid () {
     }
   }
 }

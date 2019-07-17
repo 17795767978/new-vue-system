@@ -15,7 +15,6 @@ const SectionData = {
   },
   actions: {
     getSectionData ({ commit }, params) {
-      console.log(params)
       return new Promise((resolve, reject) => {
         api['schedulingAnalysis.getAnalysisDatasByWarnLeave'](params).then(res => {
           commit('SET_SECTIONDATA', res)

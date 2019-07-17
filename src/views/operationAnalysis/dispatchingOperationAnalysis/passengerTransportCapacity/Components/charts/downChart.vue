@@ -22,6 +22,7 @@
 <script type="text/ecmascript-6">
 // import {numberAnalysisDown} from 'server/interface';
 import { max } from '../../../../../../utils/max'
+import { mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
   props: {
@@ -41,11 +42,14 @@ export default {
       echartsDataMax: ''
     }
   },
+  computed: {
+    ...mapGetters(['initLineId'])
+  },
   created () {
     let date = new Date() - 3600 * 1000 * 24
     date = moment(date).format('YYYY-MM-DD')
     this._numberAnalysisDown({
-      lineId: '0103',
+      lineId: this.initLineId,
       dateTime: date,
       type: '2'
     })

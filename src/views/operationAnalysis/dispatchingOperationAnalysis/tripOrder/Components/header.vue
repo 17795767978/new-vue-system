@@ -68,16 +68,13 @@ export default {
   data () {
     return {
       formInline: {
-        lineId: '0103',
+        lineId: '',
         dateTime: '',
         type: '1',
         startHour: '07:00',
         endHour: '09:00'
       },
-      lineOptions: [{
-        value: '0103',
-        label: '103路'
-      }],
+      lineOptions: [],
       turnOptions: [{
         value: '1',
         label: '上行'
@@ -112,21 +109,15 @@ export default {
       }
     }
   },
-  mounted () {
+  created () {
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
+      this.formInline.lineId = this.lineOptions[0].value
     })
     let data = new Date() - 1000 * 3600 * 24
     this.formInline.dateTime = moment(data).format('YYYY-MM-DD')
   },
   methods: {
-    // formInline: {
-    //     lineId: '0103',
-    //     dateTime: '',
-    //     type: '1',
-    //     startHour: '07:00',
-    //     endHour: '09:00'
-    //   },
     onSubmit () {
       if (this.formInline.lineId === '' || this.formInline.dateTime === '' || this.formInline.dateTime === null || this.formInline.type === '' || this.formInline.startHour === null || this.formInline.endHour === null) {
         this.$message.error('请填写完整的查询条件')

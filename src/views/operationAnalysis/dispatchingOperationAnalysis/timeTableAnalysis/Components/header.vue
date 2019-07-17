@@ -29,33 +29,36 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       formInline: {
-        value: '0103',
+        value: '',
         date: ''
       },
       lineOptions: []
     }
+  },
+  computed: {
+    ...mapGetters(['initLineId'])
   },
   mounted () {
     let date = new Date() - 3600 * 24 * 30 * 1000
     this.formInline.date = moment(date).format('YYYY-MM')
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
+      this.formInline.value = this.lineOptions[0].value
     })
   },
   watch: {
     'formInline.date': {
       handler (newValue) {
-        console.log(newValue)
       }
     }
   },
   methods: {
     onCheck () {
-      console.log(this.formInline)
       if (this.formInline.date === '' || this.formInline.value === '' || this.formInline.date === 'Invalid date' || this.formInline.date === null) {
         this.$message.error('请添加完整的查询条件')
       } else {

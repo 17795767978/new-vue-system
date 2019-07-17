@@ -14,6 +14,7 @@ const getters = {
   avatar: state => state.user.avatar,
   token: state => state.user.token,
   roles: state => state.user.roles,
+  initLineId: state => state.user.initLineId,
   // 路由
   addRouters: state => state.routers.addRouters,
   asyncRouter: state => state.routers.router,

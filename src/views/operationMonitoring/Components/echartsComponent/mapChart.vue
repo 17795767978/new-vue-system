@@ -9,6 +9,7 @@
       :scroll-wheel-zoom="true"
       @ready="handler"
       v-loading="loading"
+      element-loading-background="rgba(0, 0, 0, 0)"
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->

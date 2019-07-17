@@ -18,6 +18,7 @@
 import moment from 'moment'
 import { setTimeout } from 'timers'
 import { max } from '../../../../../utils/max'
+import { mapGetters } from 'vuex'
 export default {
   name: 'sectionAnalysis',
   props: {
@@ -39,12 +40,15 @@ export default {
       valueNum: []
     }
   },
+  computed: {
+    ...mapGetters(['initLineId'])
+  },
   created () {
     this.xAxisData = []
     let date = new Date() - 24 * 3600 * 1000 * 30
     date = moment(date).format('YYYY-MM')
     this.$store.dispatch('getSectionData', {
-      lineId: '0103',
+      lineId: this.initLineId,
       type: '1',
       month: date
     }).then(res => {

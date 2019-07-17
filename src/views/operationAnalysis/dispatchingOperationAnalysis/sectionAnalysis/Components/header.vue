@@ -42,7 +42,7 @@ export default {
   data () {
     return {
       formInline: {
-        lineId: '0103',
+        lineId: '',
         type: '1',
         month: ''
       },
@@ -56,12 +56,15 @@ export default {
       }]
     }
   },
+  computed: {
+  },
   mounted () {
     let date = new Date() - 24 * 3600 * 1000 * 30
     date = moment(date).format('YYYY-MM')
     this.formInline.month = date
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
+      this.formInline.lineId = this.lineOptions[0].value
     })
   },
   methods: {

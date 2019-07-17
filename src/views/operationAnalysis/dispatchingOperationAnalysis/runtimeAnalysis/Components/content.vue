@@ -11,6 +11,7 @@
 // import { runtimeAnalysis } from 'server/interface'
 import { max } from '../../../../../utils/max'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -28,11 +29,14 @@ export default {
       maxData: ''
     }
   },
+  computed: {
+    ...mapGetters(['initLineId'])
+  },
   created () {
     let date = new Date() - 3600 * 1000 * 24 * 30
     date = moment(date).format('YYYY-MM')
     this._runtimeAnalysis({
-      lineId: '0103',
+      lineId: this.initLineId,
       type: '1',
       month: date
     })

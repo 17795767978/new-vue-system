@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="search">
-      <el-button type="primary" @click="addAdmin">添加管理员</el-button>
+      <el-button type="primary" @click="addAdmin">添加用户</el-button>
     </div>
     <div class="table">
       <el-table
@@ -21,7 +21,7 @@
             <span>{{scope.row.userAccount}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="管理员姓名">
+        <el-table-column align="center" label="用户姓名">
           <template slot-scope="scope">
             <span>{{scope.row.userRealName}}</span>
           </template>
@@ -41,11 +41,11 @@
             <span>{{scope.row.enabled === '1' ? '启用' : '禁用'}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="创建时间" :formatter="forMatterCreateTime">
+        <el-table-column align="center" label="创建时间" :formatter="forMatterCreateTime"  width="250">
         </el-table-column>
-        <el-table-column align="center" label="更新时间" :formatter="forMatterUpdateTime">
+        <el-table-column align="center" label="更新时间" :formatter="forMatterUpdateTime"  width="250">
         </el-table-column>
-        <el-table-column align="center" label="操作">
+        <el-table-column align="center" label="操作" width="400">
           <template slot-scope="scope">
             <div v-if="scope.row.id === 1">
               -----
@@ -61,6 +61,11 @@
                 type="danger"
                 @click="handleRemoveAdmin(scope.row.userId)"
               >删除</el-button>
+              <el-button
+                size="mini"
+                type="warning"
+                @click="handleResetAdmin(scope.row.userId)"
+              >重置密码</el-button>
             </div>
           </template>
         </el-table-column>
@@ -87,13 +92,13 @@
             placeholder="请输入账号"
             v-model="adminForm.userAccount"></el-input>
         </el-form-item>
-        <el-form-item label="密码：" prop="userPassword">
+        <!-- <el-form-item label="密码：" prop="userPassword">
           <el-input
             type="password"
             style="width: 240px"
             placeholder="请输入密码"
             v-model="adminForm.userPassword"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="姓名：" prop="userRealName">
           <el-input
             style="width: 240px"
@@ -126,28 +131,27 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="角色：" prop="roleIds">
+        <el-form-item label="所属机构：" prop="userOrgUuid">
           <el-select
             style="width: 240px"
-            v-model="adminForm.roleIds"
-            multiple
-            collapse-tags
+            v-model="adminForm.userOrgUuid"
+            :disabled="disabled"
             placeholder="请选择">
             <el-option
-              v-for="item in roleOptions"
+              v-for="item in orgOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属机构：" prop="userOrgUuid">
+        <el-form-item label="角色：" prop="roleIds">
           <el-select
             style="width: 240px"
-            v-model="adminForm.userOrgUuid"
+            v-model="adminForm.roleIds"
             placeholder="请选择">
             <el-option
-              v-for="item in orgOptions"
+              v-for="item in roleOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -164,6 +168,7 @@
 
 <script>
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Admin',
   data () {
@@ -177,20 +182,16 @@ export default {
       dialogVisible: false,
       adminForm: {
         userAccount: '',
-        userPassword: '',
         userRealName: '',
         userGender: '',
-        enabled: '',
-        roleIds: [],
+        enabled: '1',
+        roleIds: '',
         userOrgUuid: ''
         // roleId: ''
       },
       rules: {
         userAccount: [
           { required: true, message: '请输入账号', trigger: 'blur' }
-        ],
-        userPassword: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
         ],
         userRealName: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
@@ -230,22 +231,37 @@ export default {
       ],
       roleOptions: [],
       orgOptions: [],
-      userId: '',
+      user: '',
       isAdd: true,
       isDisable: false,
       pageSize: 10,
-      titleMsg: ''
+      titleMsg: '',
+      disabled: false
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
     this.getAdminList({
+      orgId: this.userId === '1' ? '' : this.userId,
       pageNumber: this.current,
       pageSize: 10
     })
     this.getRoleList()
     this.getOrgList()
+    this.isDisabled()
   },
   methods: {
+    isDisabled () {
+      if (this.userId !== '1') {
+        this.disabled = true
+        this.adminForm.userOrgUuid = this.userId
+      } else {
+        this.disabled = false
+        this.adminForm.userOrgUuid = ''
+      }
+    },
     getAdminList (params) {
       this.$api['permission.userList'](params).then(res => {
         this.list = res.list
@@ -254,7 +270,8 @@ export default {
     },
     getRoleList () {
       this.$api['role.list']({
-        enabled: '1'
+        enabled: '1',
+        orgId: this.userId === '1' ? '' : this.userId
       }).then(res => {
         let list = []
         if (res.list) {
@@ -269,6 +286,7 @@ export default {
           }
         })
         // this.list = res
+        console.log(this.roleOptions)
       })
     },
     getOrgList (params) {
@@ -290,7 +308,13 @@ export default {
       this.isAdd = true
       this.isDisable = false
       Object.keys(this.adminForm).forEach(key => {
-        this.adminForm[key] = ''
+        if (this.userId === '1') {
+          this.adminForm[key] = ''
+        } else {
+          this.adminForm[key] = ''
+          this.adminForm.userOrgUuid = this.userId
+        }
+        this.adminForm.enabled = '1'
       })
       this.$nextTick(() => {
         this.$refs['adminForm'].resetFields()
@@ -309,7 +333,7 @@ export default {
               })
             })
           } else {
-            this.adminForm.userId = this.userId
+            this.adminForm.userId = this.user
             this.$api['permission.update'](this.adminForm).then(res => {
               this.dialogVisible = false
               this.$message.success('修改成功！')
@@ -348,19 +372,38 @@ export default {
       this.titleMsg = '编辑'
       this.dialogVisible = true
       this.isAdd = false
-      this.userId = id
+      this.user = id
       this.isDisable = true
       this.$api['permission.detail']({
         id
       }).then(res => {
         this.adminForm.userAccount = res.userAccount
-        this.adminForm.userPassword = res.userPassword
         this.adminForm.userRealName = res.userRealName
         this.adminForm.userGender = res.userGender
         this.adminForm.enabled = res.enabled
-        this.userId = res.userId
-        this.adminForm.roleIds = res.roleIds
+        this.user = res.userId
+        this.adminForm.roleIds = res.roleIds[0]
         this.adminForm.userOrgUuid = res.userOrgUuid
+      })
+    },
+    handleResetAdmin (id) {
+      this.$confirm('是否重置密码', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api['user.reset']({
+          id: id
+        }).then(res => {
+          this.$message.success('重置成功')
+        }).catch(res => {
+          this.$message.error('操作失败')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消重置'
+        })
       })
     },
     forMatterCreateTime (row) {

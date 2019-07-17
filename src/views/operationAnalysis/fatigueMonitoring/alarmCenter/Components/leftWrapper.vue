@@ -19,8 +19,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { Input, Tree } from 'element-ui'
-// import { lineTree } from 'server/interface'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     isClear: {
@@ -37,12 +36,19 @@ export default {
       }
     }
   },
-  components: {
-    'el-input': Input,
-    'el-tree': Tree
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
-    this._lineTree()
+    if (this.userId === '1') {
+      this._lineTree({
+        orgId: ''
+      })
+    } else {
+      this._lineTree({
+        orgId: this.userId
+      })
+    }
   },
   watch: {
     searchCode (val) {
@@ -57,8 +63,8 @@ export default {
   },
 
   methods: {
-    _lineTree () {
-      this.$api['tiredMonitoring.getLineBusTree']().then(res => {
+    _lineTree (params) {
+      this.$api['tiredMonitoring.getLineBusTree'](params).then(res => {
         let levelOne = res.filter(list => list.levelsType === '0')
         let levelTwo = res.filter(list => list.levelsType === '1')
         let levelThree = res.filter(list => list.levelsType === '2')
@@ -99,7 +105,6 @@ export default {
       return data.name.indexOf(value) !== -1
     },
     handleNodeClick (data) {
-      console.log(data)
       this.$emit('selectCar', data)
     }
   }

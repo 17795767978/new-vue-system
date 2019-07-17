@@ -62,7 +62,7 @@ export const tiredMonitoringApi = {
         pageNum: '',
         pageSize: '',
         lineUuid: [],
-        orgUuid: ''
+        orgId: ''
       },
       desc: '设备状态-线路设备状态列表'
     },

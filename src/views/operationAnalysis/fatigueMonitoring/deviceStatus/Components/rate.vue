@@ -16,7 +16,16 @@
 
 <script type="text/ecmascript-6">
 // import moment from 'moment';
+import { mapGetters } from 'vuex'
 export default {
+  props: {
+    selectData: {
+      type: Object
+    },
+    isUpdate: {
+      type: Boolean
+    }
+  },
   data () {
     return {
       deviceCount: '',
@@ -27,6 +36,7 @@ export default {
     this._onLineRate()
   },
   computed: {
+    ...mapGetters(['userId']),
     perNum () {
       if (this.deviceCount && this.deviceCount !== '0') {
         let num = this.onlineDeviceCount / this.deviceCount * 100
@@ -36,12 +46,39 @@ export default {
       }
     }
   },
+  watch: {
+    isUpdate () {
+      if (this.isUpdate) {
+        this._onLineRate(this.selectData.orgUuid)
+      }
+    }
+  },
   methods: {
-    _onLineRate () {
-      this.$api['tiredMonitoring.getDeviceStatus']().then(res => {
-        this.deviceCount = res.deviceCount
-        this.onlineDeviceCount = res.onlineDeviceCount
-      })
+    _onLineRate (params) {
+      if (params) {
+        this.$api['tiredMonitoring.getDeviceStatus']({
+          orgId: params === '1' ? '' : params
+        }).then(res => {
+          this.deviceCount = res.deviceCount
+          this.onlineDeviceCount = res.onlineDeviceCount
+        })
+      } else {
+        if (this.userId === '1') {
+          this.$api['tiredMonitoring.getDeviceStatus']({
+            orgId: ''
+          }).then(res => {
+            this.deviceCount = res.deviceCount
+            this.onlineDeviceCount = res.onlineDeviceCount
+          })
+        } else {
+          this.$api['tiredMonitoring.getDeviceStatus']({
+            orgId: this.userId
+          }).then(res => {
+            this.deviceCount = res.deviceCount
+            this.onlineDeviceCount = res.onlineDeviceCount
+          })
+        }
+      }
     }
   },
   components: {

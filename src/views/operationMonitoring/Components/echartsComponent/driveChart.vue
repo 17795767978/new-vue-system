@@ -84,7 +84,7 @@ export default {
           //   data: this.badDrivingBehavior
           // },
           {
-            name: '面积模式',
+            name: '不良驾驶行为',
             type: 'pie',
             radius: '55%',
             center: ['50%', '60%'],

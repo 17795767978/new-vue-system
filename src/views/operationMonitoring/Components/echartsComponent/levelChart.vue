@@ -87,7 +87,7 @@ export default {
         color: ['#2bacd0', '#fedd00'],
         series: [
           {
-            name: '面积模式',
+            name: '不良驾驶等级',
             type: 'pie',
             radius: '50%',
             center: ['50%', '50%'],

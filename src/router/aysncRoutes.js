@@ -174,7 +174,7 @@ export const aysncRoutesMap = [
         component: _import_('operationAnalysis/fatigueMonitoring/alarmCenter/index'),
         name: 'alarmCenter',
         meta: {
-          title: '报警中心',
+          title: '驾驶行为监测',
           icon: 'nocturne icon-dash',
           roles: ['/alarm-center']
         }
@@ -185,7 +185,7 @@ export const aysncRoutesMap = [
         name: 'alarmContent',
         hidden: true,
         meta: {
-          title: '报警中心详情',
+          title: '驾驶行为监测详情',
           icon: 'nocturne icon-dash',
           roles: ['/alarm-content']
         }
@@ -229,7 +229,7 @@ export const aysncRoutesMap = [
     component: Layout,
     name: 'permissionManagement',
     meta: {
-      title: '权限管理',
+      title: '用户管理',
       icon: 'nocturne icon-dash',
       roles: ['/management-list', '/role-list']
     },
@@ -239,7 +239,7 @@ export const aysncRoutesMap = [
         component: _import_('permissionManagement/managementList/index'),
         name: 'managementList',
         meta: {
-          title: '管理员列表',
+          title: '用户列表',
           icon: 'nocturne icon-dash',
           roles: ['/management-list']
         }

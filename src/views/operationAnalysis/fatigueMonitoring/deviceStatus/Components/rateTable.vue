@@ -16,6 +16,9 @@
         align="center"
         label="序号"
         width="60">
+        <template slot-scope="scope">
+          <span> {{scope.$index + (outCurrentPage - 1) * 10 + 1}} </span>
+        </template>
       </el-table-column>
       <el-table-column
         align="center"
@@ -60,10 +63,14 @@
     </div>
     <!-- 弹出框 -->
     <el-dialog :title="lineName" width="80%" :visible.sync="dialogTableVisible">
-      <el-table size="mini" :data="lineTableData" border height="600px" style="margin-bottom: 40px;">
-        <el-table-column type="index" align="center" label="序号" width="60"></el-table-column>
+      <el-table size="mini" :data="lineTableData" border height="600px" style="margin-bottom: 40px;" v-loading="loading">
+        <el-table-column type="index" align="center" label="序号" width="60">
+          <template slot-scope="scope">
+            <span> {{scope.$index + (inCurrentPage - 1) * 10 + 1}} </span>
+          </template>
+        </el-table-column>
         <!-- <el-table-column property="date" label="设备编号"></el-table-column> -->
-        <el-table-column align="center" property="deviceCode" label="设备型号"></el-table-column>
+        <el-table-column align="center" property="deviceCode" label="设备号"></el-table-column>
         <el-table-column align="center" property="lineName" label="线路"></el-table-column>
         <el-table-column align="center" property="busPlateNum" label="车辆"></el-table-column>
         <el-table-column align="center" label="当前位置">
@@ -105,6 +112,7 @@
 <script type="text/ecmascript-6">
 import moment from 'moment'
 import mapWrapper from './map'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -130,21 +138,24 @@ export default {
       rowData: {},
       outCurrentPage: 1,
       inCurrentPage: 1,
-      outsideTime: ''
+      outsideTime: '',
+      loading: true
     }
   },
   components: {
     mapWrapper
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
     this._statusTable({
       pageNum: this.outCurrentPage,
       pageSize: 10,
       lineUuid: [], // 线路id，可多选
-      orgUuid: '' // 组织机构
+      orgUuid: this.userId // 组织机构
     })
   },
-  computed: {},
   watch: {
     // selectData: {
     //   deep: true,
@@ -154,7 +165,8 @@ export default {
     // },
     isUpdate () {
       if (this.isUpdate) {
-        this._statusTable(this.selectData)
+        this.outCurrentPage = 1
+        this._statusTable({ ...this.selectData, pageNum: this.outCurrentPage, pageSize: 10 })
       }
       this.$emit('isUpdateTo')
     }
@@ -183,14 +195,19 @@ export default {
       }
     },
     handleClick (row) {
+      this.dialogTableVisible = true
+      this.loading = true
+      this.inCurrentPage = 1
       this.lineId = row.lineId
       this.lineName = row.lineName
+      this.lineTableData = []
+      this.lineTotal = 0
       this.$api['tiredMonitoring.getLinelineStatusPage']({
         pageNum: this.inCurrentPage,
         pageSize: 10,
         lineId: this.lineId
       }).then(res => {
-        this.dialogTableVisible = true
+        this.loading = false
         this.lineTableData = res.list
         this.lineTotal = res.total
         this.$message.success('数据更新')
@@ -209,6 +226,7 @@ export default {
     // 内层table
     handleCurrentChangeLine (val) {
       this.inCurrentPage = val
+      this.loading = true
       this.$api['tiredMonitoring.getLinelineStatusPage']({
         pageNum: this.inCurrentPage,
         pageSize: 10,
@@ -217,6 +235,7 @@ export default {
         this.dialogTableVisible = true
         this.lineTableData = res.list
         this.lineTotal = res.total
+        this.loading = false
       })
     },
     getRow (row) {

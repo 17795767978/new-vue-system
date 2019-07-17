@@ -166,6 +166,7 @@
 // import { tableList, alarmType, downLoad } from 'server/interface'
 import downloadExcel from 'vue-json-excel'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectCarData: {
@@ -212,6 +213,9 @@ export default {
       code: '加载中'
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   created () {
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
@@ -224,7 +228,7 @@ export default {
       warnLevel: ''
     })
     this._tableList({
-      orgId: this.formInline.orgId, // 组织机构id
+      orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
       lineId: this.formInline.lineId, // 线路id
       busUuid: this.formInline.busUuid, // 车辆id
       devCode: this.formInline.devCode, // 设备号
@@ -253,26 +257,28 @@ export default {
   watch: {
     selectCarData: {
       deep: true,
-      handler () {
+      handler (newValue) {
         // 车偏号 联动
         this.changeBusPlateNumber()
         this.formInline.timeValue.forEach(time => {
           time = moment(time).format('YYYY-MM-DD HH:mm:ss')
         })
-        this._tableList({
-          orgId: this.formInline.orgId, // 组织机构id
-          lineId: this.formInline.lineId, // 线路id
-          busUuid: this.formInline.busUuid, // 车辆id
-          devCode: this.formInline.devCode, // 设备号
-          busPlateNumber: this.formInline.busPlateNumber, // 车牌号
-          busSelfCode: this.formInline.busSelfCode, // 自编号
-          warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-          warnTypeId: this.formInline.warnTypeId, // 报警类型
-          startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
-          endTime: this.formInline.timeValue[1],
-          pageSize: 10,
-          pageNum: 1
-        })
+        if (newValue.levelsType !== '0') {
+          this._tableList({
+            orgId: this.formInline.orgId, // 组织机构id
+            lineId: this.formInline.lineId, // 线路id
+            busUuid: this.formInline.busUuid, // 车辆id
+            devCode: this.formInline.devCode, // 设备号
+            busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+            busSelfCode: this.formInline.busSelfCode, // 自编号
+            warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+            warnTypeId: this.formInline.warnTypeId, // 报警类型
+            startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+            endTime: this.formInline.timeValue[1],
+            pageSize: 10,
+            pageNum: 1
+          })
+        }
       }
     },
     'formInline.warnLevel' () {
@@ -305,7 +311,7 @@ export default {
         this.loading = false
       })
     },
-    // 左侧点击是否显示右侧搜索内容，0 机构 1 公司 2 线路 3 车牌号
+    // 左侧点击是否显示右侧搜索内容，0 总公司 1 公司 2 线路 3 车牌号
     changeBusPlateNumber () {
       if (this.selectCarData.levelsType === '3') {
         this.formInline.busPlateNumber = this.selectCarData.name

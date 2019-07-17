@@ -108,6 +108,7 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -130,13 +131,16 @@ export default {
       loading: true
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   mounted () {
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 24 * 3600 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
     this._passengerFlow({
-      orgId: '',
+      orgId: this.userId,
       lineId: '',
       lineType: '',
       busNumber: '',
@@ -181,6 +185,7 @@ export default {
         this.loading = false
       }).catch(() => {
         this.$message.error('不支持查询1000万条以上数据')
+        this.loading = false
       })
     },
     downLoadList (params) {
@@ -213,7 +218,7 @@ export default {
       })
     },
     gerDate (row) {
-      return moment(row.pfrTripDate).format('YYYY-MM-DD')
+      return moment(row.pfrUploadTime).format('YYYY-MM-DD HH:mm:ss')
     },
     handleCurrentChange (val) {
       this.selectData.pageNumber = val

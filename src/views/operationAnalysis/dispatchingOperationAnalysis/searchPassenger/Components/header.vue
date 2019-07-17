@@ -2,7 +2,7 @@
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-form-item label="选择机构">
-        <el-select class="font-style" v-model="formInline.orgId" placeholder="请选择" filterable>
+        <el-select class="font-style" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptions"
             :key="item.value"
@@ -83,6 +83,7 @@
 // import { lineList, comList } from 'server/interface';
 import downloadExcel from 'vue-json-excel'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -119,7 +120,8 @@ export default {
       carOptions: [],
       centerDialogVisible: false,
       laoding: true,
-      code: '加载中'
+      code: '加载中',
+      disabled: false
     }
   },
   created () {
@@ -141,8 +143,13 @@ export default {
     }, 20)
   },
   computed: {
+    ...mapGetters(['userId'])
   },
   mounted () {
+    if (this.userId !== '1') {
+      this.disabled = true
+      this.formInline.orgId = this.userId
+    }
   },
   watch: {
     'formInline.orgId': {

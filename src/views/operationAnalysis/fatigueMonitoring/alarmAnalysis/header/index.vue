@@ -2,7 +2,7 @@
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-form-item label="选择机构">
-        <el-select class="font-style" v-model="formInline.orgId" placeholder="请选择">
+        <el-select class="font-style" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择">
           <el-option
             v-for="item in comOptions"
             :key="item.value"
@@ -45,6 +45,7 @@
 // import moment from 'moment';
 // import { lineList, comList } from 'server/interface';
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -68,8 +69,12 @@ export default {
           value: '0104',
           label: '104路'
         }
-      ]
+      ],
+      disabled: false
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
     // this._lineList();
@@ -80,6 +85,13 @@ export default {
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
+    if (this.userId === '1') {
+      this.disabled = false
+    } else {
+      this.formInline.orgId = this.userId
+      this.disabled = true
+    }
+
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 7 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
@@ -120,7 +132,7 @@ export default {
     },
     onclear () {
       this.formInline = {
-        orgId: '',
+        orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
         busPlateNumber: '',
         valueTime: []

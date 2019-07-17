@@ -56,7 +56,13 @@ export default {
     busDetails: {
       deep: true,
       handler () {
+        console.log(123)
         this.mapData = this.busDetails
+        this.center.lng = this.mapData.lng
+        this.center.lat = this.mapData.lat
+        this.position.lng = this.mapData.lng
+        this.position.lat = this.mapData.lat
+        this.zoom = 20
       }
     }
   },

@@ -3,7 +3,7 @@ import store from '@/plugins/store'
 /**
  * Globel STORE
  */
-const selectData = {
+const globel = {
   state: {
     lineData: [],
     stationData: [],
@@ -98,25 +98,44 @@ const selectData = {
     },
     getCarList ({ commit }) {
       return new Promise((resolve, reject) => {
-        api['wholeInformation.getCar']({
-          orgId: '',
-          orgName: ''
-        }).then(res => {
-          let list = []
-          res.forEach(item => {
-            list.push({
-              label: item.busPlateNumber,
-              value: item.busUuid
+        if (store.getters.userId === '1') {
+          api['wholeInformation.getCar']({
+            orgId: '',
+            orgName: ''
+          }).then(res => {
+            let list = []
+            res.forEach(item => {
+              list.push({
+                label: item.busPlateNumber,
+                value: item.busUuid
+              })
             })
+            commit('CAR_DATA', list)
+            resolve(list)
+          }).catch(error => {
+            reject(error)
           })
-          commit('CAR_DATA', list)
-          resolve(list)
-        }).catch(error => {
-          reject(error)
-        })
+        } else {
+          api['wholeInformation.getCar']({
+            orgId: store.getters.userId,
+            orgName: ''
+          }).then(res => {
+            let list = []
+            res.forEach(item => {
+              list.push({
+                label: item.busPlateNumber,
+                value: item.busUuid
+              })
+            })
+            commit('CAR_DATA', list)
+            resolve(list)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     }
   }
 }
 
-export default selectData
+export default globel

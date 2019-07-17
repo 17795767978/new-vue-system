@@ -58,9 +58,8 @@
 </template>
 
 <script type="type/ecmascript-6">
-// import {alarmTableAna} from 'server/interface';
-import { Pagination, Table } from 'element-ui'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -75,16 +74,15 @@ export default {
       pageSize: 10
     }
   },
-  components: {
-    'el-pagination': Pagination,
-    'el-table': Table
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
     let start = new Date()
     let endTime = moment(start).format('YYYY-MM-DD 23:59:59')
     let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD 00:00:00')
     this._alarmTableAna({
-      orgId: this.selectData.orgId,
+      orgId: this.selectData.orgId || (this.userId === '1' ? '' : this.userId),
       lineId: this.selectData.lineId,
       busPlateNumber: this.selectData.busPlateNumber,
       startTime,
@@ -122,12 +120,6 @@ export default {
     handleCurrentChange (val) {
       this.currentPage = val
       this._alarmTableAna({
-        orgId: this.selectData.orgId,
-        lineId: this.selectData.lineId,
-        busPlateNumber: this.selectData.busPlateNumber,
-        startTime: '',
-        endTime: '',
-        pageSize: 10,
         pageNum: this.currentPage
       })
     }

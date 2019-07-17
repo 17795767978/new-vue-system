@@ -18,6 +18,7 @@
 // import { tripOrder } from 'server/interface'
 import moment from 'moment'
 import { max, min } from '../../../../../utils/max.js'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -37,11 +38,14 @@ export default {
       beforeDate: false
     }
   },
+  computed: {
+    ...mapGetters(['initLineId'])
+  },
   created () {
     let date = new Date()
     date = moment(date).format('YYYY-MM-DD')
     this._tripOrder({
-      lineId: '0103',
+      lineId: this.initLineId,
       dateTime: date,
       type: '1',
       startHour: '07',
@@ -51,19 +55,6 @@ export default {
   mounted () {
   },
   watch: {
-    // selectData: {
-    //   deep: true,
-    //   handler () {
-    //     this.selectData.date = moment(this.selectData.date).format('YYYY-MM-DD')
-    //     this._tripOrder({
-    //       lineId: this.selectData.value,
-    //       dateTime: this.selectData.date,
-    //       type: this.selectData.turn,
-    //       startHour: this.selectData.startTime.substring(0, 2),
-    //       endHour: this.selectData.endTime.substring(0, 2)
-    //     })
-    //   }
-    // },
     isUpdate () {
       if (this.isUpdate) {
         this._tripOrder({

@@ -17,6 +17,7 @@
 // import elementResizeDetector from 'element-resize-detector'
 import { max } from '../../../../../../utils/max'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     headerParams: {
@@ -35,11 +36,14 @@ export default {
       maxNum: ''
     }
   },
+  computed: {
+    ...mapGetters(['initLineId'])
+  },
   created () {
     let date = new Date() - 3600 * 24 * 30 * 1000
     date = moment(date).format('YYYY-MM')
     this._timeTableAnalysisUp({
-      lineId: '0103',
+      lineId: this.initLineId,
       month: date,
       type: '1'
     })

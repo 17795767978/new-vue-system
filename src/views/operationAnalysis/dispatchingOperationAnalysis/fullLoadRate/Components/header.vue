@@ -110,7 +110,6 @@ export default {
   created () {
     let dataNow = new Date()
     let dataBefore = new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)
-    this.formInline.value = '0103'
     this.formInline.date = moment(dataBefore).format('YYYY-MM-DD')
     this.formInline.startTime = '07:00'
     this.formInline.endTime = '09:00'
@@ -118,6 +117,7 @@ export default {
   mounted () {
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
+      this.formInline.value = this.lineOptions[0].value
     })
   },
   methods: {

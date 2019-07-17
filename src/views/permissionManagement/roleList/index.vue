@@ -11,10 +11,7 @@
         fit
         highlight-current-row
         style="width: 100%">
-        <el-table-column align="center" label="排序" width="60">
-          <template slot-scope="scope">
-            <span>{{scope.row.roleSort}}</span>
-          </template>
+        <el-table-column align="center" label="序号" width="100" type="index">
         </el-table-column>
         <el-table-column align="center" label="角色名称" width="120">
           <template slot-scope="scope">
@@ -76,14 +73,14 @@
           placeholder="请输入角色名称">
         </el-input>
         </el-row>
-        <el-row style="margin-top: 20px">
+        <!-- <el-row style="margin-top: 20px">
         <span>角色排序：</span>
         <el-input
           style="width: 200px"
           v-model.number="sort"
           placeholder="请输入排序">
         </el-input>
-        </el-row>
+        </el-row> -->
         <el-row style="margin-top: 20px">
         <span>角色描述：</span>
          <el-input
@@ -134,12 +131,12 @@
       :visible.sync="updateWrapper"
       width="420px">
       <el-form label-width="100px" :model="adminForm" ref="adminForm" :rules="rules">
-        <el-form-item label="排序：" prop="roleSort">
+        <!-- <el-form-item label="排序：" prop="roleSort">
           <el-input
             style="width: 240px"
             placeholder="请输入排序"
             v-model.number="adminForm.roleSort"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="角色名称：" prop="roleName">
           <el-input
             style="width: 240px"
@@ -185,20 +182,15 @@ export default {
       updateWrapper: false,
       roleName: '',
       enabled: '1',
-      sort: '',
       describes: '',
       roleId: '',
       adminForm: {
         roleId: '',
-        roleSort: '',
         roleName: '',
         describes: '',
         enabled: ''
       },
       rules: {
-        roleSort: [
-          { type: 'number', required: true, message: '请输入序号(数字)', trigger: 'blur' }
-        ],
         roleName: [
           { required: true, message: '请输入角色名称', trigger: 'blur' }
         ],
@@ -230,7 +222,8 @@ export default {
       rolesIndexArr: [],
       rolesNameArr: [],
       currentSort: '',
-      currentName: ''
+      currentName: '',
+      resourceList: []
     }
   },
   created () {
@@ -252,22 +245,24 @@ export default {
         pageSize: 1000,
         pageNumber: this.currentPage
       }).then(res => {
-        this.list = res.list.sort((prev, next) => prev.roleSort - next.roleSort)
+        this.list = res.list
         if (this.list.length > 0) {
-          this.rolesIndexArr = this.list.map(sort => sort.roleSort)
           this.rolesNameArr = this.list.map(name => name.roleName)
         }
       })
     },
     getSourceList () {
-      this.$api['resource.list']().then(res => {
+      this.$api['platformMenu.list']().then(res => {
+        // this.treeData = res.resourceTree
+        let initList = []
         let list = []
         let data = []
-        res.forEach((item, index) => {
+        initList = this.getResourceList(res.resourceTree)
+        initList.forEach((item, index) => {
           list[index] = {
-            resourceId: item.resourceId,
-            resourceParentId: item.resourceParentId,
-            name: item.resourceTitle
+            resourceId: item.id,
+            resourceParentId: item.parentId,
+            name: item.name
           }
         })
         data = list.filter(item => item.resourceParentId === null)
@@ -288,25 +283,40 @@ export default {
         })
       })
     },
+    // 递归遍历children 目前不需要
+    getResourceList (resource) {
+      resource.forEach(item => {
+        this.resourceList.push({
+          id: item.id,
+          parentId: item.parentId,
+          name: item.title
+        })
+        if (item.children.length > 0) {
+          this.getResourceList(item.children)
+        }
+      })
+      return this.resourceList
+    },
     onRoleSubmit () {
-      if (this.roleName.length > 0 && this.sort !== '' && this.describes !== '') {
-        if (!this.rolesNameArr.some(item => item === this.roleName) && !this.rolesIndexArr.some(item => item === Number(this.sort))) {
+      if (this.roleName.length > 0 && this.describes !== '') {
+        if (!this.rolesNameArr.some(item => item === this.roleName)) {
           this.$api['role.add']({
             roleName: this.roleName,
             enabled: this.enabled,
-            roleSort: this.sort,
             describes: this.describes
           }).then(res => {
             this.getSysRoleList()
             this.adminForm.roleName = this.roleName
             this.$message.success('添加成功!')
             this.dialogVisible = false
+          }).catch(() => {
+            this.$message.error('输入的内容不合法')
           })
         } else {
-          this.$message.error('角色名称已存在，或者角色排序已存在')
+          this.$message.error('角色名称已存在')
         }
       } else {
-        this.$message.error('请填写所有信息')
+        this.$message.error('请检查信息是否填写完整')
       }
     },
     handleDeleteRole (id) {
@@ -337,6 +347,7 @@ export default {
       let arr = []
       this.dialogRoleVisible = true
       this.roleId = row.roleId
+      console.log(row)
       arr = row.resources.filter(item => item.resourceId !== '47' &&
         item.resourceId !== '48' &&
         item.resourceId !== '353' &&
@@ -375,9 +386,7 @@ export default {
       }).then(res => {
         this.adminForm.roleName = res.roleName
         this.adminForm.describes = res.describes
-        this.adminForm.roleSort = res.roleSort
         this.adminForm.enabled = res.enabled
-        this.currentSort = res.roleSort
         this.currentName = res.roleName
       })
     },
@@ -385,18 +394,14 @@ export default {
       this.$refs['adminForm'].validate((valid) => {
         if (valid) {
           if (this.currentName === this.adminForm.roleName || !this.rolesNameArr.some(name => name === this.adminForm.roleName)) {
-            if (this.currentSort === Number(this.adminForm.roleSort) || !this.rolesIndexArr.some(sort => sort === Number(this.adminForm.roleSort))) {
-              this.$api['role.update'](this.adminForm).then(res => {
-                this.getSysRoleList({
-                  pageSize: 1000,
-                  pageNumber: this.currentPage
-                })
-                this.$message.success('修改成功！')
-                this.updateWrapper = false
+            this.$api['role.update'](this.adminForm).then(res => {
+              this.getSysRoleList({
+                pageSize: 1000,
+                pageNumber: this.currentPage
               })
-            } else {
-              this.$message.error('角色序号已存在')
-            }
+              this.$message.success('修改成功！')
+              this.updateWrapper = false
+            })
           } else {
             this.$message.error('角色名已存在')
           }
@@ -407,7 +412,6 @@ export default {
     },
     handleAddRole () {
       this.roleName = ''
-      this.sort = ''
       this.describes = ''
       this.dialogVisible = true
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
-      <el-form-item label="选择站点">
+      <el-form-item label="搜索站点">
         <el-select
           @change="getLabel"
           ref="elSelectWrapperUp"

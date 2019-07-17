@@ -6,7 +6,7 @@
     <el-row class="main-card" :gutter="50">
       <el-col style="margin-left: 50px;" :span="8">
         <h3 style="font-size: 20px;">运营监控</h3>
-        <div class="tab-con" @click="goToContral()">
+        <div class="tab-con" :class="isScreen ? '' : 'tab-con-dis'" @click="goToContral()">
         </div>
       </el-col>
       <el-col :span="7">
@@ -84,7 +84,8 @@ export default {
       operationAnalysis: [],
       simple: [],
       tiredContral: [],
-      rolesTem: []
+      rolesTem: [],
+      isScreen: false
     }
   },
   components: {
@@ -93,6 +94,7 @@ export default {
   },
   mounted () {
     let roles = this.$store.getters.roles
+    this.isScreen = roles.some(role => role.path === '/chart-analysis')
     if (roles !== 'error') {
       this.getRoles(roles)
       this.checkRoles()
@@ -150,7 +152,11 @@ export default {
       this.tiredContral = tired
     },
     goToContral () {
-      this.$router.push('/chart-analysis/chart-analysis')
+      if (this.isScreen) {
+        this.$router.push('/chart-analysis/chart-analysis')
+      } else {
+        this.$message.warning('权限不足，无法进入此页面')
+      }
     },
     goToChart (e) {
       if (e.admin) {
@@ -207,6 +213,9 @@ export default {
     .tab-con:hover {
       background-color: #2089db;
       transform: scale(0.99)
+    }
+    .tab-con-dis {
+      background-color: #999 !important
     }
     .tab-ans {
       width: 100%;

@@ -13,6 +13,7 @@
 // import { levelRate } from 'server/interface'
 import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -36,14 +37,15 @@ export default {
       ]
     }
   },
-  components: {
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
     let start = new Date()
     let endTime = moment(start).format('YYYY-MM-DD 23:59:59')
     let startTime = moment(start - 3600 * 1000 * 24 * 7).format('YYYY-MM-DD 00:00:00')
     this._levelRate({
-      orgId: this.selectData.orgId || '',
+      orgId: this.selectData.orgId || (this.userId === '1' ? '' : this.userId),
       lineId: this.selectData.lineId || '',
       busPlateNumber: this.selectData.busPlateNumber || '',
       startTime,

@@ -14,19 +14,19 @@
     </div>
     <div class="settings">
       <ul>
-        <!-- <li>
+        <li>
           <el-dropdown size="small">
             <span>
               <i class="nocturne icon-settings"></i>
               <span>设置</span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="modifyPassword"><i class="nocturne icon-password"></i>修改密码</el-dropdown-item> -->
+              <el-dropdown-item @click.native="modifyPassword"><i class="nocturne icon-password"></i>修改密码</el-dropdown-item>
               <!-- 功能未完成, 暂时注释 -->
-              <!-- <el-dropdown-item @click.native="settingPersonal"><i class="nocturne icon-personal"></i>个性化设置</el-dropdown-item>
+              <!-- <el-dropdown-item @click.native="settingPersonal"><i class="nocturne icon-personal"></i>个性化设置</el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
-        </li> -->
+        </li>
         <li @click="logout">
           <span>
             <i class="nocturne icon-logout"></i>

@@ -1,5 +1,6 @@
 import { getToken, setToken, removeToken } from '@/service/expands/auth'
 import api from '@/plugins/api'
+import store from '@/plugins/store'
 
 // import { constantRouterMap } from '@/router/staticRoutes'
 /**
@@ -21,7 +22,8 @@ const user = {
     //   router: constantRouterMap,
     //   homepage: '/homepage/home'
     // },
-    roles: null // 权限应该是返回个数组对象
+    roles: null, // 权限应该是返回个数组对象
+    initLineId: ''
   },
 
   mutations: {
@@ -48,6 +50,9 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_LINEID: (state, lineId) => {
+      state.initLineId = lineId
     }
     // SET_ROUTERS (state, router) {
     //   state.routers.addRouters = router
@@ -118,6 +123,9 @@ const user = {
           if (data.resourceTree && data.resourceTree.length > 0) {
             commit('SET_ROLES', data.resourceTree)
             commit('SET_USERINFO', data.userOrgId)
+            store.dispatch('getLineList').then(res => {
+              commit('SET_LINEID', res[0].value)
+            })
           } else {
             alert('管理员请先设置权限再登录')
             commit('SET_USERINFO', '')

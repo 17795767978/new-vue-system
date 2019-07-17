@@ -34,7 +34,7 @@ export default {
   data () {
     return {
       formInline: {
-        value: '0103',
+        value: '',
         date: ''
       },
       lineOptions: [],
@@ -70,6 +70,7 @@ export default {
     this.formInline.date = moment(date).format('YYYY-MM-DD')
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
+      this.formInline.value = this.lineOptions[0].value
     })
   },
   methods: {

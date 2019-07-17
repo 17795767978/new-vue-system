@@ -27,22 +27,24 @@ export const UserApi = {
       },
       desc: '用户注销'
     },
-    // {
-    //   name: 'info',
-    //   method: 'POST',
-    //   path: '/user/info',
-    //   mockPath: '/user/info',
-    //   params: {},
-    //   desc: '获取用户信息'
-    // },
+    {
+      name: 'reset',
+      method: 'POST',
+      path: '/api/base/user/resetPassWord',
+      mockPath: '/api/base/user/resetPassWord',
+      params: {
+        id: ''
+      },
+      desc: '用户重置密码'
+    },
     {
       name: 'password.edit',
       method: 'POST',
-      path: '/user/password/edit',
-      mockPath: '/user/password/edit',
+      path: '/api/base/user/updatePassWord',
+      mockPath: '/api/base/user/updatePassWord',
       params: {
-        oldPassword: '',
-        newPassword: ''
+        oldUserPassword: '',
+        userPassword: ''
       },
       desc: '修改登录用户密码'
     }

@@ -4,7 +4,7 @@
       <headerNav @selectConfig='selectConfig'></headerNav>
     </header>
     <div class="rate-wrapper">
-      <rateWrapper></rateWrapper>
+      <rateWrapper :selectData="selectData" :isUpdate="isUpdate" @isUpdateTo="isUpdateTo"></rateWrapper>
     </div>
     <div class="table-wrapper">
       <tableWrapper :selectData="selectData" :isUpdate="isUpdate" @isUpdateTo="isUpdateTo"></tableWrapper>

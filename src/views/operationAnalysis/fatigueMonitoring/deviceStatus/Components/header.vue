@@ -2,7 +2,7 @@
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-form-item label="选择机构">
-        <el-select class="font-style" v-model="formInline.orgUuid" placeholder="请选择">
+        <el-select class="font-style" v-model="formInline.orgUuid" :disabled="disabled" placeholder="请选择">
           <el-option
             v-for="item in comOptions"
             :key="item.value"
@@ -32,6 +32,7 @@
 
 <script type="text/ecmascript-6">
 // import moment from 'moment';
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -40,8 +41,12 @@ export default {
         orgUuid: ''
       },
       comOptions: [],
-      lineOptions: []
+      lineOptions: [],
+      disabled: false
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
   },
@@ -52,6 +57,13 @@ export default {
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
+    if (this.userId !== '1') {
+      this.formInline.orgUuid = this.userId
+      this.disabled = true
+    } else {
+      this.formInline.orgUuid = ''
+      this.disabled = false
+    }
   },
   watch: {
     'formInline.orgUuid': {
@@ -82,7 +94,7 @@ export default {
     onclear () {
       this.formInline = {
         lineUuid: [],
-        orgUuid: ''
+        orgUuid: this.userId === '1' ? '' : this.userId
       }
       this.$emit('selectConfig', this.formInline)
     }
