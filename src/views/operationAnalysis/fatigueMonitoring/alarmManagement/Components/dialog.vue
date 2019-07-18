@@ -1,6 +1,6 @@
 <template>
   <div class="alarm-dialog">
-    <el-dialog title="报警类型新增/修改" :visible.sync="dialogFormVisible">
+    <el-dialog title="报警类型新增/修改" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
       <el-form :model="form" :rules="rules" ref="ruleForm">
         <el-form-item label="报警类型编码" prop="plValue">
           <el-input v-model="form.plValue" style="width: 300px;"></el-input>

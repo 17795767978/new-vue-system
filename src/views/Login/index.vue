@@ -52,7 +52,7 @@ export default {
       isLoginning: false,
       loginForm: {
         userAccount: 'admin',
-        userPassword: 'zhx@yyjk2019'
+        userPassword: '123456'
       },
       loginRules: {
         userAccount: [

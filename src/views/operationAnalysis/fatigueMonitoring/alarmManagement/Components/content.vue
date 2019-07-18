@@ -101,10 +101,13 @@ export default {
   methods: {
     _alarmManageTable (params) {
       this.$api['tiredMonitoring.getWarnTypeList'](params).then(res => {
-        let tableArr = res.list
-        this.tableData = tableArr.sort((prev, next) => next.plSort - prev.plSort)
-        this.total = res.total
+        return this.getList(res)
       })
+    },
+    getList (res) {
+      let tableArr = res.list
+      this.tableData = tableArr.sort((prev, next) => next.plSort - prev.plSort)
+      this.total = res.total
     },
     handleBan (row) {
       this.$api['tiredMonitoring.warntypeIsvalid']({

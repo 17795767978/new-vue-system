@@ -11,14 +11,14 @@
         fit
         highlight-current-row
         style="width: 100%">
-        <el-table-column align="center" label="序号" width="100" type="index">
+        <el-table-column align="center" label="序号" width="80" type="index">
         </el-table-column>
-        <el-table-column align="center" label="角色名称" width="120">
+        <el-table-column align="center" label="角色名称" width="200">
           <template slot-scope="scope">
             <span>{{scope.row.roleName}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="角色描述" width="120">
+        <el-table-column align="center" label="角色描述" width="200">
           <template slot-scope="scope">
             <span>{{scope.row.describes}}</span>
           </template>
@@ -63,9 +63,11 @@
     <el-dialog
       title="新增"
       :visible.sync="dialogVisible"
-      width="330px">
+      :close-on-click-modal="false"
+      width="420px">
       <div>
         <el-row>
+        <span style="color: red">* </span>
         <span>角色名称：</span>
         <el-input
           style="width: 200px"
@@ -82,6 +84,7 @@
         </el-input>
         </el-row> -->
         <el-row style="margin-top: 20px">
+        <span style="color: red">* </span>
         <span>角色描述：</span>
          <el-input
           style="width: 200px"
@@ -90,6 +93,7 @@
         </el-input>
         </el-row>
         <el-row style="margin-top: 20px">
+        <span style="color: red">* </span>
         <span>是否禁用：</span>
         <el-select
           style="width: 200px"
@@ -129,6 +133,7 @@
     <el-dialog
       title="编辑"
       :visible.sync="updateWrapper"
+      :close-on-click-modal="false"
       width="420px">
       <el-form label-width="100px" :model="adminForm" ref="adminForm" :rules="rules">
         <!-- <el-form-item label="排序：" prop="roleSort">
@@ -388,6 +393,9 @@ export default {
         this.adminForm.describes = res.describes
         this.adminForm.enabled = res.enabled
         this.currentName = res.roleName
+      })
+      this.$nextTick(() => {
+        this.$refs['adminForm'].resetFields()
       })
     },
     onSubmitUpdate () {

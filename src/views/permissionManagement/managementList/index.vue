@@ -21,29 +21,31 @@
             <span>{{scope.row.userAccount}}</span>
           </template>
         </el-table-column>
+        <el-table-column align="center" label="机构" prop="orgName">
+        </el-table-column>
         <el-table-column align="center" label="用户姓名">
           <template slot-scope="scope">
             <span>{{scope.row.userRealName}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="角色">
+        <el-table-column align="center" label="角色" width="180">
           <template slot-scope="scope">
             <span>{{scope.row.roleName}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="性别">
+        <el-table-column align="center" label="性别" width="80">
           <template slot-scope="scope">
             <span>{{scope.row.userGender === '1' ? '男' : '女'}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="状态">
+        <el-table-column align="center" label="状态" width="80">
           <template slot-scope="scope">
             <span>{{scope.row.enabled === '1' ? '启用' : '禁用'}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="创建时间" :formatter="forMatterCreateTime"  width="250">
+        <el-table-column align="center" label="创建时间" :formatter="forMatterCreateTime"  width="200">
         </el-table-column>
-        <el-table-column align="center" label="更新时间" :formatter="forMatterUpdateTime"  width="250">
+        <el-table-column align="center" label="更新时间" :formatter="forMatterUpdateTime"  width="200">
         </el-table-column>
         <el-table-column align="center" label="操作" width="400">
           <template slot-scope="scope">
@@ -83,22 +85,27 @@
     <el-dialog
       :title="titleMsg"
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
       width="420px">
       <el-form label-width="100px" :model="adminForm" ref="adminForm" :rules="rules">
         <el-form-item label="账号：" prop="userAccount">
           <el-input
+            ref="accoutDom"
+            type="text"
             style="width: 240px"
             :disabled="isDisable"
             placeholder="请输入账号"
+            auto-complete="new-text"
             v-model="adminForm.userAccount"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="密码：" prop="userPassword">
+        <el-form-item v-show="titleMsg === '新增'" label="密码：" prop="userPassword">
           <el-input
             type="password"
             style="width: 240px"
             placeholder="请输入密码"
+            auto-complete="new-password"
             v-model="adminForm.userPassword"></el-input>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="姓名：" prop="userRealName">
           <el-input
             style="width: 240px"
@@ -182,6 +189,7 @@ export default {
       dialogVisible: false,
       adminForm: {
         userAccount: '',
+        userPassword: '',
         userRealName: '',
         userGender: '',
         enabled: '1',
@@ -192,6 +200,9 @@ export default {
       rules: {
         userAccount: [
           { required: true, message: '请输入账号', trigger: 'blur' }
+        ],
+        userPassword: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ],
         userRealName: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
@@ -248,9 +259,26 @@ export default {
       pageNumber: this.current,
       pageSize: 10
     })
-    this.getRoleList()
+    this.getRoleList(this.userId === '1' ? '' : this.userId)
     this.getOrgList()
     this.isDisabled()
+  },
+  watch: {
+    'adminForm.userOrgUuid': {
+      handler (newValue) {
+        this.getRoleList(newValue)
+      }
+    },
+    titleMsg (newValue) {
+      if (newValue === '新增') {
+        // this.addAdmin.userAccount = ''
+        // this.addAdmin.userPassword = ''
+        // setTimeout(() => {
+        //   // autocomplete="off"
+        //   console.log(this.$refs.accoutDom.$el)
+        // }, 1000)
+      }
+    }
   },
   methods: {
     isDisabled () {
@@ -268,10 +296,10 @@ export default {
         this.total = res.total
       })
     },
-    getRoleList () {
+    getRoleList (params) {
       this.$api['role.list']({
         enabled: '1',
-        orgId: this.userId === '1' ? '' : this.userId
+        orgId: params
       }).then(res => {
         let list = []
         if (res.list) {
@@ -378,12 +406,16 @@ export default {
         id
       }).then(res => {
         this.adminForm.userAccount = res.userAccount
+        this.adminForm.userPassword = res.userPassword
         this.adminForm.userRealName = res.userRealName
         this.adminForm.userGender = res.userGender
         this.adminForm.enabled = res.enabled
         this.user = res.userId
         this.adminForm.roleIds = res.roleIds[0]
         this.adminForm.userOrgUuid = res.userOrgUuid
+      })
+      this.$nextTick(() => {
+        this.$refs['adminForm'].resetFields()
       })
     },
     handleResetAdmin (id) {

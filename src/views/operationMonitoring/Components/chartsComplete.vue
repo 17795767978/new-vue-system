@@ -46,7 +46,8 @@ export default {
       realTimeMileageMax: '',
       timerLeft: null,
       timerMiddle: null,
-      timerRight: null
+      timerRight: null,
+      maxLineNum: 0
     }
   },
   created () {
@@ -59,6 +60,9 @@ export default {
     })
     this._realTimeShift({
       orgId
+    })
+    this.$store.dispatch('getLineList').then(res => {
+      console.log(res.length)
     })
   },
   mounted () {
@@ -75,9 +79,9 @@ export default {
       this.$api['dispatch.getRealtimeMileage'](params).then(res => {
         this.loading = false
         if (res && res.length > 0) {
-          this.realTimeMileage = res.map(item => parseInt(item.realtimeMileage))
-          this.planMileage = res.map(item => parseInt(item.planMileage))
-          this.orgNameMileage = res.map(item => item.orgName)
+          this.realTimeMileage = res.map(item => Number(item.realtimeMileage))
+          this.planMileage = res.map(item => Number(item.planMileage))
+          this.orgNameMileage = res.map(item => item.displyLabel)
           this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
         }
         this.timerLeft = setTimeout(() => {
@@ -90,9 +94,9 @@ export default {
       this.$api['dispatch.getRealtimeTrips'](params).then(res => {
         this.loading = false
         if (res && res.length > 0) {
-          this.realTimeTrips = res.map(item => parseInt(item.realtimeTrips))
-          this.planTrips = res.map(item => parseInt(item.planTrips))
-          this.orgNameTrips = res.map(item => item.orgName)
+          this.realTimeTrips = res.map(item => Number(item.realtimeTrips))
+          this.planTrips = res.map(item => Number(item.planTrips))
+          this.orgNameTrips = res.map(item => item.displyLabel)
           this.realTimeTripsMax = max([max(this.realTimeTrips), max(this.planTrips)])
         }
         this.timerMiddle = setTimeout(() => {
@@ -105,9 +109,9 @@ export default {
       this.$api['dispatch.getRealtimeClasses'](params).then(res => {
         this.loading = false
         if (res && res.length > 0) {
-          this.realTimeShift = res.map(item => parseInt(item.realtimeClasses))
-          this.planClasses = res.map(item => parseInt(item.planClasses))
-          this.orgNameShift = res.map(item => item.orgName)
+          this.realTimeShift = res.map(item => Number(item.realtimeClasses))
+          this.planClasses = res.map(item => Number(item.planClasses))
+          this.orgNameShift = res.map(item => item.displyLabel)
           this.realTimeShiftMax = max([max(this.realTimeShift), max(this.planClasses)])
         }
         this.timerRight = setTimeout(() => {
