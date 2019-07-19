@@ -1,7 +1,7 @@
 <template>
   <div class="main-chart-wrapper">
     <el-row :gutter="10">
-      <el-col :span="6" class="data-style">
+      <el-col :span="getLeftWrapperWidth" class="data-style" v-if="config !== 'fatigueAlarm'">
         <div class="left-wrapper">
           <div class="person-chart-wrapper">
             <personChart></personChart>
@@ -11,12 +11,12 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="config === 'all' ? 10 : 12">
         <div class="middel-wrapper">
           <mapChart></mapChart>
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="getRightWrapperWidth" v-if="config !== 'passengerFlow'">
         <div class="right-wrapper">
           <div class="drive-chart-wrapper">
             <driveChart></driveChart>
@@ -37,9 +37,46 @@ import driveChart from './echartsComponent/driveChart.vue'
 import levelChart from './echartsComponent/levelChart.vue'
 import mapChart from './echartsComponent/mapChart.vue'
 export default {
+  props: {
+    config: {
+      type: String
+    }
+  },
   data () {
     return {
     }
+  },
+  computed: {
+    getLeftWrapperWidth () {
+      let width = 0
+      if (this.config === 'all') {
+        width = 7
+      } else if (this.config === 'passengerFlow') {
+        width = 12
+      } else if (this.config !== 'passengerFlow' && this.config !== 'all') {
+        width = 0
+      }
+      return width
+    },
+    getRightWrapperWidth () {
+      let width = 0
+      if (this.config === 'all') {
+        width = 7
+      } else if (this.config === 'fatigueAlarm') {
+        width = 12
+      } else if (this.config !== 'fatigueAlarm' && this.config !== 'all') {
+        width = 0
+      }
+      return width
+    }
+  },
+  mounted () {
+    setTimeout(() => {
+      if (this.config === 'all') {
+      } else if (this.config === 'passengerFlow') {
+      } else if (this.config === 'fatigueAlarm') {
+      }
+    })
   },
   components: {
     personChart,

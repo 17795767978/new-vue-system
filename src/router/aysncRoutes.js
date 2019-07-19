@@ -16,16 +16,36 @@ export const aysncRoutesMap = [
     meta: {
       title: '运营监控',
       icon: 'nocturne icon-dash',
-      roles: ['/chart-analysis']
+      roles: ['/chart-analysis/all', '/chart-analysis/passenger-flow', '/chart-analysis/fatigue-alarm']
     },
     children: [{
-      path: 'chart-analysis',
+      path: 'chart-analysis/all',
       component: _import_('operationMonitoring/index'),
       name: 'chartAnalysis',
       meta: {
         title: '运营监控',
         icon: 'nocturne icon-dash',
-        roles: ['/chart-analysis']
+        roles: ['/chart-analysis/all']
+      }
+    },
+    {
+      path: 'chart-analysis/passenger-flow',
+      component: _import_('operationMonitoring/index'),
+      name: 'chartAnalysis',
+      meta: {
+        title: '客流运营监控',
+        icon: 'nocturne icon-dash',
+        roles: ['/chart-analysis/passenger-flow']
+      }
+    },
+    {
+      path: 'chart-analysis/fatigue-alarm',
+      component: _import_('operationMonitoring/index'),
+      name: 'chartAnalysis',
+      meta: {
+        title: '疲劳运营监控',
+        icon: 'nocturne icon-dash',
+        roles: ['/chart-analysis/fatigue-alarm']
       }
     }]
   },

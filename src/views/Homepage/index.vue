@@ -85,7 +85,8 @@ export default {
       simple: [],
       tiredContral: [],
       rolesTem: [],
-      isScreen: false
+      isScreen: false,
+      isScreenTo: []
     }
   },
   components: {
@@ -94,7 +95,8 @@ export default {
   },
   mounted () {
     let roles = this.$store.getters.roles
-    this.isScreen = roles.some(role => role.path === '/chart-analysis')
+    this.isScreen = roles.some(role => role.path.indexOf('/chart-analysis') > -1)
+    this.isScreenTo = roles.filter(role => role.title === '运营监控')
     if (roles !== 'error') {
       this.getRoles(roles)
       this.checkRoles()
@@ -153,7 +155,8 @@ export default {
     },
     goToContral () {
       if (this.isScreen) {
-        this.$router.push('/chart-analysis/chart-analysis')
+        let path = this.isScreenTo[0].children[0].path
+        this.$router.push(`/chart-analysis${path}`)
       } else {
         this.$message.warning('权限不足，无法进入此页面')
       }

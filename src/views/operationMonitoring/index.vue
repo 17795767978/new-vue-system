@@ -5,10 +5,10 @@
     </el-button>
     <div class="content-wrapper">
      <TopTitleMsg></TopTitleMsg>
-     <StreamNum></StreamNum>
+     <StreamNum :config="config"></StreamNum>
      <chartsComplete></chartsComplete>
-     <chartsMain></chartsMain>
-     <bottomChart></bottomChart>
+     <chartsMain :config="config"></chartsMain>
+     <bottomChart :config="config"></bottomChart>
     </div>
   </div>
 </template>
@@ -23,10 +23,18 @@ export default {
   name: 'chartAnalysis',
   data () {
     return {
-      isFullScreen: false
+      isFullScreen: false,
+      config: ''
     }
   },
   created () {
+    if (this.$route.path === '/chart-analysis/chart-analysis/all') {
+      this.config = 'all'
+    } else if (this.$route.path === '/chart-analysis/chart-analysis/passenger-flow') {
+      this.config = 'passengerFlow'
+    } else if (this.$route.path === '/chart-analysis/chart-analysis/fatigue-alarm') {
+      this.config = 'fatigueAlarm'
+    }
     // 监听全屏事件 根据高度计算是否退出
     document.addEventListener('fullscreenchange', (e) => {
       console.log(123123)
@@ -57,8 +65,7 @@ export default {
   },
   mounted () {
     // this.fullScreen()
-    console.log(this.$set)
-    console.log(this.$delete)
+    console.log(this.$route.path)
   },
   activated () {
     this.fullScreen()

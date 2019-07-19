@@ -1,12 +1,12 @@
 <template>
   <div class="main-chart-wrapper">
     <el-row :gutter="20">
-      <el-col :span="12" class="data-style">
+      <el-col :span="getLeftWrapperWidth" class="data-style" v-if="config !== 'fatigueAlarm'">
         <div class="left-wrapper">
           <rankingChart></rankingChart>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="getRightWrapperWidth" class="data-style" v-if="config !== 'passengerFlow'">
         <div>
           <div  v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" class="right-wrapper">
             <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
@@ -36,6 +36,11 @@ import rankingChart from './echartsComponent/rankingChart.vue'
 import vueSeamless from 'vue-seamless-scroll'
 const TIME = 5 * 60 * 1000
 export default {
+  props: {
+    config: {
+      type: String
+    }
+  },
   data () {
     return {
       alermData: [],
@@ -54,6 +59,30 @@ export default {
         hoverStop: true,
         step: 0.5
       }
+    },
+    getLeftWrapperWidth () {
+      let width = 0
+      if (this.config === 'all') {
+        width = 12
+      } else if (this.config === 'passengerFlow') {
+        width = 24
+      } else if (this.config !== 'passengerFlow' && this.config !== 'all') {
+        width = 0
+      }
+      console.log(width)
+      return width
+    },
+    getRightWrapperWidth () {
+      let width = 0
+      if (this.config === 'all') {
+        width = 12
+      } else if (this.config === 'fatigueAlarm') {
+        width = 24
+      } else if (this.config !== 'fatigueAlarm' && this.config !== 'all') {
+        width = 0
+      }
+      console.log(width)
+      return width
     }
   },
   created () {

@@ -2,7 +2,7 @@
   <div class="stream-wrapper">
     <header style="margin-bottom: 20px;">
      <el-row :gutter="20">
-       <el-col :span="4">
+       <el-col :span="styleObj.spanBig" v-if="config !== 'fatigueAlarm'">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-user-solid icon"></i>
           <h3 class="title-style">
@@ -11,42 +11,42 @@
           <p class="font-style" style="color: #e9e404">{{passengeFlowNum}}</p>
         </el-card>
        </el-col>
-       <el-col :span="4">
+       <el-col :span="styleObj.spanBig" v-if="config !== 'fatigueAlarm'">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-s-custom icon"></i>
           <h3 class="title-style">实时载客（人）</h3>
           <p class="font-style" style="color: #00f4f5">{{totelPerson}}</p>
         </el-card>
        </el-col>
-       <el-col :span="3">
+       <el-col :span="config !== 'fatigueAlarm' ? 4 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-s-unfold icon"></i>
           <h3 class="title-style">运营线路</h3>
           <p class="font-style" style="color: #acf50f">{{operLines}}/{{totalLines}}</p>
         </el-card>
        </el-col>
-       <el-col :span="4">
+       <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-data-line icon"></i>
           <h3 class="title-style">在线车辆数</h3>
           <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}</p>
         </el-card>
        </el-col>
-       <el-col :span="3">
+       <el-col :span="styleObj.spanSmall" v-if="config !== 'fatigueAlarm'">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-s-data icon"></i>
           <h3 class="title-style">实时满载率</h3>
           <p class="font-style" style="color: #d52d8c">{{totelFullLoadRate}}%</p>
         </el-card>
        </el-col>
-       <el-col :span="3">
+       <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-ship icon"></i>
           <h3 class="title-style">运营车辆数</h3>
           <p class="font-style" style="color: #d5d40c">{{operateCarNum}}</p>
         </el-card>
        </el-col>
-       <el-col :span="3">
+       <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
         <el-card class="bg-style" shadow="hover">
           <i class="el-icon-loading icon"></i>
           <h3 class="title-style">待发车辆数</h3>
@@ -61,6 +61,11 @@
 <script>
 const TIME = 1 * 60 * 1000
 export default {
+  props: {
+    config: {
+      type: String
+    }
+  },
   data () {
     return {
       passengeFlowNum: '',
@@ -79,7 +84,11 @@ export default {
       timerOnlineCar: null,
       timerLoadRate: null,
       timerGetOnCar: null,
-      timerGetOffCar: null
+      timerGetOffCar: null,
+      styleObj: {
+        spanBig: 4,
+        spanSmall: 3
+      }
     }
   },
   created () {
@@ -101,6 +110,15 @@ export default {
     })
     this._operateCarNum()
     this._outgoingCarNum()
+  },
+  mounted () {
+    setTimeout(() => {
+      if (this.config === 'all') {
+        return this.styleObj
+      } else if (this.config === 'fatigueAlarm') {
+        this.styleObj.spanBig = 6
+      }
+    })
   },
   methods: {
     _passengeFlow (params) {

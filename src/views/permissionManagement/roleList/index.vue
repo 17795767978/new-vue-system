@@ -123,6 +123,7 @@
           show-checkbox
           node-key="resourceId"
           :default-checked-keys="defaultTreeData"
+          @check-change="checkChange"
           :props="defaultProps">
         </el-tree>
       </div>
@@ -228,7 +229,9 @@ export default {
       rolesNameArr: [],
       currentSort: '',
       currentName: '',
-      resourceList: []
+      resourceList: [],
+      disabledArr: [],
+      treeParentIds: []
     }
   },
   created () {
@@ -259,6 +262,7 @@ export default {
     getSourceList () {
       this.$api['platformMenu.list']().then(res => {
         // this.treeData = res.resourceTree
+        this.treeParentIds = []
         let initList = []
         let list = []
         let data = []
@@ -272,23 +276,40 @@ export default {
         })
         data = list.filter(item => item.resourceParentId === null)
         data.forEach((item, index) => {
-          this.treeData[index] = {
-            resourceId: item.resourceId,
-            name: item.name,
-            children: []
+          if (item.name !== '运营监控') {
+            this.treeData[index] = {
+              resourceId: item.resourceId,
+              name: item.name,
+              disabled: false,
+              children: []
+            }
+          } else {
+            this.treeData[index] = {
+              resourceId: item.resourceId,
+              name: item.name,
+              disabled: true,
+              children: []
+            }
           }
         })
         this.treeData.forEach((tree, index) => {
           tree.children = list.filter(i => i.resourceParentId === tree.resourceId)
+          tree.children.forEach(item => {
+            item.disabled = false
+          })
         })
         this.treeData.forEach((tree, index) => {
           tree.children.forEach(child => {
             child.children = list.filter(i => i.resourceParentId === child.resourceId)
+            child.children.forEach(item => {
+              item.disabled = false
+            })
           })
         })
+        this.getParentNode(this.treeData)
       })
     },
-    // 递归遍历children 目前不需要
+    // 递归遍历children
     getResourceList (resource) {
       resource.forEach(item => {
         this.resourceList.push({
@@ -301,6 +322,16 @@ export default {
         }
       })
       return this.resourceList
+    },
+    // 获取所有父节点
+    getParentNode (params) {
+      params.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          this.treeParentIds.push(item.resourceId)
+          this.getParentNode(item.children)
+        }
+      })
+      // console.log(this.treeParentIds)
     },
     onRoleSubmit () {
       if (this.roleName.length > 0 && this.describes !== '') {
@@ -349,21 +380,53 @@ export default {
       })
     },
     handleAllot (row) {
-      let arr = []
+      let arr = JSON.parse(JSON.stringify(row.resources))
       this.dialogRoleVisible = true
       this.roleId = row.roleId
-      console.log(row)
-      arr = row.resources.filter(item => item.resourceId !== '47' &&
-        item.resourceId !== '48' &&
-        item.resourceId !== '353' &&
-        item.resourceId !== '350' &&
-        item.resourceId !== '359' &&
-        item.resourceId !== '362'
-      )
-      if (arr.length > 0) {
+      console.log(row.resources)
+      console.log(arr)
+      // arr = arr.filter(item => item.resourceId !== '1' &&
+      //   item.resourceId !== '2' &&
+      //   item.resourceId !== '11' &&
+      //   item.resourceId !== '14' &&
+      //   item.resourceId !== '20' &&
+      //   item.resourceId !== '23'
+      // )
+      arr = arr.sort((prev, next) => Number(prev.resourceId) - Number(next.resourceId))
+      this.treeParentIds.forEach(id => {
+        if (arr.some(item => item.resourceId === id)) {
+          let deleteItem = arr.filter(deleteItem => deleteItem.resourceId === id)
+          console.log(deleteItem)
+          arr.splice(deleteItem[0], 1)
+        }
+      })
+      console.log(arr)
+      if (arr && arr.length > 0) {
+        // 初始化 进入树形结构时的选中id
+        let currentIndex = ''
         arr = arr.map(res => res.resourceId)
         this.defaultTreeData = Array.from(new Set(arr))
         this.defaultTreeData = this.defaultTreeData.sort((prev, next) => prev - next)
+        this.treeData.forEach((item) => {
+          if (item.name === '运营监控') {
+            // 拿到需要判断的树形结构的所有子节点
+            const currentItemIds = item.children.map(id => id.resourceId)
+            currentItemIds.forEach(current => {
+              // 选出属性结构的选中节点
+              if (this.defaultTreeData.some(date => date === current)) {
+                currentIndex = current
+              }
+            })
+            // 判断将没选中的属性节点设置成不能点击
+            item.children.forEach(list => {
+              if (currentIndex && list.resourceId !== currentIndex) {
+                list.disabled = true
+              } else if (!currentIndex) {
+                list.disabled = false
+              }
+            })
+          }
+        })
       } else {
         this.defaultTreeData = []
       }
@@ -401,7 +464,8 @@ export default {
     onSubmitUpdate () {
       this.$refs['adminForm'].validate((valid) => {
         if (valid) {
-          if (this.currentName === this.adminForm.roleName || !this.rolesNameArr.some(name => name === this.adminForm.roleName)) {
+          if (this.currentName === this.adminForm.roleName ||
+          !this.rolesNameArr.some(name => name === this.adminForm.roleName)) {
             this.$api['role.update'](this.adminForm).then(res => {
               this.getSysRoleList({
                 pageSize: 1000,
@@ -428,6 +492,36 @@ export default {
     },
     getUpdateTime (row) {
       return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    checkChange (arr, obj, ccc) {
+      let checkArr = arr.resourceId
+      if ((checkArr === '24' && this.$refs.tree.getCheckedKeys().some(item => item === checkArr)) ||
+        (checkArr === '25' && this.$refs.tree.getCheckedKeys().some(item => item === checkArr)) ||
+        (checkArr === '26' && this.$refs.tree.getCheckedKeys().some(item => item === checkArr))) {
+        this.treeData.forEach(item => {
+          if (item.name === '运营监控') {
+            item.children.forEach(child => {
+              if (child.resourceId !== checkArr) {
+                child.disabled = true
+              } else {
+                child.disabled = false
+              }
+            })
+          }
+        })
+      } else if ((checkArr === '24' && this.$refs.tree.getCheckedKeys().some(item => item !== checkArr)) ||
+        (checkArr === '25' && this.$refs.tree.getCheckedKeys().some(item => item !== checkArr)) ||
+        (checkArr === '26' && this.$refs.tree.getCheckedKeys().some(item => item !== checkArr)) ||
+        this.$refs.tree.getCheckedKeys().length === 0) {
+        this.treeData.forEach(item => {
+          if (item.name === '运营监控') {
+            item.children.forEach(child => {
+              child.disabled = false
+            })
+          }
+        })
+      }
+      console.log(this.$refs.tree.getCheckedKeys())
     }
   }
 }
