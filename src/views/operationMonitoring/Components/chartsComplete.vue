@@ -123,7 +123,6 @@ export default {
     drawLineLeft () {
       let leftChart = this.$echarts.init(document.getElementById('echart-left'))
       window.addEventListener('resize', () => { leftChart.resize() })
-      // let dataAxis = ['一公司', '二公司', '三公司', '四公司', '五公司', '六公司', '七公司'];
       leftChart.setOption({
         title: {
           text: '里程完成情况',

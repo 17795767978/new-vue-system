@@ -31,7 +31,7 @@ export const wholeInformationApi = {
         orgId: '',
         lineId: ''
       },
-      desc: '获取机构信息'
+      desc: '获取车辆信息'
     }
   ]
 }

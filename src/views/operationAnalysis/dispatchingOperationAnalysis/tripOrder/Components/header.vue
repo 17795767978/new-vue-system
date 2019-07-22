@@ -21,6 +21,16 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="选择车辆">
+        <el-select v-model="formInline.busPlateNumbers" multiple collapse-tags class="font-style" style="width: 180px" placeholder="请选择" filterable>
+          <el-option
+            v-for="item in busOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="上下行">
         <el-select  class="font-style" v-model="formInline.type" placeholder="请选择">
           <el-option
@@ -64,6 +74,7 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -72,7 +83,8 @@ export default {
         dateTime: '',
         type: '1',
         startHour: '07:00',
-        endHour: '09:00'
+        endHour: '09:00',
+        busPlateNumbers: []
       },
       lineOptions: [],
       turnOptions: [{
@@ -82,6 +94,7 @@ export default {
         value: '2',
         label: '下行'
       }],
+      busOptions: [],
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() > Date.now()
@@ -109,15 +122,43 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['initLineId'])
+  },
   created () {
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
       this.formInline.lineId = this.lineOptions[0].value
     })
+    // this._getCar(this.initLineId)
     let data = new Date() - 1000 * 3600 * 24
     this.formInline.dateTime = moment(data).format('YYYY-MM-DD')
   },
+  watch: {
+    'formInline.lineId': {
+      handler (newValue) {
+        this._getCar(newValue)
+        this.formInline.busPlateNumbers = []
+      }
+    }
+  },
   methods: {
+    _getCar (params) {
+      this.$api['wholeInformation.getCar']({
+        lineId: params,
+        lineName: '',
+        orgId: ''
+      }).then(res => {
+        let list = []
+        res.forEach(item => {
+          list.push({
+            value: item.busPlateNumber,
+            label: item.busPlateNumber
+          })
+        })
+        this.busOptions = list
+      })
+    },
     onSubmit () {
       if (this.formInline.lineId === '' || this.formInline.dateTime === '' || this.formInline.dateTime === null || this.formInline.type === '' || this.formInline.startHour === null || this.formInline.endHour === null) {
         this.$message.error('请填写完整的查询条件')

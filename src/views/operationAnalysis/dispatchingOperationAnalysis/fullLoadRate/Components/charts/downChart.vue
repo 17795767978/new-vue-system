@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="topWrapper">
     <div
       v-cloak
       ref="downChartWrapper"
@@ -17,6 +17,7 @@
 
 <script type="text/ecmascript-6">
 // import { fullRateAnalysisDown } from 'server/interface'
+import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
 import { max } from '../../../../../../utils/max'
 import { mapGetters } from 'vuex'
@@ -61,6 +62,10 @@ export default {
     })
   },
   mounted () {
+    let listenResize = elementResizeDetector()
+    listenResize.listenTo(this.$refs.topWrapper, (el) => {
+      this.$echarts.init(document.getElementById('down-chart-wrapper')).resize()
+    })
   },
   watch: {
     // checkData: {
@@ -117,11 +122,11 @@ export default {
     },
     seeType () {
       if (this.tabTypeData.length === 0) {
-        this.tabType = ['上车人数', '下车人数', '断面客流', '满载率']
-        this.upPersonNum = this.dataSource[0]
-        this.downPersonNum = this.dataSource[1]
-        this.passengerFlow = this.dataSource[2]
-        this.fullRate = this.dataSource[3]
+        this.tabType = []
+        this.upPersonNum = []
+        this.downPersonNum = []
+        this.passengerFlow = []
+        this.fullRate = []
       } else {
         this.tabType = []
         let isTypeUp = this.tabTypeData.some(item => item === '上车人数')
@@ -188,13 +193,13 @@ export default {
           // }
         },
         color: ['#249cf9', '#fdb628', '#67e0e3', '#eb6f49'],
-        legend: {
-          data: this.tabType,
-          bottom: 10,
-          textStyle: {
-            color: '#000'
-          }
-        },
+        // legend: {
+        //   data: this.tabType,
+        //   bottom: 10,
+        //   textStyle: {
+        //     color: '#000'
+        //   }
+        // },
         xAxis: [
           {
             type: 'category',

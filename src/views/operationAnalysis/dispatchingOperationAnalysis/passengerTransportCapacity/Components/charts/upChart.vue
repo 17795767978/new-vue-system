@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="topWrapper">
     <div
       ref="upChartWrapper"
       id="up-chart-wrapper"
@@ -20,7 +20,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import { numberAnalysisUp } from 'server/interface'
+import elementResizeDetector from 'element-resize-detector'
 import { max } from '../../../../../../utils/max'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
@@ -55,6 +55,10 @@ export default {
     })
   },
   mounted () {
+    let listenResize = elementResizeDetector()
+    listenResize.listenTo(this.$refs.topWrapper, (el) => {
+      this.$echarts.init(document.getElementById('up-chart-wrapper')).resize()
+    })
   },
   watch: {
     // selectData: {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="topWrapper">
     <div id="chart-wrapper"
      ref="chartWrapper"
      :style="{width: '100%', height: '600px'}"></div>
@@ -16,6 +16,7 @@
 
 <script type="text/ecmascript-6">
 // import { tripOrder } from 'server/interface'
+import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
 import { max, min } from '../../../../../utils/max.js'
 import { mapGetters } from 'vuex'
@@ -49,10 +50,15 @@ export default {
       dateTime: date,
       type: '1',
       startHour: '07',
-      endHour: '09'
+      endHour: '09',
+      busPlateNumbers: []
     })
   },
   mounted () {
+    let listenResize = elementResizeDetector()
+    listenResize.listenTo(this.$refs.topWrapper, (el) => {
+      this.$echarts.init(document.getElementById('chart-wrapper')).resize()
+    })
   },
   watch: {
     isUpdate () {
@@ -62,7 +68,8 @@ export default {
           dateTime: this.selectData.dateTime,
           type: this.selectData.type,
           startHour: this.selectData.startHour.substring(0, 2),
-          endHour: this.selectData.endHour.substring(0, 2)
+          endHour: this.selectData.endHour.substring(0, 2),
+          busPlateNumbers: this.selectData.busPlateNumbers
         })
       }
       this.$emit('isUpdateTo', false)

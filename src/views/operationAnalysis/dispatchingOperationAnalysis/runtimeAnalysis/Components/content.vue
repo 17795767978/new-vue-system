@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref='topWrapper'>
     <div id="echart-wrapper" ref="echartWrapper" :style="{width: '100%', height: '700px'}"></div>
     <div v-show="echartData.length === 0" class="anim" style="width: 100%; height: 400px; line-height:300px;text-align:center">
       暂无数据
@@ -8,7 +8,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import { runtimeAnalysis } from 'server/interface'
+import elementResizeDetector from 'element-resize-detector'
 import { max } from '../../../../../utils/max'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
@@ -39,6 +39,12 @@ export default {
       lineId: this.initLineId,
       type: '1',
       month: date
+    })
+  },
+  mounted () {
+    let listenResize = elementResizeDetector()
+    listenResize.listenTo(this.$refs.topWrapper, (el) => {
+      this.$echarts.init(document.getElementById('echart-wrapper')).resize()
     })
   },
   watch: {
@@ -194,7 +200,8 @@ export default {
           type: 'value',
           max: this.maxData,
           min: 0,
-          interval: Math.floor(this.maxData / 20)
+          interval: Math.floor(this.maxData / 20),
+          axisLabel: { formatter: '{value} s' }
         },
         yAxis: {
           type: 'category',

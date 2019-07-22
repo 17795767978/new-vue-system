@@ -99,6 +99,8 @@ export default {
                 })
               }
             })
+          }).catch(err => {
+            this.$message.error(err.message)
           })
         }
       })

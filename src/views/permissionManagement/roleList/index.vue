@@ -383,8 +383,6 @@ export default {
       let arr = JSON.parse(JSON.stringify(row.resources))
       this.dialogRoleVisible = true
       this.roleId = row.roleId
-      console.log(row.resources)
-      console.log(arr)
       // arr = arr.filter(item => item.resourceId !== '1' &&
       //   item.resourceId !== '2' &&
       //   item.resourceId !== '11' &&
@@ -392,12 +390,11 @@ export default {
       //   item.resourceId !== '20' &&
       //   item.resourceId !== '23'
       // )
+      console.log('-------', this.treeParentIds)
       arr = arr.sort((prev, next) => Number(prev.resourceId) - Number(next.resourceId))
       this.treeParentIds.forEach(id => {
         if (arr.some(item => item.resourceId === id)) {
-          let deleteItem = arr.filter(deleteItem => deleteItem.resourceId === id)
-          console.log(deleteItem)
-          arr.splice(deleteItem[0], 1)
+          arr = arr.filter(deleteItem => deleteItem.resourceId !== id)
         }
       })
       console.log(arr)
@@ -521,7 +518,6 @@ export default {
           }
         })
       }
-      console.log(this.$refs.tree.getCheckedKeys())
     }
   }
 }

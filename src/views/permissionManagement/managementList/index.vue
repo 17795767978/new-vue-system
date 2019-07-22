@@ -359,6 +359,8 @@ export default {
                 pageNumber: this.current,
                 pageSize: 10
               })
+            }).catch(err => {
+              this.$message.error(err.message)
             })
           } else {
             this.adminForm.userId = this.user
@@ -369,6 +371,8 @@ export default {
                 pageNumber: this.current,
                 pageSize: 10
               })
+            }).catch(err => {
+              this.$message.error(err.message)
             })
           }
         }

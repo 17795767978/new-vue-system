@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="topWrapper">
     <div id="chart-wrapper"
       ref="chartWrapper"
       :style="{width: '100%', height: '700px'}"
@@ -14,7 +14,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import { sectionAnalysis } from 'server/interface'
+import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
 import { setTimeout } from 'timers'
 import { max } from '../../../../../utils/max'
@@ -56,6 +56,10 @@ export default {
     })
   },
   mounted () {
+    let listenResize = elementResizeDetector()
+    listenResize.listenTo(this.$refs.topWrapper, (el) => {
+      this.$echarts.init(document.getElementById('chart-wrapper')).resize()
+    })
   },
   watch: {
     chartData: {
