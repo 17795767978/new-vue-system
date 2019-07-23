@@ -31,7 +31,6 @@ export const PermissionApi = {
       path: '/api/base/user/update',
       mockPath: '/api/base/user/update',
       params: {
-        id: ''
       },
       desc: '修改用户'
     },

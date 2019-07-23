@@ -92,7 +92,7 @@ export default {
             data: this.badDrivingBehavior
           }
         ]
-      })
+      }, true)
     }
   },
   watch: {

@@ -17,7 +17,6 @@ export const RoleApi = {
       path: '/api/base/role/detail',
       mockPath: '/api/base/role/detail',
       params: {
-        id: ''
       },
       desc: '查看角色'
     },
@@ -27,7 +26,6 @@ export const RoleApi = {
       path: '/api/base/role/update',
       mockPath: '/api/base/role/update',
       params: {
-        id: ''
       },
       desc: '修改角色'
     },

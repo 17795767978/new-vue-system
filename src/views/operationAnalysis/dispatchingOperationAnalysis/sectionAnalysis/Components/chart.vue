@@ -179,7 +179,7 @@ export default {
           }
         }]
       }
-      chartLine.setOption(options)
+      chartLine.setOption(options, true)
     }
   }
 }

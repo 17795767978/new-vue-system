@@ -108,8 +108,12 @@ export default {
     this._realTimeFullRate({
       orgId
     })
-    this._operateCarNum()
-    this._outgoingCarNum()
+    this._operateCarNum({
+      orgId
+    })
+    this._outgoingCarNum({
+      orgId
+    })
   },
   mounted () {
     setTimeout(() => {
@@ -184,8 +188,8 @@ export default {
         // console.log(res)
       })
     },
-    _operateCarNum () {
-      this.$api['dispatch.getOnCarNumber']().then(res => {
+    _operateCarNum (params) {
+      this.$api['dispatch.getOnCarNumber'](params).then(res => {
         // let dataArr = res.data.data;
         // let numArr = dataArr.map(item => item.operateBusNumber);
         // numArr.forEach(item => {
@@ -202,8 +206,8 @@ export default {
         }, TIME)
       })
     },
-    _outgoingCarNum () {
-      this.$api['dispatch.getOffCarNumber']().then(res => {
+    _outgoingCarNum (params) {
+      this.$api['dispatch.getOffCarNumber'](params).then(res => {
         if (res && res.nooperateBusNumber) {
           this.outgoingCarNum = res.nooperateBusNumber
         } else {

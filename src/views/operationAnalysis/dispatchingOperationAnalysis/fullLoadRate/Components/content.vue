@@ -22,7 +22,6 @@
 <script type="text/ecmascript-6">
 import upChart from './charts/upChart'
 import downChart from './charts/downChart'
-import { Row } from 'element-ui'
 export default {
   data () {
     return {
@@ -45,8 +44,7 @@ export default {
   },
   components: {
     upChart,
-    downChart,
-    'el-row': Row
+    downChart
   },
   created () {},
   methods: {

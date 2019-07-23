@@ -17,7 +17,7 @@
 
 <script type="text/ecmascript-6">
 // import { fullRateAnalysisDown } from 'server/interface'
-import elementResizeDetector from 'element-resize-detector'
+// import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
 import { max } from '../../../../../../utils/max'
 import { mapGetters } from 'vuex'
@@ -44,7 +44,8 @@ export default {
       xAxisData: [],
       tabType: '',
       maxNum: '',
-      maxRate: ''
+      maxRate: '',
+      defaultData: ['上车人数', '下车人数', '断面客流', '满载率']
     }
   },
   computed: {
@@ -53,6 +54,9 @@ export default {
   created () {
     let dataNow = new Date()
     let dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
+    window.addEventListener('resize', () => {
+      this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
+    })
     this._fullRateAnalysisDown({
       lineId: this.initLineId,
       type: '2',
@@ -62,10 +66,11 @@ export default {
     })
   },
   mounted () {
-    let listenResize = elementResizeDetector()
-    listenResize.listenTo(this.$refs.topWrapper, (el) => {
-      this.$echarts.init(document.getElementById('down-chart-wrapper')).resize()
-    })
+    this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
+    // let listenResize = elementResizeDetector()
+    // listenResize.listenTo(this.$refs.topWrapper, (el) => {
+    //   this.$echarts.init(document.getElementById('down-chart-wrapper')).resize()
+    // })
   },
   watch: {
     // checkData: {
@@ -84,7 +89,8 @@ export default {
     //     }
     //   }
     // },
-    tabTypeData () {
+    tabTypeData (newVal) {
+      this.defaultData = newVal
       this.seeType()
     },
     isUpdateDown () {
@@ -110,10 +116,8 @@ export default {
         this.seeType()
         if (this.xAxisData.length > 0) {
           this.$refs.downChartWrapper.style.display = 'block'
-          setTimeout(() => {
-            this.drawLine()
-          }, 100)
           this.loading = false
+          this.drawLine()
         } else {
           this.$message.warning('暂无数据')
           this.$refs.downChartWrapper.style.display = 'none'
@@ -121,7 +125,7 @@ export default {
       })
     },
     seeType () {
-      if (this.tabTypeData.length === 0) {
+      if (this.defaultData.length === 0) {
         this.tabType = []
         this.upPersonNum = []
         this.downPersonNum = []
@@ -129,10 +133,10 @@ export default {
         this.fullRate = []
       } else {
         this.tabType = []
-        let isTypeUp = this.tabTypeData.some(item => item === '上车人数')
-        let isTypeDown = this.tabTypeData.some(item => item === '下车人数')
-        let isPassFlow = this.tabTypeData.some(item => item === '断面客流')
-        let isFullRate = this.tabTypeData.some(item => item === '满载率')
+        let isTypeUp = this.defaultData.some(item => item === '上车人数')
+        let isTypeDown = this.defaultData.some(item => item === '下车人数')
+        let isPassFlow = this.defaultData.some(item => item === '断面客流')
+        let isFullRate = this.defaultData.some(item => item === '满载率')
         if (isTypeUp) {
           this.upPersonNum = this.dataSource[0]
           this.tabType.push('上车人数')
@@ -167,7 +171,7 @@ export default {
       }, 100)
     },
     drawLine () {
-      this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
+      // this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
       let downChart = this.$echarts.init(document.getElementById('down-chart-wrapper'))
       let timeInterval = this.xAxisData
       window.addEventListener('resize', () => { downChart.resize() })
@@ -314,17 +318,13 @@ export default {
             data: this.fullRate
           }
         ]
-      })
+      }, true)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-[v-cloak]
-{
-display: none;
-}
 .anim {
   animation: zy 2.5s .15s linear forwards;
 // -moz-animation: zy 2.5s .15s linear infinite; /* Firefox */

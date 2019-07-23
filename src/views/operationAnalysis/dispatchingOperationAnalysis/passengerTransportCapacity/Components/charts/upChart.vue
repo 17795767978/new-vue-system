@@ -218,7 +218,7 @@ export default {
             }
           }
         ]
-      })
+      }, true)
     }
   }
 }

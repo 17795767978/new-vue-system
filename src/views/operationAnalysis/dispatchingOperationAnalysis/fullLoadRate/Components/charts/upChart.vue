@@ -1,7 +1,6 @@
 <template>
   <div ref="topWrapper">
     <div
-      v-cloak
       ref="upChartWrapper"
       id="up-chart-wrapper"
       :style="{width: '100%', height: '330px'}"
@@ -10,7 +9,6 @@
     >
     </div>
     <div
-      v-cloak
       ref="animationDom"
       v-show="xAxisData.length === 0"
       class="anim"
@@ -22,7 +20,7 @@
 
 <script type="text/ecmascript-6">
 // import { fullRateAnalysisUp } from 'server/interface'
-import elementResizeDetector from 'element-resize-detector'
+// import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
 import { max } from '../../../../../../utils/max'
 import { mapGetters } from 'vuex'
@@ -33,6 +31,9 @@ export default {
     },
     tabTypeData: {
       type: Array
+      // default () {
+      //   return ['上车人数', '下车人数', '断面客流', '满载率']
+      // }
     },
     isUpdateUp: {
       type: Boolean
@@ -49,7 +50,8 @@ export default {
       xAxisData: [],
       tabType: [],
       maxNum: '',
-      maxRate: ''
+      maxRate: '',
+      defaultData: ['上车人数', '下车人数', '断面客流', '满载率']
     }
   },
   computed: {
@@ -58,6 +60,9 @@ export default {
   created () {
     const dataNow = new Date()
     const dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
+    window.addEventListener('resize', () => {
+      this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
+    })
     this._fullRateAnalysisUp({
       lineId: this.initLineId,
       type: '1',
@@ -67,10 +72,11 @@ export default {
     })
   },
   mounted () {
-    let listenResize = elementResizeDetector()
-    listenResize.listenTo(this.$refs.topWrapper, (el) => {
-      this.$echarts.init(document.getElementById('up-chart-wrapper')).resize()
-    })
+    this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
+    // let listenResize = elementResizeDetector()
+    // listenResize.listenTo(this.$refs.topWrapper, (el) => {
+    //   this.$echarts.init(document.getElementById('up-chart-wrapper')).resize()
+    // })
   },
   watch: {
     // checkData: {
@@ -87,7 +93,7 @@ export default {
     //     }
     //   }
     // },
-    tabTypeData () {
+    tabTypeData (newVal) {
       // this._fullRateAnalysisUp({
       //   lineId: this.checkData.value,
       //   type: '1',
@@ -95,6 +101,7 @@ export default {
       //   startHour: this.checkData.startTime.substring(0, 2),
       //   endHour: this.checkData.endTime.substring(0, 2)
       // });
+      this.defaultData = newVal
       this.seeType()
     },
     isUpdateUp () {
@@ -119,11 +126,9 @@ export default {
         this.xAxisData = res.xAxisNames
         this.seeType()
         if (this.xAxisData.length > 0) {
-          setTimeout(() => {
-            this.drawLine()
-          }, 100)
           this.loading = false
           this.$refs.upChartWrapper.style.display = 'block'
+          this.drawLine()
           this.$message.success('数据已更新')
         } else {
           // this.$refs.animationDom.addClassList('anim');
@@ -133,7 +138,8 @@ export default {
       })
     },
     seeType () {
-      if (this.tabTypeData.length === 0) {
+      console.log(this.defaultData)
+      if (this.defaultData.length === 0) {
         this.tabType = []
         // console.log(123);
         this.upPersonNum = []
@@ -142,10 +148,10 @@ export default {
         this.fullRate = []
       } else {
         this.tabType = []
-        let isTypeUp = this.tabTypeData.some(item => item === '上车人数')
-        let isTypeDown = this.tabTypeData.some(item => item === '下车人数')
-        let isPassFlow = this.tabTypeData.some(item => item === '断面客流')
-        let isFullRate = this.tabTypeData.some(item => item === '满载率')
+        let isTypeUp = this.defaultData.some(item => item === '上车人数')
+        let isTypeDown = this.defaultData.some(item => item === '下车人数')
+        let isPassFlow = this.defaultData.some(item => item === '断面客流')
+        let isFullRate = this.defaultData.some(item => item === '满载率')
         if (isTypeUp) {
           this.upPersonNum = this.dataSource[0]
           this.tabType.push('上车人数')
@@ -180,7 +186,6 @@ export default {
       }, 100)
     },
     drawLine () {
-      this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
       let upChart = this.$echarts.init(document.getElementById('up-chart-wrapper'))
       let timeInterval = this.xAxisData
       window.addEventListener('resize', () => {
@@ -332,17 +337,13 @@ export default {
             data: this.fullRate
           }
         ]
-      })
+      }, true)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-[v-cloak]
-{
-display: none;
-}
 .anim {
   animation: zy 2.5s .15s linear forwards;
 }

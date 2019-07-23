@@ -112,7 +112,7 @@ export default {
           type: 'line',
           color: '#e2be08'
         }]
-      })
+      }, true)
     }
   },
   watch: {

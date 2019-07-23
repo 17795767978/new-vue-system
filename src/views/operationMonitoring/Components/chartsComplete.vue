@@ -216,7 +216,7 @@ export default {
             }
           }
         ]
-      })
+      }, true)
     },
     drawLineMiddle () {
       let middleChart = this.$echarts.init(document.getElementById('echart-middle'))
@@ -319,7 +319,7 @@ export default {
             }
           }
         ]
-      })
+      }, true)
     },
     drawLineRight () {
       let rightChart = this.$echarts.init(document.getElementById('echart-right'))
@@ -416,7 +416,7 @@ export default {
             }
           }
         ]
-      })
+      }, true)
     }
   },
   watch: {

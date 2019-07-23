@@ -36,7 +36,8 @@ export default {
       xAxisNames: [],
       maxDate: '',
       minDate: '',
-      beforeDate: false
+      beforeDate: false,
+      carData: []
     }
   },
   computed: {
@@ -80,6 +81,9 @@ export default {
       this.$api['schedulingAnalysis.getSequenceChartDatas'](params).then(res => {
         this.beforeDate = false
         this.echartDatas = res.datas
+        console.log('initData', this.echartDatas)
+        this.carData = res.legendNames
+        // Object.freeze(this.echartDatas)
         this.echartDatas.forEach((date, index) => {
           this.echartDatas[index] = date.map(num => {
             if (num !== null && num !== undefined) {
@@ -123,12 +127,14 @@ export default {
         chart.resize()
       })
       let series = []
-      for (var i = 0; i < this.echartDatas.length - 1; i++) {
+      for (var i = 0; i < this.echartDatas.length; i++) {
         series.push({
           type: 'line',
+          name: this.carData[i],
           data: this.echartDatas[i]
         })
       }
+      console.log('series', series)
       chart.setOption({
         title: {
           text: ''
@@ -139,16 +145,26 @@ export default {
           bottom: '3%',
           containLabel: true
         },
+        // dataZoom: [{
+        //   show: true,
+        //   type: 'slider',
+        //   start: 0,
+        //   end: '100%'
+        // }, {
+        //   show: true,
+        //   type: 'inside',
+        //   start: 10,
+        //   end: ' 100%'
+        // }],
         tooltip: {
-          trigger: 'item',
+          // trigger: 'item',
+          trigger: 'axis',
           axisPointer: {
             type: 'shadow'
-          },
-          formatter: (params) => {
-            console.log(params)
-            // station = params[0].axisValueLabel + '<br />' + '发车时序:' + '<br />'
-            return `${params.name}<br />${moment(params.value).format('YYYY-MM-DD HH:mm:ss')}`
           }
+          // formatter: (params) => {
+          //   return `${params.name}<br />${params.seriesName}<br />${moment(params.value).format('YYYY-MM-DD HH:mm:ss')}`
+          // }
         },
         xAxis: {
           type: 'category',
@@ -183,7 +199,7 @@ export default {
           }
         },
         series
-      })
+      }, true)
     }
   }
 }

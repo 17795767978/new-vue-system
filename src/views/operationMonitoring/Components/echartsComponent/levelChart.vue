@@ -111,7 +111,7 @@ export default {
             data: this.getLevelList
           }
         ]
-      })
+      }, true)
     }
   },
   watch: {

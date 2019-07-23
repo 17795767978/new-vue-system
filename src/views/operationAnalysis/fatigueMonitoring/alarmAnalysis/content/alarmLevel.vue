@@ -146,7 +146,7 @@ export default {
             data: this.echartData
           }
         ]
-      })
+      }, true)
     }
   }
 }

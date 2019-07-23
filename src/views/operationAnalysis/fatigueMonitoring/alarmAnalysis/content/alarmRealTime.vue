@@ -60,8 +60,10 @@ export default {
     warnObj: {
       deep: true,
       handler () {
-        this.echartName = `(${this.warnObj.warnTypeName})报警次数时间趋势`
-        this.getNewChart()
+        if (this.warnObj) {
+          this.echartName = `(${this.warnObj.warnTypeName})报警次数时间趋势`
+          this.getNewChart()
+        }
       }
     },
     selectData: {
@@ -116,7 +118,7 @@ export default {
         },
         legend: {
           y: '30px',
-          data: ['次数', '环比上周']
+          data: ['次数', '环比']
         },
         grid: {
           left: '3%',
@@ -163,7 +165,7 @@ export default {
             }
           },
           {
-            name: '环比上周',
+            name: '环比',
             type: 'line',
             smooth: true,
             data: this.contrastCountData,
@@ -189,7 +191,7 @@ export default {
             }
           }
         ]
-      })
+      }, true)
     }
   }
 }

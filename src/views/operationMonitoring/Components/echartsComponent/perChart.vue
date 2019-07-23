@@ -185,7 +185,7 @@ export default {
             data: this.fullLoadRate
           }
         ]
-      })
+      }, true)
     }
   },
   watch: {

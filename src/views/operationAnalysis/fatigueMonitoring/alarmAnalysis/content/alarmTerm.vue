@@ -154,7 +154,7 @@ export default {
             }
           }
         ]
-      })
+      }, true)
       chart.on('click', (param) => {
         let arr = this.listData.filter(list => list.warnTypeName === param.name)
         this.$emit('getWarnId', arr[0])
