@@ -32,6 +32,14 @@ export const wholeInformationApi = {
         lineId: ''
       },
       desc: '获取车辆信息'
+    },
+    {
+      name: 'getCityCoordinatePoints',
+      method: 'POST',
+      path: '/api/base/common/getCityCoordinatePoints',
+      mockPath: '/api/base/common/getCityCoordinatePoints',
+      params: {},
+      desc: '获取城市坐标'
     }
   ]
 }

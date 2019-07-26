@@ -179,6 +179,16 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Admin',
   data () {
+    let validatePass = (rule, value, callback) => {
+      if (value === '') {
+        console.log(value)
+        callback(new Error('请输入账号'))
+      } else if (/[\u4E00-\u9FA5]/g.test(value)) {
+        callback(new Error('用户名中不能有汉字'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         name: ''
@@ -199,7 +209,7 @@ export default {
       },
       rules: {
         userAccount: [
-          { required: true, message: '请输入账号', trigger: 'blur' }
+          { validator: validatePass, trigger: 'blur' }
         ],
         userPassword: [
           { required: true, message: '请输入密码', trigger: 'blur' }

@@ -15,14 +15,14 @@
           <el-input v-model="form.plRemark" style="width: 300px;"></el-input>
         </el-form-item>
         <el-form-item label="报警类型级别" prop="plWarnLevel">
-          <el-select v-model="form.plWarnLevel" placeholder="请选择活动区域">
+          <el-select v-model="form.plWarnLevel" placeholder="请选择报警级别">
             <el-option label="1级" value="1"></el-option>
             <el-option label="2级" value="2"></el-option>
             <el-option label="3级" value="3"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="报警类型状态" prop="plIsvalid">
-          <el-select v-model="form.plIsvalid" placeholder="请选择活动区域">
+          <el-select v-model="form.plIsvalid" placeholder="请选择报警状态">
             <el-option label="启用" value="1"></el-option>
             <el-option label="禁用" value="0"></el-option>
           </el-select>
@@ -63,7 +63,7 @@ export default {
           { type: 'string', required: true, message: '请选择一个报警等级', trigger: 'change' }
         ],
         plIsvalid: [
-          { type: 'string', required: true, message: '请选择报警船台', trigger: 'change' }
+          { type: 'string', required: true, message: '请选择报警状态', trigger: 'change' }
         ],
         plSort: [
           { required: true, message: '请填写排序数字', trigger: 'change' }

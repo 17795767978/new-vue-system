@@ -130,6 +130,7 @@ export default {
   z-index: 1002;
   padding: 5px 20px;
   box-sizing: border-box;
+  background-color: #00082d;
   .content-wrapper {
     padding: 0;
     box-sizing: border-box;

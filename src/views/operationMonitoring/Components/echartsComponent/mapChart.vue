@@ -13,6 +13,7 @@
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
+      <!-- <bml-marker-clusterer :averageCenter="isAll"> -->
       <bm-marker
         v-for="marker in markers"
         :key="marker.busId"
@@ -24,6 +25,7 @@
         animation="BMAP_ANIMATION_DROP"
         >
       </bm-marker>
+      <!-- </bml-marker-clusterer> -->
       <bml-heatmap :data="hotdata" :max="max" :radius="20">
       </bml-heatmap>
     </baidu-map>
@@ -195,13 +197,15 @@ export default {
       max: 100,
       loading: true,
       timerRate: null,
-      timerHot: null
+      timerHot: null,
+      isAll: false
     }
   },
   components: {
     BaiduMap,
     BmlHeatmap,
     BmMarker
+    // BmlMarkerClusterer
   },
   created () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
@@ -211,6 +215,7 @@ export default {
     this._hotDataLine({
       orgId
     })
+    this._getOps()
   },
   mounted () {
   },
@@ -246,14 +251,19 @@ export default {
     //   }
     // },
     // zoom (newValue) {
-    //   if (newValue < 13) {
-    //     this._positionRating({
-    //       orgId: ''
-    //     })
+    //   if (newValue < 15) {
+    //     this.isAll = true
+    //   } else {
+    //     this.isAll = false
     //   }
     // }
   },
   methods: {
+    _getOps () {
+      this.$api['wholeInformation.getCityCoordinatePoints']().then(res => {
+        console.log(res)
+      })
+    },
     _positionRating (params) {
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
         this.markers = res
@@ -315,15 +325,9 @@ export default {
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
       // this.$refs.baiduMapWrapper.$el.children[0].addEventListener('mousewheel', (e) => {
       //   this.zoom = map.getZoom()
-      //   this._positionRating({
-      //     orgId: ''
-      //   })
       // })
       // this.$refs.baiduMapWrapper.$el.children[0].addEventListener('click', (e) => {
       //   this.zoom = map.getZoom()
-      //   this._positionRating({
-      //     orgId: ''
-      //   })
       // })
     },
     handleMarkerClick () {

@@ -11,6 +11,24 @@ const _import_ = file => () => import('@/views/' + file + '.vue')
  */
 export const aysncRoutesMap = [
   {
+    path: '/comprehensive',
+    component: Layout,
+    meta: {
+      title: '综合运营分析',
+      icon: 'nocturne icon-dash',
+      roles: ['/chart-analysis/all']
+    },
+    children: [{
+      path: 'comprehensive-analysis',
+      component: _import_('comprehensiveAnalysis/index'),
+      meta: {
+        title: '综合运营分析',
+        icon: 'nocturne icon-dash',
+        roles: ['/chart-analysis/all']
+      }
+    }]
+  },
+  {
     path: '/chart-analysis',
     component: Layout,
     meta: {

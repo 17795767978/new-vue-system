@@ -216,7 +216,7 @@ export default {
     },
     onclear () {
       this.formInline = {
-        orgId: '',
+        orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
         busNumber: '',
         valueTime: [],
@@ -229,6 +229,20 @@ export default {
       })
       this.$store.dispatch('getComList').then(res => {
         this.comOptions = res
+      })
+      this.$api['wholeInformation.getCar']({
+        lineId: '',
+        lineName: '',
+        orgId: this.userId === '1' ? '' : this.userId
+      }).then(res => {
+        let list = []
+        res.forEach(item => {
+          list.push({
+            value: item.busPlateNumber,
+            label: item.busPlateNumber
+          })
+        })
+        this.carOptions = list
       })
       let dataNow = new Date()
       let endTime = dataNow.getTime() - 24 * 3600 * 1000

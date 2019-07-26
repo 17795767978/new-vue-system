@@ -26,10 +26,8 @@
 
 <script>
 import moment from 'moment'
-// import { getWeather } from '../../../server/api/platform'
 import '../../../assets/iconfontWeather/iconfont.css'
 import { Row, Col } from 'element-ui'
-// import { constants } from 'fs'
 export default {
   data () {
     return {

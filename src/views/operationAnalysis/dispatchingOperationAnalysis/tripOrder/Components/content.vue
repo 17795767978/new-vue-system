@@ -157,14 +157,14 @@ export default {
         //   end: ' 100%'
         // }],
         tooltip: {
-          // trigger: 'item',
-          trigger: 'axis',
+          trigger: 'item',
+          // trigger: 'axis',
           axisPointer: {
             type: 'shadow'
+          },
+          formatter: (params) => {
+            return `${params.name}<br />${params.seriesName}<br />${moment(params.value).format('YYYY-MM-DD HH:mm:ss')}`
           }
-          // formatter: (params) => {
-          //   return `${params.name}<br />${params.seriesName}<br />${moment(params.value).format('YYYY-MM-DD HH:mm:ss')}`
-          // }
         },
         xAxis: {
           type: 'category',

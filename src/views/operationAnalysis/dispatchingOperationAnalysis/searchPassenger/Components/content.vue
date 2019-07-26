@@ -161,6 +161,7 @@ export default {
     // },
     isUpdate () {
       if (this.isUpdate) {
+        this.pageNumber = 1
         this.selectData.pageNumber = this.pageNumber
         this.selectData.pageSize = 15
         this._passengerFlow(this.selectData)

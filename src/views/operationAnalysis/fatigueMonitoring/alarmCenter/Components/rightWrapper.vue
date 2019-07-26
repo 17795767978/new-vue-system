@@ -291,7 +291,6 @@ export default {
   methods: {
     _alarmType (params) {
       this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
-        console.log(res)
         let dataArr = res
         this.warnOptions = []
         this.formInline.warnTypeId = []
@@ -339,7 +338,7 @@ export default {
     handleCurrentChange (val) {
       this.pageNum = val
       this._tableList({
-        orgId: this.formInline.orgId, // 组织机构id
+        orgId: this.userId === '' ? this.formInline.orgId : this.userId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号
@@ -369,7 +368,7 @@ export default {
       })
       this.pageNum = 1
       this._tableList({
-        orgId: this.formInline.orgId, // 组织机构id
+        orgId: this.userId === '' ? this.formInline.orgId : this.userId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号
