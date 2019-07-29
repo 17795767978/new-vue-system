@@ -1,7 +1,6 @@
 <template>
-  <div class="table-wrapper">
+  <div class="table-wrapper" v-loading="loading">
     <el-table
-      v-loading="loading"
       :data="tableData"
       element-loading-text="拼命加载中"
       border
@@ -96,6 +95,7 @@
     <el-pagination
       style="float: right; margin-top: 20px;"
       background
+      :disabled="isDisabled"
       :current-page="pageNumber"
       @current-change="handleCurrentChange"
       layout="prev, pager, next"
@@ -128,27 +128,30 @@ export default {
       pageNumber: 1,
       pageSize: 15,
       downLoadData: [],
-      loading: true
+      loading: true,
+      isDisabled: false
     }
   },
   computed: {
     ...mapGetters(['userId'])
   },
   mounted () {
-    let dataNow = new Date()
-    let endTime = dataNow.getTime() - 24 * 3600 * 1000
-    let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-    let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
-    this._passengerFlow({
-      orgId: this.userId,
-      lineId: '',
-      lineType: '',
-      busNumber: '',
-      startTime: timeStart,
-      endTime: timeEnd,
-      pageSize: 15,
-      pageNumber: this.pageNumber
-    })
+    // let dataNow = new Date()
+    // let endTime = dataNow.getTime() - 24 * 3600 * 1000
+    // let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
+    // let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
+    // this._passengerFlow({
+    //   orgId: this.userId,
+    //   lineId: '',
+    //   lineType: '',
+    //   busNumber: '',
+    //   startTime: timeStart,
+    //   endTime: timeEnd,
+    //   pageSize: 15,
+    //   pageNumber: this.pageNumber
+    // })
+    this.loading = false
+    this.isDisabled = false
   },
   watch: {
     // selectData: {
@@ -179,28 +182,32 @@ export default {
   },
   methods: {
     _passengerFlow (params) {
+      this.loading = true
+      this.isDisabled = true
       this.$api['passengerFlow.list'](params).then(res => {
         this.tableData = res.list
         this.total = res.total
         this.$message.success('数据已更新')
         this.loading = false
+        this.isDisabled = false
       }).catch(() => {
         this.$message.error('不支持查询1000万条以上数据')
         this.loading = false
+        this.isDisabled = false
       })
     },
     downLoadList (params) {
       this.$emit('getData', [], 0)
       this.$api['passengerFlow.list'](params).then(res => {
         res.list.forEach((item, index) => {
-          item.pfrTripDate = moment(item.pfrTripDate).format('YYYY-MM-DD')
+          item.pfrUploadTime = moment(item.pfrUploadTime).format('YYYY-MM-DD HH:mm:ss')
           this.downLoadData[index] = {
             '机构名称': item.orgName,
             '线路': item.pfrLineName,
             '车辆': item.prfBusPlateNumber,
             '站序': item.pfrStationSeq,
             '站点名称': item.pfrStationName,
-            '客流时间': item.pfrTripDate,
+            '客流时间': item.pfrUploadTime,
             '上车人数': item.pfrGetOnNumber,
             '下车人数': item.pfrGetOffNumber,
             '前门上车人数': item.prfGetFOnNumber,
@@ -209,7 +216,6 @@ export default {
             '后门下车人数': item.prfGetEOffNumber
           }
         })
-        console.log(this.downLoadData)
         if (this.total > 0) {
           this.$emit('getData', this.downLoadData, this.total)
         } else {

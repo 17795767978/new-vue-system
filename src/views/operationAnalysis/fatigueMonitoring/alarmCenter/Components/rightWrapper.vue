@@ -329,7 +329,7 @@ export default {
         this.formInline.busPlateNumber = ''
         this.formInline.busUuid = ''
         this.formInline.lineId = ''
-        this.formInline.orgId = ''
+        this.formInline.orgId = this.userId === '1' ? '' : this.userId
       }
     },
     formatterTime (row) {
@@ -338,7 +338,7 @@ export default {
     handleCurrentChange (val) {
       this.pageNum = val
       this._tableList({
-        orgId: this.userId === '' ? this.formInline.orgId : this.userId, // 组织机构id
+        orgId: this.userId !== '1' ? this.formInline.orgId : '', // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号
@@ -366,9 +366,12 @@ export default {
       this.formInline.timeValue.forEach(time => {
         dateArr.push(moment(time).format('YYYY-MM-DD HH:mm:ss'))
       })
+      if (this.userId !== '1') {
+        this.formInline.orgId = this.userId
+      }
       this.pageNum = 1
       this._tableList({
-        orgId: this.userId === '' ? this.formInline.orgId : this.userId, // 组织机构id
+        orgId: this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号

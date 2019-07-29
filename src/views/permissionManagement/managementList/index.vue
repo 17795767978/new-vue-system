@@ -257,7 +257,8 @@ export default {
       isDisable: false,
       pageSize: 10,
       titleMsg: '',
-      disabled: false
+      disabled: false,
+      isUpdateRoleList: false
     }
   },
   computed: {
@@ -287,6 +288,11 @@ export default {
         //   // autocomplete="off"
         //   console.log(this.$refs.accoutDom.$el)
         // }, 1000)
+      }
+    },
+    dialogVisible (newValue) {
+      if (!newValue && this.isUpdateRoleList) {
+        this.roleOptions = this.roleOptions.slice(0, this.roleOptions.length - 1)
       }
     }
   },
@@ -324,7 +330,6 @@ export default {
           }
         })
         // this.list = res
-        console.log(this.roleOptions)
       })
     },
     getOrgList (params) {
@@ -416,9 +421,17 @@ export default {
       this.isAdd = false
       this.user = id
       this.isDisable = true
+      this.isUpdateRoleList = false
       this.$api['permission.detail']({
         id
       }).then(res => {
+        if (res.roles[0].enabled === '0') {
+          this.isUpdateRoleList = true
+          this.roleOptions.push({
+            value: res.roles[0].roleId,
+            label: res.roles[0].roleName
+          })
+        }
         this.adminForm.userAccount = res.userAccount
         this.adminForm.userPassword = res.userPassword
         this.adminForm.userRealName = res.userRealName
