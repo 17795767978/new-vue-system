@@ -11,7 +11,7 @@
         type="index"
         label="序号"
         align="center"
-        width="100"
+        width="80"
       >
       <template slot-scope="scope">
         <span> {{scope.$index + (pageNumber - 1) * pageSize + 1}} </span>
@@ -21,14 +21,15 @@
         align="center"
         prop="orgName"
         label="机构"
-        width="150">
+        width="120">
       </el-table-column>
       <el-table-column
         align="center"
         prop="pfrLineName"
         label="线路"
-        width="100">
+        width="90">
       </el-table-column>
+      <!-- prfGetPersonCount -->
       <el-table-column
         align="center"
         prop="prfBusPlateNumber"
@@ -37,7 +38,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="80"
+        width="60"
         label="方向">
         <template slot-scope="scope">
           {{scope.row.pfrLineType === '1' ? '上行' : '下行'}}
@@ -45,7 +46,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="80"
+        width="70"
         prop="pfrStationSeq"
         label="站序">
       </el-table-column>
@@ -57,9 +58,21 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="200"
+        prop="pfrTripTime"
+        label="趟次"
+        width="60">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        width="160"
         :formatter="gerDate"
         label="客流时间">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        width="80"
+        prop="prfGetPersonCount"
+        label="车内人数">
       </el-table-column>
       <el-table-column
         align="center"

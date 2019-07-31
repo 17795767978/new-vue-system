@@ -38,7 +38,7 @@ import { BaiduMap, BmMarker, BmlHeatmap } from 'vue-baidu-map'
 import iconCarRed from '../../../../assets/images/bus-red.png'
 // import iconCarYellow from '../../../../assets/images/bus-yellow.png'
 import iconCarGreen from '../../../../assets/images/bus-green.png'
-const TIME = 5 * 60 * 1000
+const TIME = 3 * 60 * 1000
 export default {
   data () {
     return {
@@ -207,7 +207,10 @@ export default {
     BmMarker
     // BmlMarkerClusterer
   },
+  beforeCreate () {
+  },
   created () {
+    this._getOps()
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._positionRating({
       orgId
@@ -215,7 +218,6 @@ export default {
     this._hotDataLine({
       orgId
     })
-    this._getOps()
   },
   mounted () {
   },
@@ -261,7 +263,8 @@ export default {
   methods: {
     _getOps () {
       this.$api['wholeInformation.getCityCoordinatePoints']().then(res => {
-        console.log(res)
+        this.center.lat = res.lat
+        this.center.lng = res.lng
       })
     },
     _positionRating (params) {
@@ -317,8 +320,8 @@ export default {
     //   console.log(this.markersMin)
     // },
     handler ({ BMap, map }) {
-      this.center.lng = '114.520486813'
-      this.center.lat = '37.0695311969'
+      // this.center.lng = '114.520486813'
+      // this.center.lat = '37.0695311969'
       this.zoom = 12
       this.isLoading = false
       map.setMapStyle(this.mapStyle)

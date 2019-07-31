@@ -27,7 +27,7 @@
 <script>
 import { max } from '../../../utils/max.js'
 import noEcharts from './echartsComponent/noEcharts'
-const TIME = 5 * 60 * 1000
+const TIME = 3 * 60 * 1000
 export default {
   data () {
     return {

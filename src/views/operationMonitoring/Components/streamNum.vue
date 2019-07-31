@@ -59,7 +59,7 @@
 </template>
 
 <script>
-const TIME = 1 * 60 * 1000
+const TIME = 0.5 * 60 * 1000
 export default {
   props: {
     config: {

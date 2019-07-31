@@ -11,7 +11,7 @@
 
 <script>
 import { max } from '../../../../utils/max.js'
-const TIME = 5 * 60 * 1000
+const TIME = 3 * 60 * 1000
 export default {
   data () {
     return {

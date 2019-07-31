@@ -63,7 +63,7 @@ export function axiosResponseSucessFunc (response) {
         return responseData.data
       } else {
         // case response data error code
-        switch (responseHead.code) {
+        switch (responseData.code) {
           case '401':
             // 权限不够,重新登录
             store.dispatch('userLogout').then(() => {

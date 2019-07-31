@@ -6,14 +6,15 @@
 </template>
 
 <script>
-const TIME = 5 * 60 * 1000
+const TIME = 3 * 60 * 1000
 export default {
   data () {
     return {
       loading: true,
       lineName: [],
       fullLoadRate: [],
-      timer: null
+      timer: null,
+      maxAsxis: ''
     }
   },
   created () {
@@ -32,7 +33,8 @@ export default {
       this.$api['passengerFlow.getRealTimeFullRateTop10'](params).then(res => {
         this.loading = false
         this.lineName = res.map(item => item.lineName)
-        this.fullLoadRate = res.map(item => item.fullLoadRate)
+        this.fullLoadRate = res.map(item => Number(item.fullLoadRate))
+        this.maxAsxis = Math.max(...this.fullLoadRate)
         this.drawLine()
         this.timer = setTimeout(() => {
           this._lineRateTen(params)
@@ -54,13 +56,18 @@ export default {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
+          },
+          formatter: (option) => {
+            // console.log(option[0])
+            let labelData = option[0]
+            return `${labelData.axisValueLabel}<br />线路满载率:${labelData.data}%`
           }
         },
         xAxis: [
           {
             type: 'value',
             min: 0,
-            max: 100,
+            max: this.maxAsxis + 5,
             interval: 10,
             axisPointer: {
               type: 'shadow'
