@@ -13,7 +13,7 @@
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
-      <!-- <bml-marker-clusterer :averageCenter="isAll"> -->
+      <bml-marker-clusterer :averageCenter="true" :maxZoom="seeZoom">
       <bm-marker
         v-for="marker in markers"
         :key="marker.busId"
@@ -25,7 +25,7 @@
         animation="BMAP_ANIMATION_DROP"
         >
       </bm-marker>
-      <!-- </bml-marker-clusterer> -->
+      </bml-marker-clusterer>
       <bml-heatmap :data="hotdata" :max="max" :radius="20">
       </bml-heatmap>
     </baidu-map>
@@ -33,7 +33,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { BaiduMap, BmMarker, BmlHeatmap } from 'vue-baidu-map'
+import { BaiduMap, BmMarker, BmlHeatmap, BmlMarkerClusterer } from 'vue-baidu-map'
 // import iconCarOrange from '../../../../assets/images/bus-orange.png'
 import iconCarRed from '../../../../assets/images/bus-red.png'
 // import iconCarYellow from '../../../../assets/images/bus-yellow.png'
@@ -46,6 +46,7 @@ export default {
       center: { lng: 0, lat: 0 },
       zoom: 3,
       ak: '7vVOlMOKr03PaWX82WajF6m',
+      seeZoom: 15,
       mapStyle: {
         styleJson: [
           {
@@ -204,8 +205,8 @@ export default {
   components: {
     BaiduMap,
     BmlHeatmap,
-    BmMarker
-    // BmlMarkerClusterer
+    BmMarker,
+    BmlMarkerClusterer
   },
   beforeCreate () {
   },
@@ -220,6 +221,23 @@ export default {
     })
   },
   mounted () {
+    setTimeout(function () {
+      let t = performance.timing
+      console.log(performance.memory)
+      console.log('DNS查询耗时 ：' + (t.domainLookupEnd - t.domainLookupStart).toFixed(0))
+      console.log('TCP链接耗时 ：' + (t.connectEnd - t.connectStart).toFixed(0))
+      console.log('客户端发起请求的耗时：' + (t.responseStart - t.requestStart).toFixed(0))
+      console.log('解析dom树耗时 ：' + (t.domComplete - t.domInteractive).toFixed(0))
+      console.log('白屏时间 ：' + (t.responseStart - t.navigationStart).toFixed(0))
+      // console.log('domready时间 ：' + (t.domContentLoadedEventEnd - t.navigationStart).toFixed(0))
+      console.log('渲染时间：' + (t.domComplete - t.domLoading))
+      // console.log('onload时间 ：' + (t.loadEventEnd - t.navigationStart).toFixed(0))
+
+      // eslint-disable-next-line no-cond-assign
+      if (t = performance.memory) {
+        console.log('js内存使用占比 ：' + (t.usedJSHeapSize / t.totalJSHeapSize * 100).toFixed(2) + '%')
+      }
+    })
   },
   computed: {
     getIcon () {

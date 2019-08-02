@@ -14,18 +14,18 @@
       <div class="main">
         <el-row :gutter="5" style="height: 100%">
           <el-col :span="2"  style="height: 100%">
-            <div style="background: #fff;height: 100%">
+            <div style="height: 100%">
               <mostLeft style="height: 100%"></mostLeft>
             </div>
           </el-col>
           <el-col :span="5" style="height: 100%">
-            <div style="background: #fff; height: 100%"></div>
+            <div style="height: 100%"></div>
           </el-col>
           <el-col :span="12" style="height: 100%">
-            <div style="background: #fff;  height: 100%"></div>
+            <div style="height: 100%"></div>
           </el-col>
           <el-col :span="5" style="height: 100%">
-            <div style="background: #fff; height: 100%"></div>
+            <div style="height: 100%"></div>
           </el-col>
         </el-row>
       </div>
@@ -107,12 +107,10 @@ export default {
     .main {
       width: 100%;
       height: 73%;
-      background: pink;
     }
     .footer {
       width: 100%;
       height: 14%;
-      background: pink;
       margin-top: 1%
     }
   }

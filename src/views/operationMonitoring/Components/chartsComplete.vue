@@ -62,7 +62,6 @@ export default {
       orgId
     })
     this.$store.dispatch('getLineList').then(res => {
-      console.log(res.length)
     })
   },
   mounted () {

@@ -138,7 +138,6 @@ export default {
       })
     },
     seeType () {
-      console.log(this.defaultData)
       if (this.defaultData.length === 0) {
         this.tabType = []
         // console.log(123);
@@ -277,7 +276,7 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: 100,
+            max: this.maxRate + 10,
             interval: 20,
             splitLine: {
               show: false

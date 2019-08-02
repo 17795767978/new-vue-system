@@ -53,6 +53,7 @@ const user = {
     },
     SET_LINEID: (state, lineId) => {
       state.initLineId = lineId
+      console.log(lineId)
     }
     // SET_ROUTERS (state, router) {
     //   state.routers.addRouters = router
@@ -116,24 +117,24 @@ const user = {
      */
     getUserInfo ({ commit, state }, params) {
       return new Promise((resolve, reject) => {
-        api['platformMenu.list']({
-          id: localStorage.getItem('id')
-        }).then(res => {
-          const data = res
-          if (data.resourceTree && data.resourceTree.length > 0) {
-            commit('SET_ROLES', data.resourceTree)
-            commit('SET_USERINFO', data.userOrgId)
-            store.dispatch('getLineList').then(res => {
-              commit('SET_LINEID', res[0].value)
-            })
-          } else {
-            alert('管理员请先设置权限再登录')
-            commit('SET_USERINFO', '')
-            commit('SET_ROLES', 'error')
-          }
-          resolve(res.resourceTree)
-        }).catch(err => {
-          reject(err)
+        store.dispatch('getLineList').then(res => {
+          commit('SET_LINEID', res[0].value)
+          api['platformMenu.list']({
+            id: localStorage.getItem('id')
+          }).then(res => {
+            const data = res
+            if (data.resourceTree && data.resourceTree.length > 0) {
+              commit('SET_ROLES', data.resourceTree)
+              commit('SET_USERINFO', data.userOrgId)
+            } else {
+              alert('管理员请先设置权限再登录')
+              commit('SET_USERINFO', '')
+              commit('SET_ROLES', 'error')
+            }
+            resolve(res.resourceTree)
+          }).catch(err => {
+            reject(err)
+          })
         })
       })
     }

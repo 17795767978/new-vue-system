@@ -69,7 +69,6 @@ export default {
       } else if (this.config !== 'passengerFlow' && this.config !== 'all') {
         width = 0
       }
-      console.log(width)
       return width
     },
     getRightWrapperWidth () {
@@ -81,7 +80,6 @@ export default {
       } else if (this.config !== 'fatigueAlarm' && this.config !== 'all') {
         width = 0
       }
-      console.log(width)
       return width
     }
   },
@@ -96,8 +94,6 @@ export default {
   methods: {
     _badDrivingBehavior (params) {
       this.codeNum = 0
-      console.log(this.codeNum)
-      console.log(this.timer)
       this.$api['homeTired.getBadDrivingBehaviorTable'](params).then(res => {
         this.alermData = []
         this.diffArrData = []

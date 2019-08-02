@@ -65,7 +65,6 @@ export default {
   },
   mounted () {
     // this.fullScreen()
-    console.log(this.$route.path)
   },
   activated () {
     this.fullScreen()

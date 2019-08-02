@@ -29,7 +29,7 @@
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-data-line icon"></i>
           <h3 class="title-style">在线车辆数</h3>
-          <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}</p>
+          <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}/{{totalBusNumber}}</p>
         </el-card>
        </el-col>
        <el-col :span="styleObj.spanSmall" v-if="config !== 'fatigueAlarm'">
@@ -73,10 +73,11 @@ export default {
       operLines: '',
       totalLines: '',
       realTimePassengeFlow: '',
-      onLineCarNum: 0,
+      onLineCarNum: '',
+      totalBusNumber: '',
       totelFullLoadRate: '',
       realTimeFullRate: '',
-      operateCarNum: 0,
+      operateCarNum: '',
       outgoingCarNum: '',
       timerTotalPassage: null,
       timerFullRate: null,
@@ -173,8 +174,9 @@ export default {
         //   let num = parseInt(item);
         //   this.onLineCarNum += num;
         // });
-        if (res && res.onlineBusNumber) {
+        if (res) {
           this.onLineCarNum = res.onlineBusNumber
+          this.totalBusNumber = res.totalBusNumber
         } else {
           this.onLineCarNum = '--'
         }

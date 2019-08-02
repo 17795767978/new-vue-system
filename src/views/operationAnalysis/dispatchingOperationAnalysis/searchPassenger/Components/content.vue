@@ -203,8 +203,9 @@ export default {
         this.$message.success('数据已更新')
         this.loading = false
         this.isDisabled = false
-      }).catch(() => {
-        this.$message.error('不支持查询1000万条以上数据')
+      }).catch((error) => {
+        console.log(error)
+        this.$message.error(error.message)
         this.loading = false
         this.isDisabled = false
       })
@@ -220,7 +221,9 @@ export default {
             '车辆': item.prfBusPlateNumber,
             '站序': item.pfrStationSeq,
             '站点名称': item.pfrStationName,
+            '趟次': item.pfrTripTime,
             '客流时间': item.pfrUploadTime,
+            '车内人数': item.prfGetPersonCount,
             '上车人数': item.pfrGetOnNumber,
             '下车人数': item.pfrGetOffNumber,
             '前门上车人数': item.prfGetFOnNumber,

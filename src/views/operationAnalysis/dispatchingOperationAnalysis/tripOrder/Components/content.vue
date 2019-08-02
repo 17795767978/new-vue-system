@@ -134,7 +134,6 @@ export default {
           data: this.echartDatas[i]
         })
       }
-      console.log('series', series)
       chart.setOption({
         title: {
           text: ''
