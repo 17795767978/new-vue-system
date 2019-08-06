@@ -125,6 +125,9 @@ export default {
     }
   },
   created () {
+    this.formInline.orgId = ''
+    this.formInline.busNumber = ''
+    this.formInline.lineId = ''
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
@@ -170,6 +173,21 @@ export default {
             })
           })
           this.lineOptions = list
+        })
+        this.$api['wholeInformation.getCar']({
+          lineId: '',
+          lineName: '',
+          orgId: orgId
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              value: item.busPlateNumber,
+              label: item.busPlateNumber
+            })
+          })
+          console.log(this.comOptions)
+          this.carOptions = list
         })
       }
     },

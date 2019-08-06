@@ -49,7 +49,7 @@
           :picker-options="{
             start: '06:00',
             step: '01:00',
-            end: '24:00'
+            end: '23:00'
           }">
         </el-time-select>
         -
@@ -60,7 +60,7 @@
           :picker-options="{
             start: '06:00',
             step: '01:00',
-            end: '24:00',
+            end: '23:00',
             minTime: formInline.startHour
           }">
         </el-time-select>

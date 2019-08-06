@@ -101,13 +101,14 @@ const globel = {
         if (store.getters.userId === '1') {
           api['wholeInformation.getCar']({
             orgId: '',
-            orgName: ''
+            orgName: '',
+            lineId: ''
           }).then(res => {
             let list = []
             res.forEach(item => {
               list.push({
                 label: item.busPlateNumber,
-                value: item.busUuid
+                value: item.busPlateNumber
               })
             })
             commit('CAR_DATA', list)
@@ -118,7 +119,8 @@ const globel = {
         } else {
           api['wholeInformation.getCar']({
             orgId: store.getters.userId,
-            orgName: ''
+            orgName: '',
+            lineId: ''
           }).then(res => {
             let list = []
             res.forEach(item => {

@@ -258,7 +258,7 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: this.maxRate + 10,
+            max: this.maxRate,
             interval: 20,
             splitLine: {
               show: false

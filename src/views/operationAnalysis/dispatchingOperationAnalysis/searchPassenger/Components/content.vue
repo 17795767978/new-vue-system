@@ -41,7 +41,7 @@
         width="60"
         label="方向">
         <template slot-scope="scope">
-          {{scope.row.pfrLineType === '1' ? '上行' : '下行'}}
+          {{scope.row.pfrLineType === 1 ? '上行' : '下行'}}
         </template>
       </el-table-column>
       <el-table-column
@@ -219,6 +219,7 @@ export default {
             '机构名称': item.orgName,
             '线路': item.pfrLineName,
             '车辆': item.prfBusPlateNumber,
+            '方向': item.pfrLineType === 1 ? '上行' : '下行',
             '站序': item.pfrStationSeq,
             '站点名称': item.pfrStationName,
             '趟次': item.pfrTripTime,

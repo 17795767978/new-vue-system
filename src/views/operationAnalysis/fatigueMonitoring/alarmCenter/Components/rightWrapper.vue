@@ -337,8 +337,10 @@ export default {
     },
     handleCurrentChange (val) {
       this.pageNum = val
+      console.log(this.userId)
+      console.log(this.formInline.orgId)
       this._tableList({
-        orgId: this.userId !== '1' ? this.formInline.orgId : '', // 组织机构id
+        orgId: this.formInline.orgId.length > 0 ? this.formInline.orgId : '', // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号

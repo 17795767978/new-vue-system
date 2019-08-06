@@ -67,7 +67,7 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: this.maxAsxis + 5,
+            max: Math.floor(this.maxAsxis + 10),
             interval: 10,
             axisPointer: {
               type: 'shadow'
