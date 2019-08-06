@@ -13,7 +13,7 @@
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
-      <bml-marker-clusterer :averageCenter="true" :maxZoom="seeZoom">
+      <!-- <bml-marker-clusterer :averageCenter="true" :maxZoom="seeZoom"> -->
       <bm-marker
         v-for="marker in markers"
         :key="marker.busId"
@@ -25,7 +25,7 @@
         animation="BMAP_ANIMATION_DROP"
         >
       </bm-marker>
-      </bml-marker-clusterer>
+      <!-- </bml-marker-clusterer> -->
       <bml-heatmap :data="hotdata" :max="max" :radius="20">
       </bml-heatmap>
     </baidu-map>
@@ -33,7 +33,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { BaiduMap, BmMarker, BmlHeatmap, BmlMarkerClusterer } from 'vue-baidu-map'
+// BmlMarkerClusterer
+import { BaiduMap, BmMarker, BmlHeatmap } from 'vue-baidu-map'
 // import iconCarOrange from '../../../../assets/images/bus-orange.png'
 import iconCarRed from '../../../../assets/images/bus-red.png'
 // import iconCarYellow from '../../../../assets/images/bus-yellow.png'
@@ -205,8 +206,8 @@ export default {
   components: {
     BaiduMap,
     BmlHeatmap,
-    BmMarker,
-    BmlMarkerClusterer
+    BmMarker
+    // BmlMarkerClusterer
   },
   beforeCreate () {
   },

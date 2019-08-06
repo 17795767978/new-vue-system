@@ -88,13 +88,14 @@ export default {
       startTime,
       endTime,
       pageSize: 10,
-      pageNum: this.currentPage
+      pageNum: 1
     })
   },
   watch: {
     selectData: {
       deep: true,
       handler () {
+        this.currentPage = 1
         this._alarmTableAna({
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
@@ -102,7 +103,7 @@ export default {
           startTime: moment(this.selectData.valueTime[0]).format('YYYY-MM-DD HH:mm:ss'),
           endTime: moment(this.selectData.valueTime[1]).format('YYYY-MM-DD HH:mm:ss'),
           pageSize: 10,
-          pageNum: this.currentPage
+          pageNum: 1
         })
       }
     }

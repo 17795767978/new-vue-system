@@ -205,7 +205,8 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: this.xAxisNames
+          data: this.xAxisNames,
+          axisLabel: { formatter: '{value} h' }
         },
         series
       }, true)
