@@ -39,7 +39,6 @@
 </template>
 <script type='text/ecmascript-6'>
 // import '../../../assets/iconfontWeather/iconfont.css'
-
 </script>
 <style lang="scss" scoped>
 .weather {

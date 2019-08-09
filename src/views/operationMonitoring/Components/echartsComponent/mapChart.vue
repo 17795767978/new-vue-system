@@ -28,13 +28,86 @@
       <!-- </bml-marker-clusterer> -->
       <bml-heatmap :data="hotdata" :max="max" :radius="20">
       </bml-heatmap>
+      <bm-control style="margin: 30px;">
+        <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
+          <el-form-item>
+            <el-select style="width: 130px;" size="mini" v-model="formInline.value" placeholder="线路" filterable :disabled="disabled">
+              <el-option
+                v-for="item in lineOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </bm-control>
     </baidu-map>
+    <div class="map-dialog-only">
+    <el-dialog :title="title" :visible.sync="dialogTableVisible" width="70%" :modal-append-to-body="false" :close-on-click-modal="false" :modal='false'>
+      <el-row :gutter="10">
+        <el-col :span="9">
+          <div class="left-content">
+            <div class="ts table-wrapper">
+              <ul style="margin-bottom: 2.5vh">
+                <li class="item">111</li>
+                <li class="item">111</li>
+                <li class="item">111</li>
+                <li class="item">111</li>
+              </ul>
+            </div>
+            <div class="ts vedio-wrapper">
+              <div class="icon">
+                <span style="color: #fff">视频通道</span>
+              </div>
+              <div class="content">
+                <span class="button" @click="getCharItem(item, index)" size="mini" v-for="(item , index) in charData" :class="currentIndexChar === index ? 'active' : ''" :key="index" type="warning">{{item}}</span>
+              </div>
+            </div>
+            <div class="ts alarm-wrapper">
+              <div class="icon">
+                <span style="color: #fff">报警视频</span>
+              </div>
+              <div class="content">
+                <span class="button" @click="getAlarmItem(item, index)" v-for="(item , index) in alarmData" :class="currentIndexAlarm === index ? 'active' : ''" :key="index" type="warning">{{item}}</span>
+              </div>
+            </div>
+            <div class="ts driver-wrapper">
+              <span style="color: #fff;margin-right: 2.5vw">驾驶员</span>
+                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">张大小</span>
+                <span style="color: #fff; margin-left: 1vw; margin-right: 1vw">工号</span>
+                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">09-14019</span>
+              </div>
+            <div class="ts class-wrapper">
+              <span style="color: #fff; " class="left">班次执行</span>
+              <el-progress :percentage="50" class="right"></el-progress>
+            </div>
+            <div class="ts flow-wrapper">
+              <span style="color: #fff; " class="left">班次执行</span>
+              <el-progress :percentage="50" class="right"></el-progress>
+            </div>
+            <div class="ts passeger-wrapper">
+              <span style="color: #fff; " class="left">班次执行</span>
+              <el-progress :percentage="50" class="right"></el-progress>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="9">
+          <div class="middle-content">
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="right-content"></div>
+        </el-col>
+      </el-row>
+    </el-dialog>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 // BmlMarkerClusterer
-import { BaiduMap, BmMarker, BmlHeatmap } from 'vue-baidu-map'
+import { BaiduMap, BmMarker, BmlHeatmap, BmControl } from 'vue-baidu-map'
 // import iconCarOrange from '../../../../assets/images/bus-orange.png'
 import iconCarRed from '../../../../assets/images/bus-red.png'
 // import iconCarYellow from '../../../../assets/images/bus-yellow.png'
@@ -43,8 +116,12 @@ const TIME = 3 * 60 * 1000
 export default {
   data () {
     return {
+      formInline: {
+        value: ''
+      },
       isLoading: true,
       center: { lng: 0, lat: 0 },
+      lineOptions: [],
       zoom: 3,
       ak: '7vVOlMOKr03PaWX82WajF6m',
       seeZoom: 15,
@@ -193,6 +270,7 @@ export default {
           }
         ]
       },
+      markersAll: [],
       markers: [],
       hotdata: [],
       markersMin: [],
@@ -200,14 +278,22 @@ export default {
       loading: true,
       timerRate: null,
       timerHot: null,
-      isAll: false
+      isAll: false,
+      disabled: true,
+      dialogTableVisible: false,
+      title: '',
+      charData: ['司机位', '司机位', '司机位', '司机位', '司机位', '司机位', '司机位', '司机位'],
+      alarmData: ['报警1', '报警1', '报警1', '报警1', '报警1'],
+      currentIndexChar: '',
+      currentIndexAlarm: ''
     }
   },
   components: {
     BaiduMap,
     BmlHeatmap,
-    BmMarker
-    // BmlMarkerClusterer
+    BmMarker,
+    // BmlMarkerClusterer,
+    BmControl
   },
   beforeCreate () {
   },
@@ -222,6 +308,14 @@ export default {
     })
   },
   mounted () {
+    this.$store.dispatch('getLineList').then(res => {
+      this.lineOptions = res
+      this.lineOptions.push({
+        label: '全部线路',
+        value: 'all'
+      })
+      // this.formInline.value = this.lineOptions[0].value
+    })
     setTimeout(function () {
       let t = performance.timing
       console.log(performance.memory)
@@ -243,17 +337,6 @@ export default {
   computed: {
     getIcon () {
       return function (marker) {
-        // if (Number(marker.num) < 50) {
-        //   return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
-        // } else if (Number(marker.num) >= 50 && Number(marker.num) < 100) {
-        //   return { url: `${iconCarYellow}`, size: { width: 13, height: 15 } }
-        // } else if (Number(marker.num) >= 100 && Number(marker.num) < 200) {
-        //   return { url: `${iconCarOrange}`, size: { width: 13, height: 15 } }
-        // } else if (Number(marker.num) >= 200 && Number(marker.num) < 400) {
-        //   return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
-        // } else {
-        //   return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
-        // }
         if (marker.warnInfo) {
           return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
         } else {
@@ -263,21 +346,15 @@ export default {
     }
   },
   watch: {
-    // markers: {
-    //   deep: true,
-    //   handler () {
-    //     if (this.markers.length > 0) {
-    //       this.getCarNum()
-    //     }
-    //   }
-    // },
-    // zoom (newValue) {
-    //   if (newValue < 15) {
-    //     this.isAll = true
-    //   } else {
-    //     this.isAll = false
-    //   }
-    // }
+    'formInline.value': {
+      handler (newV) {
+        if (newV !== 'all') {
+          this.markers = this.markersAll.filter(item => item.lineId === newV)
+        } else {
+          this.markers = this.markersAll
+        }
+      }
+    }
   },
   methods: {
     _getOps () {
@@ -288,8 +365,11 @@ export default {
     },
     _positionRating (params) {
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
-        this.markers = res
+        this.markersAll = res
+        this.markers = this.markersAll
+        this.formInline.value = 'all'
         this.loading = false
+        this.disabled = false
         this.timerRate = setTimeout(() => {
           this._positionRating(params)
         }, TIME)
@@ -313,46 +393,24 @@ export default {
         }, TIME)
       })
     },
-    // getCarNum () {
-    //   console.log(this.markers)
-    //   let r = 6371.393 // 地球半径千米
-    //   let lng = Number(this.markers[0].lng)
-    //   let lat = Number(this.markers[0].lat)
-    //   let dlng = 2 * Math.asin(Math.sin(0.1 / (2 * r)) / Math.cos(lat * Math.PI / 180))
-    //   dlng = dlng * 180 / Math.PI// 角度转为弧度
-    //   let dlat = 5 / r
-    //   dlat = dlat * 180 / Math.PI
-    //   let minlat = lat - dlat
-    //   let maxlat = lat + dlat
-    //   let minlng = lng - dlng
-    //   let maxlng = lng + dlng
-    //   let latDis = maxlat - minlat
-    //   let lngDis = maxlng - minlng
-    //   console.log(latDis)
-    //   console.log(lngDis)
-    //   this.markersMin.push({
-    //     lat,
-    //     lng,
-    //     num: this.markers.filter(list => Number(list.lat) - lat < latDis && Number(list.lng) - lng < lngDis).length
-    //   })
-    //   this.markers = this.markers.filter(item => Number(item.lat) - lat >= latDis || Number(item.lng) - lng >= lngDis)
-    //   console.log(this.markersMin)
-    // },
     handler ({ BMap, map }) {
-      // this.center.lng = '114.520486813'
-      // this.center.lat = '37.0695311969'
       this.zoom = 12
       this.isLoading = false
       map.setMapStyle(this.mapStyle)
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
-      // this.$refs.baiduMapWrapper.$el.children[0].addEventListener('mousewheel', (e) => {
-      //   this.zoom = map.getZoom()
-      // })
-      // this.$refs.baiduMapWrapper.$el.children[0].addEventListener('click', (e) => {
-      //   this.zoom = map.getZoom()
-      // })
     },
-    handleMarkerClick () {
+    handleMarkerClick (marker) {
+      this.dialogTableVisible = true
+      this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
+      console.log(marker)
+    },
+    getCharItem (item, index) {
+      console.log(item)
+      this.currentIndexChar = index
+    },
+    getAlarmItem (item, index) {
+      console.log(item)
+      this.currentIndexAlarm = index
     }
   },
   destroyed () {
@@ -370,6 +428,121 @@ export default {
   height: 100%;
   border-radius: 6px;
 }
+.left-content {
+  width: 100%;
+  height: 30vw;
+  .ts {
+    width: 100%;
+    height: 8vh;
+    margin-bottom: 2.5vh;
+    &.table-wrapper {
+      width: 100%;
+      .item {
+        width: 50%;
+        float:left;
+        height: 3.75vh;
+        line-height: 3.75vh;
+        border: 1px solid #fff;
+        text-align: center;
+        box-sizing: border-box;
+        color: #fff;
+      }
+    }
+    &.vedio-wrapper {
+      width: 100%;
+      display: flex;
+      height: 10vh;
+      margin-top: 15px;
+      .icon {
+        flex: 0 0 80px;
+        line-height: 10vh;
+      }
+      .content {
+        width: 100%;
+        padding: 1.5vh 0.75vw;
+        display: flex;
+        flex-direction:row;
+        flex-wrap: wrap;
+        align-content: center;
+        box-sizing: border-box;
+        .button {
+          padding: 0.3vw 0.6vw;
+          font-size: 0.6vw;
+          margin-right: 1.5vw;
+          margin-bottom: 0.5vw;
+          background: #6076ad;
+          color: #fff;
+          border: hidden;
+          outline: none;
+          border-radius: 6px;
+          // margin-left: -10px;
+        }
+        .active {
+          background-color: #71f3ff;
+          color: #000;
+        }
+      }
+    }
+    &.alarm-wrapper {
+      width: 100%;
+      display: flex;
+      height: 7.5vh;
+      .icon {
+        flex: 0 0 80px;
+        line-height: 7.5vh;
+      }
+      .content {
+        width: 100%;
+        padding: 1.5vh 0.75vw;
+        display: flex;
+        flex-direction:row;
+        flex-wrap: wrap;
+        align-content: center;
+        box-sizing: border-box;
+        .button {
+          padding: 0.3vw 0.6vw;
+          font-size: 0.6vw;
+          margin-right: 1.5vw;
+          margin-bottom: 0.5vw;
+          background: #6076ad;
+          color: #fff;
+          border: hidden;
+          outline: none;
+          border-radius: 6px;
+          // margin-left: -10px;
+        }
+        .active {
+          background-color: #71f3ff;
+          color: #000;
+        }
+      }
+    }
+    &.driver-wrapper {
+      height: 3vh;
+      margin-bottom: 2.5vh;
+      margin-top: 2.5vh;
+    }
+    &.class-wrapper {
+      height: 3vh;
+      margin-bottom: 2.5vh;
+      display: flex;
+      .left {
+        flex: 0 0 80px;
+      }
+      .right {
+        width: 100%;
+      }
+    }
+  }
+}
+.middle-content {
+  width: 100%;
+  height: 600px;
+}
+.right-content {
+  width: 100%;
+  height: 600px;
+}
 .arrow_box{animation: glow 800ms ease-out infinite alternate; }
 @keyframes glow {
     0% {
@@ -380,5 +553,15 @@ export default {
         border-color: #6f6;
         box-shadow: 0 0 20px rgba(0,255,0,.6), inset 0 0 10px rgba(0,255,0,.4), 0 1px 0 #6f6;
     }
+}
+</style>
+<style lang="scss">
+.map-dialog-only {
+  .el-dialog {
+    background-color: rgba(18,25,48, 1)
+  }
+  .el-dialog__title {
+    color: #fff
+  }
 }
 </style>

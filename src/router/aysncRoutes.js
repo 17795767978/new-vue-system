@@ -29,6 +29,24 @@ export const aysncRoutesMap = [
   //   }]
   // },
   {
+    path: '/newBigScreen',
+    component: Layout,
+    meta: {
+      title: '监控分析大屏',
+      icon: 'nocturne icon-dash',
+      roles: ['/chart-analysis/all']
+    },
+    children: [{
+      path: 'newBigScreen-analysis',
+      component: _import_('newBigScreen/index'),
+      meta: {
+        title: '监控分析大屏',
+        icon: 'nocturne icon-dash',
+        roles: ['/chart-analysis/all']
+      }
+    }]
+  },
+  {
     path: '/chart-analysis',
     component: Layout,
     meta: {

@@ -1,12 +1,9 @@
 <template>
   <div class="chart-complete-wrapper">
     <el-row style="height: 200px" :gutter="5">
-      <el-col style="height: 100%;" :span="8">
+      <el-col style="height: 100%; position: relative" :span="8">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '95%', height: '200px',margin: '0 auto'}"></div>
         <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'-'"></noEcharts>
-        <!-- <div v-show="realTimeMileage.length === 0" class="warning">
-          <h2 style="text-align:center; color: #fff">暂无数据</h2>
-        </div> -->
       </el-col>
       <el-col :span="8" style="border-left: 1px #fff solid;border-right: 1px #fff solid;height: 100%">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '95%', height: '200px', margin: '0 auto'}">
@@ -35,15 +32,21 @@ export default {
       orgNameTrips: [],
       realTimeTrips: [],
       planTrips: [],
+      totalRealTrips: 0,
+      totalPlanTrips: 0,
       realTimeTripsMax: '',
       orgNameShift: [],
       realTimeShift: [],
       planClasses: [],
+      totalRealShift: 0,
+      totalPlanShift: 0,
       realTimeShiftMax: '',
       realTimeMileage: [],
       planMileage: [],
       orgNameMileage: [],
       realTimeMileageMax: '',
+      totalRealMileage: 0,
+      totalPlanMileage: 0,
       timerLeft: null,
       timerMiddle: null,
       timerRight: null,
@@ -79,8 +82,9 @@ export default {
         this.loading = false
         if (res && res.length > 0) {
           this.realTimeMileage = res.map(item => Number(item.realtimeMileage))
+          this.totalRealMileage = this.realTimeMileage.reduce((a, b) => a + b).toFixed(2)
           this.planMileage = res.map(item => Number(item.planMileage))
-          this.orgNameMileage = res.map(item => item.displyLabel)
+          this.totalPlanMileage = this.planMileage.reduce((a, b) => a + b).toFixed(2)
           this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
         }
         this.timerLeft = setTimeout(() => {
@@ -94,7 +98,9 @@ export default {
         this.loading = false
         if (res && res.length > 0) {
           this.realTimeTrips = res.map(item => Number(item.realtimeTrips))
+          this.totalRealTrips = this.realTimeTrips.reduce((a, b) => a + b).toFixed(2)
           this.planTrips = res.map(item => Number(item.planTrips))
+          this.totalPlanTrips = this.planTrips.reduce((a, b) => a + b).toFixed(2)
           this.orgNameTrips = res.map(item => item.displyLabel)
           this.realTimeTripsMax = max([max(this.realTimeTrips), max(this.planTrips)])
         }
@@ -109,7 +115,11 @@ export default {
         this.loading = false
         if (res && res.length > 0) {
           this.realTimeShift = res.map(item => Number(item.realtimeClasses))
+          // totalRealShift: 0,
+          // totalPlanShift: 0,
+          this.totalRealShift = this.realTimeShift.reduce((a, b) => a + b)
           this.planClasses = res.map(item => Number(item.planClasses))
+          this.totalPlanShift = this.planClasses.reduce((a, b) => a + b)
           this.orgNameShift = res.map(item => item.displyLabel)
           this.realTimeShiftMax = max([max(this.realTimeShift), max(this.planClasses)])
         }
@@ -128,7 +138,9 @@ export default {
           left: 'center',
           textStyle: {
             'color': '#fff'
-          }
+          },
+          // subtext: `总计划里程：${this.totalPlanTrips}   总实际里程：${this.totalRealTrips}   总百分比：${(this.totalRealTrips / this.totalPlanTrips).toFixed(2) * 100}%`
+          subtext: `${this.totalRealMileage}km / ${this.totalPlanMileage}km  完成率：${this.totalPlanMileage > 0 ? (this.totalRealMileage / this.totalPlanMileage * 100).toFixed(2) : '-'}%`
         },
         color: ['#ff30a0', '#03abd0'],
         tooltip: {
@@ -226,7 +238,8 @@ export default {
           left: 'center',
           textStyle: {
             'color': '#fff'
-          }
+          },
+          subtext: `${this.totalRealTrips}次 / ${this.totalPlanTrips}次  完成率：${this.totalPlanTrips > 0 ? (this.totalRealTrips / this.totalPlanTrips * 100).toFixed(2) : '-'}%`
         },
         color: [ '#fedd00', '#8fc31f', '#03abd0' ],
         tooltip: {
@@ -329,7 +342,8 @@ export default {
           left: 'center',
           textStyle: {
             'color': '#fff'
-          }
+          },
+          subtext: `${this.totalRealShift}次 / ${this.totalPlanShift}次  完成率：${this.totalPlanShift > 0 ? (this.totalRealShift / this.totalPlanShift * 100).toFixed(2) : '-'}%`
         },
         color: [ '#00ffff', '#8957a1', '#f39800' ],
         tooltip: {

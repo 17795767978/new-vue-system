@@ -178,7 +178,7 @@ export default {
             }
           },
           {
-            name: '运量',
+            name: '车内人数',
             type: 'line',
             data: this.echartsData[1],
             areaStyle: {
@@ -196,27 +196,27 @@ export default {
                 }])
               }
             }
-          },
-          {
-            name: '车内人数',
-            type: 'line',
-            data: this.echartsData[2],
-            areaStyle: {
-              normal: {
-              // 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
-                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: 'rgba(103,224,227,0.39)'
-                }, {
-                  offset: 0.34,
-                  color: 'rgba(103,224,227,0.25)'
-                }, {
-                  offset: 1,
-                  color: 'rgba(103,224,227,0.00)'
-                }])
-              }
-            }
           }
+          // {
+          //   name: '车内人数',
+          //   type: 'line',
+          //   data: this.echartsData[2],
+          //   areaStyle: {
+          //     normal: {
+          //     // 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+          //       color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+          //         offset: 0,
+          //         color: 'rgba(103,224,227,0.39)'
+          //       }, {
+          //         offset: 0.34,
+          //         color: 'rgba(103,224,227,0.25)'
+          //       }, {
+          //         offset: 1,
+          //         color: 'rgba(103,224,227,0.00)'
+          //       }])
+          //     }
+          //   }
+          // }
         ]
       }, true)
     }

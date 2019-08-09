@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="per-chart" :style="{width: '100%', height: '220px',padding: '10px', margin: '0 auto', boxSizing: 'border-box'}"
+    <div ref="chart" id="per-chart" :style="{width: '100%', height: '220px',padding: '10px', margin: '0 auto', boxSizing: 'border-box'}"
       v-loading="loading"
       element-loading-background="rgba(0, 0, 0, 0)"
       >
@@ -13,6 +13,12 @@
 import { max } from '../../../../utils/max.js'
 const TIME = 3 * 60 * 1000
 export default {
+  props: {
+    height: {
+      type: Number,
+      default: 220
+    }
+  },
   data () {
     return {
       loading: true,
@@ -34,10 +40,16 @@ export default {
     })
   },
   mounted () {
+    // this.$refs.chart.style.height = this.height + 'px'
   },
   activated () {
     this.drawLine()
   },
+  // watch: {
+  //   height (newV) {
+  //     console.log(newV)
+  //   }
+  // },
   methods: {
     _realTimeFullRate (params) {
       this.$api['passengerFlow.getRealTimeFullLoadRate'](params).then(res => {
@@ -186,10 +198,6 @@ export default {
           }
         ]
       }, true)
-    }
-  },
-  watch: {
-    busLoadNumberMax () {
     }
   },
   destroyed () {
