@@ -41,11 +41,18 @@
             </el-select>
           </el-form-item>
         </el-form>
+        <div style="width: 20vw;height: 10vh;position: absolute; right: 20px; bottom: 20px;z-index: 10000">
+          <el-button-group>
+            <el-button type="primary" icon="el-icon-edit"></el-button>
+            <el-button type="primary" icon="el-icon-share"></el-button>
+            <el-button type="primary" icon="el-icon-delete"></el-button>
+          </el-button-group>
+        </div>
       </bm-control>
     </baidu-map>
     <div class="map-dialog-only">
     <el-dialog :title="title" :visible.sync="dialogTableVisible" width="70%" :modal-append-to-body="false" :close-on-click-modal="false" :modal='false'>
-      <el-row :gutter="10">
+      <el-row :gutter="20">
         <el-col :span="9">
           <div class="left-content">
             <div class="ts table-wrapper">
@@ -83,21 +90,77 @@
               <el-progress :percentage="50" class="right"></el-progress>
             </div>
             <div class="ts flow-wrapper">
-              <span style="color: #fff; " class="left">班次执行</span>
-              <el-progress :percentage="50" class="right"></el-progress>
+              <span style="color: #fff; " class="left">POS客流</span>
+              <div class="middle">
+                 <span class="top">当日累计</span>
+                 <span class="bottom">1835</span>
+              </div>
+              <div class="right">
+                 <span class="top">本班累计</span>
+                 <span class="bottom">80</span>
+              </div>
             </div>
             <div class="ts passeger-wrapper">
-              <span style="color: #fff; " class="left">班次执行</span>
-              <el-progress :percentage="50" class="right"></el-progress>
+              <span style="color: #fff; " class="left">车内乘客</span>
+              <div class="right-left">
+                 <span class="top">整车/负载</span>
+                 <span class="bottom">37/56</span>
+              </div>
+              <div class="right-middle">
+                 <span class="top">前车厢</span>
+                 <span class="bottom">---</span>
+              </div>
+              <div class="right-right">
+                 <span class="top">后车厢</span>
+                 <span class="bottom">---</span>
+              </div>
             </div>
           </div>
         </el-col>
         <el-col :span="9">
           <div class="middle-content">
+            <div class="top-video">
+              <videoWrapper :monitorData="monitorData" :dialogTableVisible='dialogTableVisible'></videoWrapper>
+            </div>
+            <div class="bottom-video">
+              <videoWrapper :monitorData="monitorData" :dialogTableVisible="dialogTableVisible"></videoWrapper>
+            </div>
+            <div class="bottom-message">
+              <span class="left">舒适度： 拥挤</span>
+              <span class="middle">车号：Z0A-0045</span>
+              <span class="right">时间：11:09:26</span>
+            </div>
           </div>
         </el-col>
         <el-col :span="6">
-          <div class="right-content"></div>
+          <div class="right-content">
+            <h3 class="title">车辆信息</h3>
+            <div class="self-code">自编号：Z0A-0045</div>
+            <div class="img-code">拍照号：Z0A-0045</div>
+            <div class="content">
+              <div class="left">归属</div>
+              <div class="middle">
+                <div class="title">公司</div>
+                <div class="title">车队</div>
+                <div class="title">线路</div>
+              </div>
+              <div class="right">
+                <div class="mark">1111</div>
+                <div class="mark">2222</div>
+                <div class="mark">3333</div>
+              </div>
+            </div>
+            <h3 class="title">基本参数</h3>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:8vw;margin-bottom: 2vh;">启用时间: 2018/05/15</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff">年龄: 1.1年</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff; margin: 1.5vw">.国IV</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:5vw;margin-top: 2vh;">年限：8.0年</span>
+            <h3 class="title">累计数据</h3>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:8vw;margin-bottom: 2vh;">总里程: 12.35万公里</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff">材料费: 1.1年</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff; margin: 1.5vw">维修次数：2次</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:6vw;margin-top: 2vh;">总耗油：8万升</span>
+          </div>
         </el-col>
       </el-row>
     </el-dialog>
@@ -112,6 +175,7 @@ import { BaiduMap, BmMarker, BmlHeatmap, BmControl } from 'vue-baidu-map'
 import iconCarRed from '../../../../assets/images/bus-red.png'
 // import iconCarYellow from '../../../../assets/images/bus-yellow.png'
 import iconCarGreen from '../../../../assets/images/bus-green.png'
+import videoWrapper from './video'
 const TIME = 3 * 60 * 1000
 export default {
   data () {
@@ -285,7 +349,8 @@ export default {
       charData: ['司机位', '司机位', '司机位', '司机位', '司机位', '司机位', '司机位', '司机位'],
       alarmData: ['报警1', '报警1', '报警1', '报警1', '报警1'],
       currentIndexChar: '',
-      currentIndexAlarm: ''
+      currentIndexAlarm: '',
+      monitorData: {}
     }
   },
   components: {
@@ -293,12 +358,18 @@ export default {
     BmlHeatmap,
     BmMarker,
     // BmlMarkerClusterer,
-    BmControl
+    BmControl,
+    videoWrapper
   },
   beforeCreate () {
   },
   created () {
     this._getOps()
+    // this.$axios.get('http://192.168.10.40:12056/api/v1/basic/key?username=admin&password=admin').then(res => {
+    //   console.log(123)
+    // })
+  },
+  mounted () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._positionRating({
       orgId
@@ -306,8 +377,6 @@ export default {
     this._hotDataLine({
       orgId
     })
-  },
-  mounted () {
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
       this.lineOptions.push({
@@ -403,6 +472,9 @@ export default {
       this.dialogTableVisible = true
       this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
       console.log(marker)
+      // setTimeout(() => {
+      //   this.initCamera(this.monitorData)
+      // }, 2000)
     },
     getCharItem (item, index) {
       console.log(item)
@@ -414,6 +486,7 @@ export default {
     }
   },
   destroyed () {
+    console.log(this.timerRate)
     clearTimeout(this.timerRate)
     clearTimeout(this.timerHot)
     this.timerRate = null
@@ -427,10 +500,10 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 6px;
+  position: relative;
 }
 .left-content {
   width: 100%;
-  height: 30vw;
   .ts {
     width: 100%;
     height: 8vh;
@@ -475,6 +548,7 @@ export default {
           border: hidden;
           outline: none;
           border-radius: 6px;
+          cursor: pointer;
           // margin-left: -10px;
         }
         .active {
@@ -509,6 +583,7 @@ export default {
           border: hidden;
           outline: none;
           border-radius: 6px;
+          cursor: pointer;
           // margin-left: -10px;
         }
         .active {
@@ -533,15 +608,218 @@ export default {
         width: 100%;
       }
     }
+    &.flow-wrapper {
+      height: 3vh;
+      margin-bottom: 2.5vh;
+      display: flex;
+      font-size: 0.65vw;
+      .left {
+        flex: 0 0 80px;
+        line-height: 3vh;
+      }
+      .middle {
+        width: 20%;
+        text-align: center;
+        margin-right: 2vw;
+        .top {
+          display: block;
+          padding: 0.07vh 0.1vh;
+          background-color: #fff;
+          color: #000;
+        }
+        .bottom {
+          display: block;
+          padding: 0.05vh 0.1vh;
+          background-color: #6076ad;
+          color: #fff;
+        }
+      }
+      .right {
+        width: 20%;
+        text-align: center;
+        .top {
+          display: block;
+          padding: 0.05vh 0.1vh;
+          background-color: #fff;
+          color: #000;
+        }
+        .bottom {
+          display: block;
+          padding: 0.05vh 0.1vh;
+          background-color: #6076ad;
+          color: #fff;
+        }
+      }
+    }
+    &.passeger-wrapper{
+      height: 3vh;
+      margin-bottom: 2.5vh;
+      display: flex;
+      font-size: 0.65vw;
+      .left {
+        flex: 0 0 80px;
+        line-height: 3vh;
+      }
+      .right-left {
+        width: 20%;
+        text-align: center;
+        margin-right: 2vw;
+        .top {
+          display: block;
+          padding: 0.07vh 0.1vh;
+          background-color: #fff;
+          color: #000;
+        }
+        .bottom {
+          display: block;
+          padding: 0.05vh 0.1vh;
+          background-color: #6076ad;
+          color: #fff;
+        }
+      }
+      .right-middle {
+        width: 20%;
+        text-align: center;
+        margin-right: 2vw;
+        .top {
+          display: block;
+          padding: 0.05vh 0.1vh;
+          background-color: #fff;
+          color: #000;
+        }
+        .bottom {
+          display: block;
+          padding: 0.05vh 0.1vh;
+          background-color: #6076ad;
+          color: #fff;
+        }
+      }
+      .right-right {
+        width: 20%;
+        text-align: center;
+        .top {
+          display: block;
+          padding: 0.05vh 0.1vh;
+          background-color: #fff;
+          color: #000;
+        }
+        .bottom {
+          display: block;
+          padding: 0.05vh 0.1vh;
+          background-color: #6076ad;
+          color: #fff;
+        }
+      }
+    }
   }
 }
 .middle-content {
   width: 100%;
-  height: 600px;
+  height: 55vh;
+  .top-video{
+    width: 100%;
+    height: 25vh;
+    margin-bottom: 1vh;
+    background-color: #000;
+  }
+  .bottom-video{
+    width: 100%;
+    height: 25vh;
+    margin-bottom: 1vh;
+    background-color: #000;
+  }
+  .bottom-message {
+    width: 100%;
+    height: 3vh;
+    line-height: 3vh;
+    display: flex;
+    font-size: 0.1vw;
+    color: #fff;
+    .left {
+      width: 30%;
+      margin-right: 3%
+    }
+    .middle {
+      width: 30%;
+      margin-right: 3%;
+    }
+    .right {
+      width: 30%;
+    }
+  }
 }
 .right-content {
   width: 100%;
-  height: 600px;
+  height: 55vh;
+  font-size: 0.2vw;
+  .title {
+    height: 3vh;
+    color: #fff;
+  }
+  .self-code {
+    color: #ffffff;
+    width: 80%;
+    height: 3vh;
+    border: 1px solid #ffffff;
+    text-align: center;
+    line-height: 3vh;
+  }
+  .img-code {
+    color: #ffffff;
+    width: 80%;
+    height: 3vh;
+    margin:1px 0;
+    border: 1px solid #ffffff;
+    border-top: hidden;
+    border-bottom: hidden;
+    text-align: center;
+    line-height: 3vh;
+  }
+  .content {
+    display: flex;
+    width: 80%;
+    border: 1px solid #ffffff;
+    height: 6vh;
+    font-size: 0.2vw;
+    color: #ffffff;
+    .left {
+      width: 20%;
+      line-height: 6vh;
+      text-align: center;
+    }
+    .right {
+      width: 60%;
+      .mark {
+        width: 100%;
+        height: 2vh;
+        text-align: center;
+        line-height: 2vh;
+      }
+      .mark:nth-child(2) {
+        border: 1px solid #ffffff;
+        border-left: hidden;
+        border-right: hidden;
+      }
+    }
+    .middle {
+      width: 20%;
+      border: 1px solid #ffffff;
+      border-top: hidden;
+      border-bottom: hidden;
+      box-sizing: border-box;
+      .title {
+        width: 100%;
+        height: 2vh;
+        text-align: center;
+        line-height: 2vh;
+      }
+      .title:nth-child(2) {
+        border: 1px solid #ffffff;
+        border-left: hidden;
+        border-right: hidden;
+      }
+    }
+  }
 }
 .arrow_box{animation: glow 800ms ease-out infinite alternate; }
 @keyframes glow {

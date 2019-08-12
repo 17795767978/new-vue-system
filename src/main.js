@@ -9,6 +9,7 @@ import echarts from 'echarts'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/iconfontWeather/iconfont.css'
+import axios from 'axios'
 // 全局配置项
 Vue.use(config)
 // 注入自定义组件和方法
@@ -17,6 +18,7 @@ Vue.use(inject)
 Vue.use(ElementUI)
 
 Vue.prototype.$echarts = echarts
+Vue.prototype.$axios = axios
 
 /* eslint-disable no-new */
 new Vue({

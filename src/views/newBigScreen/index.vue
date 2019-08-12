@@ -63,7 +63,9 @@ export default {
       isFullScreen: false,
       config: '',
       loading: true,
-      diffArrData: []
+      diffArrData: [],
+      timer: null,
+      timerOption: null
     }
   },
   computed: {
@@ -189,6 +191,9 @@ export default {
     driveChart
   },
   destroyed () {
+    clearInterval(this.timerOption)
+    this.timer = null
+    this.timerOption = null
   }
 }
 </script>

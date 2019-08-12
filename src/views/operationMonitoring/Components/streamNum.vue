@@ -224,6 +224,7 @@ export default {
   components: {
   },
   destroyed () {
+    console.log(123123123)
     clearTimeout(this.timerTotalPassage)
     clearTimeout(this.timerFullRate)
     clearTimeout(this.timerLine)
