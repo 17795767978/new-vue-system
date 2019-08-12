@@ -28,7 +28,7 @@
       <!-- </bml-marker-clusterer> -->
       <bml-heatmap :data="hotdata" :max="max" :radius="20">
       </bml-heatmap>
-      <bm-control style="margin: 30px;">
+      <bm-control style="margin: 30px;" v-show="isHidden">
         <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
           <el-form-item>
             <el-select style="width: 130px;" size="mini" v-model="formInline.value" placeholder="线路" filterable :disabled="disabled">
@@ -41,17 +41,13 @@
             </el-select>
           </el-form-item>
         </el-form>
-        <div style="width: 20vw;height: 10vh;position: absolute; right: 20px; bottom: 20px;z-index: 10000">
-          <el-button-group>
-            <el-button type="primary" icon="el-icon-edit"></el-button>
-            <el-button type="primary" icon="el-icon-share"></el-button>
-            <el-button type="primary" icon="el-icon-delete"></el-button>
-          </el-button-group>
-        </div>
       </bm-control>
     </baidu-map>
+    <div style="position: absolute; right: 2vw; bottom: 2vh;z-index: 1000">
+        <button v-for="(item, index) in buttonGroup" @click="getMapType(index)" :class="currentIndexMap === index ? 'active' : ''" class="primary" :key="index">{{item}}</button>
+    </div>
     <div class="map-dialog-only">
-    <el-dialog :title="title" :visible.sync="dialogTableVisible" width="70%" :modal-append-to-body="false" :close-on-click-modal="false" :modal='false'>
+    <el-dialog :title="title" top="10vh" :visible.sync="dialogTableVisible" width="70%" :modal-append-to-body="false" :close-on-click-modal="false" :modal='false'>
       <el-row :gutter="20">
         <el-col :span="9">
           <div class="left-content">
@@ -345,11 +341,14 @@ export default {
       isAll: false,
       disabled: true,
       dialogTableVisible: false,
+      isHidden: false,
       title: '',
       charData: ['司机位', '司机位', '司机位', '司机位', '司机位', '司机位', '司机位', '司机位'],
       alarmData: ['报警1', '报警1', '报警1', '报警1', '报警1'],
-      currentIndexChar: '',
-      currentIndexAlarm: '',
+      buttonGroup: ['热力图', '单车', '线路'],
+      currentIndexChar: 0,
+      currentIndexAlarm: 0,
+      currentIndexMap: 0,
       monitorData: {}
     }
   },
@@ -371,9 +370,6 @@ export default {
   },
   mounted () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._positionRating({
-      orgId
-    })
     this._hotDataLine({
       orgId
     })
@@ -423,6 +419,28 @@ export default {
           this.markers = this.markersAll
         }
       }
+    },
+    currentIndexMap (newV) {
+      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+      if (newV === 1) {
+        this._positionRating({
+          orgId
+        })
+        this.hotdata = []
+        this.isHidden = true
+      } else if (newV === 0) {
+        this.markersAll = []
+        this.markers = []
+        this._hotDataLine({
+          orgId
+        })
+        // this.isHidden = false
+      } else if (newV === 2) {
+        this.markersAll = []
+        this.markers = []
+        this.hotdata = []
+        this.isHidden = true
+      }
     }
   },
   methods: {
@@ -433,6 +451,7 @@ export default {
       })
     },
     _positionRating (params) {
+      this.loading = true
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
         this.markersAll = res
         this.markers = this.markersAll
@@ -445,18 +464,22 @@ export default {
       })
     },
     _hotDataLine (params) {
+      this.loading = true
+      this.hotdata = []
       this.$api['homeMap.getBusHeatmapDatas'](params).then(res => {
-        let dataArrCount = res.map(item => parseInt(item.getOnNumber))
-        let dataArrLat = res.map(item => item.lat)
-        let dataArrLng = res.map(item => item.lng)
-        for (let i = 0; i < dataArrCount.length; i++) {
-          this.hotdata[i] = {
-            lng: +dataArrLng[i],
-            lat: +dataArrLat[i],
-            count: dataArrCount[i]
-          }
-        }
-        this.max = 4000
+        this.hotdata = res
+        // let dataArrCount = res.map(item => Number(item.getOnNumber))
+        // let dataArrLat = res.map(item => item.lat)
+        // let dataArrLng = res.map(item => item.lng)
+        // for (let i = 0; i < dataArrCount.length; i++) {
+        //   this.hotdata[i] = {
+        //     lng: +dataArrLng[i],
+        //     lat: +dataArrLat[i],
+        //     count: dataArrCount[i]
+        //   }
+        // }
+        this.max = 100
+        this.loading = false
         this.timerHot = setTimeout(() => {
           this._hotDataLine(params)
         }, TIME)
@@ -471,7 +494,22 @@ export default {
     handleMarkerClick (marker) {
       this.dialogTableVisible = true
       this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
-      console.log(marker)
+      // console.log(marker)
+      const { busId, busNumber, samplingTime, busSelfcode, warnSpeed, orgName, lineName, lineType } = marker
+      this.$api['homeTired.getVideoMsg']({
+        busId,
+        busNumber,
+        samplingTime,
+        busSelfcode,
+        warnSpeed,
+        orgName,
+        lineName,
+        lineType,
+        driverName: '',
+        driverNum: ''
+      }).then(res => {
+        console.log(res)
+      })
       // setTimeout(() => {
       //   this.initCamera(this.monitorData)
       // }, 2000)
@@ -483,10 +521,13 @@ export default {
     getAlarmItem (item, index) {
       console.log(item)
       this.currentIndexAlarm = index
+    },
+    getMapType (index) {
+      console.log(typeof index)
+      this.currentIndexMap = index
     }
   },
   destroyed () {
-    console.log(this.timerRate)
     clearTimeout(this.timerRate)
     clearTimeout(this.timerHot)
     this.timerRate = null
@@ -501,6 +542,18 @@ export default {
   height: 100%;
   border-radius: 6px;
   position: relative;
+  .primary {
+    padding: 0.5vh 1.5vw;
+    margin-left: 1vw;
+    background-color: rgba(0,0,0, 0.5);
+    color: #ffffff;
+    border: hidden;
+    outline: none;
+    border-radius: 6px;
+  }
+  .active {
+    background-color: #71f3ff
+  }
 }
 .left-content {
   width: 100%;
@@ -510,6 +563,7 @@ export default {
     margin-bottom: 2.5vh;
     &.table-wrapper {
       width: 100%;
+      margin-bottom: 3vh;
       .item {
         width: 50%;
         float:left;
@@ -526,6 +580,7 @@ export default {
       display: flex;
       height: 10vh;
       margin-top: 15px;
+      margin-bottom: 3vh;
       .icon {
         flex: 0 0 80px;
         line-height: 10vh;
@@ -561,6 +616,7 @@ export default {
       width: 100%;
       display: flex;
       height: 7.5vh;
+      margin-bottom: 3vh;
       .icon {
         flex: 0 0 80px;
         line-height: 7.5vh;
@@ -594,12 +650,12 @@ export default {
     }
     &.driver-wrapper {
       height: 3vh;
-      margin-bottom: 2.5vh;
-      margin-top: 2.5vh;
+      margin-bottom: 5vh;
+      margin-top: 5vh;
     }
     &.class-wrapper {
       height: 3vh;
-      margin-bottom: 2.5vh;
+      margin-bottom: 5vh;
       display: flex;
       .left {
         flex: 0 0 80px;
@@ -610,7 +666,7 @@ export default {
     }
     &.flow-wrapper {
       height: 3vh;
-      margin-bottom: 2.5vh;
+      margin-bottom: 5vh;
       display: flex;
       font-size: 0.65vw;
       .left {
@@ -653,7 +709,7 @@ export default {
     }
     &.passeger-wrapper{
       height: 3vh;
-      margin-bottom: 2.5vh;
+      margin-bottom: 5vh;
       display: flex;
       font-size: 0.65vw;
       .left {
@@ -715,17 +771,17 @@ export default {
 }
 .middle-content {
   width: 100%;
-  height: 55vh;
+  height: 70vh;
   .top-video{
     width: 100%;
-    height: 25vh;
-    margin-bottom: 1vh;
+    height: 32vh;
+    margin-bottom: 1.5vh;
     background-color: #000;
   }
   .bottom-video{
     width: 100%;
-    height: 25vh;
-    margin-bottom: 1vh;
+    height: 32vh;
+    margin-bottom: 1.5vh;
     background-color: #000;
   }
   .bottom-message {
@@ -750,7 +806,7 @@ export default {
 }
 .right-content {
   width: 100%;
-  height: 55vh;
+  height: 70vh;
   font-size: 0.2vw;
   .title {
     height: 3vh;
@@ -781,6 +837,7 @@ export default {
     border: 1px solid #ffffff;
     height: 6vh;
     font-size: 0.2vw;
+    margin-bottom: 5vh;
     color: #ffffff;
     .left {
       width: 20%;
@@ -836,7 +893,7 @@ export default {
 <style lang="scss">
 .map-dialog-only {
   .el-dialog {
-    background-color: rgba(18,25,48, 1)
+    background-color: rgba(18,25,48, 0.95)
   }
   .el-dialog__title {
     color: #fff

@@ -39,6 +39,25 @@ export const homeTiredApi = {
         orgId: ''
       },
       desc: '不良驾驶行为数据（图表）'
+    },
+    {
+      name: 'getVideoMsg',
+      method: 'POST',
+      path: '/zhfxpt/getDetail',
+      mockPath: '/zhfxpt/getDetail',
+      params: {
+        busId: '',
+        busNumber: '',
+        samplingTime: '',
+        busSelfcode: '',
+        warnSpeed: '',
+        orgName: '',
+        lineName: '',
+        lineType: '',
+        driverName: '',
+        driverNum: ''
+      },
+      desc: '获取单车明细'
     }
   ]
 }

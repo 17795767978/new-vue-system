@@ -60,7 +60,7 @@ export default {
             this._getWeather()
           }, 10 * 60 * 1000)
         } else {
-          this.$message.warning('暂无数据')
+          this.$message.warning('暂无天气信息')
         }
       })
     }
