@@ -88,6 +88,9 @@ export default {
             type: 'pie',
             radius: '55%',
             center: ['50%', '60%'],
+            label: {
+              formatter: '{b}: {@2012} ({d}%)'
+            },
             // roseType: 'area',
             data: this.badDrivingBehavior
           }
