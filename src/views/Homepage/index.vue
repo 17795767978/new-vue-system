@@ -72,7 +72,7 @@ const SIMPLE = [
   { name: '客流数据查询', icon: iconHomeMzl, path: '/search-passenger', admin: false }
 ]
 const TIRED_CONTRAL = [
-  { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center', admin: false },
+  { name: '驾驶行为监测', icon: iconHomeBjzx, path: '/alarm-center', admin: false },
   { name: '设备状态', icon: iconHomeBjzt, path: '/device-status', admin: false },
   { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false },
   { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management', admin: false }
