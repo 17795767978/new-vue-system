@@ -85,6 +85,7 @@ export default {
           this.totalRealMileage = this.realTimeMileage.reduce((a, b) => a + b).toFixed(2)
           this.planMileage = res.map(item => Number(item.planMileage))
           this.totalPlanMileage = this.planMileage.reduce((a, b) => a + b).toFixed(2)
+          this.orgNameMileage = res.map(item => item.displyLabel)
           this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
         }
         this.timerLeft = setTimeout(() => {

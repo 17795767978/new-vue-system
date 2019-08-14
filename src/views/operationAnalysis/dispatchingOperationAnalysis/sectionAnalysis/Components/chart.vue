@@ -103,7 +103,7 @@ export default {
         tooltip: {
           position: 'top',
           formatter: function (params) {
-            return params.name + '---客流高峰值:' + params.value[2]
+            return params.name + '---断面客流值:' + params.value[2]
           }
         },
         grid: {

@@ -5,6 +5,7 @@
       :style="{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0, 0.5)', borderRadius: '6px'}"
       :zoom="zoom"
       :ak="ak"
+      :mapClick="false"
       :center="center"
       :scroll-wheel-zoom="true"
       @ready="handler"
@@ -22,7 +23,6 @@
         :title="`${marker.lineName}-${marker.busNumber}`"
         :icon="getIcon(marker)"
         class="arrow_box"
-        animation="BMAP_ANIMATION_DROP"
         >
       </bm-marker>
       <!-- </bml-marker-clusterer> -->
@@ -53,10 +53,11 @@
           <div class="left-content">
             <div class="ts table-wrapper">
               <ul style="margin-bottom: 2.5vh">
-                <li class="item">111</li>
-                <li class="item">111</li>
-                <li class="item">111</li>
-                <li class="item">111</li>
+                <li class="item">35KM/H</li>
+                <li class="item">{{carDetailData.carTeam || '---'}}</li>
+                <!-- <li class="item">{{carDetailData.lineName}}</li> -->
+                <li class="item">002路西环</li>
+                <li class="item">{{carDetailData.lineType === '1' ? '上行' : '下行'}}</li>
               </ul>
             </div>
             <div class="ts vedio-wrapper">
@@ -77,9 +78,11 @@
             </div>
             <div class="ts driver-wrapper">
               <span style="color: #fff;margin-right: 2.5vw">驾驶员</span>
-                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">张大小</span>
+                <!-- <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">{{carDetailData.driverName || '---'}}</span> -->
+                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">刘立群</span>
                 <span style="color: #fff; margin-left: 1vw; margin-right: 1vw">工号</span>
-                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">09-14019</span>
+                <!-- <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">{{carDetailData.driverNum || '---'}}</span> -->
+                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">EF0128</span>
               </div>
             <div class="ts class-wrapper">
               <span style="color: #fff; " class="left">班次执行</span>
@@ -89,26 +92,21 @@
               <span style="color: #fff; " class="left">POS客流</span>
               <div class="middle">
                  <span class="top">当日累计</span>
-                 <span class="bottom">1835</span>
+                 <!-- <span class="bottom">{{carDetailData.totalPersonFlow}}</span> -->
+                 <span class="bottom">132</span>
               </div>
               <div class="right">
                  <span class="top">本班累计</span>
-                 <span class="bottom">80</span>
+                 <!-- <span class="bottom">{{carDetailData.currentPersonFlow}}</span> -->
+                 <span class="bottom">56</span>
               </div>
             </div>
             <div class="ts passeger-wrapper">
               <span style="color: #fff; " class="left">车内乘客</span>
               <div class="right-left">
                  <span class="top">整车/负载</span>
-                 <span class="bottom">37/56</span>
-              </div>
-              <div class="right-middle">
-                 <span class="top">前车厢</span>
-                 <span class="bottom">---</span>
-              </div>
-              <div class="right-right">
-                 <span class="top">后车厢</span>
-                 <span class="bottom">---</span>
+                 <!-- <span class="bottom">{{carDetailData.personNumberInCar}}/{{carDetailData.busLoadNumber}}</span> -->
+                 <span class="bottom">33/56</span>
               </div>
             </div>
           </div>
@@ -122,17 +120,20 @@
               <videoWrapper :monitorData="monitorData" :dialogTableVisible="dialogTableVisible"></videoWrapper>
             </div>
             <div class="bottom-message">
-              <span class="left">舒适度： 拥挤</span>
-              <span class="middle">车号：Z0A-0045</span>
-              <span class="right">时间：11:09:26</span>
+              <!-- <span class="left">舒适度： 拥挤</span> -->
+              <!-- <span class="middle">车号：{{carDetailData.busNumber}}</span> -->
+              <span class="middle">车号：EF0128</span>
+              <!-- <span class="right">时间：{{carDetailData.samplingTime}}</span> -->
+              <span class="right">时间：2019-8-14 10:13:27</span>
             </div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="right-content">
             <h3 class="title">车辆信息</h3>
-            <div class="self-code">自编号：Z0A-0045</div>
-            <div class="img-code">拍照号：Z0A-0045</div>
+            <!-- <div class="self-code">自编号：{{carDetailData.busSelfcode}}</div> -->
+            <div class="self-code">自编号：EF0128</div>
+            <div class="img-code">牌照号：冀EF0128</div>
             <div class="content">
               <div class="left">归属</div>
               <div class="middle">
@@ -141,21 +142,23 @@
                 <div class="title">线路</div>
               </div>
               <div class="right">
-                <div class="mark">1111</div>
-                <div class="mark">2222</div>
-                <div class="mark">3333</div>
+                <!-- <div class="mark">{{carDetailData.orgName}}</div> -->
+                <div class="mark">三公司</div>
+                <div class="mark">{{carDetailData.carTeam}}</div>
+                <!-- <div class="mark">{{carDetailData.lineName}}</div> -->
+                <div class="mark">002路西环</div>
               </div>
             </div>
             <h3 class="title">基本参数</h3>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:8vw;margin-bottom: 2vh;">启用时间: 2018/05/15</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff">年龄: 1.1年</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff; margin: 1.5vw">.国IV</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:5vw;margin-top: 2vh;">年限：8.0年</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:10vw;margin-bottom: 2vh;">启用时间: {{carDetailData.startUpDate}}</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff">年龄: {{carDetailData.carAge}}</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff; margin: 1.5vw">{{carDetailData.nationalStandard || '---'}}</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:5vw;margin-top: 2vh;">年限：{{carDetailData.carAgeLimit}}年</span>
             <h3 class="title">累计数据</h3>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:8vw;margin-bottom: 2vh;">总里程: 12.35万公里</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff">材料费: 1.1年</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff; margin: 1.5vw">维修次数：2次</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:6vw;margin-top: 2vh;">总耗油：8万升</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:8vw;margin-bottom: 2vh;">总里程: {{carDetailData.totalMileage}}KM</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff">材料费: {{carDetailData.materials}}元</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff; margin: 1.5vw">维修次数：{{carDetailData.repairNumber}}次</span>
+            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:6vw;margin-top: 2vh;">总耗油：{{carDetailData.totalFuel}}万升</span>
           </div>
         </el-col>
       </el-row>
@@ -172,6 +175,7 @@ import iconCarRed from '../../../../assets/images/bus-red.png'
 // import iconCarYellow from '../../../../assets/images/bus-yellow.png'
 import iconCarGreen from '../../../../assets/images/bus-green.png'
 import videoWrapper from './video'
+import moment from 'moment'
 const TIME = 3 * 60 * 1000
 export default {
   data () {
@@ -343,13 +347,14 @@ export default {
       dialogTableVisible: false,
       isHidden: false,
       title: '',
-      charData: ['司机位', '司机位', '司机位', '司机位', '司机位', '司机位', '司机位', '司机位'],
-      alarmData: ['报警1', '报警1', '报警1', '报警1', '报警1'],
+      charData: ['通道1', '通道2', '通道3', '通道4', '通道5', '通道6', '通道7', '通道8'],
+      alarmData: ['报警1', '报警2', '报警3'],
       buttonGroup: ['热力图', '单车', '线路'],
       currentIndexChar: 0,
       currentIndexAlarm: 0,
       currentIndexMap: 0,
-      monitorData: {}
+      monitorData: {},
+      carDetailData: {}
     }
   },
   components: {
@@ -383,15 +388,12 @@ export default {
     })
     setTimeout(function () {
       let t = performance.timing
-      console.log(performance.memory)
       console.log('DNS查询耗时 ：' + (t.domainLookupEnd - t.domainLookupStart).toFixed(0))
       console.log('TCP链接耗时 ：' + (t.connectEnd - t.connectStart).toFixed(0))
       console.log('客户端发起请求的耗时：' + (t.responseStart - t.requestStart).toFixed(0))
       console.log('解析dom树耗时 ：' + (t.domComplete - t.domInteractive).toFixed(0))
       console.log('白屏时间 ：' + (t.responseStart - t.navigationStart).toFixed(0))
-      // console.log('domready时间 ：' + (t.domContentLoadedEventEnd - t.navigationStart).toFixed(0))
       console.log('渲染时间：' + (t.domComplete - t.domLoading))
-      // console.log('onload时间 ：' + (t.loadEventEnd - t.navigationStart).toFixed(0))
 
       // eslint-disable-next-line no-cond-assign
       if (t = performance.memory) {
@@ -423,6 +425,8 @@ export default {
     currentIndexMap (newV) {
       let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
       if (newV === 1) {
+        clearTimeout(this.timerHot)
+        this.timerHot = null
         this._positionRating({
           orgId
         })
@@ -431,15 +435,33 @@ export default {
       } else if (newV === 0) {
         this.markersAll = []
         this.markers = []
+        clearTimeout(this.timerRate)
+        this.timerRate = null
         this._hotDataLine({
           orgId
         })
-        // this.isHidden = false
+        this.isHidden = false
       } else if (newV === 2) {
         this.markersAll = []
         this.markers = []
         this.hotdata = []
         this.isHidden = true
+      }
+    },
+    dialogTableVisible (newV) {
+      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+      if (newV) {
+        clearTimeout(this.timerRate)
+        this.timerRate = null
+      } else {
+        // this._positionRating({
+        //   orgId
+        // })
+        this.timerRate = setTimeout(() => {
+          this._positionRating({
+            orgId
+          })
+        }, TIME)
       }
     }
   },
@@ -486,10 +508,28 @@ export default {
       })
     },
     handler ({ BMap, map }) {
-      this.zoom = 12
+      this.zoom = 13
       this.isLoading = false
       map.setMapStyle(this.mapStyle)
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
+      // var map2 = new BMap.Map('map', { minZoom: 7, maxZoom: 18 })
+      map.centerAndZoom(new BMap.Point(this.center.lng, this.center.lat), 8)
+      // map.enableScrollWheelZoom()
+
+      var cityName = '邢台市'
+      // map.addControl(new BMap.OverviewMapControl())
+      // map.enableScrollWheelZoom()
+      // map.addControl(new BMap.NavigationControl({ type: 'BMAP_NAVIGATION_CONTROL_LARGE', anchor: 'BMAP_ANCHOR_TOP_LEFT', offset: new BMap.Size(40, 250) }))
+      var bdary = new BMap.Boundary()
+      bdary.get(cityName, function (rs) { // 获取行政区域
+        var EN_JW = '180, 90;' // 东北角
+        var NW_JW = '-180,  90;' // 西北角
+        var WS_JW = '-180, -90;' // 西南角
+        var SE_JW = '180, -90;' // 东南角
+        // 4.添加环形遮罩层
+        var ply1 = new BMap.Polygon(rs.boundaries[0] + SE_JW + SE_JW + WS_JW + NW_JW + EN_JW + SE_JW, { strokeColor: 'none', fillColor: 'rgb(246,246,246)', fillOpacity: 1, strokeOpacity: 0.5 }) // 建立多边形覆盖物
+        map.addOverlay(ply1)
+      })
     },
     handleMarkerClick (marker) {
       this.dialogTableVisible = true
@@ -508,7 +548,9 @@ export default {
         driverName: '',
         driverNum: ''
       }).then(res => {
-        console.log(res)
+        // console.log(res)
+        this.carDetailData = res
+        this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
       })
       // setTimeout(() => {
       //   this.initCamera(this.monitorData)
@@ -791,16 +833,16 @@ export default {
     display: flex;
     font-size: 0.1vw;
     color: #fff;
-    .left {
-      width: 30%;
-      margin-right: 3%
-    }
+    // .left {
+    //   width: 30%;
+    //   margin-right: 3%
+    // }
     .middle {
       width: 30%;
       margin-right: 3%;
     }
     .right {
-      width: 30%;
+      width: 63%;
     }
   }
 }

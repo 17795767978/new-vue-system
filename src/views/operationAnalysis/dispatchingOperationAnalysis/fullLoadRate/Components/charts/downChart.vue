@@ -197,13 +197,14 @@ export default {
           // }
         },
         color: ['#249cf9', '#fdb628', '#67e0e3', '#eb6f49'],
-        // legend: {
-        //   data: this.tabType,
-        //   bottom: 10,
-        //   textStyle: {
-        //     color: '#000'
-        //   }
-        // },
+        legend: {
+          data: this.tabType,
+          selectedMode: false,
+          bottom: 10,
+          textStyle: {
+            color: '#000'
+          }
+        },
         xAxis: [
           {
             type: 'category',

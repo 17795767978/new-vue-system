@@ -178,7 +178,7 @@ export default {
             }
           },
           {
-            name: '车内人数',
+            name: '运量',
             type: 'line',
             data: this.echartsData[1],
             areaStyle: {
