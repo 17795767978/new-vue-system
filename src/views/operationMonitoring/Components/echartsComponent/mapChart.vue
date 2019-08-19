@@ -369,7 +369,7 @@ export default {
         st: 0,
         port: 12060
       }).then(res => {
-        // this.monitorData = res.data
+        this.monitorData = res.data
         // console.log(this.monitorData)
         console.log(res)
       })

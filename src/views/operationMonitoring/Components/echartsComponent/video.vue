@@ -46,7 +46,7 @@ export default {
         this.player = Flv.createPlayer({
           isLive: true,
           type: 'flv',
-          url: 'http://61.157.184.120:12060/live.flv?devid=008801222D&chl=1&st=1&isaudio=1'
+          url: data.url
         })
 
         this.player.attachMediaElement(videoDom)
