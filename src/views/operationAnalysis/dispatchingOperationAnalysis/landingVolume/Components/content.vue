@@ -1,5 +1,5 @@
 <template>
-  <div class="content-wrapper">
+  <div class="content-wrapper" ref="tableWrapper">
     <el-row :gutter="24">
       <el-col :span="12" style="height: 730px; background: #f6f6f6">
         <p class="before-title" style="font-size: 18px;font-weight:600;display: inline-block;">上车人数</p>
@@ -248,9 +248,9 @@ export default {
     selectData: {
       deep: true,
       handler () {
-        console.log(this.selectData)
         this.upTableData = this.getTableData(true)
         this.downTableData = this.getTableData(false)
+        this.$forceUpdate()
       }
     }
   },

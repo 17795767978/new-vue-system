@@ -1,6 +1,6 @@
 <template>
- <div>
-   <video ref="video" src="" style="width: 100%;height: 32vh;" v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.8)"></video>
+ <div style="width: 100%;background: #000">
+   <video ref="video" src="" style="width: 80%;" v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.8)"></video>
  </div>
 </template>
 

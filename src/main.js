@@ -10,6 +10,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/iconfontWeather/iconfont.css'
 import axios from 'axios'
+import VueJsonp from 'vue-jsonp'
+Vue.use(VueJsonp)
 // 全局配置项
 Vue.use(config)
 // 注入自定义组件和方法

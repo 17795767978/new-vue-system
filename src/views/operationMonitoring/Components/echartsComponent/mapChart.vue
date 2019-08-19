@@ -49,49 +49,20 @@
     <div class="map-dialog-only">
     <el-dialog :title="title" top="10vh" :visible.sync="dialogTableVisible" width="70%" :modal-append-to-body="false" :close-on-click-modal="false" :modal='false'>
       <el-row :gutter="20">
-        <el-col :span="9">
+        <el-col :span="11">
           <div class="left-content">
-            <div class="ts table-wrapper">
-              <ul style="margin-bottom: 2.5vh">
-                <li class="item">35KM/H</li>
-                <li class="item">{{carDetailData.carTeam || '---'}}</li>
-                <!-- <li class="item">{{carDetailData.lineName}}</li> -->
-                <li class="item">002路西环</li>
-                <li class="item">{{carDetailData.lineType === '1' ? '上行' : '下行'}}</li>
-              </ul>
-            </div>
-            <div class="ts vedio-wrapper">
-              <div class="icon">
-                <span style="color: #fff">视频通道</span>
-              </div>
-              <div class="content">
-                <span class="button" @click="getCharItem(item, index)" size="mini" v-for="(item , index) in charData" :class="currentIndexChar === index ? 'active' : ''" :key="index" type="warning">{{item}}</span>
-              </div>
-            </div>
-            <div class="ts alarm-wrapper">
-              <div class="icon">
-                <span style="color: #fff">报警视频</span>
-              </div>
-              <div class="content">
-                <span class="button" @click="getAlarmItem(item, index)" v-for="(item , index) in alarmData" :class="currentIndexAlarm === index ? 'active' : ''" :key="index" type="warning">{{item}}</span>
-              </div>
-            </div>
             <div class="ts driver-wrapper">
-              <span style="color: #fff;margin-right: 2.5vw">驾驶员</span>
+              <span style="color: #fff;margin-right: 2.5vw; font-size: 0.8vw;">驾驶员</span>
                 <!-- <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">{{carDetailData.driverName || '---'}}</span> -->
-                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">刘立群</span>
-                <span style="color: #fff; margin-left: 1vw; margin-right: 1vw">工号</span>
+                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #fff; color: #000; border-radius:6px;">刘立群</span>
+                <span style="color: #fff; margin-left: 1vw; margin-right: 1vw;font-size: 0.8vw;">工号</span>
                 <!-- <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">{{carDetailData.driverNum || '---'}}</span> -->
-                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #6076ad; color: #fff">EF0128</span>
-              </div>
-            <div class="ts class-wrapper">
-              <span style="color: #fff; " class="left">班次执行</span>
-              <el-progress :percentage="50" class="right"></el-progress>
+                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #fff; color: #000; border-radius:6px;">EF0128</span>
             </div>
             <div class="ts flow-wrapper">
-              <span style="color: #fff; " class="left">POS客流</span>
+              <span style="color: #fff;font-size: 0.8vw; " class="left">POS客流</span>
               <div class="middle">
-                 <span class="top">当日累计</span>
+                 <span class="top" >当日累计</span>
                  <!-- <span class="bottom">{{carDetailData.totalPersonFlow}}</span> -->
                  <span class="bottom">132</span>
               </div>
@@ -102,22 +73,59 @@
               </div>
             </div>
             <div class="ts passeger-wrapper">
-              <span style="color: #fff; " class="left">车内乘客</span>
+              <span style="color: #fff; font-size: 0.8vw;" class="left">车内乘客</span>
               <div class="right-left">
                  <span class="top">整车/负载</span>
                  <!-- <span class="bottom">{{carDetailData.personNumberInCar}}/{{carDetailData.busLoadNumber}}</span> -->
                  <span class="bottom">33/56</span>
               </div>
             </div>
+            <div class="ts class-wrapper">
+              <span style="color: #fff;" class="left">班次执行</span>
+              <div class="right">
+                <el-progress :percentage="60" class="right" status="success" :show-text="false">
+                </el-progress>
+                <div style="width: 100%;height: 1vh;margin-top: 0.5vh">
+                  <span style="display: inline-block;width: 50%; text-align: left; color: #fff">当前3</span>
+                  <span style="display: inline-block;width: 50%; text-align: right; color: #fff">计划5</span>
+                </div>
+              </div>
+            </div>
+            <div class="ts vedio-wrapper">
+              <div class="icon">
+                <span style="color: #fff;font-size: 0.8vw;">视频通道</span>
+              </div>
+              <div class="content">
+                <span class="button" @click="getCharItem(item, index)" size="mini" v-for="(item , index) in charData" :class="currentIndexChar === index ? 'active' : ''" :key="index" type="warning">{{item}}</span>
+              </div>
+            </div>
+            <div class="ts alarm-wrapper">
+              <div class="icon">
+                <span style="color: #fff;font-size: 0.8vw;">报警视频</span>
+              </div>
+              <div class="content">
+                <span class="button" @click="getAlarmItem(item, index)" v-for="(item , index) in alarmData" :class="currentIndexAlarm === index ? 'active' : ''" :key="index" type="warning">{{item}}</span>
+              </div>
+            </div>
           </div>
         </el-col>
-        <el-col :span="9">
+        <el-col :span="13">
           <div class="middle-content">
-            <div class="top-video">
-              <videoWrapper :monitorData="monitorData" :dialogTableVisible='dialogTableVisible'></videoWrapper>
-            </div>
-            <div class="bottom-video">
-              <videoWrapper :monitorData="monitorData" :dialogTableVisible="dialogTableVisible"></videoWrapper>
+            <div class="table">
+              <div class="left">
+                <div class="top-title">车辆信息</div>
+                <div class="bottom-title"></div>
+              </div>
+              <div class="middle">
+                <div class="pub-code"></div>
+                <div class="company"></div>
+                <div class="line"></div>
+              </div>
+              <div class="right">
+                <div class="pub-code"></div>
+                <div class="company"></div>
+                <div class="line"></div>
+              </div>
             </div>
             <div class="bottom-message">
               <!-- <span class="left">舒适度： 拥挤</span> -->
@@ -126,39 +134,20 @@
               <!-- <span class="right">时间：{{carDetailData.samplingTime}}</span> -->
               <span class="right">时间：2019-8-14 10:13:27</span>
             </div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="right-content">
-            <h3 class="title">车辆信息</h3>
-            <!-- <div class="self-code">自编号：{{carDetailData.busSelfcode}}</div> -->
-            <div class="self-code">自编号：EF0128</div>
-            <div class="img-code">牌照号：冀EF0128</div>
-            <div class="content">
-              <div class="left">归属</div>
-              <div class="middle">
-                <div class="title">公司</div>
-                <div class="title">车队</div>
-                <div class="title">线路</div>
+            <div class="video">
+              <div class="top-left-video">
+                <videoWrapper :monitorData="monitorData" :dialogTableVisible='dialogTableVisible'></videoWrapper>
               </div>
-              <div class="right">
-                <!-- <div class="mark">{{carDetailData.orgName}}</div> -->
-                <div class="mark">三公司</div>
-                <div class="mark">{{carDetailData.carTeam}}</div>
-                <!-- <div class="mark">{{carDetailData.lineName}}</div> -->
-                <div class="mark">002路西环</div>
+              <div class="top-right-video">
+                <videoWrapper :monitorData="monitorData" :dialogTableVisible="dialogTableVisible"></videoWrapper>
+              </div>
+              <div class="bottom-left-video">
+                <videoWrapper :monitorData="monitorData" :dialogTableVisible="dialogTableVisible"></videoWrapper>
+              </div>
+              <div class="bottom-right-video">
+                <videoWrapper :monitorData="monitorData" :dialogTableVisible="dialogTableVisible"></videoWrapper>
               </div>
             </div>
-            <h3 class="title">基本参数</h3>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:10vw;margin-bottom: 2vh;">启用时间: {{carDetailData.startUpDate}}</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff">年龄: {{carDetailData.carAge}}</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff; margin: 1.5vw">{{carDetailData.nationalStandard || '---'}}</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:5vw;margin-top: 2vh;">年限：{{carDetailData.carAgeLimit}}年</span>
-            <h3 class="title">累计数据</h3>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:8vw;margin-bottom: 2vh;">总里程: {{carDetailData.totalMileage}}KM</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff">材料费: {{carDetailData.materials}}元</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff; margin: 1.5vw">维修次数：{{carDetailData.repairNumber}}次</span>
-            <span style="padding: 0.2vh 0.5vw;background-color:#6076ad;color: #ffffff;display:block; width:6vw;margin-top: 2vh;">总耗油：{{carDetailData.totalFuel}}万升</span>
           </div>
         </el-col>
       </el-row>
@@ -369,9 +358,22 @@ export default {
   },
   created () {
     this._getOps()
-    // this.$axios.get('http://192.168.10.40:12056/api/v1/basic/key?username=admin&password=admin').then(res => {
-    //   console.log(123)
-    // })
+    this.$jsonp('http://192.168.0.55:12056/api/v1/basic/key?username=admin&password=admin').then(json => {
+      console.log(json)
+      let key = json.data.key
+      this.$jsonp('http://192.168.0.55:12056/api/v1/basic/live/video?', {
+        key,
+        terid: '008800B07C',
+        chl: 3,
+        audio: 1,
+        st: 0,
+        port: 12060
+      }).then(res => {
+        // this.monitorData = res.data
+        // console.log(this.monitorData)
+        console.log(res)
+      })
+    })
   },
   mounted () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
@@ -513,23 +515,23 @@ export default {
       map.setMapStyle(this.mapStyle)
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
       // var map2 = new BMap.Map('map', { minZoom: 7, maxZoom: 18 })
-      map.centerAndZoom(new BMap.Point(this.center.lng, this.center.lat), 8)
-      // map.enableScrollWheelZoom()
+      // map.centerAndZoom(new BMap.Point(this.center.lng, this.center.lat), 8)
+      // // map.enableScrollWheelZoom()
 
-      var cityName = '邢台市'
-      // map.addControl(new BMap.OverviewMapControl())
-      // map.enableScrollWheelZoom()
-      // map.addControl(new BMap.NavigationControl({ type: 'BMAP_NAVIGATION_CONTROL_LARGE', anchor: 'BMAP_ANCHOR_TOP_LEFT', offset: new BMap.Size(40, 250) }))
-      var bdary = new BMap.Boundary()
-      bdary.get(cityName, function (rs) { // 获取行政区域
-        var EN_JW = '180, 90;' // 东北角
-        var NW_JW = '-180,  90;' // 西北角
-        var WS_JW = '-180, -90;' // 西南角
-        var SE_JW = '180, -90;' // 东南角
-        // 4.添加环形遮罩层
-        var ply1 = new BMap.Polygon(rs.boundaries[0] + SE_JW + SE_JW + WS_JW + NW_JW + EN_JW + SE_JW, { strokeColor: 'none', fillColor: 'rgb(246,246,246)', fillOpacity: 1, strokeOpacity: 0.5 }) // 建立多边形覆盖物
-        map.addOverlay(ply1)
-      })
+      // var cityName = '邢台市'
+      // // map.addControl(new BMap.OverviewMapControl())
+      // // map.enableScrollWheelZoom()
+      // // map.addControl(new BMap.NavigationControl({ type: 'BMAP_NAVIGATION_CONTROL_LARGE', anchor: 'BMAP_ANCHOR_TOP_LEFT', offset: new BMap.Size(40, 250) }))
+      // var bdary = new BMap.Boundary()
+      // bdary.get(cityName, function (rs) { // 获取行政区域
+      //   var EN_JW = '180, 90;' // 东北角
+      //   var NW_JW = '-180, 90;' // 西北角
+      //   var WS_JW = '-180, -90;' // 西南角
+      //   var SE_JW = '180, -90;' // 东南角
+      //   // 4.添加环形遮罩层
+      //   var ply1 = new BMap.Polygon(rs.boundaries[0] + SE_JW + SE_JW + WS_JW + NW_JW + EN_JW + SE_JW, { strokeColor: 'none', fillColor: 'rgb(246,246,246)', fillOpacity: 1, strokeOpacity: 0.5 }) // 建立多边形覆盖物
+      //   map.addOverlay(ply1)
+      // })
     },
     handleMarkerClick (marker) {
       this.dialogTableVisible = true
@@ -557,15 +559,12 @@ export default {
       // }, 2000)
     },
     getCharItem (item, index) {
-      console.log(item)
       this.currentIndexChar = index
     },
     getAlarmItem (item, index) {
-      console.log(item)
       this.currentIndexAlarm = index
     },
     getMapType (index) {
-      console.log(typeof index)
       this.currentIndexMap = index
     }
   },
@@ -629,7 +628,7 @@ export default {
       }
       .content {
         width: 100%;
-        padding: 1.5vh 0.75vw;
+        padding: 1.5vh 0vw;
         display: flex;
         flex-direction:row;
         flex-wrap: wrap;
@@ -640,8 +639,8 @@ export default {
           font-size: 0.6vw;
           margin-right: 1.5vw;
           margin-bottom: 0.5vw;
-          background: #6076ad;
-          color: #fff;
+          background: #fff;
+          color: #000;
           border: hidden;
           outline: none;
           border-radius: 6px;
@@ -649,7 +648,7 @@ export default {
           // margin-left: -10px;
         }
         .active {
-          background-color: #71f3ff;
+          background-color: #67c23a;
           color: #000;
         }
       }
@@ -665,7 +664,7 @@ export default {
       }
       .content {
         width: 100%;
-        padding: 1.5vh 0.75vw;
+        padding: 1.5vh 0vw;
         display: flex;
         flex-direction:row;
         flex-wrap: wrap;
@@ -676,8 +675,8 @@ export default {
           font-size: 0.6vw;
           margin-right: 1.5vw;
           margin-bottom: 0.5vw;
-          background: #6076ad;
-          color: #fff;
+          background: #fff;
+          color: #000;
           border: hidden;
           outline: none;
           border-radius: 6px;
@@ -685,7 +684,7 @@ export default {
           // margin-left: -10px;
         }
         .active {
-          background-color: #71f3ff;
+          background-color: #67c23a;
           color: #000;
         }
       }
@@ -693,12 +692,12 @@ export default {
     &.driver-wrapper {
       height: 3vh;
       margin-bottom: 5vh;
-      margin-top: 5vh;
     }
     &.class-wrapper {
       height: 3vh;
       margin-bottom: 5vh;
       display: flex;
+      line-height: 3vh;
       .left {
         flex: 0 0 80px;
       }
@@ -728,8 +727,10 @@ export default {
         .bottom {
           display: block;
           padding: 0.05vh 0.1vh;
-          background-color: #6076ad;
-          color: #fff;
+          background-color: #67c23a;
+          color: #000;
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
         }
       }
       .right {
@@ -744,8 +745,10 @@ export default {
         .bottom {
           display: block;
           padding: 0.05vh 0.1vh;
-          background-color: #6076ad;
-          color: #fff;
+          background-color: #67c23a;
+          color: #000;
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
         }
       }
     }
@@ -771,8 +774,10 @@ export default {
         .bottom {
           display: block;
           padding: 0.05vh 0.1vh;
-          background-color: #6076ad;
-          color: #fff;
+          background-color: #67c23a;
+          color: #000;
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
         }
       }
       .right-middle {
@@ -813,18 +818,70 @@ export default {
 }
 .middle-content {
   width: 100%;
-  height: 70vh;
-  .top-video{
-    width: 100%;
-    height: 32vh;
-    margin-bottom: 1.5vh;
-    background-color: #000;
+  .table {
+    width: 70%;
+    display: flex;
+    .left {
+      width: 33%;
+      box-sizing: border-box;
+      .top-title {
+        width: 100%;
+        height: 3vh;
+        text-align: center;
+        background: #67c23a;
+        line-height: 3vh;
+        color: #000;
+        box-sizing: border-box;
+        font-size: 1.5vh;
+        font-weight: 800;
+        border: 1px solid #fff;
+      }
+      .bottom-title {
+        width: 100%;
+        height: 6vh;
+        text-align: center;
+        border-left: 1px solid #ffffff;
+        border-right: 1px solid #ffffff;
+        border-bottom: 1px solid #ffffff;
+        box-sizing: border-box;
+      }
+    }
+    .middle,
+    .right
+     {
+      width: 33%;
+      .pub-code {
+        width: 100%;
+        height: 3vh;
+        line-height: 3vh;
+        color: #000;
+        box-sizing: border-box;
+        border: 1px solid #ffffff;
+        border-left: hidden;
+        box-sizing: border-box;
+      }
+      .company,.line {
+        width: 100%;
+        height: 3vh;
+        line-height: 3vh;
+        color: #000;
+        box-sizing: border-box;
+        border-right: 1px solid #ffffff;
+        border-bottom: 1px solid #ffffff;
+        box-sizing: border-box;
+      }
+    }
   }
-  .bottom-video{
+  .video {
     width: 100%;
-    height: 32vh;
-    margin-bottom: 1.5vh;
-    background-color: #000;
+    display: flex;
+    flex-wrap: wrap;
+    .top-left-video,.top-right-video,.bottom-left-video,.bottom-right-video{
+      width: 47%;
+      margin-left: 1vw;
+      // margin-top: 0.1vh;
+      background-color: #000;
+    }
   }
   .bottom-message {
     width: 100%;
@@ -833,6 +890,7 @@ export default {
     display: flex;
     font-size: 0.1vw;
     color: #fff;
+    margin-top: 3vh;
     // .left {
     //   width: 30%;
     //   margin-right: 3%
@@ -843,80 +901,6 @@ export default {
     }
     .right {
       width: 63%;
-    }
-  }
-}
-.right-content {
-  width: 100%;
-  height: 70vh;
-  font-size: 0.2vw;
-  .title {
-    height: 3vh;
-    color: #fff;
-  }
-  .self-code {
-    color: #ffffff;
-    width: 80%;
-    height: 3vh;
-    border: 1px solid #ffffff;
-    text-align: center;
-    line-height: 3vh;
-  }
-  .img-code {
-    color: #ffffff;
-    width: 80%;
-    height: 3vh;
-    margin:1px 0;
-    border: 1px solid #ffffff;
-    border-top: hidden;
-    border-bottom: hidden;
-    text-align: center;
-    line-height: 3vh;
-  }
-  .content {
-    display: flex;
-    width: 80%;
-    border: 1px solid #ffffff;
-    height: 6vh;
-    font-size: 0.2vw;
-    margin-bottom: 5vh;
-    color: #ffffff;
-    .left {
-      width: 20%;
-      line-height: 6vh;
-      text-align: center;
-    }
-    .right {
-      width: 60%;
-      .mark {
-        width: 100%;
-        height: 2vh;
-        text-align: center;
-        line-height: 2vh;
-      }
-      .mark:nth-child(2) {
-        border: 1px solid #ffffff;
-        border-left: hidden;
-        border-right: hidden;
-      }
-    }
-    .middle {
-      width: 20%;
-      border: 1px solid #ffffff;
-      border-top: hidden;
-      border-bottom: hidden;
-      box-sizing: border-box;
-      .title {
-        width: 100%;
-        height: 2vh;
-        text-align: center;
-        line-height: 2vh;
-      }
-      .title:nth-child(2) {
-        border: 1px solid #ffffff;
-        border-left: hidden;
-        border-right: hidden;
-      }
     }
   }
 }
@@ -935,7 +919,11 @@ export default {
 <style lang="scss">
 .map-dialog-only {
   .el-dialog {
-    background-color: rgba(18,25,48, 0.95)
+    background-color: rgba(0,0,0, 0.9);
+    box-shadow:0px 0px 60px #066587;
+    border-radius: 6px;
+    padding: 20px;
+    box-sizing: border-box;
   }
   .el-dialog__title {
     color: #fff
