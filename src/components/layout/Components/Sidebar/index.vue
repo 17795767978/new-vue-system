@@ -5,8 +5,8 @@
       v-show="!sidebarState.isHidden"
       :style="{background: systemThemeColor}">
         <div class="logo">
-          <div class="full" v-show="sidebarState.isOpen">邢台公交系统</div>
-          <div class="short" v-show="!sidebarState.isOpen">邢台</div>
+          <div class="full" v-show="sidebarState.isOpen">{{currentCity}}公交系统</div>
+          <div class="short" v-show="!sidebarState.isOpen">{{currentCity}}</div>
         </div>
         <el-menu mode="vertical" class="vertical-menu"
           :default-active="$route.path"
@@ -56,9 +56,15 @@
 import { Menu, Submenu, MenuItem } from 'element-ui'
 import { mapGetters } from 'vuex'
 import SidebarMenuItem from './SidebarMenuItem'
+import { currentCity } from '@/config/city'
 
 export default {
   name: 'Sidebar',
+  data () {
+    return {
+      currentCity: currentCity
+    }
+  },
   computed: {
     ...mapGetters(['asyncRouter', 'sidebarState', 'systemTheme']),
     // 这里必须根据条件结合ElementUI的sidebar来调整颜色,保证自定义主题和sidebar的内置颜色一致.

@@ -3,7 +3,7 @@
     <!-- <canvas id="loginAni"></canvas> -->
     <div class="img-wrapper animate-bounce-up"></div>
     <div class="login-wrapper">
-      <h3 class="title">邢台公交管理综合分析决策系统</h3>
+      <h3 class="title">{{currentCity}}公交管理综合分析决策系统</h3>
       <div class="login-block">
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" size="medium">
           <el-form-item prop="userAccount">
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { currentCity } from '@/config/city'
 export default {
   name: 'Login',
   data () {
@@ -52,7 +53,8 @@ export default {
       isLoginning: false,
       loginForm: {
         userAccount: '',
-        userPassword: ''
+        userPassword: '',
+        currentCity
       },
       loginRules: {
         userAccount: [

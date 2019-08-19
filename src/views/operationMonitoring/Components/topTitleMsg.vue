@@ -15,7 +15,7 @@
          <span style="margin-left: 30px;">{{temperature}}</span>
        </el-col>
        <el-col :span="8">
-        <h1 class="font">{{title}}</h1>
+        <h1 class="font">{{currentCity}}公交管理综合分析决策系统</h1>
        </el-col>
        <el-col :span="8">
        </el-col>
@@ -28,14 +28,16 @@
 import moment from 'moment'
 import '../../../assets/iconfontWeather/iconfont.css'
 import { Row, Col } from 'element-ui'
+import { currentCity } from '@/config/city'
 export default {
   data () {
     return {
       dataNow: '',
-      title: '邢台公交管理综合分析决策系统',
+      title: '',
       timer: null,
       temperature: '',
-      weather: ''
+      weather: '',
+      currentCity
     }
   },
   created () {

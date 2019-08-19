@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container cont-container">
     <el-row>
-      <span class="main-title">邢台公交管理综合分析决策系统</span>
+      <span class="main-title">{{currentCity}}公交管理综合分析决策系统</span>
     </el-row>
     <el-row class="main-card" :gutter="50">
       <el-col style="margin-left: 50px;" :span="8">
@@ -59,6 +59,7 @@ import iconHomeBjfx from '../../assets/images/homeIcon/bjfx.png'
 import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
 import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
 import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
+import { currentCity } from '@/config/city'
 const PER_ANA = [
   { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis', admin: false },
   { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order', admin: false },
@@ -86,7 +87,8 @@ export default {
       tiredContral: [],
       rolesTem: [],
       isScreen: false,
-      isScreenTo: []
+      isScreenTo: [],
+      currentCity
     }
   },
   components: {
