@@ -1,6 +1,6 @@
 <template>
- <div style="width: 100%;background: #000">
-   <video ref="video" src="" style="width: 80%;" v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.8)"></video>
+ <div>
+   <video ref="video" src="" style="width: 100%;height: 100%;" controls autoplay v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.8)"></video>
  </div>
 </template>
 
@@ -19,7 +19,15 @@ export default {
     }
   },
   mounted () {
-    this.initCamera(this.monitorData)
+    console.log(this.monitorData)
+    if (this.monitorData.warnType && this.monitorData.warnType.length > 0) {
+      if (!this.monitorData.warnMediaList) {
+        this.$message.error(`${this.monitorData.warnTypeName}暂无视频`)
+      }
+      this.$refs.video.src = this.monitorData.warnMediaList[0].url
+    } else {
+      this.initCamera(this.monitorData)
+    }
   },
   beforeDestroy () {
 

@@ -179,6 +179,7 @@ export default {
       if (this.dataSource.length > 0) {
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
         this.maxRate = max(this.fullRate)
+        console.log(this.maxRate)
       }
       setTimeout(() => {
         this.drawLine()
@@ -277,7 +278,7 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: this.maxRate + 10,
+            max: this.maxRate,
             interval: 20,
             splitLine: {
               show: false
