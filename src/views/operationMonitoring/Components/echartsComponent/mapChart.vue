@@ -335,14 +335,14 @@ export default {
       isHidden: false,
       title: '',
       charData: [
-        { ch: '通道1', isAct: false },
-        { ch: '通道2', isAct: false },
-        { ch: '通道3', isAct: false },
-        { ch: '通道4', isAct: false },
-        { ch: '通道5', isAct: false },
-        { ch: '通道6', isAct: false },
-        { ch: '通道7', isAct: false },
-        { ch: '通道8', isAct: false }],
+        { ch: '通道1', isAct: false, index: 0 },
+        { ch: '通道2', isAct: false, index: 1 },
+        { ch: '通道3', isAct: false, index: 2 },
+        { ch: '通道4', isAct: false, index: 3 },
+        { ch: '通道5', isAct: false, index: 4 },
+        { ch: '通道6', isAct: false, index: 5 },
+        { ch: '通道7', isAct: false, index: 6 },
+        { ch: '通道8', isAct: false, index: 7 }],
       buttonGroup: ['热力图', '单车', '线路'],
       currentIndexChar: 0,
       currentIndexAlarm: 0,
@@ -496,18 +496,18 @@ export default {
         this.key = json.data.key
       })
     },
-    _getVideo (terid, index) {
+    _getVideo (terid, item) {
       if (this.key.length > 0) {
         this.$jsonp(`${URL}api/v1/basic/live/video?`, {
           key: this.key,
           terid,
-          chl: index,
+          chl: item.index,
           audio: 1,
           st: 0,
           port: 12060
         }).then(res => {
-          this.monitorData.push = res.data
-          this.charData[index].isAct = true
+          this.monitorData.push = Object.assign({}, item, res.data)
+          this.charData[item.index].isAct = true
           console.log(res)
         })
       }
@@ -519,12 +519,12 @@ export default {
       map.setMapStyle(this.mapStyle)
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
     },
-    getVideoList (terid) {
-      this._getVideo(terid, 0)
-      this._getVideo(terid, 1)
-      this._getVideo(terid, 2)
-      this._getVideo(terid, 3)
-    },
+    // getVideoList (terid) {
+    //   this._getVideo(terid, 0)
+    //   this._getVideo(terid, 1)
+    //   this._getVideo(terid, 2)
+    //   this._getVideo(terid, 3)
+    // },
     handleMarkerClick (marker) {
       this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
       this.isLoading = true
@@ -550,7 +550,7 @@ export default {
         this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
         this.dialogTableVisible = true
         this.isLoading = false
-        this.getVideoList(this.carDetailData.devRefId)
+        // this.getVideoList(this.carDetailData.devRefId)
         if (this.carDetailData.warnInfos.length > 0) {
           this.getWarnInfo(this.carDetailData.warnInfos)
         }
@@ -581,6 +581,7 @@ export default {
     getAlarmItem (item) {
       let isHav = this.monitorData.some(data => data.warnTypeName === item.warnTypeName)
       item.isAct = true
+      this._getVideo(this.carDetailData.devRefIdrid, item)
       if (!isHav) {
         this.monitorData.push(item)
       } else {
