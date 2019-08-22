@@ -212,7 +212,6 @@ export default {
   beforeCreate () {
   },
   created () {
-    this._getOps()
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._positionRating({
       orgId
@@ -341,6 +340,7 @@ export default {
     handler ({ BMap, map }) {
       // this.center.lng = '114.520486813'
       // this.center.lat = '37.0695311969'
+      this._getOps()
       this.zoom = 12
       this.isLoading = false
       map.setMapStyle(this.mapStyle)
