@@ -8,7 +8,7 @@
 import Flv from 'flv.js'
 export default {
   props: {
-    monitorData: Object,
+    item: Object,
     dialogTableVisible: Boolean
   },
   data () {
@@ -19,20 +19,45 @@ export default {
     }
   },
   mounted () {
-    console.log(this.monitorData)
-    if (this.monitorData.warnType && this.monitorData.warnType.length > 0) {
-      if (!this.monitorData.warnMediaList) {
-        this.$message.error(`${this.monitorData.warnTypeName}暂无视频`)
+    console.log(this.item)
+    if (this.item.warnType && this.item.warnType.length > 0) {
+      if (!this.item.warnMediaList) {
+        this.$message.error(`${this.item.warnTypeName}暂无视频`)
+      } else {
+        this.$refs.video.src = this.item.warnMediaList[0].url
       }
-      this.$refs.video.src = this.monitorData.warnMediaList[0].url
     } else {
-      this.initCamera(this.monitorData)
+      this.initCamera(this.item)
     }
   },
+  updated () {
+    // console.log(this.monitorData)
+  },
   beforeDestroy () {
-
+    if (this.player !== null) {
+      this.player.pause()
+      this.player.unload()
+      this.player.detachMediaElement()
+      this.player.destroy()
+      this.player = null
+    }
   },
   watch: {
+    item: {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+        if (this.item.warnType && this.item.warnType.length > 0) {
+          if (!this.item.warnMediaList) {
+            this.$message.error(`${this.item.warnTypeName}暂无视频`)
+          } else {
+            this.$refs.video.src = this.item.warnMediaList[0].url
+          }
+        } else {
+          this.initCamera(this.item)
+        }
+      }
+    },
     dialogTableVisible (newV) {
       if (!newV) {
         if (this.player !== null) {
@@ -42,8 +67,6 @@ export default {
           this.player.destroy()
           this.player = null
         }
-      } else {
-        this.initCamera(this.monitorData)
       }
     }
   },
@@ -69,6 +92,11 @@ export default {
             message: `视频播放出错`,
             type: 'error'
           })
+          this.player.pause()
+          this.player.unload()
+          this.player.detachMediaElement()
+          this.player.destroy()
+          this.player = null
           // this.$parent.$emit('monitorShowError', this.monitorData);
         })
       }

@@ -53,14 +53,14 @@
           <div class="left-content">
             <div class="ts driver-wrapper">
               <span style="color: #fff;margin-right: 2.5vw; font-size: 0.8vw;">驾驶员</span>
-                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #FFF; color: #000">{{carDetailData.driverName || '---'}}</span>
+                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #FFF; color: #000">{{carDetailData.drvName || '---'}}</span>
                 <!-- <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #fff; color: #000; border-radius:6px;">刘立群</span> -->
                 <span style="color: #fff; margin-left: 1vw; margin-right: 1vw;font-size: 0.8vw;">工号</span>
-                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color:  #FFF; color: #000">{{carDetailData.driverNum || '---'}}</span>
+                <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color:  #FFF; color: #000">{{carDetailData.drvIccard || '---'}}</span>
                 <!-- <span style="padding: 0.5vh 0.75vw;font-size: 0.6vw;background-color: #fff; color: #000; border-radius:6px;">EF0128</span> -->
             </div>
             <div class="ts flow-wrapper">
-              <span style="color: #fff;font-size: 0.8vw; " class="left">POS客流</span>
+              <span style="color: #fff;font-size: 0.8vw; " class="left">客流</span>
               <div class="middle">
                  <span class="top" >当日累计</span>
                  <span class="bottom">{{carDetailData.totalPersonFlow}}</span>
@@ -81,13 +81,13 @@
               </div>
             </div>
             <div class="ts class-wrapper">
-              <span style="color: #fff;" class="left">班次执行</span>
+              <span style="color: #fff;" class="left">趟次执行</span>
               <div class="right">
-                <el-progress :percentage="getPer" class="right" status="success" :show-text="false">
+                <el-progress :percentage="carDetailData.tripPercent" class="right" status="success" :show-text="false">
                 </el-progress>
-                <div style="width: 100%;height: 1vh;margin-top: 0.5vh">
+                <div style="width: 80%;height: 1vh;margin-top: 0.5vh">
                   <span style="display: inline-block;width: 50%; text-align: left; color: #fff">当前{{carDetailData.currenttrip}}</span>
-                  <span style="display: inline-block;width: 50%; text-align: right; color: #fff">计划{{carDetailData.planTrip}}</span>
+                  <span style="display: inline-block;width: 50%; text-align: right; color: #fff">计划{{carDetailData.planTrips}}</span>
                 </div>
               </div>
             </div>
@@ -96,7 +96,7 @@
                 <span style="color: #fff;font-size: 0.8vw;">视频通道</span>
               </div>
               <div class="content">
-                <span class="button" @click="getCharItem(item)" size="mini" v-for="(item , index) in charData" :class="item.isAct ? 'active' : ''" :key="index" type="warning">{{item.ch}}</span>
+                <span class="button" @click="getCharItem(item)" size="mini" v-for="(item , index) in charData" :class="item.isAct ? 'active' : ''" :key="index">{{item.ch}}</span>
               </div>
             </div>
             <div class="ts alarm-wrapper" v-show="carDetailData.warnInfos && carDetailData.warnInfos.length > 0">
@@ -104,7 +104,7 @@
                 <span style="color: #fff;font-size: 0.8vw;">报警视频</span>
               </div>
               <div class="content">
-                <span class="button" @click="getAlarmItem(item, index)" v-for="(item , index) in carDetailData.warnInfos" :class="item.isAct ? 'active' : ''" :key="index" type="warning">{{item.warnTypeName}}</span>
+                <span class="button" @click="getAlarmItem(warn, index)" v-for="(warn , index) in warnData" :class="warn.isAct ? 'active' : ''" :key="index">{{warn.warnTypeName}}</span>
               </div>
             </div>
           </div>
@@ -134,18 +134,14 @@
               <span class="right">时间：{{carDetailData.samplingTime}}</span>
               <!-- <span class="right">时间：2019-8-14 10:13:27</span> -->
             </div>
-            <div class="video">
-              <div class="top-left-video">
-                <videoWrapper  v-if="monitorData[0]" :monitorData="monitorData[0]" :dialogTableVisible='dialogTableVisible'></videoWrapper>
+            <div class="live-video">
+              <div class="top-left-video" v-for="(item, index) in urlList" :key="index">
+                <videoWrapper  v-if="charData[index].isAct" :item="item" :dialogTableVisible='dialogTableVisible'></videoWrapper>
               </div>
-              <div class="top-right-video">
-                <videoWrapper  v-if="monitorData[1]" :monitorData="monitorData[1]" :dialogTableVisible="dialogTableVisible"></videoWrapper>
-              </div>
-              <div class="bottom-left-video">
-                <videoWrapper  v-if="monitorData[2]" :monitorData="monitorData[2]" :dialogTableVisible="dialogTableVisible"></videoWrapper>
-              </div>
-              <div class="bottom-right-video">
-                <videoWrapper  v-if="monitorData[3]" :monitorData="monitorData[3]" :dialogTableVisible="dialogTableVisible"></videoWrapper>
+            </div>
+            <div class="alarm-video"  v-show="carDetailData.warnInfos && carDetailData.warnInfos.length > 0">
+              <div class="top-left-video" v-for="(warn, index) in carDetailData.warnInfos" :key="index">
+                <videoWrapper v-if="warnData[index].isAct" :item="warn" :dialogTableVisible='dialogTableVisible'></videoWrapper>
               </div>
             </div>
           </div>
@@ -164,6 +160,7 @@ import videoWrapper from './video'
 import moment from 'moment'
 const TIME = 3 * 60 * 1000
 const URL = 'http://192.168.0.55:12056/api/v1/basic/'
+// const URL = 'http://192.168.10.40:12056/api/v1/basic/'
 export default {
   data () {
     return {
@@ -338,18 +335,21 @@ export default {
         { ch: '通道1', isAct: false, index: 0 },
         { ch: '通道2', isAct: false, index: 1 },
         { ch: '通道3', isAct: false, index: 2 },
-        { ch: '通道4', isAct: false, index: 3 },
-        { ch: '通道5', isAct: false, index: 4 },
-        { ch: '通道6', isAct: false, index: 5 },
-        { ch: '通道7', isAct: false, index: 6 },
-        { ch: '通道8', isAct: false, index: 7 }],
+        { ch: '通道4', isAct: false, index: 3 }
+        // { ch: '通道5', isAct: false, index: 4 },
+        // { ch: '通道6', isAct: false, index: 5 },
+        // { ch: '通道7', isAct: false, index: 6 },
+        // { ch: '通道8', isAct: false, index: 7 }
+      ],
+      warnData: [],
       buttonGroup: ['热力图', '单车', '线路'],
       currentIndexChar: 0,
       currentIndexAlarm: 0,
       currentIndexMap: 0,
       monitorData: [],
       carDetailData: {},
-      key: ''
+      key: '',
+      urlList: []
     }
   },
   components: {
@@ -399,13 +399,6 @@ export default {
         } else {
           return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
         }
-      }
-    },
-    getPer () {
-      if (this.carDetailData.currenttrip !== null && this.carDetailData.planTrips !== null) {
-        return (this.carDetailData.planTrips / this.carDetailData.currenttrip) * 100
-      } else {
-        return 0
       }
     }
   },
@@ -457,6 +450,12 @@ export default {
           })
         }, TIME)
       }
+    },
+    'carDetailData.warnInfos': {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+      }
     }
   },
   methods: {
@@ -496,21 +495,28 @@ export default {
         this.key = json.data.key
       })
     },
-    _getVideo (terid, item) {
-      if (this.key.length > 0) {
-        this.$jsonp(`${URL}api/v1/basic/live/video?`, {
-          key: this.key,
-          terid,
-          chl: item.index,
-          audio: 1,
-          st: 0,
-          port: 12060
-        }).then(res => {
-          this.monitorData.push = Object.assign({}, item, res.data)
-          this.charData[item.index].isAct = true
-          console.log(res)
+    _getVideoList (terid) {
+      this.urlList = []
+      return new Promise((resolve, reject) => {
+        this.$jsonp(`${URL}live/port?key=${this.key}`).then(res => {
+          for (let i = 0; i < 4; i++) {
+            if (i < 4) {
+              this.$jsonp(`${URL}live/video?key=${this.key}&terid=${terid}&chl=${i}&audio=1&st=0&port=${res.data[0].port}`).then(res => {
+                this.urlList.push(Object.assign({}, res.data, { ch: i, isAct: false }))
+              })
+            } else {
+              this.$jsonp(`${URL}live/video?key=${this.key}&terid=${terid}&chl=${i}&audio=1&st=0&port=${res.data[1].port}`).then(res => {
+                this.urlList.push(Object.assign({}, res.data, { ch: i, isAct: false }))
+              })
+            }
+          }
+          setTimeout(() => {
+            resolve(this.urlList)
+          }, 1000)
         })
-      }
+      })
+    },
+    _getVideo (item) {
     },
     handler ({ BMap, map }) {
       this._getOps()
@@ -519,17 +525,27 @@ export default {
       map.setMapStyle(this.mapStyle)
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
     },
-    // getVideoList (terid) {
-    //   this._getVideo(terid, 0)
-    //   this._getVideo(terid, 1)
-    //   this._getVideo(terid, 2)
-    //   this._getVideo(terid, 3)
-    // },
     handleMarkerClick (marker) {
+      this.charData.forEach(item => {
+        item.isAct = false
+      })
+      this.warnData = []
       this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
       this.isLoading = true
       // console.log(marker)
-      const { busId, busNumber, samplingTime, busSelfcode, warnSpeed, orgName, lineName, lineType, positionSpeed, warnDeviceCode } = marker
+      const { busId,
+        busNumber,
+        drvName,
+        drvIccard,
+        samplingTime,
+        busSelfcode,
+        warnSpeed,
+        orgName,
+        lineName,
+        lineType,
+        positionSpeed,
+        currenttrip,
+        warnDeviceCode } = marker
       this.$api['homeTired.getVideoMsg']({
         busId,
         busNumber,
@@ -539,60 +555,49 @@ export default {
         orgName,
         lineName,
         lineType,
-        driverName: '',
-        driverNum: '',
+        drvName,
+        drvIccard,
         positionSpeed,
+        currenttrip,
         warnDeviceCode
       }).then(res => {
         console.log(res)
-        this.monitorData = []
         this.carDetailData = res
         this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
-        this.dialogTableVisible = true
-        this.isLoading = false
-        // this.getVideoList(this.carDetailData.devRefId)
+        this.carDetailData.tripPercent = Number(this.carDetailData.tripPercent)
+        this._getKey()
+        this._getVideoList(this.carDetailData.devRefId).then(res => {
+          console.log(res)
+        })
         if (this.carDetailData.warnInfos.length > 0) {
-          this.getWarnInfo(this.carDetailData.warnInfos)
+          this.carDetailData.warnInfos = this.carDetailData.warnInfos.slice(0, 2)
+          this.carDetailData.warnInfos.slice(0, 2).forEach((item, index) => {
+            this.warnData.push({
+              index,
+              isAct: false,
+              warnTypeName: item.warnTypeName + (index + 1)
+            })
+          })
         }
+        this.dialogTableVisible = true
       }).catch((e) => {
         this.$message.error(e.message)
       })
     },
-    getWarnInfo (warnInfos) {
-      warnInfos.forEach((item, index) => {
-        item.warnTypeName = item.warnTypeName + (index + 1)
-        item.isAct = false
-      })
-    },
+    // getWarnInfo (warnInfos) {
+    //   warnInfos.forEach((item, index) => {
+    //     item.warnTypeName = item.warnTypeName + (index + 1)
+    //     item.isAct = false
+    //     item.index = index
+    //   })
+    // },
     getCharItem (item) {
-      let isHav = this.monitorData.some(data => data.ch === item.ch)
-      item.isAct = true
-      if (!isHav) {
-        this.monitorData.push(item)
-      } else {
-        this.monitorData = this.monitorData.filter(data => data.ch !== item.ch)
-        item.isAct = false
-      }
-      if (this.monitorData.length > 4 && !isHav) {
-        this.monitorData.shift().isAct = false
-        console.log(this.monitorData)
-      }
+      this.charData[item.index].isAct = !this.charData[item.index].isAct
     },
-    getAlarmItem (item) {
-      let isHav = this.monitorData.some(data => data.warnTypeName === item.warnTypeName)
-      item.isAct = true
-      this._getVideo(this.carDetailData.devRefIdrid, item)
-      if (!isHav) {
-        this.monitorData.push(item)
-      } else {
-        this.monitorData = this.monitorData.filter(data => data.warnTypeName !== item.warnTypeName)
-        item.isAct = false
-      }
-      console.log(this.monitorData.length)
-      if (this.monitorData.length > 4 && !isHav) {
-        this.monitorData.shift().isAct = false
-        console.log(this.monitorData)
-      }
+    getAlarmItem (item, index) {
+      // this.carDetailData.warnInfos[item.index].isAct = true
+      this.warnData[index].isAct = !this.warnData[index].isAct
+      // item.isAct = true
     },
     getMapType (index) {
       this.currentIndexMap = index
@@ -666,9 +671,9 @@ export default {
         box-sizing: border-box;
         .button {
           padding: 0.3vw 0.6vw;
-          font-size: 0.6vw;
           margin-right: 1.5vw;
-          margin-bottom: 0.5vw;
+          height: 4vh;
+          line-height: 2.4;
           background: #fff;
           color: #000;
           border: hidden;
@@ -702,9 +707,8 @@ export default {
         box-sizing: border-box;
         .button {
           padding: 0.3vw 0.6vw;
-          font-size: 0.6vw;
           margin-right: 1.5vw;
-          margin-bottom: 0.5vw;
+          line-height: 2.1;
           background: #fff;
           color: #000;
           border: hidden;
@@ -732,7 +736,7 @@ export default {
         flex: 0 0 80px;
       }
       .right {
-        width: 100%;
+        width: 80%;
       }
     }
     &.flow-wrapper {
@@ -848,6 +852,7 @@ export default {
 }
 .middle-content {
   width: 100%;
+  margin-top: -6vh;
   .table {
     width: 70%;
     display: flex;
@@ -906,28 +911,34 @@ export default {
       }
     }
   }
-  .video {
+  .live-video, .alarm-video {
     width: 100%;
     min-height: 30vh;
     display: flex;
     flex-wrap: wrap;
-    margin-top: 3vh;
+    margin-top: 1vh;
     .top-left-video,.top-right-video,.bottom-left-video,.bottom-right-video{
-      width: 47%;
+      width: 40%;
       min-height: 10vh;
-      margin-left: 1vw;
+      margin-right: 1vw;
       margin-top: 0.5vh;
       background-color: #333;
     }
   }
+  .alarm-video {
+    min-height: 15vh !important;
+  }
+  .bg {
+    background-color: transparent
+  }
   .bottom-message {
     width: 100%;
-    height: 3vh;
+    height: 2vh;
     line-height: 3vh;
     display: flex;
     font-size: 0.1vw;
     color: #fff;
-    margin-top: 3vh;
+    margin-top: 1vh;
     // .left {
     //   width: 30%;
     //   margin-right: 3%

@@ -224,7 +224,6 @@ export default {
   components: {
   },
   destroyed () {
-    console.log(123123123)
     clearTimeout(this.timerTotalPassage)
     clearTimeout(this.timerFullRate)
     clearTimeout(this.timerLine)
@@ -247,22 +246,23 @@ export default {
   .bg-style {
     background-color: rgba(0,0,0, 0.8);
     box-shadow: 2px 2px 10px 2px #066898;
-    height: 80px;
+    height: auto;
     .icon {
-      font-size: 21px;
+      font-size: 1vw;
       float: left;
       margin-right: 7px;
       color: #fff;
     }
     .title-style {
       margin-top: 0px;
-      font-size: 16px;
+      font-size: 0.85vw;
       margin-bottom: 10px;
       color: #fff;
     }
     .font-style {
       margin: 0;
-      font-size: 22px !important;
+      line-height: 1;
+      font-size: 1.2vw !important;
       font-weight: bold;
     }
   }

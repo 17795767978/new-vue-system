@@ -31,7 +31,7 @@
         </div>
       </el-col>
       <el-col :span="7">
-        <h3 style="font-size: 20px;">疲劳监测</h3>
+        <h3 style="font-size: 20px;">驾驶行为分析</h3>
         <div class="tab-contral">
           <ul class="item-fam">
             <li class="item-font"  :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in tiredContral" :key="index" @click="goToAlarm(item)">
@@ -154,12 +154,13 @@ export default {
       this.tiredContral = tired
     },
     goToContral () {
-      if (this.isScreen) {
-        let path = this.isScreenTo[0].children[0].path
-        this.$router.push(`/chart-analysis${path}`)
-      } else {
-        this.$message.warning('权限不足，无法进入此页面')
-      }
+      // if (this.isScreen) {
+      //   let path = this.isScreenTo[0].children[0].path
+      //   this.$router.push(`/chart-analysis${path}`)
+      // } else {
+      //   this.$message.warning('权限不足，无法进入此页面')
+      // }
+      this.$router.push(`/newBigScreen/newBigScreen-analysis`)
     },
     goToChart (e) {
       if (e.admin) {
