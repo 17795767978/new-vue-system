@@ -72,14 +72,13 @@
                  <!-- <span class="bottom">56</span> -->
               </div>
             </div>
-            <div class="ts passeger-wrapper">
+            <!-- <div class="ts passeger-wrapper">
               <span style="color: #fff; font-size: 0.8vw;" class="left">车内乘客</span>
               <div class="right-left">
                  <span class="top">整车/负载</span>
                  <span class="bottom">{{carDetailData.personNumberInCar}}/{{carDetailData.busLoadNumber}}</span>
-                 <!-- <span class="bottom">33/56</span> -->
               </div>
-            </div>
+            </div> -->
             <div class="ts class-wrapper">
               <span style="color: #fff;" class="left">趟次执行</span>
               <div class="right">
@@ -361,6 +360,7 @@ export default {
     videoWrapper
   },
   beforeCreate () {
+    console.log(this.$store)
   },
   created () {
   },

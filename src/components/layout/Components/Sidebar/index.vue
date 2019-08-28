@@ -5,7 +5,7 @@
       v-show="!sidebarState.isHidden"
       :style="{background: systemThemeColor}">
         <div class="logo">
-          <div class="full" v-show="sidebarState.isOpen">邢台公交系统</div>
+          <div class="full" v-show="sidebarState.isOpen">运营监控</div>
           <div class="short" v-show="!sidebarState.isOpen">邢台</div>
         </div>
         <el-menu mode="vertical" class="vertical-menu"
