@@ -334,11 +334,9 @@ export default {
         { ch: '通道1', isAct: false, index: 0 },
         { ch: '通道2', isAct: false, index: 1 },
         { ch: '通道3', isAct: false, index: 2 },
-        { ch: '通道4', isAct: false, index: 3 }
-        // { ch: '通道5', isAct: false, index: 4 },
-        // { ch: '通道6', isAct: false, index: 5 },
-        // { ch: '通道7', isAct: false, index: 6 },
-        // { ch: '通道8', isAct: false, index: 7 }
+        { ch: '通道4', isAct: false, index: 3 },
+        { ch: '通道5', isAct: false, index: 4 },
+        { ch: '通道6', isAct: false, index: 5 }
       ],
       warnData: [],
       buttonGroup: ['热力图', '单车', '线路'],
@@ -499,7 +497,7 @@ export default {
       this.urlList = []
       return new Promise((resolve, reject) => {
         this.$jsonp(`${URL}live/port?key=${this.key}`).then(res => {
-          for (let i = 0; i < 4; i++) {
+          for (let i = 1; i < 7; i++) {
             if (i < 4) {
               this.$jsonp(`${URL}live/video?key=${this.key}&terid=${terid}&chl=${i}&audio=1&st=0&port=${res.data[0].port}`).then(res => {
                 this.urlList.push(Object.assign({}, res.data, { ch: i, isAct: false }))
@@ -532,7 +530,6 @@ export default {
       this.warnData = []
       this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
       this.isLoading = true
-      // console.log(marker)
       const { busId,
         busNumber,
         drvName,
@@ -672,8 +669,9 @@ export default {
         .button {
           padding: 0.3vw 0.6vw;
           margin-right: 1.5vw;
-          height: 4vh;
-          line-height: 2.4;
+          margin-bottom: 1vh;
+          height: 3vh;
+          line-height: 2;
           background: #fff;
           color: #000;
           border: hidden;
