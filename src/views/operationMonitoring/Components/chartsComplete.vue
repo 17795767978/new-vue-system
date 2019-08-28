@@ -54,7 +54,7 @@ export default {
     }
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    let orgId = this.$store.getters.userId === '1' ? '1' : this.$store.getters.userId
     this._realTimeMileage({
       orgId
     })
