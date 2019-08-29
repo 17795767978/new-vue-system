@@ -143,7 +143,7 @@ export default {
           // subtext: `总计划里程：${this.totalPlanTrips}   总实际里程：${this.totalRealTrips}   总百分比：${(this.totalRealTrips / this.totalPlanTrips).toFixed(2) * 100}%`
           subtext: `${this.totalRealMileage}km / ${this.totalPlanMileage}km  完成率：${this.totalPlanMileage > 0 ? (this.totalRealMileage / this.totalPlanMileage * 100).toFixed(2) : '-'}%`
         },
-        color: ['#ff30a0', '#03abd0'],
+        color: ['#03abd0', '#ff30a0'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -242,7 +242,7 @@ export default {
           },
           subtext: `${this.totalRealTrips}次 / ${this.totalPlanTrips}次  完成率：${this.totalPlanTrips > 0 ? (this.totalRealTrips / this.totalPlanTrips * 100).toFixed(2) : '-'}%`
         },
-        color: [ '#fedd00', '#8fc31f', '#03abd0' ],
+        color: [ '#ff2bd0', '#fedd00' ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -346,7 +346,7 @@ export default {
           },
           subtext: `${this.totalRealShift}次 / ${this.totalPlanShift}次  完成率：${this.totalPlanShift > 0 ? (this.totalRealShift / this.totalPlanShift * 100).toFixed(2) : '-'}%`
         },
-        color: [ '#00ffff', '#8957a1', '#f39800' ],
+        color: [ '#ff840b', '#00ffff', '#f39800' ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {

@@ -8,14 +8,14 @@
           <h3 class="title-style">
             当日累计客流（人次）
           </h3>
-          <p class="font-style" style="color: #e9e404">{{passengeFlowNum}}</p>
+          <p class="font-style" style="color: #fffc1e">{{passengeFlowNum}}</p>
         </el-card>
        </el-col>
        <el-col :span="styleObj.spanBig" v-if="config !== 'fatigueAlarm'">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-s-custom icon"></i>
           <h3 class="title-style">实时载客（人）</h3>
-          <p class="font-style" style="color: #00f4f5">{{totelPerson}}</p>
+          <p class="font-style" style="color: #00ffff">{{totelPerson}}</p>
         </el-card>
        </el-col>
        <el-col :span="config !== 'fatigueAlarm' ? 4 : 6 ">
@@ -36,21 +36,21 @@
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-s-data icon"></i>
           <h3 class="title-style">实时满载率</h3>
-          <p class="font-style" style="color: #d52d8c">{{totelFullLoadRate}}%</p>
+          <p class="font-style" style="color: #ff30a0">{{totelFullLoadRate}}%</p>
         </el-card>
        </el-col>
        <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-ship icon"></i>
           <h3 class="title-style">运营车辆数</h3>
-          <p class="font-style" style="color: #d5d40c">{{operateCarNum}}</p>
+          <p class="font-style" style="color: #fffc1e">{{operateCarNum}}</p>
         </el-card>
        </el-col>
        <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
         <el-card class="bg-style" shadow="hover">
           <i class="el-icon-loading icon"></i>
           <h3 class="title-style">待发车辆数</h3>
-          <p class="font-style" style="color: #a308b2">{{outgoingCarNum}}</p>
+          <p class="font-style" style="color: #21fffc">{{outgoingCarNum}}</p>
         </el-card>
        </el-col>
      </el-row>
