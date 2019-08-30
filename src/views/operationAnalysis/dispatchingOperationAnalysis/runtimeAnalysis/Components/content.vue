@@ -201,7 +201,9 @@ export default {
           max: this.maxData,
           min: 0,
           interval: Math.floor(this.maxData / 20),
-          axisLabel: { formatter: '{value} s' }
+          axisLabel: { formatter: (value) => {
+            return Math.ceil(value / 60) + 'min'
+          } }
         },
         yAxis: {
           type: 'category',
