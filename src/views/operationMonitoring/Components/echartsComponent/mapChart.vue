@@ -90,11 +90,11 @@
                 </div>
               </div>
             </div>
-            <div class="ts vedio-wrapper">
+            <div class="ts vedio-wrapper" v-show="carDetailData.showVideo">
               <div class="icon">
                 <span style="color: #fff;font-size: 0.8vw;">视频通道</span>
               </div>
-              <div class="content">
+              <div class="content" v-show="carDetailData.showVideo">
                 <span class="button" @click="getCharItem(item)" size="mini" v-for="(item , index) in charData" :class="item.isAct ? 'active' : ''" :key="index">{{item.ch}}</span>
               </div>
             </div>
@@ -118,7 +118,7 @@
               <div class="middle">
                 <div class="pub-code">牌照号：{{carDetailData.busNumber}}</div>
                 <div class="company">公司：{{carDetailData.orgName}}</div>
-                <div class="line">路线：{{carDetailData.lineName}}</div>
+                <div class="line">线路：{{carDetailData.lineName}}</div>
               </div>
               <div class="right">
                 <div class="pub-code">自编号：{{carDetailData.busSelfcode}}</div>
@@ -133,7 +133,7 @@
               <span class="right">时间：{{carDetailData.samplingTime}}</span>
               <!-- <span class="right">时间：2019-8-14 10:13:27</span> -->
             </div>
-            <div class="live-video">
+            <div class="live-video" v-show="carDetailData.showVideo">
               <div class="top-left-video" v-for="(item, index) in urlList" :key="index">
                 <videoWrapper  v-if="charData[index].isAct" :item="item" :dialogTableVisible='dialogTableVisible'></videoWrapper>
               </div>
@@ -545,7 +545,9 @@ export default {
         lineType,
         positionSpeed,
         currenttrip,
-        warnDeviceCode } = marker
+        warnDeviceCode,
+        showVideo
+      } = marker
       this.$api['homeTired.getVideoMsg']({
         busId,
         busNumber,
@@ -559,7 +561,8 @@ export default {
         drvIccard,
         positionSpeed,
         currenttrip,
-        warnDeviceCode
+        warnDeviceCode,
+        showVideo
       }).then(res => {
         console.log(res)
         this.carDetailData = res
