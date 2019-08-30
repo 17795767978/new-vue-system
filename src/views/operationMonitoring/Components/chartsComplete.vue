@@ -437,7 +437,6 @@ export default {
     },
     getSortList (res) {
       let sortArr = []
-      this.loading = false
       res.forEach((item, index) => {
         sortArr[index] = item
         const id = parseInt(item.lineName)
