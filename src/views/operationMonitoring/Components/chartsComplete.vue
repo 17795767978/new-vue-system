@@ -81,6 +81,7 @@ export default {
       this.$api['dispatch.getRealtimeMileage'](params).then(res => {
         this.loading = false
         if (res && res.length > 0) {
+          res = this.getSortList(res)
           this.realTimeMileage = res.map(item => Number(item.realtimeMileage))
           this.totalRealMileage = this.realTimeMileage.reduce((a, b) => a + b).toFixed(2)
           this.planMileage = res.map(item => Number(item.planMileage))
@@ -98,6 +99,7 @@ export default {
       this.$api['dispatch.getRealtimeTrips'](params).then(res => {
         this.loading = false
         if (res && res.length > 0) {
+          res = this.getSortList(res)
           this.realTimeTrips = res.map(item => Number(item.realtimeTrips))
           this.totalRealTrips = this.realTimeTrips.reduce((a, b) => a + b).toFixed(2)
           this.planTrips = res.map(item => Number(item.planTrips))
@@ -115,6 +117,7 @@ export default {
       this.$api['dispatch.getRealtimeClasses'](params).then(res => {
         this.loading = false
         if (res && res.length > 0) {
+          res = this.getSortList(res)
           this.realTimeShift = res.map(item => Number(item.realtimeClasses))
           // totalRealShift: 0,
           // totalPlanShift: 0,
@@ -431,6 +434,21 @@ export default {
           }
         ]
       }, true)
+    },
+    getSortList (res) {
+      let sortArr = []
+      this.loading = false
+      res.forEach((item, index) => {
+        sortArr[index] = item
+        const id = parseInt(item.lineName)
+        if (isNaN(id)) {
+          sortArr[index].sort = 10000 + index
+        } else {
+          sortArr[index].sort = id
+        }
+      })
+      sortArr = sortArr.sort((prev, next) => prev.sort - next.sort)
+      return sortArr
     }
   },
   watch: {
