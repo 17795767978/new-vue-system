@@ -118,7 +118,7 @@
               <div class="middle">
                 <div class="pub-code">牌照号：{{carDetailData.busNumber}}</div>
                 <div class="company">公司：{{carDetailData.orgName}}</div>
-                <div class="line">路线：{{carDetailData.lineName}}</div>
+                <div class="line">线路：{{carDetailData.lineName}}</div>
               </div>
               <div class="right">
                 <div class="pub-code">自编号：{{carDetailData.busSelfcode}}</div>
