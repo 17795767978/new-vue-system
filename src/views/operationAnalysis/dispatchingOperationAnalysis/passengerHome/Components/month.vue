@@ -1,0 +1,121 @@
+<template>
+  <div class="passenger-vol" ref="wrapper">
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+import { max } from '../../../../../utils/max.js'
+import lineEcharts from '@/components/echarts/brokenLineDiagram'
+export default {
+  name: 'passengerHome',
+  data () {
+    return {
+      lineData: [],
+      // width: 100,
+      title: {},
+      height: '',
+      legend: {},
+      xData: [],
+      yData: [],
+      maxNum: 0,
+      id: 'month',
+      grid: {}
+    }
+  },
+  created () {
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    this._getMonthData({
+      orgId
+    })
+  },
+  mounted () {
+    console.log(this.$refs.wrapper.style)
+  },
+  methods: {
+    _getMonthData (params) {
+      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+        console.log(res)
+        this.title = {
+          text: '客流月趋势图',
+          left: 10,
+          top: 10,
+          textStyle: {
+            'color': '#000'
+          }
+        }
+        this.grid = {
+          x: 50,
+          y: 50,
+          x2: 30,
+          y2: 30,
+          borderWidth: 1
+        }
+        this.lineData = [{
+          name: '日客流人次',
+          type: 'line',
+          data: res.datas[0]
+        }]
+        this.maxNum = max(res.datas[0])
+        this.dataLength = 2
+        this.legend = {
+          data: ['日客流人次'],
+          right: 10,
+          top: 10,
+          textStyle: {
+            color: '#000'
+          }
+        }
+        this.xData = [
+          {
+            type: 'category',
+            data: res.xAxisNames,
+            axisPointer: {
+              type: 'shadow'
+            },
+            axisLabel: {
+              inside: false,
+              // interval: 0,
+              textStyle: {
+                color: '#000',
+                fontSize: '10',
+                borderRadius: '6'
+              }
+            }
+          }
+        ]
+        this.yData = [
+          {
+            min: 0,
+            max: this.maxNum,
+            interval: Math.ceil(this.maxNum / 6),
+            // axisLabel: {
+            //     formatter: '{value} ml'
+            // },
+            axisLabel: {
+              inside: false,
+              interval: 0,
+              textStyle: {
+                color: '#000',
+                fontSize: '10',
+                borderRadius: '6'
+              }
+            }
+          }
+        ]
+      })
+    }
+  },
+  components: {
+    lineEcharts
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.passenger-vol {
+  width:100%;
+  box-sizing: border-box;
+  height: 100%;
+}
+</style>

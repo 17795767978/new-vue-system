@@ -46,45 +46,45 @@ export const aysncRoutesMap = [
       }
     }]
   },
-  {
-    path: '/chart-analysis',
-    component: Layout,
-    meta: {
-      title: '运营监控',
-      icon: 'nocturne icon-dash',
-      roles: ['/chart-analysis/all', '/chart-analysis/passenger-flow', '/chart-analysis/fatigue-alarm']
-    },
-    children: [{
-      path: 'chart-analysis/all',
-      component: _import_('operationMonitoring/index'),
-      name: 'chartAnalysis',
-      meta: {
-        title: '运营监控',
-        icon: 'nocturne icon-dash',
-        roles: ['/chart-analysis/all']
-      }
-    },
-    {
-      path: 'chart-analysis/passenger-flow',
-      component: _import_('operationMonitoring/index'),
-      name: 'chartAnalysis',
-      meta: {
-        title: '客流运营监控',
-        icon: 'nocturne icon-dash',
-        roles: ['/chart-analysis/passenger-flow']
-      }
-    },
-    {
-      path: 'chart-analysis/fatigue-alarm',
-      component: _import_('operationMonitoring/index'),
-      name: 'chartAnalysis',
-      meta: {
-        title: '疲劳运营监控',
-        icon: 'nocturne icon-dash',
-        roles: ['/chart-analysis/fatigue-alarm']
-      }
-    }]
-  },
+  // {
+  //   path: '/chart-analysis',
+  //   component: Layout,
+  //   meta: {
+  //     title: '运营监控',
+  //     icon: 'nocturne icon-dash',
+  //     roles: ['/chart-analysis/all', '/chart-analysis/passenger-flow', '/chart-analysis/fatigue-alarm']
+  //   },
+  //   children: [{
+  //     path: 'chart-analysis/all',
+  //     component: _import_('operationMonitoring/index'),
+  //     name: 'chartAnalysis',
+  //     meta: {
+  //       title: '运营监控',
+  //       icon: 'nocturne icon-dash',
+  //       roles: ['/chart-analysis/all']
+  //     }
+  //   },
+  //   {
+  //     path: 'chart-analysis/passenger-flow',
+  //     component: _import_('operationMonitoring/index'),
+  //     name: 'chartAnalysis',
+  //     meta: {
+  //       title: '客流运营监控',
+  //       icon: 'nocturne icon-dash',
+  //       roles: ['/chart-analysis/passenger-flow']
+  //     }
+  //   },
+  //   {
+  //     path: 'chart-analysis/fatigue-alarm',
+  //     component: _import_('operationMonitoring/index'),
+  //     name: 'chartAnalysis',
+  //     meta: {
+  //       title: '疲劳运营监控',
+  //       icon: 'nocturne icon-dash',
+  //       roles: ['/chart-analysis/fatigue-alarm']
+  //     }
+  //   }]
+  // },
   {
     path: '/operation',
     component: Layout,
@@ -103,86 +103,96 @@ export const aysncRoutesMap = [
         path: 'runtime-analysis',
         roles: ['/timeTable-analysis', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity']
       },
-      children: [{
-        path: 'timeTable-analysis',
-        component: _import_('operationAnalysis/dispatchingOperationAnalysis/timeTableAnalysis/index'),
-        name: 'timeTableAnalysis',
-        meta: {
-          title: '客流高峰时刻分析',
-          icon: 'nocturne icon-dash',
-          roles: ['/timeTable-analysis']
+      children: [
+        {
+          path: 'passenger-home',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/passengerHome/index'),
+          name: 'passengerHome',
+          meta: {
+            title: '客流首页',
+            icon: 'nocturne icon-dash',
+            roles: ['/timeTable-analysis']
+          }
+        }, {
+          path: 'timeTable-analysis',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/timeTableAnalysis/index'),
+          name: 'timeTableAnalysis',
+          meta: {
+            title: '客流高峰时刻分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/timeTable-analysis']
+          }
+        },
+        {
+          path: 'section-analysis',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/sectionAnalysis/index'),
+          name: 'sectionAnalysis',
+          meta: {
+            title: '客流高峰断面分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/section-analysis']
+          }
+        },
+        {
+          path: 'trip-order',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/tripOrder/index'),
+          name: 'tripOrder',
+          meta: {
+            title: '发车趟次时序图',
+            icon: 'nocturne icon-dash',
+            roles: ['/trip-order']
+          }
+        },
+        {
+          path: 'full-load-rate',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/fullLoadRate/index'),
+          name: 'fullLoadRate',
+          meta: {
+            title: '区间满载率查询',
+            icon: 'nocturne icon-dash',
+            roles: ['/full-load-rate']
+          }
+        },
+        {
+          path: 'landing-volume',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/landingVolume/index'),
+          name: 'landingVolume',
+          meta: {
+            title: '站点登降量查询',
+            icon: 'nocturne icon-dash',
+            roles: ['/landing-volume']
+          }
+        },
+        {
+          path: 'runtime-analysis',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/runtimeAnalysis/index'),
+          name: 'runtimeAnalysis',
+          meta: {
+            title: '站间运行时间分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/runtime-analysis']
+          }
+        },
+        {
+          path: 'passenger-transport-capacity',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/passengerTransportCapacity/index'),
+          name: 'passengerTransportCapacity',
+          meta: {
+            title: '客流运力运量分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/passenger-transport-capacity']
+          }
+        },
+        {
+          path: 'search-passenger',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/searchPassenger/index'),
+          name: 'searchPassenger',
+          meta: {
+            title: '客流数据查询',
+            icon: 'nocturne icon-dash',
+            roles: ['/search-passenger']
+          }
         }
-      },
-      {
-        path: 'section-analysis',
-        component: _import_('operationAnalysis/dispatchingOperationAnalysis/sectionAnalysis/index'),
-        name: 'sectionAnalysis',
-        meta: {
-          title: '客流高峰断面分析',
-          icon: 'nocturne icon-dash',
-          roles: ['/section-analysis']
-        }
-      },
-      {
-        path: 'trip-order',
-        component: _import_('operationAnalysis/dispatchingOperationAnalysis/tripOrder/index'),
-        name: 'tripOrder',
-        meta: {
-          title: '发车趟次时序图',
-          icon: 'nocturne icon-dash',
-          roles: ['/trip-order']
-        }
-      },
-      {
-        path: 'full-load-rate',
-        component: _import_('operationAnalysis/dispatchingOperationAnalysis/fullLoadRate/index'),
-        name: 'fullLoadRate',
-        meta: {
-          title: '区间满载率查询',
-          icon: 'nocturne icon-dash',
-          roles: ['/full-load-rate']
-        }
-      },
-      {
-        path: 'landing-volume',
-        component: _import_('operationAnalysis/dispatchingOperationAnalysis/landingVolume/index'),
-        name: 'landingVolume',
-        meta: {
-          title: '站点登降量查询',
-          icon: 'nocturne icon-dash',
-          roles: ['/landing-volume']
-        }
-      },
-      {
-        path: 'runtime-analysis',
-        component: _import_('operationAnalysis/dispatchingOperationAnalysis/runtimeAnalysis/index'),
-        name: 'runtimeAnalysis',
-        meta: {
-          title: '站间运行时间分析',
-          icon: 'nocturne icon-dash',
-          roles: ['/runtime-analysis']
-        }
-      },
-      {
-        path: 'passenger-transport-capacity',
-        component: _import_('operationAnalysis/dispatchingOperationAnalysis/passengerTransportCapacity/index'),
-        name: 'passengerTransportCapacity',
-        meta: {
-          title: '客流运力运量分析',
-          icon: 'nocturne icon-dash',
-          roles: ['/passenger-transport-capacity']
-        }
-      },
-      {
-        path: 'search-passenger',
-        component: _import_('operationAnalysis/dispatchingOperationAnalysis/searchPassenger/index'),
-        name: 'searchPassenger',
-        meta: {
-          title: '客流数据查询',
-          icon: 'nocturne icon-dash',
-          roles: ['/search-passenger']
-        }
-      }
       ]
     },
     // {

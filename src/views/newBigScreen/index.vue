@@ -110,8 +110,6 @@ export default {
   },
   mounted () {
     // this.fullScreen()
-    let app = new Proxy()
-    console.log(app)
   },
   activated () {
     this.fullScreen()
