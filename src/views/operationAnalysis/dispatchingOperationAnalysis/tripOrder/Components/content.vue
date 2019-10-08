@@ -45,7 +45,7 @@ export default {
   },
   created () {
     let date = new Date()
-    date = moment(date).format('YYYY-MM-DD')
+    date = moment(date).subtract(1, 'day').format('YYYY-MM-DD')
     this._tripOrder({
       lineId: this.initLineId,
       dateTime: date,

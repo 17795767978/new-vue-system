@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'fatigueMonitoring'
+  name: 'dataAnalysis'
 }
 </script>
 

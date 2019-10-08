@@ -1,5 +1,5 @@
 <template>
-  <div class="passenger-vol" ref="wrapper">
+  <div class="passenger-vol" ref="wrapper" v-loading="loading">
     <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
   </div>
 </template>
@@ -20,7 +20,8 @@ export default {
       yData: [],
       maxNum: 0,
       id: 'vol',
-      grid: {}
+      grid: {},
+      loading: true
     }
   },
   created () {
@@ -30,12 +31,13 @@ export default {
     })
   },
   mounted () {
-    console.log(this.$refs.wrapper.style)
   },
   methods: {
     _fullRateAnalysisUp (params) {
+      this.loading = true
       this.$api['passengerSimple.getUpanddown'](params).then(res => {
         console.log(res)
+        this.loading = false
         this.title = {
           text: '实时客流登降量',
           left: 10,
@@ -52,18 +54,18 @@ export default {
           borderWidth: 1
         }
         this.lineData = [{
-          name: '断面客流',
+          name: '实时',
           type: 'line',
           data: res.datas[0]
         }, {
-          name: '满载率',
+          name: '昨日',
           type: 'line',
           data: res.datas[1]
         }]
         this.maxNum = max([max(res.datas[0]), max(res.datas[1])])
         this.dataLength = 2
         this.legend = {
-          data: ['断面客流', '满载率'],
+          data: ['实时', '昨日'],
           top: 10,
           right: 10,
           textStyle: {

@@ -8,12 +8,12 @@
     </header>
     <div class="cul-wrapper">
       <div class="left">
-        <p>月平均：12313123</p>
-        <p><span style="color: #0f0">增加</span>：23%</p>
+        <p>周平均：{{weekPersoncount}}</p>
+        <p><span style="color: #0f0">增加</span>：{{reduce}}%</p>
       </div>
       <div class="right">
         <p>昨日累计：{{beforePersoncount}}</p>
-        <p><span style="color: #f00">增加</span>：23%</p>
+        <p><span style="color: #f00">减小</span>：{{increase}}%</p>
       </div>
     </div>
   </div>
@@ -26,8 +26,11 @@ export default {
   data () {
     return {
       date: '',
-      totalPassenger: 2299,
-      beforePersoncount: ''
+      totalPassenger: '',
+      beforePersoncount: '',
+      weekPersoncount: '',
+      increase: '',
+      reduce: ''
     }
   },
   created () {
@@ -40,24 +43,54 @@ export default {
     this._getTotalPassengerSimple({
       orgId
     })
+    this._getWeekData({
+      orgId
+    })
+    console.log(this._passengeFlow({
+      orgId
+    }))
   },
   methods: {
     _passengeFlow (params) {
       this.$api['passengerFlow.getTotalPassengerFlow'](params).then(res => {
         if (res.personCount) {
-          this.totalPassenger = res.personCount
+          this.totalPassenger = +res.personCount
         } else {
-          this.totalPassenger = '--'
+          this.totalPassenger = 0
         }
       })
     },
     _getTotalPassengerSimple (params) {
       this.$api['passengerSimple.getTotalPassengerSimple'](params).then(res => {
+        console.log('__________________________')
         console.log(res)
         if (res.personCount) {
-          this.beforePersoncount = res.personCount
+          this.beforePersoncount = +res.personCount
+          if (this.totalPassenger === 0) {
+            this.increase = '---'
+          } else {
+            console.log((this.totalPassenger - this.beforePersoncount) / this.totalPassenger * 100)
+            this.increase = ((this.totalPassenger - this.beforePersoncount) / this.totalPassenger * 100).toFixed(2)
+          }
         } else {
           this.beforePersoncount = '--'
+          this.increase = '--'
+        }
+      })
+    },
+    _getWeekData (params) {
+      this.$api['passengerSimple.getWeekData'](params).then(res => {
+        if (res.personCount) {
+          this.weekPersoncount = +res.personCount
+          if (this.totalPassenger === 0) {
+            this.reduce = '---'
+          } else {
+            console.log((this.weekPersoncount - this.totalPassenger) / this.totalPassenger)
+            this.reduce = ((this.weekPersoncount - this.totalPassenger) / this.totalPassenger * 100).toFixed(2)
+          }
+        } else {
+          this.weekPersoncount = '--'
+          this.reduce = '--'
         }
       })
     }

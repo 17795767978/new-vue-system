@@ -1,5 +1,5 @@
 <template>
-  <div class="passenger-vol" ref="wrapper">
+  <div class="passenger-vol" ref="wrapper" v-loading="loading">
     <lineEcharts id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
   </div>
 </template>
@@ -19,7 +19,8 @@ export default {
       yData: [],
       maxNum: 0,
       id: 'station',
-      grid: {}
+      grid: {},
+      loading: true
     }
   },
   created () {
@@ -33,8 +34,10 @@ export default {
   },
   methods: {
     _getHotstations (params) {
+      this.loading = true
       this.$api['passengerSimple.getHotstations'](params).then(res => {
         console.log(res)
+        this.loading = false
         this.title = {}
         this.lineData = [{
           name: '客流人次',

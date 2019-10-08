@@ -235,61 +235,117 @@ export const aysncRoutesMap = [
         icon: 'nocturne icon-dash',
         roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management']
       },
-      children: [{
-        path: 'alarm-center',
-        component: _import_('operationAnalysis/fatigueMonitoring/alarmCenter/index'),
-        name: 'alarmCenter',
-        meta: {
-          title: '驾驶行为监测',
-          icon: 'nocturne icon-dash',
-          roles: ['/alarm-center']
+      children: [
+        {
+          path: 'alarm-home',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmHome/index'),
+          name: 'alarmHome',
+          meta: {
+            title: '安全运营首页',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-home']
+          }
+        },
+        {
+          path: 'alarm-drive',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmDriver/index'),
+          name: 'alarmDriver',
+          meta: {
+            title: '司机排行分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-drive']
+          }
+        },
+        {
+          path: 'alarm-type',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmType/index'),
+          name: 'alarmType',
+          meta: {
+            title: '报警类型分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-type']
+          }
+        },
+        {
+          path: 'alarm-speed',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmSpeed/index'),
+          name: 'alarmSpeed',
+          meta: {
+            title: '报警速度分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-speed']
+          }
+        },
+        {
+          path: 'alarm-center',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmCenter/index'),
+          name: 'alarmCenter',
+          meta: {
+            title: '驾驶行为监测',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-center']
+          }
+        },
+        {
+          path: 'alarm-content',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmCenter/alarmContent/index'),
+          name: 'alarmContent',
+          hidden: true,
+          meta: {
+            title: '驾驶行为监测详情',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-content']
+          }
+        },
+        {
+          path: 'device-status',
+          component: _import_('operationAnalysis/fatigueMonitoring/deviceStatus/index'),
+          name: 'deviceStatus',
+          meta: {
+            title: '设备状态',
+            icon: 'nocturne icon-dash',
+            roles: ['/device-status']
+          }
+        },
+        {
+          path: 'alarm-analysis',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmAnalysis/index'),
+          name: 'alarmAnalysis',
+          meta: {
+            title: '报警分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-analysis']
+          }
+        },
+        {
+          path: 'alarm-management',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmManagement/index'),
+          name: 'alarmManagement',
+          meta: {
+            title: '报警类型管理',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-management']
+          }
         }
-      },
-      {
-        path: 'alarm-content',
-        component: _import_('operationAnalysis/fatigueMonitoring/alarmCenter/alarmContent/index'),
-        name: 'alarmContent',
-        hidden: true,
-        meta: {
-          title: '驾驶行为监测详情',
-          icon: 'nocturne icon-dash',
-          roles: ['/alarm-content']
-        }
-      },
-      {
-        path: 'device-status',
-        component: _import_('operationAnalysis/fatigueMonitoring/deviceStatus/index'),
-        name: 'deviceStatus',
-        meta: {
-          title: '设备状态',
-          icon: 'nocturne icon-dash',
-          roles: ['/device-status']
-        }
-      },
-      {
-        path: 'alarm-analysis',
-        component: _import_('operationAnalysis/fatigueMonitoring/alarmAnalysis/index'),
-        name: 'alarmAnalysis',
-        meta: {
-          title: '报警分析',
-          icon: 'nocturne icon-dash',
-          roles: ['/alarm-analysis']
-        }
-      },
-      {
-        path: 'alarm-management',
-        component: _import_('operationAnalysis/fatigueMonitoring/alarmManagement/index'),
-        name: 'alarmManagement',
-        meta: {
-          title: '报警类型管理',
-          icon: 'nocturne icon-dash',
-          roles: ['/alarm-management']
-        }
-      }
       ]
     }
     ]
   },
+  // {
+  //   path: '/data-analysis',
+  //   component: Layout,
+  //   meta: {
+  //     title: '数据分析',
+  //     icon: 'nocturne icon-dash',
+  //     roles: ['/chart-analysis/all']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'big-home-screen',
+  //       component: _import_('')
+  //     }
+  //   ]
+  // },
   {
     path: '/permission-management',
     component: Layout,

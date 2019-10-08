@@ -49,6 +49,16 @@ export const passengerSimpleApi = {
         orgId: ''
       },
       desc: '客流登降量（实时，昨日）'
+    },
+    {
+      name: 'getWeekData',
+      method: 'POST',
+      path: '/zhfxpt/passengerflow/getWeekAvgTotalPassengerFlow',
+      mockPath: '/zhfxpt/passengerflow/getWeekAvgTotalPassengerFlow',
+      params: {
+        orgId: ''
+      },
+      desc: '周客流平均值'
     }
   ]
 }

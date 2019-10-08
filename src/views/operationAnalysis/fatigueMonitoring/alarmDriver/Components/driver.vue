@@ -1,5 +1,5 @@
 <template>
-  <div class="passenger-vol" ref="wrapper" v-loading="loading" >
+  <div class="passenger-vol" ref="wrapper" v-loading="loading">
     <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
   </div>
 </template>
@@ -8,6 +8,7 @@
 import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
+  name: 'passengerHome',
   data () {
     return {
       lineData: [],
@@ -18,59 +19,34 @@ export default {
       xData: [],
       yData: [],
       maxNum: 0,
-      id: 'line',
+      id: 'driver',
       grid: {},
       loading: true
     }
   },
   created () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getLines({
+    this._getMonthData({
       orgId
     })
   },
   mounted () {
-    // console.log(this.$refs.wrapper.style)
+    console.log(this.$refs.wrapper.style)
   },
   methods: {
-    _getLines (params) {
+    _getMonthData (params) {
       this.loading = true
-      this.$api['passengerSimple.getHotlines'](params).then(res => {
+      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
         console.log(res)
         this.loading = false
-        this.title = {}
-        this.lineData = [{
-          name: '客流人次',
-          type: 'bar',
-          radius: ['100%', '60%'],
-          data: res.datas[0],
-          itemStyle: {
-            // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
-            emphasis: {
-              barBorderRadius: 30
-            },
-
-            normal: {
-              // 柱形图圆角，初始化效果
-              barBorderRadius: [0, 10, 10, 0],
-              label: {
-                show: true, // 是否展示
-                textStyle: {
-                  fontWeight: 'bolder',
-                  fontSize: '12',
-                  fontFamily: '微软雅黑'
-                }
-              },
-              color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 1, [{
-                offset: 0,
-                color: '#fdc14d'
-              }, {
-                offset: 1,
-                color: '#ed8237'
-              }])
-            }
+        this.title = {
+          text: '客流月趋势图',
+          left: 'center',
+          top: 10,
+          textStyle: {
+            'color': '#000'
           }
-        }]
+        }
         this.grid = {
           x: 50,
           y: 50,
@@ -78,17 +54,23 @@ export default {
           y2: 30,
           borderWidth: 1
         }
+        this.lineData = [{
+          name: '日客流人次',
+          type: 'line',
+          data: res.datas[0],
+          smooth: true
+        }]
         this.maxNum = max(res.datas[0])
         this.dataLength = 2
         this.legend = {
-          data: ['客流人次'],
-          top: 10,
+          data: ['日客流人次'],
           right: 10,
+          top: 10,
           textStyle: {
             color: '#000'
           }
         }
-        this.yData = [
+        this.xData = [
           {
             type: 'category',
             data: res.xAxisNames,
@@ -106,7 +88,7 @@ export default {
             }
           }
         ]
-        this.xData = [
+        this.yData = [
           {
             min: 0,
             max: this.maxNum,

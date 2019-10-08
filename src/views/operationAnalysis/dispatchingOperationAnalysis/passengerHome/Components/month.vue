@@ -1,5 +1,5 @@
 <template>
-  <div class="passenger-vol" ref="wrapper">
+  <div class="passenger-vol" ref="wrapper" v-loading="loading">
     <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
   </div>
 </template>
@@ -20,7 +20,8 @@ export default {
       yData: [],
       maxNum: 0,
       id: 'month',
-      grid: {}
+      grid: {},
+      loading: true
     }
   },
   created () {
@@ -34,8 +35,10 @@ export default {
   },
   methods: {
     _getMonthData (params) {
+      this.loading = true
       this.$api['passengerSimple.getMonthtrend'](params).then(res => {
         console.log(res)
+        this.loading = false
         this.title = {
           text: '客流月趋势图',
           left: 10,

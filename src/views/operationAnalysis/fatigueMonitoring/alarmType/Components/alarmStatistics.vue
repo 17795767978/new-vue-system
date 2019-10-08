@@ -18,7 +18,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: 0,
-      id: 'line',
+      id: 'statistics',
       grid: {},
       loading: true
     }
@@ -38,9 +38,12 @@ export default {
       this.$api['passengerSimple.getHotlines'](params).then(res => {
         console.log(res)
         this.loading = false
-        this.title = {}
+        this.title = {
+          text: '各报警类型统计',
+          left: 'center'
+        }
         this.lineData = [{
-          name: '客流人次',
+          name: '各报警类型统计',
           type: 'bar',
           radius: ['100%', '60%'],
           data: res.datas[0],

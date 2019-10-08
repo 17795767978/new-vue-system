@@ -18,7 +18,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: 0,
-      id: 'line',
+      id: 'speedType',
       grid: {},
       loading: true
     }
@@ -38,7 +38,10 @@ export default {
       this.$api['passengerSimple.getHotlines'](params).then(res => {
         console.log(res)
         this.loading = false
-        this.title = {}
+        this.title = {
+          text: '报警速度报警类型',
+          left: 'center'
+        }
         this.lineData = [{
           name: '客流人次',
           type: 'bar',
@@ -63,7 +66,7 @@ export default {
               },
               color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 1, [{
                 offset: 0,
-                color: '#fdc14d'
+                color: '#409EFF'
               }, {
                 offset: 1,
                 color: '#ed8237'

@@ -12,12 +12,14 @@
         @isUpdateFaDown="isUpdateFaDown"
       ></contentWrapper>
     </div>
+    <introduceWrapper :msg="msg"/>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import headerNav from './Components/header'
 import contentWrapper from './Components/content'
+import introduceWrapper from '@/components/introduce/'
 import moment from 'moment'
 export default {
   name: 'timeTableAnalysis',
@@ -26,12 +28,17 @@ export default {
       selectData: {},
       nowTime: '',
       isUpdateUp: false,
-      isUpdateDown: false
+      isUpdateDown: false,
+      msg: {
+        methods: '输入查询线路，日期单击查询可查看系统，横坐标为时间，15分钟为单位，纵坐标为客流。运力是实际公交投入的运力，运量是单位时间内的通过量。',
+        aim: '客流运力运量分析主要分析用户运力与运量的匹配情况，是否存在运力不足或者运力过剩情况，为调度排班，排班评价等提供支持。'
+      }
     }
   },
   components: {
     headerNav,
-    contentWrapper
+    contentWrapper,
+    introduceWrapper
   },
   mounted () {
   },
