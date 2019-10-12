@@ -68,7 +68,7 @@ export default {
       type: '1',
       dateTime: dataBefore,
       startHour: '07',
-      endHour: '09'
+      endHour: '08'
     })
   },
   mounted () {
@@ -112,7 +112,7 @@ export default {
             type: '1',
             dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
             startHour: this.checkData.startTime.substring(0, 2),
-            endHour: this.checkData.endTime.substring(0, 2)
+            endHour: this.checkData.endTimeFormatter
           })
         }
         this.$emit('isUpdateToUp', false)

@@ -40,12 +40,16 @@ export default {
         let data = []
         let dataArrValue = res.map(item => item.warnLabel)
         let dataArrNumber = res.map(item => item.warnNumber)
+        let dataArrwarnType = res.map(item => item.warnType)
+        console.log(dataArrwarnType)
         for (let i = 0; i < dataArrValue.length; i++) {
           data[i] = {
             name: dataArrValue[i],
-            value: dataArrNumber[i]
+            value: dataArrNumber[i],
+            warnType: dataArrwarnType[i]
           }
         }
+        console.log(data)
         this.title = {}
         this.lineData = [{
           name: '不良驾驶行为',

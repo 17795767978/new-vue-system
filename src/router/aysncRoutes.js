@@ -101,7 +101,7 @@ export const aysncRoutesMap = [
         title: '调度运营分析',
         icon: 'nocturne icon-dash',
         path: 'runtime-analysis',
-        roles: ['/timeTable-analysis', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity']
+        roles: ['/timeTable-analysis', '/passenger-home', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity']
       },
       children: [
         {
@@ -111,7 +111,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '客流首页',
             icon: 'nocturne icon-dash',
-            roles: ['/timeTable-analysis']
+            roles: ['/passenger-home']
           }
         }, {
           path: 'timeTable-analysis',
@@ -243,7 +243,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '安全运营首页',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-home']
+            roles: ['/alarm-center']
           }
         },
         {
@@ -253,7 +253,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '司机排行分析',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-drive']
+            roles: ['/alarm-center']
           }
         },
         {
@@ -263,7 +263,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '报警类型分析',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-type']
+            roles: ['/alarm-center']
           }
         },
         {
@@ -273,7 +273,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '报警速度分析',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-speed']
+            roles: ['/alarm-center']
           }
         },
         {
@@ -331,21 +331,59 @@ export const aysncRoutesMap = [
     }
     ]
   },
-  // {
-  //   path: '/data-analysis',
-  //   component: Layout,
-  //   meta: {
-  //     title: '数据分析',
-  //     icon: 'nocturne icon-dash',
-  //     roles: ['/chart-analysis/all']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'big-home-screen',
-  //       component: _import_('')
-  //     }
-  //   ]
-  // },
+  {
+    path: '/data-analysis',
+    component: Layout,
+    name: 'dataAnalysis',
+    meta: {
+      title: '数据分析',
+      icon: 'nocturne icon-dash',
+      roles: ['/chart-analysis/all']
+    },
+    children: [
+      {
+        path: 'big-home-screen',
+        component: _import_('dataAnalysis/visualScreen/index'),
+        name: 'bigHomeScreen',
+        meta: {
+          title: '可视化大屏',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'line-condition',
+        component: _import_('dataAnalysis/lineCondition/index'),
+        name: 'lineCondition',
+        meta: {
+          title: '线路情况',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'repeatability-index',
+        component: _import_('dataAnalysis/repeatability/index'),
+        name: 'repeatability',
+        meta: {
+          title: '重复度指标',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'repeatability-detail',
+        component: _import_('dataAnalysis/repeatDetail/index'),
+        name: 'repeatabilityDetail',
+        hidden: true,
+        meta: {
+          title: '重复度指标详情',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      }
+    ]
+  },
   {
     path: '/permission-management',
     component: Layout,

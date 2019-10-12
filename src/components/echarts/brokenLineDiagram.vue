@@ -21,7 +21,7 @@ export default {
       type: Object
     },
     legend: {
-      type: Object
+      type: [Object, Array]
     },
     XData: {
       type: Array
@@ -30,12 +30,18 @@ export default {
       type: Array
     },
     maxNum: {
-      type: Number
+      type: [Number, Array]
     },
     data: {
       type: Array
     },
     grid: {
+      type: Object
+    },
+    angleAxis: {
+      type: Object
+    },
+    tooltip: {
       type: Object
     }
   },
@@ -49,6 +55,8 @@ export default {
       titleNew: '',
       max: 0,
       legendData: [],
+      angleAxisData: {},
+      tooltipData: {},
       gridData: {}
     }
   },
@@ -104,6 +112,18 @@ export default {
     maxNum (newV) {
       this.max = newV
     },
+    angleAxis: {
+      deep: true,
+      handler (newV) {
+        this.angleAxisData = newV
+      }
+    },
+    tooltip: {
+      deep: true,
+      handler (newV) {
+        this.tooltipData = newV
+      }
+    },
     data: {
       deep: true,
       handler (newV) {
@@ -117,28 +137,31 @@ export default {
   },
   methods: {
     drawLine () {
-      let fullLoadRate = this.$echarts.init(document.getElementById(this.id))
-      console.log(fullLoadRate)
-      window.addEventListener('resize', () => { fullLoadRate.resize() })
+      let charts = this.$echarts.init(document.getElementById(this.id))
+      window.addEventListener('resize', () => { charts.resize() })
       if (this.series.length > 0) {
-        fullLoadRate.setOption({
+        charts.setOption({
           title: this.titleNew,
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
-            }
-          },
+          tooltip: Object.keys(this.tooltipData).length > 0
+            ? this.tooltipData : {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow'
+              }
+            },
           grid: this.gridData,
           // color: ['#0490b3', '#6e9724', '#b22679'],
-          color: ['#03adb0', '#ff2bd0', '#ff840b', '#ff30a0', '#fedd00', '#00ffff'],
+          color: ['#fedd00', '#00ffff', '#03adb0', '#ff2bd0', '#ff840b', '#ff30a0'],
+          angleAxis: Object.keys(this.angleAxisData).length > 0 ? this.angleAxisData : null,
+          radiusAxis: Object.keys(this.angleAxisData).length > 0 ? {} : null,
+          polar: Object.keys(this.angleAxisData).length > 0 ? {} : null,
           legend: this.legendData,
           xAxis: this.xData,
           yAxis: this.yData,
           series: this.series
         }, true)
       }
-      fullLoadRate.on('click', (param) => {
+      charts.on('click', (param) => {
         console.log(param)
       })
     }

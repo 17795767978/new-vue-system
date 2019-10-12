@@ -21,22 +21,28 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
+const TIME = 60 * 5000
 export default {
   name: 'passengerHome',
   data () {
     return {
       date: '',
+      timer: null,
       totalPassenger: '',
+      timeTotal: null,
       beforePersoncount: '',
+      timeBore: null,
       weekPersoncount: '',
+      timeWeek: null,
       increase: '',
       reduce: ''
     }
   },
   created () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    const date = new Date()
-    this.date = moment(date).format('YYYY-MM-DD')
+    this.timer = setInterval(() => {
+      this.date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    }, 1000)
     this._passengeFlow({
       orgId
     })
@@ -54,46 +60,61 @@ export default {
     _passengeFlow (params) {
       this.$api['passengerFlow.getTotalPassengerFlow'](params).then(res => {
         if (res.personCount) {
-          this.totalPassenger = +res.personCount
+          this.totalPassenger = Math.floor(+res.personCount)
         } else {
           this.totalPassenger = 0
         }
+        this.timeTotal = setTimeout(() => {
+          this._passengeFlow(params)
+        }, TIME)
       })
     },
     _getTotalPassengerSimple (params) {
       this.$api['passengerSimple.getTotalPassengerSimple'](params).then(res => {
-        console.log('__________________________')
-        console.log(res)
         if (res.personCount) {
-          this.beforePersoncount = +res.personCount
+          this.beforePersoncount = Math.floor(+res.personCount)
           if (this.totalPassenger === 0) {
             this.increase = '---'
           } else {
-            console.log((this.totalPassenger - this.beforePersoncount) / this.totalPassenger * 100)
             this.increase = ((this.totalPassenger - this.beforePersoncount) / this.totalPassenger * 100).toFixed(2)
           }
         } else {
           this.beforePersoncount = '--'
           this.increase = '--'
         }
+        this.timeBore = setTimeout(() => {
+          this._getTotalPassengerSimple(params)
+        }, TIME)
       })
     },
     _getWeekData (params) {
       this.$api['passengerSimple.getWeekData'](params).then(res => {
         if (res.personCount) {
-          this.weekPersoncount = +res.personCount
+          this.weekPersoncount = Math.floor(+res.personCount)
           if (this.totalPassenger === 0) {
             this.reduce = '---'
           } else {
-            console.log((this.weekPersoncount - this.totalPassenger) / this.totalPassenger)
             this.reduce = ((this.weekPersoncount - this.totalPassenger) / this.totalPassenger * 100).toFixed(2)
           }
         } else {
           this.weekPersoncount = '--'
           this.reduce = '--'
         }
+        this.timeWeek = setTimeout(() => {
+          this._getWeekData(params)
+        }, TIME)
       })
     }
+  },
+  destroyed () {
+    clearInterval(this.timer)
+    clearTimeout(this.timeTotal)
+    clearTimeout(this.timeBore)
+    clearTimeout(this.timeWeek)
+    this.timer = null
+    this.timeTotal = null
+    this.timeBore = null
+    this.timeWeek = null
   }
 }
 </script>

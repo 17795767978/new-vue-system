@@ -1,11 +1,11 @@
 <template>
   <div style="width: 100%;height: 100%;">
     <mapChart
-     :isHotMap="true"
+     :isHotMap="false"
      :isSearchLine="true"
      :isCarsDetail="true"
-     :isLineMap="true"
-     :isSelect="true"
+     :isLineMap="false"
+     :isSelect="false"
      :isFlv="true"
     ></mapChart>
   </div>

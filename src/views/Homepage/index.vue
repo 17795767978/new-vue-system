@@ -13,7 +13,7 @@
         <h3 style="font-size: 20px;">调度运营分析</h3>
         <div class="tab-ans">
           <ul class="item-fam">
-            <li class="item-font" :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in operationAnalysis" :key="index" @click="goToChart(item)">
+            <li class="item-font" :class="item.admin ? '' : 'simple-font-dis'" v-for="(item, index) in simple" :key="index"  @click="goToTimeAna(item)">
               <div class="inside-font">
                 <img :src="item.icon" width="30" height="30" class="img-font"/>
               </div>
@@ -21,7 +21,7 @@
             </li>
           </ul>
           <ul class="item-fam">
-            <li class="item-font" :class="item.admin ? '' : 'simple-font-dis'" v-for="(item, index) in simple" :key="index"  @click="goToTimeAna(item)">
+            <li class="item-font" :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in operationAnalysis" :key="index" @click="goToChart(item)">
               <div class="inside-font">
                 <img :src="item.icon" width="30" height="30" class="img-font"/>
               </div>
@@ -68,6 +68,7 @@ const PER_ANA = [
   { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false }
 ]
 const SIMPLE = [
+  { name: '客流首页', icon: iconHomeYlyl, path: '/passenger-home', admin: false },
   { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false },
   { name: '客流数据查询', icon: iconHomeMzl, path: '/search-passenger', admin: false }
 ]

@@ -206,7 +206,7 @@ export default {
       isAll: false,
       disabled: true,
       dialogTableVisible: false,
-      isHidden: false,
+      isHidden: true,
       title: '',
       charData: [
         { ch: '通道1', isAct: false, index: 0 },

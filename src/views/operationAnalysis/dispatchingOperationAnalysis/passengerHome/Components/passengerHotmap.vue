@@ -21,6 +21,8 @@
 <script type="text/ecmascrip-6">
 import { BaiduMap, BmlHeatmap } from 'vue-baidu-map'
 import { mapStyle } from '../utils/mapStyle'
+import { setTimeout } from 'timers'
+const TIME = 60 * 5000
 export default {
   data () {
     return {
@@ -30,6 +32,7 @@ export default {
       zoom: 3,
       ak: '7vVOlMOKr03PaWX82WajF6m',
       loading: true,
+      timer: null,
       hotdata: [],
       max: 0
     }
@@ -49,6 +52,9 @@ export default {
         this.hotdata = res
         this.max = 100
         this.loading = false
+        this.timer = setTimeout(() => {
+          this._hotDataLine()
+        }, TIME)
       })
     },
     handler ({ BMap, map }) {
@@ -62,6 +68,10 @@ export default {
   components: {
     BaiduMap,
     BmlHeatmap
+  },
+  destroyed () {
+    clearTimeout(this.timer)
+    this.timer = null
   }
 }
 </script>

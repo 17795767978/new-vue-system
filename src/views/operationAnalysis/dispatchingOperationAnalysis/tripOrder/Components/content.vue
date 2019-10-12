@@ -51,7 +51,7 @@ export default {
       dateTime: date,
       type: '1',
       startHour: '07',
-      endHour: '09',
+      endHour: '08',
       busPlateNumbers: []
     })
   },
@@ -69,7 +69,7 @@ export default {
           dateTime: this.selectData.dateTime,
           type: this.selectData.type,
           startHour: this.selectData.startHour.substring(0, 2),
-          endHour: this.selectData.endHour.substring(0, 2),
+          endHour: this.selectData.endHourFormatter,
           busPlateNumbers: this.selectData.busPlateNumbers
         })
       }

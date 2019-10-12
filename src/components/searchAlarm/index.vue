@@ -41,6 +41,46 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="搜索起始站点" v-if="isStation">
+        <el-select
+          ref="elSelectWrapperUp"
+          style="width:200px;"
+          filterable
+          collapse-tags
+          clearable
+          v-model="formInline.startStation"
+          remote
+          reserve-keyword
+          :remote-method="remoteMethod"
+          placeholder="请选择">
+          <el-option
+            v-for="item in searchStationOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="搜索结束站点" v-if="isStation">
+        <el-select
+          ref="elSelectWrapperUp"
+          style="width:200px;"
+          filterable
+          collapse-tags
+          clearable
+          v-model="formInline.endStation"
+          remote
+          reserve-keyword
+          :remote-method="remoteMethod"
+          placeholder="请选择">
+          <el-option
+            v-for="item in searchStationOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="选择日期" v-if="isDate">
          <el-date-picker
           v-model="formInline.valueTime"
@@ -148,6 +188,9 @@ export default {
     isTime: {
       type: Boolean
     },
+    isStation: {
+      type: Boolean
+    },
     isDownload: {
       type: Boolean
     },
@@ -167,8 +210,13 @@ export default {
         endTime: '',
         warnTypeId: [],
         startHour: '',
-        endHour: ''
+        endHour: '',
+        endHourFormatter: '',
+        startStation: {},
+        endStation: {}
       },
+      searchStationOptions: [],
+      stationOptions: [],
       comOptions: [],
       turnOptions: [{
         value: '1',
@@ -209,6 +257,7 @@ export default {
     setTimeout(() => {
       this.formInline.valueTime = [timeStart, timeEnd]
     }, 20)
+    this._stationList()
   },
   computed: {
     ...mapGetters(['userId'])
@@ -276,6 +325,20 @@ export default {
           })
         }
       }
+    },
+    'formInline.startStation': {
+      handler (newV) {
+        if (newV !== '') {
+          this.searchStationOptions = []
+        }
+      }
+    },
+    'formInline.endStation': {
+      handler (newV) {
+        if (newV !== '') {
+          this.searchStationOptions = []
+        }
+      }
     }
   },
   updated () {
@@ -291,6 +354,17 @@ export default {
     }
   },
   methods: {
+    _stationList () {
+      this.$store.dispatch('getStationList').then(res => {
+        let arr = res
+        arr.forEach(item => {
+          this.stationOptions.push({
+            value: item.staUuid,
+            label: item.staName
+          })
+        })
+      })
+    },
     _alarmType (params) {
       this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
         let dataArr = res
@@ -304,10 +378,27 @@ export default {
         })
       })
     },
+    remoteMethod (query) {
+      if (query !== '') {
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.searchStationOptions = this.stationOptions.filter(item => {
+            return item.label.toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          })
+        }, 200)
+      } else {
+        this.options = []
+      }
+    },
     onSubmit () {
       // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD');
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+      if (this.formInline.endHour !== '') {
+        this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
+      }
       console.log(this.formInline)
       this.$emit('configCheck', this.formInline)
     },
@@ -319,7 +410,12 @@ export default {
         valueTime: [],
         lineType: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        startHour: '',
+        endHour: '',
+        endHourFormatter: '',
+        startStation: {},
+        endStation: {}
       }
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res

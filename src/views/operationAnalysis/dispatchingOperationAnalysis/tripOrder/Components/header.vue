@@ -84,6 +84,7 @@ export default {
         type: '1',
         startHour: '07:00',
         endHour: '09:00',
+        endHourFormatter: '',
         busPlateNumbers: []
       },
       lineOptions: [],
@@ -160,6 +161,9 @@ export default {
       })
     },
     onSubmit () {
+      if (this.formInline.endHour !== '') {
+        this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
+      }
       if (this.formInline.lineId === '' || this.formInline.dateTime === '' || this.formInline.dateTime === null || this.formInline.type === '' || this.formInline.startHour === null || this.formInline.endHour === null) {
         this.$message.error('请填写完整的查询条件')
       } else {
