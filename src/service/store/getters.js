@@ -21,7 +21,10 @@ const getters = {
   homepage: state => state.routers.homepage,
   // 页面
   cachedViews: state => state.views.cachedViews,
-  visitedViews: state => state.views.visitedViews
+  visitedViews: state => state.views.visitedViews,
+  // echarts状态
+  renderId: state => state.query.renderId,
+  queryId: state => state.query.queryId
 }
 
 export default getters

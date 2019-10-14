@@ -41,7 +41,14 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="搜索起始站点" v-if="isStation">
+      <el-form-item label="月份" v-if="isMonth">
+        <el-date-picker
+          v-model="formInline.month"
+          type="month"
+          placeholder="选择月">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="站位A" v-if="isStation">
         <el-select
           ref="elSelectWrapperUp"
           style="width:200px;"
@@ -61,7 +68,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="搜索结束站点" v-if="isStation">
+      <el-form-item label="站位B" v-if="isStation">
         <el-select
           ref="elSelectWrapperUp"
           style="width:200px;"
@@ -80,6 +87,13 @@
             :value="item">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="选择日期" v-if="isDataCurrent">
+        <el-date-picker
+          v-model="formInline.dataCurrent"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDate">
          <el-date-picker
@@ -182,7 +196,13 @@ export default {
     isTurn: {
       type: Boolean
     },
+    isMonth: {
+      type: Boolean
+    },
     isDate: {
+      type: Boolean
+    },
+    isDataCurrent: {
       type: Boolean
     },
     isTime: {
@@ -207,7 +227,9 @@ export default {
         valueTime: [],
         lineType: '',
         startTime: '',
+        month: '',
         endTime: '',
+        dataCurrent: '',
         warnTypeId: [],
         startHour: '',
         endHour: '',
@@ -414,6 +436,7 @@ export default {
         startHour: '',
         endHour: '',
         endHourFormatter: '',
+        month: '',
         startStation: {},
         endStation: {}
       }

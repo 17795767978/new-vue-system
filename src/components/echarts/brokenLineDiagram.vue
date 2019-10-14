@@ -43,6 +43,9 @@ export default {
     },
     tooltip: {
       type: Object
+    },
+    radar: {
+      type: Array
     }
   },
   data () {
@@ -57,7 +60,8 @@ export default {
       legendData: [],
       angleAxisData: {},
       tooltipData: {},
-      gridData: {}
+      gridData: {},
+      radarData: []
     }
   },
   components: {
@@ -124,6 +128,12 @@ export default {
         this.tooltipData = newV
       }
     },
+    radar: {
+      deep: true,
+      handler (newV) {
+        this.radarData = newV
+      }
+    },
     data: {
       deep: true,
       handler (newV) {
@@ -158,6 +168,7 @@ export default {
           legend: this.legendData,
           xAxis: this.xData,
           yAxis: this.yData,
+          radar: this.radar,
           series: this.series
         }, true)
       }

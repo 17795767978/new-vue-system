@@ -381,6 +381,76 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/chart-analysis/all']
         }
+      },
+      {
+        path: 'comprehensive-query',
+        component: _import_('dataAnalysis/comprehensiveQuery/index'),
+        name: 'comprehensiveQuery',
+        meta: {
+          title: '数据综合查询',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'line-network-core',
+        component: _import_('dataAnalysis/lineNetworkCore/index'),
+        name: 'lineNetworkCore',
+        meta: {
+          title: '线网评分',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'line-netWork-core-Detail',
+        component: _import_('dataAnalysis/lineNetWorkDetail/index'),
+        name: 'lineNetWorkDetail',
+        meta: {
+          title: '线网评分详情',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'data-overview-page',
+        component: _import_('dataAnalysis/dataOverviewPage/index'),
+        name: 'dataOverviewPage',
+        meta: {
+          title: '数据总览页',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'flow-comprehensive-query',
+        component: _import_('dataAnalysis/flowComprehensiveQuery/index'),
+        name: 'flowComprehensiveQuery',
+        meta: {
+          title: '线路客流综合查询',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'line-od',
+        component: _import_('dataAnalysis/lineOD/index'),
+        name: 'lineOD',
+        meta: {
+          title: '线路OD',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
+      },
+      {
+        path: 'od-matrix',
+        component: _import_('dataAnalysis/ODMatrix/index'),
+        name: 'ODMatrix',
+        meta: {
+          title: 'OD矩阵',
+          icon: 'nocturne icon-dash',
+          roles: ['/chart-analysis/all']
+        }
       }
     ]
   },
