@@ -1,8 +1,11 @@
 <template>
   <div>
     <Search
-      :isOrg='true'
-      :isLine="true"
+      :isOrg='false'
+      :isLine="false"
+      :isOrgSec='true'
+      :isDefault="true"
+      :isLineSec="true"
       :isMonth="false"
       :isBus="false"
       :isDate="false"
@@ -15,14 +18,14 @@
     />
     <div class="content">
       <div class="total-line-length">
-        <QueryTable />
+        <QueryTable :selectData="selectData"/>
       </div>
       <div class="total-station-length">
         <div class="settings">
           <Settings />
         </div>
         <div class="echarts">
-          <QueryEcharts />
+          <QueryEcharts :selectData="selectData"/>
         </div>
       </div>
     </div>
@@ -44,7 +47,6 @@ export default {
   methods: {
     getSearch (data) {
       this.selectData = data
-      console.log(this.selectData)
     }
   },
   components: {

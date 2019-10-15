@@ -21,6 +21,26 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="选择机构" v-if="isOrgSec">
+        <el-select class="font-style" v-model="formInline.lineOrgId" :disabled="disabled" placeholder="请选择" filterable>
+          <el-option
+            v-for="item in comOptionsSec"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择线路" v-if="isLineSec">
+        <el-select class="font-style" filterable v-model="formInline.lineLineId" placeholder="请选择">
+          <el-option
+            v-for="item in lineOptionsSec"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="选择车辆" v-if="isBus">
         <el-select class="font-style" v-model="formInline.busNumber" filterable placeholder="请选择">
           <el-option
@@ -167,10 +187,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import moment from 'moment';
+import moment from 'moment'
 // import { lineList, comList } from 'server/interface';
 import downloadExcel from 'vue-json-excel'
-import moment from 'moment'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -188,6 +207,12 @@ export default {
       type: Boolean
     },
     isLine: {
+      type: Boolean
+    },
+    isOrgSec: {
+      type: Boolean
+    },
+    isLineSec: {
       type: Boolean
     },
     isBus: {
@@ -216,13 +241,18 @@ export default {
     },
     isWarntype: {
       type: Boolean
+    },
+    isDefault: {
+      type: Boolean
     }
   },
   data () {
     return {
       formInline: {
         orgId: '',
+        lineOrgId: '',
         lineId: '',
+        lineLineId: '',
         busNumber: '',
         valueTime: [],
         lineType: '',
@@ -240,6 +270,7 @@ export default {
       searchStationOptions: [],
       stationOptions: [],
       comOptions: [],
+      comOptionsSec: [],
       turnOptions: [{
         value: '1',
         label: '上行'
@@ -248,6 +279,7 @@ export default {
         label: '下行'
       }],
       lineOptions: [],
+      lineOptionsSec: [],
       carOptions: [],
       warnOptions: [],
       centerDialogVisible: false,
@@ -269,6 +301,14 @@ export default {
     this.$store.dispatch('getCarList').then(res => {
       this.carOptions = res
     })
+    if (!this.isDefault) {
+      this.$store.dispatch('getLineSecList').then(res => {
+        this.lineOptionsSec = res
+      })
+      this.$store.dispatch('getComSecList').then(res => {
+        this.comOptionsSec = res
+      })
+    }
     this._alarmType({
       warnLevel: ''
     })
@@ -322,8 +362,15 @@ export default {
               label: item.busPlateNumber
             })
           })
-          console.log(this.comOptions)
           this.carOptions = list
+        })
+      }
+    },
+    'formInline.lineOrgId': {
+      handler (newV) {
+        this.formInline.lineLineId = ''
+        this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
+          this.lineOptionsSec = res
         })
       }
     },
@@ -359,6 +406,27 @@ export default {
       handler (newV) {
         if (newV !== '') {
           this.searchStationOptions = []
+        }
+      }
+    },
+    'isDefault': {
+      immediate: true,
+      handler (newV) {
+        let date = new Date()
+        date = moment(date).valueOf() - 3600 * 1000 * 24
+        if (newV) {
+          this.$store.dispatch('getComSecList').then(res => {
+            this.comOptionsSec = res
+            this.formInline.lineOrgId = this.comOptionsSec[0].value
+            // this.formInline.lineLineId = this.lineOptionsSec[0]
+            this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
+              this.lineOptionsSec = res
+              this.formInline.lineLineId = this.lineOptionsSec[0].value
+            })
+          })
+          this.formInline.lineType = this.turnOptions[0].value
+          this.formInline.dataCurrent = date
+          this.$store.dispatch('getDefaultSearch', this.formInline)
         }
       }
     }
@@ -415,14 +483,30 @@ export default {
       }
     },
     onSubmit () {
-      // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD');
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
       if (this.formInline.endHour !== '') {
         this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
       }
-      console.log(this.formInline)
-      this.$emit('configCheck', this.formInline)
+      let configData = {
+        orgId: this.userId === '1' ? '' : this.userId,
+        lineId: this.formInline.lineId,
+        busNumber: this.formInline.busNumber,
+        valueTime: this.formInline.valueTime,
+        lineType: this.formInline.lineType,
+        dataCurrent: this.formInline.dataCurrent,
+        startTime: this.formInline.startTime,
+        endTime: this.formInline.endTime,
+        startHour: this.formInline.startHour,
+        endHour: this.formInline.endHour,
+        endHourFormatter: this.formInline.endHourFormatter,
+        month: this.formInline.month,
+        lineOrgId: this.formInline.lineOrgId,
+        lineLineId: this.formInline.lineLineId,
+        startStation: this.formInline.startStation,
+        endStation: this.formInline.endStation
+      }
+      this.$emit('configCheck', configData)
     },
     onclear () {
       this.formInline = {
@@ -437,9 +521,30 @@ export default {
         endHour: '',
         endHourFormatter: '',
         month: '',
+        lineOrgId: '',
+        lineLineId: '',
         startStation: {},
-        endStation: {}
+        endStation: {},
+        dataCurrent: ''
       }
+      let configData = {
+        orgId: this.userId === '1' ? '' : this.userId,
+        lineId: this.formInline.lineId,
+        busNumber: this.formInline.busNumber,
+        valueTime: this.formInline.valueTime,
+        lineType: this.formInline.lineType,
+        startTime: this.formInline.startTime,
+        endTime: this.formInline.endTime,
+        startHour: this.formInline.startHour,
+        endHour: this.formInline.endHour,
+        endHourFormatter: this.formInline.endHourFormatter,
+        month: this.formInline.month,
+        lineOrgId: this.formInline.lineOrgId,
+        lineLineId: this.formInline.lineLineId,
+        startStation: this.formInline.startStation,
+        endStation: this.formInline.endStation
+      }
+      this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
       })

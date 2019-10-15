@@ -375,7 +375,6 @@ export const aysncRoutesMap = [
         path: 'repeatability-detail',
         component: _import_('dataAnalysis/repeatDetail/index'),
         name: 'repeatabilityDetail',
-        hidden: true,
         meta: {
           title: '重复度指标详情',
           icon: 'nocturne icon-dash',

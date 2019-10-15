@@ -9,6 +9,11 @@ import { max } from '../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
   name: 'passengerHome',
+  props: {
+    selectData: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -25,18 +30,30 @@ export default {
     }
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
-      orgId
+    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    this._getlineNumLength({
+      company: '',
+      lineID: ''
     })
   },
   mounted () {
   },
+  watch: {
+    // selectData: {
+    //   deep: true,
+    //   handler (newV) {
+    //     console.log(newV)
+    //     this._getlineNumLength({
+    //       company: newV.lineOrgId,
+    //       lineID: newV.lineLineId
+    //     })
+    //   }
+    // }
+  },
   methods: {
-    _getMonthData (params) {
+    _getlineNumLength (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
-        console.log(res)
+      this.$api['lineNet.getlineNumLength'](params).then(res => {
         this.loading = false
         this.title = {
           text: '分公司线路条数/总长度',
@@ -59,17 +76,17 @@ export default {
             name: '线路总数',
             type: 'bar',
             data: res.datas[0],
-            barWidth: 20,
-            smooth: true
+            barWidth: 20
           },
           {
             name: '线路长度',
             type: 'line',
-            data: res.datas[0],
+            yAxisIndex: 1,
+            data: res.datas[1],
             smooth: false
           }
         ]
-        this.maxNum = [max(res.datas[0]), max(res.datas[0])]
+        this.maxNum = [max(res.datas[0]), max(res.datas[1])]
         this.dataLength = 2
         this.legend = [
           {
@@ -132,9 +149,6 @@ export default {
             }
           },
           {
-            min: 0,
-            max: this.maxNum[1],
-            interval: Math.ceil(this.maxNum[1] / 6),
             splitLine: {
               show: false
             },

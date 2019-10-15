@@ -1,8 +1,10 @@
 <template>
   <div>
     <Search
-      :isOrg='true'
-      :isLine="true"
+      :isOrg='false'
+      :isLine="false"
+      :isOrgSec='false'
+      :isLineSec="true"
       :isBus="false"
       :isDate="false"
       :isTime="false"
@@ -16,10 +18,10 @@
         <LineRepeatability />
       </div>
       <div class="line-dowm-repeatability">
-        <LineRepeatabilityDown />
+        <LineRepeatabilityDown :selectData="selectData"/>
       </div>
       <div class="repeatability-table">
-        <RepeatabilityTable />
+        <RepeatabilityTable :selectData="selectData"/>
       </div>
     </div>
   </div>
@@ -40,13 +42,12 @@ export default {
   methods: {
     getSearch (data) {
       this.selectData = data
+      console.log(this.selectData)
     }
   },
   mounted () {
-    console.log(this.$store.state.views.cachedViews)
   },
   activated () {
-    console.log(123)
   },
   components: {
     Search,

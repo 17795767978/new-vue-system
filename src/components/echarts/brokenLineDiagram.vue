@@ -46,6 +46,12 @@ export default {
     },
     radar: {
       type: Array
+    },
+    bmap: {
+      type: Object
+    },
+    polar: {
+      type: Object
     }
   },
   data () {
@@ -61,7 +67,8 @@ export default {
       angleAxisData: {},
       tooltipData: {},
       gridData: {},
-      radarData: []
+      radarData: [],
+      bmapData: {}
     }
   },
   components: {
@@ -134,6 +141,12 @@ export default {
         this.radarData = newV
       }
     },
+    bmap: {
+      deep: true,
+      handler (newV) {
+        this.bmapData = newV
+      }
+    },
     data: {
       deep: true,
       handler (newV) {
@@ -164,11 +177,12 @@ export default {
           color: ['#fedd00', '#00ffff', '#03adb0', '#ff2bd0', '#ff840b', '#ff30a0'],
           angleAxis: Object.keys(this.angleAxisData).length > 0 ? this.angleAxisData : null,
           radiusAxis: Object.keys(this.angleAxisData).length > 0 ? {} : null,
-          polar: Object.keys(this.angleAxisData).length > 0 ? {} : null,
+          polar: this.polar,
           legend: this.legendData,
           xAxis: this.xData,
           yAxis: this.yData,
           radar: this.radar,
+          bmap: this.bmap,
           series: this.series
         }, true)
       }

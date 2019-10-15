@@ -1,8 +1,10 @@
 <template>
   <div>
     <Search
-      :isOrg='true'
-      :isLine="true"
+      :isOrg='false'
+      :isLine="false"
+      :isOrgSec='true'
+      :isLineSec="true"
       :isBus="false"
       :isDate="false"
       :isTime="false"

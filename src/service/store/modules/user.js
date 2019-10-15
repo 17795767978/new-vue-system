@@ -118,7 +118,7 @@ const user = {
     getUserInfo ({ commit, state }, params) {
       return new Promise((resolve, reject) => {
         store.dispatch('getLineList').then(res => {
-          commit('SET_LINEID', res[0].value)
+          commit('SET_LINEID', res.length > 0 && res[0].value)
           api['platformMenu.list']({
             id: localStorage.getItem('id')
           }).then(res => {

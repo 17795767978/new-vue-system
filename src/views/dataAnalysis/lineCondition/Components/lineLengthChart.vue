@@ -9,6 +9,11 @@ import { max } from '../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
   name: 'passengerHome',
+  props: {
+    selectData: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -25,21 +30,33 @@ export default {
     }
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._getMonthData({
-      orgId
-    })
+      company: '',
+      lineID: ''
+    }, '')
   },
   mounted () {
   },
+  watch: {
+    'selectData.lineLineId': {
+      handler (newV) {
+        let strArr = newV.split('+')
+        this._getMonthData({
+          company: '',
+          lineID: strArr[0]
+        }, strArr[1])
+      }
+    }
+  },
   methods: {
-    _getMonthData (params) {
+    _getMonthData (params, str) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getLineOnOrDownEchartData'](params).then(res => {
         console.log(res)
         this.loading = false
         this.title = {
-          text: '线路长度',
+          text: str === undefined ? '线路长度' : `${str}线路长度`,
           left: 'center',
           top: 0,
           textStyle: {
@@ -74,7 +91,7 @@ export default {
           {
             name: '下行线路长度',
             type: 'bar',
-            data: res.datas[0],
+            data: res.datas[1],
             barWidth: 15,
             smooth: false
             // label: {
@@ -131,12 +148,6 @@ export default {
         ]
         this.yData = [
           {
-            min: 0,
-            max: this.maxNum[0] + this.maxNum[0] / 3,
-            interval: Math.ceil(this.maxNum[0] / 6),
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
             splitLine: {
               show: false
             },

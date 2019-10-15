@@ -8,6 +8,20 @@ export const wholeInformationApi = {
       desc: '获取线路信息'
     },
     {
+      name: 'getLineSec',
+      method: 'POST',
+      path: '/api/net/data/busline/getLineListData',
+      mockPath: '/api/net/data/busline/getLineListData',
+      desc: '--获取线网线路信息--'
+    },
+    {
+      name: 'getComSec',
+      method: 'POST',
+      path: '/api/net/data/busline/getCompanyListData',
+      mockPath: '/api/net/data/busline/getCompanyListData',
+      desc: '--获取线网机构信息--'
+    },
+    {
       name: 'getStation',
       method: 'POST',
       path: '/zhfxpt/analysis/getStations',

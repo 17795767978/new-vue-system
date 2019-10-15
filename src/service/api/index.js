@@ -12,6 +12,7 @@ import { PermissionApi } from './permission'
 import { RoleApi } from './role'
 import { ResourceApi } from './resource'
 import { passengerSimpleApi } from './passengerSimple'
+import { lineNetApi } from './lineNet'
 
 const requireModules = require.context('./', true, /index.js$/)
 let modules = {
@@ -28,7 +29,8 @@ let modules = {
   ...PermissionApi,
   ...RoleApi,
   ...ResourceApi,
-  ...passengerSimpleApi
+  ...passengerSimpleApi,
+  ...lineNetApi
 }
 requireModules.keys().forEach(moduleName => {
   moduleName = requireModules(moduleName)

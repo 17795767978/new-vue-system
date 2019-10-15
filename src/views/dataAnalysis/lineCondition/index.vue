@@ -1,8 +1,10 @@
 <template>
   <div>
     <Search
-      :isOrg='true'
-      :isLine="true"
+      :isOrg='false'
+      :isLine="false"
+      :isLineSec="true"
+      :isOrgSec="false"
       :isBus="false"
       :isDate="false"
       :isTime="false"
@@ -13,16 +15,16 @@
     />
     <div class="content">
       <div class="total-line-length">
-        <TotalLineNum />
+        <TotalLineNum :selectData="selectData"/>
       </div>
       <div class="total-station-length">
-        <TotalStationNum />
+        <TotalStationNum :selectData="selectData"/>
       </div>
       <div class="line-length">
-        <LineLengthChart />
+        <LineLengthChart :selectData="selectData"/>
       </div>
       <div class="station-length">
-        <StationTable />
+        <StationTable :selectData="selectData"/>
       </div>
     </div>
   </div>
@@ -44,7 +46,6 @@ export default {
   methods: {
     getSearch (data) {
       this.selectData = data
-      console.log(this.selectData)
     }
   },
   components: {

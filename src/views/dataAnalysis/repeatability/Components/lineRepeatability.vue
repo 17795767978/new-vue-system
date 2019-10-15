@@ -26,17 +26,19 @@ export default {
     }
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
-      orgId
+    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    this._getlineRepeat({
+      company: '',
+      lineID: ''
     })
   },
   mounted () {
   },
   methods: {
-    _getMonthData (params) {
+    _getlineRepeat (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getRepeatData'](params).then(res => {
+        console.log(res)
         this.loading = false
         this.title = {
           text: '分公司线路重复度',
@@ -89,7 +91,7 @@ export default {
           {
             name: '重复占位数',
             type: 'bar',
-            data: [55000, 11100, 1110, 6000, 8000, 12000, 11100, 10000, 5000, 4440, 7900, 10000, 5000, 4440, 7900],
+            data: res.datas[1],
             barWidth: 25,
             color: '#d53a35',
             smooth: false
@@ -107,7 +109,7 @@ export default {
             name: '重复比',
             type: 'line',
             yAxisIndex: 1,
-            data: [10, 20, 10, 10, 6, 30, 11, 18, 10, 20, 10, 10, 6, 30, 11],
+            data: res.datas[2],
             barWidth: 15,
             smooth: false,
             label: {
@@ -174,12 +176,6 @@ export default {
         ]
         this.yData = [
           {
-            min: 0,
-            max: this.maxNum[0] + this.maxNum[0] / 3,
-            interval: Math.ceil(this.maxNum[0] / 6),
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
             splitLine: {
               show: false
             },
@@ -194,12 +190,6 @@ export default {
             }
           },
           {
-            min: 0,
-            max: 100,
-            interval: 100 / 5,
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
             splitLine: {
               show: false
             },

@@ -24,7 +24,9 @@ const getters = {
   visitedViews: state => state.views.visitedViews,
   // echarts状态
   renderId: state => state.query.renderId,
-  queryId: state => state.query.queryId
+  queryId: state => state.query.queryId,
+  // m默认搜索条件
+  defaultSearch: state => state.defaultSearch.defaultSearch
 }
 
 export default getters

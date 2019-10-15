@@ -25,18 +25,18 @@ export default {
     }
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
-      orgId
+    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    this._getComStation({
+      company: '',
+      lineID: ''
     })
   },
   mounted () {
   },
   methods: {
-    _getMonthData (params) {
+    _getComStation (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
-        console.log(res)
+      this.$api['lineNet.getComStation'](params).then(res => {
         this.loading = false
         this.title = {
           text: '分公司站点/占位数',
@@ -74,7 +74,7 @@ export default {
           {
             name: '占位数',
             type: 'bar',
-            data: res.datas[0],
+            data: res.datas[1],
             barWidth: 15,
             smooth: false,
             label: {
@@ -88,7 +88,7 @@ export default {
             }
           }
         ]
-        this.maxNum = [max(res.datas[0]), max(res.datas[0])]
+        this.maxNum = [max(res.datas[0]), max(res.datas[1])]
         this.dataLength = 2
         this.legend = [
           {
@@ -131,9 +131,6 @@ export default {
         ]
         this.yData = [
           {
-            min: 0,
-            max: this.maxNum[0] + this.maxNum[0] / 3,
-            interval: Math.ceil(this.maxNum[0] / 6),
             // axisLabel: {
             //     formatter: '{value} ml'
             // },

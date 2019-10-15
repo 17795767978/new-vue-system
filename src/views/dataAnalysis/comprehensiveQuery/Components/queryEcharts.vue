@@ -6,6 +6,7 @@
 
 <script type="text/ecmascript-6">
 // import { max } from '../../../../utils/max.js'
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 const GRID = {
@@ -17,6 +18,11 @@ const GRID = {
 }
 export default {
   name: 'passengerHome',
+  props: {
+    selectData: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -36,38 +42,70 @@ export default {
     ...mapGetters(['renderId'])
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getStationData({
-      orgId
-    })
   },
   mounted () {
-    console.log(this.renderId)
+    setTimeout(() => {
+      let arr = this.$store.getters.defaultSearch
+      let lineArr = this.$store.getters.defaultSearch.lineLineId.split('+')
+      if (arr.lineOrgId !== '' && arr.lineLineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
+        this._getPfBaseUpDownGrid({
+          company: arr.lineOrgId,
+          lineID: lineArr[1],
+          arrow: arr.lineType,
+          pDate: moment(arr.dataCurrent).format('YYYY-MM-DD')
+        })
+      } else {
+        this.$message.error('请添加完整的查询条件')
+      }
+    }, 1000)
   },
   watch: {
-    'renderId': {
+    selectData: {
+      deep: true,
       handler (newV) {
-        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-        if (newV === '1') {
-          this._getStationData({
-            orgId
-          })
-        } else if (newV === '2') {
-          this._getTimeData({
-            orgId
-          })
-        } else if (newV === '3') {
-          this._getRateData({
-            orgId
+        if (newV.lineOrgId !== '' && newV.lineLineId !== '' && newV.lineType !== '' && newV.dataCurrent !== '') {
+          let lineArr = newV.lineLineId.split('+')
+          this._getPfBaseUpDownGrid({
+            company: newV.lineOrgId,
+            lineID: lineArr[1],
+            arrow: newV.lineType,
+            pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
           })
         }
+      }
+    },
+    'renderId': {
+      handler (newV) {
+        console.log(this.selectData)
+        // if (newV === '1') {
+        //   this._getPfBaseUpDownGrid({
+        //     company: newV.lineOrgId,
+        //     lineID: lineArr[1],
+        //     arrow: newV.lineType,
+        //     pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
+        //   })
+        // } else if (newV === '2') {
+        //   this._getTimeData({
+        //     company: newV.lineOrgId,
+        //     lineID: lineArr[1],
+        //     arrow: newV.lineType,
+        //     pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
+        //   })
+        // } else if (newV === '3') {
+        //   this._getRateData({
+        //     company: newV.lineOrgId,
+        //     lineID: lineArr[1],
+        //     arrow: newV.lineType,
+        //     pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
+        //   })
+        // }
       }
     }
   },
   methods: {
-    _getStationData (params) {
+    _getPfBaseUpDownGrid (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getPfBaseUpDownGrid'](params).then(res => {
         setTimeout(() => {
           this.loading = false
         }, 1000)
