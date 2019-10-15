@@ -11,9 +11,13 @@
 <script type="text/ecmascript-6">
 export default {
   name: 'comprehensiveQuery',
+  props: {
+    selectData: {
+      type: Object
+    }
+  },
   data () {
     return {
-      selectData: {},
       isStation: true,
       isTime: true,
       isRate: true
@@ -21,6 +25,17 @@ export default {
   },
   created () {
     this.isStation = false
+  },
+  watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        this.isStation = false
+        this.isTime = true
+        this.isRate = true
+        this.$store.dispatch('getStation', '1')
+      }
+    }
   },
   methods: {
     isStationTo () {

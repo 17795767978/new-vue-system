@@ -22,7 +22,7 @@
       </div>
       <div class="total-station-length">
         <div class="settings">
-          <Settings />
+          <Settings :selectData="selectData"/>
         </div>
         <div class="echarts">
           <QueryEcharts :selectData="selectData"/>

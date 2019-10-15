@@ -76,36 +76,45 @@ export default {
     },
     'renderId': {
       handler (newV) {
-        console.log(this.selectData)
-        // if (newV === '1') {
-        //   this._getPfBaseUpDownGrid({
-        //     company: newV.lineOrgId,
-        //     lineID: lineArr[1],
-        //     arrow: newV.lineType,
-        //     pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
-        //   })
-        // } else if (newV === '2') {
-        //   this._getTimeData({
-        //     company: newV.lineOrgId,
-        //     lineID: lineArr[1],
-        //     arrow: newV.lineType,
-        //     pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
-        //   })
-        // } else if (newV === '3') {
-        //   this._getRateData({
-        //     company: newV.lineOrgId,
-        //     lineID: lineArr[1],
-        //     arrow: newV.lineType,
-        //     pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
-        //   })
-        // }
+        let lineArr = []
+        let data = {}
+        if (Object.keys(this.selectData).length > 0) {
+          console.log(this.selectData.lineLineId)
+          lineArr = this.selectData.lineLineId.split('+')
+          data = this.selectData
+        } else {
+          lineArr = this.$store.getters.defaultSearch.lineLineId.split('+')
+          data = this.$store.getters.defaultSearch
+        }
+        if (newV === '1') {
+          this._getPfBaseUpDownGrid({
+            company: data.lineOrgId,
+            lineID: lineArr[1],
+            arrow: data.lineType,
+            pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
+          })
+        } else if (newV === '2') {
+          this._getTimeData({
+            company: data.lineOrgId,
+            lineID: lineArr[1],
+            arrow: data.lineType,
+            pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
+          })
+        } else if (newV === '3') {
+          this._getRateData({
+            company: data.lineOrgId,
+            lineID: lineArr[1],
+            arrow: data.lineType,
+            pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
+          })
+        }
       }
     }
   },
   methods: {
     _getPfBaseUpDownGrid (params) {
       this.loading = true
-      this.$api['lineNet.getPfBaseUpDownGrid'](params).then(res => {
+      this.$api['lineNet.getPfStationDayListGridData'](params).then(res => {
         setTimeout(() => {
           this.loading = false
         }, 1000)
@@ -196,7 +205,7 @@ export default {
     },
     _getTimeData (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getPfBaseUpDownGrid'](params).then(res => {
         console.log(res)
         setTimeout(() => {
           this.loading = false
@@ -288,7 +297,7 @@ export default {
     },
     _getRateData (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getPfBaseApprovalGrid'](params).then(res => {
         // console.log(res)
         setTimeout(() => {
           this.loading = false
