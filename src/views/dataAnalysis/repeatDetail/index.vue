@@ -8,14 +8,16 @@
       :isBus="false"
       :isDate="false"
       :isTime="false"
-      :isTurn="false"
+      :isTurn="true"
       :isDownload="true"
       :isWarntype="false"
       :isStation="true"
+      :isDefault="true"
+      :queryData="queryData"
       @configCheck="getSearch"
     />
     <div class="content">
-      <Table />
+      <Table :queryData="queryData" :selectData="selectData"/>
     </div>
   </div>
 </template>
@@ -27,11 +29,15 @@ export default {
   name: 'repeatabilityDetail',
   data () {
     return {
-      selectData: {}
+      selectData: {},
+      queryData: {}
     }
   },
   created () {
-    console.log(this.$route.query)
+    this.queryData = this.$route.params.data
+  },
+  activated () {
+    this.queryData = this.$route.params.data
   },
   methods: {
     getSearch (data) {

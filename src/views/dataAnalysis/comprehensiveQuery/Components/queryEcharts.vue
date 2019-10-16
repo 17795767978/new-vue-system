@@ -50,7 +50,7 @@ export default {
       if (arr.lineOrgId !== '' && arr.lineLineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
         this._getPfBaseUpDownGrid({
           company: arr.lineOrgId,
-          lineID: lineArr[1],
+          lineID: lineArr[0],
           arrow: arr.lineType,
           pDate: moment(arr.dataCurrent).format('YYYY-MM-DD')
         })
@@ -67,7 +67,7 @@ export default {
           let lineArr = newV.lineLineId.split('+')
           this._getPfBaseUpDownGrid({
             company: newV.lineOrgId,
-            lineID: lineArr[1],
+            lineID: lineArr[0],
             arrow: newV.lineType,
             pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
           })
@@ -89,21 +89,21 @@ export default {
         if (newV === '1') {
           this._getPfBaseUpDownGrid({
             company: data.lineOrgId,
-            lineID: lineArr[1],
+            lineID: lineArr[0],
             arrow: data.lineType,
             pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
           })
         } else if (newV === '2') {
           this._getTimeData({
             company: data.lineOrgId,
-            lineID: lineArr[1],
+            lineID: lineArr[0],
             arrow: data.lineType,
             pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
           })
         } else if (newV === '3') {
           this._getRateData({
             company: data.lineOrgId,
-            lineID: lineArr[1],
+            lineID: lineArr[0],
             arrow: data.lineType,
             pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
           })

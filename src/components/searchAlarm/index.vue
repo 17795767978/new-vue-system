@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择机构" v-if="isOrgSec">
-        <el-select class="font-style" v-model="formInline.lineOrgId" :disabled="disabled" placeholder="请选择" filterable>
+        <el-select class="font-style" @visible-change="changed" v-model="formInline.lineOrgId" :disabled="disabled" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptionsSec"
             :key="item.value"
@@ -32,7 +32,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择线路" v-if="isLineSec">
-        <el-select class="font-style" filterable v-model="formInline.lineLineId" placeholder="请选择">
+        <el-select class="font-style"  v-test filterable v-model="formInline.lineLineId" placeholder="请选择">
           <el-option
             v-for="item in lineOptionsSec"
             :key="item.value"
@@ -244,6 +244,9 @@ export default {
     },
     isDefault: {
       type: Boolean
+    },
+    queryData: {
+      type: Object
     }
   },
   data () {
@@ -285,7 +288,8 @@ export default {
       centerDialogVisible: false,
       laoding: true,
       code: '加载中',
-      disabled: false
+      disabled: false,
+      isLinkage: false
     }
   },
   created () {
@@ -329,6 +333,28 @@ export default {
       this.disabled = true
       this.formInline.orgId = this.userId
     }
+    if (this.queryData) {
+      this.formInline.lineOrgId = this.queryData.company
+      this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
+      this.formInline.lineType = this.queryData.arrow
+    }
+  },
+  directives: {
+    test: {
+      componentUpdated (el) {
+        console.log(el)
+      }
+    }
+  },
+  activated () {
+    setTimeout(() => {
+      if (this.queryData) {
+        console.log(this.queryData.lineUuid + '+' + this.queryData.lineNumber)
+        this.formInline.lineOrgId = this.queryData.company
+        this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
+        this.formInline.lineType = this.queryData.arrow
+      }
+    }, 1000)
   },
   watch: {
     'formInline.orgId': {
@@ -368,10 +394,14 @@ export default {
     },
     'formInline.lineOrgId': {
       handler (newV) {
-        this.formInline.lineLineId = ''
         this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
           this.lineOptionsSec = res
         })
+        // console.log(this.isLinkage)
+        if (this.isLinkage) {
+          this.formInline.lineLineId = ''
+        }
+        // this.formInline.lineLineId = ''
       }
     },
     'formInline.lineId': {
@@ -445,12 +475,12 @@ export default {
   },
   methods: {
     _stationList () {
-      this.$store.dispatch('getStationList').then(res => {
+      this.$api['wholeInformation.getAllBaseStationNamesListData']().then(res => {
         let arr = res
         arr.forEach(item => {
           this.stationOptions.push({
-            value: item.staUuid,
-            label: item.staName
+            value: item.stationName,
+            label: item.stationName
           })
         })
       })
@@ -467,6 +497,10 @@ export default {
           }
         })
       })
+    },
+    changed (data) {
+      console.log(data)
+      this.isLinkage = data
     },
     remoteMethod (query) {
       if (query !== '') {

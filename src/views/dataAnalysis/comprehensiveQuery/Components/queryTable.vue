@@ -48,7 +48,7 @@
         label="通过量（人次）">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="approval"
         align="center"
         label="满载率">
       </el-table-column>
@@ -78,7 +78,7 @@ export default {
       if (arr.lineOrgId !== '' && arr.lineLineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
         this._getPfBaseListData({
           company: arr.lineOrgId,
-          lineID: lineArr[1],
+          lineID: lineArr[0],
           arrow: arr.lineType,
           pDate: moment(arr.dataCurrent).format('YYYY-MM-DD')
         })
@@ -95,7 +95,7 @@ export default {
           let lineArr = newV.lineLineId.split('+')
           this._getPfBaseListData({
             company: newV.lineOrgId,
-            lineID: lineArr[1],
+            lineID: lineArr[0],
             arrow: newV.lineType,
             pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
           })

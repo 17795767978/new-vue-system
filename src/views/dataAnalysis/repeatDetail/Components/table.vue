@@ -1,8 +1,10 @@
 <template>
   <div>
     <el-table
-      :data="tableData"
+      ref="tableWrapper"
+      :data="seeTableData"
       height="80vh"
+      size="mini"
       border
       style="width: 100%">
       <el-table-column
@@ -12,47 +14,49 @@
         width="80">
       </el-table-column>
       <el-table-column
-        prop="date"
+        prop="company"
         align="center"
-        width="200"
+        width="150"
         label="分公司">
         <!-- <template slot-scope="scope">
         <el-button type="primary" @click="goToDetail(scope.row)" size="mini">{{scope.row.date}}</el-button>
         </template> -->
       </el-table-column>
       <el-table-column
-        prop="type"
+        prop="lineNumber"
         align="center"
         label="线路号">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="arrow"
         align="center"
         label="上下行">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="linename"
         align="center"
         width="300"
         label="线路名">
       </el-table-column>
       <el-table-column
-        prop="num"
+        prop="sStationIndex"
         align="center"
+        width="100"
         label="站序A">
       </el-table-column>
       <el-table-column
-        prop="repeat"
+        prop="eStationIndex"
+        width="100"
         align="center"
         label="站序B">
       </el-table-column>
       <el-table-column
-        prop="repeatLine"
+        prop="sStation"
         align="center"
         label="站位A">
       </el-table-column>
       <el-table-column
-        prop="repeatLine"
+        prop="eStation"
         align="center"
         label="站位B">
       </el-table-column>
@@ -62,7 +66,7 @@
         label="重复线路">
       </el-table-column>
       <el-table-column
-        prop="repeatLine"
+        prop="repeatLineCount"
         align="center"
         label="重复数量(条)">
       </el-table-column>
@@ -72,24 +76,107 @@
 
 <script>
 export default {
+  props: {
+    selectData: {
+      type: Object
+    },
+    queryData: {
+      type: Object
+    }
+  },
   data () {
     return {
-      tableData: [
-        {
-          date: '01',
-          type: '上行',
-          name: '口杯',
-          address: 12312312,
-          num: 12121,
-          repeat: '10%',
-          repeatLine: ['0', '23', '4']
+      tableData: [],
+      seeTableData: [],
+      isRequstStatus: false,
+      tableLength: 0,
+      cellHeight: 0,
+      currentCell: 0,
+      viewCellNum: 0
+    }
+  },
+  computed: {
+  },
+  mounted () {
+    let dom = this.$refs.tableWrapper
+    dom.$el.children[2].addEventListener('scroll', (e) => {
+      let parentNode = e.srcElement
+      let tableBodyDom = dom.$el.querySelectorAll('.el-table__body')[0]
+      let tbodyDom = tableBodyDom.children[1].children
+      this.cellHeight = tableBodyDom.offsetHeight / this.tableLength
+      this.currentCell = Math.floor(parentNode.scrollTop / this.cellHeight)
+      this.viewCellNum = Math.ceil(parentNode.offsetHeight / this.cellHeight)
+      for (let i = 0; i < tbodyDom.length; i++) {
+        // console.log(tbodyDom[i])
+        // if (i < this.currentCell - 5) {
+        //   // tbodyDom[i].style.visibility = 'hidden'
+
+        // } else if (i >= this.currentCell - 5 && i < this.currentCell + this.viewCellNum + 5) {
+        //   tbodyDom[i].style.visibility = 'visible'
+        // } else {
+        //   tbodyDom[i].style.visibility = 'hidden'
+        // }
+      }
+      // if (this.tableLength - this.currentCell > this.viewCellNum) {
+      // } else {
+      // }
+      // console.log(tableBodyDom.offsetHeight) // 总高度
+      // console.log(parentNode.offsetHeight) // 视图的高度
+      // console.log(parentNode.scrollTop) // 滚动的高度
+      // console.log(this.currentCell) // 滚动了多少行
+      // console.log(this.cellHeight) // 行高
+      // console.log(this.viewCellNum) // 视图可见行数
+      // console.log('------------------')
+      // if (tableBodyDom.offsetHeight <= (parentNode.offsetHeight +
+      // parentNode.scrollTop + 5)) {
+      //   console.log(123)
+      // }
+    })
+    setTimeout(() => {
+      this.changeSearchCondition(this.$store.getters.defaultSearch)
+    }, 1000)
+  },
+  watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        this.changeSearchCondition(newV)
+      }
+    },
+    queryData: {
+      deep: true,
+      handler (newV) {
+        let data = {
+          lineOrgId: newV.company,
+          lineLineId: newV.lineUuid + '+' + newV.lineNumber,
+          lineType: newV.arrow === '上行' ? '1' : '2',
+          startStation: {},
+          endStation: {}
         }
-      ]
+        this.changeSearchCondition(data)
+      }
     }
   },
   methods: {
+    _getRepeatTable (params) {
+      this.$api['lineNet.getRepeatDetailLink'](params).then(res => {
+        this.tableLength = res.length
+        this.tableData = res
+        this.seeTableData = res
+      })
+    },
+    changeSearchCondition (params) {
+      let arr = params
+      let lineArr = params.lineLineId.split('+')
+      this._getRepeatTable({
+        company: arr.lineOrgId,
+        lineID: lineArr[0],
+        arrow: arr.lineType,
+        sStation: arr.startStation.value !== undefined ? arr.startStation.value : '',
+        eStation: arr.endStation.value !== undefined ? arr.endStation.value : ''
+      })
+    },
     goToDetail (data) {
-      console.log(data)
       this.$router.push({
         name: 'repeatabilityDetail',
         query: {
@@ -103,4 +190,13 @@ export default {
 
 <style lang="scss" scoped>
 
+</style>
+<style>
+  .el-table .warning-row {
+    display: none;
+  }
+
+  .el-table .success-row {
+    display: block;
+  }
 </style>

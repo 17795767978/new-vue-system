@@ -114,7 +114,7 @@ export default {
     goToDetail (data) {
       this.$router.push({
         name: 'repeatabilityDetail',
-        query: {
+        params: {
           data
         }
       })

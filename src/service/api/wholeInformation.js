@@ -54,6 +54,14 @@ export const wholeInformationApi = {
       mockPath: '/api/base/common/getCityCoordinatePoints',
       params: {},
       desc: '获取城市坐标'
+    },
+    {
+      name: 'getAllBaseStationNamesListData',
+      method: 'POST',
+      path: '/api/net/data/basestation/getAllBaseStationNamesListData',
+      mockPath: '/api/net/data/basestation/getAllBaseStationNamesListData',
+      params: {},
+      desc: '站位列表'
     }
   ]
 }

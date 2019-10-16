@@ -20,7 +20,6 @@ if (ip.indexOf('192.168') !== -1) {
 } else {
   baseUrl = 'http://111.62.52.35:8089'
 }
-console.log(baseUrl)
 export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://192.168.10.145:8082',
   // mockBaseUrl: 'http://111.62.52.35:8089',
