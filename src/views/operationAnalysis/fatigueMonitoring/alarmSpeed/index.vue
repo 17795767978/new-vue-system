@@ -4,7 +4,8 @@
       :isOrg='true'
       :isLine="true"
       :isBus="false"
-      :isDate="true"
+      :isDate="false"
+      :isDateTo="true"
       :isTime="false"
       :isTurn="false"
       :isDownload="false"
@@ -13,13 +14,13 @@
     />
     <div class="content">
       <div class="statistics">
-        <SpeedStatistics />
+        <SpeedStatistics :searchData="searchData" @echartsSelected="echartsSelected"/>
       </div>
       <div class="time-slot">
-        <SpeedType />
+        <SpeedType :searchData="searchData" :selectEcharts="selectEcharts"/>
       </div>
       <div class="time-trend">
-        <SpeedNum />
+        <SpeedNum :searchData="searchData"/>
       </div>
     </div>
   </div>
@@ -33,7 +34,8 @@ import SpeedNum from './Components/speedNum'
 export default {
   data () {
     return {
-      searchData: {}
+      searchData: {},
+      selectEcharts: {}
     }
   },
   components: {
@@ -45,6 +47,9 @@ export default {
   methods: {
     getSearch (item) {
       this.searchData = item
+    },
+    echartsSelected (data) {
+      this.selectEcharts = data
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-form-item label="选择机构" v-if="isOrg">
-        <el-select class="font-style" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
+        <el-select class="font-style" @visible-change="changed" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptions"
             :key="item.value"
@@ -124,6 +124,15 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="选择日期" v-if="isDateTo">
+        <el-date-picker
+          v-model="formInline.dateArray"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+      </el-date-picker>
+    </el-form-item>
       <el-form-item label="时间" v-if="isTime">
         <el-time-select
           placeholder="起始时间"
@@ -242,6 +251,9 @@ export default {
     isWarntype: {
       type: Boolean
     },
+    isDateTo: {
+      type: Boolean
+    },
     isDefault: {
       type: Boolean
     },
@@ -268,7 +280,8 @@ export default {
         endHour: '',
         endHourFormatter: '',
         startStation: {},
-        endStation: {}
+        endStation: {},
+        dateArray: []
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -329,10 +342,21 @@ export default {
     ...mapGetters(['userId'])
   },
   mounted () {
+    let defaultForm = this.$store.getters.formData
     if (this.userId !== '1') {
       this.disabled = true
       this.formInline.orgId = this.userId
     }
+    this.formInline.lineOrgId = defaultForm.lineOrgId
+    this.formInline.lineLineId = defaultForm.lineLineId
+    this.formInline.orgId = defaultForm.orgId
+    this.formInline.lineId = defaultForm.lineId
+    this.formInline.lineType = defaultForm.lineType
+    this.formInline.dataCurrent = defaultForm.currentDate
+    this.formInline.startHour = defaultForm.startHour
+    this.formInline.endHour = defaultForm.endHour
+    this.formInline.dateArray = defaultForm.dateArray
+    console.log(this.formInline)
     if (this.queryData) {
       this.formInline.lineOrgId = this.queryData.company
       this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
@@ -349,7 +373,6 @@ export default {
   activated () {
     setTimeout(() => {
       if (this.queryData) {
-        console.log(this.queryData.lineUuid + '+' + this.queryData.lineNumber)
         this.formInline.lineOrgId = this.queryData.company
         this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
         this.formInline.lineType = this.queryData.arrow
@@ -359,8 +382,10 @@ export default {
   watch: {
     'formInline.orgId': {
       handler (newValue) {
-        this.formInline.lineId = ''
-        this.formInline.busNumber = ''
+        if (this.isLinkage) {
+          this.formInline.lineId = ''
+          this.formInline.busNumber = ''
+        }
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
           lineId: '',
@@ -406,7 +431,9 @@ export default {
     },
     'formInline.lineId': {
       handler (newValue) {
-        this.formInline.busNumber = ''
+        if (this.isLinkage) {
+          this.formInline.busNumber = ''
+        }
         if (newValue !== '') {
           this.$api['wholeInformation.getCar']({
             lineId: newValue,
@@ -448,7 +475,6 @@ export default {
           this.$store.dispatch('getComSecList').then(res => {
             this.comOptionsSec = res
             this.formInline.lineOrgId = this.comOptionsSec[0].value
-            // this.formInline.lineLineId = this.lineOptionsSec[0]
             this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
               this.lineOptionsSec = res
               this.formInline.lineLineId = this.lineOptionsSec[0].value
@@ -499,7 +525,6 @@ export default {
       })
     },
     changed (data) {
-      console.log(data)
       this.isLinkage = data
     },
     remoteMethod (query) {
@@ -519,11 +544,14 @@ export default {
     onSubmit () {
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+      if (this.formInline.dateArray.length === 2) {
+        this.formInline.dateArray = [moment(this.formInline.dateArray[0]).format('YYYY-MM-DD'), moment(this.formInline.dateArray[1]).format('YYYY-MM-DD')]
+      }
       if (this.formInline.endHour !== '') {
         this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
       }
       let configData = {
-        orgId: this.userId === '1' ? '' : this.userId,
+        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
         lineId: this.formInline.lineId,
         busNumber: this.formInline.busNumber,
         valueTime: this.formInline.valueTime,
@@ -538,7 +566,9 @@ export default {
         lineOrgId: this.formInline.lineOrgId,
         lineLineId: this.formInline.lineLineId,
         startStation: this.formInline.startStation,
-        endStation: this.formInline.endStation
+        endStation: this.formInline.endStation,
+        warnTypeId: this.formInline.warnTypeId,
+        dateArray: this.formInline.dateArray
       }
       this.$emit('configCheck', configData)
     },
@@ -559,7 +589,9 @@ export default {
         lineLineId: '',
         startStation: {},
         endStation: {},
-        dataCurrent: ''
+        dataCurrent: '',
+        warnTypeId: [],
+        dateArray: []
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -576,7 +608,9 @@ export default {
         lineOrgId: this.formInline.lineOrgId,
         lineLineId: this.formInline.lineLineId,
         startStation: this.formInline.startStation,
-        endStation: this.formInline.endStation
+        endStation: this.formInline.endStation,
+        warnTypeId: this.formInline.warnTypeId,
+        dateArray: this.formInline.dateArray
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {

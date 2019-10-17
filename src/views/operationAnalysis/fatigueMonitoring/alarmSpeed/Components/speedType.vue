@@ -7,7 +7,16 @@
 <script type="text/ecmascript-6">
 import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import { mapGetters } from 'vuex'
 export default {
+  props: {
+    searchData: {
+      type: Object
+    },
+    selectEcharts: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -20,26 +29,63 @@ export default {
       maxNum: 0,
       id: 'speedType',
       grid: {},
-      loading: true
+      loading: true,
+      echartsData: '',
+      selectData: {}
     }
   },
+  computed: {
+    ...mapGetters(['formData'])
+  },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getLines({
-      orgId
+    this.selectData = this.formData
+    this._getAlarmTypeRatioAnalysis({
+      orgId: this.selectData.orgId,
+      lineId: this.selectData.lineId,
+      startTime: this.selectData.dateArray[0],
+      endTime: this.selectData.dateArray[1],
+      warnLevel: ''
     })
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
   },
+  watch: {
+    searchData: {
+      deep: true,
+      handler (newV) {
+        this.selectData = newV
+        this.echartsData = ''
+        this._getAlarmTypeRatioAnalysis({
+          orgId: this.selectData.orgId,
+          lineId: this.selectData.lineId,
+          startTime: this.selectData.dateArray[0],
+          endTime: this.selectData.dateArray[1],
+          warnLevel: this.echartsData
+        })
+      }
+    },
+    'selectEcharts.name': {
+      handler (newV) {
+        this.echartsData = newV
+        this._getAlarmTypeRatioAnalysis({
+          orgId: this.selectData.orgId,
+          lineId: this.selectData.lineId,
+          startTime: this.selectData.dateArray[0],
+          endTime: this.selectData.dateArray[1],
+          warnLevel: this.echartsData
+        })
+      }
+    }
+  },
   methods: {
-    _getLines (params) {
+    _getAlarmTypeRatioAnalysis (params) {
       this.loading = true
-      this.$api['passengerSimple.getHotlines'](params).then(res => {
+      this.$api['tiredMonitoring.getAlarmTypeRatioAnalysis'](params).then(res => {
         console.log(res)
         this.loading = false
         this.title = {
-          text: '报警速度报警类型',
+          text: `报警速度${this.echartsData}报警类型`,
           left: 'center'
         }
         this.lineData = [{

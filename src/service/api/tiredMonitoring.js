@@ -208,6 +208,117 @@ export const tiredMonitoringApi = {
         endTime: ''
       },
       desc: '报警中心-列表导出'
+    },
+    {
+      name: 'getBadDrivingBehaviorRanking',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingBehaviorRanking',
+      mockPath: '/zhfxpt/getBadDrivingBehaviorRanking',
+      params: {
+        orgId: '',
+        lineId: '',
+        busPlateNumber: '',
+        warnTypes: []
+      },
+      desc: '不良驾驶行为日排行'
+    },
+    {
+      name: 'getBadDrivingDriverRanking',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingDriverRanking',
+      mockPath: '/zhfxpt/getBadDrivingDriverRanking',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: []
+      },
+      desc: '不良驾驶行为分析报警司机排行'
+    },
+    {
+      name: 'getDriverWarnTimeTrend',
+      method: 'POST',
+      path: '/zhfxpt/getDriverWarnTimeTrend',
+      mockPath: '/zhfxpt/getDriverWarnTimeTrend',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: [],
+        driverName: '',
+        driverNum: ''
+      },
+      desc: '司机报警时间趋势'
+    },
+    {
+      name: 'getAlarmLevelRatioAnalysis',
+      method: 'POST',
+      path: '/zhfxpt/getAlarmLevelRatioAnalysis',
+      mockPath: '/zhfxpt/getAlarmLevelRatioAnalysis',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '各报警速度占比统计'
+    },
+    {
+      name: 'getFatigueDrivingWarnTimeAnalysis',
+      method: 'POST',
+      path: '/zhfxpt/getFatigueDrivingWarnTimeAnalysis',
+      mockPath: '/zhfxpt/getFatigueDrivingWarnTimeAnalysis',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: ''
+      },
+      desc: '（疲劳驾驶） 报警时间段分析'
+    },
+    {
+      name: 'getFatigueDrivingWarnTimeTrendAnalysis',
+      method: 'POST',
+      path: '/zhfxpt/getFatigueDrivingWarnTimeTrendAnalysis',
+      mockPath: '/zhfxpt/getFatigueDrivingWarnTimeTrendAnalysis',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: ''
+      },
+      desc: '（疲劳驾驶） 报警时间趋势分析'
+    },
+    {
+      name: 'getAlarmTypeRatioAnalysis',
+      method: 'POST',
+      path: '/zhfxpt/getAlarmTypeRatioAnalysis',
+      mockPath: '/zhfxpt/getAlarmTypeRatioAnalysis',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnLevel: ''
+      },
+      desc: '报警速度条件下各报警类型占比统计'
+    },
+    {
+      name: 'getFatAlarmSpeedStatistic',
+      method: 'POST',
+      path: '/zhfxpt/getAlarmSpeedStatistic',
+      mockPath: '/zhfxpt/getAlarmSpeedStatistic',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '各速度下报警总数统计'
     }
   ]
 }

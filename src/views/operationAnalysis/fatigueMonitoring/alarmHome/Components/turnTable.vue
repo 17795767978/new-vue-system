@@ -3,22 +3,31 @@
     <el-table
       :data="tableData"
       border
+      size="mini"
       height="300"
       stripe
       style="width: 100%">
       <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
+        prop="orgName"
+        label="机构"
+        align="center"
+        width="120">
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
+        prop="driverNum"
+        label="工号"
+        align="center"
+        width="150">
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="地址">
+        prop="driverName"
+        align="center"
+        label="司机">
+      </el-table-column>
+      <el-table-column
+        prop="totalWarn"
+        align="center"
+        label="报警总数">
       </el-table-column>
     </el-table>
   </div>
@@ -26,9 +35,47 @@
 
 <script type="text/ecmascript-6">
 export default {
+  props: {
+    searchData: {
+      type: Object
+    }
+  },
   data () {
     return {
       tableData: []
+    }
+  },
+  created () {
+    let defaultData = this.$store.getters.formData
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    this._getDriverTable({
+      orgId,
+      lineId: defaultData.lineId,
+      busPlateNumber: '',
+      warnTypes: []
+    })
+  },
+  watch: {
+    searchData: {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+        const { orgId, lineId, busNumber, warnTypeId } = newV
+        this._getDriverTable({
+          orgId,
+          lineId,
+          busPlateNumber: busNumber,
+          warnTypes: warnTypeId
+        })
+      }
+    }
+  },
+  methods: {
+    _getDriverTable (params) {
+      this.$api['tiredMonitoring.getBadDrivingBehaviorRanking'](params).then(res => {
+        // console.log(res)
+        this.tableData = res
+      })
     }
   }
 }

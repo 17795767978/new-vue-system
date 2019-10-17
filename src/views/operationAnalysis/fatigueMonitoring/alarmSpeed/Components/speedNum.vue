@@ -7,7 +7,13 @@
 <script type="text/ecmascript-6">
 import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import { mapGetters } from 'vuex'
 export default {
+  props: {
+    searchData: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -23,19 +29,39 @@ export default {
       loading: true
     }
   },
+  computed: {
+    ...mapGetters(['formData'])
+  },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getLines({
-      orgId
+    this.selectData = this.formData
+    this._getFatAlarmSpeedStatistic({
+      orgId: this.selectData.orgId,
+      lineId: this.selectData.lineId,
+      startTime: this.selectData.dateArray[0],
+      endTime: this.selectData.dateArray[1]
     })
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
   },
+  watch: {
+    searchData: {
+      deep: true,
+      handler (newV) {
+        this._getFatAlarmSpeedStatistic({
+          orgId: newV.orgId,
+          lineId: newV.lineId,
+          startTime: newV.dateArray[0],
+          endTime: newV.dateArray[1]
+        })
+      }
+    }
+  },
   methods: {
-    _getLines (params) {
+    _getFatAlarmSpeedStatistic (params) {
+      console.log(123)
       this.loading = true
-      this.$api['passengerSimple.getHotlines'](params).then(res => {
+      this.$api['tiredMonitoring.getFatAlarmSpeedStatistic'](params).then(res => {
         console.log(res)
         this.loading = false
         this.title = {

@@ -1,13 +1,19 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading" >
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { max } from '../../../../../utils/max.js'
+// import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import { mapGetters } from 'vuex'
 export default {
+  props: {
+    searchData: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -23,20 +29,44 @@ export default {
       loading: true
     }
   },
+  computed: {
+    ...mapGetters(['formData'])
+  },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getLines({
-      orgId
+    let formData = this.formData
+    this._getAlarmLevelRatioAnalysis({
+      orgId: formData.orgId,
+      lineId: formData.lineId,
+      startTime: formData.dateArray[0],
+      endTime: formData.dateArray[0]
     })
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
   },
+  watch: {
+    searchData: {
+      deep: true,
+      handler (newV) {
+        this._getAlarmLevelRatioAnalysis({
+          orgId: newV.orgId,
+          lineId: newV.lineId,
+          startTime: newV.dateArray[0],
+          endTime: newV.dateArray[0]
+        })
+      }
+    }
+  },
   methods: {
-    _getLines (params) {
+    _getAlarmLevelRatioAnalysis (params) {
       this.loading = true
-      this.$api['passengerSimple.getHotlines'](params).then(res => {
+      this.$api['homeTired.getStatisticDatasByWarnType'](params).then(res => {
         console.log(res)
+        let yData = res.map(item => item.warnLabel)
+        let series = res.map(item => ({
+          value: item.warnNumber,
+          label: item.warnType
+        }))
         this.loading = false
         this.title = {
           text: '各报警类型统计',
@@ -46,7 +76,7 @@ export default {
           name: '各报警类型统计',
           type: 'bar',
           radius: ['100%', '60%'],
-          data: res.datas[0],
+          data: series,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
             emphasis: {
@@ -81,7 +111,7 @@ export default {
           y2: 30,
           borderWidth: 1
         }
-        this.maxNum = max(res.datas[0])
+        // this.maxNum = max(res.datas[0])
         this.dataLength = 2
         this.legend = {
           data: ['客流人次'],
@@ -94,7 +124,7 @@ export default {
         this.yData = [
           {
             type: 'category',
-            data: res.xAxisNames,
+            data: yData,
             axisPointer: {
               type: 'shadow'
             },
@@ -111,12 +141,6 @@ export default {
         ]
         this.xData = [
           {
-            min: 0,
-            max: this.maxNum,
-            interval: Math.ceil(this.maxNum / 6),
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
             axisLabel: {
               inside: false,
               interval: 0,
@@ -129,6 +153,10 @@ export default {
           }
         ]
       })
+    },
+    getEchartsData (data) {
+      // console.log(data)
+      this.$emit('echartsSelected', data)
     }
   },
   components: {

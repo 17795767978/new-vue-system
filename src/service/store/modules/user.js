@@ -1,12 +1,17 @@
 import { getToken, setToken, removeToken } from '@/service/expands/auth'
 import api from '@/plugins/api'
 import store from '@/plugins/store'
+import moment from 'moment'
 
 // import { constantRouterMap } from '@/router/staticRoutes'
 /**
  * User STORE
  */
-
+let data = moment(new Date()).valueOf()
+let currentHour = moment(new Date()).format('HH:00')
+let dateBefore = data - 24 * 3600 * 1000 * 7
+dateBefore = moment(dateBefore).format('YYYY-MM-DD')
+data = moment(data).format('YYYY-MM-DD')
 const user = {
   state: {
     // userId: '',
@@ -23,7 +28,13 @@ const user = {
     //   homepage: '/homepage/home'
     // },
     roles: null, // 权限应该是返回个数组对象
-    initLineId: ''
+    initLineId: '',
+    formData: {
+      orgId: '',
+      lineId: '',
+      lineOrgId: '',
+      linelineId: ''
+    }
   },
 
   mutations: {
@@ -53,7 +64,9 @@ const user = {
     },
     SET_LINEID: (state, lineId) => {
       state.initLineId = lineId
-      console.log(lineId)
+    },
+    SET_FORM_DATA: (state, formData) => {
+      state.formData = formData
     }
     // SET_ROUTERS (state, router) {
     //   state.routers.addRouters = router
@@ -117,8 +130,37 @@ const user = {
      */
     getUserInfo ({ commit, state }, params) {
       return new Promise((resolve, reject) => {
+        let form = {
+          lineType: '1',
+          currentDate: data,
+          startHour: '06:00',
+          endHour: currentHour,
+          dateArray: [dateBefore, data]
+        }
         store.dispatch('getLineList').then(res => {
+          if (res.length > 0) {
+            form.lineId = res[0].value
+          }
           commit('SET_LINEID', res.length > 0 && res[0].value)
+          store.dispatch('getLineSecList').then(res => {
+            if (res.length > 0) {
+              form.linelineId = res[0].value
+            }
+          })
+          store.dispatch('getComList').then(res => {
+            if (res.length > 0) {
+              form.orgId = res[0].value
+            }
+          })
+          store.dispatch('getComSecList').then(res => {
+            if (res.length > 0) {
+              form.lineOrgId = res[0].value
+            }
+          })
+          // store.dispatch('getLineSecList').then(res => {
+          //   form.linelineID = res[0].value
+          // })
+          commit('SET_FORM_DATA', form)
           api['platformMenu.list']({
             id: localStorage.getItem('id')
           }).then(res => {

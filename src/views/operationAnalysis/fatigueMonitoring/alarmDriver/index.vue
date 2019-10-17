@@ -4,7 +4,8 @@
       :isOrg='true'
       :isLine="true"
       :isBus="false"
-      :isDate="true"
+      :isDate="false"
+      :isDateTo="true"
       :isTime="false"
       :isTurn="false"
       :isDownload="false"
@@ -12,10 +13,10 @@
       @configCheck="getSearch"
     />
     <div class="table">
-      <Table />
+      <Table :searchData="searchData" @driverChanged="driverChanged" v-change/>
     </div>
     <div class="driver">
-      <Driver />
+      <Driver :searchData="searchData" :driverData="driverData"/>
     </div>
   </div>
 </template>
@@ -27,7 +28,8 @@ import Table from './Components/table'
 export default {
   data () {
     return {
-      searchData: {}
+      searchData: {},
+      driverData: {}
     }
   },
   components: {
@@ -35,9 +37,19 @@ export default {
     Table,
     Driver
   },
+  directives: {
+    change: {
+      componentUpdated (el) {
+        console.log(el)
+      }
+    }
+  },
   methods: {
     getSearch (item) {
       this.searchData = item
+    },
+    driverChanged (data) {
+      this.driverData = data
     }
   }
 }

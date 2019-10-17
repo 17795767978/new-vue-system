@@ -7,8 +7,17 @@
 <script type="text/ecmascript-6">
 import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import { mapGetters } from 'vuex'
 export default {
   name: 'passengerHome',
+  props: {
+    searchData: {
+      type: Object
+    },
+    selectEcharts: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -21,26 +30,64 @@ export default {
       maxNum: 0,
       id: 'trend',
       grid: {},
-      loading: true
+      loading: true,
+      echartsData: '',
+      selectData: {}
     }
   },
+  computed: {
+    ...mapGetters(['formData'])
+  },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
-      orgId
+    this.selectData = this.formData
+    this._getFatigueDrivingWarnTimeTrendAnalysis({
+      orgId: this.selectData.orgId,
+      lineId: this.selectData.lineId,
+      startTime: this.selectData.dateArray[0],
+      endTime: this.selectData.dateArray[1],
+      warnTypes: ''
     })
   },
   mounted () {
     console.log(this.$refs.wrapper.style)
   },
+  watch: {
+    searchData: {
+      deep: true,
+      handler (newV) {
+        console.log('11111111111111111111111111111111', newV)
+        this.selectData = newV
+        this.echartsData = ''
+        this._getFatigueDrivingWarnTimeTrendAnalysis({
+          orgId: this.selectData.orgId,
+          lineId: this.selectData.lineId,
+          startTime: this.selectData.dateArray[0],
+          endTime: this.selectData.dateArray[1],
+          warnTypes: this.echartsData
+        })
+      }
+    },
+    'selectEcharts.name': {
+      handler (newV) {
+        this.echartsData = newV
+        this._getFatigueDrivingWarnTimeTrendAnalysis({
+          orgId: this.selectData.orgId,
+          lineId: this.selectData.lineId,
+          startTime: this.selectData.dateArray[0],
+          endTime: this.selectData.dateArray[1],
+          warnTypes: this.echartsData
+        })
+      }
+    }
+  },
   methods: {
-    _getMonthData (params) {
+    _getFatigueDrivingWarnTimeTrendAnalysis (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['tiredMonitoring.getFatigueDrivingWarnTimeTrendAnalysis'](params).then(res => {
         console.log(res)
         this.loading = false
         this.title = {
-          text: '报警时间趋势分析',
+          text: `${this.echartsData}报警时间趋势分析`,
           left: 'center',
           top: 10,
           textStyle: {
@@ -55,7 +102,7 @@ export default {
           borderWidth: 1
         }
         this.lineData = [{
-          name: '日客流人次',
+          name: '报警次数',
           type: 'line',
           data: res.datas[0],
           areaStyle: {
@@ -78,7 +125,7 @@ export default {
         this.maxNum = max(res.datas[0])
         this.dataLength = 2
         this.legend = {
-          data: ['日客流人次'],
+          data: ['报警次数'],
           right: 10,
           top: 10,
           textStyle: {

@@ -1,12 +1,18 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading" >
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"  @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import { mapGetters } from 'vuex'
 export default {
+  props: {
+    searchData: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -22,24 +28,43 @@ export default {
       loading: true
     }
   },
+  computed: {
+    ...mapGetters(['formData'])
+  },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    let formData = this.formData
     this._getDriver({
-      orgId
+      orgId: formData.orgId,
+      lineId: formData.lineId,
+      startTime: formData.dateArray[0],
+      endTime: formData.dateArray[1]
     })
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
   },
+  watch: {
+    searchData: {
+      deep: true,
+      handler (newV) {
+        this._getDriver({
+          orgId: newV.orgId,
+          lineId: newV.lineId,
+          startTime: newV.dateArray[0],
+          endTime: newV.dateArray[1]
+        })
+      }
+    }
+  },
   methods: {
     _getDriver (params) {
       this.loading = true
-      this.$api['homeTired.getStatisticDatasByWarnType'](params).then(res => {
-        console.log(res)
+      this.$api['tiredMonitoring.getAlarmLevelRatioAnalysis'](params).then(res => {
         this.loading = false
+        console.log(res)
         let data = []
-        let dataArrValue = res.map(item => item.warnLabel)
-        let dataArrNumber = res.map(item => item.warnNumber)
+        let dataArrValue = res.xAxisNames
+        let dataArrNumber = res.datas[0]
         for (let i = 0; i < dataArrValue.length; i++) {
           data[i] = {
             name: dataArrValue[i],
@@ -64,6 +89,9 @@ export default {
         this.grid = {
         }
       })
+    },
+    getEchartsData (data) {
+      this.$emit('echartsSelected', data)
     }
   },
   components: {

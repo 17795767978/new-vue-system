@@ -7,8 +7,23 @@
 <script type="text/ecmascript-6">
 import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import { mapGetters } from 'vuex'
 export default {
   name: 'passengerHome',
+  props: {
+    searchData: {
+      type: Object
+    },
+    driverData: {
+      type: Object,
+      default: () => {
+        return {
+          driverName: '',
+          driverNum: ''
+        }
+      }
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -21,26 +36,76 @@ export default {
       maxNum: 0,
       id: 'driver',
       grid: {},
-      loading: true
+      loading: true,
+      drivers: {
+        driverName: '',
+        driverNum: ''
+      },
+      currentData: {}
     }
   },
+  computed: {
+    ...mapGetters(['formData'])
+  },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
-      orgId
+    this.currentData = this.formData
+    this._getDriverWarnTimeTrend({
+      orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
+      lineId: this.currentData.lineId,
+      startTime: this.currentData.dateArray[0],
+      endTime: this.currentData.dateArray[1],
+      warnTypes: [],
+      driverName: '',
+      driverNum: ''
     })
   },
   mounted () {
     console.log(this.$refs.wrapper.style)
   },
+  watch: {
+    searchData: {
+      deep: true,
+      handler (newV) {
+        this.currentData = newV
+        this.drivers = {
+          driverName: '',
+          driverNum: ''
+        }
+        this._getDriverWarnTimeTrend({
+          orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
+          lineId: this.currentData.lineId,
+          startTime: this.currentData.dateArray[0] === undefined ? '' : this.currentData.dateArray[0],
+          endTime: this.currentData.dateArray[1] === undefined ? '' : this.currentData.dateArray[1],
+          warnTypes: this.currentData.warnTypeId,
+          driverName: this.drivers.driverName,
+          driverNum: this.drivers.driverNum
+        })
+      }
+    },
+    driverData: {
+      deep: true,
+      handler (newV) {
+        this.drivers = newV
+        this._getDriverWarnTimeTrend({
+          orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
+          lineId: this.currentData.lineId,
+          startTime: this.currentData.dateArray[0] === undefined ? '' : this.currentData.dateArray[0],
+          endTime: this.currentData.dateArray[1] === undefined ? '' : this.currentData.dateArray[1],
+          warnTypes: this.currentData.warnTypeId,
+          driverName: this.drivers.driverName,
+          driverNum: this.drivers.driverNum
+        })
+      }
+    }
+  },
   methods: {
-    _getMonthData (params) {
+    _getDriverWarnTimeTrend (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['tiredMonitoring.getDriverWarnTimeTrend'](params).then(res => {
         console.log(res)
         this.loading = false
         this.title = {
-          text: '客流月趋势图',
+          text: `${this.drivers.driverName}司机报警时间趋势图`,
           left: 'center',
           top: 10,
           textStyle: {

@@ -4,7 +4,8 @@
       :isOrg='true'
       :isLine="true"
       :isBus="false"
-      :isDate="true"
+      :isDate="false"
+      :isDateTo="true"
       :isTime="false"
       :isTurn="false"
       :isDownload="false"
@@ -13,13 +14,13 @@
     />
     <div class="content">
       <div class="statistics">
-        <AlarmStatistics />
+        <AlarmStatistics :searchData="searchData" @echartsSelected="echartsSelected"/>
       </div>
       <div class="time-slot">
-        <AlarmTimeSlot />
+        <AlarmTimeSlot :searchData="searchData" :selectEcharts="selectEcharts"/>
       </div>
       <div class="time-trend">
-        <AlarmTimestrend />
+        <AlarmTimestrend  :searchData="searchData" :selectEcharts="selectEcharts"/>
       </div>
     </div>
   </div>
@@ -33,7 +34,8 @@ import AlarmTimestrend from './Components/alarmTimetrend'
 export default {
   data () {
     return {
-      searchData: {}
+      searchData: {},
+      selectEcharts: {}
     }
   },
   components: {
@@ -45,6 +47,10 @@ export default {
   methods: {
     getSearch (item) {
       this.searchData = item
+    },
+    echartsSelected (data) {
+      console.log(data)
+      this.selectEcharts = data
     }
   }
 }

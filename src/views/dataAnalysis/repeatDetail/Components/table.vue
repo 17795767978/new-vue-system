@@ -149,7 +149,7 @@ export default {
         let data = {
           lineOrgId: newV.company,
           lineLineId: newV.lineUuid + '+' + newV.lineNumber,
-          lineType: newV.arrow === '上行' ? '1' : '2',
+          lineType: newV.arrow,
           startStation: {},
           endStation: {}
         }
@@ -166,6 +166,13 @@ export default {
       })
     },
     changeSearchCondition (params) {
+      if (params.lineType === '1' || params.lineType === '2') {
+        return
+      } else if (params.lineType === '上行') {
+        params.lineType = '1'
+      } else if (params.lineType === '下行') {
+        params.lineType = '2'
+      }
       let arr = params
       let lineArr = params.lineLineId.split('+')
       this._getRepeatTable({

@@ -5,9 +5,10 @@
       :isLine="true"
       :isBus="true"
       :isDate="false"
-      :isTime="true"
+      :isTime="false"
       :isTurn="false"
       :isDownload="true"
+      :isDefault="true"
       :isWarntype="true"
       @configCheck="getSearch"
     />
@@ -17,14 +18,14 @@
           <div class="title">
             不良驾驶行为类型
           </div>
-          <driverEchart />
+          <driverEchart :searchData="searchData"/>
         </div>
         <div class="table">
           <div class="title">
             不良驾驶行为当日排行
           </div>
           <div class="table-wrapper">
-             <driverTable></driverTable>
+             <driverTable :searchData="searchData"></driverTable>
           </div>
         </div>
       </div>
