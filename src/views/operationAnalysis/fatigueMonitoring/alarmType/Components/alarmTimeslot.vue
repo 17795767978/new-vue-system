@@ -35,7 +35,8 @@ export default {
       grid: {},
       loading: true,
       echartsData: '',
-      selectData: {}
+      selectData: {},
+      alarmName: ''
     }
   },
   computed: {
@@ -59,6 +60,7 @@ export default {
       handler (newV) {
         this.selectData = newV
         this.echartsData = ''
+        this.alarmName = ''
         this._getFatigueDrivingWarnTimeAnalysis({
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
@@ -68,10 +70,10 @@ export default {
         })
       }
     },
-    'selectEcharts.name': {
+    'selectEcharts.data.label': {
       handler (newV) {
-        console.log(this.warnOptions)
         this.echartsData = newV
+        this.alarmName = this.selectEcharts.name
         this._getFatigueDrivingWarnTimeAnalysis({
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
@@ -88,7 +90,7 @@ export default {
       this.$api['tiredMonitoring.getFatigueDrivingWarnTimeAnalysis'](params).then(res => {
         this.loading = false
         this.title = {
-          text: `${this.echartsData}报警时间段分析`,
+          text: `${this.alarmName}报警时间段分析`,
           left: 'center',
           top: 10,
           textStyle: {

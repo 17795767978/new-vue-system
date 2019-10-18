@@ -187,7 +187,7 @@ export default {
         }, true)
       }
       charts.on('click', (param) => {
-        console.log(param)
+        console.log(param.data.label)
         this.$emit('getEchartsData', param)
       })
     }

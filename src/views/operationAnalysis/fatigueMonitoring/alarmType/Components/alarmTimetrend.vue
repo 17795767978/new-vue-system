@@ -32,7 +32,8 @@ export default {
       grid: {},
       loading: true,
       echartsData: '',
-      selectData: {}
+      selectData: {},
+      alarmName: ''
     }
   },
   computed: {
@@ -58,6 +59,7 @@ export default {
         console.log('11111111111111111111111111111111', newV)
         this.selectData = newV
         this.echartsData = ''
+        this.alarmName = ''
         this._getFatigueDrivingWarnTimeTrendAnalysis({
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
@@ -67,9 +69,10 @@ export default {
         })
       }
     },
-    'selectEcharts.name': {
+    'selectEcharts.data.label': {
       handler (newV) {
         this.echartsData = newV
+        this.alarmName = this.selectEcharts.name
         this._getFatigueDrivingWarnTimeTrendAnalysis({
           orgId: this.selectData.orgId,
           lineId: this.selectData.lineId,
@@ -87,7 +90,7 @@ export default {
         console.log(res)
         this.loading = false
         this.title = {
-          text: `${this.echartsData}报警时间趋势分析`,
+          text: `${this.alarmName}报警时间趋势分析`,
           left: 'center',
           top: 10,
           textStyle: {

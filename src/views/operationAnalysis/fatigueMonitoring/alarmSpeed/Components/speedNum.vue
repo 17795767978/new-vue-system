@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading" >
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" v-test :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
   </div>
 </template>
 
@@ -59,10 +59,8 @@ export default {
   },
   methods: {
     _getFatAlarmSpeedStatistic (params) {
-      console.log(123)
       this.loading = true
       this.$api['tiredMonitoring.getFatAlarmSpeedStatistic'](params).then(res => {
-        console.log(res)
         this.loading = false
         this.title = {
           text: '报警速度报警类型',
