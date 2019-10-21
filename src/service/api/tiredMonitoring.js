@@ -319,6 +319,19 @@ export const tiredMonitoringApi = {
         endTime: ''
       },
       desc: '各速度下报警总数统计'
+    },
+    {
+      name: 'getBadDrivingBehaviorRankingDetail',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingBehaviorRankingDetail',
+      mockPath: '/zhfxpt/getBadDrivingBehaviorRankingDetail',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '不良驾驶行为日排行详情'
     }
   ]
 }

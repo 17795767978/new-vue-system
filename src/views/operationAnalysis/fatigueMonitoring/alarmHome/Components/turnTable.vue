@@ -23,6 +23,9 @@
         prop="driverName"
         align="center"
         label="司机">
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="goToDetail(scope.row)">{{scope.row.driverName}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         prop="totalWarn"
@@ -59,7 +62,6 @@ export default {
     searchData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         const { orgId, lineId, busNumber, warnTypeId } = newV
         this._getDriverTable({
           orgId,
@@ -73,9 +75,11 @@ export default {
   methods: {
     _getDriverTable (params) {
       this.$api['tiredMonitoring.getBadDrivingBehaviorRanking'](params).then(res => {
-        // console.log(res)
         this.tableData = res
       })
+    },
+    goToDetail (row) {
+      this.$emit('getDetail', row)
     }
   }
 }
