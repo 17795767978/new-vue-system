@@ -332,6 +332,19 @@ export const tiredMonitoringApi = {
         endTime: ''
       },
       desc: '不良驾驶行为日排行详情'
+    },
+    {
+      name: 'wsUpdate',
+      method: 'POST',
+      path: '/zhfxpt/update',
+      mockPath: '/zhfxpt/update',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '更新疲劳处理状态'
     }
   ]
 }

@@ -161,6 +161,7 @@ export default {
   methods: {
     drawLine () {
       let charts = this.$echarts.init(document.getElementById(this.id))
+      charts.off('click')
       window.addEventListener('resize', () => { charts.resize() })
       if (this.series.length > 0) {
         charts.setOption({
@@ -187,7 +188,7 @@ export default {
         }, true)
       }
       charts.on('click', (param) => {
-        console.log(param)
+        // console.log(param)
         this.$emit('getEchartsData', param)
       })
     }

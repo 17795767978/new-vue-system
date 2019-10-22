@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading" >
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
@@ -24,17 +24,16 @@ export default {
       maxNum: 0,
       id: 'drive',
       grid: {},
-      loading: true
+      loading: true,
+      echartsData: {}
     }
   },
   created () {
     let defaultData = this.$store.getters.formData
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._getDriver({
-      orgId,
+      orgId: defaultData.orgId === '1' ? '' : defaultData.orgId,
       lineId: defaultData.lineId,
-      busPlateNumbers: '',
-      warnTypes: []
+      busPlateNumbers: ''
     })
   },
   mounted () {
@@ -45,7 +44,7 @@ export default {
       deep: true,
       handler (newV) {
         this._getDriver({
-          orgId: newV.orgId,
+          orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           busPlateNumbers: newV.busNumber,
           warnTypes: newV.warnTypeId
@@ -84,6 +83,10 @@ export default {
         this.grid = {
         }
       })
+    },
+    getEchartsData (data) {
+      // this.echartsData = data
+      this.$emit('getwarnTypeData', data)
     }
   },
   components: {

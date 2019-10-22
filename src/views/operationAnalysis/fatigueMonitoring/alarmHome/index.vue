@@ -18,7 +18,7 @@
           <div class="title">
             不良驾驶行为类型
           </div>
-          <driverEchart :searchData="searchData"/>
+          <driverEchart :searchData="searchData" @getwarnTypeData="getwarnTypeData"/>
         </div>
         <div class="table">
           <div class="title">
@@ -33,7 +33,7 @@
         <div class="title">
           不良驾驶行为分析实时报警监控
           <el-badge :value="diaData.length" :max="10" style="margin-top:0px; margin-right: 20px;float:right">
-            <el-button size="small" @click="seeDetail" icon="el-icon-message-solid" type="info" style="font-size: 1rem"></el-button>
+            <el-button size="small" @click="seeDetail" icon="el-icon-message-solid" type="warning" style="font-size: 1rem"></el-button>
           </el-badge>
         </div>
         <div class="map-wrapper">
@@ -48,7 +48,8 @@
         </div>
       </div>
     </div>
-    <Dialog :diaData="diaData" :isSee="isSee" @close="close" :clickData="clickData"/>
+    <Dialog :diaData="diaData" :isSee="isSee" @close="close" :clickData="clickData" :echartsData="echartsData"/>
+    <audio :src="alarmAudio" ref="audioWrapper" class="audio" muted="muted"></audio>
   </div>
 </template>
 
@@ -62,6 +63,7 @@ import driverTable from './Components/turnTable'
 import Dialog from './Components/dialog'
 import { WSAPI } from '../../../../config/settings'
 import { mapGetters } from 'vuex'
+import alarmAudio from '@/assets/MP3/alarm.mp3'
 export default {
   name: 'alarmHome',
   data () {
@@ -75,8 +77,12 @@ export default {
         dataType: ''
       },
       currentData: {}, // 默认筛选条件，
-      clickData: [], // 点击交互的值
-      wsDataClose: false
+      clickData: [], // 点击Table交互的值
+      echartsData: [], // 点击echarts交互的值
+      wsDataClose: false,
+      alarmAudio: '',
+      audioDom: '',
+      time: 0
     }
   },
   components: {
@@ -90,6 +96,7 @@ export default {
     ...mapGetters(['formData'])
   },
   mounted () {
+    this.alarmAudio = alarmAudio
     this.currentData = this.formData
     this.openWs()
   },
@@ -119,6 +126,7 @@ export default {
     },
     openWs () {
       if ('WebSocket' in window) {
+        this.$refs.audioWrapper.pause()
         let url = WSAPI
         this.ws = new WebSocket(url)
         this.ws.onopen = () => {
@@ -129,6 +137,9 @@ export default {
           let data = evt.data
           this.wsData = JSON.parse(data)
           this.diaData = this.wsData
+          if (this.diaData.length > 0) {
+            this.$refs.audioWrapper.play()
+          }
         }
         console.log('===============推送开始=============')
       } else {
@@ -139,27 +150,38 @@ export default {
       this.ws.close()
       console.log('===============推送关闭=============')
     },
-    close () {
+    close (data) {
+      data = data.filter(item => item.handleResult === '0')
       this.isSee.is = false
       if (this.wsDataClose) {
-        this.wsData = []
-        this.diaData = []
+        this.wsData = data
+        this.diaData = data
       }
       this.openWs()
     },
     getDetail (data) {
+      this._getApi(data, 'table')
+    },
+    getwarnTypeData (data) {
+      this._getApi(data, 'charts')
+    },
+    _getApi (data, type) {
       let params = {
         orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
         lineId: this.currentData.lineId,
         busNumber: this.currentData.busNumber,
-        warnTypes: this.currentData.warnTypeId,
+        warnTypes: type === 'charts' ? [data.data.warnType] : this.currentData.warnTypeId,
         driverNum: data.driverNum,
         driveName: data.driverName
       }
       this.$api['tiredMonitoring.getBadDrivingBehaviorRankingDetail'](params).then(res => {
-        this.clickData = res
+        if (type === 'table') {
+          this.clickData = res
+        } else {
+          this.echartsData = res
+        }
         this.isSee.is = true
-        this.isSee.dataType = 'table'
+        this.isSee.dataType = type
         this.wsDataClose = false
       })
     }
@@ -242,6 +264,11 @@ export default {
         height: calc(100% - 6%);
       }
     }
+  }
+  .audio {
+    position: absolute;
+    top: 0;
+    right: -100vw;
   }
 }
 </style>

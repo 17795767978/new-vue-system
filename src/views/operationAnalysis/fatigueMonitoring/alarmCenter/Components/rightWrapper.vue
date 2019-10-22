@@ -355,7 +355,6 @@ export default {
       })
     },
     handleClick (row) {
-      sessionStorage.setItem('id', row.warnUuid)
       this.$router.push({
         name: 'alarmContent',
         query: {

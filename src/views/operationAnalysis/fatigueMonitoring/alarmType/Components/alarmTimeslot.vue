@@ -45,7 +45,7 @@ export default {
   created () {
     this.selectData = this.formData
     this._getFatigueDrivingWarnTimeAnalysis({
-      orgId: this.selectData.orgId,
+      orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
@@ -62,7 +62,7 @@ export default {
         this.echartsData = ''
         this.alarmName = ''
         this._getFatigueDrivingWarnTimeAnalysis({
-          orgId: this.selectData.orgId,
+          orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
@@ -75,7 +75,7 @@ export default {
         this.echartsData = newV
         this.alarmName = this.selectEcharts.name
         this._getFatigueDrivingWarnTimeAnalysis({
-          orgId: this.selectData.orgId,
+          orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],

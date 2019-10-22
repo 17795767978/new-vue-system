@@ -34,7 +34,7 @@ export default {
   created () {
     let formData = this.formData
     this._getDriver({
-      orgId: formData.orgId,
+      orgId: formData.orgId === '1' ? '' : formData.orgId,
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1]
@@ -48,7 +48,7 @@ export default {
       deep: true,
       handler (newV) {
         this._getDriver({
-          orgId: newV.orgId,
+          orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1]

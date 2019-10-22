@@ -35,7 +35,7 @@ export default {
   created () {
     this.selectData = this.formData
     this._getFatAlarmSpeedStatistic({
-      orgId: this.selectData.orgId,
+      orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1]
@@ -49,7 +49,7 @@ export default {
       deep: true,
       handler (newV) {
         this._getFatAlarmSpeedStatistic({
-          orgId: newV.orgId,
+          orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1]

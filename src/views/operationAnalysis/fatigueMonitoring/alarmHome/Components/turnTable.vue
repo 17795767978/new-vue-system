@@ -50,9 +50,8 @@ export default {
   },
   created () {
     let defaultData = this.$store.getters.formData
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._getDriverTable({
-      orgId,
+      orgId: defaultData.orgId === '1' ? '' : defaultData.orgId,
       lineId: defaultData.lineId,
       busPlateNumber: '',
       warnTypes: []
@@ -64,7 +63,7 @@ export default {
       handler (newV) {
         const { orgId, lineId, busNumber, warnTypeId } = newV
         this._getDriverTable({
-          orgId,
+          orgId: orgId === '1' ? '' : orgId,
           lineId,
           busPlateNumber: busNumber,
           warnTypes: warnTypeId

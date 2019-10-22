@@ -1,6 +1,6 @@
 <template>
   <div class="dialog">
-    <el-dialog title="报警详情" :visible.sync="see" :fullscreen="true" >
+    <el-dialog title="报警详情" :visible.sync="see" :fullscreen="true" :modal="false">
       <el-table :data="selectData" border size="mini">
         <el-table-column type="index" label="序号" width="80" align="center"></el-table-column>
         <el-table-column property="orgName" label="所属公司" width="120" align="center"></el-table-column>
@@ -19,8 +19,8 @@
         </el-table-column>
         <el-table-column property="address" label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="goToSucc(scope.row)">未处理</el-button>
-            <el-button type="success" size="mini" plain>已处理</el-button>
+            <el-button v-if="scope.row.handleResult === '0'" type="danger" size="mini" @click="goToSucc(scope.row)">未处理</el-button>
+            <el-button v-if="scope.row.handleResult === '1'" type="success" size="mini" plain>已处理</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -38,6 +38,9 @@ export default {
       type: Object
     },
     clickData: {
+      type: Array
+    },
+    echartsData: {
       type: Array
     }
   },
@@ -63,6 +66,13 @@ export default {
         this.tableData = newV
       }
     },
+    echartsData: {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+        this.chartData = newV
+      }
+    },
     isSee: {
       deep: true,
       handler (newV) {
@@ -80,15 +90,28 @@ export default {
     },
     see (newV) {
       if (!newV) {
-        this.$emit('close')
+        this.$emit('close', this.selectData)
       }
     }
   },
   methods: {
     goToDetail (data) {
-      console.log(data)
+      console.log(data.warnUuid)
+      this.$router.push({
+        path: '/fatigue-monitoring/alarm-content',
+        query: {
+          id: data.warnUuid
+        }
+      })
     },
     goToSucc (row) {
+      this.$api['tiredMonitoring.wsUpdate']({
+        warnUuid: row.warnUuid,
+        handleResult: '1'
+      }).then(res => {
+        this.$message.success('已处理')
+        row.handleResult = '1'
+      })
       console.log(row)
     }
   }
