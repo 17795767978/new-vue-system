@@ -112,11 +112,14 @@ export default {
       })
     },
     goToDetail (data) {
-      this.$router.push({
-        name: 'repeatabilityDetail',
-        params: {
-          data
-        }
+      this.$store.dispatch('getRouterData', data).then(res => {
+        console.log(res)
+        this.$router.push({
+          name: 'repeatabilityDetail',
+          params: {
+            data: res
+          }
+        })
       })
     }
   }

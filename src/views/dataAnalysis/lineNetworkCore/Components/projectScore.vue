@@ -6,10 +6,14 @@
 
 <script type="text/ecmascript-6">
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import { mapGetters } from 'vuex'
 export default {
   name: '',
   props: {
     echartsData: {
+      type: Object
+    },
+    selectData: {
       type: Object
     }
   },
@@ -27,32 +31,51 @@ export default {
       grid: {},
       loading: true,
       tooltip: {},
-      radar: []
+      radar: [],
+      lineNum: ''
     }
   },
+  computed: {
+    ...mapGetters(['formData'])
+  },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
-      orgId
+    let lineArr = this.formData.lineLineId.split('+')
+    this._getNetIndexDeaData({
+      company: this.formData.lineOrgId,
+      lineID: lineArr[0]
     })
   },
-  mounted () {
-  },
   watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        let lineArr = newV.lineLineId.split('+')
+        this._getNetIndexDeaData({
+          company: newV.lineOrgId,
+          lineID: lineArr[0]
+        })
+      }
+    },
     echartsData: {
       deep: true,
       handler (newV) {
-        console.log(newV.line)
+        this._getNetIndexDeaData({
+          company: newV.lineOrgId,
+          lineID: newV.lineUuid
+        })
       }
     }
   },
   methods: {
-    _getMonthData (params) {
+    _getNetIndexDeaData (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getDeaLineScoreListData'](params).then(res => {
         this.loading = false
+        let data = []
+        data = [res[0].staRational, res[0].safeRational, res[0].conRational, res[0].rapRational, res[0].score]
+        this.lineNum = res[0].lineNumber
         this.title = {
-          text: '项目得分情况',
+          text: `${this.lineNum}项目得分情况`,
           left: 'center',
           top: 20,
           textStyle: {
@@ -72,11 +95,11 @@ export default {
         this.radar = [
           {
             indicator: [
-              { text: '站点建设合理性', max: 100 },
-              { text: '舒适性', max: 100 },
-              { text: '便捷性', max: 100 },
-              { text: '快捷性', max: 100 },
-              { text: '总得分', max: 100 }
+              { text: '站点建设合理性', max: 1 },
+              { text: '舒适性', max: 1 },
+              { text: '便捷性', max: 1 },
+              { text: '快捷性', max: 1 },
+              { text: '总得分', max: 1 }
             ],
             center: ['50%', '60%'],
             radius: 120
@@ -91,7 +114,7 @@ export default {
             itemStyle: { normal: { areaStyle: { type: 'default' } } },
             data: [
               {
-                value: [60, 73, 85, 40, 70],
+                value: data,
                 name: '项目得分情况'
               }
             ]

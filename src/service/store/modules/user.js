@@ -33,7 +33,7 @@ const user = {
       orgId: '',
       lineId: '',
       lineOrgId: '',
-      linelineId: ''
+      lineLineId: ''
     }
   },
 
@@ -135,18 +135,15 @@ const user = {
           currentDate: data,
           startHour: '06:00',
           endHour: currentHour,
-          dateArray: [dateBefore, data]
+          dateArray: [dateBefore, data],
+          startStation: '',
+          endStation: ''
         }
         store.dispatch('getLineList').then(res => {
           if (res.length > 0) {
             form.lineId = res[0].value
           }
           commit('SET_LINEID', res.length > 0 && res[0].value)
-          store.dispatch('getLineSecList').then(res => {
-            if (res.length > 0) {
-              form.linelineId = res[0].value
-            }
-          })
           store.dispatch('getComList').then(res => {
             if (res.length > 0) {
               form.orgId = res[0].value
@@ -155,6 +152,11 @@ const user = {
           store.dispatch('getComSecList').then(res => {
             if (res.length > 0) {
               form.lineOrgId = res[0].value
+              store.dispatch('getLineSecList', form.lineOrgId).then(res => {
+                if (res.length > 0) {
+                  form.lineLineId = res[0].value
+                }
+              })
             }
           })
           // store.dispatch('getLineSecList').then(res => {

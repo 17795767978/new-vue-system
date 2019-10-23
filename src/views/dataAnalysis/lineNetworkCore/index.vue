@@ -1,25 +1,26 @@
 <template>
   <div>
     <Search
-      :isOrg='true'
-      :isLine="true"
+      :isOrgSec='true'
+      :isLineSec="true"
       :isBus="false"
       :isDate="false"
       :isTime="false"
       :isTurn="false"
       :isDownload="false"
+      :isEmpty="true"
       :isWarntype="false"
       @configCheck="getSearch"
     />
     <div class="content">
       <div class="repeatability-table">
-        <CoreTable @changeEcharts="changeEcharts"/>
+        <CoreTable @changeEcharts="changeEcharts" :selectData="selectData"/>
       </div>
       <div class="line-repeatability">
-        <LineGrade />
+        <LineGrade :selectData="selectData"/>
       </div>
       <div class="line-dowm-repeatability">
-        <ProjectScore :echartsData="echartsData"/>
+        <ProjectScore :echartsData="echartsData" :selectData="selectData"/>
       </div>
     </div>
   </div>

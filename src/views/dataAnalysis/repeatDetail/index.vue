@@ -13,6 +13,7 @@
       :isWarntype="false"
       :isStation="true"
       :isDefault="true"
+      :isEmpty="true"
       :queryData="queryData"
       @configCheck="getSearch"
     />
@@ -25,6 +26,7 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
+import { mapGetters } from 'vuex'
 export default {
   name: 'repeatabilityDetail',
   data () {
@@ -33,11 +35,16 @@ export default {
       queryData: {}
     }
   },
+  computed: {
+    ...mapGetters(['routerData'])
+  },
   created () {
-    this.queryData = this.$route.params.data
+    console.log(this.routerData)
+    this.queryData = this.routerData
   },
   activated () {
-    this.queryData = this.$route.params.data
+    console.log(this.routerData)
+    this.queryData = this.routerData
   },
   methods: {
     getSearch (data) {
@@ -47,6 +54,8 @@ export default {
   components: {
     Search,
     Table
+  },
+  destroyed () {
   }
 }
 </script>

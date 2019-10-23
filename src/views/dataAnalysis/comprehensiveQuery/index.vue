@@ -12,6 +12,7 @@
       :isDataCurrent="true"
       :isTime="false"
       :isTurn="true"
+      :isEmpty="false"
       :isDownload="true"
       :isWarntype="false"
       @configCheck="getSearch"

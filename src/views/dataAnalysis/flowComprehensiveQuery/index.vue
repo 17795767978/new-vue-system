@@ -1,20 +1,21 @@
 <template>
   <div>
     <Search
-      :isOrg='true'
-      :isLine="true"
+      :isOrgSec='true'
+      :isLineSec="true"
       :isBus="false"
       :isDate="false"
       :isTime="false"
       :isTurn="true"
       :isDataCurrent="true"
       :isDownload="true"
+      :isEmpty="true"
       :isWarntype="false"
       @configCheck="getSearch"
     />
     <div class="content">
       <div class="table">
-        <Table @getRow="getRow"/>
+        <Table @getRow="getRow" :selectData="selectData"/>
       </div>
       <div class="echarts">
         <div class="setting">

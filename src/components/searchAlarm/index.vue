@@ -32,7 +32,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择线路" v-if="isLineSec">
-        <el-select class="font-style"  v-test filterable v-model="formInline.lineLineId" placeholder="请选择">
+        <el-select class="font-style" filterable v-model="formInline.lineLineId" placeholder="请选择">
           <el-option
             v-for="item in lineOptionsSec"
             :key="item.value"
@@ -169,7 +169,7 @@
         </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
-        <el-button type="warning" @click="onclear">重置</el-button>
+        <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
         <el-button type="success" @click="onSave" v-if="isDownload">导出</el-button>
       </el-form-item>
     </el-form>
@@ -259,6 +259,9 @@ export default {
     },
     queryData: {
       type: Object
+    },
+    isEmpty: {
+      type: Boolean
     }
   },
   data () {
@@ -319,11 +322,11 @@ export default {
       this.carOptions = res
     })
     if (!this.isDefault) {
-      this.$store.dispatch('getLineSecList').then(res => {
-        this.lineOptionsSec = res
-      })
       this.$store.dispatch('getComSecList').then(res => {
         this.comOptionsSec = res
+      })
+      this.$store.dispatch('getLineSecList').then(res => {
+        this.lineOptionsSec = res
       })
     }
     this._alarmType({
@@ -356,23 +359,15 @@ export default {
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
     this.formInline.dateArray = defaultForm.dateArray
-    console.log(this.formInline)
-    if (this.queryData) {
+    if (this.queryData !== undefined && Object.keys(this.queryData).length > 0) {
       this.formInline.lineOrgId = this.queryData.company
       this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
       this.formInline.lineType = this.queryData.arrow
     }
   },
-  directives: {
-    test: {
-      componentUpdated (el) {
-        console.log(el)
-      }
-    }
-  },
   activated () {
     setTimeout(() => {
-      if (this.queryData) {
+      if (this.queryData !== undefined && Object.keys(this.queryData).length > 0) {
         this.formInline.lineOrgId = this.queryData.company
         this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
         this.formInline.lineType = this.queryData.arrow
@@ -422,7 +417,6 @@ export default {
         this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
           this.lineOptionsSec = res
         })
-        // console.log(this.isLinkage)
         if (this.isLinkage) {
           this.formInline.lineLineId = ''
         }
@@ -610,7 +604,8 @@ export default {
         startStation: this.formInline.startStation,
         endStation: this.formInline.endStation,
         warnTypeId: this.formInline.warnTypeId,
-        dateArray: this.formInline.dateArray
+        dateArray: this.formInline.dateArray,
+        dataCurrent: this.formInline.dataCurrent
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -648,7 +643,6 @@ export default {
     getExcel () {
       this.centerDialogVisible = false
       if (this.excelData.length > 0) {
-        console.log(this.excelData)
         this.$message.success('正在下载中。。。')
       } else {
         this.$message.warning('暂无数据')

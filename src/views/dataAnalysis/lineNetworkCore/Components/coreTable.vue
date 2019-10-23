@@ -12,63 +12,66 @@
         width="80">
       </el-table-column>
       <el-table-column
-        prop="org"
+        prop="company"
         label="机构"
         align="center"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="line"
+        prop="lineNumber"
         label="线路号"
         align="center"
         width="180">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="goToDetail(scope.row)">{{scope.row.lineNumber}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="prod"
+        prop="staRational"
         align="center"
         label="站点建设合理性">
-        <template slot-scope="scope">
-          <el-link type="primary" @click="detailByProd(scope.row)">{{scope.row.prod}}</el-link>
-        </template>
+        <!-- <template slot-scope="scope">
+          <el-link type="primary" @click="detailByProd(scope.row)">{{scope.row.staRational}}</el-link>
+        </template> -->
       </el-table-column>
       <el-table-column
-        prop="rela"
+        prop="safeRational"
         align="center"
         label="舒适性">
-        <template slot-scope="scope">
-          <el-link type="warning" @click="detailByRela(scope.row)">{{scope.row.rela}}</el-link>
-        </template>
+        <!-- <template slot-scope="scope">
+          <el-link type="warning" @click="detailByRela(scope.row)">{{scope.row.safeRational}}</el-link>
+        </template> -->
       </el-table-column>
       <el-table-column
-        prop="cond"
+        prop="conRational"
         align="center"
         label="便捷性">
-        <template slot-scope="scope">
-          <el-link type="danger" @click="detailByCond(scope.row)">{{scope.row.cond}}</el-link>
-        </template>
+        <!-- <template slot-scope="scope">
+          <el-link type="danger" @click="detailByCond(scope.row)">{{scope.row.conRational}}</el-link>
+        </template> -->
       </el-table-column>
       <el-table-column
-        prop="fast"
+        prop="rapRational"
         align="center"
         label="快捷性">
-        <template slot-scope="scope">
-          <el-link type="info" @click="detailByFast(scope.row)">{{scope.row.fast}}</el-link>
-        </template>
+        <!-- <template slot-scope="scope">
+          <el-link type="info" @click="detailByFast(scope.row)">{{scope.row.rapRational}}</el-link>
+        </template> -->
       </el-table-column>
       <el-table-column
-        prop="total"
+        prop="score"
         align="center"
         label="总得分">
         <template slot-scope="scope">
-          <el-link type="success" @click="getEcharts(scope.row)">{{scope.row.total}}</el-link>
+          <el-button type="success" @click="getEcharts(scope.row)">{{scope.row.score}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
-        prop="grade"
+        prop="levelName"
         align="center"
         label="线路等级">
         <template slot-scope="scope">
-          <span style="color: green">{{scope.row.grade}}</span>
+          <span style="color: green">{{scope.row.levelName}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -76,45 +79,65 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
+  props: {
+    selectData: {
+      type: Object
+    }
+  },
   data () {
     return {
-      tableData: [
-        {
-          org: '公交一公司',
-          line: '47路',
-          prod: '1.00',
-          rela: '0.00',
-          cond: '0.20',
-          fast: '0.54',
-          total: '1.00',
-          grade: '普'
-        },
-        {
-          org: '公交二公司',
-          line: '50路',
-          prod: '1.00',
-          rela: '0.00',
-          cond: '0.20',
-          fast: '0.54',
-          total: '1.00',
-          grade: '普'
-        }
-      ]
+      tableData: []
+    }
+  },
+  computed: {
+    ...mapGetters(['formData'])
+  },
+  created () {
+    let lineArr = this.formData.lineLineId.split('+')
+    this._getNetIndexDeaData({
+      company: this.formData.lineOrgId,
+      lineID: lineArr[0]
+    })
+  },
+  watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        let lineArr = newV.lineLineId.split('+')
+        this._getNetIndexDeaData({
+          company: newV.lineOrgId,
+          lineID: lineArr[0]
+        })
+      }
     }
   },
   methods: {
-    detailByProd (data) {
-      console.log(data)
+    _getNetIndexDeaData (params) {
+      this.$api['lineNet.getDeaLineScoreListData'](params).then(res => {
+        this.tableData = res
+      })
     },
-    detailByRela (data) {
-      console.log(data)
-    },
-    detailByCond (data) {
-      console.log(data)
-    },
-    detailByFast (data) {
-      console.log(data)
+    // detailByProd (data) {
+    //   console.log(data)
+    // },
+    // detailByRela (data) {
+    //   console.log(data)
+    // },
+    // detailByCond (data) {
+    //   console.log(data)
+    // },
+    // detailByFast (data) {
+    //   console.log(data)
+    // },
+    goToDetail (row) {
+      this.$router.push({
+        path: '/data-analysis/line-netWork-core-Detail',
+        params: {
+          data: row
+        }
+      })
     },
     getEcharts (data) {
       this.$emit('changeEcharts', data)

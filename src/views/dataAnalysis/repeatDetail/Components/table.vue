@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -92,55 +93,33 @@ export default {
       tableLength: 0,
       cellHeight: 0,
       currentCell: 0,
-      viewCellNum: 0
+      viewCellNum: 0,
+      searchData: {}
     }
   },
   computed: {
+    ...mapGetters(['formData'])
   },
   mounted () {
-    let dom = this.$refs.tableWrapper
-    dom.$el.children[2].addEventListener('scroll', (e) => {
-      let parentNode = e.srcElement
-      let tableBodyDom = dom.$el.querySelectorAll('.el-table__body')[0]
-      let tbodyDom = tableBodyDom.children[1].children
-      this.cellHeight = tableBodyDom.offsetHeight / this.tableLength
-      this.currentCell = Math.floor(parentNode.scrollTop / this.cellHeight)
-      this.viewCellNum = Math.ceil(parentNode.offsetHeight / this.cellHeight)
-      for (let i = 0; i < tbodyDom.length; i++) {
-        // console.log(tbodyDom[i])
-        // if (i < this.currentCell - 5) {
-        //   // tbodyDom[i].style.visibility = 'hidden'
-
-        // } else if (i >= this.currentCell - 5 && i < this.currentCell + this.viewCellNum + 5) {
-        //   tbodyDom[i].style.visibility = 'visible'
-        // } else {
-        //   tbodyDom[i].style.visibility = 'hidden'
-        // }
-      }
-      // if (this.tableLength - this.currentCell > this.viewCellNum) {
-      // } else {
-      // }
-      // console.log(tableBodyDom.offsetHeight) // 总高度
-      // console.log(parentNode.offsetHeight) // 视图的高度
-      // console.log(parentNode.scrollTop) // 滚动的高度
-      // console.log(this.currentCell) // 滚动了多少行
-      // console.log(this.cellHeight) // 行高
-      // console.log(this.viewCellNum) // 视图可见行数
-      // console.log('------------------')
-      // if (tableBodyDom.offsetHeight <= (parentNode.offsetHeight +
-      // parentNode.scrollTop + 5)) {
-      //   console.log(123)
-      // }
-    })
     setTimeout(() => {
-      this.changeSearchCondition(this.$store.getters.defaultSearch)
-    }, 1000)
+      if (Object.keys(this.$route.params).length > 0) {
+        this.queryData.startStation = ''
+        this.queryData.endStation = ''
+        this.queryData.lineType = '1'
+        this.queryData.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
+        this.queryData.lineOrgId = this.queryData.company
+        this.changeSearchCondition(this.queryData)
+      } else {
+        this.changeSearchCondition(this.formData)
+      }
+    }, 100)
   },
   watch: {
     selectData: {
       deep: true,
       handler (newV) {
-        this.changeSearchCondition(newV)
+        this.searchData = newV
+        this.changeSearchCondition(this.searchData)
       }
     },
     queryData: {
@@ -153,7 +132,8 @@ export default {
           startStation: {},
           endStation: {}
         }
-        this.changeSearchCondition(data)
+        this.searchData = data
+        this.changeSearchCondition(this.searchData)
       }
     }
   },
@@ -166,29 +146,18 @@ export default {
       })
     },
     changeSearchCondition (params) {
-      if (params.lineType === '1' || params.lineType === '2') {
-        return
-      } else if (params.lineType === '上行') {
+      if (params.lineType === '上行') {
         params.lineType = '1'
       } else if (params.lineType === '下行') {
         params.lineType = '2'
       }
-      let arr = params
       let lineArr = params.lineLineId.split('+')
       this._getRepeatTable({
-        company: arr.lineOrgId,
+        company: params.lineOrgId,
         lineID: lineArr[0],
-        arrow: arr.lineType,
-        sStation: arr.startStation.value !== undefined ? arr.startStation.value : '',
-        eStation: arr.endStation.value !== undefined ? arr.endStation.value : ''
-      })
-    },
-    goToDetail (data) {
-      this.$router.push({
-        name: 'repeatabilityDetail',
-        query: {
-          id: '001'
-        }
+        arrow: params.lineType,
+        sStation: params.startStation.value !== undefined ? params.startStation.value : '',
+        eStation: params.endStation.value !== undefined ? params.endStation.value : ''
       })
     }
   }

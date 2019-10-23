@@ -91,6 +91,7 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
+        console.log(123)
         if (newV.lineOrgId !== '' && newV.lineLineId !== '' && newV.lineType !== '' && newV.dataCurrent !== '') {
           let lineArr = newV.lineLineId.split('+')
           this._getPfBaseListData({
@@ -99,6 +100,8 @@ export default {
             arrow: newV.lineType,
             pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
           })
+        } else {
+          this.$message.error('请添加完整的查询条件')
         }
       }
     }

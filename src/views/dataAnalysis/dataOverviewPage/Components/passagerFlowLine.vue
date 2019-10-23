@@ -5,7 +5,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { max } from '../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
   data () {
@@ -24,19 +23,17 @@ export default {
     }
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getLines({
-      orgId
-    })
+    this._getDayPfTOP10ListData()
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
   },
   methods: {
-    _getLines (params) {
+    _getDayPfTOP10ListData (params) {
       this.loading = true
-      this.$api['passengerSimple.getHotlines'](params).then(res => {
-        console.log(res)
+      this.$api['lineNet.getDayPfTOP10ListData'](params).then(res => {
+        let lineNumber = res.map(item => item.lineNumber)
+        let data = res.map(item => item.brushCount)
         this.loading = false
         this.title = {
           text: '线路日均客流TOP10',
@@ -51,7 +48,7 @@ export default {
           name: '线路日均客流TOP10',
           type: 'bar',
           radius: ['100%', '60%'],
-          data: res.datas[0],
+          data,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
             emphasis: {
@@ -86,7 +83,6 @@ export default {
           y2: 30,
           borderWidth: 1
         }
-        this.maxNum = max(res.datas[0])
         this.dataLength = 2
         this.legend = {
           data: ['客流人次'],
@@ -99,7 +95,7 @@ export default {
         this.yData = [
           {
             type: 'category',
-            data: res.xAxisNames,
+            data: lineNumber,
             axisPointer: {
               type: 'shadow'
             },
@@ -116,12 +112,6 @@ export default {
         ]
         this.xData = [
           {
-            min: 0,
-            max: this.maxNum,
-            interval: Math.ceil(this.maxNum / 6),
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
             axisLabel: {
               inside: false,
               interval: 0,

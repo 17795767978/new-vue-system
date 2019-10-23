@@ -28,10 +28,10 @@ export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://117.34.118.30:8089',
   // mockBaseUrl: 'http://192.168.10.233:8089',
   // mockBaseUrl: 'http://192.168.10.23:8081',
-  mockBaseUrl: 'http://192.168.10.81:8081',
+  // mockBaseUrl: 'http://192.168.10.81:8081',
   // mockBaseUrl: 'http://111.62.52.35:8089',
   // 192.168.10.33:8081
-  // mockBaseUrl: 'http://192.168.10.33:8081',
+  mockBaseUrl: 'http://192.168.10.33:8081',
   // 10.233 8089
   // prodBaseUrl: 'http://192.168.10.233:8089',
   // prodBaseUrl: 'http://117.34.118.30:8089',

@@ -5,7 +5,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { max } from '../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
   name: 'passengerHome',
@@ -26,22 +25,21 @@ export default {
   },
   created () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
+    this._getDeaLineScoreGrid({
       orgId
     })
   },
   mounted () {
   },
   methods: {
-    _getMonthData (params) {
+    _getDeaLineScoreGrid (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
-        console.log(res)
+      this.$api['lineNet.getDeaLineScoreGrid'](params).then(res => {
         this.loading = false
         this.title = {
           text: '线路评分展示',
           left: 'center',
-          top: 20,
+          top: 10,
           textStyle: {
             'color': '#000',
             'fontSize': '22'
@@ -56,42 +54,41 @@ export default {
         }
         this.lineData = [
           {
-            name: '总得分',
+            name: res.legendNames[0],
             type: 'bar',
             data: res.datas[0],
             barWidth: 20,
             smooth: true
           },
           {
-            name: '站点建设合理性',
+            name: res.legendNames[1],
             type: 'line',
-            data: res.datas[0],
+            data: res.datas[1],
             smooth: false
           },
           {
-            name: '舒适性',
+            name: res.legendNames[2],
             type: 'line',
-            data: res.datas[0],
+            data: res.datas[2],
             smooth: false
           },
           {
-            name: '便捷性',
+            name: res.legendNames[3],
             type: 'line',
-            data: res.datas[0],
+            data: res.datas[3],
             smooth: false
           },
           {
-            name: '快捷性',
+            name: res.legendNames[4],
             type: 'line',
-            data: res.datas[0],
+            data: res.datas[4],
             smooth: false
           }
         ]
-        this.maxNum = [max(res.datas[0]), max(res.datas[0])]
         this.dataLength = 2
         this.legend = [
           {
-            data: ['总得分'],
+            data: [res.legendNames[0]],
             right: 450,
             top: 10,
             textStyle: {
@@ -99,7 +96,7 @@ export default {
             }
           },
           {
-            data: ['站点建设合理性'],
+            data: [res.legendNames[1]],
             right: 300,
             top: 10,
             textStyle: {
@@ -107,7 +104,7 @@ export default {
             }
           },
           {
-            data: ['舒适性'],
+            data: [res.legendNames[2]],
             right: 200,
             top: 10,
             textStyle: {
@@ -115,7 +112,7 @@ export default {
             }
           },
           {
-            data: ['便捷性'],
+            data: [res.legendNames[3]],
             right: 100,
             top: 10,
             textStyle: {
@@ -123,7 +120,7 @@ export default {
             }
           },
           {
-            data: ['快捷性'],
+            data: [res.legendNames[4]],
             right: 10,
             top: 10,
             textStyle: {
@@ -154,12 +151,6 @@ export default {
         ]
         this.yData = [
           {
-            min: 0,
-            max: this.maxNum[0],
-            interval: Math.ceil(this.maxNum[0] / 6),
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
             splitLine: {
               show: false
             },

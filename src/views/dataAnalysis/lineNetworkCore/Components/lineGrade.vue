@@ -6,8 +6,14 @@
 
 <script type="text/ecmascript-6">
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import { mapGetters } from 'vuex'
 export default {
   name: '',
+  props: {
+    selectData: {
+      type: Object
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -24,19 +30,42 @@ export default {
       tooltip: {}
     }
   },
+  computed: {
+    ...mapGetters(['formData'])
+  },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
-      orgId
+    let lineArr = this.formData.lineLineId.split('+')
+    this._getLevelLineCountListData({
+      company: this.formData.lineOrgId,
+      lineID: lineArr[0]
     })
   },
   mounted () {
   },
+  watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        let lineArr = newV.lineLineId.split('+')
+        this._getLevelLineCountListData({
+          company: newV.lineOrgId,
+          lineID: lineArr[0]
+        })
+      }
+    }
+  },
   methods: {
-    _getMonthData (params) {
+    _getLevelLineCountListData (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
-        console.log(res)
+      this.$api['lineNet.getLevelLineCountListData'](params).then(res => {
+        let data = []
+        let name = res.map(item => item.levelName)
+        res.forEach(item => {
+          data.push({
+            value: item.lineCount,
+            name: item.levelName
+          })
+        })
         this.loading = false
         this.title = {
           text: '线路等级占比',
@@ -56,7 +85,7 @@ export default {
         }
         this.legend = [
           {
-            data: ['微', '普', '支', '快'],
+            data: name,
             top: 50,
             textStyle: {
               color: '#000'
@@ -90,12 +119,7 @@ export default {
                 show: false
               }
             },
-            data: [
-              { value: 335, name: '微' },
-              { value: 310, name: '普' },
-              { value: 234, name: '支' },
-              { value: 135, name: '快' }
-            ]
+            data
           }
         ]
       })

@@ -141,6 +141,135 @@ export const lineNetApi = {
         pDate: ''
       },
       desc: '线路时段满载率'
+    },
+    {
+      name: 'getDeaLineScoreListData',
+      method: 'POST',
+      path: '/api/net/index/dea/linescore/getDeaLineScoreListData',
+      mockPath: '/api/net/index/dea/linescore/getDeaLineScoreListData',
+      params: {
+        company: '',
+        lineID: ''
+      },
+      desc: '线网评分-列表'
+    },
+    {
+      name: 'getLevelLineCountListData',
+      method: 'POST',
+      path: '/api/net/index/level/entropy/result/getLevelLineCountListData',
+      mockPath: '/api/net/index/level/entropy/result/getLevelLineCountListData',
+      params: {
+        company: '',
+        lineID: ''
+      },
+      desc: '线网评分-线路等级占比'
+    },
+    {
+      name: 'getNetIndexDeaData',
+      method: 'POST',
+      path: '/api/net/index/dea/transfordata/getNetIndexDeaData',
+      mockPath: '/api/net/index/dea/transfordata/getNetIndexDeaData',
+      params: {
+        company: '',
+        lineID: ''
+      },
+      desc: '线网评分指标链接-列表'
+    },
+    {
+      name: 'getCompanyLineCountsListData',
+      method: 'POST',
+      path: '/api/net/data/busline/getCompanyLineCountsListData',
+      mockPath: '/api/net/data/busline/getCompanyLineCountsListData',
+      params: {
+        company: '',
+        lineID: ''
+      },
+      desc: '数据总览-分公司线路条数饼图'
+    },
+    {
+      name: 'getLineRepeatTOP10ListData',
+      method: 'POST',
+      path: '/api/net/index/repeat/arrow/getLineRepeatTOP10ListData',
+      mockPath: '/api/net/index/repeat/arrow/getLineRepeatTOP10ListData',
+      params: {
+        company: '',
+        lineID: ''
+      },
+      desc: '数据总览-线路重复度TOP10'
+    },
+    {
+      name: 'getDayPfTOP10ListData',
+      method: 'POST',
+      path: '/api/net/index/pf/line/day/getDayPfTOP10ListData',
+      mockPath: '/api/net/index/pf/line/day/getDayPfTOP10ListData',
+      params: {
+        company: '',
+        lineID: ''
+      },
+      desc: '数据总览-线路日均客流TOP10'
+    },
+    {
+      name: 'getDeaLineScoreGrid',
+      method: 'POST',
+      path: '/api/net/index/dea/linescore/getDeaLineScoreGrid',
+      mockPath: '/api/net/index/dea/linescore/getDeaLineScoreGrid',
+      params: {
+        company: '',
+        lineID: ''
+      },
+      desc: '数据总览-线路评分展示'
+    },
+    {
+      name: 'getIndexPfLineDayListData',
+      method: 'POST',
+      path: '/api/net/index/pf/line/day/getIndexPfLineDayListData',
+      mockPath: '/api/net/index/pf/line/day/getIndexPfLineDayListData',
+      params: {
+        company: '',
+        lineID: '',
+        arrow: '',
+        pDate: ''
+      },
+      desc: '线路客流综合查询-列表'
+    },
+    {
+      name: 'getPfOdbrushCountListGridData',
+      method: 'POST',
+      path: '/api/net/index/pf/od/getPfOdbrushCountListGridData',
+      mockPath: '/api/net/index/pf/od/getPfOdbrushCountListGridData',
+      params: {
+        company: '',
+        lineID: '',
+        arrow: '',
+        pDate: ''
+      },
+      desc: '线路客流综合查询-线路各时间段客流详情-刷卡总量'
+    },
+    {
+      name: 'getPfOdZZLListGridData',
+      method: 'POST',
+      path: '/api/net/index/pf/od/getPfOdZZLListGridData',
+      mockPath: '/api/net/index/pf/od/getPfOdZZLListGridData',
+      params: {
+        company: '',
+        lineID: '',
+        arrow: '',
+        pDate: ''
+      },
+      desc: '线路客流综合查询-线路各时间段客流详情-周转量'
+    },
+    {
+      name: 'getPfOdPJYJListGridData',
+      method: 'POST',
+      path: '/api/net/index/pf/od/getPfOdPJYJListGridData',
+      mockPath: '/api/net/index/pf/od/getPfOdPJYJListGridData',
+      params: {
+        company: '',
+        lineID: '',
+        arrow: '',
+        pDate: ''
+      },
+      desc: '线路客流综合查询-线路各时间段客流详情-平均运距'
     }
   ]
 }

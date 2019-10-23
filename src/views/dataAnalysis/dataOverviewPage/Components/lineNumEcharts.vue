@@ -25,18 +25,22 @@ export default {
     }
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getMonthData({
-      orgId
-    })
+    this._getCompanyLineCountsListData()
   },
   mounted () {
   },
   methods: {
-    _getMonthData (params) {
+    _getCompanyLineCountsListData (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
-        console.log(res)
+      this.$api['lineNet.getCompanyLineCountsListData'](params).then(res => {
+        let dataNameArr = res.map(item => item.company)
+        let data = []
+        res.forEach(item => {
+          data.push({
+            name: item.company,
+            value: item.lineCounts
+          })
+        })
         this.loading = false
         this.title = {
           text: '分公司线路条数',
@@ -56,7 +60,7 @@ export default {
         }
         this.legend = [
           {
-            data: ['公交一公司', '公交二公司', '公交三公司', '公交四公司'],
+            data: dataNameArr,
             top: 50,
             textStyle: {
               color: '#000'
@@ -90,12 +94,7 @@ export default {
                 show: false
               }
             },
-            data: [
-              { value: 335, name: '公交一公司' },
-              { value: 310, name: '公交二公司' },
-              { value: 234, name: '公交三公司' },
-              { value: 135, name: '公交四公司' }
-            ]
+            data
           }
         ]
       })

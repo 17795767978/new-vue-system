@@ -115,6 +115,7 @@ export default {
     _getPfBaseUpDownGrid (params) {
       this.loading = true
       this.$api['lineNet.getPfStationDayListGridData'](params).then(res => {
+        console.log(res)
         setTimeout(() => {
           this.loading = false
         }, 1000)
@@ -132,14 +133,14 @@ export default {
           {
             name: '登量（人次）',
             type: 'bar',
-            data: [100, 200, 210, 90, 100, 200, 300, 300, 240, 210, 140, 150, 190, 30, 10],
+            data: res.datas[0],
             barWidth: 15,
             smooth: true
           },
           {
             name: '降量（人次）',
             type: 'bar',
-            data: [-100, -200, -210, -90, -100, -200, -300, -300, -240, -210, -140, -150, -190, -30, -10],
+            data: res.datas[1],
             barWidth: 15,
             smooth: false
           }
@@ -167,7 +168,7 @@ export default {
         this.xData = [
           {
             type: 'category',
-            data: ['站点1', '站点2', '站点3', '站点4', '站点11', '站点21', '站点31', '站点41', '站点21', '站点32', '站点43', '站点54', '站点61', '站点72', '站点83'],
+            data: res.xAxisNames,
             axisPointer: {
               type: 'shadow'
             },
@@ -224,14 +225,14 @@ export default {
           {
             name: '登量',
             type: 'bar',
-            data: [100, 200, 300, 400, 240, 333, 331, 125, 312, 132, 156, 123, 90, 100, 30, 50, 300, 100, 123, 100, 200, 300, 400, 240],
+            data: res.datas[0],
             barWidth: 15,
             smooth: true
           },
           {
             name: '降量',
             type: 'bar',
-            data: [100, 200, 300, 400, 240, 333, 331, 125, 312, 132, 156, 123, 90, 100, 30, 50, 300, 100, 123, 100, 200, 300, 400, 240],
+            data: res.datas[1],
             barWidth: 15,
             smooth: false
           }
@@ -259,7 +260,7 @@ export default {
         this.xData = [
           {
             type: 'category',
-            data: ['6:00', '6:30', '7:00', '7:30', '8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'],
+            data: res.xAxisNames,
             axisPointer: {
               type: 'shadow'
             },
@@ -298,7 +299,7 @@ export default {
     _getRateData (params) {
       this.loading = true
       this.$api['lineNet.getPfBaseApprovalGrid'](params).then(res => {
-        // console.log(res)
+        console.log(res)
         setTimeout(() => {
           this.loading = false
         }, 1000)
@@ -316,7 +317,7 @@ export default {
           {
             name: '满载率',
             type: 'line',
-            data: [0.05, 0.1, 0.15, 0.35, 0.33, 0.35, 0.45, 0.76, 0.70, 0.71, 0.435, 0.50, 0.41, 0.41, 0.36, 0.5, 0.3, 0.26, 0.22, 0.16, 0.13, 0.11, 0.1, 0.05],
+            data: res.datas[0],
             barWidth: 15,
             smooth: true,
             areaStyle: {}
@@ -337,7 +338,7 @@ export default {
         this.xData = [
           {
             type: 'category',
-            data: ['6:00', '6:30', '7:00', '7:30', '8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'],
+            data: res.xAxisNames,
             axisPointer: {
               type: 'shadow'
             },
