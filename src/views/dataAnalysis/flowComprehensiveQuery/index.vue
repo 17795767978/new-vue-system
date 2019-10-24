@@ -19,10 +19,10 @@
       </div>
       <div class="echarts">
         <div class="setting">
-          <Settings />
+          <Settings :selectData="selectData" :isDefault="isDefault" @changeDefault="changeDefault"/>
         </div>
         <div class="canvas">
-          <LinePassagerFlow :rowData="rowData"/>
+          <LinePassagerFlow :rowData="rowData" :selectData="selectData" @defaultConfig="defaultConfig"/>
         </div>
       </div>
     </div>
@@ -40,7 +40,8 @@ export default {
     return {
       selectData: {},
       echartsData: {},
-      rowData: {}
+      rowData: {},
+      isDefault: false
     }
   },
   methods: {
@@ -49,6 +50,12 @@ export default {
     },
     getRow (data) {
       this.rowData = data
+    },
+    defaultConfig () {
+      this.isDefault = true
+    },
+    changeDefault () {
+      this.isDefault = false
     }
   },
   mounted () {

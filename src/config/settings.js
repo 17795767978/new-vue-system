@@ -14,13 +14,13 @@ export const PLATFORM_PREFIX_NAME = 'NOCTURNE_UI'
   * API接口默认参数配置
   */
 let id = Math.random().toString(36).substr(3, 30)
-let ip = window.location.host
-let baseUrl = ''
-if (ip.indexOf('192.168') !== -1) {
-  baseUrl = 'http://192.168.0.48:12345'
-} else {
-  baseUrl = 'http://111.62.52.35:8089'
-}
+// let ip = window.location.host
+// let baseUrl = ''
+// if (ip.indexOf('192.168') !== -1) {
+//   baseUrl = 'http://192.168.0.48:12345'
+// } else {
+//   baseUrl = 'http://172.16.100.160:8081'
+// }
 export const WSAPI = `ws://192.168.10.81:8081/websocket/mesgshow/${id}`
 export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://192.168.10.145:8082',
@@ -35,7 +35,7 @@ export const API_DEFAULT_CONFIG = {
   // 10.233 8089
   // prodBaseUrl: 'http://192.168.10.233:8089',
   // prodBaseUrl: 'http://117.34.118.30:8089',
-  prodBaseUrl: baseUrl,
+  prodBaseUrl: 'http://172.16.100.160:8081',
   isMocked: process.env.NODE_ENV !== 'production',
   isDebug: true,
   sep: '.'

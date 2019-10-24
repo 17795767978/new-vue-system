@@ -6,6 +6,7 @@
 
 <script type="text/ecmascript-6">
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 const GRID = {
   x: 50,
@@ -18,6 +19,9 @@ export default {
   name: 'passengerHome',
   props: {
     rowData: {
+      type: Object
+    },
+    selectData: {
       type: Object
     }
   },
@@ -33,35 +37,71 @@ export default {
       maxNum: [],
       id: 'lineScoreDisplay',
       grid: {},
-      loading: true
+      loading: true,
+      currentSelect: {},
+      lineNum: '',
+      arrow: ''
     }
   },
   computed: {
-    ...mapGetters(['queryId'])
+    ...mapGetters(['queryId', 'formData'])
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getTotalData({
-      orgId
+    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    let lineArr = this.formData.lineLineId.split('+')
+    this.arrow = this.formData.lineType === '1' ? '上行' : '下行'
+    this.lineNum = lineArr[1]
+    this.formData.dataCurrent = this.formData.currentDate
+    this.currentSelect = JSON.parse(JSON.stringify(this.formData))
+    this._getPfOdbrushCountListGridData({
+      company: this.currentSelect.lineOrgId,
+      lineID: lineArr[0],
+      arrow: this.currentSelect.lineType,
+      pDate: this.currentSelect.dataCurrent
     })
   },
   mounted () {
   },
   watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        this.lineNum = ''
+        this.arrow = ''
+        this.currentSelect = JSON.parse(JSON.stringify(newV))
+        this.currentSelect.dataCurrent = moment(this.currentSelect.dataCurrent).format('YYYY-MM-DD')
+        let lineArr = newV.lineLineId.split('+')
+        this._getPfOdbrushCountListGridData({
+          company: this.currentSelect.lineOrgId,
+          lineID: lineArr[0],
+          arrow: this.currentSelect.lineType,
+          pDate: this.currentSelect.dataCurrent
+        })
+      }
+    },
     'queryId': {
       handler (newV) {
-        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+        let lineArr = this.currentSelect.lineLineId.split('+')
         if (newV === '1') {
-          this._getTotalData({
-            orgId
+          this._getPfOdbrushCountListGridData({
+            company: this.currentSelect.lineOrgId,
+            lineID: lineArr[0],
+            arrow: this.currentSelect.lineType,
+            pDate: this.currentSelect.dataCurrent
           })
         } else if (newV === '2') {
-          this._getAvaData({
-            orgId
+          this._getPfOdZZLListGridData({
+            company: this.currentSelect.lineOrgId,
+            lineID: lineArr[0],
+            arrow: this.currentSelect.lineType,
+            pDate: this.currentSelect.dataCurrent
           })
         } else if (newV === '3') {
-          this._getweekData({
-            orgId
+          this._getPfOdPJYJListGridData({
+            company: this.currentSelect.lineOrgId,
+            lineID: lineArr[0],
+            arrow: this.currentSelect.lineType,
+            pDate: this.currentSelect.dataCurrent
           })
         }
       }
@@ -69,19 +109,31 @@ export default {
     rowData: {
       deep: true,
       handler (newV) {
-        console.log(newV.name)
+        this.lineNum = newV.lineNumber
+        this.arrow = newV.arrow
+        this.currentSelect.lineLineId = newV.lineUuid + '+' + newV.lineNumber
+        this.currentSelect.lineType = newV.arrow === '上行' ? '1' : '2'
+        let lineArr = this.currentSelect.lineLineId.split('+')
+        this._getPfOdbrushCountListGridData({
+          company: this.currentSelect.lineOrgId,
+          lineID: lineArr[0],
+          arrow: this.currentSelect.lineType,
+          pDate: this.currentSelect.dataCurrent
+        })
+        this.$emit('defaultConfig')
       }
     }
   },
   methods: {
-    _getTotalData (params) {
+    _getPfOdbrushCountListGridData (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getPfOdbrushCountListGridData'](params).then(res => {
+        console.log(res)
         setTimeout(() => {
           this.loading = false
         }, 1000)
         this.title = {
-          text: '线路各时间段客流详情（刷卡总量）',
+          text: `${this.lineNum}${this.arrow}线路各时间段客流详情（刷卡总量）`,
           left: 'center',
           top: 0,
           textStyle: {
@@ -92,7 +144,7 @@ export default {
         this.grid = GRID
         this.lineData = [
           {
-            name: '总得分',
+            name: res.legendNames[0],
             type: 'bar',
             data: res.datas[0],
             barWidth: 20,
@@ -100,7 +152,14 @@ export default {
           }
         ]
         this.dataLength = 2
-        this.legend = []
+        this.legend = {
+          data: res.legendNames,
+          right: 100,
+          top: 10,
+          textStyle: {
+            color: '#000'
+          }
+        }
         this.xData = [
           {
             type: 'category',
@@ -140,14 +199,14 @@ export default {
         ]
       })
     },
-    _getAvaData (params) {
+    _getPfOdZZLListGridData (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getPfOdZZLListGridData'](params).then(res => {
         setTimeout(() => {
           this.loading = false
         }, 1000)
         this.title = {
-          text: '线路评分展示（平均运距）',
+          text: `${this.lineNum}${this.arrow}线路评分展示（平均运距）`,
           left: 'center',
           top: 0,
           textStyle: {
@@ -158,7 +217,7 @@ export default {
         this.grid = GRID
         this.lineData = [
           {
-            name: '总得分',
+            name: res.legendNames[0],
             type: 'bar',
             data: res.datas[0],
             barWidth: 20,
@@ -166,7 +225,14 @@ export default {
           }
         ]
         this.dataLength = 2
-        this.legend = []
+        this.legend = {
+          data: res.legendNames,
+          right: 100,
+          top: 10,
+          textStyle: {
+            color: '#000'
+          }
+        }
         this.xData = [
           {
             type: 'category',
@@ -206,14 +272,14 @@ export default {
         ]
       })
     },
-    _getweekData (params) {
+    _getPfOdPJYJListGridData (params) {
       this.loading = true
-      this.$api['passengerSimple.getMonthtrend'](params).then(res => {
+      this.$api['lineNet.getPfOdPJYJListGridData'](params).then(res => {
         setTimeout(() => {
           this.loading = false
         }, 1000)
         this.title = {
-          text: '线路评分展示（周转量）',
+          text: `${this.lineNum}${this.arrow}线路评分展示（周转量）`,
           left: 'center',
           top: 0,
           textStyle: {
@@ -224,7 +290,7 @@ export default {
         this.grid = GRID
         this.lineData = [
           {
-            name: '总得分',
+            name: res.legendNames[0],
             type: 'bar',
             data: res.datas[0],
             barWidth: 20,
@@ -232,7 +298,14 @@ export default {
           }
         ]
         this.dataLength = 2
-        this.legend = []
+        this.legend = {
+          data: res.legendNames,
+          right: 100,
+          top: 10,
+          textStyle: {
+            color: '#000'
+          }
+        }
         this.xData = [
           {
             type: 'category',

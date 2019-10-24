@@ -112,6 +112,7 @@
         <el-date-picker
           v-model="formInline.dataCurrent"
           type="date"
+          :editable="false"
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
@@ -567,6 +568,7 @@ export default {
       this.$emit('configCheck', configData)
     },
     onclear () {
+      let date = moment(new Date()).format('YYYY-MM-DD')
       this.formInline = {
         orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
@@ -583,7 +585,7 @@ export default {
         lineLineId: '',
         startStation: {},
         endStation: {},
-        dataCurrent: '',
+        dataCurrent: date,
         warnTypeId: [],
         dateArray: []
       }
@@ -605,7 +607,7 @@ export default {
         endStation: this.formInline.endStation,
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
-        dataCurrent: this.formInline.dataCurrent
+        dataCurrent: date
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -667,6 +669,13 @@ export default {
     .font-style {
       width: 130px;
     }
+  }
+}
+</style>
+<style lang="scss">
+.header {
+  .el-input__suffix-inner {
+    display: none;
   }
 }
 </style>

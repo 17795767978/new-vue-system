@@ -270,6 +270,19 @@ export const lineNetApi = {
         pDate: ''
       },
       desc: '线路客流综合查询-线路各时间段客流详情-平均运距'
+    },
+    {
+      name: 'getPfLineOdCountListData',
+      method: 'POST',
+      path: '/api/net/index/pf/od/getPfLineOdCountListData',
+      mockPath: '/api/net/index/pf/od/getPfLineOdCountListData',
+      params: {
+        company: '',
+        lineID: '',
+        arrow: '',
+        pDate: ''
+      },
+      desc: '线路OD-线路OD矩形-列表'
     }
   ]
 }

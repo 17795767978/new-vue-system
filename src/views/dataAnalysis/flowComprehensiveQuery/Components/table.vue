@@ -37,11 +37,6 @@
         label="刷卡总量（人次）">
       </el-table-column>
       <el-table-column
-        prop="address"
-        align="center"
-        label="站名">
-      </el-table-column>
-      <el-table-column
         prop="pjyj"
         align="center"
         label="周转量（人次）">
@@ -111,7 +106,6 @@ export default {
       })
     },
     getRowData (row) {
-      console.log(row)
       this.$emit('getRow', row)
     }
   }

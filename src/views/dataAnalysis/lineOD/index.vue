@@ -1,20 +1,21 @@
 <template>
   <div>
     <Search
-      :isOrg='true'
-      :isLine="true"
+      :isOrgSec='true'
+      :isLineSec="true"
       :isBus="false"
-      :isDate="false"
       :isTime="false"
       :isTurn="true"
-      :isMonth="true"
+      :isMonth="false"
+      :isDataCurrent="true"
+      :isEmpty="true"
       :isDownload="true"
       :isWarntype="false"
       @configCheck="getSearch"
     />
     <div class="content-wrapper">
       <div class="table">
-        <Table />
+        <Table :selectData="selectData"/>
       </div>
     </div>
   </div>
@@ -34,6 +35,7 @@ export default {
   },
   methods: {
     getSearch (data) {
+      console.log(data)
       this.selectData = data
     }
   },

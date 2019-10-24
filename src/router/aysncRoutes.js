@@ -440,17 +440,17 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/chart-analysis/all']
         }
-      },
-      {
-        path: 'od-matrix',
-        component: _import_('dataAnalysis/ODMatrix/index'),
-        name: 'ODMatrix',
-        meta: {
-          title: 'OD矩阵',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
       }
+      // {
+      //   path: 'od-matrix',
+      //   component: _import_('dataAnalysis/ODMatrix/index'),
+      //   name: 'ODMatrix',
+      //   meta: {
+      //     title: 'OD矩阵',
+      //     icon: 'nocturne icon-dash',
+      //     roles: ['/chart-analysis/all']
+      //   }
+      // }
     ]
   },
   {
