@@ -2,13 +2,14 @@
   <div>
     <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">不良驾驶行为分析报警司机排行</h2>
     <el-table
+      ref="tableWrapper"
       :data="tableData"
       height="50vh"
       border
       style="width: 100%">
       <el-table-column
         align="center"
-        type="index"
+        prop="id"
         label="序号"
         width="80">
       </el-table-column>
@@ -82,7 +83,9 @@ export default {
   data () {
     return {
       tableData: [],
-      plain: true
+      plain: true,
+      tableLength: 0,
+      scrollHeight: 0
     }
   },
   computed: {
@@ -97,6 +100,34 @@ export default {
       endTime: defaultForm.dateArray[1],
       warnTypes: []
     })
+  },
+  mounted () {
+    this.$nextTick(() => {
+      let eleArr = this.$refs.tableWrapper.$el
+      let table = eleArr.getElementsByClassName('el-table__body-wrapper')[0]
+      let tableBody = eleArr.getElementsByClassName('el-table__body')[0]
+      let emptyBlock = eleArr.getElementsByClassName('el-table__empty-block')[0]
+      let vDom = document.createElement('div')
+      let vWrapper = document.createElement('div')
+      vDom.className = 'v-dom'
+      vWrapper.className = 'v-wrapper'
+      table.insertBefore(vDom, tableBody)
+      vDom.appendChild(vWrapper)
+      vWrapper.appendChild(tableBody)
+      tableBody.appendChild(emptyBlock)
+      console.log(vDom)
+      console.log(table)
+    })
+  },
+  activated () {
+    this.scrollHeight = 0
+    let eleArr = this.$refs.tableWrapper.$el
+    let vWrapper = eleArr.getElementsByClassName('v-wrapper')[0]
+    this.tableData = this.tableAllData.slice(0, 10)
+    console.log(vWrapper)
+    if (vWrapper) {
+      vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+    }
   },
   watch: {
     searchData: {
@@ -115,7 +146,38 @@ export default {
   methods: {
     _getTableData (params) {
       this.$api['tiredMonitoring.getBadDrivingDriverRanking'](params).then(res => {
-        this.tableData = res
+        this.tableAllData = res
+        this.tableAllData.forEach((item, index) => {
+          item.id = index + 1
+        })
+        this.tableData = this.tableAllData.slice(0, 10)
+        this.tableLength = this.tableAllData.length
+        this.bigTable()
+      })
+    },
+    bigTable () {
+      let eleArr = this.$refs.tableWrapper.$el
+      let vDom = eleArr.getElementsByClassName('v-dom')[0]
+      let vWrapper = vDom.getElementsByClassName('v-wrapper')[0]
+      vDom.style.height = 50 * this.tableLength + 'px'
+      let table = eleArr.getElementsByClassName('el-table__body-wrapper')[0]
+      table.scrollTop = 0
+      this.scrollHeight = 0
+      table.addEventListener('scroll', () => {
+        if (table.scrollTop < 50 * this.tableLength) {
+          this.scrollHeight = table.scrollTop
+        } else {
+          this.scrollHeight = 50 * this.tableLength
+        }
+        let domNum = this.scrollHeight / 50
+        vWrapper.style.transform = `translateY(${this.scrollHeight - 2}px)`
+        if (domNum === this.tableLength) {
+          domNum = Math.floor(domNum)
+          this.tableData = this.tableAllData.slice(domNum - 10, this.tableLength)
+        } else {
+          domNum = Math.floor(domNum)
+          this.tableData = this.tableAllData.slice(domNum, domNum + 10)
+        }
       })
     },
     getrowData (row) {

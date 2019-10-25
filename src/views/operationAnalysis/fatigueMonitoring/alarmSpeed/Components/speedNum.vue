@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading" >
-    <lineEcharts :id="id" v-test :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
   </div>
 </template>
 
@@ -67,10 +67,11 @@ export default {
           left: 'center'
         }
         this.lineData = [{
-          name: '客流人次',
+          name: '报警次数',
           type: 'bar',
           radius: ['100%', '60%'],
           data: res.datas[0],
+          barWidth: 30,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
             emphasis: {
@@ -79,7 +80,7 @@ export default {
 
             normal: {
               // 柱形图圆角，初始化效果
-              barBorderRadius: [0, 10, 10, 0],
+              barBorderRadius: [10, 10, 10, 10],
               label: {
                 show: true, // 是否展示
                 textStyle: {
@@ -87,14 +88,14 @@ export default {
                   fontSize: '12',
                   fontFamily: '微软雅黑'
                 }
-              },
-              color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 1, [{
-                offset: 0,
-                color: '#fdc14d'
-              }, {
-                offset: 1,
-                color: '#ed8237'
-              }])
+              }
+              // color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 1, [{
+              //   offset: 0,
+              //   color: '#fdc14d'
+              // }, {
+              //   offset: 1,
+              //   color: '#ed8237'
+              // }])
             }
           }
         }]
@@ -108,7 +109,7 @@ export default {
         this.maxNum = max(res.datas[0])
         this.dataLength = 2
         this.legend = {
-          data: ['客流人次'],
+          data: ['报警次数'],
           top: 10,
           right: 10,
           textStyle: {

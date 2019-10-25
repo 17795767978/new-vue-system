@@ -64,7 +64,7 @@ export default {
 
 <style lang="scss" scoped>
 .bt-wrapper {
-  width: 100vw;
+  width: calc(100% - 220px);
   height: 3vh;
   margin-top: 1vh;
 }

@@ -9,6 +9,7 @@
       :isTurn="false"
       :isDownload="false"
       :isDefault="true"
+      :isEmpty="true"
       :isWarntype="true"
       @configCheck="getSearch"
     />

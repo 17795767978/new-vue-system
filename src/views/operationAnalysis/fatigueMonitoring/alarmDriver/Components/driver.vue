@@ -120,7 +120,7 @@ export default {
           borderWidth: 1
         }
         this.lineData = [{
-          name: '日客流人次',
+          name: '报警次数',
           type: 'line',
           data: res.datas[0],
           smooth: true
@@ -128,7 +128,7 @@ export default {
         this.maxNum = max(res.datas[0])
         this.dataLength = 2
         this.legend = {
-          data: ['日客流人次'],
+          data: ['报警次数'],
           right: 10,
           top: 10,
           textStyle: {

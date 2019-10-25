@@ -9,11 +9,11 @@
     <div class="cul-wrapper">
       <div class="left">
         <p>周平均：{{weekPersoncount}}</p>
-        <p><span style="color: #0f0">增加</span>：{{reduce}}%</p>
+        <p><span style="color: #0f0">{{leftTitle}}</span>：{{reduce}}%</p>
       </div>
       <div class="right">
         <p>昨日累计：{{beforePersoncount}}</p>
-        <p><span style="color: #f00">减小</span>：{{increase}}%</p>
+        <p><span style="color: #f00">{{rightTitle}}</span>：{{increase}}%</p>
       </div>
     </div>
   </div>
@@ -35,7 +35,9 @@ export default {
       weekPersoncount: '',
       timeWeek: null,
       increase: '',
-      reduce: ''
+      reduce: '',
+      leftTitle: '增加',
+      rightTitle: '增加'
     }
   },
   created () {
@@ -77,6 +79,11 @@ export default {
             this.increase = '---'
           } else {
             this.increase = ((this.totalPassenger - this.beforePersoncount) / this.totalPassenger * 100).toFixed(2)
+            if (this.increase > 0) {
+              this.leftTitle = '增加'
+            } else {
+              this.leftTitle = '减小'
+            }
           }
         } else {
           this.beforePersoncount = '--'
@@ -95,6 +102,11 @@ export default {
             this.reduce = '---'
           } else {
             this.reduce = ((this.weekPersoncount - this.totalPassenger) / this.totalPassenger * 100).toFixed(2)
+            if (this.increase > 0) {
+              this.leftTitle = '增加'
+            } else {
+              this.leftTitle = '减小'
+            }
           }
         } else {
           this.weekPersoncount = '--'

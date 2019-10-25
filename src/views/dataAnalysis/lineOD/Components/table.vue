@@ -6,12 +6,12 @@
       height="36vh"
       border
       style="width: 100%">
-      <!-- <el-table-column
-        type="index"
+      <el-table-column
+        prop="id"
         label="序号"
         align="center"
         width="80">
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column
         prop="company"
         label="分公司"
@@ -117,36 +117,46 @@ export default {
       }
     }
   },
+  activated () {
+    this.scrollHeight = 0
+    let eleArr = this.$refs.tableWrapper.$el
+    let vWrapper = eleArr.getElementsByClassName('v-wrapper')[0]
+    vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+    this.tableData = this.tableAllData.slice(0, 10)
+  },
   methods: {
     _getPfLineOdCountListData (params) {
       this.$api['lineNet.getPfLineOdCountListData'](params).then(res => {
-        console.log(res)
         this.tableAllData = res
+        this.tableAllData.forEach((item, index) => {
+          item.id = index + 1
+        })
         this.tableData = this.tableAllData.slice(0, 10)
         this.tableLength = this.tableAllData.length
-        let eleArr = this.$refs.tableWrapper.$el
-        let vDom = eleArr.getElementsByClassName('v-dom')[0]
-        let vWrapper = vDom.getElementsByClassName('v-wrapper')[0]
-        vDom.style.height = 50 * this.tableLength + 'px'
-        let table = eleArr.getElementsByClassName('el-table__body-wrapper')[0]
-        table.scrollTop = 0
-        this.scrollHeight = 0
-        table.addEventListener('scroll', () => {
-          if (table.scrollTop < 50 * this.tableLength) {
-            this.scrollHeight = table.scrollTop
-          } else {
-            this.scrollHeight = 50 * this.tableLength
-          }
-          console.log(this.scrollHeight)
-          let domNum = Math.ceil(this.scrollHeight / 50)
-          console.log(domNum)
-          vWrapper.style.transform = `translateY(${this.scrollHeight - 2}px)`
-          if (domNum + 30 >= this.tableLength) {
-            this.tableData = this.tableAllData.slice(domNum - 10, this.tableLength)
-          } else {
-            this.tableData = this.tableAllData.slice(domNum, domNum + 10)
-          }
-        })
+        this.bigTable()
+      })
+    },
+    bigTable () {
+      let eleArr = this.$refs.tableWrapper.$el
+      let vDom = eleArr.getElementsByClassName('v-dom')[0]
+      let vWrapper = vDom.getElementsByClassName('v-wrapper')[0]
+      vDom.style.height = 50 * this.tableLength + 'px'
+      let table = eleArr.getElementsByClassName('el-table__body-wrapper')[0]
+      table.scrollTop = 0
+      this.scrollHeight = 0
+      table.addEventListener('scroll', () => {
+        if (table.scrollTop < 50 * this.tableLength) {
+          this.scrollHeight = table.scrollTop
+        } else {
+          this.scrollHeight = 50 * this.tableLength
+        }
+        let domNum = Math.ceil(this.scrollHeight / 50)
+        vWrapper.style.transform = `translateY(${this.scrollHeight - 2}px)`
+        if (domNum + 30 >= this.tableLength) {
+          this.tableData = this.tableAllData.slice(domNum - 10, this.tableLength)
+        } else {
+          this.tableData = this.tableAllData.slice(domNum, domNum + 10)
+        }
       })
     },
     detailByProd (data) {

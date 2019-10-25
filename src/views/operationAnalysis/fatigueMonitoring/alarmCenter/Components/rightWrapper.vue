@@ -114,6 +114,12 @@
         </el-table-column>
         <el-table-column
           align="center"
+          prop="speed"
+          label="报警速度"
+          >
+        </el-table-column>
+        <el-table-column
+          align="center"
           prop="warnTime"
           label="报警时间"
           :formatter="formatterTime"
@@ -428,6 +434,7 @@ export default {
             '设备编号': item.devCode,
             '报警级别(级)': item.warnLevel,
             '报警类型': item.warnTypeName,
+            '报警速度': item.speed,
             '报警时间': item.warnTime
           }
         })

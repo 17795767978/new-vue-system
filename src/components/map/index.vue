@@ -161,7 +161,7 @@ import iconCarGreen from '../../assets/images/bus-green.png'
 import videoWrapper from './video'
 import moment from 'moment'
 const TIME = 3 * 60 * 1000
-const URL = 'http://192.168.0.55:12056/api/v1/basic/'
+const URL = 'http://61.157.184.120:12056/api/v1/basic/'
 // const URL = 'http://192.168.10.40:12056/api/v1/basic/'
 export default {
   props: {
@@ -382,11 +382,12 @@ export default {
       })
     },
     _getKey () {
-      this.$jsonp(`${URL}key?username=admin&password=admin`).then(json => {
+      this.$jsonp(`${URL}key?username=admin&password=1985916`).then(json => {
         this.key = json.data.key
       })
     },
     _getVideoList (terid) {
+      console.log(terid)
       this.urlList = []
       return new Promise((resolve, reject) => {
         this.$jsonp(`${URL}live/port?key=${this.key}`).then(res => {
@@ -458,6 +459,7 @@ export default {
         this.carDetailData.tripPercent = Number(this.carDetailData.tripPercent)
         if (this.isFlv) {
           this._getKey()
+          console.log(this.carDetailData)
           this._getVideoList(this.carDetailData.devRefId).then(res => {
             console.log(res)
           })
