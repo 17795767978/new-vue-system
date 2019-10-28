@@ -75,7 +75,6 @@ const globel = {
       })
     },
     getLineSecList ({ commit }, id) {
-      console.log('1231312313123123123', id)
       return new Promise((resolve, reject) => {
         api['wholeInformation.getLineSec']({
           lineID: '',

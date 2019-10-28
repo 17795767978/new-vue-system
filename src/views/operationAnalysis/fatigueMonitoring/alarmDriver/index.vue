@@ -3,18 +3,13 @@
     <Search
       :isOrg='true'
       :isLine="true"
-      :isBus="false"
-      :isDate="false"
       :isDateTo="true"
-      :isTime="false"
-      :isTurn="false"
-      :isDownload="false"
       :isEmpty="true"
       :isWarntype="true"
       @configCheck="getSearch"
     />
     <div class="table">
-      <Table :searchData="searchData" @driverChanged="driverChanged" v-change/>
+      <Table :searchData="searchData" @driverChanged="driverChanged"/>
     </div>
     <div class="driver">
       <Driver :searchData="searchData" :driverData="driverData"/>
@@ -37,13 +32,6 @@ export default {
     Search,
     Table,
     Driver
-  },
-  directives: {
-    change: {
-      componentUpdated (el) {
-        console.log(el)
-      }
-    }
   },
   methods: {
     getSearch (item) {

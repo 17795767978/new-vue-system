@@ -1,24 +1,20 @@
 <template>
   <div>
     <Search
-      :isOrg='true'
-      :isLine="true"
-      :isBus="false"
-      :isDate="false"
-      :isTime="false"
-      :isTurn="false"
-      :isDownload="false"
-      :isWarntype="false"
+      :isOrgSec='true'
+      :isLineSec="true"
+      :isDefault="true"
+      :isEmpty="true"
+      :queryData="queryData"
       @configCheck="getSearch"
     />
     <div class="content-wrapper">
       <div class="title">线网评分详情</div>
       <div class="content">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="站点建设合理性" name="first">站点建设合理性</el-tab-pane>
-        <el-tab-pane label="舒适性" name="second">舒适性</el-tab-pane>
-        <el-tab-pane label="便捷性" name="third">便捷性</el-tab-pane>
-        <el-tab-pane label="快捷性" name="fourth">快捷性</el-tab-pane>
+        <el-tab-pane v-for="(item, index) in tabArr" :key="item" :label="item" :name="item">
+          <TabTable :tableData="tabDataArr[index]"/>
+        </el-tab-pane>
       </el-tabs>
       </div>
     </div>
@@ -27,16 +23,73 @@
 
 <script>
 import Search from '@/components/searchAlarm'
+import TabTable from './Components/tabTable'
+import { mapGetters } from 'vuex'
 export default {
   name: 'lineNetWorkDetail',
   data () {
     return {
       selectData: {},
       echartsData: {},
-      activeName: 'first'
+      activeName: '',
+      tableArrData: [],
+      apiCond: {},
+      tabArr: [], // 多少分类
+      tabDataArr: [], // 分类下的list组
+      queryData: {}
+    }
+  },
+  computed: {
+    ...mapGetters(['formData'])
+  },
+  created () {
+  },
+  mounted () {
+    // this.apiCond = {}
+    if (Object.keys(this.$route.params).length > 0) {
+      this.queryData = this.$route.params.data
+      this.apiCond.lineOrgId = this.$route.params.data.company
+      this.apiCond.lineLineId = this.$route.params.data.lineUuid
+    } else {
+      let lineArr = this.formData.lineLineId.split('+')
+      this.apiCond = this.formData
+      this.apiCond.lineLineId = lineArr[0]
+    }
+    this._getNetIndexDeaData({
+      company: this.apiCond.lineOrgId,
+      lineID: this.apiCond.lineLineId
+    })
+  },
+  activated () {
+    this.queryData = this.$route.params.data
+    this.apiCond = this.$route.params.data
+    this._getNetIndexDeaData({
+      company: this.apiCond.company,
+      lineID: this.apiCond.lineUuid
+    })
+  },
+  watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        let lineArr = newV.lineLineId.split('+')
+        this.apiCond = newV
+        this.apiCond.lineLineId = lineArr[0]
+        this._getNetIndexDeaData({
+          company: this.apiCond.lineOrgId,
+          lineID: this.apiCond.lineLineId
+        })
+      }
     }
   },
   methods: {
+    _getNetIndexDeaData (params) {
+      this.$api['lineNet.getNetIndexDeaData'](params).then(res => {
+        this.tabArr = res.typeNameList
+        this.activeName = this.tabArr[0]
+        this.tabDataArr = res.valueList
+      })
+    },
     getSearch (data) {
       this.selectData = data
     },
@@ -45,10 +98,9 @@ export default {
       console.log(event)
     }
   },
-  mounted () {
-  },
   components: {
-    Search
+    Search,
+    TabTable
   }
 }
 </script>

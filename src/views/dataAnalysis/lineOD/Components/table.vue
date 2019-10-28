@@ -3,7 +3,7 @@
     <el-table
       ref="tableWrapper"
       :data="tableData"
-      height="36vh"
+      height="70vh"
       border
       style="width: 100%">
       <el-table-column
@@ -122,7 +122,7 @@ export default {
     let eleArr = this.$refs.tableWrapper.$el
     let vWrapper = eleArr.getElementsByClassName('v-wrapper')[0]
     vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
-    this.tableData = this.tableAllData.slice(0, 10)
+    this.tableData = this.tableAllData.slice(0, 20)
   },
   methods: {
     _getPfLineOdCountListData (params) {
@@ -131,7 +131,7 @@ export default {
         this.tableAllData.forEach((item, index) => {
           item.id = index + 1
         })
-        this.tableData = this.tableAllData.slice(0, 10)
+        this.tableData = this.tableAllData.slice(0, 20)
         this.tableLength = this.tableAllData.length
         this.bigTable()
       })
@@ -153,9 +153,9 @@ export default {
         let domNum = Math.ceil(this.scrollHeight / 50)
         vWrapper.style.transform = `translateY(${this.scrollHeight - 2}px)`
         if (domNum + 30 >= this.tableLength) {
-          this.tableData = this.tableAllData.slice(domNum - 10, this.tableLength)
+          this.tableData = this.tableAllData.slice(domNum - 20, this.tableLength)
         } else {
-          this.tableData = this.tableAllData.slice(domNum, domNum + 10)
+          this.tableData = this.tableAllData.slice(domNum, domNum + 20)
         }
       })
     },

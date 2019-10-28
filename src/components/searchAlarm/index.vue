@@ -360,7 +360,8 @@ export default {
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
     this.formInline.dateArray = defaultForm.dateArray
-    if (this.queryData !== undefined && Object.keys(this.queryData).length > 0) {
+    if (this.queryData && Object.keys(this.queryData).length > 0) {
+      console.log(this.queryData)
       this.formInline.lineOrgId = this.queryData.company
       this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
       this.formInline.lineType = this.queryData.arrow
@@ -368,12 +369,13 @@ export default {
   },
   activated () {
     setTimeout(() => {
-      if (this.queryData !== undefined && Object.keys(this.queryData).length > 0) {
+      console.log(this.queryData)
+      if (this.queryData && Object.keys(this.queryData).length > 0) {
         this.formInline.lineOrgId = this.queryData.company
         this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
         this.formInline.lineType = this.queryData.arrow
       }
-    }, 1000)
+    }, 500)
   },
   watch: {
     'formInline.orgId': {

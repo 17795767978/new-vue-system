@@ -24,6 +24,7 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
+import Immutable from 'immutable'
 export default {
   name: 'lineOD',
   data () {
@@ -40,6 +41,17 @@ export default {
     }
   },
   mounted () {
+    let map1 = {
+      a: {
+        c: 2
+      },
+      b: 2
+    }
+    let map2 = Immutable.Map(map1)
+    let map3 = Immutable.Map(map1)
+    Immutable.fromJS(map2)
+    map2 = map2.toJS()
+    console.log(Immutable.is(map3, map2))
   },
   components: {
     Search,

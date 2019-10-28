@@ -3,13 +3,7 @@
     <Search
       :isOrgSec='true'
       :isLineSec="true"
-      :isBus="false"
-      :isDate="false"
-      :isTime="false"
-      :isTurn="false"
-      :isDownload="false"
       :isEmpty="true"
-      :isWarntype="false"
       @configCheck="getSearch"
     />
     <div class="content">

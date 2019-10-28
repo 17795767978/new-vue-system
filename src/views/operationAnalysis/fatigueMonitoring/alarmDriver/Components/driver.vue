@@ -38,8 +38,8 @@ export default {
       grid: {},
       loading: true,
       drivers: {
-        driverName: '',
-        driverNum: ''
+        drivername: '',
+        drivernum: ''
       },
       currentData: {}
     }
@@ -68,8 +68,8 @@ export default {
       handler (newV) {
         this.currentData = newV
         this.drivers = {
-          driverName: '',
-          driverNum: ''
+          drivername: '',
+          drivernum: ''
         }
         this._getDriverWarnTimeTrend({
           orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
@@ -85,6 +85,7 @@ export default {
     driverData: {
       deep: true,
       handler (newV) {
+        console.log(newV)
         this.drivers = newV
         this._getDriverWarnTimeTrend({
           orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
@@ -92,8 +93,8 @@ export default {
           startTime: this.currentData.dateArray[0] === undefined ? '' : this.currentData.dateArray[0],
           endTime: this.currentData.dateArray[1] === undefined ? '' : this.currentData.dateArray[1],
           warnTypes: this.currentData.warnTypeId,
-          driverName: this.drivers.driverName,
-          driverNum: this.drivers.driverNum
+          driverName: this.drivers.drivername,
+          driverNum: this.drivers.drivernum
         })
       }
     }
@@ -105,7 +106,7 @@ export default {
         console.log(res)
         this.loading = false
         this.title = {
-          text: `${this.drivers.driverName}司机报警时间趋势图`,
+          text: `${this.drivers.drivername}司机报警时间趋势图`,
           left: 'center',
           top: 10,
           textStyle: {

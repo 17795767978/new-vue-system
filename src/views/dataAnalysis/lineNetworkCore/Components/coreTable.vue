@@ -119,21 +119,10 @@ export default {
         this.tableData = res
       })
     },
-    // detailByProd (data) {
-    //   console.log(data)
-    // },
-    // detailByRela (data) {
-    //   console.log(data)
-    // },
-    // detailByCond (data) {
-    //   console.log(data)
-    // },
-    // detailByFast (data) {
-    //   console.log(data)
-    // },
     goToDetail (row) {
+      console.log(row)
       this.$router.push({
-        path: '/data-analysis/line-netWork-core-Detail',
+        name: 'lineNetWorkDetail',
         params: {
           data: row
         }
@@ -141,7 +130,6 @@ export default {
     },
     getEcharts (data) {
       this.$emit('changeEcharts', data)
-      console.log(data)
     }
   }
 }
