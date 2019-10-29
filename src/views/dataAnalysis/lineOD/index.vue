@@ -14,9 +14,16 @@
       @configCheck="getSearch"
     />
     <div class="content-wrapper">
-      <div class="table">
-        <Table :selectData="selectData"/>
-      </div>
+      <el-tabs style="width: 100%;" v-model="activeName">
+        <el-tab-pane label="OD图" name="first">
+          <div class="table">
+            <Echarts :selectData="selectData"/>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="OD表格" name="second">
+          <Table :selectData="selectData"/>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -24,6 +31,7 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
+import Echarts from './Components/echarts'
 import Immutable from 'immutable'
 export default {
   name: 'lineOD',
@@ -37,6 +45,7 @@ export default {
   methods: {
     getSearch (data) {
       console.log(data)
+      this.activeName = 'first'
       this.selectData = data
     }
   },
@@ -55,7 +64,8 @@ export default {
   },
   components: {
     Search,
-    Table
+    Table,
+    Echarts
   }
 }
 </script>

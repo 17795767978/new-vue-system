@@ -283,6 +283,19 @@ export const lineNetApi = {
         pDate: ''
       },
       desc: '线路OD-线路OD矩形-列表'
+    },
+    {
+      name: 'getPfODYCountListData',
+      method: 'POST',
+      path: '/api/net/index/pf/od/getPfODYCountListData',
+      mockPath: '/api/net/index/pf/od/getPfODYCountListData',
+      params: {
+        company: '',
+        lineID: '',
+        arrow: '',
+        pDate: ''
+      },
+      desc: '线路OD-线路OD图'
     }
   ]
 }

@@ -24,55 +24,6 @@
           <span v-else>{{scope.row[item.plvalue]}}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column
-        align="center"
-        prop="lineName"
-        label="线路"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="driverNum"
-        label="工号">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="driverName"
-        label="司机">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="getrowData(scope.row)">{{scope.row.driverName}}</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="warnFatigue"
-        label="疲劳">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="warnSmoking"
-        label="抽烟">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="warnPhone"
-        label="打电话">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="warnDistraction"
-        label="分神">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="warnAbnormal"
-        label="驾驶员异常">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="warnTotalNum"
-        label="报警总数">
-      </el-table-column> -->
     </el-table>
   </div>
 </template>
@@ -163,7 +114,9 @@ export default {
           this.tableLength = this.tableAllData.length
           this.bigTable()
         } else {
+          this.tableLength = 0
           this.tableData = this.tableAllData
+          this.bigTable()
         }
       })
     },
@@ -171,31 +124,44 @@ export default {
       let eleArr = this.$refs.tableWrapper.$el
       let vDom = eleArr.getElementsByClassName('v-dom')[0]
       let vWrapper = vDom.getElementsByClassName('v-wrapper')[0]
-      vDom.style.height = 53 * this.tableLength + 'px'
       let table = eleArr.getElementsByClassName('el-table__body-wrapper')[0]
-      let tableHeight = table.clientHeight
       table.scrollTop = 0
       this.scrollHeight = 0
-      table.addEventListener('scroll', () => {
-        console.log(table.scrollHeight)
-        console.log(table.scrollTop)
-        console.log(table.clientHeight)
-        if (table.scrollTop < 53 * this.tableLength) {
-          this.scrollHeight = table.scrollTop
+      let tableHeight = table.clientHeight
+      if (this.tableLength >= 20) {
+        vDom.style.height = 53 * this.tableLength + 'px'
+        table.addEventListener('scroll', this.getScroll(table, vDom, vWrapper, tableHeight), true)
+      } else {
+        table.removeEventListener('scroll', this.getScroll(table, vDom, vWrapper, tableHeight), true)
+      }
+    },
+    getScroll (table, vDom, vWrapper, tableHeight) {
+      return () => {
+        if (this.tableLength >= 20) {
+          console.log(table.scrollHeight)
+          console.log(table.scrollTop)
+          console.log(table.clientHeight)
+          if (table.scrollTop < 53 * this.tableLength) {
+            this.scrollHeight = table.scrollTop
+          } else {
+            this.scrollHeight = 53 * this.tableLength
+          }
+          let domNum = Math.floor(this.scrollHeight / 53)
+          if (this.scrollHeight >= 53 * this.tableLength - tableHeight) {
+            vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+            domNum = Math.floor(domNum)
+            this.tableData = this.tableAllData.slice(this.tableLength - 10, this.tableLength + 1)
+          } else {
+            vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+            domNum = Math.floor(domNum)
+            this.tableData = this.tableAllData.slice(domNum, domNum + 10)
+          }
         } else {
-          this.scrollHeight = 53 * this.tableLength
+          console.log('关闭滚动监听事件')
+          vDom.style.height = 0
+          vWrapper.style.transform = `translateY(0px)`
         }
-        let domNum = Math.floor(this.scrollHeight / 53)
-        if (this.scrollHeight >= 53 * this.tableLength - tableHeight) {
-          vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
-          domNum = Math.floor(domNum)
-          this.tableData = this.tableAllData.slice(this.tableLength - 10, this.tableLength + 1)
-        } else {
-          vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
-          domNum = Math.floor(domNum)
-          this.tableData = this.tableAllData.slice(domNum, domNum + 10)
-        }
-      })
+      }
     },
     getrowData (row) {
       this.$emit('driverChanged', row)

@@ -37,6 +37,7 @@
       <el-table-column
         prop="sStationIndex"
         align="center"
+        width="100"
         label="上车站序名">
       </el-table-column>
       <el-table-column
@@ -47,11 +48,13 @@
       <el-table-column
         prop="eStationIndex"
         align="center"
+        width="100"
         label="下车站序名">
       </el-table-column>
       <el-table-column
         prop="brushCount"
         align="center"
+        width="100"
         label="刷卡量（人次）">
       </el-table-column>
       <el-table-column
