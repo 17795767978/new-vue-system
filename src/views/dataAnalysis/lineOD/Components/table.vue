@@ -79,7 +79,8 @@ export default {
     return {
       tableData: [],
       tableLength: 0,
-      scrollHeight: 0
+      scrollHeight: 0,
+      tableAllData: []
     }
   },
   computed: {
@@ -131,36 +132,85 @@ export default {
     _getPfLineOdCountListData (params) {
       this.$api['lineNet.getPfLineOdCountListData'](params).then(res => {
         this.tableAllData = res
+        console.log(res)
         this.tableAllData.forEach((item, index) => {
           item.id = index + 1
         })
-        this.tableData = this.tableAllData.slice(0, 20)
-        this.tableLength = this.tableAllData.length
-        this.bigTable()
+        if (this.tableAllData.length >= 40) {
+          this.tableData = this.tableAllData.slice(0, 20)
+          this.tableLength = this.tableAllData.length
+          this.bigTable()
+        } else {
+          this.tableLength = 0
+          this.tableData = this.tableAllData
+          this.bigTable()
+        }
       })
     },
+    // bigTable () {
+    //   let eleArr = this.$refs.tableWrapper.$el
+    //   let vDom = eleArr.getElementsByClassName('v-dom')[0]
+    //   let vWrapper = vDom.getElementsByClassName('v-wrapper')[0]
+    //   vDom.style.height = 50 * this.tableLength + 'px'
+    //   let table = eleArr.getElementsByClassName('el-table__body-wrapper')[0]
+    //   table.scrollTop = 0
+    //   this.scrollHeight = 0
+    //   table.addEventListener('scroll', () => {
+    //     if (table.scrollTop < 50 * this.tableLength) {
+    //       this.scrollHeight = table.scrollTop
+    //     } else {
+    //       this.scrollHeight = 50 * this.tableLength
+    //     }
+    //     let domNum = Math.ceil(this.scrollHeight / 50)
+    //     vWrapper.style.transform = `translateY(${this.scrollHeight - 2}px)`
+    //     if (domNum + 30 >= this.tableLength) {
+    //       this.tableData = this.tableAllData.slice(domNum - 20, this.tableLength)
+    //     } else {
+    //       this.tableData = this.tableAllData.slice(domNum, domNum + 20)
+    //     }
+    //   })
+    // },
     bigTable () {
       let eleArr = this.$refs.tableWrapper.$el
       let vDom = eleArr.getElementsByClassName('v-dom')[0]
       let vWrapper = vDom.getElementsByClassName('v-wrapper')[0]
-      vDom.style.height = 50 * this.tableLength + 'px'
       let table = eleArr.getElementsByClassName('el-table__body-wrapper')[0]
       table.scrollTop = 0
       this.scrollHeight = 0
-      table.addEventListener('scroll', () => {
-        if (table.scrollTop < 50 * this.tableLength) {
-          this.scrollHeight = table.scrollTop
+      if (this.tableLength >= 40) {
+        vDom.style.height = 50 * this.tableLength + 'px'
+        table.addEventListener('scroll', this.getScroll(table, vDom, vWrapper), true)
+      } else {
+        table.removeEventListener('scroll', this.getScroll(table, vDom, vWrapper), true)
+      }
+    },
+    getScroll (table, vDom, vWrapper) {
+      return () => {
+        if (this.tableLength >= 40) {
+          console.log(table.scrollHeight)
+          console.log(table.scrollTop)
+          console.log(table.clientHeight)
+          if (table.scrollTop < 50 * this.tableLength) {
+            this.scrollHeight = table.scrollTop
+          } else {
+            this.scrollHeight = 50 * this.tableLength
+          }
+          let domNum = Math.floor(this.scrollHeight / 50)
+          if (this.scrollHeight >= 50 * this.tableLength - 12 * 50) {
+            vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+            domNum = Math.floor(domNum)
+            this.tableData = this.tableAllData.slice(this.tableLength - 20, this.tableLength + 1)
+          } else {
+            vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+            domNum = Math.floor(domNum)
+            this.tableData = this.tableAllData.slice(domNum, domNum + 20)
+          }
         } else {
-          this.scrollHeight = 50 * this.tableLength
+          console.log('关闭滚动监听事件')
+          vDom.style.height = 0
+          vWrapper.style.transform = `translateY(0px)`
         }
-        let domNum = Math.ceil(this.scrollHeight / 50)
-        vWrapper.style.transform = `translateY(${this.scrollHeight - 2}px)`
-        if (domNum + 30 >= this.tableLength) {
-          this.tableData = this.tableAllData.slice(domNum - 20, this.tableLength)
-        } else {
-          this.tableData = this.tableAllData.slice(domNum, domNum + 20)
-        }
-      })
+      }
     },
     detailByProd (data) {
       console.log(data)

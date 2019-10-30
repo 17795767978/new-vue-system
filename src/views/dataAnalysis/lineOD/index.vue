@@ -11,6 +11,7 @@
       :isEmpty="true"
       :isDownload="true"
       :isWarntype="false"
+      :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
     <div class="content-wrapper">
@@ -39,14 +40,18 @@ export default {
     return {
       selectData: {},
       echartsData: {},
-      activeName: 'first'
+      activeName: 'first',
+      downLoadName: 'downLoad.ODExport'
     }
   },
   methods: {
     getSearch (data) {
-      console.log(data)
-      this.activeName = 'first'
-      this.selectData = data
+      if (data.lineLineId === '' || data.lineOrgId === '' || data.lineType === '') {
+        this.$message.warning('请选择完整的查询条件')
+      } else {
+        this.activeName = 'first'
+        this.selectData = data
+      }
     }
   },
   mounted () {

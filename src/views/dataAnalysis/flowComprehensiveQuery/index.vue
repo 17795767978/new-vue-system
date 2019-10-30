@@ -11,6 +11,7 @@
       :isDownload="true"
       :isEmpty="true"
       :isWarntype="false"
+      :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
     <div class="content">
@@ -41,6 +42,7 @@ export default {
       selectData: {},
       echartsData: {},
       rowData: {},
+      downLoadName: 'downLoad.lineTotalExport',
       isDefault: false
     }
   },

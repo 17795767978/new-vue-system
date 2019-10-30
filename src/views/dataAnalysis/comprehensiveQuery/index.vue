@@ -15,6 +15,7 @@
       :isEmpty="false"
       :isDownload="true"
       :isWarntype="false"
+      :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
     <div class="content">
@@ -42,7 +43,8 @@ export default {
   name: 'comprehensiveQuery',
   data () {
     return {
-      selectData: {}
+      selectData: {},
+      downLoadName: 'downLoad.totalDataExport'
     }
   },
   methods: {

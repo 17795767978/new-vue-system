@@ -61,18 +61,19 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-       <p style="font-weight: bold">1.如果数据量过大加载时间可能过长，请耐心等待，默认下载前10000条信息</p>
-       <p style="color: #f00; font-weight: bold">2.如果没有数据，请点击取消按钮</p>
+       <p style="font-weight: bold">导出只支持最大下载量为65535条，如果超过65535条默认下载前65535条</p>
+       <!-- <p style="color: #f00; font-weight: bold">2.如果没有数据，请点击取消按钮</p> -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <downloadExcel
+        <el-button type="primary" @click="getExcel">确认</el-button>
+        <!-- <downloadExcel
           :data= "excelData"
           type="xls"
           style="display: inline-block; margin-left: 10px;"
           name= "客流查询报表.xls"
         >
         <el-button type="primary" @click="getExcel" :loading="laoding">{{code}}</el-button>
-        </downloadExcel>
+        </downloadExcel> -->
       </span>
     </el-dialog>
   </div>
@@ -81,7 +82,7 @@
 <script type="text/ecmascript-6">
 // import moment from 'moment';
 // import { lineList, comList } from 'server/interface';
-import downloadExcel from 'vue-json-excel'
+// import downloadExcel from 'vue-json-excel'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 
@@ -214,16 +215,16 @@ export default {
     }
   },
   updated () {
-    if (this.totle <= 10000 && this.totle > 0 && this.excelData.length === this.totle && !this.isClose) {
-      this.laoding = false
-      this.code = '下载'
-    } else if (this.totle > 10000 && this.excelData.length === 10000 && !this.isClose) {
-      this.laoding = false
-      this.code = '下载'
-    } else {
-      this.laoding = true
-      this.code = '加载中'
-    }
+    // if (this.totle <= 10000 && this.totle > 0 && this.excelData.length === this.totle && !this.isClose) {
+    //   this.laoding = false
+    //   this.code = '下载'
+    // } else if (this.totle > 10000 && this.excelData.length === 10000 && !this.isClose) {
+    //   this.laoding = false
+    //   this.code = '下载'
+    // } else {
+    //   this.laoding = true
+    //   this.code = '加载中'
+    // }
   },
   methods: {
     onSubmit () {
@@ -271,21 +272,32 @@ export default {
       }, 20)
     },
     onSave () {
-      this.$emit('isDownload')
+      // this.$emit('isDownload')
       this.centerDialogVisible = true
     },
     getExcel () {
-      this.centerDialogVisible = false
-      if (this.excelData.length > 0) {
-        console.log(this.excelData)
+      this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+      this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+      this.$api['downLoad.export']({
+        orgId: this.formInline.orgId,
+        lineId: this.formInline.lineId,
+        lineType: this.formInline.lineType,
+        busNumber: this.formInline.busNumber,
+        startTime: this.formInline.startTime,
+        endTime: this.formInline.endTime
+      }).then(res => {
+        // console.log(res)
+        window.open(res.url)
+        // window.location.href = res.url
+        this.centerDialogVisible = false
         this.$message.success('正在下载中。。。')
-      } else {
-        this.$message.warning('暂无数据')
-      }
+      }).catch((err) => {
+        this.$message.error(err.message)
+      })
     }
   },
   components: {
-    downloadExcel
+    // downloadExcel
   }
 }
 </script>

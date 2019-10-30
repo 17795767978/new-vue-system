@@ -82,7 +82,6 @@ export default {
     if (this.tableAllData.length > 0) {
       this.tableData = this.tableAllData.slice(0, 10)
     }
-    console.log(this.tableAllData)
     if (vWrapper) {
       vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
     }

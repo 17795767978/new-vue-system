@@ -15,6 +15,7 @@
       :isDefault="true"
       :isEmpty="true"
       :queryData="queryData"
+      :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
     <div class="content">
@@ -32,7 +33,8 @@ export default {
   data () {
     return {
       selectData: {},
-      queryData: {}
+      queryData: {},
+      downLoadName: 'downLoad.repeatExport'
     }
   },
   computed: {

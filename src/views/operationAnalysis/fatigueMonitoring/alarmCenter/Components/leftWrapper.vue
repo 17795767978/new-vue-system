@@ -56,7 +56,15 @@ export default {
     },
     isClear () {
       if (this.isClear) {
-        this._lineTree()
+        if (this.userId === '1') {
+          this._lineTree({
+            orgId: ''
+          })
+        } else {
+          this._lineTree({
+            orgId: this.userId
+          })
+        }
       }
       this.$emit('isClearTo')
     }
@@ -110,7 +118,6 @@ export default {
     },
     handleNodeClick (data) {
       this.$emit('selectCar', data)
-      console.log(data)
     }
   }
 }
