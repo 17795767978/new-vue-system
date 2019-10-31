@@ -37,7 +37,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.tableData)
     if (Object.keys(this.tableData).length > 0) {
       this.tableLabelList = this.tableData.columnNameList
       this.tablePropList = this.tableData.columnList

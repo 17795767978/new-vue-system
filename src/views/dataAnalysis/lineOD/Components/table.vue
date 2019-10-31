@@ -125,14 +125,15 @@ export default {
     this.scrollHeight = 0
     let eleArr = this.$refs.tableWrapper.$el
     let vWrapper = eleArr.getElementsByClassName('v-wrapper')[0]
-    vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+    if (vWrapper) {
+      vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+    }
     this.tableData = this.tableAllData.slice(0, 20)
   },
   methods: {
     _getPfLineOdCountListData (params) {
       this.$api['lineNet.getPfLineOdCountListData'](params).then(res => {
         this.tableAllData = res
-        console.log(res)
         this.tableAllData.forEach((item, index) => {
           item.id = index + 1
         })

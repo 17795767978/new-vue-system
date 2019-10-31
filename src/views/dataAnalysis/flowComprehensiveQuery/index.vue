@@ -12,6 +12,7 @@
       :isEmpty="true"
       :isWarntype="false"
       :downLoadName="downLoadName"
+      :isDefault="true"
       @configCheck="getSearch"
     />
     <div class="content">

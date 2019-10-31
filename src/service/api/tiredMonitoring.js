@@ -342,7 +342,9 @@ export const tiredMonitoringApi = {
         orgId: '',
         lineId: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        pageNumber: '',
+        pageSize: ''
       },
       desc: '更新疲劳处理状态'
     }

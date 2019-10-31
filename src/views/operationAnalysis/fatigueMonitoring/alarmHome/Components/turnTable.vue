@@ -4,7 +4,7 @@
       :data="tableData"
       border
       size="mini"
-      height="300"
+      height="270"
       stripe
       style="width: 100%">
       <el-table-column

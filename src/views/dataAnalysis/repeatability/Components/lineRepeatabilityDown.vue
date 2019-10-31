@@ -82,7 +82,7 @@ export default {
           }
         }
         this.polar = {
-          radius: '130'
+          radius: '120'
         }
         this.lineData = [
           {

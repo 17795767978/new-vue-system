@@ -10,6 +10,7 @@
       :isDataCurrent="true"
       :isEmpty="true"
       :isDownload="true"
+      :isDefault="true"
       :isWarntype="false"
       :downLoadName="downLoadName"
       @configCheck="getSearch"
@@ -85,8 +86,7 @@ export default {
   flex-wrap: wrap;
   .table {
     width: 100%;
-    height: 50%;
-    border-bottom: 1px solid #EBEEF5;
+    height: 100%;
     box-sizing: border-box;
   }
 }

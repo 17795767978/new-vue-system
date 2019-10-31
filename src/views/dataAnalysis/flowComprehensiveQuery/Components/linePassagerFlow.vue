@@ -39,7 +39,7 @@ export default {
       grid: {},
       loading: true,
       currentSelect: {},
-      lineNum: '',
+      lineNum: '总',
       arrow: ''
     }
   },
@@ -49,6 +49,7 @@ export default {
   created () {
     // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     let lineArr = this.formData.lineLineId.split('+')
+    console.log(this.formData.lineLineId)
     this.arrow = this.formData.lineType === '1' ? '上行' : '下行'
     this.lineNum = lineArr[1]
     this.formData.dataCurrent = this.formData.currentDate
@@ -66,7 +67,7 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        this.lineNum = ''
+        this.lineNum = '总'
         this.arrow = ''
         this.currentSelect = JSON.parse(JSON.stringify(newV))
         this.currentSelect.dataCurrent = moment(this.currentSelect.dataCurrent).format('YYYY-MM-DD')
@@ -126,9 +127,9 @@ export default {
   },
   methods: {
     _getPfOdbrushCountListGridData (params) {
+      console.log(this.lineNum)
       this.loading = true
       this.$api['lineNet.getPfOdbrushCountListGridData'](params).then(res => {
-        console.log(res)
         setTimeout(() => {
           this.loading = false
         }, 1000)

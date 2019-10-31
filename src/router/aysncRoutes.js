@@ -341,12 +341,22 @@ export const aysncRoutesMap = [
       roles: ['/chart-analysis/all']
     },
     children: [
+      // {
+      //   path: 'big-home-screen',
+      //   component: _import_('dataAnalysis/visualScreen/index'),
+      //   name: 'bigHomeScreen',
+      //   meta: {
+      //     title: '可视化大屏',
+      //     icon: 'nocturne icon-dash',
+      //     roles: ['/chart-analysis/all']
+      //   }
+      // },
       {
-        path: 'big-home-screen',
-        component: _import_('dataAnalysis/visualScreen/index'),
-        name: 'bigHomeScreen',
+        path: 'data-overview-page',
+        component: _import_('dataAnalysis/dataOverviewPage/index'),
+        name: 'dataOverviewPage',
         meta: {
-          title: '可视化大屏',
+          title: '数据总览页',
           icon: 'nocturne icon-dash',
           roles: ['/chart-analysis/all']
         }
@@ -407,16 +417,6 @@ export const aysncRoutesMap = [
         name: 'lineNetWorkDetail',
         meta: {
           title: '线网评分详情',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'data-overview-page',
-        component: _import_('dataAnalysis/dataOverviewPage/index'),
-        name: 'dataOverviewPage',
-        meta: {
-          title: '数据总览页',
           icon: 'nocturne icon-dash',
           roles: ['/chart-analysis/all']
         }

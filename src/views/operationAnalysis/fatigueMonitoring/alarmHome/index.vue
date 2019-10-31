@@ -207,7 +207,7 @@ export default {
     flex-wrap: wrap;
     box-sizing: border-box;
     .echart-table {
-      width: 30%;
+      width: 35%;
       border: 1px solid #ccc;
       box-sizing: border-box;
       height: 100%;
@@ -244,7 +244,7 @@ export default {
       }
     }
     .map {
-      width: 70%;
+      width: 65%;
       height: 100%;
       border: 1px solid #ccc;
       border-left: hidden;

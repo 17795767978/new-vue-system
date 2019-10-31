@@ -2,16 +2,20 @@
   <div class="dialog">
     <el-dialog title="报警详情" :visible.sync="see" :fullscreen="true" :modal="false">
       <el-table :data="selectData" border size="mini">
-        <el-table-column type="index" label="序号" width="80" align="center"></el-table-column>
+        <el-table-column type="index" label="序号" width="80" align="center">
+          <template slot-scope="scope">
+            <span> {{scope.$index + (pageNumber - 1) * pageSize + 1}} </span>
+          </template>
+        </el-table-column>
         <el-table-column property="orgName" label="所属公司" width="120" align="center"></el-table-column>
         <el-table-column property="lineName" label="所属线路" width="120" align="center"></el-table-column>
-        <el-table-column property="busNumber" label="车牌号" align="center"></el-table-column>
+        <el-table-column property="busPlateNumber" label="车牌号" align="center"></el-table-column>
         <el-table-column property="driverNum" label="司机工号" width="150" align="center"></el-table-column>
         <el-table-column property="driverName" label="司机" width="120" align="center"></el-table-column>
-        <el-table-column property="date" label="设备类型" width="100" align="center"></el-table-column>
+        <el-table-column property="devCode" label="设备编号" width="100" align="center"></el-table-column>
         <el-table-column property="warnType" label="报警类型" width="100" align="center"></el-table-column>
-        <el-table-column property="warnTime" label="报警时间"  width="200" align="center"></el-table-column>
-        <el-table-column property="warnSpeed" label="报警车速（KM/H）" align="center"></el-table-column>
+        <el-table-column property="warnTime" label="报警时间" :formatter="formatter"  width="200" align="center"></el-table-column>
+        <el-table-column property="speed" label="报警车速（KM/H）" align="center"></el-table-column>
         <el-table-column property="name" label="查看详情" align="center">
           <template slot-scope="scope">
             <el-link type="primary" @click="goToDetail(scope.row)">查看详情</el-link>
@@ -24,11 +28,21 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        style="float: right; margin-top: 20px;"
+        background
+        :current-page="pageNumber"
+        @current-change="handleCurrentChange"
+        layout="prev, pager, next"
+        :page-size="pageSize"
+        :total="total">
+      </el-pagination>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   props: {
     diaData: {
@@ -46,11 +60,15 @@ export default {
   },
   data () {
     return {
+      selectAllData: [],
       selectData: [],
       see: false,
       wsData: [],
       tableData: [],
-      chartData: []
+      chartData: [],
+      pageNumber: 1,
+      pageSize: 15,
+      total: 0
     }
   },
   watch: {
@@ -69,22 +87,33 @@ export default {
     echartsData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         this.chartData = newV
       }
     },
     isSee: {
       deep: true,
       handler (newV) {
+        // console.log(newV.dataType)
+        this.pageNumber = 1
+        this.total = 0
         if (newV.is) {
           this.see = true
         }
         if (newV.dataType === 'ws') {
-          this.selectData = this.wsData
+          this.selectAllData = this.wsData
+          this.selectData = this.selectAllData.slice(0, this.pageSize)
+          this.total = this.selectAllData.length
+          console.log(this.selectAllData)
         } else if (newV.dataType === 'table') {
-          this.selectData = this.tableData
+          this.selectAllData = this.tableData
+          this.total = this.selectAllData.length
+          this.selectData = this.selectAllData.slice(0, this.pageSize)
+          console.log(this.selectAllData)
         } else if (newV.dataType === 'charts') {
-          this.selectData = this.chartData
+          this.selectAllData = this.chartData
+          this.selectData = this.selectAllData.slice(0, this.pageSize)
+          this.total = this.selectAllData.length
+          console.log(this.selectAllData)
         }
       }
     },
@@ -113,6 +142,19 @@ export default {
         row.handleResult = '1'
       })
       console.log(row)
+    },
+    formatter (row) {
+      return moment(row.warnTime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    handleCurrentChange (val) {
+      this.pageNumber = val
+      if (val === Math.ceil(this.total / this.pageSize)) {
+        this.selectData = this.selectAllData.slice((val - 1) * this.pageSize, this.total + 1)
+      } else {
+        this.selectData = this.selectAllData.slice((val - 1) * this.pageSize, val * this.pageSize)
+      }
+
+      console.log(val)
     }
   }
 }

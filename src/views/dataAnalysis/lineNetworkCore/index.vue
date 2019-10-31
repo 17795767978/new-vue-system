@@ -4,6 +4,7 @@
       :isOrgSec='true'
       :isLineSec="true"
       :isEmpty="true"
+      :isDefault="true"
       @configCheck="getSearch"
     />
     <div class="content">

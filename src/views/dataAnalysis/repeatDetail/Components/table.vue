@@ -3,7 +3,7 @@
     <el-table
       ref="tableWrapper"
       :data="seeTableData"
-      height="80vh"
+      height="70vh"
       size="mini"
       border
       style="width: 100%">
@@ -12,6 +12,9 @@
         align="center"
         label="序号"
         width="80">
+        <template slot-scope="scope">
+          <span> {{scope.$index + (pageNumber - 1) * pageSize + 1}} </span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="company"
@@ -71,6 +74,15 @@
         label="重复数量(条)">
       </el-table-column>
     </el-table>
+    <el-pagination
+      style="float: right; margin-top: 20px;"
+      background
+      :current-page="pageNumber"
+      @current-change="handleCurrentChange"
+      layout="prev, pager, next"
+      :page-size="pageSize"
+      :total="total">
+    </el-pagination>
   </div>
 </template>
 
@@ -90,11 +102,13 @@ export default {
       tableData: [],
       seeTableData: [],
       isRequstStatus: false,
-      tableLength: 0,
       cellHeight: 0,
       currentCell: 0,
       viewCellNum: 0,
-      searchData: {}
+      searchData: {},
+      pageNumber: 1,
+      pageSize: 30,
+      total: 0
     }
   },
   computed: {
@@ -118,6 +132,8 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
+        this.pageNumber = 1
+        this.pageSize = 30
         this.searchData = newV
         this.changeSearchCondition(this.searchData)
       }
@@ -125,12 +141,16 @@ export default {
     queryData: {
       deep: true,
       handler (newV) {
+        this.pageNumber = 1
+        this.pageSize = 30
         let data = {
           lineOrgId: newV.company,
           lineLineId: newV.lineUuid + '+' + newV.lineNumber,
           lineType: newV.arrow,
           startStation: {},
-          endStation: {}
+          endStation: {},
+          pageNumber: this.pageNumber,
+          pageSize: this.pageSize
         }
         this.searchData = data
         this.changeSearchCondition(this.searchData)
@@ -140,9 +160,9 @@ export default {
   methods: {
     _getRepeatTable (params) {
       this.$api['lineNet.getRepeatDetailLink'](params).then(res => {
-        this.tableLength = res.length
-        this.tableData = res
-        this.seeTableData = res
+        this.tableData = res.list
+        this.total = res.total
+        this.seeTableData = res.list
       })
     },
     changeSearchCondition (params) {
@@ -157,8 +177,19 @@ export default {
         lineID: lineArr[0],
         arrow: params.lineType,
         sStation: params.startStation.value !== undefined ? params.startStation.value : '',
-        eStation: params.endStation.value !== undefined ? params.endStation.value : ''
+        eStation: params.endStation.value !== undefined ? params.endStation.value : '',
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize
       })
+    },
+    handleCurrentChange (val) {
+      this.pageNumber = val
+      // if (val === Math.ceil(this.total / this.pageSize)) {
+      //   this.selectData = this.selectAllData.slice((val - 1) * this.pageSize, this.total + 1)
+      // } else {
+      //   this.selectData = this.selectAllData.slice((val - 1) * this.pageSize, val * this.pageSize)
+      // }
+      this.changeSearchCondition(this.searchData)
     }
   }
 }

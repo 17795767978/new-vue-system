@@ -72,7 +72,7 @@ export default {
         this.lineData = [{
           name: '不良驾驶行为',
           type: 'pie',
-          radius: ['50%', '70%'],
+          radius: ['35%', '50%'],
           center: ['50%', '45%'],
           label: {
             formatter: '{b}: {@2012} ({d}%)'

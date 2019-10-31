@@ -95,7 +95,7 @@ export default {
           let chart = new G2.Chart({
             container: 'classer',
             forceFit: true,
-            height: 650,
+            height: 570,
             padding: ['auto', 'auto', 100, 'auto']
           })
 
@@ -137,8 +137,9 @@ export default {
 
 <style lang="scss" scoped>
 .g2-wrapper {
-  width: 70%;
-  height: 100%;
-  margin: 0vh auto 5vh;
+  width: 60%;
+  height: 90%;
+  margin: 10vh auto 5vh;
+  box-sizing: border-box;
 }
 </style>

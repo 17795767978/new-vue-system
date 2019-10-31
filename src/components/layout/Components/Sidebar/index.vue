@@ -9,6 +9,7 @@
           <div class="short" v-show="!sidebarState.isOpen">宜宾</div>
         </div>
         <el-menu mode="vertical" class="vertical-menu"
+          :unique-opened="true"
           :default-active="$route.path"
           :router="true"
           :background-color="systemThemeColor"

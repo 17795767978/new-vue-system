@@ -1,17 +1,17 @@
 <template>
   <main class="main" id="contentMain">
     <!-- custom scroll bar for main area -->
-    <VuePerfectScrollbar class="scroll-area" :settings="scrollOptions">
+    <!-- <VuePerfectScrollbar class="scroll-area" :settings="scrollOptions"> -->
       <keep-alive :include="cachedViews">
         <router-view />
       </keep-alive>
-    </VuePerfectScrollbar>
+    <!-- </VuePerfectScrollbar> -->
   </main>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+// import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
   name: 'Main',
@@ -26,7 +26,7 @@ export default {
     ...mapGetters(['cachedViews'])
   },
   components: {
-    VuePerfectScrollbar
+    // VuePerfectScrollbar
   }
 }
 </script>

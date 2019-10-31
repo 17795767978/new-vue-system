@@ -71,7 +71,7 @@ export default {
           type: 'bar',
           radius: ['100%', '60%'],
           data: res.datas[0],
-          barWidth: 30,
+          barWidth: 20,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
             emphasis: {

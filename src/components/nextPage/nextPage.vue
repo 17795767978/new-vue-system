@@ -28,7 +28,7 @@ export default {
       viewList: [], // 对应 store.getters.visitedViews
       component: null,
       scrollOptions: {
-        maxScrollbarLength: 500
+        maxScrollbarLength: 600
       }
     }
   },

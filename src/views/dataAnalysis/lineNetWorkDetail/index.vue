@@ -51,8 +51,8 @@ export default {
       this.apiCond.lineOrgId = this.$route.params.data.company
       this.apiCond.lineLineId = this.$route.params.data.lineUuid
     } else {
+      this.apiCond = JSON.parse(JSON.stringify(this.formData))
       let lineArr = this.formData.lineLineId.split('+')
-      this.apiCond = this.formData
       this.apiCond.lineLineId = lineArr[0]
     }
     this._getNetIndexDeaData({
@@ -61,12 +61,14 @@ export default {
     })
   },
   activated () {
-    this.queryData = this.$route.params.data
-    this.apiCond = this.$route.params.data
-    this._getNetIndexDeaData({
-      company: this.apiCond.company,
-      lineID: this.apiCond.lineUuid
-    })
+    if (this.$route.params.data) {
+      this.queryData = this.$route.params.data
+      this.apiCond = this.$route.params.data
+      this._getNetIndexDeaData({
+        company: this.apiCond.company,
+        lineID: this.apiCond.lineUuid
+      })
+    }
   },
   watch: {
     selectData: {
