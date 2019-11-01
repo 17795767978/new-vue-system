@@ -76,6 +76,19 @@ export const passengerFlowApi = {
         pageSize: '',
         pageNumber: ''
       },
+      desc: '客流数据明细查询'
+    },
+    {
+      name: 'getOnOffPersonCountlist',
+      method: 'POST',
+      path: '/api/passenger/flow/result/getOnOffPersonCountlist',
+      mockPath: '/api/passenger/flow/result/getOnOffPersonCountlist',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: ''
+      },
       desc: '客流数据查询'
     }
   ]

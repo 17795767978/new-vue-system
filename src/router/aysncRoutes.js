@@ -184,11 +184,21 @@ export const aysncRoutesMap = [
           }
         },
         {
+          path: 'search-passenger-flow',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/searchPassengerFlow/index'),
+          name: 'searchPassengerFlow',
+          meta: {
+            title: '客流数据查询',
+            icon: 'nocturne icon-dash',
+            roles: ['/search-passenger']
+          }
+        },
+        {
           path: 'search-passenger',
           component: _import_('operationAnalysis/dispatchingOperationAnalysis/searchPassenger/index'),
           name: 'searchPassenger',
           meta: {
-            title: '客流数据查询',
+            title: '客流数据明细查询',
             icon: 'nocturne icon-dash',
             roles: ['/search-passenger']
           }

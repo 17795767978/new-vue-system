@@ -76,6 +76,19 @@ export const downLoadApi = {
         dateTime: ''
       },
       desc: '线路OD导出'
+    },
+    {
+      name: 'passengerFlowExport',
+      method: 'POST',
+      path: '/api/passenger/flow/result/export',
+      mockPath: '/api/passenger/flow/result/export',
+      params: {
+        orgId: '',
+        lineId: '',
+        startDate: '',
+        endDate: ''
+      },
+      desc: '客流查询导出'
     }
   ]
 }

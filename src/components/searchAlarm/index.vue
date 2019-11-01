@@ -182,7 +182,7 @@
        <p>导出只支持最大下载量为65535条，如果超过65535条默认下载前65535条</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="getExcel">确认</el-button>
+        <el-button type="primary" @click="getExcel"  :loading="downLoadLoading">确认</el-button>
         <!-- <downloadExcel
           :data= "excelData"
           type="xls"
@@ -310,7 +310,8 @@ export default {
       code: '加载中',
       disabled: false,
       isLinkage: false,
-      downLoadStr: ''
+      downLoadStr: '',
+      downLoadLoading: false
     }
   },
   created () {
@@ -651,7 +652,7 @@ export default {
       this.centerDialogVisible = true
     },
     getExcel () {
-      console.log(this.downLoadName)
+      // console.log(this.downLoadName)
       // this.centerDialogVisible = false
       // if (this.excelData.length > 0) {
       //   this.$message.success('正在下载中。。。')
@@ -660,21 +661,29 @@ export default {
       // }
       // this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       // this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
-      let lineArr = this.formInline.lineLineId.split('+')
+      let lineArr = []
+      this.downLoadLoading = true
+      if (this.formInline.lineLineId !== '') {
+        lineArr = this.formInline.lineLineId.split('+')
+      }
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
         lineID: lineArr[0],
         arrow: this.formInline.lineType,
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
-        pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : ''
+        pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
+        startDate: this.formInline.dateArray[0],
+        endDate: this.formInline.dateArray[1]
       }).then(res => {
+        this.downLoadLoading = false
         // console.log(res)
         window.open(res.url)
         // window.location.href = res.url
         this.centerDialogVisible = false
         this.$message.success('正在下载中。。。')
       }).catch((err) => {
+        this.downLoadLoading = false
         this.$message.error(err.message)
       })
     }

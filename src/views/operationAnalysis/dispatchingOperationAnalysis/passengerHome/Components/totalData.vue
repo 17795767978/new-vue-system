@@ -78,11 +78,13 @@ export default {
           if (this.totalPassenger === 0) {
             this.increase = '---'
           } else {
-            this.increase = ((this.totalPassenger - this.beforePersoncount) / this.totalPassenger * 100).toFixed(2)
-            if (this.increase > 0) {
-              this.leftTitle = '增加'
+            let num = ((this.beforePersoncount - this.totalPassenger) / this.totalPassenger * 100).toFixed(2)
+            console.log('zong', num)
+            this.increase = Math.abs(num)
+            if (num > 0) {
+              this.rightTitle = '增加'
             } else {
-              this.leftTitle = '减小'
+              this.rightTitle = '减小'
             }
           }
         } else {
@@ -101,8 +103,10 @@ export default {
           if (this.totalPassenger === 0) {
             this.reduce = '---'
           } else {
-            this.reduce = ((this.weekPersoncount - this.totalPassenger) / this.totalPassenger * 100).toFixed(2)
-            if (this.increase > 0) {
+            let num = ((this.weekPersoncount - this.totalPassenger) / this.totalPassenger * 100).toFixed(2)
+            console.log('week', num)
+            this.reduce = Math.abs(num)
+            if (num > 0) {
               this.leftTitle = '增加'
             } else {
               this.leftTitle = '减小'

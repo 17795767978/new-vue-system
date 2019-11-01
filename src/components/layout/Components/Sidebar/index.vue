@@ -6,7 +6,7 @@
       :style="{background: systemThemeColor}">
         <div class="logo">
           <div class="full" v-show="sidebarState.isOpen">运营监控</div>
-          <div class="short" v-show="!sidebarState.isOpen">宜宾</div>
+          <div class="short" v-show="!sidebarState.isOpen">邢台</div>
         </div>
         <el-menu mode="vertical" class="vertical-menu"
           :unique-opened="true"

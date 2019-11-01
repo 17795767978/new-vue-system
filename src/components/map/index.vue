@@ -161,8 +161,8 @@ import iconCarGreen from '../../assets/images/bus-green.png'
 import videoWrapper from './video'
 import moment from 'moment'
 const TIME = 3 * 60 * 1000
-const URL = 'http://61.157.184.120:12056/api/v1/basic/'
-// const URL = 'http://192.168.10.40:12056/api/v1/basic/'
+// const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
+const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
 export default {
   props: {
     isHotMap: {

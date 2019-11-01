@@ -13,7 +13,7 @@
         <el-table-column property="driverNum" label="司机工号" width="150" align="center"></el-table-column>
         <el-table-column property="driverName" label="司机" width="120" align="center"></el-table-column>
         <el-table-column property="devCode" label="设备编号" width="100" align="center"></el-table-column>
-        <el-table-column property="warnType" label="报警类型" width="100" align="center"></el-table-column>
+        <el-table-column property="warnTypeName" label="报警类型" width="100" align="center"></el-table-column>
         <el-table-column property="warnTime" label="报警时间" :formatter="formatter"  width="200" align="center"></el-table-column>
         <el-table-column property="speed" label="报警车速（KM/H）" align="center"></el-table-column>
         <el-table-column property="name" label="查看详情" align="center">

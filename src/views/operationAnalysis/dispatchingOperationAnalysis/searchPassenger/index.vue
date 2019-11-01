@@ -21,7 +21,7 @@ import headerNav from './Components/header'
 import contentWrapper from './Components/content'
 import moment from 'moment'
 export default {
-  name: 'timeTableAnalysis',
+  name: 'searchPassenger',
   data () {
     return {
       selectData: {},
