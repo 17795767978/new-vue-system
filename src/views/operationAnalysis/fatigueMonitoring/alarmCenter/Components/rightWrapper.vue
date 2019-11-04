@@ -273,7 +273,7 @@ export default {
         })
         if (newValue.levelsType !== '0') {
           this._tableList({
-            orgId: this.formInline.orgId, // 组织机构id
+            orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
             lineId: this.formInline.lineId, // 线路id
             busUuid: this.formInline.busUuid, // 车辆id
             devCode: this.formInline.devCode, // 设备号
@@ -448,7 +448,7 @@ export default {
     },
     getExcel () {
       this.$api['downLoad.warnExport']({
-        orgId: this.formInline.orgId, // 组织机构id
+        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号

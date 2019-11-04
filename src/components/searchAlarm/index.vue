@@ -663,18 +663,20 @@ export default {
       // this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
       let lineArr = []
       this.downLoadLoading = true
-      if (this.formInline.lineLineId !== '') {
+      if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
+        console.log(this.formInline.lineLineId)
         lineArr = this.formInline.lineLineId.split('+')
       }
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
         lineID: lineArr[0],
+        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
         arrow: this.formInline.lineType,
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
-        startDate: this.formInline.dateArray[0],
-        endDate: this.formInline.dateArray[1]
+        startTime: this.formInline.dateArray[0],
+        endTime: this.formInline.dateArray[1]
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

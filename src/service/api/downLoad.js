@@ -3,8 +3,8 @@ export const downLoadApi = {
     {
       name: 'export',
       method: 'POST',
-      path: '/api/passenger/flow/result/export',
-      mockPath: '/api/passenger/flow/result/export',
+      path: '/api/passenger/flow/result/detail/export',
+      mockPath: '/api/passenger/flow/result/detail/export',
       params: {
         orgId: '',
         dateTime: ''

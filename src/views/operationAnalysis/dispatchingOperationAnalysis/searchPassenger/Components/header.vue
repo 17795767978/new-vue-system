@@ -279,7 +279,7 @@ export default {
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
       this.$api['downLoad.export']({
-        orgId: this.formInline.orgId,
+        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
         lineId: this.formInline.lineId,
         lineType: this.formInline.lineType,
         busNumber: this.formInline.busNumber,

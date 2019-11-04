@@ -246,46 +246,46 @@ export const aysncRoutesMap = [
         roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management']
       },
       children: [
-        {
-          path: 'alarm-home',
-          component: _import_('operationAnalysis/fatigueMonitoring/alarmHome/index'),
-          name: 'alarmHome',
-          meta: {
-            title: '安全运营首页',
-            icon: 'nocturne icon-dash',
-            roles: ['/alarm-center']
-          }
-        },
-        {
-          path: 'alarm-drive',
-          component: _import_('operationAnalysis/fatigueMonitoring/alarmDriver/index'),
-          name: 'alarmDriver',
-          meta: {
-            title: '司机排行分析',
-            icon: 'nocturne icon-dash',
-            roles: ['/alarm-center']
-          }
-        },
-        {
-          path: 'alarm-type',
-          component: _import_('operationAnalysis/fatigueMonitoring/alarmType/index'),
-          name: 'alarmType',
-          meta: {
-            title: '报警类型分析',
-            icon: 'nocturne icon-dash',
-            roles: ['/alarm-center']
-          }
-        },
-        {
-          path: 'alarm-speed',
-          component: _import_('operationAnalysis/fatigueMonitoring/alarmSpeed/index'),
-          name: 'alarmSpeed',
-          meta: {
-            title: '报警速度分析',
-            icon: 'nocturne icon-dash',
-            roles: ['/alarm-center']
-          }
-        },
+        // {
+        //   path: 'alarm-home',
+        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmHome/index'),
+        //   name: 'alarmHome',
+        //   meta: {
+        //     title: '安全运营首页',
+        //     icon: 'nocturne icon-dash',
+        //     roles: ['/alarm-center']
+        //   }
+        // },
+        // {
+        //   path: 'alarm-drive',
+        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmDriver/index'),
+        //   name: 'alarmDriver',
+        //   meta: {
+        //     title: '司机排行分析',
+        //     icon: 'nocturne icon-dash',
+        //     roles: ['/alarm-center']
+        //   }
+        // },
+        // {
+        //   path: 'alarm-type',
+        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmType/index'),
+        //   name: 'alarmType',
+        //   meta: {
+        //     title: '报警类型分析',
+        //     icon: 'nocturne icon-dash',
+        //     roles: ['/alarm-center']
+        //   }
+        // },
+        // {
+        //   path: 'alarm-speed',
+        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmSpeed/index'),
+        //   name: 'alarmSpeed',
+        //   meta: {
+        //     title: '报警速度分析',
+        //     icon: 'nocturne icon-dash',
+        //     roles: ['/alarm-center']
+        //   }
+        // },
         {
           path: 'alarm-center',
           component: _import_('operationAnalysis/fatigueMonitoring/alarmCenter/index'),
@@ -341,128 +341,128 @@ export const aysncRoutesMap = [
     }
     ]
   },
-  {
-    path: '/data-analysis',
-    component: Layout,
-    name: 'dataAnalysis',
-    meta: {
-      title: '数据分析',
-      icon: 'nocturne icon-dash',
-      roles: ['/chart-analysis/all']
-    },
-    children: [
-      // {
-      //   path: 'big-home-screen',
-      //   component: _import_('dataAnalysis/visualScreen/index'),
-      //   name: 'bigHomeScreen',
-      //   meta: {
-      //     title: '可视化大屏',
-      //     icon: 'nocturne icon-dash',
-      //     roles: ['/chart-analysis/all']
-      //   }
-      // },
-      {
-        path: 'data-overview-page',
-        component: _import_('dataAnalysis/dataOverviewPage/index'),
-        name: 'dataOverviewPage',
-        meta: {
-          title: '数据总览页',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'line-condition',
-        component: _import_('dataAnalysis/lineCondition/index'),
-        name: 'lineCondition',
-        meta: {
-          title: '线路情况',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'repeatability-index',
-        component: _import_('dataAnalysis/repeatability/index'),
-        name: 'repeatability',
-        meta: {
-          title: '重复度指标',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'repeatability-detail',
-        component: _import_('dataAnalysis/repeatDetail/index'),
-        name: 'repeatabilityDetail',
-        meta: {
-          title: '重复度指标详情',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'comprehensive-query',
-        component: _import_('dataAnalysis/comprehensiveQuery/index'),
-        name: 'comprehensiveQuery',
-        meta: {
-          title: '数据综合查询',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'line-network-core',
-        component: _import_('dataAnalysis/lineNetworkCore/index'),
-        name: 'lineNetworkCore',
-        meta: {
-          title: '线网评分',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'line-netWork-core-Detail',
-        component: _import_('dataAnalysis/lineNetWorkDetail/index'),
-        name: 'lineNetWorkDetail',
-        meta: {
-          title: '线网评分详情',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'flow-comprehensive-query',
-        component: _import_('dataAnalysis/flowComprehensiveQuery/index'),
-        name: 'flowComprehensiveQuery',
-        meta: {
-          title: '线路客流综合查询',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      },
-      {
-        path: 'line-od',
-        component: _import_('dataAnalysis/lineOD/index'),
-        name: 'lineOD',
-        meta: {
-          title: '线路OD',
-          icon: 'nocturne icon-dash',
-          roles: ['/chart-analysis/all']
-        }
-      }
-      // {
-      //   path: 'od-matrix',
-      //   component: _import_('dataAnalysis/ODMatrix/index'),
-      //   name: 'ODMatrix',
-      //   meta: {
-      //     title: 'OD矩阵',
-      //     icon: 'nocturne icon-dash',
-      //     roles: ['/chart-analysis/all']
-      //   }
-      // }
-    ]
-  },
+  // {
+  //   path: '/data-analysis',
+  //   component: Layout,
+  //   name: 'dataAnalysis',
+  //   meta: {
+  //     title: '数据分析',
+  //     icon: 'nocturne icon-dash',
+  //     roles: ['/chart-analysis/all']
+  //   },
+  //   children: [
+  //     // {
+  //     //   path: 'big-home-screen',
+  //     //   component: _import_('dataAnalysis/visualScreen/index'),
+  //     //   name: 'bigHomeScreen',
+  //     //   meta: {
+  //     //     title: '可视化大屏',
+  //     //     icon: 'nocturne icon-dash',
+  //     //     roles: ['/chart-analysis/all']
+  //     //   }
+  //     // },
+  //     {
+  //       path: 'data-overview-page',
+  //       component: _import_('dataAnalysis/dataOverviewPage/index'),
+  //       name: 'dataOverviewPage',
+  //       meta: {
+  //         title: '数据总览页',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     },
+  //     {
+  //       path: 'line-condition',
+  //       component: _import_('dataAnalysis/lineCondition/index'),
+  //       name: 'lineCondition',
+  //       meta: {
+  //         title: '线路情况',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     },
+  //     {
+  //       path: 'repeatability-index',
+  //       component: _import_('dataAnalysis/repeatability/index'),
+  //       name: 'repeatability',
+  //       meta: {
+  //         title: '重复度指标',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     },
+  //     {
+  //       path: 'repeatability-detail',
+  //       component: _import_('dataAnalysis/repeatDetail/index'),
+  //       name: 'repeatabilityDetail',
+  //       meta: {
+  //         title: '重复度指标详情',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     },
+  //     {
+  //       path: 'comprehensive-query',
+  //       component: _import_('dataAnalysis/comprehensiveQuery/index'),
+  //       name: 'comprehensiveQuery',
+  //       meta: {
+  //         title: '数据综合查询',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     },
+  //     {
+  //       path: 'line-network-core',
+  //       component: _import_('dataAnalysis/lineNetworkCore/index'),
+  //       name: 'lineNetworkCore',
+  //       meta: {
+  //         title: '线网评分',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     },
+  //     {
+  //       path: 'line-netWork-core-Detail',
+  //       component: _import_('dataAnalysis/lineNetWorkDetail/index'),
+  //       name: 'lineNetWorkDetail',
+  //       meta: {
+  //         title: '线网评分详情',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     },
+  //     {
+  //       path: 'flow-comprehensive-query',
+  //       component: _import_('dataAnalysis/flowComprehensiveQuery/index'),
+  //       name: 'flowComprehensiveQuery',
+  //       meta: {
+  //         title: '线路客流综合查询',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     },
+  //     {
+  //       path: 'line-od',
+  //       component: _import_('dataAnalysis/lineOD/index'),
+  //       name: 'lineOD',
+  //       meta: {
+  //         title: '线路OD',
+  //         icon: 'nocturne icon-dash',
+  //         roles: ['/chart-analysis/all']
+  //       }
+  //     }
+  //     // {
+  //     //   path: 'od-matrix',
+  //     //   component: _import_('dataAnalysis/ODMatrix/index'),
+  //     //   name: 'ODMatrix',
+  //     //   meta: {
+  //     //     title: 'OD矩阵',
+  //     //     icon: 'nocturne icon-dash',
+  //     //     roles: ['/chart-analysis/all']
+  //     //   }
+  //     // }
+  //   ]
+  // },
   {
     path: '/permission-management',
     component: Layout,

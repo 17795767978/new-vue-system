@@ -208,14 +208,7 @@ export default {
       dialogTableVisible: false,
       isHidden: true,
       title: '',
-      charData: [
-        { ch: '通道1', isAct: false, index: 0 },
-        { ch: '通道2', isAct: false, index: 1 },
-        { ch: '通道3', isAct: false, index: 2 },
-        { ch: '通道4', isAct: false, index: 3 },
-        { ch: '通道5', isAct: false, index: 4 },
-        { ch: '通道6', isAct: false, index: 5 }
-      ],
+      charData: [],
       warnData: [],
       buttonGroup: ['热力图', '单车', '线路'],
       currentIndexChar: 0,
@@ -437,7 +430,8 @@ export default {
         lineType,
         positionSpeed,
         currenttrip,
-        warnDeviceCode } = marker
+        warnDeviceCode,
+        showBusVideoOrder } = marker
       this.$api['homeTired.getVideoMsg']({
         busId,
         busNumber,
@@ -451,17 +445,34 @@ export default {
         drvIccard,
         positionSpeed,
         currenttrip,
-        warnDeviceCode
+        warnDeviceCode,
+        showBusVideoOrder
       }).then(res => {
-        console.log(res)
         this.carDetailData = res
         this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
         this.carDetailData.tripPercent = Number(this.carDetailData.tripPercent)
+        if (this.carDetailData.showBusVideoOrder) {
+          this.charData = [
+            { ch: '前路', isAct: false, index: 0 },
+            { ch: '司机', isAct: false, index: 1 },
+            { ch: '前门', isAct: false, index: 2 },
+            { ch: '后门', isAct: false, index: 3 },
+            { ch: '前车厢', isAct: false, index: 4 },
+            { ch: '后车厢', isAct: false, index: 5 }
+          ]
+        } else {
+          this.charData = [
+            { ch: '通道1', isAct: false, index: 0 },
+            { ch: '通道2', isAct: false, index: 1 },
+            { ch: '通道3', isAct: false, index: 2 },
+            { ch: '通道4', isAct: false, index: 3 },
+            { ch: '通道5', isAct: false, index: 4 },
+            { ch: '通道6', isAct: false, index: 5 }
+          ]
+        }
         if (this.isFlv) {
           this._getKey()
-          console.log(this.carDetailData)
           this._getVideoList(this.carDetailData.devRefId).then(res => {
-            console.log(res)
           })
         }
         if (this.carDetailData.warnInfos.length > 0) {

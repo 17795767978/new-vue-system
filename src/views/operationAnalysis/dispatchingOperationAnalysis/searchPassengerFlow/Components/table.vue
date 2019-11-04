@@ -121,7 +121,7 @@ export default {
       tableBody.appendChild(emptyBlock)
     })
     this._getOnOffPersonCountlist({
-      orgId: this.formData.orgId,
+      orgId: this.formData.orgId === '1' ? '' : this.formData.orgId,
       lineId: this.formData.lineId,
       startDate: this.formData.dateArray[0],
       endDate: this.formData.dateArray[1]
@@ -132,7 +132,7 @@ export default {
       deep: true,
       handler (newV) {
         this._getOnOffPersonCountlist({
-          orgId: newV.orgId,
+          orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           startDate: newV.dateArray[0],
           endDate: newV.dateArray[1]
