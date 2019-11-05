@@ -21,6 +21,16 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="选择线路" v-if="islineIdRepeat">
+        <el-select style="width: 200px" filterable v-model="formInline.lineIds" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in lineOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="选择机构" v-if="isOrgSec">
         <el-select class="font-style" @visible-change="changed" v-model="formInline.lineOrgId" :disabled="disabled" placeholder="请选择" filterable>
           <el-option
@@ -179,7 +189,7 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-       <p>导出只支持最大下载量为65535条，如果超过65535条默认下载前65535条</p>
+       <p>导出只支持最大下载量为65536条，如果超过65536条默认下载前65536条</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="getExcel"  :loading="downLoadLoading">确认</el-button>
@@ -266,6 +276,9 @@ export default {
     },
     downLoadName: {
       type: String
+    },
+    islineIdRepeat: {
+      type: Boolean
     }
   },
   data () {
@@ -274,6 +287,7 @@ export default {
         orgId: '',
         lineOrgId: '',
         lineId: '',
+        lineIds: [],
         lineLineId: '',
         busNumber: '',
         valueTime: [],
@@ -360,6 +374,7 @@ export default {
     this.formInline.lineLineId = defaultForm.lineLineId
     this.formInline.orgId = defaultForm.orgId
     this.formInline.lineId = defaultForm.lineId
+    this.formInline.lineIds = defaultForm.lineIds
     this.formInline.lineType = defaultForm.lineType
     this.formInline.dataCurrent = defaultForm.currentDate
     this.formInline.startHour = defaultForm.startHour
@@ -387,6 +402,7 @@ export default {
       handler (newValue) {
         if (this.isLinkage) {
           this.formInline.lineId = ''
+          this.formInline.lineIds = []
           this.formInline.busNumber = ''
         }
         let orgId = newValue === '1' ? '' : newValue
@@ -573,7 +589,8 @@ export default {
         startStation: this.formInline.startStation,
         endStation: this.formInline.endStation,
         warnTypeId: this.formInline.warnTypeId,
-        dateArray: this.formInline.dateArray
+        dateArray: this.formInline.dateArray,
+        lineIds: this.formInline.lineIds
       }
       this.$emit('configCheck', configData)
     },
@@ -597,7 +614,8 @@ export default {
         endStation: {},
         dataCurrent: date,
         warnTypeId: [],
-        dateArray: []
+        dateArray: [],
+        lineIds: []
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -617,7 +635,8 @@ export default {
         endStation: this.formInline.endStation,
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
-        dataCurrent: date
+        dataCurrent: date,
+        lineIds: this.formInline.lineIds
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -669,9 +688,10 @@ export default {
       }
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
+        lineId: this.formInline.lineId,
         lineID: lineArr[0],
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
-        arrow: this.formInline.lineType,
+        arrow: this.isTurn ? this.formInline.lineType : '',
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',

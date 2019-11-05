@@ -32,6 +32,7 @@ const user = {
     formData: {
       orgId: '',
       lineId: '',
+      lineIds: [],
       lineOrgId: '',
       lineLineId: ''
     }
@@ -137,7 +138,8 @@ const user = {
           endHour: currentHour,
           dateArray: [dateBefore, data],
           startStation: '',
-          endStation: ''
+          endStation: '',
+          lineIds: []
         }
         store.dispatch('getLineList').then(res => {
           if (res.length > 0) {

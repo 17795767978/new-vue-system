@@ -246,46 +246,46 @@ export const aysncRoutesMap = [
         roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management']
       },
       children: [
-        // {
-        //   path: 'alarm-home',
-        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmHome/index'),
-        //   name: 'alarmHome',
-        //   meta: {
-        //     title: '安全运营首页',
-        //     icon: 'nocturne icon-dash',
-        //     roles: ['/alarm-center']
-        //   }
-        // },
-        // {
-        //   path: 'alarm-drive',
-        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmDriver/index'),
-        //   name: 'alarmDriver',
-        //   meta: {
-        //     title: '司机排行分析',
-        //     icon: 'nocturne icon-dash',
-        //     roles: ['/alarm-center']
-        //   }
-        // },
-        // {
-        //   path: 'alarm-type',
-        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmType/index'),
-        //   name: 'alarmType',
-        //   meta: {
-        //     title: '报警类型分析',
-        //     icon: 'nocturne icon-dash',
-        //     roles: ['/alarm-center']
-        //   }
-        // },
-        // {
-        //   path: 'alarm-speed',
-        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmSpeed/index'),
-        //   name: 'alarmSpeed',
-        //   meta: {
-        //     title: '报警速度分析',
-        //     icon: 'nocturne icon-dash',
-        //     roles: ['/alarm-center']
-        //   }
-        // },
+        {
+          path: 'alarm-home',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmHome/index'),
+          name: 'alarmHome',
+          meta: {
+            title: '安全运营首页',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-center']
+          }
+        },
+        {
+          path: 'alarm-drive',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmDriver/index'),
+          name: 'alarmDriver',
+          meta: {
+            title: '司机排行分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-center']
+          }
+        },
+        {
+          path: 'alarm-type',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmType/index'),
+          name: 'alarmType',
+          meta: {
+            title: '报警类型分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-center']
+          }
+        },
+        {
+          path: 'alarm-speed',
+          component: _import_('operationAnalysis/fatigueMonitoring/alarmSpeed/index'),
+          name: 'alarmSpeed',
+          meta: {
+            title: '报警速度分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-center']
+          }
+        },
         {
           path: 'alarm-center',
           component: _import_('operationAnalysis/fatigueMonitoring/alarmCenter/index'),

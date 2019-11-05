@@ -161,5 +161,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+/deep/ .el-dialog__headerbtn {
+  font-size: 36px;
+}
 </style>

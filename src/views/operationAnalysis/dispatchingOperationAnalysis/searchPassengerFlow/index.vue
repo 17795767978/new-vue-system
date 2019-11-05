@@ -2,11 +2,11 @@
   <div class="search-passenger-flow">
     <Search
       :isOrg='true'
-      :isLine="true"
       :isDefault="true"
       :isEmpty="true"
       :isDateTo="true"
       :isDownload="true"
+      :islineIdRepeat="true"
       :downLoadName="downLoadName"
       @configCheck="getSearch"
     />

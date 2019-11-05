@@ -38,7 +38,8 @@
       :data="tableData"
       ref="tableWrapper"
       border
-      :summary-method="getSummaries(this.tableAllData)"
+      :row-class-name="tableRowClassName"
+      :summary-method="getSummaries(this.totalTableAllData)"
       show-summary
       height="75vh"
       v-loading="loading"
@@ -56,6 +57,7 @@
       </el-table-column>
       <el-table-column
         prop="lineName"
+        v-if="selectData.lineIds && selectData.lineIds.length > 0"
         align="center"
         label="线路">
       </el-table-column>
@@ -80,6 +82,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+// import Immutable from 'immutable.js'
 export default {
   props: {
     selectData: {
@@ -102,7 +105,9 @@ export default {
       plain: true,
       tableLength: 0,
       scrollHeight: 0,
-      loading: true
+      loading: true,
+      totalTableAllData: [],
+      indexArr: []
     }
   },
   mounted () {
@@ -122,7 +127,7 @@ export default {
     })
     this._getOnOffPersonCountlist({
       orgId: this.formData.orgId === '1' ? '' : this.formData.orgId,
-      lineId: this.formData.lineId,
+      lineIds: this.formData.lineIds,
       startDate: this.formData.dateArray[0],
       endDate: this.formData.dateArray[1]
     })
@@ -131,9 +136,10 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
+        console.log(newV)
         this._getOnOffPersonCountlist({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
-          lineId: newV.lineId,
+          lineIds: newV.lineIds,
           startDate: newV.dateArray[0],
           endDate: newV.dateArray[1]
         })
@@ -150,7 +156,8 @@ export default {
     _getOnOffPersonCountlist (params) {
       this.loading = true
       this.$api['passengerFlow.getOnOffPersonCountlist'](params).then(res => {
-        this.tableAllData = res
+        this.totalTableAllData = res
+        this.tableAllData = this.getOrgTotleNum(JSON.parse(JSON.stringify(res)))
         this.loading = false
         this.tableAllData.forEach((item, index) => {
           item.id = index + 1
@@ -168,6 +175,38 @@ export default {
           this.$message.warning('暂无数据')
         }
       })
+    },
+    // 计算每个分公司的上下车人数总和
+    getOrgTotleNum (res) {
+      this.indexArr = []
+      if (res.length === 0) {
+        return []
+      }
+      let initRepData = res.map(item => item.orgName)
+      let initData = new Set(initRepData)
+      let index = 0
+      for (let key of initData) { // 遍历Set
+        let arrOrg = res.filter(item => item.orgName === key)
+        let getOnArr = arrOrg.map(item => Number(item.onPersonCount))
+        let getOffArr = arrOrg.map(item => Number(item.offPersonCount))
+        index += arrOrg.length
+        this.indexArr.push(index)
+        res[index] = {
+          orgName: key,
+          mark: arrOrg.length,
+          lineName: '——',
+          uploadTime: '——',
+          onPersonCount: getOnArr.reduce((prev, next) => prev + next),
+          offPersonCount: getOffArr.reduce((prev, next) => prev + next)
+        }
+      }
+      return res
+    },
+    tableRowClassName ({ row, rowIndex }) {
+      if (this.indexArr.some(item => item === row.id - 1)) {
+        return 'success-row'
+      }
+      return ''
     },
     bigTable () {
       let eleArr = this.$refs.tableWrapper.$el
@@ -234,6 +273,9 @@ export default {
           if (index === 0) {
             sums[index] = '总计'
           }
+          // if (index === 2) {
+          //   sums[index] = '——'
+          // }
         })
         return sums
       }
@@ -242,6 +284,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+ /deep/ .el-table .success-row {
+    background: #f0f9eb;
+  }
 
 </style>

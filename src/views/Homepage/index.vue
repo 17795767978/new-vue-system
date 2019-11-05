@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container cont-container">
     <el-row>
-      <span class="main-title">邢台公交综合运营监控分析系统</span>
+      <span class="main-title">宜宾公交综合运营监控分析系统</span>
     </el-row>
     <el-row class="main-card" :gutter="50">
       <el-col style="margin-left: 50px;" :span="8">
