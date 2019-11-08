@@ -159,10 +159,11 @@ import { mapStyle } from './utils/mapStyle'
 import iconCarRed from '../../assets/images/bus-red.png'
 import iconCarGreen from '../../assets/images/bus-green.png'
 import videoWrapper from './video'
+import { mapGetters } from 'vuex'
 import moment from 'moment'
 const TIME = 3 * 60 * 1000
-const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
-// const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
+// const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
+const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
 export default {
   props: {
     isHotMap: {
@@ -182,6 +183,9 @@ export default {
     },
     isFlv: {
       type: Boolean
+    },
+    searchData: {
+      type: Object
     }
   },
   data () {
@@ -266,7 +270,8 @@ export default {
           return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
         }
       }
-    }
+    },
+    ...mapGetters(['formData'])
   },
   watch: {
     'formInline.value': {
@@ -322,6 +327,20 @@ export default {
       handler (newV) {
         console.log(newV)
       }
+    },
+    searchData: {
+      deep: true,
+      handler (newV) {
+        clearTimeout(this.timerRate)
+        this.timerRate = null
+        let orgId = newV.orgId === '1' ? '' : newV.orgId
+        this._positionRating({
+          orgId,
+          lineId: newV.lineId,
+          busNumber: newV.busNumber,
+          warnTypes: newV.warnTypeId
+        })
+      }
     }
   },
   methods: {
@@ -337,7 +356,10 @@ export default {
         })
       } else if (this.isCarsDetail) {
         this._positionRating({
-          orgId
+          orgId,
+          lineId: '',
+          busNumber: '',
+          warnTypes: ''
         })
       } else if (this.isLineMap) {
       }
@@ -357,9 +379,11 @@ export default {
         this.formInline.value = 'all'
         this.loading = false
         this.disabled = false
-        this.timerRate = setTimeout(() => {
-          this._positionRating(params)
-        }, TIME)
+        if (!this.searchData) {
+          this.timerRate = setTimeout(() => {
+            this._positionRating(params)
+          }, TIME)
+        }
       })
     },
     _hotDataLine (params) {

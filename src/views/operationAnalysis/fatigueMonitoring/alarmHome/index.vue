@@ -33,7 +33,7 @@
       <div class="map">
         <div class="title">
           不良驾驶行为分析实时报警监控
-          <el-badge :value="diaData.length" :max="10" style="margin-top:0px; margin-right: 20px;float:right">
+          <el-badge :value="diaData.length" :max="2000" style="margin-top:0px; margin-right: 50px;float:right">
             <el-button size="small" @click="seeDetail" icon="el-icon-message-solid" type="warning" style="font-size: 1rem"></el-button>
           </el-badge>
         </div>
@@ -45,6 +45,7 @@
           :isLineMap="false"
           :isSelect="false"
           :isFlv="false"
+          :searchData="searchData"
           ></mapChart>
         </div>
       </div>
@@ -107,6 +108,12 @@ export default {
         if (newV) {
           this.closeWs()
         }
+      }
+    },
+    searchData: {
+      deep: true,
+      handler (newV) {
+
       }
     }
   },
@@ -173,7 +180,7 @@ export default {
         busNumber: this.currentData.busNumber,
         warnTypes: type === 'charts' ? [data.data.warnType] : this.currentData.warnTypeId,
         driverNum: data.driverNum,
-        driveName: data.driverName
+        driverName: data.driverName
       }
       this.$api['tiredMonitoring.getBadDrivingBehaviorRankingDetail'](params).then(res => {
         if (type === 'table') {

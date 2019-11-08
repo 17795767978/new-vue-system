@@ -47,7 +47,7 @@ export default {
 <style lang="scss" scoped>
 .table {
   width: 100%;
-  padding: 0px 5vw 1vh;
+  padding: 0px 1vw 1vh;
   height: 100%;
   box-sizing: border-box;
   border-bottom: 1px solid #EBEEF5;

@@ -29,7 +29,9 @@ const getters = {
   // m默认搜索条件
   defaultSearch: state => state.defaultSearch.defaultSearch,
   // router路由的参数
-  routerData: state => state.routerData.data
+  routerData: state => state.routerData.data,
+  // 导出内容序列化
+  formDown: state => state.defaultSearch.formDown
 }
 
 export default getters

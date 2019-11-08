@@ -143,7 +143,7 @@ const user = {
         }
         store.dispatch('getLineList').then(res => {
           if (res.length > 0) {
-            form.lineId = res[0].value
+            form.lineId = ''
           }
           commit('SET_LINEID', res.length > 0 && res[0].value)
           store.dispatch('getComList').then(res => {

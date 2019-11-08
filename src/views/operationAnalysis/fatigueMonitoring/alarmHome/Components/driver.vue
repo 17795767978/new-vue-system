@@ -33,7 +33,7 @@ export default {
     this._getDriver({
       orgId: defaultData.orgId === '1' ? '' : defaultData.orgId,
       lineId: defaultData.lineId,
-      busPlateNumbers: ''
+      busNumber: ''
     })
   },
   mounted () {
@@ -46,7 +46,7 @@ export default {
         this._getDriver({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
-          busPlateNumbers: newV.busNumber,
+          busNumber: newV.busNumber,
           warnTypes: newV.warnTypeId
         })
       }

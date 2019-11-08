@@ -53,7 +53,7 @@ export default {
     this._getDriverTable({
       orgId: defaultData.orgId === '1' ? '' : defaultData.orgId,
       lineId: defaultData.lineId,
-      busPlateNumber: '',
+      busNumber: '',
       warnTypes: []
     })
   },
@@ -65,7 +65,7 @@ export default {
         this._getDriverTable({
           orgId: orgId === '1' ? '' : orgId,
           lineId,
-          busPlateNumber: busNumber,
+          busNumber: busNumber,
           warnTypes: warnTypeId
         })
       }

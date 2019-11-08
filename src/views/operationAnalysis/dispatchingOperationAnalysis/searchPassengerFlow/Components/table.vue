@@ -55,10 +55,11 @@
         align="center"
         label="公司">
       </el-table-column>
+       <!-- v-if="selectData.lineIds && selectData.lineIds.length > 0" -->
       <el-table-column
         prop="lineName"
-        v-if="selectData.lineIds && selectData.lineIds.length > 0"
         align="center"
+        v-if="selectData.lineIds && selectData.lineIds.length > 0"
         label="线路">
       </el-table-column>
       <el-table-column
@@ -96,7 +97,7 @@ export default {
     // }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'formDown'])
   },
   data () {
     return {
@@ -136,7 +137,6 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         this._getOnOffPersonCountlist({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineIds: newV.lineIds,
@@ -158,6 +158,7 @@ export default {
       this.$api['passengerFlow.getOnOffPersonCountlist'](params).then(res => {
         this.totalTableAllData = res
         this.tableAllData = this.getOrgTotleNum(JSON.parse(JSON.stringify(res)))
+        this.$store.dispatch('getDownloadData', this.tableAllData)
         this.loading = false
         this.tableAllData.forEach((item, index) => {
           item.id = index + 1
@@ -179,6 +180,7 @@ export default {
     // 计算每个分公司的上下车人数总和
     getOrgTotleNum (res) {
       this.indexArr = []
+      let allTable = []
       if (res.length === 0) {
         return []
       }
@@ -191,19 +193,30 @@ export default {
         let getOffArr = arrOrg.map(item => Number(item.offPersonCount))
         index += arrOrg.length
         this.indexArr.push(index)
-        res[index] = {
-          orgName: key,
+        let currentData = {
+          orgName: '合计',
           mark: arrOrg.length,
           lineName: '——',
           uploadTime: '——',
-          onPersonCount: getOnArr.reduce((prev, next) => prev + next),
-          offPersonCount: getOffArr.reduce((prev, next) => prev + next)
+          onPersonCount: JSON.stringify(getOnArr.reduce((prev, next) => prev + next)),
+          offPersonCount: JSON.stringify(getOffArr.reduce((prev, next) => prev + next))
         }
+        this.getTable(allTable, this.indexArr, currentData, res)
       }
-      return res
+      return allTable
+    },
+    // 重新组装table
+    getTable (allTable, indexArr, currentData, res) {
+      if (this.indexArr.length === 1) {
+        let spliceRes = res.slice(0, indexArr[0])
+        allTable.push(...spliceRes, currentData)
+      } else {
+        let spliceRes = res.slice(indexArr[indexArr.length - 2], indexArr[indexArr.length - 1])
+        allTable.push(...spliceRes, currentData)
+      }
     },
     tableRowClassName ({ row, rowIndex }) {
-      if (this.indexArr.some(item => item === row.id - 1)) {
+      if (this.indexArr.some((item, index) => item + index === row.id - 1)) {
         return 'success-row'
       }
       return ''
@@ -253,7 +266,13 @@ export default {
     },
     getSummaries (param) {
       return () => {
-        const columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+        let columns = []
+        if (this.selectData.lineIds && this.selectData.lineIds.length > 0) {
+          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+        } else {
+          columns = ['id', 'orgName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+        }
+
         const sums = []
         columns.forEach((item, index) => {
           const values = param.map(list => Number(list[item]))

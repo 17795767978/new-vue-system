@@ -362,7 +362,7 @@ export default {
     this._stationList()
   },
   computed: {
-    ...mapGetters(['userId'])
+    ...mapGetters(['userId', 'formDown'])
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
@@ -449,9 +449,7 @@ export default {
     },
     'formInline.lineId': {
       handler (newValue) {
-        if (this.isLinkage) {
-          this.formInline.busNumber = ''
-        }
+        this.formInline.busNumber = ''
         if (newValue !== '') {
           this.$api['wholeInformation.getCar']({
             lineId: newValue,
@@ -696,7 +694,8 @@ export default {
         endStation: this.isStation ? this.formInline.endStation : '',
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
         startTime: this.formInline.dateArray[0],
-        endTime: this.formInline.dateArray[1]
+        endTime: this.formInline.dateArray[1],
+        data: this.formDown
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

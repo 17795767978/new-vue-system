@@ -75,6 +75,7 @@ export default {
     diaData: {
       deep: true,
       handler (newV) {
+        console.log(newV)
         this.wsData = newV
       }
     },
@@ -95,7 +96,6 @@ export default {
       handler (newV) {
         // console.log(newV.dataType)
         this.pageNumber = 1
-        this.total = 0
         if (newV.is) {
           this.see = true
         }
@@ -103,23 +103,20 @@ export default {
           this.selectAllData = this.wsData
           this.selectData = this.selectAllData.slice(0, this.pageSize)
           this.total = this.selectAllData.length
-          console.log(this.selectAllData)
         } else if (newV.dataType === 'table') {
           this.selectAllData = this.tableData
           this.total = this.selectAllData.length
           this.selectData = this.selectAllData.slice(0, this.pageSize)
-          console.log(this.selectAllData)
         } else if (newV.dataType === 'charts') {
           this.selectAllData = this.chartData
           this.selectData = this.selectAllData.slice(0, this.pageSize)
           this.total = this.selectAllData.length
-          console.log(this.selectAllData)
         }
       }
     },
     see (newV) {
       if (!newV) {
-        this.$emit('close', this.selectData)
+        this.$emit('close', this.selectAllData)
       }
     }
   },

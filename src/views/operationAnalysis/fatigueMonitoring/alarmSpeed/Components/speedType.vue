@@ -82,8 +82,9 @@ export default {
     _getAlarmTypeRatioAnalysis (params) {
       this.loading = true
       this.$api['tiredMonitoring.getAlarmTypeRatioAnalysis'](params).then(res => {
-        console.log(res)
-        this.loading = false
+        setTimeout(() => {
+          this.loading = false
+        }, 1000)
         this.title = {
           text: `报警速度${this.echartsData}报警类型`,
           left: 'center'

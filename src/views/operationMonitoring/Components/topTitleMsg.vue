@@ -32,7 +32,7 @@ export default {
   data () {
     return {
       dataNow: '',
-      title: '宜宾公交管理综合分析决策系统',
+      title: '公交管理综合分析决策系统',
       timer: null,
       temperature: '',
       weather: ''

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="isloading">
     <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">不良驾驶行为分析报警司机排行</h2>
     <el-table
       ref="tableWrapper"
@@ -14,10 +14,12 @@
         width="80">
       </el-table-column>
       <el-table-column
-        v-for="item in columnArr"
+        v-for="(item, index) in columnArr"
         :key="item.plvalue"
         align="center"
+        :sortable="getSort(index)"
         :prop="item.plvalue"
+        :width="getWidth(item, index)"
         :label="item.pldisplay">
         <template slot-scope="scope">
           <el-button v-if="item.plvalue === 'drivername'" type="primary" size="mini" @click="getrowData(scope.row)">{{scope.row.drivername}}</el-button>
@@ -43,7 +45,8 @@ export default {
       tableAllData: [],
       plain: true,
       tableLength: 0,
-      scrollHeight: 0
+      scrollHeight: 0,
+      isloading: true
     }
   },
   computed: {
@@ -102,7 +105,11 @@ export default {
   },
   methods: {
     _getTableData (params) {
+      this.isloading = true
       this.$api['tiredMonitoring.getBadDrivingDriverRanking'](params).then(res => {
+        setTimeout(() => {
+          this.isloading = false
+        }, 100)
         this.columnArr = res.column
         this.tableAllData = res.data
         this.tableAllData.forEach((item, index) => {
@@ -160,6 +167,22 @@ export default {
           vDom.style.height = 0
           vWrapper.style.transform = `translateY(0px)`
         }
+      }
+    },
+    getSort (index) {
+      if (index > 3) {
+        return true
+      }
+      return false
+    },
+    getWidth (item, index) {
+      console.log(item.pldisplay.length)
+      if (index > 3 && item.pldisplay.length > 4) {
+        return 130
+      } else if (index > 3 && item.pldisplay.length <= 4) {
+        return 110
+      } else if (index <= 3) {
+        return 100
       }
     },
     getrowData (row) {

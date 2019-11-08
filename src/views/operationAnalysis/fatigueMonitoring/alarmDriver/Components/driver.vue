@@ -102,8 +102,9 @@ export default {
     _getDriverWarnTimeTrend (params) {
       this.loading = true
       this.$api['tiredMonitoring.getDriverWarnTimeTrend'](params).then(res => {
-        console.log(res)
-        this.loading = false
+        setTimeout(() => {
+          this.loading = false
+        }, 100)
         this.title = {
           text: `${this.drivers.drivername}司机报警时间趋势图`,
           left: 'center',
