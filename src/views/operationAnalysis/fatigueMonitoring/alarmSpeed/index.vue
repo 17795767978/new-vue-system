@@ -33,6 +33,7 @@ import SpeedStatistics from './Components/speedStatistics'
 import SpeedType from './Components/speedType'
 import SpeedNum from './Components/speedNum'
 export default {
+  name: 'alarmSpeed',
   data () {
     return {
       searchData: {},

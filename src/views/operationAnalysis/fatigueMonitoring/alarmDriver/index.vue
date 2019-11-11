@@ -22,6 +22,7 @@ import Search from '@/components/searchAlarm'
 import Driver from './Components/driver'
 import Table from './Components/table'
 export default {
+  name: 'alarmDriver',
   data () {
     return {
       searchData: {},
@@ -40,6 +41,9 @@ export default {
     driverChanged (data) {
       this.driverData = data
     }
+  },
+  destroyed () {
+    console.log('alarmDriver')
   }
 }
 </script>

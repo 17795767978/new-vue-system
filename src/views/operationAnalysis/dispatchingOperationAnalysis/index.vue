@@ -1,14 +1,18 @@
 <template>
   <div>
-    <keep-alive>
+    <keep-alive :include="cachedViews">
       <router-view></router-view>
     </keep-alive>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: 'dispatchingOperationAnalysis'
+  name: 'dispatchingOperationAnalysis',
+  computed: {
+    ...mapGetters(['cachedViews'])
+  }
 }
 </script>
 

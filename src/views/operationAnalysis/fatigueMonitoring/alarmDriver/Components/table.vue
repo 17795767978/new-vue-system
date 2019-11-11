@@ -176,7 +176,6 @@ export default {
       return false
     },
     getWidth (item, index) {
-      console.log(item.pldisplay.length)
       if (index > 3 && item.pldisplay.length > 4) {
         return 130
       } else if (index > 3 && item.pldisplay.length <= 4) {

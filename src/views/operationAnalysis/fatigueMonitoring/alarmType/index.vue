@@ -33,6 +33,7 @@ import AlarmStatistics from './Components/alarmStatistics'
 import AlarmTimeSlot from './Components/alarmTimeslot'
 import AlarmTimestrend from './Components/alarmTimetrend'
 export default {
+  name: 'alarmType',
   data () {
     return {
       searchData: {},
@@ -53,6 +54,9 @@ export default {
       console.log(data)
       this.selectEcharts = data
     }
+  },
+  destroyed () {
+    console.log('alarmType')
   }
 }
 </script>

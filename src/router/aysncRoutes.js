@@ -113,7 +113,18 @@ export const aysncRoutesMap = [
             icon: 'nocturne icon-dash',
             roles: ['/passenger-home']
           }
-        }, {
+        },
+        {
+          path: 'realtime-passenger-flow',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/realtimePassengerFlow/index'),
+          name: 'realtimePassengerFlow',
+          meta: {
+            title: '客流实时统计',
+            icon: 'nocturne icon-dash',
+            roles: ['/timeTable-analysis']
+          }
+        },
+        {
           path: 'timeTable-analysis',
           component: _import_('operationAnalysis/dispatchingOperationAnalysis/timeTableAnalysis/index'),
           name: 'timeTableAnalysis',
@@ -339,6 +350,28 @@ export const aysncRoutesMap = [
         }
       ]
     }
+    ]
+  },
+  {
+    path: '/system-admin',
+    component: Layout,
+    name: 'systemAdmin',
+    meta: {
+      title: '系统管理',
+      icon: 'nocturne icon-dash',
+      roles: ['/alarm-center']
+    },
+    children: [
+      {
+        path: 'channel-management',
+        component: _import_('systemAdmin/channelManagement/index'),
+        name: 'channelManagement',
+        meta: {
+          title: '通道配置',
+          icon: 'nocturne icon-dash',
+          roles: ['/alarm-center']
+        }
+      }
     ]
   },
   // {
