@@ -62,6 +62,14 @@ export const wholeInformationApi = {
       mockPath: '/api/net/data/basestation/getAllBaseStationNamesListData',
       params: {},
       desc: '站位列表'
+    },
+    {
+      name: 'videoInfo',
+      method: 'POST',
+      path: '/api/base/video/param/info',
+      mockPath: '/api/base/video/param/info',
+      params: {},
+      desc: '视频通道'
     }
   ]
 }

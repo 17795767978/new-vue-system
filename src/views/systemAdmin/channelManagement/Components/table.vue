@@ -73,15 +73,7 @@ export default {
     ...mapGetters(['formData'])
   },
   created () {
-    let defaultForm = this.formData
-    this._getTableData({
-      orgId: defaultForm.orgId === '1' ? '' : defaultForm.orgId,
-      lineId: defaultForm.lineId,
-      busNumber: '',
-      busSelfCode: '',
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize
-    })
+    // let defaultForm = this.formData
   },
   mounted () {
   },
@@ -91,27 +83,11 @@ export default {
     searchData: {
       deep: true,
       handler (newV) {
-        this._getTableData({
-          orgId: newV.orgId === '1' ? '' : newV.orgId,
-          lineId: newV.lineId,
-          busNumber: newV.busNumber,
-          busSelfCode: newV.busSelfCode,
-          pageNumber: this.pageNumber,
-          pageSize: this.pageSize
-        })
       }
     }
   },
   methods: {
     _getTableData (params) {
-      this.isloading = true
-      this.$api['tiredMonitoring.getBadDrivingDriverRanking'](params).then(res => {
-        setTimeout(() => {
-          this.isloading = false
-        }, 100)
-        this.columnArr = res.column
-        this.tableData = res.data
-      })
     },
     canEdit (row) {
       console.log(row)
@@ -120,17 +96,6 @@ export default {
       console.log(row)
     },
     handleCurrentChange (val) {
-      this.selectData.pageNumber = val
-      this.selectData.pageSize = 13
-      this.pageNumber = val
-      this._getTableData({
-        orgId: this.searchData.orgId === '1' ? '' : this.searchData.orgId,
-        lineId: this.searchData.lineId,
-        busNumber: this.searchData.busNumber,
-        busSelfCode: this.searchData.busSelfCode,
-        pageNumber: this.pageNumber,
-        pageSize: this.pageSize
-      })
     }
   }
 }

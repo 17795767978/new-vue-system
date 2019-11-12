@@ -52,7 +52,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择车辆" v-if="isBus">
-        <el-select class="font-style" v-model="formInline.busNumber" filterable placeholder="请选择">
+        <el-select class="font-style" style="width: 200px" v-model="formInline.busNumber" :multiple="isBusMul" :collapse-tags="isBusMul" filterable placeholder="请选择">
           <el-option
             v-for="item in carOptions"
             :key="item.value"
@@ -182,6 +182,7 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
         <el-button type="success" @click="onSave" v-if="isDownload">导出</el-button>
+        <el-button type="success" @click="getTableData" v-if="isMul">批量修改</el-button>
       </el-form-item>
     </el-form>
     <el-dialog
@@ -238,6 +239,9 @@ export default {
     isBus: {
       type: Boolean
     },
+    isBusMul: {
+      type: Boolean
+    },
     isTurn: {
       type: Boolean
     },
@@ -270,6 +274,9 @@ export default {
     },
     queryData: {
       type: Object
+    },
+    isMul: {
+      type: Boolean
     },
     isEmpty: {
       type: Boolean
@@ -667,6 +674,38 @@ export default {
     },
     onSave () {
       this.centerDialogVisible = true
+    },
+    getTableData () {
+      this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+      this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+      if (this.formInline.dateArray.length === 2) {
+        this.formInline.dateArray = [moment(this.formInline.dateArray[0]).format('YYYY-MM-DD'), moment(this.formInline.dateArray[1]).format('YYYY-MM-DD')]
+      }
+      if (this.formInline.endHour !== '') {
+        this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
+      }
+      let configData = {
+        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
+        lineId: this.formInline.lineId,
+        busNumber: this.formInline.busNumber,
+        valueTime: this.formInline.valueTime,
+        lineType: this.formInline.lineType,
+        dataCurrent: this.formInline.dataCurrent,
+        startTime: this.formInline.startTime,
+        endTime: this.formInline.endTime,
+        startHour: this.formInline.startHour,
+        endHour: this.formInline.endHour,
+        endHourFormatter: this.formInline.endHourFormatter,
+        month: this.formInline.month,
+        lineOrgId: this.formInline.lineOrgId,
+        lineLineId: this.formInline.lineLineId,
+        startStation: this.formInline.startStation,
+        endStation: this.formInline.endStation,
+        warnTypeId: this.formInline.warnTypeId,
+        dateArray: this.formInline.dateArray,
+        lineIds: this.formInline.lineIds
+      }
+      this.$emit('configCheckMul', configData)
     },
     getExcel () {
       // console.log(this.downLoadName)

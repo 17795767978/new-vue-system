@@ -90,6 +90,25 @@ export const passengerFlowApi = {
         endTime: ''
       },
       desc: '客流数据查询'
+    },
+    {
+      name: 'getCompanyTotalPassengerFlow',
+      method: 'POST',
+      path: '/zhfxpt/passengerflow/getCompanyTotalPassengerFlow',
+      mockPath: '/zhfxpt/passengerflow/getCompanyTotalPassengerFlow',
+      params: {
+      },
+      desc: '各公司客流数据查询'
+    },
+    {
+      name: 'getLineTotalPassengerFlow',
+      method: 'POST',
+      path: '/zhfxpt/passengerflow/getLineTotalPassengerFlow',
+      mockPath: '/zhfxpt/passengerflow/getLineTotalPassengerFlow',
+      params: {
+        orgId: ''
+      },
+      desc: '线路当日累计客流（人次）'
     }
   ]
 }

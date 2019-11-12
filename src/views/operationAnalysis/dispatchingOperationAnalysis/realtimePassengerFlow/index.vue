@@ -6,91 +6,164 @@
     <div class="scroll-num">
       <div class="top-scroll">
         <div class="left-flow">
-          <h2 class="real-flow">实施累计客流（人次）</h2>
+          <h2 class="real-flow">实时累计客流（人次）</h2>
           <ul class="scroll-wrapper">
-            <li class="item" v-for="(item, index) in passenger" :key="item">
+            <li class="item" ref="totalFlowWrapper" :class="[bfFlow1[index] !== realtimeFlow1[index] ? 'active' : 'kobe']" v-for="(item, index) in passenger" :key="item">
               {{realtimeFlow1[index]}}
             </li>
           </ul>
         </div>
         <div class="right-flow">
-          <h2 class="real-num">实施载客（人）</h2>
+          <h2 class="real-num">实时载客（人）</h2>
           <ul class="scroll-wrapper">
-            <li  class="item" v-for="(item, index) in passenger" :key="item">
+            <li  class="item" ref="currentFlowWrapper" :class="[bfFlow2[index] !== realtimeFlow2[index] ? 'active' : 'kobe']" v-for="(item, index) in passenger" :key="item">
               {{realtimeFlow2[index]}}
             </li>
           </ul>
         </div>
       </div>
       <div class="bottom-scroll">
-        <el-button type="primary" @click="getCont">点击</el-button>
+        <ul class="every-org-flow-num">
+          <li class="org-num-wrapper" v-for="(item,index) in orgFlowData" :style="getOrgWidth" :key="item.orgUuid"  @click="getEcharts(item)">
+            <div class="org-title"  :class="[currentId === item.orgUuid ? 'down' : '']">
+              {{item.orgName}}
+              <span style="font-size: #eee; font-size:0.5vw;margin-left: 0.2vw;">(人次)</span>
+            </div>
+            <p :style="getColor(index)" class="org-num">{{item.personCount}}</p>
+          </li>
+        </ul>
       </div>
+    </div>
+    <div class="echarts">
+      <Echarts v-if="Object.keys(selectData).length > 0" :selectData="selectData"/>
     </div>
   </div>
 </template>
 
 <script>
+import Echarts from './Components/echarts'
 export default {
   name: 'realtimePassengerFlow',
   data () {
     return {
-      passenger: ['k', 'o', 'b', 'e', 'd', 'r', 'g'],
-      realtimeFlow1: [2, 5, 4, 7, 1, 2, 5],
-      realtimeFlow2: [0, 0, 0, 7, 6, 5, 0],
-      numArr1: [2547125, 2547234, 2547456, 2576575, 2541111, 2541213, 2547111, 2547235],
-      numArr2: [7650, 7541, 7213, 8421, 7650, 7333, 7222, 7111],
-      num1: 2547125,
-      num2: 7650
+      passenger: ['k', 'o', 'b', 'e', 'd', 'r', 'g'], // vdom的key
+      bfFlow1: ['0', '0', '0', '0', '0', '0', '0'], // 之前的客流
+      bfFlow2: ['0', '0', '0', '0', '0', '0', '0'], // 之前的载客
+      realtimeFlow1: ['0', '0', '0', '0', '0', '0', '0'], // 动画后的客流
+      realtimeFlow2: ['0', '0', '0', '0', '0', '0', '0'], // 动画后的载客
+      totalTimer: null,
+      currentTimer: null,
+      orgFlowData: [],
+      colorful: ['#FEDD00', '#00F6F7', '#A1E716', '#FFBF35', '#FF30A0', '#FEDD00', '#00F6F7', '#A1E716', '#FFBF35', '#FF30A0'],
+      currentId: '',
+      selectData: ''
     }
   },
-  methods: {
-    getCont () {
-      let str1 = ''
-      let str2 = ''
-      // let random = Math.random()
-      // if (random < 0.3) {
-      //   this.num1 += 1
-      //   this.num2 += 1
-      // } else if (random >= 0.3 && random <= 0.5) {
-      //   this.num1 += 100
-      //   this.num2 += 100
-      // } else if (random > 0.5 && random < 0.7) {
-      //   this.num1 += 1000
-      //   this.num2 += 1000
-      // } else {
-      //   this.num1 += 258
-      //   this.num2 += 258
-      // }
-      for (let i = 0; i < this.numArr1.length; i++) {
-        setTimeout(() => {
-          console.log(i)
-          str1 = String(this.numArr1[i])
-          if (str1.length === 7) {
-            this.realtimeFlow1 = str1.split('')
-          } else {
-            let len = 7 - str1.length
-            for (let i = 0; i < len; i++) {
-              str1 = 0 + str1
-            }
-            this.realtimeFlow1 = str1.split('')
-          }
-        }, 3000 * i)
+  components: {
+    Echarts
+  },
+  computed: {
+    getOrgWidth () {
+      return {
+        width: `${100 / this.orgFlowData.length - 2}%`,
+        height: '10vh'
       }
-      for (let i = 0; i < this.numArr2.length; i++) {
-        setTimeout(() => {
-          str2 = String(this.numArr2[i])
-          if (str2.length === 7) {
-            this.realtimeFlow2 = str2.split('')
-          } else {
-            let len = 7 - str2.length
-            for (let i = 0; i < len; i++) {
-              str2 = 0 + str2
-            }
-            this.realtimeFlow2 = str2.split('')
-          }
-        }, 3000 * i)
+    },
+    getColor () {
+      return (index) => {
+        return {
+          color: this.colorful[index]
+        }
       }
     }
+  },
+  mounted () {
+    this._getTotalFlow({
+      orgId: ''
+    })
+    this._getCurrentFlow({
+      orgId: ''
+    })
+    this._getCompanyTotalPassengerFlow()
+  },
+  methods: {
+    _getTotalFlow (params) {
+      this.bfFlow1 = JSON.parse(JSON.stringify(this.realtimeFlow1))
+      this.$api['passengerFlow.getTotalPassengerFlow'](params).then((res) => {
+        let str1 = String(res.personCount)
+        let dom = this.$refs.totalFlowWrapper
+        this.actionsType(str1, dom, true)
+        this.totalTimer = setTimeout(() => {
+          this._getTotalFlow({
+            orgId: ''
+          })
+        }, 10000)
+      })
+    },
+    _getCurrentFlow (params) {
+      this.bfFlow2 = JSON.parse(JSON.stringify(this.realtimeFlow2))
+      this.$api['passengerFlow.getRealTimePersoncountAndFullLoadRate'](params).then((res) => {
+        let str2 = String(res.personCount)
+        let dom = this.$refs.currentFlowWrapper
+        this.actionsType(str2, dom, false)
+        this.currentTimer = setTimeout(() => {
+          this._getCurrentFlow({
+            orgId: ''
+          })
+        }, 10000)
+      })
+    },
+    _getCompanyTotalPassengerFlow () {
+      this.$api['passengerFlow.getCompanyTotalPassengerFlow']().then(res => {
+        if (Object.keys(this.selectData).length === 0) {
+          this.selectData = res[0]
+          this.currentId = res[0].orgUuid
+        } else {
+          this.selectData = res.filter(item => item.orgUuid === this.selectData.orgUuid)[0]
+          this.currentId = res.filter(item => item.orgUuid === this.selectData.orgUuid)[0].orgUuid
+        }
+        this.orgFlowData = res
+        this.orgFlow = setTimeout(() => {
+          this._getCompanyTotalPassengerFlow()
+        }, 10000)
+      })
+    },
+    // 动画操作
+    actionsType (str, dom, is) {
+      if (str.length === 7) {
+        if (is) {
+          this.realtimeFlow1 = str.split('')
+        } else {
+          this.realtimeFlow2 = str.split('')
+        }
+      } else {
+        let len = 7 - str.length
+        for (let i = 0; i < len; i++) {
+          str = 0 + str
+        }
+        if (is) {
+          this.realtimeFlow1 = str.split('')
+        } else {
+          this.realtimeFlow2 = str.split('')
+        }
+      }
+      setTimeout(() => {
+        for (let i = 0; i < dom.length; i++) {
+          dom[i].classList.remove('active')
+        }
+      }, 5000)
+    },
+    getEcharts (item) {
+      this.currentId = item.orgUuid
+      this.selectData = item
+    }
+  },
+  destroyed () {
+    clearTimeout(this.totalTimer)
+    clearTimeout(this.currentTimer)
+    this.totalTimer = null
+    this.currentTimer = null
+    console.log(123)
   }
 }
 </script>
@@ -123,14 +196,14 @@ export default {
   }
   .scroll-num {
     width: 90%;
-    margin: 5vh auto;
-    height: 45vh;
+    margin: 5vh auto 2vh;
+    height: 40vh;
     border: 1px solid #08325f;
     box-shadow: 1px 1px 10px 4px #08325f inset;
     box-sizing: border-box;
     .top-scroll {
       width: 100%;
-      height: 30vh;
+      height: 27vh;
       display: flex;
       box-sizing: border-box;
       justify-content: center;
@@ -163,12 +236,64 @@ export default {
             border: 1px solid #08325f;
             box-shadow: 1px 1px 10px 4px #08325f inset;
             box-sizing: border-box;
-            font-size: 2.7vw;
-            font-weight: bold;
+            font-size: 4vw;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+    .bottom-scroll {
+      width: 100%;
+      height: 10vh;
+      .every-org-flow-num {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        .org-num-wrapper {
+          width: 100%;
+          cursor: pointer;
+          .org-title {
+            height: 4vh;
+            color: #fff;
+            font-size: 1vw;
+            font-weight: 900;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1vh;
+          }
+          .org-num {
+            text-align: center;
+            font-size: 2vw;
+            margin: 0;
+            letter-spacing: 0.1vw;
+            cursor: pointer;
           }
         }
       }
     }
   }
+  .echarts {
+    width: 90%;
+    margin: 0 auto;
+    height: calc(45vh - 100px);
+    border: 1px solid #08325f;
+    box-shadow: 1px 1px 10px 4px #08325f inset;
+    box-sizing: border-box;
+    padding: 1vh 2vw;
+  }
+}
+.active {
+  animation: zy 5s 0s linear;
+}
+@keyframes zy{
+  0% {transform: rotate(30deg); opacity: 0;}
+  20% {transform: rotate(-30deg);  opacity: 0.25;}
+  30% {transform: rotate(15deg);  opacity: 0.5;}
+  40% {transform: rotate(-15deg);  opacity: 0.75;}
+  50%,100% {transform: rotate(0deg);  opacity: 1;}
+}
+.down {
+  border-bottom: 1px solid #ffffff;
+  box-sizing: border-box;
 }
 </style>
