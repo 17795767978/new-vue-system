@@ -10,16 +10,18 @@
       @configCheck="getSearch"
       @configCheckMul="getSearchMul" />
     <div class="table">
-      <Table :selectData="selectData"/>
+      <Table :selectData="selectData" :tableData="tableData" :videoTableHeader="videoTableHeader" :videoInfo="videoInfo" @clearTableData="clearTableData"/>
     </div>
     <el-dialog
       title="请选择通道"
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      @close="closeClear"
       width="20%">
       <ul>
         <li style="margin-bottom: 1vh;" v-for="(options, index) in videoInfo" :key="options.value">
           <span>{{`通道${index + 1}: `}}</span>
-          <el-select v-model="videoInfoData[index]" :placeholder="`请选择通道${index + 1}`" @change="getChange" clearable @clear="getClear(index)">
+          <el-select v-model="videoInfoData[index]" :placeholder="`请选择通道${index + 1}`" @change="getChange" clearable @clear="getClear(index)" @blur="changeStatus">
             <el-option
               v-for="item in videoInfo"
               :key="item.value"
@@ -45,50 +47,38 @@ export default {
   name: 'channelManagement',
   data () {
     return {
-      selectData: {},
-      selectDataMul: {},
+      selectData: {}, // 单一查询
+      selectDataMul: {}, // 批量
       dialogVisible: false,
-      videoInfoData: [],
-      videoInfo: [
-        {
-          label: '前路',
-          value: '前路',
-          disabled: false
-        },
-        {
-          label: '司机',
-          value: '司机',
-          disabled: false
-        },
-        {
-          label: '前门',
-          value: '前门',
-          disabled: false
-        },
-        {
-          label: '后门',
-          value: '后门',
-          disabled: false
-        },
-        {
-          label: '前车厢',
-          value: '前车厢',
-          disabled: false
-        }, {
-          label: '后车厢',
-          value: '后车厢',
-          disabled: false
-        }
-      ]
+      videoInfoData: [], // 通道列表
+      tableData: [], // 批量生成通道的table
+      videoTableHeader: [],
+      videoInfo: []
     }
   },
+  created () {
+    this._getVideoInfo()
+  },
   methods: {
+    _getVideoInfo () {
+      this.$api['wholeInformation.videoInfo']().then(res => {
+        this.videoInfo = []
+        res.forEach(item => {
+          if (item.videoIsvalid === '1') {
+            this.videoInfo.push({
+              label: item.videoName,
+              value: item.videoName,
+              disabled: false
+            })
+          }
+        })
+      })
+    },
     getSearch (data) {
       this.selectData = data
     },
     getSearchMul (data) {
       this.selectDataMul = data
-      console.log(this.selectDataMul)
       if (this.selectDataMul.lineId === '' && this.selectDataMul.busNumber.length === 0) {
         this.$message.warning('请选择线路或车辆')
       } else {
@@ -96,20 +86,47 @@ export default {
       }
     },
     seeTable () {
-      console.log(this.videoInfoData)
+      this.tableData = []
+      this.selectDataMul.busNumber.forEach((item, index) => {
+        this.tableData[index] = {
+          busPlateNumber: item
+        }
+        this.videoTableHeader.push('busPlateNumber')
+        this.videoInfoData.forEach((info, infoIndex) => {
+          this.tableData[index][`video${infoIndex + 1}`] = info
+          this.videoTableHeader.push(`video${infoIndex + 1}`)
+        })
+      })
+      this.videoTableHeader = Array.from(new Set([...this.videoTableHeader]))
       this.dialogVisible = false
     },
     getChange (data) {
-      console.log(data)
       this.videoInfo.forEach(item => {
-        if (item.value === data) {
+        if (this.videoInfoData.some(info => item.value === info)) {
           item.disabled = true
+        } else {
+          item.disabled = false
         }
       })
     },
+    changeStatus () {
+    },
+    // 清空input
     getClear (index) {
       console.log(index)
       this.videoInfo[index].disabled = false
+    },
+    // 关闭弹窗
+    closeClear () {
+      this.videoInfoData = []
+      this.videoInfo.forEach(item => {
+        item.disabled = false
+      })
+      // this.videoTableHeader = []
+    },
+    // 点击查询时 清除批量的生成table
+    clearTableData (data) {
+      this.tableData = []
     }
   },
   components: {

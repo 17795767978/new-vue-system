@@ -66,10 +66,35 @@ export const wholeInformationApi = {
     {
       name: 'videoInfo',
       method: 'POST',
-      path: '/api/base/video/param/info',
-      mockPath: '/api/base/video/param/info',
+      path: '/api/base/video/param/info/list',
+      mockPath: '/api/base/video/param/info/list',
       params: {},
       desc: '视频通道'
+    },
+    {
+      name: 'videoInfoAdd',
+      method: 'POST',
+      path: '/api/base/bus/video/info/add',
+      mockPath: '/api/base/bus/video/info/add',
+      params: {
+      },
+      desc: '车辆视频位置关系-新增'
+    },
+    {
+      name: 'videoList',
+      method: 'POST',
+      path: '/api/base/bus/video/info/list',
+      mockPath: '/api/base/bus/video/info/list',
+      params: {},
+      desc: '车辆视频位置关系-列表'
+    },
+    {
+      name: 'videoUpdateList',
+      method: 'POST',
+      path: '/api/base/bus/video/info/update',
+      mockPath: '/api/base/bus/video/info/update',
+      params: {},
+      desc: '车辆视频位置关系-更新'
     }
   ]
 }

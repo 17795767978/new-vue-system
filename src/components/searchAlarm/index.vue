@@ -182,7 +182,7 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
         <el-button type="success" @click="onSave" v-if="isDownload">导出</el-button>
-        <el-button type="success" @click="getTableData" v-if="isMul">批量修改</el-button>
+        <el-button type="success" @click="getTableData" v-if="isMul">批量设置</el-button>
       </el-form-item>
     </el-form>
     <el-dialog
@@ -514,16 +514,6 @@ export default {
     }
   },
   updated () {
-    // if (this.totle <= 10000 && this.totle > 0 && this.excelData.length === this.totle && !this.isClose) {
-    //   this.laoding = false
-    //   this.code = '下载'
-    // } else if (this.totle > 10000 && this.excelData.length === 10000 && !this.isClose) {
-    //   this.laoding = false
-    //   this.code = '下载'
-    // } else {
-    //   this.laoding = true
-    //   this.code = '加载中'
-    // }
   },
   methods: {
     _stationList () {
@@ -684,6 +674,9 @@ export default {
       if (this.formInline.endHour !== '') {
         this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
       }
+      if (this.formInline.busNumber.length === 0 && this.isBusMul && this.formInline.lineId !== '') {
+        this.formInline.busNumber = this.carOptions.map(item => item.value)
+      }
       let configData = {
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
         lineId: this.formInline.lineId,
@@ -708,15 +701,6 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
-      // console.log(this.downLoadName)
-      // this.centerDialogVisible = false
-      // if (this.excelData.length > 0) {
-      //   this.$message.success('正在下载中。。。')
-      // } else {
-      //   this.$message.warning('暂无数据')
-      // }
-      // this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
-      // this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
       let lineArr = []
       this.downLoadLoading = true
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
