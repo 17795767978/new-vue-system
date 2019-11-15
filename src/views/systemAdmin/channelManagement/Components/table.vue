@@ -49,16 +49,16 @@
         v-if="tableData.length === 0"
         width="150">
         <template slot-scope="scope">
-          <el-button type="primary" v-if="scope.row.disabled === true" @click="canEdit(scope.row)" size="small">编辑</el-button>
-          <el-button type="primary" v-else @click="canEdit(scope.row)" size="small">取消</el-button>
-          <el-button type="success" @click="save(scope.row)" size="small">保存</el-button>
+          <el-button type="primary" v-if="scope.row.disabled === true" @click="canEdit(scope.row, scope.$index)" size="small">编辑</el-button>
+          <el-button type="primary" v-if="scope.row.disabled === false" @click="canEdit(scope.row, scope.$index)" size="small">取消</el-button>
+          <el-button type="success" v-if="scope.row.disabled === false" @click="save(scope.row)" size="small">保存</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
       style="float: right; margin-top: 20px;"
       background
-      :current-page="pageNumber"
+      :current-page.sync="pageNumber"
       @current-change="handleCurrentChange"
       layout="prev, pager, next"
       :page-size="pageSize"
@@ -68,6 +68,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Immutable from 'immutable'
 import { mapGetters } from 'vuex'
 export default {
   props: {
@@ -113,6 +114,7 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
+        this.pageNumber = 1
         this._getTableData({
           orgUuid: newV.orgId === '1' ? '' : newV.orgId,
           lineUuid: newV.lineId,
@@ -143,6 +145,10 @@ export default {
       handler (newV) {
         this.columnArr = newV
       }
+    },
+    pageNumber (newV) {
+      console.log(newV)
+      console.log(this.pageNumber)
     }
   },
   methods: {
@@ -163,7 +169,6 @@ export default {
     _getTableData (params) {
       this.columnArr = ['busPlateNumber']
       this.tableDataOwn = []
-      this.pageNumber = 1
       this.videoInfo.forEach((item, index) => {
         this.columnArr.push(`video${index + 1}`)
       })
@@ -198,7 +203,7 @@ export default {
         }
       })
     },
-    // 修改
+    // 修改input框
     getChange (row) {
       this.tableDataAll = JSON.parse(JSON.stringify(this.tableDataAll))
       Object.keys(row).forEach(item => {
@@ -211,32 +216,38 @@ export default {
         })
       })
     },
+    // input框清除
     getClear (index) {
       this.videoInfo[index - 1].disabled = false
     },
+    // 批量新增
     onSave () {
-      console.log(this.tableData)
       this.$api['wholeInformation.videoInfoAdd']({
         list: JSON.stringify(this.tableData)
       }).then(res => {
         this.$message.success(`修改成功`)
       })
     },
-    canEdit (row) {
+    // 取消编辑是修改数据后返回原来数据 immutable.js + 深拷贝
+    canEdit (row, index) {
       if (row.disabled === true) {
         row.disabled = false
+        let map2 = Immutable.Map(row)
+        this.oldRow = map2
       } else {
-        row.disabled = true
+        let currentRow = this.oldRow.toJS()
+        currentRow.disabled = true
+        this.tableDataOwn[index] = currentRow
+        this.tableDataOwn = JSON.parse(JSON.stringify(this.tableDataOwn))
       }
     },
+    // 修改单行
     save (row) {
-      console.log(row)
-      this.$api['wholeInformation.videoUpdateList']({
+      this.$api['wholeInformation.videoInfoAdd']({
         list: JSON.stringify([{ ...row }])
       }).then(res => {
         row.disabled = true
         this.$message.success('修改成功')
-        this.pageNumber = 1
         this._getTableData({
           orgUuid: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineUuid: this.selectData.lineId,
@@ -247,10 +258,12 @@ export default {
       })
     },
     handleCurrentChange (val) {
+      console.log(val)
       this.pageNumber = val
       if (this.tableData.length > 0) {
         this.tableDataOwn = this.tableData.slice((val - 1) * 10, val * 10)
       } else {
+        console.log(this.pageNumber)
         this._getTableData({
           orgUuid: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineUuid: this.selectData.lineId,

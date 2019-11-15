@@ -83,6 +83,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 // import Immutable from 'immutable.js'
 export default {
   props: {
@@ -126,23 +127,25 @@ export default {
       vWrapper.appendChild(tableBody)
       tableBody.appendChild(emptyBlock)
     })
+    let date = moment().format('YYYY-MM-DD')
     this._getOnOffPersonCountlist({
       orgId: this.formData.orgId === '1' ? '' : this.formData.orgId,
       lineIds: this.formData.lineIds,
-      startDate: this.formData.dateArray[0],
-      endDate: this.formData.dateArray[1]
-    })
+      startDate: date,
+      endDate: date
+    }, '1')
   },
   watch: {
     selectData: {
       deep: true,
       handler (newV) {
+        console.log(newV.radio)
         this._getOnOffPersonCountlist({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineIds: newV.lineIds,
           startDate: newV.dateArray[0],
           endDate: newV.dateArray[1]
-        })
+        }, newV.radio)
       }
     }
     // isOrgOpen (newV) {
@@ -153,29 +156,53 @@ export default {
     // }
   },
   methods: {
-    _getOnOffPersonCountlist (params) {
+    _getOnOffPersonCountlist (params, type) {
       this.loading = true
-      this.$api['passengerFlow.getOnOffPersonCountlist'](params).then(res => {
-        this.totalTableAllData = res
-        this.tableAllData = this.getOrgTotleNum(JSON.parse(JSON.stringify(res)))
-        this.$store.dispatch('getDownloadData', this.tableAllData)
-        this.loading = false
-        this.tableAllData.forEach((item, index) => {
-          item.id = index + 1
+      if (type === '1') {
+        this.$api['passengerFlow.getTodayOnOffPersonCountlist'](params).then(res => {
+          this.totalTableAllData = res
+          this.tableAllData = this.getOrgTotleNum(JSON.parse(JSON.stringify(res)))
+          this.$store.dispatch('getDownloadData', this.tableAllData)
+          this.loading = false
+          this.tableAllData.forEach((item, index) => {
+            item.id = index + 1
+          })
+          if (this.tableAllData.length >= 40) {
+            this.tableData = this.tableAllData.slice(0, 20)
+            this.tableLength = this.tableAllData.length
+            this.bigTable()
+          } else {
+            this.tableLength = 0
+            this.tableData = this.tableAllData
+            this.bigTable()
+          }
+          if (res.length === 0) {
+            this.$message.warning('暂无数据')
+          }
         })
-        if (this.tableAllData.length >= 40) {
-          this.tableData = this.tableAllData.slice(0, 20)
-          this.tableLength = this.tableAllData.length
-          this.bigTable()
-        } else {
-          this.tableLength = 0
-          this.tableData = this.tableAllData
-          this.bigTable()
-        }
-        if (res.length === 0) {
-          this.$message.warning('暂无数据')
-        }
-      })
+      } else {
+        this.$api['passengerFlow.getOnOffPersonCountlist'](params).then(res => {
+          this.totalTableAllData = res
+          this.tableAllData = this.getOrgTotleNum(JSON.parse(JSON.stringify(res)))
+          this.$store.dispatch('getDownloadData', this.tableAllData)
+          this.loading = false
+          this.tableAllData.forEach((item, index) => {
+            item.id = index + 1
+          })
+          if (this.tableAllData.length >= 40) {
+            this.tableData = this.tableAllData.slice(0, 20)
+            this.tableLength = this.tableAllData.length
+            this.bigTable()
+          } else {
+            this.tableLength = 0
+            this.tableData = this.tableAllData
+            this.bigTable()
+          }
+          if (res.length === 0) {
+            this.$message.warning('暂无数据')
+          }
+        })
+      }
     },
     // 计算每个分公司的上下车人数总和
     getOrgTotleNum (res) {

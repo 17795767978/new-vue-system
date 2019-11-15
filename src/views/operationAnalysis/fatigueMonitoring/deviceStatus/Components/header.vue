@@ -12,8 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择线路">
-        <el-select class="font-style" multiple
-            collapse-tags filterable v-model="formInline.lineUuid" placeholder="请选择">
+        <el-select class="font-style" filterable v-model="formInline.lineUuid" placeholder="请选择">
           <el-option
             v-for="item in lineOptions"
             :key="item.value"

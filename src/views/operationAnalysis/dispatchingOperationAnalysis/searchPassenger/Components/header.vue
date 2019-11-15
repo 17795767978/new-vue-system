@@ -1,6 +1,7 @@
 <template>
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
+      <el-row>
       <el-form-item label="选择机构">
         <el-select class="font-style" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
           <el-option
@@ -41,6 +42,7 @@
           </el-option>
         </el-select>
       </el-form-item>
+      </el-row>
       <el-form-item label="选择日期">
          <el-date-picker
           v-model="formInline.valueTime"
@@ -49,6 +51,10 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期">
         </el-date-picker>
+      </el-form-item>
+      <el-form-item label="查询时间">
+        <el-radio v-model="formInline.radio" label="1">当天</el-radio>
+        <el-radio v-model="formInline.radio" label="2">历史</el-radio>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -62,18 +68,9 @@
       width="30%"
       center>
        <p style="font-weight: bold">导出只支持最大下载量为65536条，如果超过65536条默认下载前65536条</p>
-       <!-- <p style="color: #f00; font-weight: bold">2.如果没有数据，请点击取消按钮</p> -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="getExcel">确认</el-button>
-        <!-- <downloadExcel
-          :data= "excelData"
-          type="xls"
-          style="display: inline-block; margin-left: 10px;"
-          name= "客流查询报表.xls"
-        >
-        <el-button type="primary" @click="getExcel" :loading="laoding">{{code}}</el-button>
-        </downloadExcel> -->
       </span>
     </el-dialog>
   </div>
@@ -107,7 +104,8 @@ export default {
         valueTime: [],
         lineType: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        radio: '1'
       },
       comOptions: [],
       turnOptions: [{
@@ -139,7 +137,7 @@ export default {
       this.carOptions = res
     })
     let dataNow = new Date()
-    let endTime = dataNow.getTime() - 24 * 3600 * 1000
+    let endTime = dataNow.getTime()
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
@@ -306,13 +304,13 @@ export default {
 .header {
   width: 100%;
   border-bottom: 1px solid #eee;
-  padding: 20px 20px;
+  padding: 10px 20px 0 20px;
   box-sizing: border-box;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
   .form-inline {
-    height: 38px;
+    min-height: 38px;
     .font-style {
-      width: 130px;
+      width: 200px;
     }
   }
 }

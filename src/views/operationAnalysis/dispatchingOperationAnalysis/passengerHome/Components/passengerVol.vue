@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" :tooltip="tooltip"></lineEcharts>
   </div>
 </template>
 
@@ -21,7 +21,8 @@ export default {
       maxNum: 0,
       id: 'vol',
       grid: {},
-      loading: true
+      loading: true,
+      tooltip: {}
     }
   },
   created () {
@@ -36,10 +37,15 @@ export default {
     _fullRateAnalysisUp (params) {
       this.loading = true
       this.$api['passengerSimple.getUpanddown'](params).then(res => {
-        console.log(res)
+        // let datas = []
+        // if (res.datas[1].length > 0 && res.datas[0].length > 0) {
+        //   datas = res.datas
+        // } else {
+        //   datas = [[], []]
+        // }
         this.loading = false
         this.title = {
-          text: '实时客流登降量',
+          text: '实时客流时间趋势分析',
           left: 10,
           top: 10,
           textStyle: {
@@ -53,14 +59,39 @@ export default {
           y2: 30,
           borderWidth: 1
         }
+        this.tooltip = {
+          formatter: (params) => {
+            return params.seriesName + ':' + params.value
+          }
+        }
         this.lineData = [{
           name: '实时',
           type: 'line',
-          data: res.datas[0]
+          data: res.datas[0],
+          smooth: true,
+          itemStyle: {
+            normal: {
+              color: '#f00',
+              lineStyle: {
+                width: 2,
+                color: '#f00'
+              }
+            }
+          }
         }, {
           name: '昨日',
           type: 'line',
-          data: res.datas[1]
+          data: res.datas[1],
+          smooth: true,
+          itemStyle: {
+            normal: {
+              color: '#00f',
+              lineStyle: {
+                width: 2,
+                color: '#00f'
+              }
+            }
+          }
         }]
         this.maxNum = max([max(res.datas[0]), max(res.datas[1])])
         this.dataLength = 2

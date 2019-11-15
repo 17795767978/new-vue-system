@@ -76,7 +76,24 @@ export const passengerFlowApi = {
         pageSize: '',
         pageNumber: ''
       },
-      desc: '客流数据明细查询'
+      desc: '客流数据明细查询-历史'
+    },
+    {
+      name: 'todayList',
+      method: 'POST',
+      path: '/api/passenger/flow/result/todayList',
+      mockPath: '/api/passenger/flow/result/todayList',
+      params: {
+        orgId: '',
+        lineId: '',
+        busNumber: '',
+        lineType: '',
+        startTime: '',
+        endTime: '',
+        pageSize: '',
+        pageNumber: ''
+      },
+      desc: '客流数据明细查询-当天'
     },
     {
       name: 'getOnOffPersonCountlist',
@@ -86,10 +103,23 @@ export const passengerFlowApi = {
       params: {
         orgId: '',
         lineId: '',
-        startTime: '',
-        endTime: ''
+        startDate: '',
+        endDate: ''
       },
-      desc: '客流数据查询'
+      desc: '客流数据查询-历史'
+    },
+    {
+      name: 'getTodayOnOffPersonCountlist',
+      method: 'POST',
+      path: '/api/passenger/flow/result/getTodayOnOffPersonCountlist',
+      mockPath: '/api/passenger/flow/result/getTodayOnOffPersonCountlist',
+      params: {
+        orgId: '',
+        lineId: '',
+        startDate: '',
+        endDate: ''
+      },
+      desc: '客流数据查询-当天'
     },
     {
       name: 'getCompanyTotalPassengerFlow',

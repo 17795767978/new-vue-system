@@ -194,21 +194,36 @@ export default {
     }
   },
   methods: {
-    _passengerFlow (params) {
+    _passengerFlow (params, type) {
       this.loading = true
       this.isDisabled = true
-      this.$api['passengerFlow.list'](params).then(res => {
-        this.tableData = res.list
-        this.total = res.total
-        this.$message.success('数据已更新')
-        this.loading = false
-        this.isDisabled = false
-      }).catch((error) => {
-        console.log(error)
-        this.$message.error(error.message)
-        this.loading = false
-        this.isDisabled = false
-      })
+      if (type === '1') {
+        this.$api['passengerFlow.todayList'](params).then(res => {
+          this.tableData = res.list
+          this.total = res.total
+          this.$message.success('数据已更新')
+          this.loading = false
+          this.isDisabled = false
+        }).catch((error) => {
+          console.log(error)
+          this.$message.error(error.message)
+          this.loading = false
+          this.isDisabled = false
+        })
+      } else {
+        this.$api['passengerFlow.list'](params).then(res => {
+          this.tableData = res.list
+          this.total = res.total
+          this.$message.success('数据已更新')
+          this.loading = false
+          this.isDisabled = false
+        }).catch((error) => {
+          console.log(error)
+          this.$message.error(error.message)
+          this.loading = false
+          this.isDisabled = false
+        })
+      }
     },
     downLoadList (params) {
       this.$emit('getData', [], 0)

@@ -15,15 +15,49 @@
       </div>
       <div class="right-bottom-wrapper">
         <div class="station-wrapper" style="border-right: 1px solid #ccc;">
-          <div class="title">客流最热站点TOP10</div>
+          <div class="title">
+            <div>客流最热站点TOP10(上车客流)</div>
+            <el-select
+              size="mini"
+              ref="elSelectWrapperUp"
+              style="width:200px;margin-right:10px;position: absolute;right: 4vw; top: 4.5vh;"
+              multiple
+              filterable
+              collapse-tags
+              clearable
+              v-model="stations"
+              remote
+              reserve-keyword
+              :remote-method="remoteMethod"
+              placeholder="请搜索站点">
+              <el-option
+                v-for="item in searchStationOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item">
+              </el-option>
+            </el-select>
+            <el-button style="position: relative; z-index: 999;position: absolute; right: 1vw; top: 5vh;" type="primary" size="mini" @click="getTopOpts('stations')">查询</el-button>
+          </div>
           <div class="map">
-            <station-echarts />
+            <station-echarts :sendStations="sendStations"/>
           </div>
         </div>
         <div class="line-wrapper">
-          <div class="title">客流最热线路TOP10</div>
+          <div class="title">
+            <div>客流最热线路TOP10(上车客流)</div>
+            <el-select style="width:200px;margin-right:10px;position: absolute;right: 4vw; top: 4.5vh;" size="mini" filterable v-model="lineIds" multiple collapse-tags placeholder="请选择">
+              <el-option
+                v-for="item in lineOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <el-button style="position: relative; z-index: 999;position: absolute;right: 1vw; top: 5vh;" type="primary" size="mini" @click="getTopOpts('lines')">查询</el-button>
+          </div>
           <div class="map">
-            <lineEchartsTop />
+            <lineEchartsTop :sendLineIds="sendLineIds"/>
           </div>
         </div>
         <div class="month-wrapper">
@@ -43,7 +77,80 @@ import lineEchartsTop from './Components/lineEchartsTop.vue'
 import monthEcharts from './Components/month.vue'
 export default {
   name: 'passengerHome',
+  data () {
+    return {
+      stations: [],
+      loading: false,
+      searchStationOptions: [],
+      stationOptions: [],
+      sendStations: [],
+      lineOptions: [],
+      lineIds: [],
+      sendLineIds: []
+    }
+  },
+  created () {
+    this._stationList()
+    this._getLinesList()
+  },
   mounted () {
+  },
+  watch: {
+    stations (newV) {
+      this.condType(newV, '站点')
+    },
+    lineIds (newV) {
+      this.condType(newV, '线路')
+    }
+  },
+  methods: {
+    _getLinesList () {
+      this.$store.dispatch('getLineList').then(res => {
+        this.lineOptions = res
+      })
+    },
+    _stationList () {
+      this.$store.dispatch('getStationList').then(res => {
+        let arr = res
+        arr.forEach(item => {
+          this.stationOptions.push({
+            value: item.staUuid,
+            label: item.staName
+          })
+        })
+      })
+    },
+    condType (value, type) {
+      if (value.length > 10) {
+        this.$message.warning(`最多可以选择10个${type}`)
+        if (type === '站点') {
+          this.stations = value.slice(0, 10)
+        } else {
+          this.lineIds = value.slice(0, 10)
+        }
+      }
+    },
+    getTopOpts (opts) {
+      if (opts === 'stations') {
+        this.sendStations = this.stations.map(item => item.value)
+      } else {
+        this.sendLineIds = this.lineIds
+      }
+    },
+    remoteMethod (query) {
+      if (query !== '') {
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.searchStationOptions = this.stationOptions.filter(item => {
+            return item.label.toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          })
+        }, 200)
+      } else {
+        this.options = []
+      }
+    }
   },
   components: {
     totalData,
@@ -91,7 +198,7 @@ export default {
       height: 27vh;
     }
     .left-bottom-wrapper {
-      width: 55%;
+      width: 51%;
       border: 1px solid #ccc;
       box-sizing: border-box;
       margin-right: 0.5%;
@@ -105,6 +212,7 @@ export default {
         padding-left: 1rem;
         box-sizing: border-box;
         font-weight: bold;
+        position: relative;
       }
       .map {
         width:100%;
@@ -112,7 +220,7 @@ export default {
       }
     }
     .right-bottom-wrapper {
-      width: 44.5%;
+      width: 48.5%;
       border: 1px solid #ccc;
       box-sizing: border-box;
       height: 69%;
@@ -133,6 +241,7 @@ export default {
           padding-left: 1rem;
           box-sizing: border-box;
           font-weight: bold;
+          position: relative;
         }
         .map {
           width: 100%;

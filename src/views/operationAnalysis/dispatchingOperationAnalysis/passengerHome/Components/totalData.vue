@@ -9,11 +9,11 @@
     <div class="cul-wrapper">
       <div class="left">
         <p>周平均：{{weekPersoncount}}</p>
-        <p><span style="color: #0f0">{{leftTitle}}</span>：{{reduce}}%</p>
+        <p><span :style="leftTitle === '增加' ? 'color: #0f0' : 'color: #f00'">{{leftTitle}}</span>：{{reduce}}%</p>
       </div>
       <div class="right">
         <p>昨日累计：{{beforePersoncount}}</p>
-        <p><span style="color: #f00">{{rightTitle}}</span>：{{increase}}%</p>
+        <p><span :style="rightTitle === '增加' ? 'color: #0f0' : 'color: #f00'">{{rightTitle}}</span>：{{increase}}%</p>
       </div>
     </div>
   </div>
@@ -54,9 +54,6 @@ export default {
     this._getWeekData({
       orgId
     })
-    console.log(this._passengeFlow({
-      orgId
-    }))
   },
   methods: {
     _passengeFlow (params) {
@@ -78,7 +75,7 @@ export default {
           if (this.totalPassenger === 0) {
             this.increase = '---'
           } else {
-            let num = ((this.beforePersoncount - this.totalPassenger) / this.totalPassenger * 100).toFixed(2)
+            let num = ((this.totalPassenger - this.beforePersoncount) / this.totalPassenger * 100).toFixed(2)
             console.log('zong', num)
             this.increase = Math.abs(num)
             if (num > 0) {
@@ -103,8 +100,7 @@ export default {
           if (this.totalPassenger === 0) {
             this.reduce = '---'
           } else {
-            let num = ((this.weekPersoncount - this.totalPassenger) / this.totalPassenger * 100).toFixed(2)
-            console.log('week', num)
+            let num = ((this.totalPassenger - this.weekPersoncount) / this.totalPassenger * 100).toFixed(2)
             this.reduce = Math.abs(num)
             if (num > 0) {
               this.leftTitle = '增加'

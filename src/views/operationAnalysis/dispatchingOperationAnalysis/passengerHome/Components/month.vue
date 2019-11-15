@@ -31,13 +31,11 @@ export default {
     })
   },
   mounted () {
-    console.log(this.$refs.wrapper.style)
   },
   methods: {
     _getMonthData (params) {
       this.loading = true
       this.$api['passengerSimple.getMonthtrend'](params).then(res => {
-        console.log(res)
         this.loading = false
         this.title = {
           text: '客流月趋势图',
@@ -57,7 +55,17 @@ export default {
         this.lineData = [{
           name: '日客流人次',
           type: 'line',
-          data: res.datas[0]
+          smooth: true,
+          data: res.datas[0],
+          itemStyle: {
+            normal: {
+              color: '#229df7',
+              lineStyle: {
+                width: 2,
+                color: '#229df7'
+              }
+            }
+          }
         }]
         this.maxNum = max(res.datas[0])
         this.dataLength = 2

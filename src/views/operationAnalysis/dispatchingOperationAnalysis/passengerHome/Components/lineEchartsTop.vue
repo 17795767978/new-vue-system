@@ -8,6 +8,11 @@
 import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
+  props: {
+    sendLineIds: {
+      type: Array
+    }
+  },
   data () {
     return {
       lineData: [],
@@ -32,18 +37,26 @@ export default {
   mounted () {
     // console.log(this.$refs.wrapper.style)
   },
+  watch: {
+    sendLineIds (newV) {
+      this._getLines({
+        orgId: '',
+        lineUuids: newV
+      })
+    }
+  },
   methods: {
     _getLines (params) {
       this.loading = true
       this.$api['passengerSimple.getHotlines'](params).then(res => {
-        console.log(res)
         this.loading = false
         this.title = {}
         this.lineData = [{
-          name: '客流人次',
+          name: '上车客流',
           type: 'bar',
           radius: ['100%', '60%'],
           data: res.datas[0],
+          barWidth: 20,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
             emphasis: {
@@ -81,7 +94,7 @@ export default {
         this.maxNum = max(res.datas[0])
         this.dataLength = 2
         this.legend = {
-          data: ['客流人次'],
+          data: [''],
           top: 10,
           right: 10,
           textStyle: {

@@ -162,8 +162,8 @@ import videoWrapper from './video'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 const TIME = 3 * 60 * 1000
-const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
-// const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
+// const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
+const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
 export default {
   props: {
     isHotMap: {
@@ -455,7 +455,7 @@ export default {
         positionSpeed,
         currenttrip,
         warnDeviceCode,
-        showBusVideoOrder } = marker
+        busVideoOrder } = marker
       this.$api['homeTired.getVideoMsg']({
         busId,
         busNumber,
@@ -470,20 +470,22 @@ export default {
         positionSpeed,
         currenttrip,
         warnDeviceCode,
-        showBusVideoOrder
+        busVideoOrder
       }).then(res => {
         this.carDetailData = res
         this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
         this.carDetailData.tripPercent = Number(this.carDetailData.tripPercent)
-        if (this.carDetailData.showBusVideoOrder) {
-          this.charData = [
-            { ch: '前路', isAct: false, index: 0 },
-            { ch: '司机', isAct: false, index: 1 },
-            { ch: '前门', isAct: false, index: 2 },
-            { ch: '后门', isAct: false, index: 3 },
-            { ch: '前车厢', isAct: false, index: 4 },
-            { ch: '后车厢', isAct: false, index: 5 }
-          ]
+        if (this.carDetailData.busVideoOrder && this.carDetailData.busVideoOrder.length > 0) {
+          this.charData = []
+          this.carDetailData.busVideoOrder.forEach((item, index) => {
+            if (index < 6) {
+              this.charData.push({
+                ch: item,
+                isAct: false,
+                index: index
+              })
+            }
+          })
         } else {
           this.charData = [
             { ch: '通道1', isAct: false, index: 0 },

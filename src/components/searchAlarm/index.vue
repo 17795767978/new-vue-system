@@ -137,6 +137,7 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDateTo">
         <el-date-picker
+          :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.dateArray"
           type="daterange"
           range-separator="至"
@@ -167,6 +168,10 @@
             minTime: formInline.startHour
           }">
         </el-time-select>
+      </el-form-item>
+      <el-form-item v-if="isRadio" label="查询时间">
+        <el-radio v-model="formInline.radio" label="1">当天</el-radio>
+        <el-radio v-model="formInline.radio" label="2">历史</el-radio>
       </el-form-item>
       <el-form-item label="报警类型" v-if="isWarntype">
           <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
@@ -286,6 +291,9 @@ export default {
     },
     islineIdRepeat: {
       type: Boolean
+    },
+    isRadio: {
+      type: Boolean
     }
   },
   data () {
@@ -309,7 +317,8 @@ export default {
         endHourFormatter: '',
         startStation: {},
         endStation: {},
-        dateArray: []
+        dateArray: [],
+        radio: '1'
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -377,6 +386,12 @@ export default {
       this.disabled = true
       this.formInline.orgId = this.userId
     }
+    if (this.formInline.radio === '1' && this.isRadio) {
+      let date = new Date()
+      this.formInline.dateArray = [date, date]
+    } else {
+      this.formInline.dateArray = defaultForm.dateArray
+    }
     this.formInline.lineOrgId = defaultForm.lineOrgId
     this.formInline.lineLineId = defaultForm.lineLineId
     this.formInline.orgId = defaultForm.orgId
@@ -386,7 +401,6 @@ export default {
     this.formInline.dataCurrent = defaultForm.currentDate
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
-    this.formInline.dateArray = defaultForm.dateArray
     if (this.queryData && Object.keys(this.queryData).length > 0) {
       console.log(this.queryData)
       this.formInline.lineOrgId = this.queryData.company
@@ -511,6 +525,14 @@ export default {
     },
     downLoadName (newV) {
       this.downLoadStr = newV
+    },
+    'formInline.radio': {
+      handler (newV) {
+        if (newV === '1') {
+          console.log(this.formInline.dataCurrent)
+          this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
+        }
+      }
     }
   },
   updated () {
@@ -585,7 +607,8 @@ export default {
         endStation: this.formInline.endStation,
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
-        lineIds: this.formInline.lineIds
+        lineIds: this.formInline.lineIds,
+        radio: this.formInline.radio
       }
       this.$emit('configCheck', configData)
     },
@@ -610,7 +633,8 @@ export default {
         dataCurrent: date,
         warnTypeId: [],
         dateArray: [],
-        lineIds: []
+        lineIds: [],
+        radio: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -631,7 +655,8 @@ export default {
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
         dataCurrent: date,
-        lineIds: this.formInline.lineIds
+        lineIds: this.formInline.lineIds,
+        radio: this.formInline.radio
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -696,7 +721,8 @@ export default {
         endStation: this.formInline.endStation,
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
-        lineIds: this.formInline.lineIds
+        lineIds: this.formInline.lineIds,
+        radio: this.formInline.radio
       }
       this.$emit('configCheckMul', configData)
     },
