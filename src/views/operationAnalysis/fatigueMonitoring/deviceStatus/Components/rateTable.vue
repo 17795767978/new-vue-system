@@ -61,57 +61,12 @@
       </el-pagination>
       <span class="demonstration" style="float: right; margin-top: 20px; line-height: 36px;">共{{total}}条</span>
     </div>
-    <!-- 弹出框 -->
-    <el-dialog :title="lineName" width="80%" :visible.sync="dialogTableVisible">
-      <el-table size="mini" :data="lineTableData" border height="600px" style="margin-bottom: 40px;" v-loading="loading">
-        <el-table-column type="index" align="center" label="序号" width="60">
-          <template slot-scope="scope">
-            <span> {{scope.$index + (inCurrentPage - 1) * 10 + 1}} </span>
-          </template>
-        </el-table-column>
-        <!-- <el-table-column property="date" label="设备编号"></el-table-column> -->
-        <el-table-column align="center" property="deviceCode" label="设备号"></el-table-column>
-        <el-table-column align="center" property="lineName" label="线路"></el-table-column>
-        <el-table-column align="center" property="busPlateNum" label="车辆"></el-table-column>
-        <el-table-column align="center" label="当前位置">
-          <template slot-scope="scope">
-            <el-popover
-              ref="elPopover"
-              placement="left"
-              trigger="click"
-              >
-              <template>
-                <mapWrapper v-if="isReload" :rowData="rowData" :isReload="isReload"/>
-                <el-button type="success" icon="el-icon-location-outline" slot="reference" circle @click="getRow(scope.row)"></el-button>
-              </template>
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="在线状态">
-          <template slot-scope="scope">
-            {{scope.row.onlineStatus === '1' ? '在线' : '离线'}}
-          </template>
-        </el-table-column>
-        <el-table-column align="center" property="address" :formatter="formatterTimeInside" label="更新时间"></el-table-column>
-      </el-table>
-      <div class="block">
-        <el-pagination
-          style="float: right; margin-top: -20px;"
-          background
-          :current-page="inCurrentPage"
-          @current-change="handleCurrentChangeLine"
-          layout="prev, pager, next"
-          :total="lineTotal">
-        </el-pagination>
-        <span class="demonstration" style="float: right; margin-top: -20px;line-height: 36px;">共{{lineTotal}}条</span>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
-import mapWrapper from './map'
+// import mapWrapper from './map'
 import { mapGetters } from 'vuex'
 export default {
   props: {
@@ -143,17 +98,20 @@ export default {
     }
   },
   components: {
-    mapWrapper
+    // mapWrapper
   },
   computed: {
     ...mapGetters(['userId'])
   },
   created () {
     this._statusTable({
-      pageNum: this.outCurrentPage,
-      pageSize: 10,
-      lineUuid: [], // 线路id，可多选
-      orgUuid: this.userId // 组织机构
+      pageNumber: this.outCurrentPage,
+      pageSize: 15,
+      lineId: '',
+      orgId: this.userId === '1' ? '' : this.userId, // 组织机构
+      busPlateNumber: '',
+      busSelfCode: '',
+      devOnlineStatus: ''
     })
   },
   watch: {
@@ -166,7 +124,15 @@ export default {
     isUpdate () {
       if (this.isUpdate) {
         this.outCurrentPage = 1
-        this._statusTable({ ...this.selectData, pageNum: this.outCurrentPage, pageSize: 10 })
+        this._statusTable({
+          orgId: this.selectData.orgUuid,
+          lineId: this.selectData.lineUuid,
+          pageNumber: this.outCurrentPage,
+          pageSize: 15,
+          busPlateNumber: this.selectData.car,
+          busSelfCode: this.selectData.carSelf,
+          devOnlineStatus: this.selectData.devOnlineStatus
+        })
       }
       this.$emit('isUpdateTo')
     }

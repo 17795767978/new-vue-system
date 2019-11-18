@@ -21,6 +21,40 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="选择车辆">
+        <el-select class="font-style"
+        filterable
+        remote
+        v-model="formInline.car"
+        :remote-method="remoteCarMethod"
+        placeholder="请选择">
+          <el-option
+            v-for="item in carSearchOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择自编号">
+        <el-select class="font-style"
+        filterable
+        remote
+        v-model="formInline.carSelf"
+        :remote-method="remoteSelfMethod"
+        placeholder="请选择">
+          <el-option
+            v-for="item in selfSearchOpt"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="在线状态">
+        <el-radio v-model="formInline.devOnlineStatus" label="1">在线</el-radio>
+        <el-radio v-model="formInline.devOnlineStatus" label="0">离线</el-radio>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear">重置</el-button>
@@ -36,11 +70,20 @@ export default {
   data () {
     return {
       formInline: {
-        lineUuid: [],
-        orgUuid: ''
+        lineUuid: '',
+        orgUuid: '',
+        car: '',
+        carSelf: '',
+        devOnlineStatus: '1',
+        pageSize: 1,
+        pageNumber: 15
       },
       comOptions: [],
       lineOptions: [],
+      carOptions: [],
+      carSearchOptions: [],
+      selfOpt: [],
+      selfSearchOpt: [],
       disabled: false
     }
   },
@@ -56,6 +99,9 @@ export default {
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
+    this._getCarList({
+      orgId: this.userId === '1' ? '' : this.userId
+    })
     if (this.userId !== '1') {
       this.formInline.orgUuid = this.userId
       this.disabled = true
@@ -67,7 +113,7 @@ export default {
   watch: {
     'formInline.orgUuid': {
       handler (newValue) {
-        this.formInline.lineUuid = []
+        this.formInline.lineUuid = ''
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
           lineId: '',
@@ -87,6 +133,47 @@ export default {
     }
   },
   methods: {
+    // 获取车辆信息
+    _getCarList (params) {
+      this.$api['wholeInformation.getCar'](params).then(res => {
+        res.forEach(item => {
+          this.carOptions.push({
+            label: item.busPlateNumber,
+            value: item.busPlateNumber
+          })
+          this.selfOpt.push({
+            label: item.busSelfCode,
+            value: item.busSelfCode
+          })
+        })
+      })
+    },
+    // 远程搜索车的方法
+    remoteCarMethod (query) {
+      this.queryMethods(query, 'car')
+    },
+    remoteSelfMethod (query) {
+      this.queryMethods(query, 'self')
+    },
+    queryMethods (query, type) {
+      if (query !== '') {
+        setTimeout(() => {
+          if (type === 'car') {
+            this.carSearchOptions = this.carOptions.filter(item => {
+              return item.label.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1
+            })
+          } else {
+            this.selfSearchOpt = this.selfOpt.filter(item => {
+              return item.label.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1
+            })
+          }
+        }, 200)
+      } else {
+        this.options = []
+      }
+    },
     onSubmit () {
       this.$emit('selectConfig', this.formInline)
     },

@@ -56,13 +56,16 @@ export const tiredMonitoringApi = {
     {
       name: 'getLineDeviceStatusPage',
       method: 'POST',
-      path: '/deviceStatus/lineDeviceStatusPage/get',
-      mockPath: '/deviceStatus/lineDeviceStatusPage/get',
+      path: '/deviceStatus/list',
+      mockPath: '/deviceStatus/list',
       params: {
         pageNum: '',
         pageSize: '',
-        lineUuid: [],
-        orgId: ''
+        lineId: '',
+        orgId: '',
+        busPlateNumber: '',
+        busSelfCode: '',
+        devOnlineStatus: ''
       },
       desc: '设备状态-线路设备状态列表'
     },
