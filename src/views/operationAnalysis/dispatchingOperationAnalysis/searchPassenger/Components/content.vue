@@ -177,10 +177,11 @@ export default {
     // },
     isUpdate () {
       if (this.isUpdate) {
+        console.log(this.selectData)
         this.pageNumber = 1
         this.selectData.pageNumber = this.pageNumber
         this.selectData.pageSize = 15
-        this._passengerFlow(this.selectData)
+        this._passengerFlow(this.selectData, this.selectData.radio)
         this.$emit('isUpdateTo')
       }
     },
