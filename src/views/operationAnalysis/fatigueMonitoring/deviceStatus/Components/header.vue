@@ -179,7 +179,12 @@ export default {
     },
     onclear () {
       this.formInline = {
-        lineUuid: [],
+        lineUuid: '',
+        car: '',
+        carSelf: '',
+        devOnlineStatus: '1',
+        pageSize: 1,
+        pageNumber: 15,
         orgUuid: this.userId === '1' ? '' : this.userId
       }
       this.$emit('selectConfig', this.formInline)

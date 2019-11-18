@@ -1,10 +1,10 @@
 <template>
   <div class="table-wrapper">
-    <h4 style="margin-top: 10px;">
+    <!-- <h4 style="margin-top: 10px;">
       <i class="fa fa-fort-awesome"></i>
       <span style="font-size: 16px;">设备状态</span>
       <span v-show="outsideTime" style="margin-left: 20px">更新时间：{{outsideTime}}</span>
-    </h4>
+    </h4> -->
     <el-table
       :data="tableData"
       size="mini"
@@ -22,33 +22,54 @@
       </el-table-column>
       <el-table-column
         align="center"
+        prop="devCode"
+        label="设备编号">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="orgName"
+        label="所属公司">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="lineName"
+        width="80"
         label="所属线路">
-        <template slot-scope="scope">
-          <el-button style="width: 150px;" type="primary" size="mini" plain @click="handleClick(scope.row)">{{scope.row.lineName}}</el-button>
-        </template>
       </el-table-column>
       <el-table-column
         align="center"
-        prop="onlineDeviceCount"
-        label="在线设备数">
+        prop="busSelfCode"
+        label="车辆自编号">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="deviceCount"
-        label="已安装设备数">
+        prop="busPlateNumber"
+        label="车牌号">
       </el-table-column>
       <el-table-column
         align="center"
-        label="在线率(%)"
+        prop="devOnlineStatus"
+        width="100"
+        label="在线状态">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="devIsvalid"
+        width="100"
+        label="启禁状态">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="devOnlineTime"
+        :formatter="formatterTime"
+        label="更新时间">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="离线时间"
         :formatter="formatterRate"
         >
       </el-table-column>
-      <!-- <el-table-column
-        align="center"
-        label="更新时间"
-        :formatter="formatterTime"
-        >
-      </el-table-column> -->
     </el-table>
     <div class="block">
       <el-pagination
@@ -71,7 +92,16 @@ import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
-      type: Object
+      type: Object,
+      default: () => {
+        return {
+          orgUuid: '',
+          lineUuid: '',
+          car: '',
+          carSelf: '',
+          devOnlineStatus: '1'
+        }
+      }
     },
     isUpdate: {
       type: Boolean
@@ -106,12 +136,12 @@ export default {
   created () {
     this._statusTable({
       pageNumber: this.outCurrentPage,
-      pageSize: 15,
+      pageSize: 10,
       lineId: '',
       orgId: this.userId === '1' ? '' : this.userId, // 组织机构
       busPlateNumber: '',
       busSelfCode: '',
-      devOnlineStatus: ''
+      devOnlineStatus: '1'
     })
   },
   watch: {
@@ -125,10 +155,10 @@ export default {
       if (this.isUpdate) {
         this.outCurrentPage = 1
         this._statusTable({
-          orgId: this.selectData.orgUuid,
+          orgId: this.selectData.orgUuid === '1' ? '' : this.selectData.orgUuid,
           lineId: this.selectData.lineUuid,
           pageNumber: this.outCurrentPage,
-          pageSize: 15,
+          pageSize: 10,
           busPlateNumber: this.selectData.car,
           busSelfCode: this.selectData.carSelf,
           devOnlineStatus: this.selectData.devOnlineStatus
@@ -150,12 +180,15 @@ export default {
       })
     },
     formatterRate (row) {
-      let num = (row.onlineDeviceCount / row.deviceCount) * 100
-      return JSON.stringify(num).substring(0, 5)
+      if (row.offlineTimeLabel) {
+        return row.offlineTimeLabel
+      } else {
+        return '-'
+      }
     },
-    formatterTimeInside (row) {
-      if (row.updateTime) {
-        return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
+    formatterTime (row) {
+      if (row.devOnlineTime) {
+        return moment(row.devOnlineTime).format('YYYY-MM-DD HH:mm:ss')
       } else {
         return '-'
       }
@@ -182,11 +215,15 @@ export default {
     // 外层table
     handleCurrentChange (val) {
       this.outCurrentPage = val
+      console.log(this.selectData)
       this._statusTable({
-        pageNum: this.outCurrentPage,
+        orgId: this.selectData.orgUuid || '',
+        lineId: this.selectData.lineUuid || '',
+        pageNumber: this.outCurrentPage,
         pageSize: 10,
-        lineUuid: [], // 线路id，可多选
-        orgUuid: '' // 组织机构
+        busPlateNumber: this.selectData.car || '',
+        busSelfCode: this.selectData.carSelf || '',
+        devOnlineStatus: this.selectData.devOnlineStatus || '1'
       })
     },
     // 内层table

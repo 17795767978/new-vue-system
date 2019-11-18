@@ -59,7 +59,7 @@ export const tiredMonitoringApi = {
       path: '/deviceStatus/list',
       mockPath: '/deviceStatus/list',
       params: {
-        pageNum: '',
+        pageNumber: '',
         pageSize: '',
         lineId: '',
         orgId: '',
