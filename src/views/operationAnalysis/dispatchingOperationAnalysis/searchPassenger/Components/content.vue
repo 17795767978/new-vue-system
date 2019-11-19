@@ -263,7 +263,7 @@ export default {
       this.selectData.pageNumber = val
       this.selectData.pageSize = 15
       this.pageNumber = val
-      this._passengerFlow({ ...this.selectData })
+      this._passengerFlow({ ...this.selectData }, this.selectData.radio)
     }
   }
 }
