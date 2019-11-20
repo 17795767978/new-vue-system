@@ -54,7 +54,7 @@ export default {
       lineId: this.currentData.lineId,
       startTime: this.currentData.dateArray[0],
       endTime: this.currentData.dateArray[1],
-      warnTypes: [],
+      warnTypes: this.currentData.warningArr,
       driverName: '',
       driverNum: ''
     })
@@ -75,7 +75,7 @@ export default {
           lineId: this.currentData.lineId,
           startTime: this.currentData.dateArray[0] === undefined ? '' : this.currentData.dateArray[0],
           endTime: this.currentData.dateArray[1] === undefined ? '' : this.currentData.dateArray[1],
-          warnTypes: this.currentData.warnTypeId,
+          warnTypes: this.currentData.warnTypeId.length === 0 ? this.formData.warningArr : this.currentData.warnTypeId,
           driverName: this.drivers.driverName,
           driverNum: this.drivers.driverNum
         })
@@ -91,7 +91,7 @@ export default {
           lineId: this.currentData.lineId,
           startTime: this.currentData.dateArray[0] === undefined ? '' : this.currentData.dateArray[0],
           endTime: this.currentData.dateArray[1] === undefined ? '' : this.currentData.dateArray[1],
-          warnTypes: this.currentData.warnTypeId,
+          warnTypes: this.currentData.warnTypeId.length === 0 ? this.formData.warningArr : this.currentData.warnTypeId,
           driverName: this.drivers.drivername,
           driverNum: this.drivers.drivernum
         })

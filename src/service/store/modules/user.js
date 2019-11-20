@@ -139,7 +139,8 @@ const user = {
           dateArray: [dateBefore, data],
           startStation: '',
           endStation: '',
-          lineIds: []
+          lineIds: [],
+          warningArr: []
         }
         store.dispatch('getLineList').then(res => {
           if (res.length > 0) {
@@ -151,19 +152,28 @@ const user = {
               form.orgId = res[0].value
             }
           })
-          store.dispatch('getComSecList').then(res => {
-            if (res.length > 0) {
-              form.lineOrgId = res[0].value
-              store.dispatch('getLineSecList', form.lineOrgId).then(res => {
-                if (res.length > 0) {
-                  form.lineLineId = res[0].value
-                }
-              })
-            }
-          })
+          // store.dispatch('getComSecList').then(res => {
+          //   if (res.length > 0) {
+          //     form.lineOrgId = res[0].value
+          //     store.dispatch('getLineSecList', form.lineOrgId).then(res => {
+          //       if (res.length > 0) {
+          //         form.lineLineId = res[0].value
+          //       }
+          //     })
+          //   }
+          // })
           // store.dispatch('getLineSecList').then(res => {
           //   form.linelineID = res[0].value
           // })
+          api['tiredMonitoring.getWarntypes']({
+            warnLevel: ''
+          }).then(res => {
+            form.warningArr = []
+            let dataArr = res
+            dataArr.forEach((list, index) => {
+              form.warningArr[index] = list.code
+            })
+          })
           commit('SET_FORM_DATA', form)
           api['platformMenu.list']({
             id: localStorage.getItem('id')

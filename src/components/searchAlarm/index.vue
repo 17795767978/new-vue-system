@@ -401,6 +401,7 @@ export default {
     this.formInline.dataCurrent = defaultForm.currentDate
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
+    this.formInline.warnTypeId = defaultForm.warningArr
     if (this.queryData && Object.keys(this.queryData).length > 0) {
       console.log(this.queryData)
       this.formInline.lineOrgId = this.queryData.company

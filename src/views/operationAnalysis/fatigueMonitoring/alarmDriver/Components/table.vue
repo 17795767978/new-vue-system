@@ -59,7 +59,7 @@ export default {
       lineId: defaultForm.lineId,
       startTime: defaultForm.dateArray[0],
       endTime: defaultForm.dateArray[1],
-      warnTypes: []
+      warnTypes: defaultForm.warningArr
     })
   },
   mounted () {
@@ -93,12 +93,13 @@ export default {
     searchData: {
       deep: true,
       handler (newV) {
+        let defaultForm = this.formData
         this._getTableData({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           startTime: newV.dateArray[0] === undefined ? '' : newV.dateArray[0],
           endTime: newV.dateArray[1] === undefined ? '' : newV.dateArray[1],
-          warnTypes: newV.warnTypeId
+          warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId
         })
       }
     }
@@ -144,9 +145,6 @@ export default {
     getScroll (table, vDom, vWrapper, tableHeight) {
       return () => {
         if (this.tableLength >= 20) {
-          console.log(table.scrollHeight)
-          console.log(table.scrollTop)
-          console.log(table.clientHeight)
           if (table.scrollTop < 53 * this.tableLength) {
             this.scrollHeight = table.scrollTop
           } else {
@@ -178,10 +176,6 @@ export default {
     getWidth (item, index) {
       if (index > 3 && item.pldisplay.length > 4) {
         return 130
-      } else if (index > 3 && item.pldisplay.length <= 4) {
-        return 110
-      } else if (index <= 3) {
-        return 100
       }
     },
     getrowData (row) {

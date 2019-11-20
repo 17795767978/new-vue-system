@@ -33,7 +33,8 @@ export default {
     this._getDriver({
       orgId: defaultData.orgId === '1' ? '' : defaultData.orgId,
       lineId: defaultData.lineId,
-      busNumber: ''
+      busNumber: '',
+      warnTypes: defaultData.warningArr
     })
   },
   mounted () {
@@ -43,11 +44,12 @@ export default {
     searchData: {
       deep: true,
       handler (newV) {
+        let defaultData = this.$store.getters.formData
         this._getDriver({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           busNumber: newV.busNumber,
-          warnTypes: newV.warnTypeId
+          warnTypes: newV.warnTypeId.length === 0 ? defaultData.warningArr : newV.warnTypeId
         })
       }
     }

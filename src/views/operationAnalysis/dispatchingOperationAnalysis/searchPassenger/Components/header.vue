@@ -282,7 +282,8 @@ export default {
         lineType: this.formInline.lineType,
         busNumber: this.formInline.busNumber,
         startTime: this.formInline.startTime,
-        endTime: this.formInline.endTime
+        endTime: this.formInline.endTime,
+        isHistory: this.formInline.radio === '2'
       }).then(res => {
         // console.log(res)
         window.open(res.url)
