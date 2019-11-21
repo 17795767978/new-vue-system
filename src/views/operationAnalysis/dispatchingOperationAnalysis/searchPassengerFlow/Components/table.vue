@@ -98,7 +98,7 @@ export default {
     // }
   },
   computed: {
-    ...mapGetters(['formData', 'formDown'])
+    ...mapGetters(['formData', 'formDown', 'userId'])
   },
   data () {
     return {
@@ -129,7 +129,7 @@ export default {
     })
     let date = moment().format('YYYY-MM-DD')
     this._getOnOffPersonCountlist({
-      orgId: this.formData.orgId === '1' ? '' : this.formData.orgId,
+      orgId: this.userId === '1' ? '' : this.userId,
       lineIds: this.formData.lineIds,
       startDate: date,
       endDate: date

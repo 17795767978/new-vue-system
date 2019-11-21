@@ -239,7 +239,8 @@ export default {
         valueTime: [],
         lineType: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        radio: '2'
       }
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
