@@ -258,7 +258,9 @@ export default {
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
-    // console.log(this.formInline);
+    if (this.userId !== '1') {
+      this.formInline.orgId = this.userId
+    }
   },
   activeted () {
   },
@@ -267,6 +269,7 @@ export default {
       deep: true,
       handler (newValue) {
         // 车偏号 联动
+        console.log(newValue)
         this.changeBusPlateNumber()
         this.formInline.timeValue.forEach(time => {
           time = moment(time).format('YYYY-MM-DD HH:mm:ss')

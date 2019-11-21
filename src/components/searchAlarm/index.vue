@@ -385,6 +385,9 @@ export default {
     if (this.userId !== '1') {
       this.disabled = true
       this.formInline.orgId = this.userId
+      console.log(this.formInline.orgId)
+    } else {
+      this.formInline.orgId = defaultForm.orgId
     }
     if (this.formInline.radio === '1' && this.isRadio) {
       let date = new Date()
@@ -394,7 +397,6 @@ export default {
     }
     this.formInline.lineOrgId = defaultForm.lineOrgId
     this.formInline.lineLineId = defaultForm.lineLineId
-    this.formInline.orgId = defaultForm.orgId
     this.formInline.lineId = defaultForm.lineId
     this.formInline.lineIds = defaultForm.lineIds
     this.formInline.lineType = defaultForm.lineType

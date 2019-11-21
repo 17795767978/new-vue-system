@@ -160,8 +160,9 @@ export default {
     },
     goToContral () {
       if (this.isScreen) {
-        let path = this.isScreenTo[0].children[0].path
-        this.$router.push(`/chart-analysis${path}`)
+        // let path = this.isScreenTo[0].children[0].path
+        // console.log(path)
+        this.$router.push(`/newBigScreen/newBigScreen-analysis`)
       } else {
         this.$message.warning('权限不足，无法进入此页面')
       }
