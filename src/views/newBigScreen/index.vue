@@ -11,29 +11,13 @@
        <el-col :span="8">
         <div class="left-wrapper">
           <div class="top-left-wrapper">
-            <perChart></perChart>
+            <personChart></personChart>
           </div>
           <div class="middle-left-wrapper">
-            <driveChart></driveChart>
+            <perChart></perChart>
           </div>
           <div class="bottom-left-wrapper">
-            <div  v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" style="height: 100%">
-            <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
-            <div v-for="(arrData, index) in diffArrData" :key="index"  @click="getIndex(index)">
-            <vueSeamless  v-if="Math.floor(codeNum / 500) ===  index"  class="scroll-wrapper" :class-option="allOptions" :data="arrData">
-              <p class="list-font" v-for="(list, index) in arrData" :key="index">
-                <span>{{list[0]}}：<span style="color: #eadf00;">{{list[1]}}</span></span>
-                <!-- <span v-if="list[1] === '打电话。'" style="color: #eadf00;">{{list[1]}}</span>
-                <span v-if="list[1] === '抽烟。'" style="color: #fa8a96;">{{list[1]}}</span>
-                <span v-if="list[1] === '分神驾驶。'" style="color: #e9a475;">{{list[1]}}</span>
-                <span v-if="list[1] === '疲劳驾驶。'" style="color: #ff2bd0;">{{list[1]}}</span>
-                <span v-if="list[1] === '驾驶员异常。'" style="color: #ff840b;">{{list[1]}}</span>
-                <span v-if="list[1] === '车道偏离。'" style="color: #e9a475;">{{list[1]}}</span>
-                <span v-else style="color:#df9235">{{list[1]}}</span> -->
-              </p>
-            </vueSeamless>
-            </div>
-          </div>
+            <rankingChart></rankingChart>
           </div>
         </div>
        </el-col>
@@ -53,8 +37,8 @@ import StreamNum from '../operationMonitoring/Components/streamNum.vue'
 import chartsComplete from '../operationMonitoring/Components/chartsComplete.vue'
 import perChart from '../operationMonitoring/Components/echartsComponent/perChart.vue'
 import mapChart from '../operationMonitoring/Components/echartsComponent/mapChart.vue'
-import driveChart from '../operationMonitoring/Components/echartsComponent/driveChart.vue'
-import vueSeamless from 'vue-seamless-scroll'
+import rankingChart from '../operationMonitoring/Components/echartsComponent/rankingChart.vue'
+import personChart from '../operationMonitoring/Components/echartsComponent/personChart.vue'
 const TIME = 3 * 60 * 1000
 export default {
   name: 'chartAnalysis',
@@ -186,9 +170,9 @@ export default {
     StreamNum,
     chartsComplete,
     perChart,
-    vueSeamless,
     mapChart,
-    driveChart
+    rankingChart,
+    personChart
   },
   destroyed () {
     clearInterval(this.timerOption)

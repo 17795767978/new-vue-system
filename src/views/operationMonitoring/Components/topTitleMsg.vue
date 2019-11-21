@@ -32,7 +32,7 @@ export default {
   data () {
     return {
       dataNow: '',
-      title: '公交管理综合分析决策系统',
+      title: '肇庆市公交大数据实时综合运营监控',
       timer: null,
       temperature: '',
       weather: ''

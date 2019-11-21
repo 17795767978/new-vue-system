@@ -1,11 +1,11 @@
 <template>
   <div class="chart-complete-wrapper">
     <el-row style="height: 200px" :gutter="5">
-      <el-col style="height: 100%; position: relative" :span="8">
+      <el-col style="height: 100%; position: relative" :span="12">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '95%', height: '200px',margin: '0 auto'}"></div>
         <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'-'"></noEcharts>
       </el-col>
-      <el-col :span="8" style="border-left: 1px #fff solid;border-right: 1px #fff solid;height: 100%">
+      <el-col :span="12" style="border-left: 1px #fff solid;border-right: 1px #fff solid;height: 100%">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '95%', height: '200px', margin: '0 auto'}">
         </div>
         <!-- <div v-show="realTimeMileage.length === 0" class="warning">
@@ -13,10 +13,10 @@
         </div> -->
         <noEcharts v-show="realTimeTrips.length === 0" :eChartsTitle="'-'"></noEcharts>
       </el-col>
-      <el-col style="height: 100%" :span="8">
+      <!-- <el-col style="height: 100%" :span="8">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-right" :style="{width: '95%', height: '200px', margin: '0 auto'}"></div>
         <noEcharts v-show="realTimeShift.length === 0" :eChartsTitle="'-'"></noEcharts>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>

@@ -11,42 +11,42 @@
           <p class="font-style" style="color: #fffc1e">{{passengeFlowNum}}</p>
         </el-card>
        </el-col>
-       <el-col :span="styleObj.spanBig" v-if="config !== 'fatigueAlarm'">
+       <!-- <el-col :span="styleObj.spanBig" v-if="config !== 'fatigueAlarm'">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-s-custom icon"></i>
           <h3 class="title-style">实时载客（人）</h3>
           <p class="font-style" style="color: #00ffff">{{totelPerson}}</p>
         </el-card>
-       </el-col>
-       <el-col :span="config !== 'fatigueAlarm' ? 4 : 6 ">
+       </el-col> -->
+       <el-col :span="config !== 'fatigueAlarm' ? 5 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-s-unfold icon"></i>
           <h3 class="title-style">运营线路</h3>
           <p class="font-style" style="color: #acf50f">{{operLines}}/{{totalLines}}</p>
         </el-card>
        </el-col>
-       <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
+       <el-col :span="config !== 'fatigueAlarm' ? 5 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-data-line icon"></i>
           <h3 class="title-style">在线车辆数</h3>
           <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}/{{totalBusNumber}}</p>
         </el-card>
        </el-col>
-       <el-col :span="styleObj.spanSmall" v-if="config !== 'fatigueAlarm'">
+       <!-- <el-col :span="styleObj.spanSmall" v-if="config !== 'fatigueAlarm'">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-s-data icon"></i>
           <h3 class="title-style">实时满载率</h3>
           <p class="font-style" style="color: #ff30a0">{{totelFullLoadRate}}%</p>
         </el-card>
-       </el-col>
-       <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
+       </el-col> -->
+       <el-col :span="config !== 'fatigueAlarm' ? 5 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-ship icon"></i>
           <h3 class="title-style">运营车辆数</h3>
           <p class="font-style" style="color: #fffc1e">{{operateCarNum}}</p>
         </el-card>
        </el-col>
-       <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
+       <el-col :span="config !== 'fatigueAlarm' ? 5 : 6 ">
         <el-card class="bg-style" shadow="hover">
           <i class="el-icon-loading icon"></i>
           <h3 class="title-style">待发车辆数</h3>
@@ -97,9 +97,9 @@ export default {
     this._passengeFlow({
       orgId
     })
-    this._realTimePassengeFlow({
-      orgId
-    })
+    // this._realTimePassengeFlow({
+    //   orgId
+    // })
     this._operateLines({
       orgId
     })
@@ -138,20 +138,20 @@ export default {
         }, TIME)
       })
     },
-    _realTimePassengeFlow (params) {
-      this.$api['passengerFlow.getRealTimePersoncountAndFullLoadRate'](params).then(res => {
-        if (res) {
-          this.totelPerson = res.personCount
-          this.totelFullLoadRate = res.fullLoadRate
-        } else {
-          this.totelPerson = '--'
-          this.totelFullLoadRate = '--'
-        }
-        this.timerFullRate = setTimeout(() => {
-          this._realTimePassengeFlow(params)
-        }, TIME)
-      })
-    },
+    // _realTimePassengeFlow (params) {
+    //   this.$api['passengerFlow.getRealTimePersoncountAndFullLoadRate'](params).then(res => {
+    //     if (res) {
+    //       this.totelPerson = res.personCount
+    //       this.totelFullLoadRate = res.fullLoadRate
+    //     } else {
+    //       this.totelPerson = '--'
+    //       this.totelFullLoadRate = '--'
+    //     }
+    //     this.timerFullRate = setTimeout(() => {
+    //       this._realTimePassengeFlow(params)
+    //     }, TIME)
+    //   })
+    // },
     _operateLines (params) {
       this.$api['passengerFlow.getRealTimeOperLines'](params).then(res => {
         if (res) {

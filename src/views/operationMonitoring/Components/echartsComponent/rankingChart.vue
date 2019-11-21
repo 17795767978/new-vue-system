@@ -46,7 +46,7 @@ export default {
       window.addEventListener('resize', () => { rankingLine.resize() })
       rankingLine.setOption({
         title: {
-          text: '线路满载率排行TOP10',
+          text: '线路登量TOP10',
           left: 'center',
           textStyle: {
             'color': '#fff'
