@@ -277,8 +277,7 @@ export const tiredMonitoringApi = {
         orgId: '',
         lineId: '',
         startTime: '',
-        endTime: '',
-        warnTypes: ''
+        endTime: ''
       },
       desc: '（疲劳驾驶） 报警时间段分析'
     },
@@ -291,8 +290,7 @@ export const tiredMonitoringApi = {
         orgId: '',
         lineId: '',
         startTime: '',
-        endTime: '',
-        warnTypes: ''
+        endTime: ''
       },
       desc: '（疲劳驾驶） 报警时间趋势分析'
     },

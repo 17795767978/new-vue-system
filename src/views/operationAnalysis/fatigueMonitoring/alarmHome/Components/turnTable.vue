@@ -37,6 +37,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { mapGetters } from 'vuex'
 export default {
   props: {
     searchData: {
@@ -48,10 +49,13 @@ export default {
       tableData: []
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   created () {
     let defaultData = this.$store.getters.formData
     this._getDriverTable({
-      orgId: defaultData.orgId === '1' ? '' : defaultData.orgId,
+      orgId: this.userId === '1' ? '' : this.userId,
       lineId: defaultData.lineId,
       busNumber: '',
       warnTypes: defaultData.warningArr

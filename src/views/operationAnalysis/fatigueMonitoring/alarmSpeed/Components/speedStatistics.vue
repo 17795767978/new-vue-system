@@ -29,12 +29,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   created () {
     let formData = this.formData
     this._getDriver({
-      orgId: formData.orgId === '1' ? '' : formData.orgId,
+      orgId: this.userId === '1' ? '' : this.userId,
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1]

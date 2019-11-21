@@ -37,16 +37,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   created () {
     this.selectData = this.formData
+    this.selectData.orgId = this.userId
     this._getFatigueDrivingWarnTimeTrendAnalysis({
-      orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
+      orgId: this.userId === '1' ? '' : this.userId,
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
-      warnTypes: ''
+      warnTypes: []
     })
   },
   mounted () {
@@ -65,7 +66,7 @@ export default {
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
-          warnTypes: this.echartsData
+          warnTypes: this.selectData.warnTypeId
         })
       }
     },
@@ -78,7 +79,7 @@ export default {
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
-          warnTypes: this.echartsData
+          warnTypes: this.echartsData === '' ? [] : [this.echartsData]
         })
       }
     }

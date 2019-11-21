@@ -45,12 +45,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   created () {
     this.currentData = this.formData
     this._getDriverWarnTimeTrend({
-      orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
+      orgId: this.userId === '1' ? '' : this.userId,
       lineId: this.currentData.lineId,
       startTime: this.currentData.dateArray[0],
       endTime: this.currentData.dateArray[1],
@@ -84,14 +84,14 @@ export default {
     driverData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
+        console.log(this.currentData.warnTypeId)
         this.drivers = newV
         this._getDriverWarnTimeTrend({
           orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
           lineId: this.currentData.lineId,
           startTime: this.currentData.dateArray[0] === undefined ? '' : this.currentData.dateArray[0],
           endTime: this.currentData.dateArray[1] === undefined ? '' : this.currentData.dateArray[1],
-          warnTypes: this.currentData.warnTypeId.length === 0 ? this.formData.warningArr : this.currentData.warnTypeId,
+          warnTypes: !this.currentData.warnTypeId || (this.currentData.warnTypeId && this.currentData.warnTypeId.length === 0) ? this.formData.warningArr : this.currentData.warnTypeId,
           driverName: this.drivers.drivername,
           driverNum: this.drivers.drivernum
         })

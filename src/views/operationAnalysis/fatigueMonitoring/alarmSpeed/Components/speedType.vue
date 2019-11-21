@@ -35,10 +35,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   created () {
     this.selectData = this.formData
+    this.selectData.orgId = this.userId
     this._getAlarmTypeRatioAnalysis({
       orgId: this.selectData.orgId,
       lineId: this.selectData.lineId,

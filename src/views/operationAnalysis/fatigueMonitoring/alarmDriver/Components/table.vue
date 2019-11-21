@@ -50,12 +50,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   created () {
     let defaultForm = this.formData
     this._getTableData({
-      orgId: defaultForm.orgId === '1' ? '' : defaultForm.orgId,
+      orgId: this.userId === '1' ? '' : this.userId,
       lineId: defaultForm.lineId,
       startTime: defaultForm.dateArray[0],
       endTime: defaultForm.dateArray[1],

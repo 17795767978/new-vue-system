@@ -30,10 +30,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   created () {
     this.selectData = this.formData
+    this.selectData.orgId = this.userId
     this._getFatAlarmSpeedStatistic({
       orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
       lineId: this.selectData.lineId,

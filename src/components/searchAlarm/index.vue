@@ -636,7 +636,7 @@ export default {
         warnTypeId: [],
         dateArray: [],
         lineIds: [],
-        radio: ''
+        radio: '2'
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
