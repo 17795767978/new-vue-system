@@ -67,7 +67,6 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {
   props: {
@@ -84,7 +83,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['defaultSearch'])
   },
   created () {
   },
@@ -102,8 +101,6 @@ export default {
       vDom.appendChild(vWrapper)
       vWrapper.appendChild(tableBody)
       tableBody.appendChild(emptyBlock)
-      console.log(vDom)
-      console.log(table)
     })
   },
   watch: {
@@ -111,12 +108,10 @@ export default {
       deep: true,
       handler (newV) {
         let lineArr = newV.lineLineId.split('+')
-        let date = moment(newV.dataCurrent).format('YYYY-MM-DD')
         this._getPfLineOdCountListData({
           company: newV.lineOrgId,
           lineID: lineArr[0],
-          arrow: newV.lineType,
-          pDate: date
+          arrow: newV.lineType
         })
       }
     }

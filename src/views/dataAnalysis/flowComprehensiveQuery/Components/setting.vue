@@ -2,8 +2,8 @@
   <div class="bt-wrapper">
     <el-row>
       <el-button type="primary" size="mini" round :plain="isStation" @click="isStationTo">刷卡总量</el-button>
-      <el-button type="success" size="mini" round :plain="isTime" @click="isTimeTo">平均运距</el-button>
-      <el-button type="warning" size="mini" round :plain="isRate" @click="isRateTo">周转量</el-button>
+      <el-button type="success" size="mini" round :plain="isTime" @click="isTimeTo">周转量</el-button>
+      <el-button type="warning" size="mini" round :plain="isRate" @click="isRateTo">平均运距</el-button>
     </el-row>
   </div>
 </template>

@@ -112,7 +112,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['defaultSearch'])
   },
   mounted () {
     setTimeout(() => {
@@ -124,9 +124,9 @@ export default {
         this.queryData.lineOrgId = this.queryData.company
         this.changeSearchCondition(this.queryData)
       } else {
-        this.changeSearchCondition(this.formData)
+        this.changeSearchCondition(this.defaultSearch)
       }
-    }, 100)
+    }, 500)
   },
   watch: {
     selectData: {
@@ -135,7 +135,11 @@ export default {
         this.pageNumber = 1
         this.pageSize = 30
         this.searchData = newV
-        this.changeSearchCondition(this.searchData)
+        if (newV.lineOrgId !== '' && newV.lineLineId !== '' && newV.lineType !== '') {
+          this.changeSearchCondition(this.searchData)
+        } else {
+          this.$message.warning('机构、线路、方向为必填项')
+        }
       }
     },
     queryData: {
@@ -171,7 +175,7 @@ export default {
       } else if (params.lineType === '下行') {
         params.lineType = '2'
       }
-      let lineArr = params.lineLineId.split('+')
+      let lineArr = (params.lineLineId && params.lineLineId.split('+')) || []
       this._getRepeatTable({
         company: params.lineOrgId,
         lineID: lineArr[0],
@@ -184,11 +188,6 @@ export default {
     },
     handleCurrentChange (val) {
       this.pageNumber = val
-      // if (val === Math.ceil(this.total / this.pageSize)) {
-      //   this.selectData = this.selectAllData.slice((val - 1) * this.pageSize, this.total + 1)
-      // } else {
-      //   this.selectData = this.selectAllData.slice((val - 1) * this.pageSize, val * this.pageSize)
-      // }
       this.changeSearchCondition(this.searchData)
     }
   }

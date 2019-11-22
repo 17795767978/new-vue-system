@@ -226,6 +226,7 @@ export default {
     display: block;
   }
   .main-card {
+    box-sizing: border-box;
     .tab-con {
       width: 100%;
       min-height: 25vh;

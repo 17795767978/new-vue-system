@@ -294,6 +294,9 @@ export default {
     },
     isRadio: {
       type: Boolean
+    },
+    isLineEmpty: {
+      type: Boolean
     }
   },
   data () {
@@ -534,6 +537,11 @@ export default {
           console.log(this.formInline.dataCurrent)
           this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
         }
+      }
+    },
+    isLineEmpty (newV) {
+      if (newV) {
+        this.formInline.lineLineId = ''
       }
     }
   },

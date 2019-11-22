@@ -30,6 +30,12 @@ export default {
   props: {
     selectData: {
       type: Object
+    },
+    echartsData: {
+      type: Object
+    },
+    stationData: {
+      type: Object
     }
   },
   data () {
@@ -45,11 +51,29 @@ export default {
   watch: {
     'selectData.lineLineId': {
       handler (newV) {
-        let str = newV.split('+')[0]
+        if (newV !== '') {
+          let str = newV.split('+')[0]
+          this._getLineCondition({
+            lineID: str
+          })
+        }
+      }
+    },
+    'echartsData.name': {
+      handler (newV) {
         this._getLineCondition({
-          lineID: str
+          company: newV,
+          lineID: ''
         })
       }
+    },
+    stationData (newV) {
+      console.log(newV)
+      let arrow = newV.seriesName.substring(0, 2) === '上行' ? '1' : '2'
+      this._getLineCondition({
+        lineName: newV.name,
+        arrow: arrow
+      })
     }
   },
   methods: {

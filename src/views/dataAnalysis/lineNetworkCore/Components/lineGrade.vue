@@ -34,10 +34,9 @@ export default {
     ...mapGetters(['formData'])
   },
   created () {
-    let lineArr = this.formData.lineLineId.split('+')
     this._getLevelLineCountListData({
-      company: this.formData.lineOrgId,
-      lineID: lineArr[0]
+      company: '',
+      lineID: ''
     })
   },
   mounted () {

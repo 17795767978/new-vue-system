@@ -3,7 +3,6 @@
     <Search
       :isOrgSec='true'
       :isLineSec="true"
-      :isDefault="true"
       :isEmpty="true"
       :queryData="queryData"
       @configCheck="getSearch"
@@ -51,9 +50,10 @@ export default {
       this.apiCond.lineOrgId = this.$route.params.data.company
       this.apiCond.lineLineId = this.$route.params.data.lineUuid
     } else {
-      this.apiCond = JSON.parse(JSON.stringify(this.formData))
-      let lineArr = this.formData.lineLineId.split('+')
-      this.apiCond.lineLineId = lineArr[0]
+      this.apiCond = {
+        lineOrgId: '',
+        lineLineId: ''
+      }
     }
     this._getNetIndexDeaData({
       company: this.apiCond.lineOrgId,
@@ -111,7 +111,7 @@ export default {
 .content-wrapper {
   width: 100%;
   height: calc(100vh - 16vh);
-  padding: 2vh 2vw;
+  padding: 0vh 2vw;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;

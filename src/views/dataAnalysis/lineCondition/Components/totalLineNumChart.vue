@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
@@ -51,6 +51,10 @@ export default {
     // }
   },
   methods: {
+    getEchartsData (data) {
+      this.$emit('changeEcharts', data)
+      console.log(data)
+    },
     _getlineNumLength (params) {
       this.loading = true
       this.$api['lineNet.getlineNumLength'](params).then(res => {

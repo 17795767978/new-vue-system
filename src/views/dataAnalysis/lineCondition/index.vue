@@ -9,23 +9,25 @@
       :isDate="false"
       :isTime="false"
       :isTurn="false"
-      :isDefault="true"
+      :isDefault="false"
       :isDownload="false"
       :isWarntype="false"
+      :isEmpty="true"
+      :isLineEmpty="isLineEmpty"
       @configCheck="getSearch"
     />
     <div class="content">
       <div class="total-line-length">
-        <TotalLineNum :selectData="selectData"/>
+        <TotalLineNum :selectData="selectData" @changeEcharts="changeEcharts"/>
       </div>
       <div class="total-station-length">
         <TotalStationNum :selectData="selectData"/>
       </div>
       <div class="line-length">
-        <LineLengthChart :selectData="selectData"/>
+        <LineLengthChart :selectData="selectData" :echartsData="echartsData" @changeStation="changeStation"/>
       </div>
       <div class="station-length">
-        <StationTable :selectData="selectData"/>
+        <StationTable :selectData="selectData" :echartsData="echartsData" :stationData="stationData"/>
       </div>
     </div>
   </div>
@@ -41,12 +43,22 @@ export default {
   name: 'lineCondition',
   data () {
     return {
-      selectData: {}
+      selectData: {},
+      echartsData: {},
+      stationData: {},
+      isLineEmpty: false
     }
   },
   methods: {
     getSearch (data) {
       this.selectData = data
+    },
+    changeEcharts (data) {
+      this.echartsData = data
+      this.isLineEmpty = true
+    },
+    changeStation (data) {
+      this.stationData = data
     }
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
@@ -11,6 +11,9 @@ export default {
   name: 'passengerHome',
   props: {
     selectData: {
+      type: Object
+    },
+    echartsData: {
       type: Object
     }
   },
@@ -30,31 +33,44 @@ export default {
     }
   },
   created () {
-    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._getMonthData({
-      company: '',
+      company: '一总站',
       lineID: ''
-    }, '')
+    }, '一总站')
   },
   mounted () {
   },
   watch: {
     'selectData.lineLineId': {
       handler (newV) {
-        let strArr = newV.split('+')
+        if (newV !== '') {
+          let strArr = newV.split('+')
+          this._getMonthData({
+            company: '',
+            lineID: strArr[0]
+          }, strArr[1])
+        }
+      }
+    },
+    'echartsData.name': {
+      handler (newV) {
         this._getMonthData({
-          company: '',
-          lineID: strArr[0]
-        }, strArr[1])
+          company: newV,
+          lineID: ''
+        }, newV)
       }
     }
   },
   methods: {
+    getEchartsData (data) {
+      this.$emit('changeStation', data)
+    },
     _getMonthData (params, str) {
       this.loading = true
       this.$api['lineNet.getLineOnOrDownEchartData'](params).then(res => {
-        console.log(res)
-        this.loading = false
+        setTimeout(() => {
+          this.loading = false
+        }, 1000)
         this.title = {
           text: str === undefined ? '线路长度' : `${str}线路长度`,
           left: 'center',

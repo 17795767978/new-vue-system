@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" :tooltip="tooltip"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" :tooltip="tooltip" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
@@ -35,15 +35,17 @@ export default {
   mounted () {
   },
   methods: {
+    getEchartsData (data) {
+      this.$emit('changeRightEcharts', data)
+    },
     _getlineRepeat (params) {
       this.loading = true
       this.$api['lineNet.getRepeatData'](params).then(res => {
-        console.log(res)
         this.loading = false
         this.title = {
           text: '分公司线路重复度',
           left: 'center',
-          top: 0,
+          top: 10,
           textStyle: {
             'color': '#000',
             'fontSize': '22'
@@ -62,12 +64,12 @@ export default {
             type: 'shadow'
           },
           formatter: (params) => {
-            return `站队数: ${params[0].data}<br/>重复占位数：${params[1].data}<br/>重复比: ${params[2].data}%`
+            return `站对数: ${params[0].data}<br/>重复站位数：${params[1].data}<br/>重复比: ${params[2].data}%`
           }
         }
         this.lineData = [
           {
-            name: '站队数',
+            name: '站对数',
             type: 'bar',
             barGap: '-100%',
             data: res.datas[0],
@@ -89,7 +91,7 @@ export default {
             // }
           },
           {
-            name: '重复占位数',
+            name: '重复站位数',
             type: 'bar',
             data: res.datas[1],
             barWidth: 25,
@@ -129,7 +131,7 @@ export default {
         this.dataLength = 2
         this.legend = [
           {
-            data: ['站队数'],
+            data: ['站对数'],
             right: 200,
             top: 10,
             textStyle: {
@@ -137,7 +139,7 @@ export default {
             }
           },
           {
-            data: ['重复占位数'],
+            data: ['重复站位数'],
             right: 85,
             top: 10,
             textStyle: {

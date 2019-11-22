@@ -10,7 +10,7 @@ import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
   name: 'passengerHome',
   props: {
-    selectData: {
+    echartsData: {
       type: Object
     }
   },
@@ -42,11 +42,11 @@ export default {
   mounted () {
   },
   watch: {
-    'selectData.lineLineId': {
+    'echartsData.name': {
       handler (newV) {
-        let str = newV.split('+')[0]
         this._getrepeatPieData({
-          lineID: str
+          company: newV,
+          lineID: ''
         })
       }
     }
@@ -55,13 +55,12 @@ export default {
     _getrepeatPieData (params) {
       this.loading = true
       this.$api['lineNet.getrepeatPieData'](params).then(res => {
-        console.log(res)
         this.loading = false
         // this.maxMum = max(data)
         this.title = {
           text: '线路重复度',
           left: 'center',
-          top: 0,
+          top: 10,
           textStyle: {
             'color': '#000',
             'fontSize': '22'

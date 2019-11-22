@@ -39,7 +39,7 @@ export default {
       this.$api['lineNet.getComStation'](params).then(res => {
         this.loading = false
         this.title = {
-          text: '分公司站点/占位数',
+          text: '分公司站点',
           left: 'center',
           top: 0,
           textStyle: {
@@ -70,38 +70,30 @@ export default {
                 padding: [3, 0, 10, 6]
               }
             }
-          },
-          {
-            name: '占位数',
-            type: 'bar',
-            data: res.datas[1],
-            barWidth: 15,
-            smooth: false,
-            label: {
-              normal: {
-                show: true,
-                position: 'center',
-                color: 'black',
-                rotate: '90',
-                padding: [3, 0, 10, 6]
-              }
-            }
           }
+          // {
+          //   name: '占位数',
+          //   type: 'bar',
+          //   data: res.datas[1],
+          //   barWidth: 15,
+          //   smooth: false,
+          //   label: {
+          //     normal: {
+          //       show: true,
+          //       position: 'center',
+          //       color: 'black',
+          //       rotate: '90',
+          //       padding: [3, 0, 10, 6]
+          //     }
+          //   }
+          // }
         ]
-        this.maxNum = [max(res.datas[0]), max(res.datas[1])]
+        this.maxNum = max(res.datas[0])
         this.dataLength = 2
         this.legend = [
           {
             data: ['站点数'],
             right: 100,
-            top: 10,
-            textStyle: {
-              color: '#000'
-            }
-          },
-          {
-            data: ['占位数'],
-            right: 10,
             top: 10,
             textStyle: {
               color: '#000'

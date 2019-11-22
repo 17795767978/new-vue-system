@@ -68,10 +68,9 @@ export default {
     ...mapGetters(['formData'])
   },
   created () {
-    let lineArr = this.formData.lineLineId.split('+')
     this._getIndexPfLineDayListData({
-      company: this.formData.lineOrgId,
-      lineID: lineArr[0],
+      company: '',
+      lineID: '',
       arrow: this.formData.lineType,
       pDate: this.formData.currentDate
     })
@@ -86,10 +85,10 @@ export default {
         } else {
           dataCurrent = ''
         }
-        let lineArr = newV.lineLineId.split('+')
+        let lineArr = (newV.lineLineId && newV.lineLineId.split('+')) || []
         this._getIndexPfLineDayListData({
-          company: newV.lineOrgId,
-          lineID: lineArr[0],
+          company: newV.lineOrgId || '',
+          lineID: lineArr[0] || '',
           arrow: newV.lineType,
           pDate: dataCurrent
         })

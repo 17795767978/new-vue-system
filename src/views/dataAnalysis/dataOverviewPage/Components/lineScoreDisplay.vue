@@ -86,48 +86,67 @@ export default {
           }
         ]
         this.dataLength = 2
-        this.legend = [
-          {
-            data: [res.legendNames[0]],
-            right: 450,
-            top: 10,
-            textStyle: {
-              color: '#000'
-            }
+        this.legend = {
+          data: res.legendNames,
+          left: 'left',
+          top: 10,
+          textStyle: {
+            color: '#000'
           },
-          {
-            data: [res.legendNames[1]],
-            right: 300,
-            top: 10,
-            textStyle: {
-              color: '#000'
-            }
-          },
-          {
-            data: [res.legendNames[2]],
-            right: 200,
-            top: 10,
-            textStyle: {
-              color: '#000'
-            }
-          },
-          {
-            data: [res.legendNames[3]],
-            right: 100,
-            top: 10,
-            textStyle: {
-              color: '#000'
-            }
-          },
-          {
-            data: [res.legendNames[4]],
-            right: 10,
-            top: 10,
-            textStyle: {
-              color: '#000'
-            }
-          }
-        ]
+          selected: (() => {
+            let selected = {}
+            res.legendNames.forEach((item, index) => {
+              if (index === 0) {
+                selected[item] = true
+              } else {
+                selected[item] = false
+              }
+            })
+            return selected
+          })()
+        }
+        // [
+        //   {
+        //     data: [res.legendNames[0]],
+        //     right: 450,
+        //     top: 10,
+        //     textStyle: {
+        //       color: '#000'
+        //     }
+        //   },
+        //   {
+        //     data: [res.legendNames[1]],
+        //     right: 300,
+        //     top: 10,
+        //     textStyle: {
+        //       color: '#000'
+        //     }
+        //   },
+        //   {
+        //     data: [res.legendNames[2]],
+        //     right: 200,
+        //     top: 10,
+        //     textStyle: {
+        //       color: '#000'
+        //     }
+        //   },
+        //   {
+        //     data: [res.legendNames[3]],
+        //     right: 100,
+        //     top: 10,
+        //     textStyle: {
+        //       color: '#000'
+        //     }
+        //   },
+        //   {
+        //     data: [res.legendNames[4]],
+        //     right: 10,
+        //     top: 10,
+        //     textStyle: {
+        //       color: '#000'
+        //     }
+        //   }
+        // ]
         this.xData = [
           {
             type: 'category',

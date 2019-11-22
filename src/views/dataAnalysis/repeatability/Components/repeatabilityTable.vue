@@ -33,16 +33,19 @@
       <el-table-column
         prop="scCount"
         align="center"
+        sortable
         label="线路站对数">
       </el-table-column>
       <el-table-column
         prop="repeatScCount"
         align="center"
+        sortable
         label="重复站对数">
       </el-table-column>
       <el-table-column
         prop="repeatability"
         align="center"
+        sortable
         label="重复度">
         <template slot-scope="scope">
           <span>{{formatterRepeatability(scope.row.repeatability)}}</span>
@@ -95,13 +98,15 @@ export default {
     })
   },
   watch: {
-    'selectData.lineLineId': {
+    selectData: {
       handler (newV) {
-        let str = newV.split('+')[0]
+        let str = newV.lineLineId.split('+')[0]
         this._getRepeatTable({
+          company: newV.lineOrgId,
           lineID: str
         })
-      }
+      },
+      deep: true
     }
   },
   methods: {

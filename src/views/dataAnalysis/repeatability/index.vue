@@ -3,26 +3,26 @@
     <Search
       :isOrg='false'
       :isLine="false"
-      :isOrgSec='false'
+      :isOrgSec='true'
       :isLineSec="true"
       :isBus="false"
       :isDate="false"
       :isTime="false"
       :isTurn="false"
       :isDownload="false"
-      :isDefault="true"
+      :isDefault="false"
       :isWarntype="false"
       @configCheck="getSearch"
     />
     <div class="content">
-      <div class="line-repeatability">
-        <LineRepeatability />
-      </div>
-      <div class="line-dowm-repeatability">
-        <LineRepeatabilityDown :selectData="selectData"/>
-      </div>
       <div class="repeatability-table">
         <RepeatabilityTable :selectData="selectData"/>
+      </div>
+      <div class="line-repeatability">
+        <LineRepeatability @changeRightEcharts="changeRightEcharts"/>
+      </div>
+      <div class="line-dowm-repeatability">
+        <LineRepeatabilityDown :echartsData="echartsData"/>
       </div>
     </div>
   </div>
@@ -37,13 +37,17 @@ export default {
   name: 'repeatability',
   data () {
     return {
-      selectData: {}
+      selectData: {},
+      echartsData: {}
     }
   },
   methods: {
     getSearch (data) {
       this.selectData = data
-      console.log(this.selectData)
+    },
+    changeRightEcharts (data) {
+      console.log(data)
+      this.echartsData = data
     }
   },
   mounted () {
@@ -70,6 +74,7 @@ export default {
   .line-repeatability {
     width: 60%;
     height: 50%;
+    border-top: 1px solid #EBEEF5;
     border-bottom: 1px solid #EBEEF5;
     box-sizing: border-box;
     border-right: 1px solid #EBEEF5;
@@ -77,6 +82,7 @@ export default {
   .line-dowm-repeatability {
     width: 40%;
     height: 50%;
+    border-top: 1px solid #EBEEF5;
     border-bottom: 1px solid #EBEEF5;
     box-sizing: border-box;
   }

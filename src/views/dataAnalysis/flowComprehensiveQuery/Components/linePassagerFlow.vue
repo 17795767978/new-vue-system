@@ -40,7 +40,7 @@ export default {
       loading: true,
       currentSelect: {},
       lineNum: '总',
-      arrow: ''
+      arrow: '上行'
     }
   },
   computed: {
@@ -48,15 +48,19 @@ export default {
   },
   created () {
     // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    let lineArr = this.formData.lineLineId.split('+')
-    console.log(this.formData.lineLineId)
-    this.arrow = this.formData.lineType === '1' ? '上行' : '下行'
-    this.lineNum = lineArr[1]
-    this.formData.dataCurrent = this.formData.currentDate
-    this.currentSelect = JSON.parse(JSON.stringify(this.formData))
+    // let lineArr = this.formData.lineLineId.split('+')
+    // console.log(this.formData.lineLineId)
+    // this.arrow = this.formData.lineType === '1' ? '上行' : '下行'
+    // this.lineNum = lineArr[1]
+    this.currentSelect = {
+      lineOrgId: '',
+      lineLineId: '',
+      lineType: '1',
+      dataCurrent: this.formData.currentDate
+    }
     this._getPfOdbrushCountListGridData({
       company: this.currentSelect.lineOrgId,
-      lineID: lineArr[0],
+      lineID: '',
       arrow: this.currentSelect.lineType,
       pDate: this.currentSelect.dataCurrent
     })
@@ -67,11 +71,22 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        this.lineNum = '总'
-        this.arrow = ''
+        if (!newV.lineLineId && !newV.lineOrgId) {
+          this.lineNum = '总'
+        } else if (!newV.lineLineId && newV.lineOrgId) {
+          this.lineNum = newV.lineOrgId
+        } else if (newV.lineLineId) {
+          let lineArr = (newV.lineLineId && newV.lineLineId.split('+')) || []
+          this.lineNum = lineArr[1]
+        }
+        if (newV.lineType === '') {
+          this.arrow = ''
+        } else {
+          this.arrow = newV.lineType === '1' ? '上行' : '下行'
+        }
         this.currentSelect = JSON.parse(JSON.stringify(newV))
         this.currentSelect.dataCurrent = moment(this.currentSelect.dataCurrent).format('YYYY-MM-DD')
-        let lineArr = newV.lineLineId.split('+')
+        let lineArr = (newV.lineLineId && newV.lineLineId.split('+')) || []
         this._getPfOdbrushCountListGridData({
           company: this.currentSelect.lineOrgId,
           lineID: lineArr[0],
@@ -82,7 +97,7 @@ export default {
     },
     'queryId': {
       handler (newV) {
-        let lineArr = this.currentSelect.lineLineId.split('+')
+        let lineArr = (this.currentSelect.lineLineId && this.currentSelect.lineLineId.split('+')) || []
         if (newV === '1') {
           this._getPfOdbrushCountListGridData({
             company: this.currentSelect.lineOrgId,
@@ -127,14 +142,13 @@ export default {
   },
   methods: {
     _getPfOdbrushCountListGridData (params) {
-      console.log(this.lineNum)
       this.loading = true
       this.$api['lineNet.getPfOdbrushCountListGridData'](params).then(res => {
         setTimeout(() => {
           this.loading = false
         }, 1000)
         this.title = {
-          text: `${this.lineNum}${this.arrow}线路各时间段客流详情（刷卡总量）`,
+          text: `${this.lineNum}${this.arrow}线路客流综合查询（刷卡总量）`,
           left: 'center',
           top: 0,
           textStyle: {
@@ -207,7 +221,7 @@ export default {
           this.loading = false
         }, 1000)
         this.title = {
-          text: `${this.lineNum}${this.arrow}线路评分展示（平均运距）`,
+          text: `${this.lineNum}${this.arrow}线路评分展示（周转量）`,
           left: 'center',
           top: 0,
           textStyle: {
@@ -280,7 +294,7 @@ export default {
           this.loading = false
         }, 1000)
         this.title = {
-          text: `${this.lineNum}${this.arrow}线路评分展示（周转量）`,
+          text: `${this.lineNum}${this.arrow}线路评分展示（平均运距）`,
           left: 'center',
           top: 0,
           textStyle: {

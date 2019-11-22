@@ -20,24 +20,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['defaultSearch'])
   },
   created () {
-    let lineArr = this.formData.lineLineId.split('+')
-    this._getPfODYCountListData({
-      company: this.formData.lineOrgId,
-      lineID: lineArr[0],
-      arrow: this.formData.lineType,
-      pDate: this.formData.currentDate
-    })
   },
   mounted () {
-    // const chart = new G2.Chart({
-    //   container: 'c1',
-    //   width: 800,
-    //   height: 600
-    // })
-    // console.log(chart)
+    setTimeout(() => {
+      let lineArr = this.defaultSearch.lineLineId.split('+')
+      this._getPfODYCountListData({
+        company: this.defaultSearch.lineOrgId,
+        lineID: lineArr[0],
+        arrow: this.defaultSearch.lineType
+      })
+    }, 500)
   },
   watch: {
     selectData: {
@@ -48,8 +43,7 @@ export default {
         this._getPfODYCountListData({
           company: newV.lineOrgId,
           lineID: lineArr[0],
-          arrow: newV.lineType,
-          pDate: newV.dateCurrent
+          arrow: newV.lineType
         })
       }
     }
@@ -57,7 +51,6 @@ export default {
   methods: {
     _getPfODYCountListData (params) {
       this.$api['lineNet.getPfODYCountListData'](params).then(res => {
-        console.log(res)
         let nodes = []
         let links = []
         if (res.nodes.length > 0) {
