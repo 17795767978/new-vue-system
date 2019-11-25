@@ -259,6 +259,9 @@ export default {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
     // console.log(this.formInline);
+    if (this.userId !== '1') {
+      this.formInline.orgId = this.userId
+    }
   },
   activeted () {
   },

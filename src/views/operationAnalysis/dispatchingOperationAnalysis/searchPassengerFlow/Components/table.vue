@@ -135,6 +135,15 @@ export default {
       endDate: date
     }, '1')
   },
+  activated () {
+    this.scrollHeight = 0
+    let eleArr = this.$refs.tableWrapper.$el
+    let vWrapper = eleArr.getElementsByClassName('v-wrapper')[0]
+    if (vWrapper) {
+      vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+    }
+    this.tableData = this.tableAllData.slice(0, 20)
+  },
   watch: {
     selectData: {
       deep: true,

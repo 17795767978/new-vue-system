@@ -4,7 +4,7 @@
       <span class="main-title">公交综合运营监控分析系统</span>
     </el-row>
     <el-row class="main-card" :gutter="50">
-      <el-col style="margin-left: 50px;" :span="4">
+      <el-col style="margin-left: 50px;" :span="4" v-if="isScreen">
         <h3 style="font-size: 20px;">实时综合运营监控</h3>
         <div class="tab-con" :class="isScreen ? '' : 'tab-con-dis'" @click="goToContral()">
         </div>
