@@ -162,8 +162,8 @@ import videoWrapper from './video'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 const TIME = 3 * 60 * 1000
-// const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
-const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
+const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
+// const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
 export default {
   props: {
     isHotMap: {
@@ -277,7 +277,7 @@ export default {
     'formInline.value': {
       handler (newV) {
         if (newV !== 'all') {
-          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineId === newV)
+          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
         } else {
           this.markers = this.markersAll
         }
