@@ -42,6 +42,14 @@ export default {
     busDetails () {
       this.imgList = this.busDetails
       this.loading = false
+      // this.imgList = []
+      // this.busDetails.forEach(item => {
+      //   this.imgList.push({
+      //     mediaEncoding: item.mediaEncoding,
+      //     url: `${URL}${item.url.substring(22, item.url.length)}`
+      //   })
+      // })
+      // console.log(this.imgList)
     }
   },
   methods: {
