@@ -6,6 +6,7 @@
       :data="tableData"
       height="50vh"
       border
+      @sort-change="changeTableSort"
       style="width: 100%">
       <el-table-column
         align="center"
@@ -166,6 +167,27 @@ export default {
           vWrapper.style.transform = `translateY(0px)`
         }
       }
+    },
+    changeTableSort (column) {
+      if (column.order === 'descending') {
+        this.tableAllData = this.tableAllData.sort((prev, next) => next[column.prop] - prev[column.prop])
+      } else {
+        this.tableAllData = this.tableAllData.sort((prev, next) => prev[column.prop] - next[column.prop])
+      }
+      console.log(this.tableAllData)
+      this.tableAllData.forEach((item, index) => {
+        item.id = index + 1
+      })
+      if (this.tableAllData.length >= 20) {
+        this.tableData = this.tableAllData.slice(0, 10)
+        this.tableLength = this.tableAllData.length
+        this.bigTable()
+      } else {
+        this.tableLength = 0
+        this.tableData = this.tableAllData
+        this.bigTable()
+      }
+      console.log(column)
     },
     getSort (index) {
       if (index > 3) {
