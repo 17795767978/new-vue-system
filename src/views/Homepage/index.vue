@@ -4,39 +4,18 @@
       <span class="main-title">公交综合运营监控分析系统</span>
     </el-row>
     <el-row class="main-card" :gutter="50">
-      <el-col style="margin-left: 50px;" :span="4">
-        <h3 style="font-size: 20px;">实时综合运营监控</h3>
+      <el-col style="margin-left: 50px;" :span="5">
+        <h3 style="font-size: 20px;">运营实况</h3>
         <div class="tab-con" :class="isScreen ? '' : 'tab-con-dis'" @click="goToContral()">
         </div>
       </el-col>
-      <el-col :span="6" v-if="operationAnalysis.some(item => item.admin)">
-        <h3 style="font-size: 20px;">运营分析</h3>
-        <div class="tab-ans">
-          <ul class="item-fam">
-            <li class="item-font" :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in operationAnalysis" :key="index" @click="goToChart(item)">
-              <div class="inside-font" v-if="item.admin">
-                <img :src="item.icon" width="30" height="30" class="img-font"/>
-              </div>
-              <p v-if="item.admin" style="text-align: center; font-size: 0.7vw;">{{item.name}}</p>
-            </li>
-          </ul>
+      <el-col :span="5" v-if="operationAnalysis.some(item => item.admin)">
+        <h3 style="font-size: 20px;">客流总体态势</h3>
+        <div class="tab-con" :class="isScreen ? '' : 'tab-con-dis'" @click="goToRealtime()">
         </div>
       </el-col>
-      <el-col :span="6" v-if="tiredContral.some(item => item.admin)">
-        <h3 style="font-size: 20px;">安全运营监控</h3>
-        <div class="tab-ans">
-          <ul class="item-fam">
-            <li class="item-font"  :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in tiredContral" :key="index" @click="goToAlarm(item)">
-              <div class="inside-font" v-if="item.admin">
-                <img :src="item.icon" width="30" height="30" class="img-font"/>
-              </div>
-              <p v-if="item.admin" style="text-align: center; font-size: 0.7vw;">{{item.name}}</p>
-            </li>
-          </ul>
-        </div>
-      </el-col>
-      <el-col :span="6" v-if="lineNets.some(item => item.admin)">
-        <h3 style="font-size: 20px;">线网评价</h3>
+      <el-col :span="7" v-if="lineNets.some(item => item.admin)">
+        <h3 style="font-size: 20px;">数据分析</h3>
         <div class="tab-ans">
           <ul class="item-fam">
             <li class="item-font"  :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in lineNets" :key="index" @click="goToLineNets(item)">
@@ -61,41 +40,22 @@ import iconHomeYlyl from '../../assets/images/homeIcon/ylyl.png'
 import iconHomeKlgf from '../../assets/images/homeIcon/klgf.png'
 import iconHomeYxsj from '../../assets/images/homeIcon/yxsj.png'
 import iconHomeBjfx from '../../assets/images/homeIcon/bjfx.png'
-import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
+// import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
 import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
 import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
 const PER_ANA = [
-  { name: '客流首页', icon: iconHomeYlyl, path: '/passenger-home', admin: false },
-  { name: '客流实时统计', icon: iconHomeKlfx, path: '/realtime-passenger-flow', admin: false },
-  { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false },
-  { name: '客流数据查询', icon: iconHomeMzl, path: '/search-passenger', admin: false },
-  { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis', admin: false },
-  { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order', admin: false },
-  { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate', admin: false },
-  { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume', admin: false },
-  { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity', admin: false },
-  { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false }
+  { name: '实时总体态势', icon: iconHomeYlyl, path: '/passenger-home', admin: false }
 ]
-const TIRED_CONTRAL = [
-  { name: '安全运营首页', icon: iconHomeBjzx, path: '/alarm-home', admin: false },
-  { name: '司机排行分析', icon: iconHomeBjzt, path: '/alarm-drive', admin: false },
-  { name: '报警类型分析', icon: iconHomeBjfx, path: '/alarm-type', admin: false },
-  { name: '报警速度分析', icon: iconHomeBjlx, path: '/alarm-speed', admin: false },
-  { name: '驾驶行为监测', icon: iconHomeBjzx, path: '/alarm-center', admin: false },
-  { name: '设备状态', icon: iconHomeBjzt, path: '/device-status', admin: false },
-  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false },
-  { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management', admin: false }
-]
-
 const LINE_NET = [
-  { name: '数据总览页', icon: iconHomeYlyl, path: '/data-overview-page', admin: false },
-  { name: '线路情况', icon: iconHomeKlfx, path: '/line-condition', admin: false },
-  { name: '重复度指标', icon: iconHomeYxsj, path: '/repeatability-index', admin: false },
-  { name: '重复度指标详情', icon: iconHomeMzl, path: '/repeatability-detail', admin: false },
-  { name: '数据综合查询', icon: iconHomeMzl, path: '/comprehensive-query', admin: false },
-  { name: '线网评分', icon: iconHomeMzl, path: '/line-network-core', admin: false },
-  { name: '线网评分详情', icon: iconHomeMzl, path: '/line-netWork-core-Detail', admin: false },
-  { name: '线路OD', icon: iconHomeMzl, path: '/line-od', admin: false }
+  { name: '发车趟次时序图', icon: iconHomeBjzx, path: '/trip-order', admin: false },
+  { name: '线路OD分析', icon: iconHomeKlfx, path: '/line-od', admin: false },
+  { name: '线路站点客流查询', icon: iconHomeFctc, path: '/comprehensive-query', admin: false },
+  { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate', admin: false },
+  { name: '客流详情查询', icon: iconHomeXlzd, path: '/search-passenger', admin: false },
+  { name: '设备状态', icon: iconHomeYxsj, path: '/device-status', admin: false },
+  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false },
+  { name: '报警类型管理', icon: iconHomeKlgf, path: '/alarm-management', admin: false },
+  { name: '报警类型管理', icon: iconHomeBjzt, path: '/alarm-management', admin: false }
 ]
 // const LINE_NET = []
 export default {
@@ -146,7 +106,6 @@ export default {
     checkRoles () {
       let anaPer = PER_ANA
       let lines = LINE_NET
-      let tired = TIRED_CONTRAL
       anaPer.forEach(item => {
         let isPer = this.rolesTem.some(role => item.path === role)
         if (isPer) {
@@ -163,42 +122,14 @@ export default {
           item.admin = false
         }
       })
-      tired.forEach(item => {
-        let isPer = this.rolesTem.some(role => item.path === role)
-        if (isPer) {
-          item.admin = true
-        } else {
-          item.admin = false
-        }
-      })
       this.operationAnalysis = anaPer
       this.lineNets = lines
-      this.tiredContral = tired
     },
     goToContral () {
-      // if (this.isScreen) {
-      //   let path = this.isScreenTo[0].children[0].path
-      //   this.$router.push(`/chart-analysis${path}`)
-      // } else {
-      //   this.$message.warning('权限不足，无法进入此页面')
-      // }
       this.$router.push(`/newBigScreen/newBigScreen-analysis`)
     },
-    goToChart (e) {
-      if (e.admin) {
-        let path = `/operation-analysis${e.path}`
-        this.$router.push(path)
-      } else {
-        this.$message.warning('权限不足，无法进入此页面')
-      }
-    },
-    goToAlarm (e) {
-      if (e.admin) {
-        let path = `/fatigue-monitoring${e.path}`
-        this.$router.push(path)
-      } else {
-        this.$message.warning('权限不足，无法进入此页面')
-      }
+    goToRealtime () {
+      this.$router.push(`/real-time/passenger-home`)
     },
     goToLineNets (e) {
       if (e.admin) {
@@ -228,7 +159,7 @@ export default {
   .main-card {
     .tab-con {
       width: 100%;
-      min-height: 25vh;
+      min-height: 30vh;
       background-image: url(../../assets/images/yunying.png);
       background-repeat: no-repeat;
       background-size: 100% 100%;

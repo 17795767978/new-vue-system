@@ -16,7 +16,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '实时监测',
       icon: 'nocturne icon-dash',
-      roles: ['/chart-analysis/all', '/passenger-home']
+      roles: ['/chart-analysis/all']
     },
     children: [{
       path: 'newBigScreen-analysis',
@@ -26,8 +26,17 @@ export const aysncRoutesMap = [
         icon: 'nocturne icon-dash',
         roles: ['/chart-analysis/all']
       }
+    }]
+  },
+  {
+    path: '/real-time',
+    component: Layout,
+    meta: {
+      title: '实时总体态势',
+      icon: 'nocturne icon-dash',
+      roles: ['/chart-analysis/all']
     },
-    {
+    children: [{
       path: 'passenger-home',
       component: _import_('operationAnalysis/dispatchingOperationAnalysis/passengerHome/index'),
       name: 'passengerHome',
@@ -36,8 +45,7 @@ export const aysncRoutesMap = [
         icon: 'nocturne icon-dash',
         roles: ['/passenger-home']
       }
-    }
-    ]
+    }]
   },
   {
     path: '/data-analysis',
