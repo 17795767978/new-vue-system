@@ -174,15 +174,17 @@
         <el-radio v-model="formInline.radio" label="2">历史</el-radio>
       </el-form-item>
       <el-form-item label="报警类型" v-if="isWarntype">
-          <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
-            <el-option
-              v-for="item in warnOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in warnOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 附加的功能 -->
+      <slot></slot>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
@@ -686,6 +688,7 @@ export default {
       setTimeout(() => {
         this.formInline.valueTime = [timeStart, timeEnd]
       }, 20)
+      this.$emit('emptySelect')
     },
     onSave () {
       this.centerDialogVisible = true

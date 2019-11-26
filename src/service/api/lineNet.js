@@ -296,6 +296,22 @@ export const lineNetApi = {
         pDate: ''
       },
       desc: '线路OD-线路OD图'
+    },
+    {
+      name: 'getAnalStaOdDataListData',
+      method: 'POST',
+      path: '/api/anal/sta/od/month/data/getAnalStaOdDataListData',
+      mockPath: '/api/anal/sta/od/month/data/getAnalStaOdDataListData',
+      params: {
+        month: '',
+        linearDistanceMin: '',
+        linearDistanceMax: '',
+        payNumberMin: '',
+        payNumberMax: '',
+        payTimeIntervalMin: '',
+        payTimeIntervalMax: ''
+      },
+      desc: '全市站点OD矩阵'
     }
   ]
 }

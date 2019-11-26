@@ -106,6 +106,16 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/search-passenger']
         }
+      },
+      {
+        path: 'station-od',
+        component: _import_('dataAnalysis/stationOD/index'),
+        name: 'stationOD',
+        meta: {
+          title: '站点OD矩阵',
+          icon: 'nocturne icon-dash',
+          roles: ['/search-passenger']
+        }
       }
     ]
   },
