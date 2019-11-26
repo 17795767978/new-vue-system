@@ -384,6 +384,7 @@ export default {
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
+    let month = moment().subtract(30, 'days').format('YYYY-MM')
     if (this.userId !== '1') {
       this.disabled = true
       this.formInline.orgId = this.userId
@@ -403,6 +404,7 @@ export default {
     this.formInline.dataCurrent = defaultForm.currentDate
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
+    this.formInline.month = month
     if (this.queryData && Object.keys(this.queryData).length > 0) {
       console.log(this.queryData)
       this.formInline.lineOrgId = this.queryData.company
@@ -616,6 +618,7 @@ export default {
     },
     onclear () {
       let date = moment(new Date()).format('YYYY-MM-DD')
+      let month = moment().subtract(30, 'days').format('YYYY-MM')
       this.formInline = {
         orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
@@ -627,7 +630,7 @@ export default {
         startHour: '',
         endHour: '',
         endHourFormatter: '',
-        month: '',
+        month: month,
         lineOrgId: '',
         lineLineId: '',
         startStation: {},

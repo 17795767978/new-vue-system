@@ -4,13 +4,16 @@
       :data="tableData"
       stripe
       border
-      height="65vh"
+      height="70vh"
       style="width: 100%">
       <el-table-column
         type="index"
         align="center"
         label="序号"
         width="80">
+        <template slot-scope="scope">
+          <span> {{scope.$index + (pageNumber - 1) * pageSize + 1}} </span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="upStaName"
@@ -47,6 +50,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   props: {
     selectData: {
@@ -62,8 +66,9 @@ export default {
     }
   },
   created () {
+    let month = moment().subtract(30, 'days').format('YYYY-MM')
     this._getAnalStaOdDataListData({
-      month: '',
+      month,
       linearDistanceMin: '',
       linearDistanceMax: '',
       payNumberMin: '',
@@ -76,15 +81,55 @@ export default {
   },
   watch: {
     selectData (newV) {
-      console.log(newV)
+      this.pageNumber = 1
+      this._getAnalStaOdDataListData({
+        month: moment(newV.month).format('YYYY-MM'),
+        linearDistanceMin: newV.startDis,
+        linearDistanceMax: newV.endDis,
+        payNumberMin: newV.startNum,
+        payNumberMax: newV.endNum,
+        payTimeIntervalMin: newV.stHour,
+        payTimeIntervalMax: newV.edHour,
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize
+      })
     }
   },
   methods: {
     async _getAnalStaOdDataListData (params) {
       let result = await this.$api['lineNet.getAnalStaOdDataListData'](params)
-      console.log(result)
+      this.tableData = result.list
+      this.total = result.total
     },
-    handleCurrentChange (val) {}
+    handleCurrentChange (val) {
+      this.pageNumber = val
+      let month = moment().subtract(30, 'days').format('YYYY-MM')
+      if (Object.keys(this.selectData).length === 0) {
+        this._getAnalStaOdDataListData({
+          month,
+          linearDistanceMin: '',
+          linearDistanceMax: '',
+          payNumberMin: '',
+          payNumberMax: '',
+          payTimeIntervalMin: '',
+          payTimeIntervalMax: '',
+          pageNumber: this.pageNumber,
+          pageSize: this.pageSize
+        })
+      } else {
+        this._getAnalStaOdDataListData({
+          month: moment(this.selectData.month).format('YYYY-MM'),
+          linearDistanceMin: this.selectData.startDis,
+          linearDistanceMax: this.selectData.endDis,
+          payNumberMin: this.selectData.startNum,
+          payNumberMax: this.selectData.endNum,
+          payTimeIntervalMin: this.selectData.stHour,
+          payTimeIntervalMax: this.selectData.edHour,
+          pageNumber: this.pageNumber,
+          pageSize: this.pageSize
+        })
+      }
+    }
   }
 }
 </script>

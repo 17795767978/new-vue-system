@@ -62,8 +62,8 @@ export default {
     return {
       selectData: {},
       slotData: {
-        stHour: '',
-        edHour: '',
+        stHour: '07:00',
+        edHour: '09:00',
         startDis: '',
         endDis: '',
         startNum: '',
