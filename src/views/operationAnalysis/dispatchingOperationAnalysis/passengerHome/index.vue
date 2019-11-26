@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="right-bottom-wrapper">
-        <div class="station-wrapper" style="border-right: 1px solid #ccc;">
+        <!-- <div class="station-wrapper" style="border-right: 1px solid #ccc;">
           <div class="title">
             <div>客流最热站点TOP10(上车客流)</div>
             <el-select
@@ -42,10 +42,10 @@
           <div class="map">
             <station-echarts :sendStations="sendStations"/>
           </div>
-        </div>
+        </div> -->
         <div class="line-wrapper">
           <div class="title">
-            <div>客流最热线路TOP10(上车客流)</div>
+            <div>客流最热线路TOP10(登量)</div>
             <el-select style="width:200px;margin-right:10px;position: absolute;right: 4vw; top: 4.5vh;" size="mini" filterable v-model="lineIds" multiple collapse-tags placeholder="请选择">
               <el-option
                 v-for="item in lineOptions"
@@ -72,7 +72,7 @@
 import totalData from './Components/totalData.vue'
 import passengerVol from './Components/passengerVol.vue'
 import passengerHotmap from './Components/passengerHotmap.vue'
-import stationEcharts from './Components/stationEcharts.vue'
+// import stationEcharts from './Components/stationEcharts.vue'
 import lineEchartsTop from './Components/lineEchartsTop.vue'
 import monthEcharts from './Components/month.vue'
 export default {
@@ -156,7 +156,7 @@ export default {
     totalData,
     passengerVol,
     passengerHotmap,
-    stationEcharts,
+    // stationEcharts,
     lineEchartsTop,
     monthEcharts
   }
@@ -228,7 +228,7 @@ export default {
       justify-content: center;
       flex-wrap: wrap;
       .station-wrapper, .line-wrapper {
-        width: 50%;
+        width: 100%;
         height: 60%;
         box-sizing: border-box;
         border-bottom: 1px solid #ccc;

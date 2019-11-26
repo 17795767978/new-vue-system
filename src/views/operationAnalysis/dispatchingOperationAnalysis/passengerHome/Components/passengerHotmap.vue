@@ -22,7 +22,7 @@
 import { BaiduMap, BmlHeatmap } from 'vue-baidu-map'
 import { mapStyle } from '../utils/mapStyle'
 import { setTimeout } from 'timers'
-const TIME = 60 * 5000
+const TIME = 1000 * 60 * 60
 export default {
   data () {
     return {

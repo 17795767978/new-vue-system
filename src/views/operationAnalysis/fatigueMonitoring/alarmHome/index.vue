@@ -148,8 +148,8 @@ export default {
           if (this.diaData.length > 0) {
             this.$refs.audioWrapper.play()
           }
+          console.log('===============推送开始=============')
         }
-        console.log('===============推送开始=============')
       } else {
         this.$message.error('浏览器不支持websocket')
       }
