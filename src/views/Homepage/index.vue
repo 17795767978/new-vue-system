@@ -6,12 +6,12 @@
     <el-row class="main-card" :gutter="50">
       <el-col style="margin-left: 50px;" :span="5">
         <h3 style="font-size: 20px;">运营实况</h3>
-        <div class="tab-con" :class="isScreen ? '' : 'tab-con-dis'" @click="goToContral()">
+        <div class="tab-con" @click="goToContral()">
         </div>
       </el-col>
       <el-col :span="5" v-if="operationAnalysis.some(item => item.admin)">
         <h3 style="font-size: 20px;">客流总体态势</h3>
-        <div class="tab-con" :class="isScreen ? '' : 'tab-con-dis'" @click="goToRealtime()">
+        <div class="tab-con" @click="goToRealtime()">
         </div>
       </el-col>
       <el-col :span="7" v-if="lineNets.some(item => item.admin)">
@@ -77,8 +77,6 @@ export default {
   },
   mounted () {
     let roles = this.$store.getters.roles
-    this.isScreen = roles.some(role => role.path.indexOf('/chart-analysis') > -1)
-    this.isScreenTo = roles.filter(role => role.title === '运营监控')
     if (roles !== 'error') {
       this.getRoles(roles)
       this.checkRoles()

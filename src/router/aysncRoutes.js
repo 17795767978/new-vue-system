@@ -16,7 +16,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '实时监测',
       icon: 'nocturne icon-dash',
-      roles: ['/chart-analysis/all']
+      roles: ['/newBigScreen-analysis']
     },
     children: [{
       path: 'newBigScreen-analysis',
@@ -24,7 +24,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '运营实况',
         icon: 'nocturne icon-dash',
-        roles: ['/chart-analysis/all']
+        roles: ['/newBigScreen-analysis']
       }
     }]
   },
@@ -34,7 +34,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '实时总体态势',
       icon: 'nocturne icon-dash',
-      roles: ['/chart-analysis/all']
+      roles: ['/passenger-home']
     },
     children: [{
       path: 'passenger-home',
