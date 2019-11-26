@@ -38,7 +38,7 @@ export default {
       orgId: this.userId === '1' ? '' : this.userId,
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
-      endTime: formData.dateArray[0]
+      endTime: formData.dateArray[1]
     })
   },
   mounted () {
@@ -52,7 +52,7 @@ export default {
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
-          endTime: newV.dateArray[0]
+          endTime: newV.dateArray[1]
         })
       }
     }
@@ -61,7 +61,6 @@ export default {
     _getAlarmLevelRatioAnalysis (params) {
       this.loading = true
       this.$api['homeTired.getStatisticDatasByWarnType'](params).then(res => {
-        console.log(res)
         let yData = res.map(item => item.warnLabel)
         let series = res.map(item => ({
           value: item.warnNumber,
