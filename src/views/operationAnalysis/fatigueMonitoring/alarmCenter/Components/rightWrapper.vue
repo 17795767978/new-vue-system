@@ -225,6 +225,7 @@ export default {
     ...mapGetters(['userId'])
   },
   created () {
+    let defaultData = this.$store.getters.formData
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
@@ -243,7 +244,7 @@ export default {
       busPlateNumber: this.formInline.busPlateNumber, // 车牌号
       busSelfCode: this.formInline.busSelfCode, // 自编号
       warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-      warnTypeId: this.formInline.warnTypeId, // 报警类型
+      warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
       startTime: this.formInline.timeValue[0] || timeStart, // 时间格式   开始结束默认查近7天的
       endTime: this.formInline.timeValue[1] || timeEnd,
       pageSize: 10,
@@ -269,6 +270,7 @@ export default {
     selectCarData: {
       deep: true,
       handler (newValue) {
+        let defaultData = this.$store.getters.formData
         // 车偏号 联动
         this.changeBusPlateNumber()
         this.formInline.timeValue.forEach(time => {
@@ -283,7 +285,7 @@ export default {
             busPlateNumber: this.formInline.busPlateNumber, // 车牌号
             busSelfCode: this.formInline.busSelfCode, // 自编号
             warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-            warnTypeId: this.formInline.warnTypeId, // 报警类型
+            warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
             startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
             endTime: this.formInline.timeValue[1],
             pageSize: 10,
@@ -348,6 +350,7 @@ export default {
     },
     handleCurrentChange (val) {
       this.pageNum = val
+      let defaultData = this.$store.getters.formData
       console.log(this.userId)
       console.log(this.formInline.orgId)
       this._tableList({
@@ -358,7 +361,7 @@ export default {
         busPlateNumber: this.formInline.busPlateNumber, // 车牌号
         busSelfCode: this.formInline.busSelfCode, // 自编号
         warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-        warnTypeId: this.formInline.warnTypeId, // 报警类型
+        warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
         pageSize: 10,
@@ -375,6 +378,7 @@ export default {
     },
     onSubmit () {
       let dateArr = []
+      let defaultData = this.$store.getters.formData
       this.formInline.timeValue.forEach(time => {
         dateArr.push(moment(time).format('YYYY-MM-DD HH:mm:ss'))
       })
@@ -390,7 +394,7 @@ export default {
         busPlateNumber: this.formInline.busPlateNumber, // 车牌号
         busSelfCode: this.formInline.busSelfCode, // 自编号
         warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-        warnTypeId: this.formInline.warnTypeId, // 报警类型
+        warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型 // 报警类型
         startTime: dateArr[0], // 时间格式   开始结束默认查近7天的
         endTime: dateArr[1],
         pageSize: 10,
@@ -450,6 +454,7 @@ export default {
       // })
     },
     getExcel () {
+      let defaultData = this.$store.getters.formData
       this.$api['downLoad.warnExport']({
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -458,7 +463,7 @@ export default {
         busPlateNumber: this.formInline.busPlateNumber, // 车牌号
         busSelfCode: this.formInline.busSelfCode, // 自编号
         warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-        warnTypeId: this.formInline.warnTypeId, // 报警类型
+        warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1]
       }).then(res => {
