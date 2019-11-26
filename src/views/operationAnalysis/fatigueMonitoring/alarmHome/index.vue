@@ -135,10 +135,11 @@ export default {
     openWs () {
       if ('WebSocket' in window) {
         this.$refs.audioWrapper.pause()
-        let url = WSAPI
+        let url = `${WSAPI}/${localStorage.getItem('id')}`
         this.ws = new WebSocket(url)
         this.ws.onopen = () => {
-        // Web Socket 已连接上，使用 send() 方法发送数据
+          console.log('===============推送开始=============')
+          // Web Socket 已连接上，使用 send() 方法发送数据
           this.ws.send('发送数据')
         }
         this.ws.onmessage = (evt) => {
@@ -149,7 +150,6 @@ export default {
             this.$refs.audioWrapper.play()
           }
         }
-        console.log('===============推送开始=============')
       } else {
         this.$message.error('浏览器不支持websocket')
       }
