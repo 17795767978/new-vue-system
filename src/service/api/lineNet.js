@@ -312,6 +312,32 @@ export const lineNetApi = {
         payTimeIntervalMax: ''
       },
       desc: '全市站点OD矩阵'
+    },
+    {
+      name: 'getMidLinePFData',
+      method: 'POST',
+      path: '/api/mid/pf/detail/time/data/getMidLinePFData',
+      mockPath: '/api/mid/pf/detail/time/data/getMidLinePFData',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        date: ''
+      },
+      desc: '线路客流查询-列表'
+    },
+    {
+      name: 'getMidLinePFGridData',
+      method: 'POST',
+      path: '/api/mid/pf/detail/time/data/getMidLinePFGridData',
+      mockPath: '/api/mid/pf/detail/time/data/getMidLinePFGridData',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        date: ''
+      },
+      desc: '线路客流查询-折线图'
     }
   ]
 }

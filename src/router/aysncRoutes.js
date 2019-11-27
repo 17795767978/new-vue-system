@@ -116,6 +116,26 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/search-passenger']
         }
+      },
+      {
+        path: 'line-passenger-flow',
+        component: _import_('dataAnalysis/linePassengerFlow/index'),
+        name: 'linePassengerFlow',
+        meta: {
+          title: '线路客流查询',
+          icon: 'nocturne icon-dash',
+          roles: ['/search-passenger']
+        }
+      },
+      {
+        path: 'hot-map',
+        component: _import_('dataAnalysis/hotMap/index'),
+        name: 'hotMap',
+        meta: {
+          title: '客流热力分析',
+          icon: 'nocturne icon-dash',
+          roles: ['/search-passenger']
+        }
       }
     ]
   },

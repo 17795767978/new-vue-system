@@ -296,6 +296,9 @@ export default {
     },
     isRadio: {
       type: Boolean
+    },
+    isDefaultEmpty: {
+      type: Boolean
     }
   },
   data () {
@@ -397,7 +400,9 @@ export default {
     }
     this.formInline.lineOrgId = defaultForm.lineOrgId
     this.formInline.lineLineId = defaultForm.lineLineId
-    this.formInline.orgId = defaultForm.orgId
+    if (!this.isDefaultEmpty) {
+      this.formInline.orgId = defaultForm.orgId
+    }
     this.formInline.lineId = defaultForm.lineId
     this.formInline.lineIds = defaultForm.lineIds
     this.formInline.lineType = defaultForm.lineType
@@ -406,7 +411,6 @@ export default {
     this.formInline.endHour = defaultForm.endHour
     this.formInline.month = month
     if (this.queryData && Object.keys(this.queryData).length > 0) {
-      console.log(this.queryData)
       this.formInline.lineOrgId = this.queryData.company
       this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
       this.formInline.lineType = this.queryData.arrow
@@ -414,7 +418,6 @@ export default {
   },
   activated () {
     setTimeout(() => {
-      console.log(this.queryData)
       if (this.queryData && Object.keys(this.queryData).length > 0) {
         this.formInline.lineOrgId = this.queryData.company
         this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
