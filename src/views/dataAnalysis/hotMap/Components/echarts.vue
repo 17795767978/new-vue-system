@@ -98,8 +98,8 @@ export default {
       this.legend = [
         {
           data: ['刷卡人次(登量)'],
-          right: 100,
-          top: 20,
+          right: 50,
+          top: 10,
           textStyle: {
             color: '#000'
           }
