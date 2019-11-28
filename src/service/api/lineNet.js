@@ -338,6 +338,18 @@ export const lineNetApi = {
         date: ''
       },
       desc: '线路客流查询-折线图'
+    },
+    {
+      name: 'getHeatMapData',
+      method: 'POST',
+      path: '/api/mid/pf/detail/time/data/getHeatMapData',
+      mockPath: '/api/mid/pf/detail/time/data/getHeatMapData',
+      params: {
+        date: '',
+        payTimeIntervalMin: '',
+        payTimeIntervalMax: ''
+      },
+      desc: '客流热力等分析'
     }
   ]
 }
