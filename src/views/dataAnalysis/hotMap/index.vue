@@ -16,7 +16,7 @@
       </div>
       <div class="display">
         <ul class="wrapper">
-          <li class="icon" :class="[play && item === currentTime ? 'active' : '']" v-for="item in time" :key="item"></li>
+          <li class="icon" :class="[item === currentTime ? 'active' : '']" v-for="(item, index) in time" :key="item" @click="puase(item, index)"></li>
         </ul>
       </div>
       <div class="right-arrow">
@@ -27,18 +27,24 @@
       <span class="font" v-if="currentTime !== ''">{{currentTime}} 数据指标</span>
     </div>
   </div>
-  <div></div>
+  <div class="line-echarts">
+    <Echarts :datas="datas.heatMapLineTOP10DataLists" :ids="'line'"/>
+  </div>
+  <div class="station-echarts">
+    <Echarts :datas="datas.heatMapStaTOP10DataLists" :ids="'station'"/>
+  </div>
   </div>
 </template>
 
 <script>
 import HotMap from './Components/map'
 import Dialog from './Components/dialog'
+import Echarts from './Components/echarts'
 import moment from 'moment'
 const TIME_DATA = ['06:00-07:00', '07:00-08:00', '08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00',
   '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00', '17:00-18:00', '18:00-19:00',
   '19:00-20:00', '20:00-21:00', '21:00-22:00', '22:00-23:00']
-const TIME = 3000
+const TIME = 5000
 export default {
   name: 'hotMap',
   data () {
@@ -47,29 +53,31 @@ export default {
       play: false,
       currentTime: '',
       setTimer: null,
-      datas: {}
+      datas: {},
+      current: 0
     }
   },
-  async created () {
-    let result = await this.$api['lineNet.getHeatMapData']({
-      date: moment().subtract(30, 'days').format('YYYY-MM'),
+  created () {
+    this.$api['lineNet.getHeatMapData']({
+      updateMonth: moment().subtract(30, 'days').format('YYYY-MM'),
       payTimeIntervalMin: '',
       payTimeIntervalMax: ''
+    }).then(res => {
+      this.datas = res
     })
-    this.datas = result
-    console.log(result)
   },
   watch: {
     play (newV) {
-      this.currentTime = ''
       if (newV) {
-        this.animHotMap(0)
+        this.animHotMap(this.current)
       } else {
         clearTimeout(this.setTimer)
         this.setTimer = null
       }
     },
     currentTime (newV) {
+      let timeArr = newV.split('-')
+      this._getDatas(timeArr)
     }
   },
   methods: {
@@ -77,11 +85,16 @@ export default {
     async _getDatas (month) {
       let result = await this.$api['lineNet.getHeatMapData']({
         date: moment(month).format('YYYY-MM'),
-        payTimeIntervalMin: '',
-        payTimeIntervalMax: ''
+        payTimeIntervalMin: month[0],
+        payTimeIntervalMax: month[1]
       })
       this.datas = result
-      console.log(result)
+    },
+    // 点击到具体的时间
+    puase (time, index) {
+      this.play = false
+      this.currentTime = time
+      this.current = index
     },
     // 暂停播放
     getStatus () {
@@ -98,9 +111,11 @@ export default {
       }
       this.setTimer = setTimeout(() => {
         if (num < this.time.length) {
-          this.animHotMap(num)
+          this.current = num
+          this.animHotMap(this.current)
         } else {
-          this.play = false
+          this.current = 0
+          this.animHotMap(this.current)
         }
       }, TIME)
     },
@@ -111,7 +126,8 @@ export default {
   },
   components: {
     HotMap,
-    Dialog
+    Dialog,
+    Echarts
   }
 }
 </script>
@@ -189,6 +205,22 @@ export default {
       font-size: 1.5vw;
     }
   }
+}
+.line-echarts {
+  width: 30%;
+  height: 15vh;
+  position: absolute;
+  left: 2vw;
+  top: 10vh;
+  z-index: 1050
+}
+.station-echarts {
+  width: 30%;
+  height: 15vh;
+  position: absolute;
+  left: 2vw;
+  top: 30vh;
+  z-index: 1050
 }
 .active {
   background-color: #fe1702 !important;

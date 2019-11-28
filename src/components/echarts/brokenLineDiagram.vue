@@ -52,6 +52,9 @@ export default {
     },
     polar: {
       type: Object
+    },
+    bgColor: {
+      type: String
     }
   },
   data () {
@@ -174,6 +177,7 @@ export default {
               }
             },
           grid: this.gridData,
+          backgroundColor: this.bgColor,
           // color: ['#0490b3', '#6e9724', '#b22679'],
           color: ['#fedd00', '#00ffff', '#03adb0', '#ff2bd0', '#ff840b', '#ff30a0'],
           angleAxis: Object.keys(this.angleAxisData).length > 0 ? this.angleAxisData : null,

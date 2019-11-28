@@ -1,20 +1,20 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="ids" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" :bgColor="bgColor"></lineEcharts>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
-import moment from 'moment'
+// import moment from 'moment'
 export default {
   name: 'passengerHome',
   props: {
-    selectData: {
-      type: Object
+    datas: {
+      type: Array
     },
-    echartsData: {
-      type: Object
+    ids: {
+      type: String
     }
   },
   data () {
@@ -27,57 +27,71 @@ export default {
       xData: [],
       yData: [],
       maxNum: [],
-      id: 'dataLineTop10',
+      id: 'kobe',
       grid: {},
       loading: true,
       lineName: '',
-      lineType: ''
+      lineType: '',
+      bgColor: 'rgba(255,255,255,0.8)'
     }
   },
   created () {
-    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    let date = moment().subtract(30, 'days').format('YYYY-MM')
-    this._getStationCharts({
-      orgUuid: '',
-      lineUuid: '',
-      lineType: '1',
-      date
-    })
   },
   mounted () {
   },
   watch: {
-    echartsData (newV) {
+    datas (newV) {
       this._getStationCharts(newV)
+    },
+    ids (newV) {
+      console.log(newV)
     }
   },
   methods: {
-    _getStationCharts (params) {
+    async _getStationCharts (params) {
+      let xDatas = []
+      let datas = []
+      if (this.ids === 'line') {
+        xDatas = params.map(item => item.lineName)
+        datas = params.map(item => item.upPayNumber)
+      } else {
+        xDatas = params.map(item => item.staName)
+        datas = params.map(item => item.upPayNumber)
+      }
+      let result = await {
+        xDatas,
+        datas
+      }
       setTimeout(() => {
         this.loading = false
       }, 1000)
       this.title = {
-        text: `线路登降量TOP10`,
+        text: this.ids === 'line' ? `线路登降量TOP10` : `站点登降量TOP10`,
         left: 'center',
         top: 10,
         textStyle: {
           'color': '#000',
-          'fontSize': '22'
+          'fontSize': '16'
         }
       }
       this.grid = {
-        x: 50,
-        y: 50,
-        x2: 70,
-        y2: 30,
+        x: 45,
+        y: 10,
+        x2: 0,
+        y2: 25,
         borderWidth: 1
       }
       this.lineData = [
         {
           name: '刷卡人次(登量)',
           type: 'bar',
-          data: 111111111111111,
-          barWidth: 20
+          data: result.datas,
+          barWidth: 20,
+          itemStyle: {
+            normal: {
+              color: this.ids === 'line' ? 'rgba(116,207,209, 0.7)' : 'rgba(140, 192, 229, 0.7)'
+            }
+          }
         }
       ]
       this.dataLength = 2
@@ -85,7 +99,7 @@ export default {
         {
           data: ['刷卡人次(登量)'],
           right: 100,
-          top: 10,
+          top: 20,
           textStyle: {
             color: '#000'
           }
@@ -94,12 +108,12 @@ export default {
       this.xData = [
         {
           type: 'category',
-          data: 111111111111111111111,
+          data: result.xDatas,
           axisPointer: {
             type: 'shadow'
           },
           splitLine: {
-            show: true
+            show: false
           },
           axisLabel: {
             inside: false,
