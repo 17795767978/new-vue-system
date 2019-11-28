@@ -55,12 +55,21 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
+    <!-- <el-pagination
       style="float: right; margin-top: 20px;"
       background
       :current-page.sync="pageNumber"
       @current-change="handleCurrentChange"
       layout="prev, pager, next"
+      :page-size="pageSize"
+      :total="total">
+    </el-pagination> -->
+    <el-pagination
+      style="float: right; margin-top: 20px;"
+      background
+      :current-page="pageNumber"
+      @current-change="handleCurrentChange"
+      layout="total, prev, pager, next"
       :page-size="pageSize"
       :total="total">
     </el-pagination>

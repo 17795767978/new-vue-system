@@ -48,12 +48,20 @@ export default {
     this._passengeFlow({
       orgId
     })
-    this._getTotalPassengerSimple({
-      orgId
-    })
-    this._getWeekData({
-      orgId
-    })
+    setTimeout(() => {
+      this._getTotalPassengerSimple({
+        orgId
+      })
+      this._getWeekData({
+        orgId
+      })
+    }, 1000)
+    // this._getTotalPassengerSimple({
+    //   orgId
+    // })
+    // this._getWeekData({
+    //   orgId
+    // })
   },
   methods: {
     _passengeFlow (params) {

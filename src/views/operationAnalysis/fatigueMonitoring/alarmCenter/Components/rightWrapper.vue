@@ -115,7 +115,7 @@
         <el-table-column
           align="center"
           prop="speed"
-          label="报警速度"
+          label="报警速度(km/h)"
           >
         </el-table-column>
         <el-table-column

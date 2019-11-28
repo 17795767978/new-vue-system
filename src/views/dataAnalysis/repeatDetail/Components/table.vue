@@ -21,9 +21,6 @@
         align="center"
         width="150"
         label="分公司">
-        <!-- <template slot-scope="scope">
-        <el-button type="primary" @click="goToDetail(scope.row)" size="mini">{{scope.row.date}}</el-button>
-        </template> -->
       </el-table-column>
       <el-table-column
         prop="lineNumber"
@@ -79,7 +76,7 @@
       background
       :current-page="pageNumber"
       @current-change="handleCurrentChange"
-      layout="prev, pager, next"
+      layout="total, prev, pager, next"
       :page-size="pageSize"
       :total="total">
     </el-pagination>

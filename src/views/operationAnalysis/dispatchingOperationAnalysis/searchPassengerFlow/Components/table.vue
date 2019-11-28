@@ -139,7 +139,7 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV.radio)
+        console.log(newV)
         this._getOnOffPersonCountlist({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineIds: newV.lineIds,

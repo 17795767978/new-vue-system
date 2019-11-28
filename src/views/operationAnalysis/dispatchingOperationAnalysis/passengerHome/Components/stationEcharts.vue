@@ -39,8 +39,9 @@ export default {
   },
   watch: {
     sendStations (newV) {
+      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
       this._getHotstations({
-        orgId: '',
+        orgId,
         staUuids: newV
       })
     }

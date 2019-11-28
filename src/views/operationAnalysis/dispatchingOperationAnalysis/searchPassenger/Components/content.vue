@@ -177,7 +177,9 @@ export default {
     // },
     isUpdate () {
       if (this.isUpdate) {
-        console.log(this.selectData)
+        if (this.selectData.orgId === '1') {
+          this.selectData.orgId = ''
+        }
         this.pageNumber = 1
         this.selectData.pageNumber = this.pageNumber
         this.selectData.pageSize = 15

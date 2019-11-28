@@ -533,6 +533,8 @@ export default {
         if (newV === '1') {
           console.log(this.formInline.dataCurrent)
           this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
+        } else {
+          this.formInline.dateArray = []
         }
       }
     }
