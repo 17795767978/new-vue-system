@@ -177,13 +177,14 @@ export default {
     // },
     isUpdate () {
       if (this.isUpdate) {
-        if (this.selectData.orgId === '1') {
-          this.selectData.orgId = ''
-        }
         this.pageNumber = 1
         this.selectData.pageNumber = this.pageNumber
         this.selectData.pageSize = 15
-        this._passengerFlow(this.selectData, this.selectData.radio)
+        let select = JSON.parse(JSON.stringify(this.selectData))
+        if (this.selectData.orgId === '1') {
+          select.orgId = ''
+        }
+        this._passengerFlow(select, this.selectData.radio)
         this.$emit('isUpdateTo')
       }
     },
@@ -208,7 +209,6 @@ export default {
           this.loading = false
           this.isDisabled = false
         }).catch((error) => {
-          console.log(error)
           this.$message.error(error.message)
           this.loading = false
           this.isDisabled = false
@@ -221,7 +221,6 @@ export default {
           this.loading = false
           this.isDisabled = false
         }).catch((error) => {
-          console.log(error)
           this.$message.error(error.message)
           this.loading = false
           this.isDisabled = false
