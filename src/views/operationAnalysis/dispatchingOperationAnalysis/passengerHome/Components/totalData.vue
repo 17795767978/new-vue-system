@@ -51,12 +51,14 @@ export default {
   },
   mounted () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._getTotalPassengerSimple({
-      orgId
-    })
-    this._getWeekData({
-      orgId
-    })
+    setTimeout(() => {
+      this._getTotalPassengerSimple({
+        orgId
+      })
+      this._getWeekData({
+        orgId
+      })
+    }, 1000)
   },
   methods: {
     _passengeFlow (params) {

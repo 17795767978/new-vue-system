@@ -32,7 +32,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择机构" v-if="isOrgSec">
-        <el-select class="font-style" @visible-change="changed" v-model="formInline.lineOrgId" :disabled="disabled" placeholder="请选择" filterable>
+        <el-select class="font-style" @visible-change="changed" v-model="formInline.lineOrgId" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptionsSec"
             :key="item.value"
@@ -534,8 +534,9 @@ export default {
     'formInline.radio': {
       handler (newV) {
         if (newV === '1') {
-          console.log(this.formInline.dataCurrent)
           this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
+        } else {
+          this.formInline.dateArray = []
         }
       }
     },

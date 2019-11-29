@@ -9,6 +9,7 @@
       <el-table-column
         type="index"
         align="center"
+        width="80"
         label="序号">
       </el-table-column>
       <el-table-column
