@@ -37,55 +37,32 @@ export default {
   watch: {
   },
   methods: {
-    async _getStationData () {
+    _getStationData () {
       this.loading = false
-      this.$jsonp('https://www.echartsjs.com/examples/data/asset/data/lines-bus.json').then(data => {
-        console.log(data)
-        let busLines = [].concat.apply([], data.map(function (busLine, idx) {
-          let prevPt
-          let points = []
-          for (let i = 0; i < busLine.length; i += 2) {
-            let pt = [busLine[i], busLine[i + 1]]
-            if (i > 0) {
-              pt = [
-                prevPt[0] + pt[0],
-                prevPt[1] + pt[1]
-              ]
-            }
-            prevPt = pt
-
-            points.push([pt[0] / 1e4, pt[1] / 1e4])
-          }
-          return {
-            coords: points
-          }
-        }))
-        console.log(busLines)
-        this.bmap = {
-          center: [116.46, 39.92],
-          zoom: 10,
-          roam: true,
-          mapStyle: {
-            styleJson: style
-          }
+      this.bmap = {
+        center: [116.46, 39.92],
+        zoom: 10,
+        roam: true,
+        mapStyle: {
+          styleJson: style
         }
-        this.lineData = [{
-          type: 'lines',
-          coordinateSystem: 'bmap',
-          polyline: true,
-          data: busLines,
-          silent: true,
-          lineStyle: {
-            normal: {
-              color: '#c23531',
-              opacity: 0.2,
-              width: 1
-            }
-          },
-          progressiveThreshold: 500,
-          progressive: 200
-        }]
-      })
+      }
+      this.lineData = [{
+        type: 'lines',
+        coordinateSystem: 'bmap',
+        polyline: true,
+        data: [],
+        silent: true,
+        lineStyle: {
+          normal: {
+            color: '#c23531',
+            opacity: 0.2,
+            width: 1
+          }
+        },
+        progressiveThreshold: 500,
+        progressive: 200
+      }]
     }
   },
   components: {

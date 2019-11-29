@@ -147,6 +147,7 @@ export const aysncRoutesMap = [
           roles: ['/search-passenger']
         }
       }
+
     ]
   },
   {

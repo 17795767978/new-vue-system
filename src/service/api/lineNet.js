@@ -350,6 +350,23 @@ export const lineNetApi = {
         payTimeIntervalMax: ''
       },
       desc: '客流热力等分析'
+    },
+    {
+      name: 'getAnalStaOdDataMapData',
+      method: 'POST',
+      path: '/api/anal/sta/od/month/data/getAnalStaOdDataMapData',
+      mockPath: '/api/anal/sta/od/month/data/getAnalStaOdDataMapData',
+      params: {
+        month: '',
+        upStaName: '',
+        linearDistanceMin: '',
+        linearDistanceMax: '',
+        payNumberMin: '',
+        payNumberMax: '',
+        payTimeIntervalMin: '',
+        payTimeIntervalMax: ''
+      },
+      desc: '全市站点电子地图'
     }
   ]
 }

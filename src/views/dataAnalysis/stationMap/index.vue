@@ -1,10 +1,10 @@
 <template>
   <div>
-  <Dialog @getDatas="getMonth"/>
+  <Dialog @defaultStation="getDefaultStation" @getDatas="getMonth" />
   <div class="map">
-    <HotMap />
+    <Map />
   </div>
-  <div class="settings">
+  <!-- <div class="settings">
     <div class="left">
       <el-button type="primary" size="mini" @click="getMonthDialog">查询</el-button>
     </div>
@@ -27,20 +27,13 @@
       <p class="font" style="text-align: center; margin-top: 0;margin-bottom: 1vh;font-size: 1.5vw">{{month}}</p>
       <p class="font" style="text-align: center; margin-top: 0;" v-if="currentTime !== ''">{{currentTime}} 数据指标</p>
     </div>
-  </div>
-  <div class="line-echarts">
-    <Echarts :datas="datas.heatMapLineTOP10DataLists" :ids="'line'"/>
-  </div>
-  <div class="station-echarts">
-    <Echarts :datas="datas.heatMapStaTOP10DataLists" :ids="'station'"/>
-  </div>
+  </div> -->
   </div>
 </template>
 
 <script>
-import HotMap from './Components/map'
+import Map from './Components/map'
 import Dialog from './Components/dialog'
-// import Echarts from './Components/echarts'
 import moment from 'moment'
 const TIME_DATA = ['06:00-07:00', '07:00-08:00', '08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00',
   '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00', '17:00-18:00', '18:00-19:00',
@@ -56,18 +49,28 @@ export default {
       currentTime: '',
       setTimer: null,
       datas: {},
-      current: 0
+      current: 0,
+      selectData: {},
+      station: ''
     }
   },
-  created () {
+  mounted () {
     this.month = moment().subtract(30, 'days').format('YYYY-MM')
-    this.$api['lineNet.getHeatMapData']({
-      updateMonth: moment().subtract(30, 'days').format('YYYY-MM'),
-      payTimeIntervalMin: '',
-      payTimeIntervalMax: ''
-    }).then(res => {
-      this.datas = res
-    })
+    setTimeout(() => {
+      this.$api['lineNet.getAnalStaOdDataMapData']({
+        month: moment().subtract(30, 'days').format('YYYY-MM'),
+        upStaName: this.station,
+        linearDistanceMin: '',
+        linearDistanceMax: '',
+        payNumberMin: '',
+        payNumberMax: '',
+        payTimeIntervalMin: '',
+        payTimeIntervalMax: ''
+      }).then(res => {
+        this.datas = res
+        console.log(res)
+      })
+    }, 1000)
   },
   watch: {
     play (newV) {
@@ -84,8 +87,13 @@ export default {
     }
   },
   methods: {
-    getMonth (month) {
-      this.month = moment(month).format('YYYY-MM')
+    getDefaultStation (station) {
+      this.station = station.staName
+    },
+    getMonth (data) {
+      console.log(data)
+      this.selectData = data
+      this.month = moment(data.month).format('YYYY-MM')
       this.play = false
       clearTimeout(this.setTimer)
       this.setTimer = null
@@ -95,12 +103,18 @@ export default {
     },
     // api获取数据
     async getDatas (time) {
-      let result = await this.$api['lineNet.getHeatMapData']({
-        updateMonth: this.month,
+      let result = await this.$api['lineNet.getAnalStaOdDataMapData']({
+        month: this.month,
+        upStaName: this.selectData.stations,
+        linearDistanceMin: this.selectData.startDis,
+        linearDistanceMax: this.selectData.endDis,
+        payNumberMin: this.selectData.startNum,
+        payNumberMax: this.selectData.endNum,
         payTimeIntervalMin: time[0],
         payTimeIntervalMax: time[1]
       })
       // 相当于异步重新开启播放
+      console.log(result)
       this.play = true
       this.datas = result
     },
@@ -143,7 +157,7 @@ export default {
     this.setTimer = null
   },
   components: {
-    HotMap,
+    Map,
     Dialog
   }
 }
