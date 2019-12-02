@@ -56,7 +56,8 @@ export default {
       currentTime: '',
       setTimer: null,
       datas: {},
-      current: 0
+      current: 0,
+      currentStop: false
     }
   },
   created () {
@@ -72,8 +73,10 @@ export default {
   watch: {
     play (newV) {
       if (newV) {
+        this.currentStop = true
         this.animHotMap(this.current)
       } else {
+        this.currentStop = false
         clearTimeout(this.setTimer)
         this.setTimer = null
       }
@@ -87,6 +90,7 @@ export default {
     getMonth (month) {
       this.month = moment(month).format('YYYY-MM')
       this.play = false
+      this.currentStop = true
       clearTimeout(this.setTimer)
       this.setTimer = null
       this.currentTime = this.time[0]
@@ -101,7 +105,9 @@ export default {
         payTimeIntervalMax: time[1]
       })
       // 相当于异步重新开启播放
-      this.play = true
+      if (this.currentStop) {
+        this.play = true
+      }
       this.datas = result
     },
     // 点击到具体的时间

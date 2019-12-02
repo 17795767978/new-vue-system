@@ -86,7 +86,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'estatelabel',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 28
+    'fontsize': '28'
   }
 }, {
   'featureType': 'manmade',
@@ -104,7 +104,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'manmade',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 36
+    'fontsize': '36'
   }
 }, {
   'featureType': 'manmade',
@@ -152,8 +152,8 @@ export const mapStyle = { styleJson: [{
   'featureType': 'shopping',
   'elementType': 'geometry',
   'stylers': {
-    'color': '#ecececff',
-    'visibility': 'on'
+    'visibility': 'on',
+    'color': '#ecececff'
   }
 }, {
   'featureType': 'transportation',
@@ -177,7 +177,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'transportation',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 36
+    'fontsize': '36'
   }
 }, {
   'featureType': 'medical',
@@ -195,7 +195,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'medical',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 36
+    'fontsize': '36'
   }
 }, {
   'featureType': 'education',
@@ -213,7 +213,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'education',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 36
+    'fontsize': '36'
   }
 }, {
   'featureType': 'carservicelabel',
@@ -297,7 +297,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'airportlabel',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 36
+    'fontsize': '36'
   }
 }, {
   'featureType': 'airportlabel',
@@ -315,7 +315,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'scenicspotslabel',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 28
+    'fontsize': '28'
   }
 }, {
   'featureType': 'scenicspotslabel',
@@ -345,7 +345,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'educationlabel',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 26
+    'fontsize': '26'
   }
 }, {
   'featureType': 'medicallabel',
@@ -363,7 +363,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'medicallabel',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 24
+    'fontsize': '24'
   }
 }, {
   'featureType': 'businesstowerlabel',
@@ -381,7 +381,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'businesstowerlabel',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 24
+    'fontsize': '24'
   }
 }, {
   'featureType': 'companylabel',
@@ -405,7 +405,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'hotellabel',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 24
+    'fontsize': '24'
   }
 }, {
   'featureType': 'shoppinglabel',
@@ -429,7 +429,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'transportationlabel',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 24
+    'fontsize': '24'
   }
 }, {
   'featureType': 'scenicspots',
@@ -447,7 +447,7 @@ export const mapStyle = { styleJson: [{
   'featureType': 'scenicspots',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 36
+    'fontsize': '36'
   }
 }, {
   'featureType': 'governmentlabel',
@@ -465,48 +465,47 @@ export const mapStyle = { styleJson: [{
   'featureType': 'district',
   'elementType': 'labels.text.fill',
   'stylers': {
-    'color': '#000000ff',
-    'weight': 10
+    'color': '#ffffffff'
   }
 }, {
   'featureType': 'district',
   'elementType': 'labels.text.stroke',
   'stylers': {
-    'color': '#ffffff00',
-    'weight': 0
+    'color': '#72533aff',
+    'weight': '3.5'
   }
 }, {
   'featureType': 'town',
   'elementType': 'labels.text.stroke',
   'stylers': {
-    'color': '#ffffffff',
-    'weight': 3
+    'color': '#72533aff',
+    'weight': '3'
   }
 }, {
   'featureType': 'town',
   'elementType': 'labels.text.fill',
   'stylers': {
-    'color': '#000000ff'
+    'color': '#ffffffff'
   }
 }, {
   'featureType': 'village',
   'elementType': 'labels.text.stroke',
   'stylers': {
     'color': '#ffffffff',
-    'weight': 2.5
+    'weight': '2.5'
   }
 }, {
   'featureType': 'village',
   'elementType': 'labels.text.fill',
   'stylers': {
     'color': '#72533aff',
-    'weight': 40
+    'weight': '40'
   }
 }, {
   'featureType': 'village',
   'elementType': 'labels.text',
   'stylers': {
-    'fontsize': 20
+    'fontsize': '20'
   }
 }, {
   'featureType': 'highway',
@@ -591,18 +590,6 @@ export const mapStyle = { styleJson: [{
   'elementType': 'labels',
   'stylers': {
     'visibility': 'on'
-  }
-}, {
-  'featureType': 'district',
-  'elementType': 'labels',
-  'stylers': {
-    'visibility': 'on'
-  }
-}, {
-  'featureType': 'district',
-  'elementType': 'labels.text',
-  'stylers': {
-    'fontsize': 23
   }
 }]
 }

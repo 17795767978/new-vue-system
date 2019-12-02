@@ -9,6 +9,7 @@
 
 <script>
 import elementResizeDetector from 'element-resize-detector'
+import { mapJson } from './utils/mapJson'
 export default {
   props: {
     id: {
@@ -55,6 +56,12 @@ export default {
     },
     bgColor: {
       type: String
+    },
+    geo: {
+      type: Object
+    },
+    isOpen: {
+      type: Boolean
     }
   },
   data () {
@@ -135,6 +142,7 @@ export default {
     tooltip: {
       deep: true,
       handler (newV) {
+        console.log(newV)
         this.tooltipData = newV
       }
     },
@@ -145,16 +153,34 @@ export default {
       }
     },
     bmap: {
-      deep: true,
       handler (newV) {
         this.bmapData = newV
+        // setTimeout(() => {
+        //   this.drawLine()
+        // }, 1000)
       }
     },
+    // geo: {
+    //   handler (newV) {
+    //     setTimeout(() => {
+    //       this.drawLine()
+    //     }, 1000)
+    //   }
+    // },
     data: {
       deep: true,
       handler (newV) {
-        // console.log(newV.x)
+        console.log(newV)
         this.series = newV
+        if (Object.keys(this.bmap).length === 0) {
+          setTimeout(() => {
+            this.drawLine()
+          }, 1000)
+        }
+      }
+    },
+    isOpen (newV) {
+      if (newV) {
         setTimeout(() => {
           this.drawLine()
         }, 1000)
@@ -163,6 +189,9 @@ export default {
   },
   methods: {
     drawLine () {
+      if (this.geo && Object.keys(this.geo).length > 0) {
+        this.$echarts.registerMap('zhaoqing', mapJson)
+      }
       let charts = this.$echarts.init(document.getElementById(this.id))
       charts.off('click')
       window.addEventListener('resize', () => { charts.resize() })
@@ -188,6 +217,7 @@ export default {
           yAxis: this.yData,
           radar: this.radar,
           bmap: this.bmap,
+          geo: this.geo,
           series: this.series
         }, true)
       }

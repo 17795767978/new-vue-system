@@ -2,13 +2,13 @@
   <div>
   <Dialog @defaultStation="getDefaultStation" @getDatas="getMonth" />
   <div class="map">
-    <Map />
+    <Map :datas="datas"/>
   </div>
-  <!-- <div class="settings">
+  <div class="settings">
     <div class="left">
       <el-button type="primary" size="mini" @click="getMonthDialog">查询</el-button>
     </div>
-    <div class="middle">
+    <!-- <div class="middle">
       <div class="play">
         <i @click="getStatus" class="el-icon-video-pause size"  v-if="play"></i>
         <i @click="getStatus" class="el-icon-video-play size" v-else></i>
@@ -24,10 +24,10 @@
       </div>
     </div>
     <div class="right">
-      <p class="font" style="text-align: center; margin-top: 0;margin-bottom: 1vh;font-size: 1.5vw">{{month}}</p>
-      <p class="font" style="text-align: center; margin-top: 0;" v-if="currentTime !== ''">{{currentTime}} 数据指标</p>
-    </div>
-  </div> -->
+      <p class="font" style="text-align: center; margin-top: 0;margin-bottom: 1vh;font-size: 1.5vw;color: #fff">{{month}}</p>
+      <p class="font" style="text-align: center; margin-top: 0;color: #fff" v-if="currentTime !== ''">{{currentTime}} 数据指标</p>
+    </div> -->
+  </div>
   </div>
 </template>
 
@@ -38,7 +38,7 @@ import moment from 'moment'
 const TIME_DATA = ['06:00-07:00', '07:00-08:00', '08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00',
   '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00', '17:00-18:00', '18:00-19:00',
   '19:00-20:00', '20:00-21:00', '21:00-22:00', '22:00-23:00']
-const TIME = 5000
+const TIME = 3000
 export default {
   name: 'stationMap',
   data () {
@@ -51,39 +51,41 @@ export default {
       datas: {},
       current: 0,
       selectData: {},
-      station: ''
+      station: '',
+      currentStop: false
     }
   },
   mounted () {
-    this.month = moment().subtract(30, 'days').format('YYYY-MM')
-    setTimeout(() => {
-      this.$api['lineNet.getAnalStaOdDataMapData']({
-        month: moment().subtract(30, 'days').format('YYYY-MM'),
-        upStaName: this.station,
-        linearDistanceMin: '',
-        linearDistanceMax: '',
-        payNumberMin: '',
-        payNumberMax: '',
-        payTimeIntervalMin: '',
-        payTimeIntervalMax: ''
-      }).then(res => {
-        this.datas = res
-        console.log(res)
-      })
-    }, 1000)
+    // this.month = moment().subtract(30, 'days').format('YYYY-MM')
+    // setTimeout(() => {
+    //   this.$api['lineNet.getAnalStaOdDataMapData']({
+    //     month: moment().subtract(30, 'days').format('YYYY-MM'),
+    //     upStaName: this.station,
+    //     linearDistanceMin: '',
+    //     linearDistanceMax: '',
+    //     payNumberMin: '',
+    //     payNumberMax: '',
+    //     payTimeIntervalMin: '',
+    //     payTimeIntervalMax: ''
+    //   }).then(res => {
+    //     this.datas = res
+    //   })
+    // }, 1000)
   },
   watch: {
     play (newV) {
       if (newV) {
+        this.currentStop = true
         this.animHotMap(this.current)
       } else {
+        this.currentStop = false
         clearTimeout(this.setTimer)
         this.setTimer = null
       }
     },
     currentTime (newV) {
-      let timeArr = newV.split('-')
-      this.getDatas(timeArr)
+      // let timeArr = newV.split('-')
+      // this.getDatas(timeArr)
     }
   },
   methods: {
@@ -91,10 +93,10 @@ export default {
       this.station = station.staName
     },
     getMonth (data) {
-      console.log(data)
       this.selectData = data
       this.month = moment(data.month).format('YYYY-MM')
       this.play = false
+      this.currentStop = true
       clearTimeout(this.setTimer)
       this.setTimer = null
       this.currentTime = this.time[0]
@@ -114,8 +116,9 @@ export default {
         payTimeIntervalMax: time[1]
       })
       // 相当于异步重新开启播放
-      console.log(result)
-      this.play = true
+      if (this.currentStop) {
+        this.play = true
+      }
       this.datas = result
     },
     // 点击到具体的时间
@@ -193,7 +196,7 @@ export default {
       width: 6%;
       .size {
         font-size: 1.5vw;
-        color: #666;
+        color: #fff;
         margin-top: 0.2vh;
       }
     }
@@ -201,7 +204,7 @@ export default {
       width: 91%;
       height: 0.5vh;
       margin-top: 1.25vh;
-      background-color: #666;
+      background-color: #fff;
       border-radius: 0.25vh;
       position: relative;
       .wrapper {
@@ -214,7 +217,7 @@ export default {
           width: 0.75rem;
           height: 0.75rem;
           border-radius: 50%;
-          border: 1px solid #666;
+          border: 1px solid #fff;
           background: #fff;
         }
       }
@@ -223,7 +226,7 @@ export default {
       width: 3%;
       .size {
         font-size: 1.5vw;
-        color: #666;
+        color: #fff;
         margin-top: 0.2vh;
       }
     }
