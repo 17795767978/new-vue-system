@@ -93,6 +93,7 @@ export default {
           title: {
             text: 'OD数据分析',
             left: 'middle',
+            top: 10,
             textStyle: {
               color: '#ffffff'
             }
@@ -119,7 +120,7 @@ export default {
           },
           dataRange: {
             min: 0,
-            max: 10,
+            max: 1200,
             left: 'right',
             top: 'middle',
             calculable: true,
@@ -130,7 +131,7 @@ export default {
           },
           bmap: {
             center: [112.4717803427, 23.0529978779],
-            zoom: 13,
+            zoom: 14,
             roam: true,
             mapStyle: {
               style: 'dark'
@@ -152,9 +153,17 @@ export default {
       }, 1000)
       if (params && Object.keys(params.echartMaps).length > 0) {
         let options = []
-        series.forEach(item => {
+        series.forEach((item, index) => {
           console.log(item)
           options.push({
+            title: {
+              text: `OD数据分析${TIME_DATA[index]}`,
+              left: 'middle',
+              top: 10,
+              textStyle: {
+                color: '#ffffff'
+              }
+            },
             series: item
           })
         })
@@ -241,7 +250,7 @@ export default {
           },
           symbol: 'circle',
           symbolSize: function (val) {
-            return 5 + val[2] * 5 // 圆环大小
+            return 5 + val[2] / 6 // 圆环大小
           },
           itemStyle: {
             normal: {
@@ -286,7 +295,7 @@ export default {
           symbolSize: 50,
           data: [{
             name: item[0],
-            value: chinaGeoCoordMap[item[0]].concat([10])
+            value: chinaGeoCoordMap[item[0]].concat([100])
           }]
         }
 

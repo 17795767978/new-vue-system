@@ -59,9 +59,6 @@ export default {
     },
     geo: {
       type: Object
-    },
-    isOpen: {
-      type: Boolean
     }
   },
   data () {
@@ -172,20 +169,18 @@ export default {
       handler (newV) {
         console.log(newV)
         this.series = newV
-        if (Object.keys(this.bmap).length === 0) {
-          setTimeout(() => {
-            this.drawLine()
-          }, 1000)
-        }
-      }
-    },
-    isOpen (newV) {
-      if (newV) {
         setTimeout(() => {
           this.drawLine()
         }, 1000)
       }
     }
+    // isOpen (newV) {
+    //   if (newV) {
+    //     setTimeout(() => {
+    //       this.drawLine()
+    //     }, 1000)
+    //   }
+    // }
   },
   methods: {
     drawLine () {
