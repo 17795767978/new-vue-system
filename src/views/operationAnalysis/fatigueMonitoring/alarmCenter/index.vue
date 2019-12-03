@@ -23,7 +23,7 @@ import leftWrapper from './Components/leftWrapper'
 import rightWrapper from './Components/rightWrapper'
 import moment from 'moment'
 export default {
-  name: '',
+  name: 'alarmCenter',
   data () {
     return {
       selectCarData: {},

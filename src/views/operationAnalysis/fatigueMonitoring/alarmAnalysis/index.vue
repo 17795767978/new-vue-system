@@ -10,7 +10,7 @@ import headerWrapper from './header/'
 import contentWrapper from './content/'
 // import moment from 'moment';
 export default {
-  name: '',
+  name: 'alarmAnalysis',
   data () {
     return {
       selectData: {}
