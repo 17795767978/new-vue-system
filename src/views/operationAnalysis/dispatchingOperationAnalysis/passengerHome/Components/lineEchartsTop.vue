@@ -23,7 +23,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: 0,
-      id: 'line',
+      id: 'lineHomeTo',
       grid: {},
       loading: true
     }

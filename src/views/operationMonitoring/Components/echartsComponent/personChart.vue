@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="person-chart" :style="{width: '100%', height: '240px',padding: '10px', margin: '0 auto'}"
+    <div id="person-chart" :style="{width: '100%', height: '330px',padding: '10px', margin: '0 auto'}"
       v-loading="loading"
       element-loading-background="rgba(0, 0, 0, 0)"
     >

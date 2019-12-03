@@ -139,6 +139,16 @@ export const passengerFlowApi = {
         orgId: ''
       },
       desc: '线路当日累计客流（人次）'
+    },
+    {
+      name: 'getLineUpPayNumberTOP10Data',
+      method: 'POST',
+      path: '/api/temp/ic/card/data/getLineUpPayNumberTOP10Data',
+      mockPath: '/api/temp/ic/card/data/getLineUpPayNumberTOP10Data',
+      params: {
+        orgId: ''
+      },
+      desc: '线路登量TOP10'
     }
   ]
 }

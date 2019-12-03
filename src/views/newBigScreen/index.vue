@@ -13,9 +13,9 @@
           <div class="top-left-wrapper">
             <personChart></personChart>
           </div>
-          <div class="middle-left-wrapper">
+          <!-- <div class="middle-left-wrapper">
             <perChart></perChart>
-          </div>
+          </div> -->
           <div class="bottom-left-wrapper">
             <rankingChart></rankingChart>
           </div>
@@ -35,7 +35,7 @@
 import TopTitleMsg from '../operationMonitoring/Components/topTitleMsg.vue'
 import StreamNum from '../operationMonitoring/Components/streamNum.vue'
 import chartsComplete from '../operationMonitoring/Components/chartsComplete.vue'
-import perChart from '../operationMonitoring/Components/echartsComponent/perChart.vue'
+// import perChart from '../operationMonitoring/Components/echartsComponent/perChart.vue'
 import mapChart from '../operationMonitoring/Components/echartsComponent/mapChart.vue'
 import rankingChart from '../operationMonitoring/Components/echartsComponent/rankingChart.vue'
 import personChart from '../operationMonitoring/Components/echartsComponent/personChart.vue'
@@ -89,10 +89,10 @@ export default {
         this.noCache()
       }
     })
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this._badDrivingBehavior({
-      orgId
-    })
+    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    // this._badDrivingBehavior({
+    //   orgId
+    // })
   },
   mounted () {
     // this.fullScreen()
@@ -169,7 +169,7 @@ export default {
     TopTitleMsg,
     StreamNum,
     chartsComplete,
-    perChart,
+    // perChart,
     mapChart,
     rankingChart,
     personChart
@@ -213,7 +213,7 @@ export default {
         width: 100%;
         position: relative;
         background-color: rgba(0,0,0, 0.65);
-        height: 31%;
+        height: 48%;
         border-radius: 6px;
       }
       .middle-left-wrapper {
@@ -228,7 +228,7 @@ export default {
         width: 100%;
         position: relative;
         background-color: rgba(0,0,0, 0.65);
-        height: 32%;
+        height: 48%;
         margin-top: 2%;
         border-radius: 6px;
         padding: 15px;

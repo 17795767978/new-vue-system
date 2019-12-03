@@ -30,10 +30,11 @@ export default {
   },
   methods: {
     _lineRateTen (params) {
-      this.$api['passengerFlow.getRealTimeFullRateTop10'](params).then(res => {
+      this.$api['passengerFlow.getLineUpPayNumberTOP10Data'](params).then(res => {
         this.loading = false
+        console.log(res)
         this.lineName = res.map(item => item.lineName)
-        this.fullLoadRate = res.map(item => Number(item.fullLoadRate))
+        this.fullLoadRate = res.map(item => Number(item.upPayNumber))
         this.maxAsxis = Math.max(...this.fullLoadRate)
         this.drawLine()
         this.timer = setTimeout(() => {
@@ -60,15 +61,12 @@ export default {
           formatter: (option) => {
             // console.log(option[0])
             let labelData = option[0]
-            return `${labelData.axisValueLabel}<br />线路满载率:${labelData.data}%`
+            return `${labelData.axisValueLabel}<br />上车人数:${labelData.data}`
           }
         },
         xAxis: [
           {
             type: 'value',
-            min: 0,
-            max: Math.floor(this.maxAsxis + 10),
-            interval: 10,
             axisPointer: {
               type: 'shadow'
             },
@@ -84,7 +82,7 @@ export default {
             axisLabel: {
               inside: false,
               interval: 0,
-              formatter: '{value}%',
+              formatter: '{value}',
               textStyle: {
                 color: '#fff',
                 fontSize: '10',

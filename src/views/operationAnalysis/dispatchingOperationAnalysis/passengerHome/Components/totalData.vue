@@ -48,16 +48,17 @@ export default {
     this._passengeFlow({
       orgId
     })
-    this._getTotalPassengerSimple({
-      orgId
-    })
-    this._getWeekData({
-      orgId
-    })
   },
   methods: {
     _passengeFlow (params) {
       this.$api['passengerFlow.getTotalPassengerFlow'](params).then(res => {
+        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+        this._getTotalPassengerSimple({
+          orgId
+        })
+        this._getWeekData({
+          orgId
+        })
         if (res.personCount) {
           this.totalPassenger = Math.floor(+res.personCount)
         } else {
@@ -88,9 +89,9 @@ export default {
           this.beforePersoncount = '--'
           this.increase = '--'
         }
-        this.timeBore = setTimeout(() => {
-          this._getTotalPassengerSimple(params)
-        }, TIME)
+        // this.timeBore = setTimeout(() => {
+        //   this._getTotalPassengerSimple(params)
+        // }, TIME)
       })
     },
     _getWeekData (params) {
@@ -112,17 +113,17 @@ export default {
           this.weekPersoncount = '--'
           this.reduce = '--'
         }
-        this.timeWeek = setTimeout(() => {
-          this._getWeekData(params)
-        }, TIME)
+        // this.timeWeek = setTimeout(() => {
+        //   this._getWeekData(params)
+        // }, TIME)
       })
     }
   },
   destroyed () {
     clearInterval(this.timer)
     clearTimeout(this.timeTotal)
-    clearTimeout(this.timeBore)
-    clearTimeout(this.timeWeek)
+    // clearTimeout(this.timeBore)
+    // clearTimeout(this.timeWeek)
     this.timer = null
     this.timeTotal = null
     this.timeBore = null

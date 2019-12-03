@@ -21,9 +21,14 @@
 <script type="text/ecmascrip-6">
 import { BaiduMap, BmlHeatmap } from 'vue-baidu-map'
 import { mapStyle } from '../utils/mapStyle'
-import { setTimeout } from 'timers'
-const TIME = 1000 * 60 * 60
+// import { setTimeout } from 'timers'
+// const TIME = 1000 * 60 * 60
 export default {
+  props: {
+    datas: {
+      type: Object
+    }
+  },
   data () {
     return {
       isLoading: true,
@@ -37,6 +42,21 @@ export default {
       max: 0
     }
   },
+  watch: {
+    datas: {
+      deep: true,
+      handler (newV) {
+        this.hotdata = []
+        newV.heatMapDataLists.forEach(item => {
+          this.loading = false
+          this.hotdata.push({
+            lat: item.staLnt,
+            lng: item.staLng
+          })
+        })
+      }
+    }
+  },
   methods: {
     _getOps () {
       this.$api['wholeInformation.getCityCoordinatePoints']().then(res => {
@@ -45,24 +65,12 @@ export default {
       })
     },
     _hotDataLine () {
-      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-      this.loading = true
-      this.hotdata = []
-      this.$api['homeMap.getBusHeatmapDatas']({ orgId }).then(res => {
-        this.hotdata = res
-        this.max = 100
-        this.loading = false
-        this.timer = setTimeout(() => {
-          this._hotDataLine()
-        }, TIME)
-      })
     },
     handler ({ BMap, map }) {
       this._getOps()
-      this.zoom = 12
-      this.isLoading = false
+      this.zoom = 13
+      this.loading = false
       map.setMapStyle(mapStyle)
-      this._hotDataLine()
     }
   },
   components: {

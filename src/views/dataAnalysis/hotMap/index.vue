@@ -2,7 +2,7 @@
   <div>
   <Dialog @getDatas="getMonth"/>
   <div class="map">
-    <HotMap />
+    <HotMap :datas="datas"/>
   </div>
   <div class="settings">
     <div class="left">

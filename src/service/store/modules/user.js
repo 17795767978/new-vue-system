@@ -151,16 +151,16 @@ const user = {
               form.orgId = res[0].value
             }
           })
-          store.dispatch('getComSecList').then(res => {
-            if (res.length > 0) {
-              form.lineOrgId = res[0].value
-              store.dispatch('getLineSecList', form.lineOrgId).then(res => {
-                if (res.length > 0) {
-                  form.lineLineId = res[0].value
-                }
-              })
-            }
-          })
+          // store.dispatch('getComSecList').then(res => {
+          //   if (res.length > 0) {
+          //     form.lineOrgId = res[0].value
+          //     store.dispatch('getLineSecList', form.lineOrgId).then(res => {
+          //       if (res.length > 0) {
+          //         form.lineLineId = res[0].value
+          //       }
+          //     })
+          //   }
+          // })
           // store.dispatch('getLineSecList').then(res => {
           //   form.linelineID = res[0].value
           // })
