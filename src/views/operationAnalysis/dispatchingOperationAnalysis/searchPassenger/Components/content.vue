@@ -265,7 +265,11 @@ export default {
       this.selectData.pageNumber = val
       this.selectData.pageSize = 15
       this.pageNumber = val
-      this._passengerFlow({ ...this.selectData }, this.selectData.radio)
+      let select = JSON.parse(JSON.stringify(this.selectData))
+      if (this.selectData.orgId === '1') {
+        select.orgId = ''
+      }
+      this._passengerFlow(select, this.selectData.radio)
     }
   }
 }

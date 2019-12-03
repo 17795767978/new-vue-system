@@ -52,7 +52,8 @@ export default {
       type: '1',
       startHour: '07',
       endHour: '08',
-      busPlateNumbers: []
+      busPlateNumbers: [],
+      isHistory: '0'
     })
   },
   mounted () {
@@ -70,7 +71,8 @@ export default {
           type: this.selectData.type,
           startHour: this.selectData.startHour.substring(0, 2),
           endHour: this.selectData.endHourFormatter,
-          busPlateNumbers: this.selectData.busPlateNumbers
+          busPlateNumbers: this.selectData.busPlateNumbers,
+          isHistory: this.selectData.radio
         })
       }
       this.$emit('isUpdateTo', false)
