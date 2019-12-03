@@ -143,6 +143,7 @@ export default {
             }
           }
         } else {
+          this.formInline.dateTime = ''
           this.pickerOptions = {
             disabledDate (time) {
               let date = moment(new Date()).format('YYYY-MM-01')
