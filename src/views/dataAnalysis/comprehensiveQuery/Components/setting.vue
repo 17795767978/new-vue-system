@@ -3,7 +3,7 @@
     <el-row>
       <el-button type="primary" size="mini" round :plain="isStation" @click="isStationTo">线路站点登降量</el-button>
       <el-button type="success" size="mini" round :plain="isTime" @click="isTimeTo">线路时段登降量</el-button>
-      <el-button type="warning" size="mini" round :plain="isRate" @click="isRateTo">线路站点满载率</el-button>
+      <!-- <el-button type="warning" size="mini" round :plain="isRate" @click="isRateTo">线路站点满载率</el-button> -->
     </el-row>
   </div>
 </template>
@@ -49,13 +49,13 @@ export default {
       this.isTime = false
       this.isRate = true
       this.$store.dispatch('getStation', '2')
-    },
-    isRateTo () {
-      this.isStation = true
-      this.isTime = true
-      this.isRate = false
-      this.$store.dispatch('getStation', '3')
     }
+    // isRateTo () {
+    //   this.isStation = true
+    //   this.isTime = true
+    //   this.isRate = false
+    //   this.$store.dispatch('getStation', '3')
+    // }
   },
   components: {
   }

@@ -38,28 +38,28 @@ export const schedulingAnalysisApi = {
     {
       name: 'getUpLineStationChartDatas',
       method: 'POST',
-      path: '/zhfxpt/analysis/getUpLineStationChartDatas',
-      mockPath: '/zhfxpt/analysis/getUpLineStationChartDatas',
+      path: '/api/mid/pf/detail/time/data/getMidLinePFMZLUpGridData',
+      mockPath: '/api/mid/pf/detail/time/data/getMidLinePFMZLUpGridData',
       params: {
-        lineId: '',
-        type: '',
-        dateTime: '',
-        startHour: '',
-        endHour: ''
+        lineUuid: '',
+        lineType: '',
+        date: '',
+        payTimeIntervalMin: '',
+        payTimeIntervalMax: ''
       },
       desc: '线路区间满载率查询(上行)'
     },
     {
       name: 'getDownLineStationChartDatas',
       method: 'POST',
-      path: '/zhfxpt/analysis/getDownLineStationChartDatas',
-      mockPath: '/zhfxpt/analysis/getDownLineStationChartDatas',
+      path: '/api/mid/pf/detail/time/data/getMidLinePFMZLDownGridData',
+      mockPath: '/api/mid/pf/detail/time/data/getMidLinePFMZLDownGridData',
       params: {
-        lineId: '',
-        type: '',
-        dateTime: '',
-        startHour: '',
-        endHour: ''
+        lineUuid: '',
+        lineType: '',
+        date: '',
+        payTimeIntervalMin: '',
+        payTimeIntervalMax: ''
       },
       desc: '线路区间满载率查询(下行)'
     },

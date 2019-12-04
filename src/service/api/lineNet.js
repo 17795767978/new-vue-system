@@ -93,39 +93,39 @@ export const lineNetApi = {
     {
       name: 'getPfBaseListData',
       method: 'POST',
-      path: '/api/net/index/pf/base/getPfBaseListData',
-      mockPath: '/api/net/index/pf/base/getPfBaseListData',
+      path: '/api/mid/pf/detail/time/data/getMidLinePFData',
+      mockPath: '/api/mid/pf/detail/time/data/getMidLinePFData',
       params: {
-        company: '',
-        lineID: '',
-        arrow: '',
-        pDate: ''
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        date: ''
       },
       desc: '线路站点客流综合列表'
     },
     {
       name: 'getPfStationDayListGridData',
       method: 'POST',
-      path: '/api/net/index/pf/station/day/getPfStationDayListGridData',
-      mockPath: '/api/net/index/pf/station/day/getPfStationDayListGridData',
+      path: '/api/mid/pf/detail/data/getMidLineStaPFGridData',
+      mockPath: '/api/mid/pf/detail/data/getMidLineStaPFGridData',
       params: {
-        company: '',
-        lineID: '',
-        arrow: '',
-        pDate: ''
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        date: ''
       },
       desc: '线路站点登降量'
     },
     {
       name: 'getPfBaseUpDownGrid',
       method: 'POST',
-      path: '/api/net/index/pf/base/getPfBaseUpDownGrid',
-      mockPath: '/api/net/index/pf/base/getPfBaseUpDownGrid',
+      path: '/api/mid/pf/detail/time/data/getMidLineStaPFGridData',
+      mockPath: '/api/mid/pf/detail/time/data/getMidLineStaPFGridData',
       params: {
-        company: '',
-        lineID: '',
-        arrow: '',
-        pDate: ''
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        date: ''
       },
       desc: '线路时段登降量'
     },
@@ -274,26 +274,26 @@ export const lineNetApi = {
     {
       name: 'getPfLineOdCountListData',
       method: 'POST',
-      path: '/api/net/index/pf/od/getPfLineOdCountListData',
-      mockPath: '/api/net/index/pf/od/getPfLineOdCountListData',
+      path: '/api/anal/line/od/data/getAnalLineOdDataListData',
+      mockPath: '/api/anal/line/od/data/getAnalLineOdDataListData',
       params: {
-        company: '',
-        lineID: '',
-        arrow: '',
-        pDate: ''
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        uploadDate: ''
       },
       desc: '线路OD-线路OD矩形-列表'
     },
     {
       name: 'getPfODYCountListData',
       method: 'POST',
-      path: '/api/net/index/pf/od/getPfODYCountListData',
-      mockPath: '/api/net/index/pf/od/getPfODYCountListData',
+      path: '/api/anal/line/od/data/getLineOdCountListData',
+      mockPath: '/api/anal/line/od/data/getLineOdCountListData',
       params: {
-        company: '',
-        lineID: '',
-        arrow: '',
-        pDate: ''
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        uploadDate: ''
       },
       desc: '线路OD-线路OD图'
     },
@@ -316,8 +316,8 @@ export const lineNetApi = {
     {
       name: 'getMidLinePFData',
       method: 'POST',
-      path: '/api/mid/pf/detail/time/data/getMidLinePFData',
-      mockPath: '/api/mid/pf/detail/time/data/getMidLinePFData',
+      path: '/api/mid/pf/detail/data/getMidLineStaPFData',
+      mockPath: '/api/mid/pf/detail/data/getMidLineStaPFData',
       params: {
         orgUuid: '',
         lineUuid: '',

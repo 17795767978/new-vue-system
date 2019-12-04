@@ -1,15 +1,13 @@
 <template>
   <div>
     <Search
-      :isOrg='false'
-      :isLine="false"
-      :isOrgSec='true'
-      :isDefault="true"
-      :isLineSec="true"
+      :isOrg='true'
+      :isLine="true"
       :isMonth="false"
       :isBus="false"
       :isDate="false"
       :isDataCurrent="true"
+      :isDefault="true"
       :isTime="false"
       :isTurn="true"
       :isEmpty="false"

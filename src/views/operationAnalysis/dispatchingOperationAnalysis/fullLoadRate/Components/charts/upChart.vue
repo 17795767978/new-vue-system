@@ -6,6 +6,7 @@
       :style="{width: '100%', height: '330px'}"
       v-loading="loading"
       element-loading-background="rgba(255, 255, 255, 0.5)"
+      v-show="xAxisData.length > 0"
     >
     </div>
     <div
@@ -64,43 +65,18 @@ export default {
       this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
     })
     this._fullRateAnalysisUp({
-      lineId: this.initLineId,
-      type: '1',
-      dateTime: dataBefore,
-      startHour: '07',
-      endHour: '08'
+      lineUuid: this.initLineId,
+      lineType: '1',
+      date: dataBefore,
+      payTimeIntervalMin: '07',
+      payTimeIntervalMax: '08'
     })
   },
   mounted () {
     this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
-    // let listenResize = elementResizeDetector()
-    // listenResize.listenTo(this.$refs.topWrapper, (el) => {
-    //   this.$echarts.init(document.getElementById('up-chart-wrapper')).resize()
-    // })
   },
   watch: {
-    // checkData: {
-    //   deep: true,
-    //   handler () {
-    //     if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
-    //       this._fullRateAnalysisUp({
-    //         lineId: this.checkData.value,
-    //         type: '1',
-    //         dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
-    //         startHour: this.checkData.startTime.substring(0, 2),
-    //         endHour: this.checkData.endTime.substring(0, 2)
-    //       })
-    //     }
-    //   }
-    // },
     tabTypeData (newVal) {
-      // this._fullRateAnalysisUp({
-      //   lineId: this.checkData.value,
-      //   type: '1',
-      //   dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
-      //   startHour: this.checkData.startTime.substring(0, 2),
-      //   endHour: this.checkData.endTime.substring(0, 2)
-      // });
       this.defaultData = newVal
       this.seeType()
     },
@@ -108,11 +84,16 @@ export default {
       if (this.isUpdateUp) {
         if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
           this._fullRateAnalysisUp({
-            lineId: this.checkData.value,
-            type: '1',
-            dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
-            startHour: this.checkData.startTime.substring(0, 2),
-            endHour: this.checkData.endTimeFormatter
+            lineUuid: this.checkData.value,
+            lineType: '1',
+            date: moment(this.checkData.date).format('YYYY-MM-DD'),
+            payTimeIntervalMin: this.checkData.startTime.substring(0, 2),
+            payTimeIntervalMax: this.checkData.endTimeFormatter
+            // lineId: this.checkData.value,
+            // type: '1',
+            // dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
+            // startHour: this.checkData.startTime.substring(0, 2),
+            // endHour: this.checkData.endTimeFormatter
           })
         }
         this.$emit('isUpdateToUp', false)
@@ -122,11 +103,11 @@ export default {
   methods: {
     _fullRateAnalysisUp (params) {
       this.$api['schedulingAnalysis.getUpLineStationChartDatas'](params).then(res => {
+        this.loading = false
         this.dataSource = res.datas
-        this.xAxisData = res.xAxisNames
+        this.xAxisData = res.stations.map(item => item.staName)
         this.seeType()
         if (this.xAxisData.length > 0) {
-          this.loading = false
           this.$refs.upChartWrapper.style.display = 'block'
           this.drawLine()
           this.$message.success('数据已更新')

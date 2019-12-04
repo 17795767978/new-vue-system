@@ -150,6 +150,11 @@ const user = {
             if (res.length > 0) {
               form.orgId = res[0].value
             }
+            store.dispatch('getLineList', form.orgId).then(res => {
+              if (res.length > 0) {
+                form.lineId = res[0].value
+              }
+            })
           })
           // store.dispatch('getComSecList').then(res => {
           //   if (res.length > 0) {

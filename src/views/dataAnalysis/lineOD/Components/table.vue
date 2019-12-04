@@ -13,52 +13,55 @@
         width="80">
       </el-table-column>
       <el-table-column
-        prop="company"
+        prop="orgName"
         label="分公司"
         align="center"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="lineNumber"
+        prop="lineName"
         label="线路号"
         align="center"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="arrow"
+        prop="lineType"
         align="center"
         label="上下行">
+        <template slot-scope="scope">
+          {{scope.row.lineType === '1' ? '上行' : '下行'}}
+        </template>
       </el-table-column>
       <el-table-column
-        prop="sStationName"
+        prop="upStaName"
         align="center"
         label="上车站位名">
       </el-table-column>
       <el-table-column
-        prop="sStationIndex"
+        prop="upStaSequence"
         align="center"
         width="100"
         label="上车站序名">
       </el-table-column>
       <el-table-column
-        prop="eStationName"
+        prop="downStaName"
         align="center"
         label="下车站位名">
       </el-table-column>
       <el-table-column
-        prop="eStationIndex"
+        prop="downStaSequence"
         align="center"
         width="100"
         label="下车站序名">
       </el-table-column>
       <el-table-column
-        prop="brushCount"
+        prop="payNumbers"
         align="center"
-        width="100"
+        width="150"
         label="刷卡量（人次）">
       </el-table-column>
       <el-table-column
-        prop="pDate"
+        prop="uploadDate"
         align="center"
         label="日期">
       </el-table-column>
@@ -87,6 +90,13 @@ export default {
     ...mapGetters(['formData'])
   },
   created () {
+    console.log(123)
+    this._getPfLineOdCountListData({
+      orgUuid: this.formData.orgId,
+      lineUuid: this.formData.lineId,
+      lineType: this.formData.lineType,
+      uploadDate: this.formData.currentDate
+    })
   },
   mounted () {
     this.$nextTick(() => {
@@ -110,13 +120,12 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        let lineArr = newV.lineLineId.split('+')
         let date = moment(newV.dataCurrent).format('YYYY-MM-DD')
         this._getPfLineOdCountListData({
-          company: newV.lineOrgId,
-          lineID: lineArr[0],
-          arrow: newV.lineType,
-          pDate: date
+          orgUuid: newV.orgId,
+          lineUuid: newV.lineId,
+          lineType: newV.lineType,
+          uploadDate: date
         })
       }
     }

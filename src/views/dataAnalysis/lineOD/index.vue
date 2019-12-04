@@ -1,8 +1,8 @@
 <template>
   <div>
     <Search
-      :isOrgSec='true'
-      :isLineSec="true"
+      :isOrg='true'
+      :isLine="true"
       :isBus="false"
       :isTime="false"
       :isTurn="true"
@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     getSearch (data) {
-      if (data.lineLineId === '' || data.lineOrgId === '' || data.lineType === '') {
+      if (data.lineId === '' || data.orgId === '' || data.lineType === '') {
         this.$message.warning('请选择完整的查询条件')
       } else {
         this.activeName = 'first'

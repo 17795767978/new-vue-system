@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import G2 from '@antv/g2'
 import DataSet from '@antv/data-set'
 import { mapGetters } from 'vuex'
@@ -23,12 +24,12 @@ export default {
     ...mapGetters(['formData'])
   },
   created () {
-    let lineArr = this.formData.lineLineId.split('+')
+    console.log(123)
     this._getPfODYCountListData({
-      company: this.formData.lineOrgId,
-      lineID: lineArr[0],
-      arrow: this.formData.lineType,
-      pDate: this.formData.currentDate
+      orgUuid: this.formData.orgId,
+      lineUuid: this.formData.lineId,
+      lineType: this.formData.lineType,
+      uploadDate: this.formData.currentDate
     })
   },
   mounted () {
@@ -44,12 +45,13 @@ export default {
       deep: true,
       handler (newV) {
         // if () {}
-        let lineArr = newV.lineLineId.split('+')
+        console.log(newV)
+        let date = moment(newV.dataCurrent).format('YYYY-MM-DD')
         this._getPfODYCountListData({
-          company: newV.lineOrgId,
-          lineID: lineArr[0],
-          arrow: newV.lineType,
-          pDate: newV.dateCurrent
+          orgUuid: newV.orgId,
+          lineUuid: newV.lineId,
+          lineType: newV.lineType,
+          uploadDate: date
         })
       }
     }
@@ -63,15 +65,15 @@ export default {
         if (res.nodes.length > 0) {
           res.nodes.forEach(item => {
             nodes.push({
-              id: item.sStationIndex,
-              name: item.sStationName,
-              value: item.brushCount
+              id: item.upStaSequence,
+              name: item.upStaName,
+              value: item.payNumbers
             })
           })
           res.edges.forEach(item => {
             links.push({
-              source: item.sStationIndex,
-              target: item.eStationIndex
+              source: item.upStaSequence,
+              target: item.downStaSequence
             })
           })
           let ds = new DataSet()

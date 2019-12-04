@@ -7,6 +7,7 @@
       :style="{width: '100%', height: '330px'}"
       v-loading="loading"
       element-loading-background="rgba(255, 255, 255, 0.5)"
+      v-show="xAxisData.length > 0"
     >
     </div>
     <div v-cloak v-show="xAxisData.length === 0" class="anim" style="width: 100%; height: 330px; line-height:300px;text-align:center">
@@ -58,37 +59,17 @@ export default {
       this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
     })
     this._fullRateAnalysisDown({
-      lineId: this.initLineId,
-      type: '2',
-      dateTime: dataBefore,
-      startHour: '07',
-      endHour: '08'
+      lineUuid: this.initLineId,
+      lineType: '2',
+      date: dataBefore,
+      payTimeIntervalMin: '07',
+      payTimeIntervalMax: '08'
     })
   },
   mounted () {
     this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
-    // let listenResize = elementResizeDetector()
-    // listenResize.listenTo(this.$refs.topWrapper, (el) => {
-    //   this.$echarts.init(document.getElementById('down-chart-wrapper')).resize()
-    // })
   },
   watch: {
-    // checkData: {
-    //   deep: true,
-    //   handler () {
-    //     if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
-    //       this._fullRateAnalysisDown({
-    //         lineId: this.checkData.value,
-    //         type: '2',
-    //         dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
-    //         startHour: this.checkData.startTime.substring(0, 2),
-    //         endHour: this.checkData.endTime.substring(0, 2)
-    //       })
-    //     } else {
-    //       this.$message.error('请添加查询条件')
-    //     }
-    //   }
-    // },
     tabTypeData (newVal) {
       this.defaultData = newVal
       this.seeType()
@@ -97,11 +78,16 @@ export default {
       if (this.isUpdateDown) {
         if (this.checkData.value.length !== 0 && this.checkData.date.length !== 0 && this.checkData.startTime.length !== 0 && this.checkData.endTime.length !== 0) {
           this._fullRateAnalysisDown({
-            lineId: this.checkData.value,
-            type: '2',
-            dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
-            startHour: this.checkData.startTime.substring(0, 2),
-            endHour: this.checkData.endTimeFormatter
+            lineUuid: this.checkData.value,
+            lineType: '1',
+            date: moment(this.checkData.date).format('YYYY-MM-DD'),
+            payTimeIntervalMin: this.checkData.startTime.substring(0, 2),
+            payTimeIntervalMax: this.checkData.endTimeFormatter
+            // lineId: this.checkData.value,
+            // type: '2',
+            // dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
+            // startHour: this.checkData.startTime.substring(0, 2),
+            // endHour: this.checkData.endTimeFormatter
           })
         }
         this.$emit('isUpdateToDown', false)
@@ -112,11 +98,11 @@ export default {
     _fullRateAnalysisDown (params) {
       this.$api['schedulingAnalysis.getDownLineStationChartDatas'](params).then(res => {
         this.dataSource = res.datas
-        this.xAxisData = res.xAxisNames
+        this.xAxisData = res.stations.map(item => item.staName)
         this.seeType()
+        this.loading = false
         if (this.xAxisData.length > 0) {
           this.$refs.downChartWrapper.style.display = 'block'
-          this.loading = false
           this.drawLine()
         } else {
           this.$message.warning('暂无数据')

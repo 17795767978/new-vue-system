@@ -46,13 +46,13 @@ export default {
   mounted () {
     setTimeout(() => {
       let arr = this.$store.getters.defaultSearch
-      let lineArr = this.$store.getters.defaultSearch.lineLineId.split('+')
-      if (arr.lineOrgId !== '' && arr.lineLineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
+      console.log(arr)
+      if (arr.orgId !== '' && arr.lineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
         this._getPfBaseUpDownGrid({
-          company: arr.lineOrgId,
-          lineID: lineArr[0],
-          arrow: arr.lineType,
-          pDate: moment(arr.dataCurrent).format('YYYY-MM-DD')
+          orgUuid: arr.orgId,
+          lineUuid: arr.lineId,
+          lineType: arr.lineType,
+          date: moment(arr.dataCurrent).format('YYYY-MM-DD')
         })
       } else {
         this.$message.error('请添加完整的查询条件')
@@ -63,49 +63,47 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        if (newV.lineOrgId !== '' && newV.lineLineId !== '' && newV.lineType !== '' && newV.dataCurrent !== '') {
-          let lineArr = newV.lineLineId.split('+')
+        if (newV.orgId !== '' && newV.lineId !== '' && newV.lineType !== '' && newV.dataCurrent !== '') {
           this._getPfBaseUpDownGrid({
-            company: newV.lineOrgId,
-            lineID: lineArr[0],
-            arrow: newV.lineType,
-            pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
+            orgUuid: newV.orgId,
+            lineUuid: newV.lineId,
+            lineType: newV.lineType,
+            date: moment(newV.dataCurrent).format('YYYY-MM-DD')
           })
         }
       }
     },
     'renderId': {
       handler (newV) {
-        let lineArr = []
         let data = {}
         if (Object.keys(this.selectData).length > 0) {
-          console.log(this.selectData.lineLineId)
-          lineArr = this.selectData.lineLineId.split('+')
+          // console.log(this.selectData.lineLineId)
+          // lineArr = this.selectData.lineLineId.split('+')
           data = this.selectData
         } else {
-          lineArr = this.$store.getters.defaultSearch.lineLineId.split('+')
+          // lineArr = this.$store.getters.defaultSearch.lineLineId.split('+')
           data = this.$store.getters.defaultSearch
         }
         if (newV === '1') {
           this._getPfBaseUpDownGrid({
-            company: data.lineOrgId,
-            lineID: lineArr[0],
-            arrow: data.lineType,
-            pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
+            orgUuid: data.orgId,
+            lineUuid: data.lineId,
+            lineType: data.lineType,
+            date: moment(data.dataCurrent).format('YYYY-MM-DD')
           })
         } else if (newV === '2') {
           this._getTimeData({
-            company: data.lineOrgId,
-            lineID: lineArr[0],
-            arrow: data.lineType,
-            pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
+            orgUuid: data.orgId,
+            lineUuid: data.lineId,
+            lineType: data.lineType,
+            date: moment(data.dataCurrent).format('YYYY-MM-DD')
           })
         } else if (newV === '3') {
           this._getRateData({
-            company: data.lineOrgId,
-            lineID: lineArr[0],
-            arrow: data.lineType,
-            pDate: moment(data.dataCurrent).format('YYYY-MM-DD')
+            orgUuid: data.orgId,
+            lineUuid: data.lineId,
+            lineType: data.lineType,
+            date: moment(data.dataCurrent).format('YYYY-MM-DD')
           })
         }
       }
@@ -115,7 +113,6 @@ export default {
     _getPfBaseUpDownGrid (params) {
       this.loading = true
       this.$api['lineNet.getPfStationDayListGridData'](params).then(res => {
-        console.log(res)
         setTimeout(() => {
           this.loading = false
         }, 1000)

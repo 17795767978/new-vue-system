@@ -362,17 +362,17 @@ export default {
     this.$store.dispatch('getCarList').then(res => {
       this.carOptions = res
     })
-    if (!this.isDefault) {
-      this.$store.dispatch('getComSecList').then(res => {
-        this.comOptionsSec = res
-      })
-      this.$store.dispatch('getLineSecList').then(res => {
-        this.lineOptionsSec = res
-      })
-    }
-    this._alarmType({
-      warnLevel: ''
-    })
+    // if (!this.isDefault) {
+    //   this.$store.dispatch('getComSecList').then(res => {
+    //     this.comOptionsSec = res
+    //   })
+    //   this.$store.dispatch('getLineSecList').then(res => {
+    //     this.lineOptionsSec = res
+    //   })
+    // }
+    // this._alarmType({
+    //   warnLevel: ''
+    // })
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 24 * 3600 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
@@ -380,7 +380,7 @@ export default {
     setTimeout(() => {
       this.formInline.valueTime = [timeStart, timeEnd]
     }, 20)
-    this._stationList()
+    // this._stationList()
   },
   computed: {
     ...mapGetters(['userId', 'formDown'])
@@ -466,12 +466,12 @@ export default {
     },
     'formInline.lineOrgId': {
       handler (newV) {
-        this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
-          this.lineOptionsSec = res
-        })
-        if (this.isLinkage) {
-          this.formInline.lineLineId = ''
-        }
+        // this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
+        //   this.lineOptionsSec = res
+        // })
+        // if (this.isLinkage) {
+        //   this.formInline.lineLineId = ''
+        // }
         // this.formInline.lineLineId = ''
       }
     },
@@ -516,14 +516,14 @@ export default {
         let date = new Date()
         date = moment(date).valueOf() - 3600 * 1000 * 24
         if (newV) {
-          this.$store.dispatch('getComSecList').then(res => {
-            this.comOptionsSec = res
-            this.formInline.lineOrgId = this.comOptionsSec[0].value
-            this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
-              this.lineOptionsSec = res
-              this.formInline.lineLineId = this.lineOptionsSec[0].value
-            })
-          })
+          // this.$store.dispatch('getComSecList').then(res => {
+          //   this.comOptionsSec = res
+          //   this.formInline.lineOrgId = this.comOptionsSec[0].value
+          //   this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
+          //     this.lineOptionsSec = res
+          //     this.formInline.lineLineId = this.lineOptionsSec[0].value
+          //   })
+          // })
           this.formInline.lineType = this.turnOptions[0].value
           this.formInline.dataCurrent = date
           this.$store.dispatch('getDefaultSearch', this.formInline)
