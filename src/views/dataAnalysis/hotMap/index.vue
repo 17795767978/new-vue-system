@@ -161,14 +161,14 @@ export default {
   width: 100%;
   height: 93vh;
   position: absolute;
-  z-index: 1000
+  z-index: 800
 }
 .settings {
   width: 100%;
   padding: 1vh 2vw;
   height: 5vh;
   box-sizing: border-box;
-  z-index: 1002;
+  z-index: 802;
   position: relative;
   top: 0;
   left: 0;
