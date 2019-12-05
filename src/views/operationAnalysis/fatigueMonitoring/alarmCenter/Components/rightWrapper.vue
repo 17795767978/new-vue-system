@@ -338,7 +338,7 @@ export default {
         this.formInline.busUuid = ''
         this.formInline.lineId = ''
         this.formInline.orgId = this.selectCarData.id
-      } else if (this.selectCarData.levelsType === '0') {
+      } else if (this.selectCarData.levelsType === '0' || !this.selectCarData.levelsType) {
         this.formInline.busPlateNumber = ''
         this.formInline.busUuid = ''
         this.formInline.lineId = ''
@@ -351,8 +351,6 @@ export default {
     handleCurrentChange (val) {
       this.pageNum = val
       let defaultData = this.$store.getters.formData
-      console.log(this.userId)
-      console.log(this.formInline.orgId)
       this._tableList({
         orgId: this.formInline.orgId.length > 0 ? this.formInline.orgId : '', // 组织机构id
         lineId: this.formInline.lineId, // 线路id

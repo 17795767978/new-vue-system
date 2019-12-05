@@ -45,10 +45,15 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        let lineArr = newV.lineLineId.split('+')
+        let str
+        if (newV.lineLineId && newV.lineLineId !== '') {
+          str = newV.lineLineId.split('+')[0]
+        } else {
+          str = ''
+        }
         this._getLevelLineCountListData({
           company: newV.lineOrgId,
-          lineID: lineArr[0]
+          lineID: str
         })
       }
     }
@@ -65,7 +70,9 @@ export default {
             name: item.levelName
           })
         })
-        this.loading = false
+        setTimeout(() => {
+          this.loading = false
+        }, 1000)
         this.title = {
           text: '线路等级占比',
           left: 'center',

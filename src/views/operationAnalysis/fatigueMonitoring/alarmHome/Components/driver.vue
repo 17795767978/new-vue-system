@@ -23,7 +23,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: 0,
-      id: 'drive',
+      id: 'drivekkk',
       grid: {},
       loading: true,
       echartsData: {}
@@ -38,7 +38,9 @@ export default {
       orgId: this.userId === '1' ? '' : this.userId,
       lineId: defaultData.lineId,
       busNumber: '',
-      warnTypes: defaultData.warningArr
+      warnTypes: defaultData.warningArr,
+      startTime: '',
+      endTime: ''
     })
   },
   mounted () {
@@ -49,11 +51,14 @@ export default {
       deep: true,
       handler (newV) {
         let defaultData = this.$store.getters.formData
+        console.log(newV)
         this._getDriver({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           busNumber: newV.busNumber,
-          warnTypes: newV.warnTypeId.length === 0 ? defaultData.warningArr : newV.warnTypeId
+          warnTypes: newV.warnTypeId.length === 0 ? defaultData.warningArr : newV.warnTypeId,
+          startTime: '',
+          endTime: ''
         })
       }
     }

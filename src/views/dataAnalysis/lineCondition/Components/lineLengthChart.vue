@@ -41,6 +41,18 @@ export default {
   mounted () {
   },
   watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+        if (newV.lineLineId === '') {
+          this._getMonthData({
+            company: '一总站',
+            lineID: ''
+          }, '一总站')
+        }
+      }
+    },
     'selectData.lineLineId': {
       handler (newV) {
         if (newV !== '') {
@@ -53,6 +65,7 @@ export default {
       }
     },
     'echartsData.name': {
+      deep: true,
       handler (newV) {
         this._getMonthData({
           company: newV,

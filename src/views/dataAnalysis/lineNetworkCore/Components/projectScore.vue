@@ -48,10 +48,15 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        let lineArr = newV.lineLineId.split('+')
+        let str
+        if (newV.lineLineId && newV.lineLineId !== '') {
+          str = newV.lineLineId.split('+')[0]
+        } else {
+          str = ''
+        }
         this._getNetIndexDeaData({
           company: newV.lineOrgId,
-          lineID: lineArr[0]
+          lineID: str
         })
       }
     },
@@ -69,7 +74,9 @@ export default {
     _getNetIndexDeaData (params) {
       this.loading = true
       this.$api['lineNet.getDeaLineScoreListData'](params).then(res => {
-        this.loading = false
+        setTimeout(() => {
+          this.loading = false
+        }, 1000)
         let data = []
         data = [res[0].staRational, res[0].safeRational, res[0].conRational, res[0].rapRational, res[0].score]
         this.lineNum = res[0].lineNumber

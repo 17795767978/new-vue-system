@@ -100,7 +100,13 @@ export default {
   watch: {
     selectData: {
       handler (newV) {
-        let str = newV.lineLineId.split('+')[0]
+        console.log(newV)
+        let str
+        if (newV.lineLineId && newV.lineLineId !== '') {
+          str = newV.lineLineId.split('+')[0]
+        } else {
+          str = ''
+        }
         this._getRepeatTable({
           company: newV.lineOrgId,
           lineID: str

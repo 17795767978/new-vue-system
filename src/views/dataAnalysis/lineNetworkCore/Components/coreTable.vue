@@ -104,10 +104,15 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        let lineArr = newV.lineLineId.split('+')
+        let str
+        if (newV.lineLineId && newV.lineLineId !== '') {
+          str = newV.lineLineId.split('+')[0]
+        } else {
+          str = ''
+        }
         this._getNetIndexDeaData({
           company: newV.lineOrgId,
-          lineID: lineArr[0]
+          lineID: str
         })
       }
     }

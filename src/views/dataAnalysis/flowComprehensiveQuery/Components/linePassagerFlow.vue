@@ -88,8 +88,8 @@ export default {
         this.currentSelect.dataCurrent = moment(this.currentSelect.dataCurrent).format('YYYY-MM-DD')
         let lineArr = (newV.lineLineId && newV.lineLineId.split('+')) || []
         this._getPfOdbrushCountListGridData({
-          company: this.currentSelect.lineOrgId,
-          lineID: lineArr[0],
+          company: this.currentSelect.lineOrgId || '',
+          lineID: lineArr[0] || '',
           arrow: this.currentSelect.lineType,
           pDate: this.currentSelect.dataCurrent
         })

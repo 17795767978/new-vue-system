@@ -20,6 +20,7 @@
       <el-table-column
         prop="predistance"
         align="center"
+        width="130"
         label="距离首站距离(km)">
       </el-table-column>
     </el-table>
@@ -46,25 +47,46 @@ export default {
   },
   created () {
     this._getLineCondition({
+      company: '一总站',
       lineID: ''
     })
   },
   watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+        if (newV.lineLineId === '') {
+          this._getLineCondition({
+            company: '一总站',
+            lineID: '',
+            lineName: '',
+            arrow: ''
+          })
+        }
+      }
+    },
     'selectData.lineLineId': {
       handler (newV) {
         if (newV !== '') {
           let str = newV.split('+')[0]
           this._getLineCondition({
-            lineID: str
+            lineID: str,
+            lineName: '',
+            arrow: '',
+            company: ''
           })
         }
       }
     },
     'echartsData.name': {
+      deep: true,
       handler (newV) {
         this._getLineCondition({
           company: newV,
-          lineID: ''
+          lineID: '',
+          lineName: '',
+          arrow: ''
         })
       }
     },
@@ -72,6 +94,8 @@ export default {
       console.log(newV)
       let arrow = newV.seriesName.substring(0, 2) === '上行' ? '1' : '2'
       this._getLineCondition({
+        company: '',
+        lineID: '',
         lineName: newV.name,
         arrow: arrow
       })
