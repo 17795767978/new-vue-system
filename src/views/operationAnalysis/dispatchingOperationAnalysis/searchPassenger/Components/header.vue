@@ -210,6 +210,15 @@ export default {
           })
         }
       }
+    },
+    'formInline.radio': {
+      handler (newV) {
+        if (newV === '1') {
+          this.formInline.valueTime = [moment().format('YYYY-MM-DD 00:00:00'), moment().format('YYYY-MM-DD 23:59:59')]
+        } else {
+          this.formInline.valueTime = []
+        }
+      }
     }
   },
   updated () {

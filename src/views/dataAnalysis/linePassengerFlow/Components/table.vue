@@ -33,6 +33,9 @@
         prop="lineType"
         align="center"
         label="方向">
+        <template slot-scope="scope">
+          {{scope.row.lineType === '1' ? '上行' : '下行'}}
+        </template>
       </el-table-column>
       <el-table-column
         prop="upPayNumber"

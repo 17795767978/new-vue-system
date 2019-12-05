@@ -62,7 +62,7 @@ export default {
     },
     echartsData (newV) {
       this.lineName = newV.lineName
-      this.lineType = newV.lineType
+      this.lineType = newV.lineType === '1' ? '上行' : '下行'
       this._getStationCharts({
         orgUuid: this.selectData.orgId,
         lineName: newV.lineName,

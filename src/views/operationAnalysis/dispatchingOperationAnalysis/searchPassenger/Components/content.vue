@@ -18,92 +18,18 @@
       </template>
       </el-table-column>
       <el-table-column
+        v-for="item in tableTitle"
+        :key="item.key"
         align="center"
-        prop="orgName"
-        label="机构"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="pfrLineName"
-        label="线路"
-        width="90">
-      </el-table-column>
-      <!-- prfGetPersonCount -->
-      <el-table-column
-        align="center"
-        prop="prfBusPlateNumber"
-        width="150"
-        label="车辆">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        width="60"
-        label="方向">
+        :prop="item.value"
+        :label="item.key">
         <template slot-scope="scope">
-          {{scope.row.pfrLineType === 1 ? '上行' : '下行'}}
+          <span v-if="item.value === 'uploadTime'">{{moment(scope.row[item.value]).format('YYYY-MM-DD HH:mm:ss')}}</span>
+          <span v-else-if="item.value === 'lineType'">{{scope.row[item.value] === '1' ? '上行' : '下行'}}</span>
+          <span v-else>{{scope.row[item.value]}}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        width="70"
-        prop="pfrStationSeq"
-        label="站序">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        width="200"
-        prop="pfrStationName"
-        label="站点名称">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="pfrTripTime"
-        label="趟次"
-        width="60">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        width="160"
-        :formatter="gerDate"
-        label="客流时间">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        width="80"
-        prop="prfGetPersonCount"
-        label="车内人数">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="pfrGetOnNumber"
-        label="上车人数">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="pfrGetOffNumber"
-        label="下车人数">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="prfGetFOnNumber"
-        label="前门上车人数">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="prfGetFOffNumber"
-        label="前门下车人数">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="prfGetEOnNumber"
-        label="后门上车人数">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="prfGetEOffNumber"
-        label="后门下车人数">
-      </el-table-column>
+      <!-- prfGetPersonCount -->
     </el-table>
     <el-pagination
       style="float: right; margin-top: 20px;"
@@ -136,7 +62,9 @@ export default {
   },
   data () {
     return {
+      moment: '',
       tableData: [],
+      tableTitle: [{ key: '机构', value: 'orgName' }, { key: '线路', value: 'lineName' }, { key: '车辆', value: 'busPlateNumber' }, { key: '刷卡时间', value: 'uploadTime' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }],
       total: 0,
       pageNumber: 1,
       pageSize: 15,
@@ -149,38 +77,26 @@ export default {
     ...mapGetters(['userId'])
   },
   mounted () {
-    // let dataNow = new Date()
-    // let endTime = dataNow.getTime() - 24 * 3600 * 1000
-    // let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-    // let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
-    // this._passengerFlow({
-    //   orgId: this.userId,
-    //   lineId: '',
-    //   lineType: '',
-    //   busNumber: '',
-    //   startTime: timeStart,
-    //   endTime: timeEnd,
-    //   pageSize: 15,
-    //   pageNumber: this.pageNumber
-    // })
     this.loading = false
     this.isDisabled = false
+    this.moment = moment
   },
   watch: {
-    // selectData: {
-    //   deep: true,
-    //   handler (newValue) {
-    //     this.selectData.pageNumber = this.pageNumber
-    //     this.selectData.pageSize = 10
-    //     this._passengerFlow({ ...this.selectData })
-    //   }
-    // },
     isUpdate () {
       if (this.isUpdate) {
         this.pageNumber = 1
         this.selectData.pageNumber = this.pageNumber
         this.selectData.pageSize = 15
-        this._passengerFlow(this.selectData, this.selectData.radio)
+        this._passengerFlow({
+          orgUuid: this.selectData.orgId,
+          lineUuid: this.selectData.lineId,
+          busPlateNumber: this.selectData.busNumber,
+          lineType: this.selectData.lineType,
+          sTime: this.selectData.startTime,
+          eTime: this.selectData.endTime,
+          pageSize: this.selectData.pageSize,
+          pageNumber: this.selectData.pageNumber
+        }, this.selectData.radio)
         this.$emit('isUpdateTo')
       }
     },
@@ -198,6 +114,7 @@ export default {
       this.loading = true
       this.isDisabled = true
       if (type === '1') {
+        this.tableTitle = [{ key: '机构', value: 'orgName' }, { key: '线路', value: 'lineName' }, { key: '车辆', value: 'busPlateNumber' }, { key: '刷卡时间', value: 'uploadTime' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }]
         this.$api['passengerFlow.todayList'](params).then(res => {
           this.tableData = res.list
           this.total = res.total
@@ -205,12 +122,12 @@ export default {
           this.loading = false
           this.isDisabled = false
         }).catch((error) => {
-          console.log(error)
           this.$message.error(error.message)
           this.loading = false
           this.isDisabled = false
         })
       } else {
+        this.tableTitle = [{ key: '机构', value: 'orgName' }, { key: '线路', value: 'lineName' }, { key: '车辆', value: 'busPlateNumber' }, { key: '方向', value: 'lineType' }, { key: '站序', value: 'staSequence' }, { key: '站点名称', value: 'staName' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }]
         this.$api['passengerFlow.list'](params).then(res => {
           this.tableData = res.list
           this.total = res.total
@@ -218,7 +135,6 @@ export default {
           this.loading = false
           this.isDisabled = false
         }).catch((error) => {
-          console.log(error)
           this.$message.error(error.message)
           this.loading = false
           this.isDisabled = false
@@ -256,14 +172,20 @@ export default {
         // this.$message.success('数据已更新')
       })
     },
-    gerDate (row) {
-      return moment(row.pfrUploadTime).format('YYYY-MM-DD HH:mm:ss')
-    },
     handleCurrentChange (val) {
       this.selectData.pageNumber = val
       this.selectData.pageSize = 15
       this.pageNumber = val
-      this._passengerFlow({ ...this.selectData })
+      this._passengerFlow({
+        orgUuid: this.selectData.orgId,
+        lineUuid: this.selectData.lineId,
+        busPlateNumber: this.selectData.busNumber,
+        lineType: this.selectData.lineType,
+        sTime: this.selectData.startTime,
+        eTime: this.selectData.endTime,
+        pageSize: this.selectData.pageSize,
+        pageNumber: this.selectData.pageNumber
+      }, this.selectData.radio)
     }
   }
 }
