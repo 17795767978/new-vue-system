@@ -64,7 +64,7 @@ export default {
             type: 'shadow'
           },
           formatter: (params) => {
-            return `站对数: ${params[0].data}<br/>重复站位数：${params[1].data}<br/>重复比: ${params[2].data}%`
+            return `站对数: ${params[0].data}<br/>重复站位数：${params[1].data}<br/>重复比: ${params[2].data * 100}%`
           }
         }
         this.lineData = [
@@ -119,7 +119,7 @@ export default {
                 show: true,
                 position: 'center',
                 formatter: (params) => {
-                  return `${params.data}%`
+                  return `${(params.data * 100).toFixed(2)}%`
                 },
                 color: 'black',
                 padding: [-10, 0, 0, 0]
@@ -198,7 +198,9 @@ export default {
             axisLabel: {
               inside: false,
               interval: 0,
-              formatter: '{value} %',
+              formatter: (params) => {
+                return `${params * 100}%`
+              },
               textStyle: {
                 color: '#000',
                 fontSize: '10',

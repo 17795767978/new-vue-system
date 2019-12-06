@@ -4,6 +4,7 @@
       :data="tableData"
       height="36vh"
       border
+      highlight-current-row
       style="width: 100%">
       <el-table-column
         type="index"

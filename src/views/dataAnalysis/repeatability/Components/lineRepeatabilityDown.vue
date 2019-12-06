@@ -29,13 +29,15 @@ export default {
       grid: {},
       angleAxis: {},
       loading: true,
-      polar: {}
+      polar: {},
+      titleName: ''
     }
   },
   created () {
     // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    this.titleName = '二总站'
     this._getrepeatPieData({
-      company: '',
+      company: '二总站',
       lineID: ''
     })
   },
@@ -44,6 +46,7 @@ export default {
   watch: {
     'echartsData.name': {
       handler (newV) {
+        this.titleName = newV
         this._getrepeatPieData({
           company: newV,
           lineID: ''
@@ -58,7 +61,7 @@ export default {
         this.loading = false
         // this.maxMum = max(data)
         this.title = {
-          text: '线路重复度',
+          text: `${this.titleName}线路重复度`,
           left: 'center',
           top: 10,
           textStyle: {
@@ -77,7 +80,7 @@ export default {
             type: 'shadow'
           },
           formatter: (params) => {
-            return `重复度：${params[0].data}%`
+            return `重复度：${(params[0].data * 100).toFixed(1)}%`
           }
         }
         this.polar = {

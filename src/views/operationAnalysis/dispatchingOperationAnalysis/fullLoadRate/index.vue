@@ -23,7 +23,7 @@ import contentWrapper from './Components/content'
 import introduceWrapper from '@/components/introduce/'
 import moment from 'moment'
 export default {
-  name: 'timeTableAnalysis',
+  name: 'fullLoadRate',
   data () {
     return {
       checkData: {},

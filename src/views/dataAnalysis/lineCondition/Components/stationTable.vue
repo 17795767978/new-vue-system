@@ -13,7 +13,7 @@
         label="序号">
       </el-table-column>
       <el-table-column
-        prop="lineName"
+        prop="stationName"
         align="center"
         label="站点名称">
       </el-table-column>
@@ -22,6 +22,9 @@
         align="center"
         width="130"
         label="距离首站距离(km)">
+        <template slot-scope="scope">
+          {{(Number(scope.row.predistance) / 1000).toFixed(5)}}
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -48,7 +51,8 @@ export default {
   created () {
     this._getLineCondition({
       company: '一总站',
-      lineID: ''
+      lineID: '',
+      arrow: '1'
     })
   },
   watch: {
@@ -61,7 +65,7 @@ export default {
             company: '一总站',
             lineID: '',
             lineName: '',
-            arrow: ''
+            arrow: '1'
           })
         }
       }
@@ -73,7 +77,7 @@ export default {
           this._getLineCondition({
             lineID: str,
             lineName: '',
-            arrow: '',
+            arrow: '1',
             company: ''
           })
         }
@@ -107,7 +111,7 @@ export default {
       this.$api['lineNet.getLineCondition'](params).then(res => {
         res.forEach(item => {
           this.tableData.push({
-            lineName: item.lineName,
+            stationName: item.stationName,
             predistance: item.predistance
           })
         })

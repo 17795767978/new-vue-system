@@ -1,12 +1,22 @@
 <template>
-  <div>
+  <keep-alive :include="cachedViews">
       <router-view></router-view>
-  </div>
+  </keep-alive>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: 'dataAnalysis'
+  name: 'dataAnalysis',
+  computed: {
+    ...mapGetters(['cachedViews'])
+  },
+  beforeMount () {
+    this.$store.dispatch('addCachedView', 'dataAnalysis')
+  },
+  beforeDestroy () {
+    this.$store.dispatch('removeCachedView', 'dataAnalysis')
+  }
 }
 </script>
 

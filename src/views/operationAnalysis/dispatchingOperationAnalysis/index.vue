@@ -12,6 +12,12 @@ export default {
   name: 'dispatchingOperationAnalysis',
   computed: {
     ...mapGetters(['cachedViews'])
+  },
+  beforeMount () {
+    this.$store.dispatch('addCachedView', 'dispatchingOperationAnalysis')
+  },
+  beforeDestroy () {
+    this.$store.dispatch('removeCachedView', 'dispatchingOperationAnalysis')
   }
 }
 </script>

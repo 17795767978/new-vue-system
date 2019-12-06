@@ -51,6 +51,14 @@
         prop="approval"
         align="center"
         label="满载率">
+        <template slot-scope="scope">
+          <span v-if="scope.row.approval > 0">
+            {{`${(scope.row.approval * 100).toFixed(2)}%`}}
+          </span>
+          <span v-else>
+            {{scope.row.approval}}
+          </span>
+        </template>
       </el-table-column>
     </el-table>
   </div>

@@ -207,7 +207,13 @@ export default {
     _getTimeData (params) {
       this.loading = true
       this.$api['lineNet.getPfBaseUpDownGrid'](params).then(res => {
-        console.log(res)
+        let xData = res.xAxisNames.map(item => {
+          if (item.indexOf(':') > 0) {
+            return item
+          } else {
+            return item.substring(0, 2) + ':' + item.substring(2, 4)
+          }
+        })
         setTimeout(() => {
           this.loading = false
         }, 1000)
@@ -260,7 +266,7 @@ export default {
         this.xData = [
           {
             type: 'category',
-            data: res.xAxisNames,
+            data: xData,
             axisPointer: {
               type: 'shadow'
             },
@@ -299,7 +305,13 @@ export default {
     _getRateData (params) {
       this.loading = true
       this.$api['lineNet.getPfBaseApprovalGrid'](params).then(res => {
-        console.log(res)
+        let xData = res.xAxisNames.map(item => {
+          if (item.indexOf(':') > 0) {
+            return item
+          } else {
+            return item.substring(0, 2) + ':' + item.substring(2, 4)
+          }
+        })
         setTimeout(() => {
           this.loading = false
         }, 1000)
@@ -338,7 +350,7 @@ export default {
         this.xData = [
           {
             type: 'category',
-            data: res.xAxisNames,
+            data: xData,
             axisPointer: {
               type: 'shadow'
             },

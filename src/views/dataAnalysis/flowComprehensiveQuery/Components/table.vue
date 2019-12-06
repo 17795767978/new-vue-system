@@ -37,12 +37,12 @@
         label="刷卡总量（人次）">
       </el-table-column>
       <el-table-column
-        prop="pjyj"
+        prop="zzl"
         align="center"
         label="周转量（人次）">
       </el-table-column>
       <el-table-column
-        prop="zzl"
+        prop="pjyj"
         align="center"
         label="平均运距（KM）">
       </el-table-column>

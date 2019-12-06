@@ -147,6 +147,13 @@ export default {
         setTimeout(() => {
           this.loading = false
         }, 1000)
+        let xData = res.xAxisNames.map(item => {
+          if (item.indexOf(':') > 0) {
+            return item
+          } else {
+            return item.substring(0, 2) + ':' + item.substring(2, 4)
+          }
+        })
         this.title = {
           text: `${this.lineNum}${this.arrow}线路客流综合查询（刷卡总量）`,
           left: 'center',
@@ -178,7 +185,7 @@ export default {
         this.xData = [
           {
             type: 'category',
-            data: res.xAxisNames,
+            data: xData,
             axisPointer: {
               type: 'shadow'
             },
@@ -217,6 +224,13 @@ export default {
     _getPfOdZZLListGridData (params) {
       this.loading = true
       this.$api['lineNet.getPfOdZZLListGridData'](params).then(res => {
+        let xData = res.xAxisNames.map(item => {
+          if (item.indexOf(':') > 0) {
+            return item
+          } else {
+            return item.substring(0, 2) + ':' + item.substring(2, 4)
+          }
+        })
         setTimeout(() => {
           this.loading = false
         }, 1000)
@@ -251,7 +265,7 @@ export default {
         this.xData = [
           {
             type: 'category',
-            data: res.xAxisNames,
+            data: xData,
             axisPointer: {
               type: 'shadow'
             },
@@ -293,6 +307,13 @@ export default {
         setTimeout(() => {
           this.loading = false
         }, 1000)
+        let xData = res.xAxisNames.map(item => {
+          if (item.indexOf(':') > 0) {
+            return item
+          } else {
+            return item.substring(0, 2) + ':' + item.substring(2, 4)
+          }
+        })
         this.title = {
           text: `${this.lineNum}${this.arrow}线路评分展示（平均运距）`,
           left: 'center',
@@ -324,7 +345,7 @@ export default {
         this.xData = [
           {
             type: 'category',
-            data: res.xAxisNames,
+            data: xData,
             axisPointer: {
               type: 'shadow'
             },

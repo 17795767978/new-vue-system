@@ -79,7 +79,7 @@
       background
       :current-page="pageNumber"
       @current-change="handleCurrentChange"
-      layout="prev, pager, next"
+      layout="total, prev, pager, next"
       :page-size="pageSize"
       :total="total">
     </el-pagination>

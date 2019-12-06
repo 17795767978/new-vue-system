@@ -28,7 +28,7 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
-import Echarts from './Components/echarts'
+import Echarts from './Components/echart'
 import Immutable from 'immutable'
 export default {
   name: 'lineOD',
@@ -81,7 +81,7 @@ export default {
   flex-wrap: wrap;
   .table {
     width: 100%;
-    height: 100%;
+    height: 75vh;
     box-sizing: border-box;
   }
 }
