@@ -170,6 +170,7 @@ export default {
       })
     },
     changeSearchCondition (params) {
+      console.log(params)
       if (params.lineType === '上行') {
         params.lineType = '1'
       } else if (params.lineType === '下行') {
@@ -180,15 +181,19 @@ export default {
         company: params.lineOrgId,
         lineID: lineArr[0],
         arrow: params.lineType,
-        sStation: params.startStation.value !== undefined ? params.startStation.value : '',
-        eStation: params.endStation.value !== undefined ? params.endStation.value : '',
+        sStation: params.startStation && params.startStation.value ? params.startStation.value : '',
+        eStation: params.endStation && params.endStation.value ? params.endStation.value : '',
         pageNumber: this.pageNumber,
         pageSize: this.pageSize
       })
     },
     handleCurrentChange (val) {
       this.pageNumber = val
-      this.changeSearchCondition(this.searchData)
+      if (Object.keys(this.searchData).length > 0) {
+        this.changeSearchCondition(this.searchData)
+      } else {
+        this.changeSearchCondition(this.defaultSearch)
+      }
     }
   }
 }
