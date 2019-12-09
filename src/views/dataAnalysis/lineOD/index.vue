@@ -9,7 +9,7 @@
       :isMonth="false"
       :isDataCurrent="true"
       :isEmpty="true"
-      :isDownload="true"
+      :isDownload="activeName === 'second'"
       :isDefault="true"
       :isWarntype="false"
       :downLoadName="downLoadName"
@@ -86,7 +86,7 @@ export default {
   flex-wrap: wrap;
   .table {
     width: 100%;
-    height: 100%;
+    height: 75vh;
     box-sizing: border-box;
   }
 }

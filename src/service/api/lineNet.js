@@ -345,7 +345,7 @@ export const lineNetApi = {
       path: '/api/mid/pd/detail/time/month/data/getHeatMapData',
       mockPath: '/api/mid/pd/detail/time/month/data/getHeatMapData',
       params: {
-        updateMonth: '',
+        uploadMonth: '',
         payTimeIntervalMin: '',
         payTimeIntervalMax: ''
       },

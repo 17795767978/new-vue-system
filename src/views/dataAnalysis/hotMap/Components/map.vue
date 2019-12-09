@@ -12,7 +12,7 @@
       v-loading="loading"
       element-loading-background="rgba(0, 0, 0, 0)"
     >
-      <bml-heatmap :data="hotdata" :max="max" :radius="20">
+      <bml-heatmap :data="hotdata" :max="500" :radius="30">
       </bml-heatmap>
     </baidu-map>
  </div>
@@ -51,7 +51,8 @@ export default {
           this.loading = false
           this.hotdata.push({
             lat: item.staLnt,
-            lng: item.staLng
+            lng: item.staLng,
+            count: item.upPayNumber * 5
           })
         })
       }

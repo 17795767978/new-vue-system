@@ -63,9 +63,9 @@ export default {
   created () {
     this.month = moment().subtract(30, 'days').format('YYYY-MM')
     this.$api['lineNet.getHeatMapData']({
-      updateMonth: moment().subtract(30, 'days').format('YYYY-MM'),
-      payTimeIntervalMin: '',
-      payTimeIntervalMax: ''
+      uploadMonth: moment().subtract(30, 'days').format('YYYY-MM'),
+      payTimeIntervalMin: '06:00',
+      payTimeIntervalMax: '23:00'
     }).then(res => {
       this.datas = res
     })
@@ -100,7 +100,7 @@ export default {
     // api获取数据
     async getDatas (time) {
       let result = await this.$api['lineNet.getHeatMapData']({
-        updateMonth: this.month,
+        uploadMonth: this.month,
         payTimeIntervalMin: time[0],
         payTimeIntervalMax: time[1]
       })
@@ -231,18 +231,18 @@ export default {
   }
 }
 .line-echarts {
-  width: 30%;
-  height: 15vh;
+  width: 33%;
+  height: 20vh;
   position: absolute;
-  left: 2vw;
-  top: 10vh;
+  left: 1vw;
+  top: 7vh;
   z-index: 1050
 }
 .station-echarts {
-  width: 30%;
-  height: 15vh;
+  width: 33%;
+  height: 20vh;
   position: absolute;
-  left: 2vw;
+  left: 1vw;
   top: 30vh;
   z-index: 1050
 }

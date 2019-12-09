@@ -100,14 +100,14 @@
                 <span class="button" @click="getCharItem(item)" size="mini" v-for="(item , index) in charData" :class="item.isAct ? 'active' : ''" :key="index">{{item.ch}}</span>
               </div>
             </div>
-            <div class="ts alarm-wrapper" v-show="carDetailData.warnInfos && carDetailData.warnInfos.length > 0">
+            <!-- <div class="ts alarm-wrapper" v-show="carDetailData.warnInfos && carDetailData.warnInfos.length > 0">
               <div class="icon">
                 <span style="color: #fff;font-size: 0.8vw;">报警视频</span>
               </div>
               <div class="content">
                 <span class="button" @click="getAlarmItem(warn, index)" v-for="(warn , index) in warnData" :class="warn.isAct ? 'active' : ''" :key="index">{{warn.warnTypeName}}</span>
               </div>
-            </div>
+            </div> -->
           </div>
         </el-col>
         <el-col :span="13">
@@ -140,11 +140,11 @@
                 <videoWrapper  v-if="charData[index].isAct" :item="item" :dialogTableVisible='dialogTableVisible'></videoWrapper>
               </div>
             </div>
-            <div class="alarm-video"  v-show="carDetailData.warnInfos && carDetailData.warnInfos.length > 0">
+            <!-- <div class="alarm-video"  v-show="carDetailData.warnInfos && carDetailData.warnInfos.length > 0">
               <div class="top-left-video" v-for="(warn, index) in carDetailData.warnInfos" :key="index">
                 <videoWrapper v-if="warnData[index].isAct" :item="warn" :dialogTableVisible='dialogTableVisible'></videoWrapper>
               </div>
-            </div>
+            </div> -->
           </div>
         </el-col>
       </el-row>
@@ -160,7 +160,7 @@ import iconCarRed from '../../assets/images/bus-red.png'
 import iconCarGreen from '../../assets/images/bus-green.png'
 import videoWrapper from './video'
 import { mapGetters } from 'vuex'
-import moment from 'moment'
+// import moment from 'moment'
 const TIME = 3 * 60 * 1000
 // const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
 const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
@@ -277,7 +277,7 @@ export default {
     'formInline.value': {
       handler (newV) {
         if (newV !== 'all') {
-          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineId === newV)
+          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
         } else {
           this.markers = this.markersAll
         }
@@ -322,12 +322,12 @@ export default {
         }, TIME)
       }
     },
-    'carDetailData.warnInfos': {
-      deep: true,
-      handler (newV) {
-        console.log(newV)
-      }
-    },
+    // 'carDetailData.warnInfos': {
+    //   deep: true,
+    //   handler (newV) {
+    //     console.log(newV)
+    //   }
+    // },
     searchData: {
       deep: true,
       handler (newV) {
@@ -436,85 +436,85 @@ export default {
       this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
     },
     handleMarkerClick (marker) {
-      this.charData.forEach(item => {
-        item.isAct = false
-      })
-      this.warnData = []
-      this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
-      this.isLoading = true
-      const { busId,
-        busNumber,
-        drvName,
-        drvIccard,
-        samplingTime,
-        busSelfcode,
-        warnSpeed,
-        orgName,
-        lineName,
-        lineType,
-        positionSpeed,
-        currenttrip,
-        warnDeviceCode,
-        busVideoOrder } = marker
-      this.$api['homeTired.getVideoMsg']({
-        busId,
-        busNumber,
-        samplingTime,
-        busSelfcode,
-        warnSpeed,
-        orgName,
-        lineName,
-        lineType,
-        drvName,
-        drvIccard,
-        positionSpeed,
-        currenttrip,
-        warnDeviceCode,
-        busVideoOrder
-      }).then(res => {
-        this.carDetailData = res
-        this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
-        this.carDetailData.tripPercent = Number(this.carDetailData.tripPercent)
-        if (this.carDetailData.busVideoOrder && this.carDetailData.busVideoOrder.length > 0) {
-          this.charData = []
-          this.carDetailData.busVideoOrder.forEach((item, index) => {
-            if (index < 6) {
-              this.charData.push({
-                ch: item,
-                isAct: false,
-                index: index
-              })
-            }
-          })
-        } else {
-          this.charData = [
-            { ch: '通道1', isAct: false, index: 0 },
-            { ch: '通道2', isAct: false, index: 1 },
-            { ch: '通道3', isAct: false, index: 2 },
-            { ch: '通道4', isAct: false, index: 3 },
-            { ch: '通道5', isAct: false, index: 4 },
-            { ch: '通道6', isAct: false, index: 5 }
-          ]
-        }
-        if (this.isFlv) {
-          this._getKey()
-          this._getVideoList(this.carDetailData.devRefId).then(res => {
-          })
-        }
-        if (this.carDetailData.warnInfos.length > 0) {
-          this.carDetailData.warnInfos = this.carDetailData.warnInfos.slice(0, 2)
-          this.carDetailData.warnInfos.slice(0, 2).forEach((item, index) => {
-            this.warnData.push({
-              index,
-              isAct: false,
-              warnTypeName: item.warnTypeName + (index + 1)
-            })
-          })
-        }
-        this.dialogTableVisible = true
-      }).catch((e) => {
-        this.$message.error(e.message)
-      })
+      // this.charData.forEach(item => {
+      //   item.isAct = false
+      // })
+      // this.warnData = []
+      // this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
+      // this.isLoading = true
+      // const { busId,
+      //   busNumber,
+      //   drvName,
+      //   drvIccard,
+      //   samplingTime,
+      //   busSelfcode,
+      //   warnSpeed,
+      //   orgName,
+      //   lineName,
+      //   lineType,
+      //   positionSpeed,
+      //   currenttrip,
+      //   warnDeviceCode,
+      //   busVideoOrder } = marker
+      // this.$api['homeTired.getVideoMsg']({
+      //   busId,
+      //   busNumber,
+      //   samplingTime,
+      //   busSelfcode,
+      //   warnSpeed,
+      //   orgName,
+      //   lineName,
+      //   lineType,
+      //   drvName,
+      //   drvIccard,
+      //   positionSpeed,
+      //   currenttrip,
+      //   warnDeviceCode,
+      //   busVideoOrder
+      // }).then(res => {
+      //   this.carDetailData = res
+      //   this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
+      //   this.carDetailData.tripPercent = Number(this.carDetailData.tripPercent)
+      //   if (this.carDetailData.busVideoOrder && this.carDetailData.busVideoOrder.length > 0) {
+      //     this.charData = []
+      //     this.carDetailData.busVideoOrder.forEach((item, index) => {
+      //       if (index < 6) {
+      //         this.charData.push({
+      //           ch: item,
+      //           isAct: false,
+      //           index: index
+      //         })
+      //       }
+      //     })
+      //   } else {
+      //     this.charData = [
+      //       { ch: '通道1', isAct: false, index: 0 },
+      //       { ch: '通道2', isAct: false, index: 1 },
+      //       { ch: '通道3', isAct: false, index: 2 },
+      //       { ch: '通道4', isAct: false, index: 3 },
+      //       { ch: '通道5', isAct: false, index: 4 },
+      //       { ch: '通道6', isAct: false, index: 5 }
+      //     ]
+      //   }
+      //   if (this.isFlv) {
+      //     this._getKey()
+      //     this._getVideoList(this.carDetailData.devRefId).then(res => {
+      //     })
+      //   }
+      //   // if (this.carDetailData.warnInfos.length > 0) {
+      //   //   this.carDetailData.warnInfos = this.carDetailData.warnInfos.slice(0, 2)
+      //   //   this.carDetailData.warnInfos.slice(0, 2).forEach((item, index) => {
+      //   //     this.warnData.push({
+      //   //       index,
+      //   //       isAct: false,
+      //   //       warnTypeName: item.warnTypeName + (index + 1)
+      //   //     })
+      //   //   })
+      //   // }
+      //   // this.dialogTableVisible = true
+      // }).catch((e) => {
+      //   this.$message.error(e.message)
+      // })
     },
     // getWarnInfo (warnInfos) {
     //   warnInfos.forEach((item, index) => {

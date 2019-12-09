@@ -5,7 +5,7 @@
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '95%', height: '200px',margin: '0 auto'}"></div>
         <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'-'"></noEcharts>
       </el-col>
-      <el-col :span="12" style="border-left: 1px #fff solid;border-right: 1px #fff solid;height: 100%">
+      <el-col :span="12" style="border-left: 1px #fff solid;height: 100%">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '95%', height: '200px', margin: '0 auto'}">
         </div>
         <!-- <div v-show="realTimeMileage.length === 0" class="warning">
@@ -74,7 +74,7 @@ export default {
   activated () {
     this.drawLineLeft()
     this.drawLineMiddle()
-    this.drawLineRight()
+    // this.drawLineRight()
   },
   methods: {
     _realTimeMileage (params) {
@@ -127,7 +127,7 @@ export default {
         this.timerRight = setTimeout(() => {
           this._realTimeShift(params)
         }, TIME)
-        this.drawLineRight()
+        // this.drawLineRight()
       })
     },
     drawLineLeft () {
@@ -453,11 +453,11 @@ export default {
     realTimeTripsMax () {
       this.drawLineMiddle()
       this.loading = false
-    },
-    realTimeShiftMax () {
-      this.drawLineRight()
-      this.loading = false
     }
+    // realTimeShiftMax () {
+    //   this.drawLineRight()
+    //   this.loading = false
+    // }
   },
   components: {
     noEcharts

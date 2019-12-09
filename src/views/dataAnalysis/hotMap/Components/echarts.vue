@@ -77,7 +77,7 @@ export default {
       this.grid = {
         x: 45,
         y: 10,
-        x2: 0,
+        x2: 5,
         y2: 25,
         borderWidth: 1
       }
@@ -98,7 +98,7 @@ export default {
       this.legend = [
         {
           data: ['刷卡人次(登量)'],
-          right: 'right',
+          right: 10,
           top: 10,
           textStyle: {
             color: '#000'

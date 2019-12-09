@@ -1,15 +1,18 @@
 <template>
-  <div class="g2-wrapper">
-    <div id="classer" ref="chartWrapper"></div>
+<div class="dom" ref="topWrapper">
+  <div class="passenger-vol" ref="wrapper" v-loading="loading">
   </div>
+</div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 import moment from 'moment'
-import G2 from '@antv/g2'
-import DataSet from '@antv/data-set'
 import { mapGetters } from 'vuex'
+import elementResizeDetector from 'element-resize-detector'
+// import 'echarts/extension/bmap/bmap'
+const COLOR_ARR = ['#fcd323', '#fba632', '#ff8440', '#ff6549', '#fe564e']
 export default {
+  name: '',
   props: {
     selectData: {
       type: Object
@@ -17,28 +20,30 @@ export default {
   },
   data () {
     return {
-      echartsData: {}
+      echartsData: {},
+      loading: true,
+      lineStations: [],
+      datas: []
     }
   },
   computed: {
     ...mapGetters(['formData'])
   },
   created () {
-    console.log(123)
-    this._getPfODYCountListData({
-      orgUuid: this.formData.orgId,
-      lineUuid: this.formData.lineId,
-      lineType: this.formData.lineType,
-      uploadDate: this.formData.currentDate
-    })
   },
   mounted () {
-    // const chart = new G2.Chart({
-    //   container: 'c1',
-    //   width: 800,
-    //   height: 600
-    // })
-    // console.log(chart)
+    let listenResize = elementResizeDetector()
+    listenResize.listenTo(this.$refs.topWrapper, (el) => {
+      this.$echarts.init(document.getElementsByClassName('passenger-vol')[0]).resize()
+    })
+    setTimeout(() => {
+      this._getPfODYCountListData({
+        orgUuid: this.formData.orgId,
+        lineUuid: this.formData.lineId,
+        lineType: this.formData.lineType,
+        uploadDate: this.formData.currentDate
+      })
+    }, 500)
   },
   watch: {
     selectData: {
@@ -57,91 +62,156 @@ export default {
     }
   },
   methods: {
-    _getPfODYCountListData (params) {
-      this.$api['lineNet.getPfODYCountListData'](params).then(res => {
-        console.log(res)
-        let nodes = []
-        let links = []
-        if (res.nodes.length > 0) {
-          res.nodes.forEach(item => {
-            nodes.push({
-              id: item.upStaSequence,
-              name: item.upStaName,
-              value: item.payNumbers
-            })
-          })
-          res.edges.forEach(item => {
-            links.push({
-              source: item.upStaSequence,
-              target: item.downStaSequence
-            })
-          })
-          let ds = new DataSet()
-          let dv = ds.createView().source({ links, nodes }, {
-            type: 'graph',
-            edges: function edges (d) {
-              return d.links
-            }
-          })
-          dv.transform({
-            type: 'diagram.arc',
-            marginRatio: 0.5
-          // sortBy: 'frequency' // id, weight, frequency, {function}
-          })
-          console.log(dv)
-          let chartDom = this.$refs.chartWrapper
-          console.log(chartDom.childNodes)
-          if (chartDom.childNodes.length > 0) {
-            chartDom.removeChild(chartDom.firstChild)
-          }
-          let chart = new G2.Chart({
-            container: 'classer',
-            forceFit: true,
-            height: 570,
-            padding: ['auto', 'auto', 100, 'auto']
-          })
-
-          chart.legend(false)
-          chart.tooltip({
-            showTitle: false
-          })
-
-          let edgeView = chart.view()
-          edgeView.source(dv.edges.filter(item => item.x))
-          edgeView.axis(false)
-          edgeView.edge().position('x*y').shape('arc').color('source').opacity(0.5).tooltip('source*target')
-
-          let nodeView = chart.view()
-          nodeView.source(dv.nodes)
-          nodeView.axis(false)
-          nodeView.point().position('x*y').shape('circle').size('value').color('id').opacity(0.5).style({
-            stroke: 'grey'
-          }).label('name', { // label configuration for non-polar coord
-            offset: -10,
-            textStyle: {
-              textAlign: 'left',
-              rotate: 90
-            }
-          })
-          chart.render()
-        } else {
-          let chartDom = this.$refs.chartWrapper
-          if (chartDom.childNodes.length > 0) {
-            chartDom.removeChild(chartDom.firstChild)
-          }
-          this.$message.warning('暂无数据')
+    drawLine () {
+      let charts = this.$echarts.init(document.getElementsByClassName('passenger-vol')[0])
+      charts.off('click')
+      window.addEventListener('resize', () => { charts.resize() })
+      charts.setOption({
+        title: [{
+          text: '线路OD图',
+          top: 10,
+          left: 'center'
         }
+        ],
+        // visualMap: visualMap,
+        tooltip: {},
+        grid: {
+          x: '50',
+          y: '50',
+          y2: '100',
+          x2: '100'
+        },
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        toolbox: {
+        // y: 'bottom',
+          // feature: {
+          //   magicType: {
+          //     type: ['stack', 'tiled']
+          //   },
+          //   dataView: {},
+          //   saveAsImage: {
+          //     pixelRatio: 2
+          //   }
+          // }
+        },
+        series: [{
+          type: 'graph',
+          top: 670,
+          layout: 'none',
+          symbol: 'circle',
+          symbolSize: [50, 30],
+          roam: true,
+          label: {
+            normal: {
+              textStyle: {
+                color: '#fff',
+                fontSize: 10
+              },
+              show: true
+            }
+          },
+          edgeSymbol: ['circle', 'arrow'],
+          edgeSymbolSize: [5, 12],
+          edgeLabel: {
+            normal: {
+              textStyle: {
+                color: '#000',
+                fontSize: 10,
+                show: true
+              }
+            }
+          },
+          data: this.lineStations,
+          links: this.datas,
+          lineStyle: {
+            normal: {
+              opacity: 0.9,
+              width: 2,
+              curveness: 0
+            }
+          }
+        }]
+      }, true)
+    },
+    _getPfODYCountListData (params) {
+      this.loading = true
+      this.lineStations = []
+      this.datas = []
+      this.$api['lineNet.getPfODYCountListData'](params).then(res => {
+        if (res.nodes.length > 0) {
+          res.nodes.forEach((item, index) => {
+            this.lineStations.push({
+              'name': item.upStaName,
+              'y': 50,
+              'x': 400 + index * 200
+            })
+          })
+        } else {
+          this.lineStations = []
+        }
+        if (res.edges.length > 0) {
+          res.edges.forEach((item, index) => {
+            this.datas.push({
+              'source': item.upStaName,
+              'target': item.downStaName,
+              'lineStyle': {
+                'normal': {
+                  'width': 0.1 * item.payNumbers,
+                  'curveness': 0.9,
+                  'color': (() => {
+                    if (item.payNumbers < 30) {
+                      return COLOR_ARR[0]
+                    } else if (item.payNumbers < 60 && item.payNumbers >= 30) {
+                      return COLOR_ARR[1]
+                    } else if (item.payNumbers < 90 && item.payNumbers >= 60) {
+                      return COLOR_ARR[2]
+                    } else if (item.payNumbers < 120 && item.payNumbers >= 90) {
+                      return COLOR_ARR[3]
+                    } else if (item.payNumbers >= 120) {
+                      return COLOR_ARR[4]
+                    }
+                  })()
+                }
+              },
+              'label': {
+                'emphasis': {
+                  'textStyle': {
+                    'color': '#000',
+                    'fontSize': 16
+                  },
+                  'show': true,
+                  'formatter': `上车人数:${item.payNumbers}`
+                }
+              }
+            })
+          })
+        } else {
+          this.datas = []
+        }
+        console.log(this.lineStations)
+        console.log(this.datas)
+        setTimeout(() => {
+          this.loading = false
+        }, 1000)
+        this.drawLine()
       })
     }
+  },
+  components: {
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.g2-wrapper {
-  width: 60%;
-  height: 90%;
-  margin: 10vh auto 5vh;
+.dom {
+  width: 100%;
   box-sizing: border-box;
+  height: 100%;
+  .passenger-vol {
+    width:100%;
+    box-sizing: border-box;
+    height: 100%;
+  }
 }
 </style>
