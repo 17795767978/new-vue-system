@@ -49,6 +49,17 @@ export default {
       this.loading = true
       this.hotdata = []
       this.$api['homeMap.getBusHeatmapDatas']({ orgId }).then(res => {
+        if (res.length === 0) {
+          this.hotdata = []
+        } else {
+          res.forEach(item => {
+            this.hotdata.push({
+              lat: item.lat,
+              lng: item.lng,
+              count: item.getOnNumber
+            })
+          })
+        }
         this.hotdata = res
         this.max = 100
         this.loading = false
