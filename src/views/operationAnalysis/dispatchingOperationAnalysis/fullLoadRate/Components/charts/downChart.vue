@@ -142,7 +142,11 @@ export default {
           this.passengerFlow = []
         }
         if (isFullRate) {
-          this.fullRate = this.dataSource[3]
+          if (this.dataSource[3] && this.dataSource[3].length > 0) {
+            this.fullRate = this.dataSource[3].map(item => Number(item * 100).toFixed(2))
+          } else {
+            this.fullRate = this.dataSource[3]
+          }
           this.tabType.push('满载率')
         } else {
           this.fullRate = []
@@ -244,8 +248,6 @@ export default {
           },
           {
             type: 'value',
-            min: 0,
-            max: this.maxRate,
             interval: 20,
             splitLine: {
               show: false

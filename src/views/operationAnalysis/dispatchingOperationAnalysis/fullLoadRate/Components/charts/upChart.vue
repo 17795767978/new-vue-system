@@ -151,7 +151,11 @@ export default {
           this.passengerFlow = []
         }
         if (isFullRate) {
-          this.fullRate = this.dataSource[3]
+          if (this.dataSource[3] && this.dataSource[3].length > 0) {
+            this.fullRate = this.dataSource[3].map(item => Number(item * 100).toFixed(2))
+          } else {
+            this.fullRate = this.dataSource[3]
+          }
           this.tabType.push('满载率')
         } else {
           this.fullRate = []
@@ -160,7 +164,6 @@ export default {
       if (this.dataSource.length > 0) {
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
         this.maxRate = max(this.fullRate)
-        console.log(this.maxRate)
       }
       setTimeout(() => {
         this.drawLine()
@@ -173,26 +176,11 @@ export default {
         upChart.resize()
       })
       upChart.setOption({
-        // title: {
-        //   text: '实时满载率',
-        //   left: 'center',
-        //   textStyle: {
-        //     'color': '#000'
-        //   }
-        // },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
           }
-          // formatter: function (params, ticket, callback) {
-          //   console.log(params)
-          //   let valueRate = params[3].value
-          //   let valueUpPersonNum = params[0].value
-          //   let valueDownPersonNum = params[1].value
-          //   let passengerFlow = params[2].value
-          //   return params[0].name + '<br>' + '上车人数：' + valueUpPersonNum + '<br>' + '下车人数：' + valueDownPersonNum + '<br>' + '断面客流：' + passengerFlow + '<br>' + '满载率：' + valueRate + '%'
-          // }
         },
         color: ['#249cf9', '#fdb628', '#67e0e3', '#eb6f49'],
         legend: {
@@ -258,8 +246,6 @@ export default {
           },
           {
             type: 'value',
-            min: 0,
-            max: this.maxRate,
             interval: 20,
             splitLine: {
               show: false
