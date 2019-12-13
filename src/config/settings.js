@@ -36,7 +36,7 @@ export const API_DEFAULT_CONFIG = {
   // prodBaseUrl: 'http://192.168.10.233:8089', // 测试
   // prodBaseUrl: 'http://117.34.118.30:8089', // 自测
   // prodBaseUrl: 'http://61.157.184.120:8088', // 宜宾
-  prodBaseUrl: 'http://117.34.118.30:8010/', // 自测
+  prodBaseUrl: 'http://117.34.118.30:8010', // 自测
   // prodBaseUrl: 'http://111.62.52.35:8089', // 邢台
   isMocked: process.env.NODE_ENV !== 'production',
   isDebug: true,
