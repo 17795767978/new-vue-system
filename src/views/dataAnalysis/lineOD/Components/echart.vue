@@ -8,8 +8,9 @@
 <script type="text/ecmascript-6">
 import { mapGetters } from 'vuex'
 import elementResizeDetector from 'element-resize-detector'
+import moment from 'moment'
 // import 'echarts/extension/bmap/bmap'
-const COLOR_ARR = ['#fcd323', '#fba632', '#ff8440', '#ff6549', '#fe564e']
+const COLOR_ARR = ['#aeea3e', '#d0ea22', '#ffe20f', '#ff9050']
 export default {
   name: '',
   props: {
@@ -40,7 +41,8 @@ export default {
       this._getPfODYCountListData({
         company: this.defaultSearch.lineOrgId,
         lineID: lineArr[0],
-        arrow: this.defaultSearch.lineType
+        arrow: this.defaultSearch.lineType,
+        pDate: this.defaultSearch.dataCurrent
       })
     }, 500)
   },
@@ -53,7 +55,8 @@ export default {
         this._getPfODYCountListData({
           company: newV.lineOrgId,
           lineID: lineArr[0],
-          arrow: newV.lineType
+          arrow: newV.lineType,
+          pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
         })
       }
     }
@@ -97,7 +100,8 @@ export default {
           top: 670,
           layout: 'none',
           symbol: 'circle',
-          symbolSize: [50, 30],
+          color: '#7c79fc',
+          symbolSize: [60, 30],
           roam: true,
           label: {
             normal: {
@@ -167,7 +171,7 @@ export default {
                     } else if (item.brushCount < 120 && item.brushCount >= 90) {
                       return COLOR_ARR[3]
                     } else if (item.brushCount >= 120) {
-                      return COLOR_ARR[4]
+                      return COLOR_ARR[3]
                     }
                   })()
                 }
@@ -186,6 +190,7 @@ export default {
           })
         } else {
           this.datas = []
+          this.$message.warning('暂无数据')
         }
         console.log(this.lineStations)
         console.log(this.datas)

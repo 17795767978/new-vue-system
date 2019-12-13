@@ -1,6 +1,7 @@
 <template>
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
+      <el-row>
       <el-form-item label="选择机构">
         <el-select class="font-style" v-model="formInline.orgUuid" :disabled="disabled" placeholder="请选择">
           <el-option
@@ -36,6 +37,8 @@
           </el-option>
         </el-select>
       </el-form-item>
+      </el-row>
+      <el-row>
       <el-form-item label="选择自编号">
         <el-select class="font-style"
         filterable
@@ -51,6 +54,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="输入设备编号">
+        <el-input v-model="formInline.devCode"></el-input>
+      </el-form-item>
       <el-form-item label="在线状态">
         <el-radio v-model="formInline.devOnlineStatus" label="1">在线</el-radio>
         <el-radio v-model="formInline.devOnlineStatus" label="0">离线</el-radio>
@@ -59,6 +65,7 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear">重置</el-button>
       </el-form-item>
+      </el-row>
     </el-form>
   </div>
 </template>
@@ -76,7 +83,8 @@ export default {
         carSelf: '',
         devOnlineStatus: '1',
         pageSize: 1,
-        pageNumber: 15
+        pageNumber: 15,
+        devCode: ''
       },
       comOptions: [],
       lineOptions: [],
@@ -185,7 +193,8 @@ export default {
         devOnlineStatus: '1',
         pageSize: 1,
         pageNumber: 15,
-        orgUuid: this.userId === '1' ? '' : this.userId
+        orgUuid: this.userId === '1' ? '' : this.userId,
+        devCode: ''
       }
       this.$emit('selectConfig', this.formInline)
     }
@@ -203,7 +212,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0 1px 10px rgba(0,0,0, 0.5);
   .form-inline {
-   height: 38px;
+   height: 70px;
    .font-style {
      width: 200px;
    }

@@ -35,16 +35,19 @@ export default {
   },
   created () {
     // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    this.titleName = '二总站'
-    this._getrepeatPieData({
-      company: '二总站',
-      lineID: ''
+    this.$store.dispatch('getComSecList').then(res => {
+      this.titleName = res[0].value
+      this._getrepeatPieData({
+        company: this.titleName,
+        lineID: ''
+      })
     })
   },
   mounted () {
   },
   watch: {
     'echartsData.name': {
+      deep: true,
       handler (newV) {
         this.titleName = newV
         this._getrepeatPieData({
@@ -58,7 +61,9 @@ export default {
     _getrepeatPieData (params) {
       this.loading = true
       this.$api['lineNet.getrepeatPieData'](params).then(res => {
-        this.loading = false
+        setTimeout(() => {
+          this.loading = false
+        }, 1000)
         // this.maxMum = max(data)
         this.title = {
           text: `${this.titleName}线路重复度`,

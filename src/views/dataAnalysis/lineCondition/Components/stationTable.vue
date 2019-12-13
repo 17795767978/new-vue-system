@@ -23,7 +23,7 @@
         width="130"
         label="距离首站距离(km)">
         <template slot-scope="scope">
-          {{(Number(scope.row.predistance) / 1000).toFixed(5)}}
+          {{(Number(scope.row.predistance) / 1000).toFixed(2)}}
         </template>
       </el-table-column>
     </el-table>
@@ -45,24 +45,27 @@ export default {
   },
   data () {
     return {
-      tableData: []
+      tableData: [],
+      defaultCom: ''
     }
   },
   created () {
-    this._getLineCondition({
-      company: '一总站',
-      lineID: '',
-      arrow: '1'
+    this.$store.dispatch('getComSecList').then(res => {
+      this.defaultCom = res[0].value
+      this._getLineCondition({
+        company: this.defaultCom,
+        lineID: '',
+        arrow: '1'
+      })
     })
   },
   watch: {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         if (newV.lineLineId === '') {
           this._getLineCondition({
-            company: '一总站',
+            company: this.defaultCom,
             lineID: '',
             lineName: '',
             arrow: '1'
@@ -95,7 +98,6 @@ export default {
       }
     },
     stationData (newV) {
-      console.log(newV)
       let arrow = newV.seriesName.substring(0, 2) === '上行' ? '1' : '2'
       this._getLineCondition({
         company: '',

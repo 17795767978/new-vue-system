@@ -64,7 +64,7 @@ export default {
             type: 'shadow'
           },
           formatter: (params) => {
-            return `站对数: ${params[0].data}<br/>重复站位数：${params[1].data}<br/>重复比: ${params[2].data * 100}%`
+            return `站对数: ${params[0].data}<br/>重复站位数：${params[1].data}<br/>重复比: ${(params[2].data * 100).toFixed(2)}%`
           }
         }
         this.lineData = [

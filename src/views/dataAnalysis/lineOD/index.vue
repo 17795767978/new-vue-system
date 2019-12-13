@@ -5,6 +5,7 @@
       :isLineSec="true"
       :isTurn="true"
       :isEmpty="true"
+      :isDataCurrent="true"
       :isDownload="activeName === 'second'"
       :isDefault="true"
       :downLoadName="downLoadName"

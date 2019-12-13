@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :tooltip="tooltip" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
@@ -29,14 +29,19 @@ export default {
       maxNum: [],
       id: 'lineLength',
       grid: {},
-      loading: true
+      loading: true,
+      defaultCom: '',
+      tooltip: {}
     }
   },
   created () {
-    this._getMonthData({
-      company: '一总站',
-      lineID: ''
-    }, '一总站')
+    this.$store.dispatch('getComSecList').then(res => {
+      this.defaultCom = res[0].value
+      this._getMonthData({
+        company: this.defaultCom,
+        lineID: ''
+      }, this.defaultCom)
+    })
   },
   mounted () {
   },
@@ -44,12 +49,11 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         if (newV.lineLineId === '') {
           this._getMonthData({
-            company: '一总站',
+            company: this.defaultCom,
             lineID: ''
-          }, '一总站')
+          }, this.defaultCom)
         }
       }
     },
@@ -100,9 +104,15 @@ export default {
           y2: 30,
           borderWidth: 1
         }
+        this.tooltip = {
+          formatter: (params) => {
+            let num = (params.value / 1000).toFixed(2)
+            return `${params.name}<br />${params.seriesName}:${num}`
+          }
+        }
         this.lineData = [
           {
-            name: '上行线路长度',
+            name: '上行线路长度(KM)',
             type: 'bar',
             data: res.datas[0],
             barWidth: 15,
@@ -118,7 +128,7 @@ export default {
             // }
           },
           {
-            name: '下行线路长度',
+            name: '下行线路长度(KM)',
             type: 'bar',
             data: res.datas[1],
             barWidth: 15,
@@ -138,7 +148,7 @@ export default {
         this.dataLength = 2
         this.legend = [
           {
-            data: ['上行线路长度'],
+            data: ['上行线路长度(KM)'],
             right: 150,
             top: 10,
             textStyle: {
@@ -146,7 +156,7 @@ export default {
             }
           },
           {
-            data: ['下行线路长度'],
+            data: ['下行线路长度(KM)'],
             right: 10,
             top: 10,
             textStyle: {

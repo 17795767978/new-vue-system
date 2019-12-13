@@ -48,10 +48,13 @@ export default {
   },
   methods: {
     getSearch (item) {
-      this.searchData = item
+      if (item.dateArray.length === 0) {
+        this.$message.warning('请添加事件段查询')
+      } else {
+        this.searchData = item
+      }
     },
     echartsSelected (data) {
-      console.log(data)
       this.selectEcharts = data
     }
   },

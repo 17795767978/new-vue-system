@@ -57,17 +57,13 @@
         width="100"
         label="刷卡量（人次）">
       </el-table-column>
-      <el-table-column
-        prop="pDate"
-        align="center"
-        label="日期">
-      </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
   props: {
     selectData: {
@@ -101,6 +97,15 @@ export default {
       vDom.appendChild(vWrapper)
       vWrapper.appendChild(tableBody)
       tableBody.appendChild(emptyBlock)
+      setTimeout(() => {
+        let lineArr = this.defaultSearch.lineLineId.split('+')
+        this._getPfLineOdCountListData({
+          company: this.defaultSearch.lineOrgId,
+          lineID: lineArr[0],
+          arrow: this.defaultSearch.lineType,
+          pDate: this.defaultSearch.dataCurrent
+        })
+      }, 500)
     })
   },
   watch: {
@@ -111,7 +116,8 @@ export default {
         this._getPfLineOdCountListData({
           company: newV.lineOrgId,
           lineID: lineArr[0],
-          arrow: newV.lineType
+          arrow: newV.lineType,
+          pDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
         })
       }
     }

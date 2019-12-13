@@ -141,6 +141,7 @@ export default {
       orgId: this.userId === '1' ? '' : this.userId, // 组织机构
       busPlateNumber: '',
       busSelfCode: '',
+      devCode: '',
       devOnlineStatus: '1'
     })
   },
@@ -161,7 +162,8 @@ export default {
           pageSize: 10,
           busPlateNumber: this.selectData.car,
           busSelfCode: this.selectData.carSelf,
-          devOnlineStatus: this.selectData.devOnlineStatus
+          devOnlineStatus: this.selectData.devOnlineStatus,
+          devCode: this.selectData.devCode
         })
       }
       this.$emit('isUpdateTo')

@@ -1,11 +1,11 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :tooltip="tooltip" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { max } from '../../../../utils/max.js'
+// import { max } from '../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
   name: 'passengerHome',
@@ -26,7 +26,8 @@ export default {
       maxNum: [],
       id: 'dataLine',
       grid: {},
-      loading: true
+      loading: true,
+      tooltip: {}
     }
   },
   created () {
@@ -53,12 +54,12 @@ export default {
   methods: {
     getEchartsData (data) {
       this.$emit('changeEcharts', data)
-      console.log(data)
     },
     _getlineNumLength (params) {
       this.loading = true
       this.$api['lineNet.getlineNumLength'](params).then(res => {
         this.loading = false
+        let lineLength = res.datas[1].map(item => Number(item / 1000).toFixed(2))
         this.title = {
           text: '分公司线路条数/总长度',
           left: 'center',
@@ -75,6 +76,13 @@ export default {
           y2: 30,
           borderWidth: 1
         }
+        this.tooltip = {
+          // formatter: (params) => {
+          //   console.log(params)
+          //   // let num = (params.value / 1000).toFixed(2)
+          //   // return `${params.name}<br />${params.seriesName}:${num}km`
+          // }
+        }
         this.lineData = [
           {
             name: '线路总数',
@@ -83,27 +91,27 @@ export default {
             barWidth: 20
           },
           {
-            name: '线路长度',
+            name: '线路长度(KM)',
             type: 'line',
             yAxisIndex: 1,
-            data: res.datas[1],
+            data: lineLength,
             smooth: false
           }
         ]
-        this.maxNum = [max(res.datas[0]), max(res.datas[1])]
+        // this.maxNum = [max(res.datas[0]), max(res.datas[1])]
         this.dataLength = 2
         this.legend = [
           {
             data: ['线路总数'],
-            right: 100,
+            right: 130,
             top: 10,
             textStyle: {
               color: '#000'
             }
           },
           {
-            data: ['线路长度'],
-            right: 10,
+            data: ['线路长度(KM)'],
+            right: 0,
             top: 10,
             textStyle: {
               color: '#000'
@@ -133,12 +141,6 @@ export default {
         ]
         this.yData = [
           {
-            min: 0,
-            max: this.maxNum[0],
-            interval: Math.ceil(this.maxNum[0] / 6),
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
             splitLine: {
               show: false
             },

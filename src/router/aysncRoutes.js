@@ -348,6 +348,17 @@ export const aysncRoutesMap = [
             roles: ['/alarm-management']
           }
         }
+        // parameterSetting
+        // {
+        //   path: 'parameter-setting',
+        //   component: _import_('operationAnalysis/fatigueMonitoring/parameterSetting/index'),
+        //   name: 'parameterSetting',
+        //   meta: {
+        //     title: '设备参数下发',
+        //     icon: 'nocturne icon-dash',
+        //     roles: ['/alarm-management']
+        //   }
+        // }
       ]
     }
     ]

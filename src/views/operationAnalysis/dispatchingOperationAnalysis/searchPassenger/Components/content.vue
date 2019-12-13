@@ -1,5 +1,9 @@
 <template>
   <div class="table-wrapper" v-loading="loading">
+    <div class="total">
+      <span style="font-size: 1vw;margin-right: 1vw;">上车人数: {{totalOnPersonCount}}</span>
+      <span style="font-size: 1vw;">下车人数: {{totalOffPersonCount}}</span>
+    </div>
     <el-table
       :data="tableData"
       element-loading-text="拼命加载中"
@@ -142,7 +146,9 @@ export default {
       pageSize: 15,
       downLoadData: [],
       loading: true,
-      isDisabled: false
+      isDisabled: false,
+      totalOnPersonCount: 0,
+      totalOffPersonCount: 0
     }
   },
   computed: {
@@ -203,8 +209,10 @@ export default {
       this.isDisabled = true
       if (type === '1') {
         this.$api['passengerFlow.todayList'](params).then(res => {
-          this.tableData = res.list
-          this.total = res.total
+          this.tableData = res.pageInfo.list
+          this.total = res.pageInfo.total
+          this.totalOnPersonCount = res.totalOnPersonCount
+          this.totalOffPersonCount = res.totalOffPersonCount
           this.$message.success('数据已更新')
           this.loading = false
           this.isDisabled = false
@@ -215,8 +223,10 @@ export default {
         })
       } else {
         this.$api['passengerFlow.list'](params).then(res => {
-          this.tableData = res.list
-          this.total = res.total
+          this.tableData = res.pageInfo.list
+          this.total = res.pageInfo.total
+          this.totalOnPersonCount = res.totalOnPersonCount
+          this.totalOffPersonCount = res.totalOffPersonCount
           this.$message.success('数据已更新')
           this.loading = false
           this.isDisabled = false
@@ -279,7 +289,7 @@ export default {
 <style lang="scss" scoped>
 .table-wrapper {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 5px;
   padding: 20px 20px;
   box-sizing: border-box;
 }
