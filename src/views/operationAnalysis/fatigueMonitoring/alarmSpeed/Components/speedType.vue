@@ -41,7 +41,7 @@ export default {
     this.selectData = this.formData
     this.selectData.orgId = this.userId
     this._getAlarmTypeRatioAnalysis({
-      orgId: this.selectData.orgId,
+      orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
@@ -58,7 +58,7 @@ export default {
         this.selectData = newV
         this.echartsData = ''
         this._getAlarmTypeRatioAnalysis({
-          orgId: this.selectData.orgId,
+          orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
@@ -70,7 +70,7 @@ export default {
       handler (newV) {
         this.echartsData = newV
         this._getAlarmTypeRatioAnalysis({
-          orgId: this.selectData.orgId,
+          orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
