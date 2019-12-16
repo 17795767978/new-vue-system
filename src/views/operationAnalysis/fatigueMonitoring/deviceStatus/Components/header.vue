@@ -39,7 +39,7 @@
       </el-form-item>
       </el-row>
       <el-row>
-      <el-form-item label="选择自编号">
+      <el-form-item label="输入自编号">
         <el-select class="font-style"
         filterable
         remote
