@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     _getMidLinePFData (params) {
-      this.$api['lineNet.getMidLinePFData'](params).then(res => {
+      this.$api['lineNet.getPfBaseListData'](params).then(res => {
         this.tableData = res
       })
     }

@@ -93,8 +93,8 @@ export const lineNetApi = {
     {
       name: 'getPfBaseListData',
       method: 'POST',
-      path: '/api/mid/pf/detail/time/data/getMidLinePFData',
-      mockPath: '/api/mid/pf/detail/time/data/getMidLinePFData',
+      path: '/api/mid/pf/detail/data/getMidLineStaPFData',
+      mockPath: '/api/mid/pf/detail/data/getMidLineStaPFData',
       params: {
         orgUuid: '',
         lineUuid: '',
@@ -316,8 +316,8 @@ export const lineNetApi = {
     {
       name: 'getMidLinePFData',
       method: 'POST',
-      path: '/api/mid/pf/detail/data/getMidLineStaPFData',
-      mockPath: '/api/mid/pf/detail/data/getMidLineStaPFData',
+      path: '/api/mid/pf/detail/time/data/getMidLinePFData',
+      mockPath: '/api/mid/pf/detail/time/data/getMidLinePFData',
       params: {
         orgUuid: '',
         lineUuid: '',

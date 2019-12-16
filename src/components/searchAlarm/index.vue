@@ -190,6 +190,7 @@
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
         <el-button type="success" @click="onSave" v-if="isDownload">导出</el-button>
         <el-button type="success" @click="getTableData" v-if="isMul">批量设置</el-button>
+        <slot name="download"></slot>
       </el-form-item>
     </el-form>
     <el-dialog
@@ -406,7 +407,7 @@ export default {
     this.formInline.lineId = defaultForm.lineId
     this.formInline.lineIds = defaultForm.lineIds
     this.formInline.lineType = defaultForm.lineType
-    this.formInline.dataCurrent = defaultForm.currentDate
+    this.formInline.dataCurrent = defaultForm.dateYes
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
     this.formInline.month = month
@@ -537,7 +538,9 @@ export default {
       handler (newV) {
         if (newV === '1') {
           console.log(this.formInline.dataCurrent)
-          this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
+          let date = moment().valueOf()
+          date = moment(date).format('YYYY-MM-DD')
+          this.formInline.dateArray = [date, date]
         }
       }
     }
@@ -743,17 +746,18 @@ export default {
         lineArr = this.formInline.lineLineId.split('+')
       }
       this.$api[`${this.downLoadName}`]({
-        company: this.formInline.lineOrgId,
-        lineId: this.formInline.lineId,
+        // orgUuid: this.formInline.lineOrgId,
+        lineUuid: this.formInline.lineId,
         lineID: lineArr[0],
-        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
-        arrow: this.isTurn ? this.formInline.lineType : '',
+        orgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
+        lineType: this.isTurn ? this.formInline.lineType : '',
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
-        pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
+        uploadDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
         startTime: this.formInline.dateArray[0],
         endTime: this.formInline.dateArray[1],
-        data: this.formDown
+        data: this.formDown,
+        date: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : ''
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

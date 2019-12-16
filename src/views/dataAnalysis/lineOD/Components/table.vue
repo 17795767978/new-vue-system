@@ -197,18 +197,14 @@ export default {
     getScroll (table, vDom, vWrapper) {
       return () => {
         if (this.tableLength >= 40) {
-          console.log(table.scrollHeight)
-          console.log(table.scrollTop)
-          console.log(table.clientHeight)
           if (table.scrollTop < 50 * this.tableLength) {
             this.scrollHeight = table.scrollTop
           } else {
             this.scrollHeight = 50 * this.tableLength
           }
           let domNum = Math.floor(this.scrollHeight / 50)
-          if (this.scrollHeight >= 50 * this.tableLength - 12 * 50) {
+          if (this.scrollHeight > 50 * this.tableLength - 20 * 50) {
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
-            domNum = Math.floor(domNum)
             this.tableData = this.tableAllData.slice(this.tableLength - 20, this.tableLength + 1)
           } else {
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`

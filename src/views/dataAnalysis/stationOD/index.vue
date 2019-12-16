@@ -3,7 +3,6 @@
     <Search
       :isMonth="true"
       :isEmpty="true"
-      :isDownload="true"
       @configCheck="getSearch"
       @emptySelect="handlerEmpty"
     >
@@ -46,16 +45,37 @@
       -
       <el-input class="default" min="0" v-model="slotData.endNum" size="mini"
         style="width: 7vw;margin-right: 1vw;" type="number"></el-input>
+        <el-button slot="download" type="success" size="mini" @click="centerDialogVisible = true">导出</el-button>
     </Search>
     <div class="table">
       <Table :selectData="selectData"/>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+       <p>导出只支持最大下载量为65536条，如果超过65536条默认下载前65536条</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="getExcel"  :loading="downLoadLoading">确认</el-button>
+        <!-- <downloadExcel
+          :data= "excelData"
+          type="xls"
+          style="display: inline-block; margin-left: 10px;"
+          name= "客流查询报表.xls"
+        >
+
+        </downloadExcel> -->
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
+import moment from 'moment'
 export default {
   name: 'stationOD',
   data () {
@@ -68,7 +88,9 @@ export default {
         endDis: '',
         startNum: '',
         endNum: ''
-      }
+      },
+      centerDialogVisible: false,
+      downLoadLoading: false
     }
   },
   watch: {
@@ -126,6 +148,35 @@ export default {
         endDis: '',
         startNum: '',
         endNum: ''
+      }
+    },
+    getExcel () {
+      console.log(this.selectData)
+      this.downLoadLoading = true
+      if (Object.keys(this.selectData).length > 0) {
+        this.$api['downLoad.stationODExports']({
+          month: moment(this.selectData.month).format('YYYY-MM'),
+          linearDistanceMin: this.slotData.startDis,
+          linearDistanceMax: this.slotData.endDis,
+          payNumberMin: this.slotData.startNum,
+          payNumberMax: this.slotData.endNum,
+          upStaUuid: '',
+          downStaUuid: '',
+          payTimeIntervalMin: this.slotData.stHour,
+          payTimeIntervalMax: this.slotData.edHour
+        }).then(res => {
+          this.downLoadLoading = false
+          // console.log(res)
+          window.open(res.url)
+          // window.location.href = res.url
+          this.centerDialogVisible = false
+          this.$message.success('正在下载中。。。')
+        }).catch((err) => {
+          this.downLoadLoading = false
+          this.$message.error(err.message)
+        })
+      } else {
+        this.$message.warning('请先查询再导出')
       }
     }
   },

@@ -70,7 +70,7 @@
        <p style="font-weight: bold">导出只支持最大下载量为65536条，如果超过65536条默认下载前65536条</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="getExcel">确认</el-button>
+        <el-button type="primary" @click="getExcel" :loading="isLoading">确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -120,7 +120,8 @@ export default {
       centerDialogVisible: false,
       laoding: true,
       code: '加载中',
-      disabled: false
+      disabled: false,
+      isLoading: false
     }
   },
   created () {
@@ -283,24 +284,46 @@ export default {
       this.centerDialogVisible = true
     },
     getExcel () {
+      this.isLoading = true
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
-      this.$api['downLoad.export']({
-        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
-        lineId: this.formInline.lineId,
-        lineType: this.formInline.lineType,
-        busNumber: this.formInline.busNumber,
-        startTime: this.formInline.startTime,
-        endTime: this.formInline.endTime
-      }).then(res => {
+      if (this.formInline.radio === '1') {
+        this.$api['downLoad.todayExport']({
+          orgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
+          lineUuid: this.formInline.lineId,
+          lineType: this.formInline.lineType,
+          busPlateNumber: this.formInline.busNumber,
+          sTime: this.formInline.startTime,
+          eTime: this.formInline.endTime
+        }).then(res => {
         // console.log(res)
-        window.open(res.url)
-        // window.location.href = res.url
-        this.centerDialogVisible = false
-        this.$message.success('正在下载中。。。')
-      }).catch((err) => {
-        this.$message.error(err.message)
-      })
+          this.isLoading = false
+          window.open(res.url)
+          // window.location.href = res.url
+          this.centerDialogVisible = false
+          this.$message.success('正在下载中。。。')
+        }).catch((err) => {
+          this.$message.error(err.message)
+        })
+      } else {
+        this.$api['downLoad.historyExport']({
+          orgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
+          lineUuid: this.formInline.lineId,
+          lineType: this.formInline.lineType,
+          busPlateNumber: this.formInline.busNumber,
+          sTime: this.formInline.startTime,
+          eTime: this.formInline.endTime
+        }).then(res => {
+        // console.log(res)
+          this.isLoading = false
+          window.open(res.url)
+          // window.location.href = res.url
+          this.centerDialogVisible = false
+          this.$message.success('正在下载中。。。')
+        }).catch((err) => {
+          this.$message.error(err.message)
+        })
+      }
     }
   },
   components: {

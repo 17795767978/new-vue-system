@@ -9,6 +9,7 @@
       :isDefaultEmpty="true"
       :isDownload="true"
       @configCheck="getSearch"
+      :downLoadName="downLoadName"
     />
     <div class="table">
       <Table :selectData="selectData" @changeEcharts="changeEcharts"/>
@@ -28,7 +29,8 @@ export default {
   data () {
     return {
       selectData: {},
-      echartsData: {}
+      echartsData: {},
+      downLoadName: 'downLoad.lineFlowExports'
     }
   },
   methods: {

@@ -1,15 +1,22 @@
 export const downLoadApi = {
   downLoad: [
     {
-      name: 'export',
+      name: 'todayExport',
       method: 'POST',
-      path: '/api/passenger/flow/result/detail/export',
-      mockPath: '/api/passenger/flow/result/detail/export',
+      path: '/api/temp/ic/card/data/export',
+      mockPath: '/api/temp/ic/card/data/export',
       params: {
-        orgId: '',
-        dateTime: ''
       },
-      desc: '客流报表下载'
+      desc: '客流报表下载（today）'
+    },
+    {
+      name: 'historyExport',
+      method: 'POST',
+      path: '/api/mid/id/card/data/export',
+      mockPath: '/api/mid/id/card/data/export',
+      params: {
+      },
+      desc: '客流报表下载（history）'
     },
     {
       name: 'warnExport',
@@ -33,14 +40,15 @@ export const downLoadApi = {
     {
       name: 'totalDataExport',
       method: 'POST',
-      path: '/api/net/index/pf/base/export',
-      mockPath: '/api/net/index/pf/base/export',
+      path: '/api/mid/pf/detail/data/export',
+      mockPath: '/api/mid/pf/detail/data/export',
       params: {
-        company: '',
-        lineID: '',
-        arrow: '',
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
         startStation: '',
-        endStation: ''
+        endStation: '',
+        date: ''
       },
       desc: '数据综合查询导出'
     },
@@ -69,11 +77,13 @@ export const downLoadApi = {
     {
       name: 'ODExport',
       method: 'POST',
-      path: '/api/net/index/pf/od/export',
-      mockPath: '/api/net/index/pf/od/export',
+      path: '/api/anal/line/od/data/export',
+      mockPath: '/api/anal/line/od/data/export',
       params: {
-        orgId: '',
-        dateTime: ''
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        uploadDate: ''
       },
       desc: '线路OD导出'
     },
@@ -89,6 +99,37 @@ export const downLoadApi = {
         endDate: ''
       },
       desc: '客流查询导出'
+    },
+    {
+      name: 'stationODExports',
+      method: 'POST',
+      path: '/api/anal/sta/od/month/data/export',
+      mockPath: '/api/anal/sta/od/month/data/export',
+      params: {
+        month: '',
+        linearDistanceMin: '',
+        linearDistanceMax: '',
+        payNumberMin: '',
+        payNumberMax: '',
+        upStaUuid: '',
+        downStaUuid: '',
+        payTimeIntervalMin: '',
+        payTimeIntervalMax: ''
+      },
+      desc: '全市站点OD矩阵_导出'
+    },
+    {
+      name: 'lineFlowExports',
+      method: 'POST',
+      path: '/api/mid/pf/detail/time/data/export',
+      mockPath: '/api/mid/pf/detail/time/data/export',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        date: ''
+      },
+      desc: '线路客流查询-列表导出'
     }
   ]
 }

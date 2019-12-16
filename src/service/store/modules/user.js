@@ -10,6 +10,7 @@ import moment from 'moment'
 let data = moment(new Date()).valueOf()
 let currentHour = moment(new Date()).format('HH:00')
 let dateBefore = data - 24 * 3600 * 1000 * 7
+let dateYes = data - 24 * 3600 * 1000 * 1
 dateBefore = moment(dateBefore).format('YYYY-MM-DD')
 data = moment(data).format('YYYY-MM-DD')
 const user = {
@@ -134,6 +135,7 @@ const user = {
         let form = {
           lineType: '1',
           currentDate: data,
+          dateYes,
           startHour: '06:00',
           endHour: currentHour,
           dateArray: [dateBefore, data],
