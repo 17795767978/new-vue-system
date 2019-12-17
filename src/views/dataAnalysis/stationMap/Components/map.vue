@@ -1,5 +1,9 @@
 <template>
 <div class="dom" ref="topWrapper">
+  <div style="position: absolute; z-index:1200; left: 2vw;top: 5vh;">
+  <el-button type="primary" size="mini" v-if="play" @click="play = !play">停止</el-button>
+  <el-button type="primary" size="mini" v-else @click="play = !play">重置</el-button>
+  </div>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
   </div>
 </div>
@@ -42,7 +46,12 @@ export default {
       lineType: '',
       bgColor: '',
       geo: {},
-      bmap: {}
+      bmap: {},
+      play: false,
+      currentTime: '',
+      dataOptions: [],
+      dataOptionsAll: [],
+      timer: null
     }
   },
   created () {
@@ -56,7 +65,22 @@ export default {
   },
   watch: {
     datas (newV) {
+      this.currentTime = 0
       this._getStationCharts(newV)
+      setInterval(() => {
+        this.currentTime += 1
+      }, 3000)
+    },
+    play (newV) {
+      if (this.dataOptions.length > 0) {
+        if (!newV) {
+          this.drawLine([this.dataOptions[1]])
+        } else {
+          this.drawLine(this.dataOptions)
+        }
+      } else {
+        this.$message.warning('暂无数据')
+      }
     }
   },
   methods: {
@@ -101,11 +125,16 @@ export default {
           tooltip: {
             trigger: 'item',
             formatter: function (v) {
-              if (typeof (v.data.fromName) === 'undefined') {
-                return v.data.name
+              if (Object.prototype.toString.call(v.data.value) === `[object Array]`) {
+                return `${v.data.name}上车人数：${v.data.value[2]}`
               } else {
-                return v.data.fromName + ' > ' + v.data.toName + '<br />' + v.data.value + '人次'
+                return `上车人数：${v.data.value}`
               }
+              // if (typeof (v.data.fromName) === 'undefined') {
+              //   return v.data.name
+              // } else {
+              //   return v.data.value
+              // }
             }
           },
           legend: {
@@ -120,11 +149,11 @@ export default {
           },
           dataRange: {
             min: 0,
-            max: 1200,
+            max: 10,
             left: 'right',
             top: 'middle',
             calculable: true,
-            color: ['#FF0000', 'yellow', '#A7FF97'],
+            color: ['#FF0000', 'yellow', '#E6A23C', '#409EFF'],
             textStyle: {
               color: '#fff'
             }
@@ -152,10 +181,12 @@ export default {
         this.loading = false
       }, 1000)
       if (params && Object.keys(params.echartMaps).length > 0) {
-        let options = []
+        this.play = true
+        this.dataOptions = []
         series.forEach((item, index) => {
+          this.currentTime = TIME_DATA[index]
           console.log(item)
-          options.push({
+          this.dataOptions.push({
             title: {
               text: `OD数据分析${TIME_DATA[index]}`,
               left: 'middle',
@@ -167,7 +198,7 @@ export default {
             series: item
           })
         })
-        this.drawLine(options)
+        this.drawLine(params)
       } else {
         this.drawLine()
       }
