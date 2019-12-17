@@ -10,7 +10,7 @@ import moment from 'moment'
 import { mapGetters } from 'vuex'
 import elementResizeDetector from 'element-resize-detector'
 // import 'echarts/extension/bmap/bmap'
-const COLOR_ARR = ['#fcd323', '#fba632', '#ff8440', '#ff6549', '#fe564e']
+const COLOR_ARR = ['#aeea3e', '#d0ea22', '#ffe20f', '#ff9050']
 export default {
   name: '',
   props: {
@@ -68,7 +68,7 @@ export default {
       window.addEventListener('resize', () => { charts.resize() })
       charts.setOption({
         title: [{
-          text: '线路OD图',
+          text: '站点OD图',
           top: 10,
           left: 'center'
         }
@@ -100,7 +100,8 @@ export default {
           top: 670,
           layout: 'none',
           symbol: 'circle',
-          symbolSize: [50, 30],
+          color: '#7c79fc',
+          symbolSize: [60, 30],
           roam: true,
           label: {
             normal: {
@@ -169,7 +170,7 @@ export default {
                     } else if (item.payNumbers < 120 && item.payNumbers >= 90) {
                       return COLOR_ARR[3]
                     } else if (item.payNumbers >= 120) {
-                      return COLOR_ARR[4]
+                      return COLOR_ARR[3]
                     }
                   })()
                 }
@@ -189,8 +190,6 @@ export default {
         } else {
           this.datas = []
         }
-        console.log(this.lineStations)
-        console.log(this.datas)
         setTimeout(() => {
           this.loading = false
         }, 1000)

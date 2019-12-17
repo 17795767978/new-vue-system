@@ -50,7 +50,6 @@ export default {
       play: false,
       currentTime: '',
       dataOptions: [],
-      dataOptionsAll: [],
       timer: null
     }
   },
@@ -63,19 +62,37 @@ export default {
     })
     this._getStationCharts()
   },
+  activated () {
+  },
+  deactivated () {
+    // console.log(321)
+    clearInterval(this.timer)
+    this.timer = null
+  },
+  destroyed () {
+    clearInterval(this.timer)
+    this.timer = null
+  },
   watch: {
     datas (newV) {
       this.currentTime = 0
+      if (this.timer) {
+        clearInterval(this.timer)
+        this.timer = null
+      }
       this._getStationCharts(newV)
-      setInterval(() => {
-        this.currentTime += 1
-      }, 3000)
+      if (newV.echartMaps && newV.echartMaps.length > 0) {
+        this.timer = setInterval(() => {
+          this.currentTime += 1
+        }, 5000)
+      }
     },
     play (newV) {
       if (this.dataOptions.length > 0) {
         if (!newV) {
-          this.drawLine([this.dataOptions[1]])
+          this.drawLine([this.dataOptions[this.currentTime]])
         } else {
+          this.currentTime = 0
           this.drawLine(this.dataOptions)
         }
       } else {
@@ -85,6 +102,7 @@ export default {
   },
   methods: {
     drawLine (params) {
+      console.log(params)
       let charts = this.$echarts.init(document.getElementsByClassName('passenger-vol')[0])
       charts.off('click')
       window.addEventListener('resize', () => { charts.resize() })
@@ -98,7 +116,7 @@ export default {
             // loop: false,
             autoPlay: true,
             // currentIndex: 2,
-            playInterval: 3000,
+            playInterval: 5000,
             symbol: 'emptyCircle',
             lineStyle: {
               color: '#FFFFFF',
@@ -149,7 +167,7 @@ export default {
           },
           dataRange: {
             min: 0,
-            max: 10,
+            max: 50,
             left: 'right',
             top: 'middle',
             calculable: true,
@@ -170,7 +188,7 @@ export default {
         options: params
       }, true)
     },
-    async _getStationCharts (params) {
+    _getStationCharts (params) {
       let series = []
       if (params && Object.keys(params.echartMaps).length > 0) {
         for (let i = 0; i < params.echartMaps.length; i++) {
@@ -184,8 +202,6 @@ export default {
         this.play = true
         this.dataOptions = []
         series.forEach((item, index) => {
-          this.currentTime = TIME_DATA[index]
-          console.log(item)
           this.dataOptions.push({
             title: {
               text: `OD数据分析${TIME_DATA[index]}`,
@@ -198,7 +214,7 @@ export default {
             series: item
           })
         })
-        this.drawLine(params)
+        this.drawLine(this.dataOptions)
       } else {
         this.drawLine()
       }
@@ -250,7 +266,7 @@ export default {
           },
           lineStyle: {
             normal: {
-              width: 1, // 尾迹线条宽度
+              width: 2.5, // 尾迹线条宽度
               opacity: 1, // 尾迹线条透明度
               curveness: 0.3 // 尾迹线条曲直度
             }
@@ -281,7 +297,8 @@ export default {
           },
           symbol: 'circle',
           symbolSize: function (val) {
-            return 5 + val[2] / 6 // 圆环大小
+            console.log(val[2])
+            return 5 + val[2] // 圆环大小
           },
           itemStyle: {
             normal: {
