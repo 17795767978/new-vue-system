@@ -254,7 +254,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '疲劳监测',
         icon: 'nocturne icon-dash',
-        roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed']
+        roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter']
       },
       children: [
         {
@@ -347,18 +347,29 @@ export const aysncRoutesMap = [
             icon: 'nocturne icon-dash',
             roles: ['/alarm-management']
           }
-        }
+        },
+        {
+          path: 'device-parameter',
+          component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
+          name: 'deviceParameter',
+          meta: {
+            title: '设备参数下发',
+            icon: 'nocturne icon-dash',
+            roles: ['/device-status']
+          }
+        },
         // parameterSetting
-        // {
-        //   path: 'parameter-setting',
-        //   component: _import_('operationAnalysis/fatigueMonitoring/parameterSetting/index'),
-        //   name: 'parameterSetting',
-        //   meta: {
-        //     title: '设备参数下发',
-        //     icon: 'nocturne icon-dash',
-        //     roles: ['/alarm-management']
-        //   }
-        // }
+        {
+          path: 'parameter-setting',
+          component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
+          name: 'parameterSetting',
+          hidden: true,
+          meta: {
+            title: '设备参数下发详情',
+            icon: 'nocturne icon-dash',
+            roles: ['/device-status']
+          }
+        }
       ]
     }
     ]
