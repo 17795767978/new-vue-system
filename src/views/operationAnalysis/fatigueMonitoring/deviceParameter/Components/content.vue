@@ -25,9 +25,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-import dialogWrapper from './dialog'
-import headerNav from './header'
-import tableWrapper from './table'
+import dialogWrapper from './Dialog'
+import headerNav from './Header'
+import tableWrapper from './Table'
 export default {
   name: 'deviceContent',
   data () {
