@@ -755,7 +755,9 @@ export default {
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
         startTime: this.formInline.dateArray[0],
         endTime: this.formInline.dateArray[1],
-        data: this.formDown
+        data: this.formDown,
+        sStation: this.isStation ? this.formInline.startStation.value : '',
+        eStation: this.isStation ? this.formInline.endStation.value : ''
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)
