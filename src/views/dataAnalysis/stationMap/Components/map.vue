@@ -1,8 +1,8 @@
 <template>
 <div class="dom" ref="topWrapper">
   <div style="position: absolute; z-index:1200; left: 2vw;top: 5vh;">
-  <el-button type="primary" size="mini" v-if="play" @click="play = !play">停止</el-button>
-  <el-button type="primary" size="mini" v-else @click="play = !play">重置</el-button>
+  <el-button type="primary" size="mini" v-if="play && datas.echartMaps && datas.echartMaps.length > 0" @click="play = !play">停止</el-button>
+  <el-button type="primary" size="mini" v-if="!play && datas.echartMaps && datas.echartMaps.length > 0" @click="play = !play">重播</el-button>
   </div>
   <div class="passenger-vol" ref="wrapper" v-loading="loading">
   </div>
@@ -102,7 +102,6 @@ export default {
   },
   methods: {
     drawLine (params) {
-      console.log(params)
       let charts = this.$echarts.init(document.getElementsByClassName('passenger-vol')[0])
       charts.off('click')
       window.addEventListener('resize', () => { charts.resize() })

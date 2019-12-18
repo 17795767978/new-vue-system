@@ -165,6 +165,7 @@ export default {
 
 <style lang="scss" scoped>
 .passenger-home {
+  width: 99% !important;
   position: absolute;
   top: 0;
   left: 0;

@@ -52,10 +52,10 @@ const LINE_NET = [
   { name: '线路站点客流查询', icon: iconHomeFctc, path: '/comprehensive-query', admin: false },
   { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate', admin: false },
   { name: '客流详情查询', icon: iconHomeXlzd, path: '/search-passenger', admin: false },
-  { name: '设备状态', icon: iconHomeYxsj, path: '/device-status', admin: false },
-  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false },
-  { name: '报警类型管理', icon: iconHomeKlgf, path: '/alarm-management', admin: false },
-  { name: '报警类型管理', icon: iconHomeBjzt, path: '/alarm-management', admin: false }
+  { name: '站点OD矩阵', icon: iconHomeYxsj, path: '/station-od', admin: false },
+  { name: '线路客流查询', icon: iconHomeBjfx, path: '/line-passenger-flow', admin: false },
+  { name: '客流热力分析', icon: iconHomeKlgf, path: '/hot-map', admin: false },
+  { name: '站点OD电子地图', icon: iconHomeBjzt, path: '/station-map', admin: false }
 ]
 // const LINE_NET = []
 export default {
