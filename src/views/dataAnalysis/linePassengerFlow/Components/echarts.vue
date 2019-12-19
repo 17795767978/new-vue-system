@@ -7,6 +7,7 @@
 <script type="text/ecmascript-6">
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   name: 'passengerHome',
   props: {
@@ -34,11 +35,15 @@ export default {
       lineType: ''
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   created () {
-    // let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-    let date = moment().format('YYYY-MM-DD')
+    let date = moment().valueOf()
+    date = date - 24 * 60 * 60 * 1000
+    date = moment(date).format('YYYY-MM-DD')
     this._getStationCharts({
-      orgUuid: '',
+      orgUuid: this.userId === '1' ? '' : this.userId,
       lineUuid: '',
       lineType: '1',
       date
@@ -55,6 +60,7 @@ export default {
         this._getStationCharts({
           orgUuid: newV.orgId,
           lineUuid: newV.lineId,
+          lineName: '',
           lineType: newV.lineType,
           date: moment(newV.dataCurrent).format('YYYY-MM-DD')
         })
@@ -63,12 +69,26 @@ export default {
     echartsData (newV) {
       this.lineName = newV.lineName
       this.lineType = newV.lineType === '1' ? '上行' : '下行'
-      this._getStationCharts({
-        orgUuid: this.selectData.orgId,
-        lineName: newV.lineName,
-        lineType: this.selectData.lineType,
-        date: moment(this.selectData.dataCurrent).format('YYYY-MM-DD')
-      })
+      // if () {}
+      console.log(this.selectData.dataCurrent)
+      if (Object.keys(this.selectData).length === 0) {
+        let date = moment().valueOf()
+        date = date - 24 * 60 * 60 * 1000
+        date = moment(date).format('YYYY-MM-DD')
+        this._getStationCharts({
+          orgUuid: this.selectData.orgId,
+          lineName: newV.lineName,
+          lineType: newV.lineType,
+          date: date
+        })
+      } else {
+        this._getStationCharts({
+          orgUuid: this.selectData.orgId,
+          lineName: newV.lineName,
+          lineType: newV.lineType,
+          date: moment(this.selectData.dataCurrent).format('YYYY-MM-DD')
+        })
+      }
     }
   },
   methods: {

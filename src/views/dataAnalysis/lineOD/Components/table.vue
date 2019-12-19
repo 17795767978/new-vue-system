@@ -83,20 +83,19 @@ export default {
       tableData: [],
       tableLength: 0,
       scrollHeight: 0,
-      tableAllData: []
+      tableAllData: [],
+      lineId: ''
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   created () {
-    console.log(123)
-    this._getPfLineOdCountListData({
-      orgUuid: this.formData.orgId,
-      lineUuid: this.formData.lineId,
-      lineType: this.formData.lineType,
-      uploadDate: this.formData.currentDate
-    })
+    if (this.userId !== '1') {
+      this.$store.dispatch('getLineList').then(res => {
+        this.lineId = res[0].value
+      })
+    }
   },
   mounted () {
     this.$nextTick(() => {
@@ -114,6 +113,14 @@ export default {
       tableBody.appendChild(emptyBlock)
       console.log(vDom)
       console.log(table)
+      setTimeout(() => {
+        this._getPfLineOdCountListData({
+          orgUuid: this.userId === '1' ? '' : this.userId,
+          lineUuid: this.lineId === '' ? this.formData.lineId : this.lineId,
+          lineType: this.formData.lineType,
+          uploadDate: moment(this.formData.dateYes).format('YYYY-MM-DD')
+        })
+      }, 500)
     })
   },
   watch: {

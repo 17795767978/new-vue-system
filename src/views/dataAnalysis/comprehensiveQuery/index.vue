@@ -47,6 +47,7 @@ export default {
   },
   methods: {
     getSearch (data) {
+      console.log(data)
       this.selectData = data
     }
   },

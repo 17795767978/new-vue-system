@@ -347,8 +347,12 @@ export default {
       disabled: false,
       isLinkage: false,
       downLoadStr: '',
-      downLoadLoading: false
+      downLoadLoading: false,
+      lineId: ''
     }
+  },
+  computed: {
+    ...mapGetters(['userId', 'formDown'])
   },
   created () {
     this.formInline.orgId = ''
@@ -357,8 +361,9 @@ export default {
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
-    this.$store.dispatch('getLineList').then(res => {
+    this.$store.dispatch('getLineList', this.userId).then(res => {
       this.lineOptions = res
+      this.lineId = this.lineOptions[0].value
     })
     this.$store.dispatch('getCarList').then(res => {
       this.carOptions = res
@@ -383,27 +388,32 @@ export default {
     }, 20)
     // this._stationList()
   },
-  computed: {
-    ...mapGetters(['userId', 'formDown'])
-  },
   mounted () {
     let defaultForm = this.$store.getters.formData
     let month = moment().subtract(30, 'days').format('YYYY-MM')
-    if (this.userId !== '1') {
-      this.disabled = true
-      this.formInline.orgId = this.userId
-    } else {
-      if (!this.isDefaultEmpty) {
-        this.formInline.orgId = defaultForm.orgId
+    setTimeout(() => {
+      if (this.userId !== '1') {
+        this.disabled = true
+        this.formInline.orgId = this.userId
+        if (!this.isDefaultEmpty) {
+          this.formInline.lineId = this.lineId
+        }
+      } else {
+        if (!this.isDefaultEmpty) {
+          this.formInline.orgId = defaultForm.orgId === '1' ? '' : defaultForm.orgId
+          this.formInline.lineId = defaultForm.lineId
+        } else {
+          this.formInline.orgId = ''
+          this.formInline.lineId = ''
+        }
       }
-      this.formInline.lineId = defaultForm.lineId
-    }
-    if (this.formInline.radio === '1' && this.isRadio) {
-      let date = new Date()
-      this.formInline.dateArray = [date, date]
-    } else {
-      this.formInline.dateArray = defaultForm.dateArray
-    }
+      if (this.formInline.radio === '1' && this.isRadio) {
+        let date = new Date()
+        this.formInline.dateArray = [date, date]
+      } else {
+        this.formInline.dateArray = defaultForm.dateArray
+      }
+    }, 500)
     this.formInline.lineOrgId = defaultForm.lineOrgId
     this.formInline.lineLineId = defaultForm.lineLineId
     this.formInline.lineIds = defaultForm.lineIds

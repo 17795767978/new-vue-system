@@ -58,6 +58,7 @@
 
 <script>
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -72,10 +73,15 @@ export default {
       total: 0
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   created () {
-    let date = moment().format('YYYY-MM-DD')
+    let date = moment().valueOf()
+    date = date - 24 * 60 * 60 * 1000
+    date = moment(date).format('YYYY-MM-DD')
     this._getMidLinePFData({
-      orgUuid: '',
+      orgUuid: this.userId === '1' ? '' : this.userId,
       lineUuid: '',
       lineType: '1',
       date,
@@ -108,10 +114,12 @@ export default {
     },
     handleCurrentChange (val) {
       this.pageNumber = val
-      let date = moment().format('YYYY-MM-DD')
+      let date = moment().valueOf()
+      date = date - 24 * 60 * 60 * 1000
+      date = moment(date).format('YYYY-MM-DD')
       if (Object.keys(this.selectData).length === 0) {
         this._getMidLinePFData({
-          orgUuid: '',
+          orgUuid: this.userId === '1' ? '' : this.userId,
           lineUuid: '',
           lineType: '1',
           date,

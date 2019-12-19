@@ -23,13 +23,19 @@ export default {
       echartsData: {},
       loading: true,
       lineStations: [],
-      datas: []
+      datas: [],
+      lineId: ''
     }
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   created () {
+    if (this.userId !== '1') {
+      this.$store.dispatch('getLineList').then(res => {
+        this.lineId = res[0].value
+      })
+    }
   },
   mounted () {
     let listenResize = elementResizeDetector()
@@ -38,10 +44,10 @@ export default {
     })
     setTimeout(() => {
       this._getPfODYCountListData({
-        orgUuid: this.formData.orgId,
-        lineUuid: this.formData.lineId,
+        orgUuid: this.userId === '1' ? '' : this.userId,
+        lineUuid: this.lineId === '' ? this.formData.lineId : this.lineId,
         lineType: this.formData.lineType,
-        uploadDate: this.formData.currentDate
+        uploadDate: moment(this.formData.dateYes).format('YYYY-MM-DD')
       })
     }, 500)
   },

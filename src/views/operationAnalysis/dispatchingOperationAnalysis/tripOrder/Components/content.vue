@@ -120,10 +120,11 @@ export default {
           this.loading = false
           this.$message.success('数据已更新')
         } else {
-          // this.$refs.animationDom.addClassList('anim');
           this.$message.warning('暂无数据')
           this.$refs.chartWrapper.style.display = 'none'
         }
+      }).catch((err) => {
+        this.$message.error(err.message)
       })
     },
     drawLine () {

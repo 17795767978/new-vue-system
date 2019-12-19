@@ -77,7 +77,7 @@ export default {
   mounted () {
     setTimeout(() => {
       let arr = this.$store.getters.defaultSearch
-      if (arr.orgId !== '' && arr.lineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
+      if (arr.lineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
         this._getMidLinePFData({
           orgUuid: arr.orgId,
           lineUuid: arr.lineId,
@@ -93,7 +93,7 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        if (newV.orgId !== '' && newV.lineId !== '' && newV.lineType !== '' && newV.dataCurrent !== '') {
+        if (newV.lineId !== '' && newV.lineType !== '' && newV.dataCurrent !== '') {
           this._getMidLinePFData({
             orgUuid: newV.orgId,
             lineUuid: newV.lineId,
