@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     getSearch (data) {
-      if (data.lineId === '' || data.orgId === '' || data.lineType === '') {
+      if (data.lineId === '' || data.lineType === '') {
         this.$message.warning('请选择完整的查询条件')
       } else {
         this.activeName = 'first'

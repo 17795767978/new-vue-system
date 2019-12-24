@@ -16,7 +16,9 @@
       </div>
       <div class="display">
         <ul class="wrapper">
-          <li class="icon" :class="[item === currentTime ? 'active' : '']" v-for="(item, index) in time" :key="item" @click="puase(item, index)"></li>
+          <li class="icon" :class="[item === currentTime ? 'active' : '']" v-for="(item, index) in time" :key="item" @click="puase(item, index)">
+            <span style="margin-top: -2vh; display: block;text-align: left">{{item.substring(0,2)}}</span>
+          </li>
         </ul>
       </div>
       <div class="right-arrow">

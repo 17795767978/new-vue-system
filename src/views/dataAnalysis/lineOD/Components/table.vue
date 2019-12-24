@@ -41,7 +41,7 @@
         prop="upStaSequence"
         align="center"
         width="100"
-        label="上车站序名">
+        label="上车站序">
       </el-table-column>
       <el-table-column
         prop="downStaName"
@@ -52,7 +52,7 @@
         prop="downStaSequence"
         align="center"
         width="100"
-        label="下车站序名">
+        label="下车站序">
       </el-table-column>
       <el-table-column
         prop="payNumbers"
@@ -149,7 +149,7 @@ export default {
   methods: {
     _getPfLineOdCountListData (params) {
       this.$api['lineNet.getPfLineOdCountListData'](params).then(res => {
-        this.tableAllData = res
+        this.tableAllData = this.getSort(res)
         this.tableAllData.forEach((item, index) => {
           item.id = index + 1
         })
@@ -187,6 +187,34 @@ export default {
     //     }
     //   })
     // },
+    getSort (res) {
+      if (res.length > 0) {
+        // 总数据
+        let allArray = []
+        // 分片的数组
+        let arrayBq = []
+        // 上车站序数组
+        let upArraySequence = Array.from(new Set(res.map(item => item.upStaSequence)))
+        upArraySequence = upArraySequence.sort((prev, next) => prev - next)
+        // 循环整个list 然后根据上车站序 排下车站序
+        upArraySequence.forEach((item, index) => {
+          arrayBq[index] = []
+          arrayBq[index].push(res.filter(val => val.upStaSequence === item))
+        })
+        arrayBq.forEach(item => {
+          item = item[0].sort((prev, next) => Number(prev.downStaSequence) - Number(next.downStaSequence))
+        })
+        arrayBq.forEach(item => {
+          allArray.push(...item[0])
+        })
+        // console.log(upArraySequence)
+        // console.log(arrayBq)
+        // console.log(allArray)
+        return allArray
+      } else {
+        return []
+      }
+    },
     bigTable () {
       let eleArr = this.$refs.tableWrapper.$el
       let vDom = eleArr.getElementsByClassName('v-dom')[0]

@@ -88,7 +88,7 @@ export default {
         this.selectData.pageNumber = this.pageNumber
         this.selectData.pageSize = 15
         this._passengerFlow({
-          orgUuid: this.selectData.orgId,
+          orgUuid: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineUuid: this.selectData.lineId,
           busPlateNumber: this.selectData.busNumber,
           lineType: this.selectData.lineType,
@@ -177,7 +177,7 @@ export default {
       this.selectData.pageSize = 15
       this.pageNumber = val
       this._passengerFlow({
-        orgUuid: this.selectData.orgId,
+        orgUuid: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
         lineUuid: this.selectData.lineId,
         busPlateNumber: this.selectData.busNumber,
         lineType: this.selectData.lineType,
