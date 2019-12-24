@@ -1,65 +1,59 @@
 <template>
   <div class="alarm-dialog">
     <el-dialog :title="title" :visible="true" :close-on-click-modal="false" @close="close">
-      <el-form :model="formData" :rules="rules" ref="ruleForm">
+      <el-form :model="formData" :rules="rules" ref="ruleForm" :inline="true" label-width="100px">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
           <el-tab-pane label="DSM" name="DSM">
             <commonFormSelect
-              prop="pResolution"
               placeholder="请选择"
               label="拍照分辨率"
-              v-model="formData.pResolution"
-              :rules="rules.pResolution"
+              v-model="formData.dsmPhotoResolution"
               :selectData='selectData'
               >
             </commonFormSelect>
             <commonFormSelect
-              prop="vResolution"
               placeholder="请选择"
               label="视频分辨率"
-              v-model="formData.vResolution"
-              :rules="rules.vResolution"
+              v-model="formData.dsmVideoResolution"
               :selectData='selectData'
               >
             </commonFormSelect>
-            <el-tree
-              :data="treeData"
-              ref="DSMtree"
-              show-checkbox
-              node-key="id"
-              :default-checked-keys="defaultTreeData"
-              :props="defaultProps">
-            </el-tree>
           </el-tab-pane>
           <el-tab-pane label="ADAS" name="ADAS">
             <commonFormSelect
-              prop="pResolution"
               placeholder="请选择"
               label="拍照分辨率"
-              v-model="formData.pResolution"
-              :rules="rules.pResolution"
+              v-model="formData.adasPhotoResolution"
               :selectData='selectData'
               >
             </commonFormSelect>
             <commonFormSelect
-              prop="vResolution"
               placeholder="请选择"
               label="视频分辨率"
-              v-model="formData.vResolution"
-              :rules="rules.vResolution"
+              v-model="formData.adasVideoResolution"
               :selectData='selectData'
               >
             </commonFormSelect>
-            <el-tree
-              :data="treeData"
-              ref="ADAStree"
-              show-checkbox
-              node-key="id"
-              :default-checked-keys="defaultTreeData"
-              :props="defaultProps">
-            </el-tree>
           </el-tab-pane>
       </el-tabs>
+      <div v-if="isDeviceParameter">
+        <el-form-item label="任务名称" prop="taskName">
+          <el-input class="font-style" v-model="formData.taskName"></el-input>
+        </el-form-item>
+        <el-form-item label="备        注">
+          <el-input class="font-style" v-model="formData.ramark"></el-input>
+        </el-form-item>
+        <el-tree
+          :data="treeData"
+          v-loading="loading"
+          ref="ADAStree"
+          show-checkbox
+          node-key="id"
+          :default-checked-keys="defaultTreeData"
+          :props="defaultProps"
+          @check="handleNodeClick">
+        </el-tree>
+      </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="close">取 消</el-button>
@@ -77,8 +71,23 @@ export default {
     rowData: {
       type: Object
     },
+    defaultProps: {
+      type: Object
+    },
     title: {
       type: String
+    },
+    treeData: {
+      type: Array
+    },
+    defaultTreeData: {
+      type: Array
+    },
+    isDeviceParameter: {
+      type: Boolean
+    },
+    loading: {
+      type: Boolean
     }
   },
   data () {
@@ -87,86 +96,74 @@ export default {
       trigger: 'change',
       dialogFormVisible: false,
       formData: {
-        pResolution: '',
-        vResolution: ''
+        dsmPhotoResolution: '',
+        dsmVideoResolution: '',
+        adasVideoResolution: '',
+        adasPhotoResolution: '',
+        taskName: '',
+        ramark: '',
+        devList: [],
+        taskIssueNum: 0,
+        jsonData: []
       },
-      treeData: [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        }, {
-          id: 8,
-          label: '二级 3-2'
-        }]
-      }],
-      defaultProps: {},
-      defaultTreeData: [],
       rules: {
-        pResolution: { type: 'string', required: true, message: '请选择一个拍照分辨率', trigger: 'change' },
-        vResolution: { type: 'string', required: true, message: '请选择一个视频分辨率', trigger: 'change' }
+        taskName: { type: 'string', required: true, message: '请输入任务名称', trigger: 'blur' }
       },
       selectData: [
-        { label: '区域1', value: '1' },
-        { label: '区域2', value: '2' },
-        { label: '区域3', value: '3' },
-        { label: '区域4', value: '4' }
+        { label: '高', value: 5 },
+        { label: '中', value: 3 },
+        { label: '低', value: 1 }
       ]
     }
   },
   components: {
     commonFormSelect
   },
+  created () {
+  },
   mounted () {
   },
   watch: {
-    rowData: {
-      deep: true,
-      handler (newValue) {
-        this.formData = newValue
-      }
-    }
   },
   methods: {
     handleOperation (ruleForm) {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
-          if (!this.formData.plUuid) {
-            this.$api['tiredMonitoring.createWarntype'](this.formData).then(res => {
+          let data = {}
+          let {taskName, devList, ramark, dsmPhotoResolution, dsmVideoResolution, adasVideoResolution, adasPhotoResolution} = this.formData
+          data.jsonData = []
+          let dsm = [{
+            "alarmType": "dsm",
+            "data": {
+              "photoResolution": dsmPhotoResolution,
+              "videoResolution": dsmVideoResolution
+            }
+          }]
+          let adas = [{
+            "alarmType": "adas",
+            "data": {
+              "photoResolution": adasPhotoResolution,
+              "videoResolution": adasVideoResolution
+            }
+          }]
+          data.jsonData = dsm.concat(adas)
+          if (!this.rowData.taskUuid) {
+            data.devList = devList
+            data.taskName = taskName
+            data.taskIssueNum = devList.length
+            data.ramark = ramark
+            this.$api['tiredMonitoring.taskAdd'](data).then(res => {
               this.$message.success('创建成功')
               this.$emit('updateTable')
-              this.dialogFormVisible = false
+              this.$emit('close')
             })
           } else {
-            this.$api['tiredMonitoring.updateWarntype'](this.formData).then(res => {
-              this.$message.success('修改成功')
+            data.taskUuid = this.rowData.taskUuid
+            data.devList = this.rowData.devList
+            this.$api['tiredMonitoring.taskAdd2'](data).then(res => {
+              this.$message.success('保存成功')
               this.$emit('updateTable')
-              this.dialogFormVisible = false
+              this.$emit('close')
             })
           }
         } else {
@@ -174,14 +171,23 @@ export default {
         }
       })
     },
-    onCancel (ruleForm) {
-      this.dialogFormVisible = false
-      this.$emit('updateTable')
-    },
     handleClick (tab) {
     },
     close () {
       this.$emit('close')
+    },
+    handleNodeClick (data, checkedNodes, self) {
+      this.formData.devList = []
+      let listArr = checkedNodes.checkedNodes
+      listArr.map((item) => {
+        if (item.levelsType === '4') {
+          let arr = {
+            "devUuid": item.id,
+            "devCode": item.name
+          }
+          this.formData.devList.push(arr)
+        }
+      })
     }
   }
 }
@@ -192,5 +198,8 @@ export default {
   width: 100%;
   padding: 10px 20px;
   box-sizing: border-box;
+}
+.font-style {
+  width: 193px;
 }
 </style>

@@ -1,6 +1,11 @@
 <template>
 <div>
-  <el-table :data="tableData" border element-loading-text="拼命加载中">
+  <el-table :data="tableData" border element-loading-text="拼命加载中" @selection-change="handleSelectionChange">
+        <el-table-column
+          v-if="!isDeviceParameter"
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           v-for="(th, key) in tableKey"
           :key="key"
@@ -14,9 +19,15 @@
         >
           <template slot-scope="scope">
           <el-button v-if="th.label === '操作'" @click="handleClick(scope.row)" type="primary" size="small">详情</el-button>
-            <div v-else>
-              <span>{{ scope.row[th.prop] }}</span>
-            </div>
+          <div v-else-if="th.prop === 'taskCreateTime'">
+            {{scope.row.taskCreateTime | timestampToTime}}
+          </div>
+          <div v-else-if="th.prop === 'taskStatus'">
+            {{scope.row.taskStatus | handleType('status')}}
+          </div>
+          <div v-else>
+            <span>{{ scope.row[th.prop] }}</span>
+          </div>
           </template>
         </el-table-column>
       </el-table>
@@ -27,6 +38,7 @@
 export default {
   data () {
     return {
+      multipleSelection: []
     }
   },
   props: {
@@ -35,6 +47,9 @@ export default {
       default: function () {
         return []
       }
+    },
+    isDeviceParameter: {
+      type: Boolean
     },
     tableKey: {
       type: Array,
@@ -50,7 +65,11 @@ export default {
   methods: {
     handleClick (item) {
       this.$emit('handleClick', item)
-    }
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+      this.$emit('handleSelectionChange', this.multipleSelection)
+    },
   }
 }
 </script>

@@ -348,6 +348,50 @@ export const tiredMonitoringApi = {
         pageSize: ''
       },
       desc: '更新疲劳处理状态'
+    }, {
+      name: 'getTaskPageList',
+      method: 'POST',
+      path: '/api/temp/device/send/task/taskPage/get',
+      mockPath: '/api/temp/device/send/task/taskPage/get',
+      params: {
+        taskName: '',
+        pageSize: '',
+        pageNum: ''
+      },
+      desc: '参数任务--列表'
+    }, {
+      name: 'getOrgLineBusTree',
+      method: 'POST',
+      path: '/api/temp/device/send/task/orgLineBusTree/get',
+      mockPath: '/api/temp/device/send/task/orgLineBusTree/get',
+      params: {
+      },
+      desc: '参数设置-组织线路车辆树'
+    }, {
+      name: 'getTaskDetailPage',
+      method: 'POST',
+      path: '/api/temp/device/send/task/detail/taskDetailPage/get',
+      mockPath: '/api/temp/device/send/task/detail/taskDetailPage/get',
+      params: {
+        taskUuid: '',
+        pageSize: '',
+        pageNum: ''
+      },
+      desc: '参数任务详情列表'
+    }, {
+      name: 'taskAdd',
+      method: 'POST',
+      path: '/api/temp/device/send/task/add',
+      mockPath: '/api/temp/device/send/task/add',
+      params: {},
+      desc: '参数下发'
+    }, {
+      name: 'taskAdd2',
+      method: 'POST',
+      path: '/api/temp/device/send/task/add2',
+      mockPath: '/api/temp/device/send/task/add2',
+      params: {},
+      desc: '参数补发'
     }
   ]
 }

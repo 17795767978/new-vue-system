@@ -22,9 +22,7 @@ export default {
     label: {
       type: String
     },
-    value: {
-      type: String
-    },
+    value: [Number, String],
     rules: [Object, Array]
   },
   data () {
