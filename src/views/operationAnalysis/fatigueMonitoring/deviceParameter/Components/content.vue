@@ -196,7 +196,7 @@ export default {
     },
     handleSelectionChange (val) {
       let arr = []
-      val.map((item)=> {
+      val.map((item) => {
         if (item.taskStatus === '0') {
           arr.push({
             devUuid: item.devUuid,

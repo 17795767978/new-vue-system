@@ -133,17 +133,17 @@ export default {
           let {taskName, devList, ramark, dsmPhotoResolution, dsmVideoResolution, adasVideoResolution, adasPhotoResolution} = this.formData
           data.jsonData = []
           let dsm = [{
-            "alarmType": "dsm",
-            "data": {
-              "photoResolution": dsmPhotoResolution,
-              "videoResolution": dsmVideoResolution
+            alarmType: 'dsm',
+            data: {
+              photoResolution: dsmPhotoResolution,
+              videoResolution: dsmVideoResolution
             }
           }]
           let adas = [{
-            "alarmType": "adas",
-            "data": {
-              "photoResolution": adasPhotoResolution,
-              "videoResolution": adasVideoResolution
+            alarmType: 'adas',
+            data: {
+              photoResolution: adasPhotoResolution,
+              videoResolution: adasVideoResolution
             }
           }]
           data.jsonData = dsm.concat(adas)
@@ -182,8 +182,8 @@ export default {
       listArr.map((item) => {
         if (item.levelsType === '4') {
           let arr = {
-            "devUuid": item.id,
-            "devCode": item.name
+            devUuid: item.id,
+            devCode: item.name
           }
           this.formData.devList.push(arr)
         }

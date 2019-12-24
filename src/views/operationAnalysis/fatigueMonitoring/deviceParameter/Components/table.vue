@@ -69,7 +69,7 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
       this.$emit('handleSelectionChange', this.multipleSelection)
-    },
+    }
   }
 }
 </script>
