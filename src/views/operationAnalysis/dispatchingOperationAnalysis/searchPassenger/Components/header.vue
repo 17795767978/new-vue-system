@@ -22,7 +22,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择车辆">
+      <el-form-item label="选择车辆" v-if="isBusNumber">
         <el-select class="font-style" v-model="formInline.busNumber" filterable placeholder="请选择">
           <el-option
             v-for="item in carOptions"
@@ -43,6 +43,9 @@
         </el-select>
       </el-form-item>
       </el-row>
+      <el-form-item label="输入自编号" v-if="isBusSelfNumber">
+        <el-input type="text" v-model="formInline.busSelfNumber"></el-input>
+      </el-form-item>
       <el-form-item label="选择日期">
          <el-date-picker
           v-model="formInline.valueTime"
@@ -105,6 +108,7 @@ export default {
         lineType: '',
         startTime: '',
         endTime: '',
+        busSelfNumber: '',
         radio: '1'
       },
       comOptions: [],
@@ -121,7 +125,9 @@ export default {
       laoding: true,
       code: '加载中',
       disabled: false,
-      isLoading: false
+      isLoading: false,
+      isBusNumber: false,
+      isBusSelfNumber: true
     }
   },
   created () {
@@ -216,8 +222,14 @@ export default {
       handler (newV) {
         if (newV === '1') {
           this.formInline.valueTime = [moment().format('YYYY-MM-DD 00:00:00'), moment().format('YYYY-MM-DD 23:59:59')]
+          this.isBusNumber = false
+          this.isBusSelfNumber = true
+          this.formInline.busNumber = ''
         } else {
           this.formInline.valueTime = []
+          this.isBusNumber = true
+          this.isBusSelfNumber = false
+          this.formInline.busSelfNumber = ''
         }
       }
     }
@@ -292,7 +304,7 @@ export default {
           orgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
           lineUuid: this.formInline.lineId,
           lineType: this.formInline.lineType,
-          busPlateNumber: this.formInline.busNumber,
+          busSelfCode: this.formInline.busSelfNumber,
           sTime: this.formInline.startTime,
           eTime: this.formInline.endTime
         }).then(res => {
