@@ -126,6 +126,14 @@ export default {
     let data = new Date() - 1000 * 3600 * 24
     this.formInline.dateTime = moment(data).format('YYYY-MM-DD')
   },
+  mounted () {
+    let time = this.formInline.startHour && Number(this.formInline.startHour.substring(0, 2)) + 2
+    if (this.formInline.startHour && time < 10) {
+      this.maxTime = `0${time}:00`
+    } else {
+      this.maxTime = `${time}:00`
+    }
+  },
   watch: {
     'formInline.lineId': {
       handler (newValue) {
