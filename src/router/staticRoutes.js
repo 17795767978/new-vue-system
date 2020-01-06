@@ -16,6 +16,11 @@ export const constantRouterMap = [
     hidden: true
   },
   {
+    path: '/yyjk/sso',
+    component: _import_('Login/sso'),
+    hidden: true
+  },
+  {
     path: '/homepage',
     component: Layout,
     meta: { title: 'Homepage', icon: 'iconfont icon-yunzhuomian' },

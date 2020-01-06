@@ -5,7 +5,7 @@ import { getToken } from '@/service/expands/auth'
 const whiteList = ['/login']
 
 export function routerBeforeEachFunc (to, from, next) {
-  if (getToken()) {
+  if (getToken() && to.path !== '/yyjk/sso') {
     if (to.path === '/login') {
       next('/login')
     } else {
@@ -37,6 +37,17 @@ export function routerBeforeEachFunc (to, from, next) {
           next()
         }
       }
+    }
+  } else if (to.path === '/yyjk/sso') {
+    // 如果是单点登录，判断是否有token，如果有则清除token后再次获取新的用户token
+    if (getToken()) {
+      store.dispatch('userLogout').then(() => {
+        location.reload()
+      })
+      next()
+    } else {
+      // 如果没有token 则直接请求登录
+      next()
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
