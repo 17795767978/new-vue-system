@@ -144,7 +144,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期">
       </el-date-picker>
-    </el-form-item>
+      </el-form-item>
       <el-form-item label="时间" v-if="isTime">
         <el-time-select
           placeholder="起始时间"
@@ -169,20 +169,21 @@
           }">
         </el-time-select>
       </el-form-item>
+      <slot></slot>
       <el-form-item v-if="isRadio" label="查询时间">
         <el-radio v-model="formInline.radio" label="1">当天</el-radio>
         <el-radio v-model="formInline.radio" label="2">历史</el-radio>
       </el-form-item>
       <el-form-item label="报警类型" v-if="isWarntype">
-          <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
-            <el-option
-              v-for="item in warnOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in warnOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
