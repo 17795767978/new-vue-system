@@ -29,7 +29,8 @@ export default {
     this._badDrivingBehavior({
       orgId,
       startTime: '',
-      endTime: ''
+      endTime: '',
+      warnTypes: ''
     })
   },
   mounted () {
