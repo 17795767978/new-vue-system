@@ -11,6 +11,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/iconfontWeather/iconfont.css'
 import VueJsonp from 'vue-jsonp'
 import axios from 'axios'
+import * as filters from './config/filter'
+// 全局Filter注册
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 Vue.use(VueJsonp)
 // 全局配置项
 Vue.use(config)

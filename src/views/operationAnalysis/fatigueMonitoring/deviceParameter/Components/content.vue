@@ -1,13 +1,15 @@
 <template>
   <div class="alarm-table">
     <el-row class="title-box">
-      <el-button type="success" @click="AddAlarm">{{title}}</el-button>
+      <el-button type="success" @click="AddTask">{{title}}</el-button>
     </el-row>
-    <headerNav v-show="hasHeaderNav"></headerNav>
+    <headerNav v-show="isDeviceParameter" @configCheck="configCheck"></headerNav>
     <tableWrapper
       :table-data="tableData"
       :table-key="cloumns"
+      :isDeviceParameter="isDeviceParameter"
       @handleClick="handleClick"
+      @handleSelectionChange="handleSelectionChange"
       />
     <div class="block">
       <el-pagination
@@ -20,7 +22,18 @@
       </el-pagination>
       <span class="demonstration">共{{total}}条</span>
     </div>
-    <dialogWrapper v-if="dialogFormVisible" @close="dialogFormVisible=false" :rowData="rowData" :title="title" @updateTable="updateTable" ref="formName"></dialogWrapper>
+    <dialogWrapper
+      v-if="dialogFormVisible"
+      :isDeviceParameter="isDeviceParameter"
+      @close="dialogFormVisible=false"
+      :rowData="rowData"
+      :loading="loading"
+      :treeData="treeData"
+      :title="title"
+      :defaultProps="defaultProps"
+      :defaultTreeData="defaultTreeData"
+      @updateTable="updateTable"
+      ref="formName"></dialogWrapper>
   </div>
 </template>
 
@@ -38,35 +51,43 @@ export default {
       currentPage: 1,
       dialogFormVisible: false,
       title: '参数设置',
-      hasHeaderNav: true,
-      titleArr: ['参数设置', '参数下发'],
+      isDeviceParameter: true,
+      taskName: '',
+      treeData: [],
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
+      defaultTreeData: [],
+      loading: true,
+      titleArr: ['参数设置', '参数补发'],
       cloumns: [],
       cloumnsList: [{
-        prop: 'plUuid',
+        prop: 'taskUuid',
         label: '序号',
         width: 100,
         align: 'center'
       },
       {
-        prop: 'plValue',
+        prop: 'taskName',
         label: '任务名称',
         width: 200,
         align: 'center'
       },
       {
-        prop: 'plDisplay',
+        prop: 'taskCreateTime',
         label: '下发时间',
         width: 180,
         align: 'center'
       },
       {
-        prop: 'plRemark',
+        prop: 'remark',
         label: '备注',
         width: 100,
         align: 'center'
       },
       {
-        prop: 'plSort',
+        prop: 'taskIssueNum',
         label: '下发数量',
         width: 100,
         align: 'center'
@@ -77,31 +98,31 @@ export default {
         align: 'center'
       }],
       cloumnsDetail: [{
-        prop: 'plUuid',
+        prop: 'taskDetailUuid',
         label: '序号',
         width: 100,
         align: 'center'
       },
       {
-        prop: 'plValue',
+        prop: 'busPlateNumber',
         label: '车牌号',
         width: 200,
         align: 'center'
       },
       {
-        prop: 'plDisplay',
+        prop: 'busSelfCode',
         label: '编号',
         width: 180,
         align: 'center'
       },
       {
-        prop: 'plRemark',
+        prop: 'devCode',
         label: '设备号',
         width: 100,
         align: 'center'
       },
       {
-        prop: 'plSort',
+        prop: 'taskStatus',
         label: '状态',
         width: 100,
         align: 'center'
@@ -114,22 +135,38 @@ export default {
     tableWrapper
   },
   created () {
-    this._alarmManageTable({
-      pageSize: 10,
-      pageNum: this.currentPage
-    })
-    this.handleListChange(this.$route.name)
+    let id = this.$route.query.id
+    this.handleListChange(this.$route.name, id)
   },
   mounted () {
   },
   watch: {
     '$route' (to, from) {
-      this.handleListChange(to.name)
+      this.handleListChange(to.name, to.query.id)
     }
   },
   methods: {
-    _alarmManageTable (params) {
-      this.$api['tiredMonitoring.getWarnTypeList'](params).then(res => {
+    configCheck (data) {
+      this.taskName = data.taskName
+      this.getTaskPageList({
+        taskName: this.taskName,
+        pageSize: 10,
+        pageNum: this.currentPage
+      })
+    },
+    getTaskPageList (params) {
+      this.$api['tiredMonitoring.getTaskPageList'](params).then(res => {
+        return this.getList(res)
+      })
+    },
+    getOrgLineBusTree () {
+      this.$api['tiredMonitoring.getOrgLineBusTree']().then(res => {
+        this.treeData = res
+        this.loading = false
+      })
+    },
+    getTaskDetailPage (params) {
+      this.$api['tiredMonitoring.getTaskDetailPage'](params).then(res => {
         return this.getList(res)
       })
     },
@@ -138,62 +175,72 @@ export default {
       this.tableData = tableArr.sort((prev, next) => next.plSort - prev.plSort)
       this.total = res.total
     },
-    handleBan (row) {
-      this.$api['tiredMonitoring.warntypeIsvalid']({
-        plUuid: row.plUuid,
-        plIsvalid: 1
-      }).then(res => {
-        this._alarmManageTable({
-          pageSize: 10,
-          pageNum: this.currentPage
-        })
-      })
-    },
-    handleOpen (row) {
-      this.$api['tiredMonitoring.warntypeIsvalid']({
-        plUuid: row.plUuid,
-        plIsvalid: 0
-      }).then(res => {
-        this._alarmManageTable({
-          pageSize: 10,
-          pageNum: this.currentPage
-        })
-      })
-    },
     handleClick (row) {
       this.cloumns = this.cloumnsDetail
       this.$router.push({
         name: 'parameterSetting',
         query: {
-          id: row.plUuid
+          id: row.taskUuid
         }
       })
     },
-    AddAlarm () {
+    AddTask () {
       this.dialogFormVisible = true
-      this.rowData = {}
+      if (!this.isDeviceParameter && !this.rowData.devList.length) {
+        this.handleSelectionChange(this.tableData)
+      }
     },
     handleCurrentChange (val) {
       this.currentPage = val
-      this._alarmManageTable({
-        pageSize: 10,
-        pageNum: this.currentPage
+      this.updateTable()
+    },
+    handleSelectionChange (val) {
+      let arr = []
+      val.map((item) => {
+        if (item.taskStatus === '0') {
+          arr.push({
+            devUuid: item.devUuid,
+            devCode: item.devCode
+          })
+        }
       })
+      this.rowData.devList = arr
     },
     updateTable () {
-      this._alarmManageTable({
-        pageSize: 10,
-        pageNum: this.currentPage
-      })
+      if (this.isDeviceParameter) {
+        this.getTaskPageList({
+          pageSize: 10,
+          pageNum: this.currentPage
+        })
+      } else {
+        this.getTaskDetailPage({
+          taskUuid: this.$route.query.id,
+          pageSize: 10,
+          pageNum: this.currentPage
+        })
+      }
     },
-    handleListChange (name) {
+    handleListChange (name, taskUuid) {
       if (name === 'deviceParameter') {
+        this.getOrgLineBusTree() // 获取结构树
+        this.getTaskPageList({
+          taskName: this.taskName,
+          pageSize: 10,
+          pageNum: this.currentPage
+        })
+        this.rowData.taskUuid = ''
         this.cloumns = this.cloumnsList
-        this.hasHeaderNav = true
+        this.isDeviceParameter = true
         this.title = this.titleArr[0]
       } else {
+        this.rowData.taskUuid = taskUuid
+        this.getTaskDetailPage({
+          taskUuid: taskUuid,
+          pageSize: 10,
+          pageNum: this.currentPage
+        })
         this.cloumns = this.cloumnsDetail
-        this.hasHeaderNav = false
+        this.isDeviceParameter = false
         this.title = this.titleArr[1]
       }
     }

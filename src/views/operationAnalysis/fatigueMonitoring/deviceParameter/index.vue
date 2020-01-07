@@ -7,7 +7,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import tableWrapper from './Components/Content'
+import tableWrapper from './Components/content'
 export default {
   name: 'deviceParameter',
   data () {
