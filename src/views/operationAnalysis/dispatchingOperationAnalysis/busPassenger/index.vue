@@ -8,6 +8,10 @@
       :isBus="true"
       :isDownload="true"
       :downLoadName="downLoadName"
+      :select="{
+        date: [...timeArr],
+        isHistory
+      }"
       @configCheck="getSearch"
     >
     <el-form-item label="选择日期">
@@ -44,7 +48,7 @@ export default {
       timeArr: [],
       isHistory: '0',
       selectData: {},
-      downLoadName: ''
+      downLoadName: 'passengerFlow.busTotalPersonExport'
     }
   },
   created () {

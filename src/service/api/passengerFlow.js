@@ -149,6 +149,16 @@ export const passengerFlowApi = {
         orgId: ''
       },
       desc: '单车客流查询列表'
+    },
+    {
+      name: 'busTotalPersonExport',
+      method: 'POST',
+      path: '/api/passenger/flow/result/busTotalPerson/export',
+      mockPath: '/api/passenger/flow/result/busTotalPerson/export',
+      params: {
+        orgId: ''
+      },
+      desc: '单车客流查询-导出'
     }
   ]
 }

@@ -100,12 +100,12 @@ export default {
       handler (newV) {
         this.pageNumber = 1
         this._pageBusPersonTotalList({
-          orgId: newV.orgId,
+          orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           busNumber: newV.busNumber,
           isHistory: newV.isHistory,
-          startTime: newV.startTime,
-          endTime: newV.endTime,
+          startTime: moment(newV.startTime).format('YYYY-MM-DD HH:mm:ss'),
+          endTime: moment(newV.endTime).format('YYYY-MM-DD HH:mm:ss'),
           pageSize: this.pageSize,
           pageNumber: this.pageNumber
         })
@@ -126,9 +126,9 @@ export default {
       this.pageNumber = val
       let dateBefore = moment().format('YYYY-MM-DD 00:00:00')
       let dateAfter = moment().format('YYYY-MM-DD 23:59:59')
-      if (this.userId === '1') {
+      if (Object.keys(this.selectData).length === 0) {
         this._pageBusPersonTotalList({
-          orgId: this.userId === '1' ? '' : this.userId,
+          orgId: '',
           lineId: '',
           busNumber: '',
           isHistory: '0',
@@ -139,7 +139,7 @@ export default {
         })
       } else {
         this._pageBusPersonTotalList({
-          orgId: this.selectData.orgId,
+          orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineId: this.selectData.lineId,
           busNumber: this.selectData.busNumber,
           isHistory: this.selectData.isHistory,

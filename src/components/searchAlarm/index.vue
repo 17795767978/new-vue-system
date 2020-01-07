@@ -188,6 +188,7 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
         <el-button type="success" @click="onSave" v-if="isDownload">导出</el-button>
+        <slot name="download"></slot>
         <el-button type="success" @click="getTableData" v-if="isMul">批量设置</el-button>
       </el-form-item>
     </el-form>
@@ -298,6 +299,9 @@ export default {
     },
     isLineEmpty: {
       type: Boolean
+    },
+    select: {
+      type: Object
     }
   },
   data () {
@@ -739,16 +743,21 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
+      console.log(this.select)
       let lineArr = []
       this.downLoadLoading = true
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
         console.log(this.formInline.lineLineId)
         lineArr = this.formInline.lineLineId.split('+')
       }
+      if (this.select) {
+        this.formInline.dateArray = [moment(this.select.date[0]).format('YYYY-MM-DD HH:mm:ss'), moment(this.select.date[1]).format('YYYY-MM-DD HH:mm:ss')]
+      }
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
         lineId: this.formInline.lineId,
-        lineID: lineArr[0],
+        // 判断是否为单车查询页面的导出，后台spring不能区分lineID和lineId，默认取lineID，所以利用this.select做判断传值的问题
+        lineID: this.select ? this.formInline.lineId : lineArr[0],
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
         arrow: this.isTurn ? this.formInline.lineType : '',
         startStation: this.isStation ? this.formInline.startStation : '',
@@ -756,7 +765,8 @@ export default {
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
         startTime: this.formInline.dateArray[0],
         endTime: this.formInline.dateArray[1],
-        data: this.formDown
+        data: this.formDown,
+        isHistory: this.select && this.select.isHistory
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)
