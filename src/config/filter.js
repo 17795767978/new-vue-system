@@ -17,7 +17,7 @@ const timestampToTime = function (val, column) {
     date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
   return Y + M + D + h + m + s
 }
-const handleType = function (val,type) {
+const handleType = function (val, type) {
   let dataObj = {
     status: {
       '0': '失败',

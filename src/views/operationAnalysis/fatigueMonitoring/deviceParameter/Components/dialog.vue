@@ -130,7 +130,7 @@ export default {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
           let data = {}
-          let {taskName, devList, ramark, dsmPhotoResolution, dsmVideoResolution, adasVideoResolution, adasPhotoResolution} = this.formData
+          let { taskName, devList, ramark, dsmPhotoResolution, dsmVideoResolution, adasVideoResolution, adasPhotoResolution } = this.formData
           data.jsonData = []
           let dsm = [{
             alarmType: 'dsm',
