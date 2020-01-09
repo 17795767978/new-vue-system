@@ -392,6 +392,14 @@ export const tiredMonitoringApi = {
       mockPath: '/api/temp/device/send/task/add2',
       params: {},
       desc: '参数补发'
+    },
+    {
+      name: 'export',
+      method: 'POST',
+      path: '/deviceStatus/export',
+      mockPath: '/deviceStatus/export',
+      params: {},
+      desc: '设备状态excel'
     }
   ]
 }

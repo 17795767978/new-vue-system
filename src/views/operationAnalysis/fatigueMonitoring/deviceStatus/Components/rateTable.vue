@@ -99,7 +99,7 @@ export default {
           lineUuid: '',
           car: '',
           carSelf: '',
-          devOnlineStatus: '1'
+          devOnlineStatus: ''
         }
       }
     },
@@ -142,7 +142,7 @@ export default {
       busPlateNumber: '',
       busSelfCode: '',
       devCode: '',
-      devOnlineStatus: '1'
+      devOnlineStatus: ''
     })
   },
   watch: {
@@ -225,7 +225,7 @@ export default {
         pageSize: 10,
         busPlateNumber: this.selectData.car || '',
         busSelfCode: this.selectData.carSelf || '',
-        devOnlineStatus: this.selectData.devOnlineStatus || '1'
+        devOnlineStatus: this.selectData.devOnlineStatus || ''
       })
     },
     // 内层table

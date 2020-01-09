@@ -64,6 +64,7 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear">重置</el-button>
+        <el-button type="success" @click="onDownload" :loading="downLoadLoading">导出</el-button>
       </el-form-item>
       </el-row>
     </el-form>
@@ -81,7 +82,7 @@ export default {
         orgUuid: '',
         car: '',
         carSelf: '',
-        devOnlineStatus: '1',
+        devOnlineStatus: '',
         pageSize: 1,
         pageNumber: 15,
         devCode: ''
@@ -92,7 +93,8 @@ export default {
       carSearchOptions: [],
       selfOpt: [],
       selfSearchOpt: [],
-      disabled: false
+      disabled: false,
+      downLoadLoading: false
     }
   },
   computed: {
@@ -190,13 +192,29 @@ export default {
         lineUuid: '',
         car: '',
         carSelf: '',
-        devOnlineStatus: '1',
+        devOnlineStatus: '',
         pageSize: 1,
         pageNumber: 15,
         orgUuid: this.userId === '1' ? '' : this.userId,
         devCode: ''
       }
       this.$emit('selectConfig', this.formInline)
+    },
+    onDownload () {
+      this.downLoadLoading = true
+      this.$api['tiredMonitoring.export']({
+        orgId: this.formInline.orgUuid || '',
+        lineId: this.formInline.lineUuid || '',
+        busPlateNumber: this.formInline.car || '',
+        busSelfCode: this.formInline.carSelf || '',
+        devOnlineStatus: this.formInline.devOnlineStatus || ''
+      }).then(res => {
+        window.open(res.url)
+        this.downLoadLoading = false
+      }).catch(err => {
+        this.$message.error(err.message)
+        this.downLoadLoading = false
+      })
     }
   },
   components: {
