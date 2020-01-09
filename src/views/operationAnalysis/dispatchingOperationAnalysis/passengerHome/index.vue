@@ -176,7 +176,7 @@ export default {
   margin: 0.5%;
   box-sizing: border-box;
   border-radius: 6px;
-  height: 98%;
+  height: 89vh;
   .top-wrapper {
     display: flex;
     justify-content: center;
@@ -185,31 +185,31 @@ export default {
     .left-top-wrapper {
       width: 44.5%;
       border: 1px solid #ccc;
-      padding: 10px;
+      padding: 1vh 1vw;
       box-sizing: border-box;
       margin-right: 0.5%;
-      margin-bottom: 10px;
-      height: 27vh;
+      margin-bottom: 1vh;
+      height: 25vh;
     }
     .right-top-wrapper {
       width: 55%;
       border: 1px solid #ccc;
       box-sizing: border-box;
-      margin-bottom: 10px;
-      height: 27vh;
+      margin-bottom: 1vh;
+      height: 25vh;
     }
     .left-bottom-wrapper {
       width: 51%;
       border: 1px solid #ccc;
       box-sizing: border-box;
       margin-right: 0.5%;
-      height: 69%;
+      height: 61vh;
       .title {
         width: 100%;
         border-bottom: 1px solid #ccc;
-        height: 3rem;
-        line-height: 3rem;
-        font-size: 1.5rem;
+        height: 4vh;
+        line-height: 4vh;
+        font-size: 1vw;
         padding-left: 1rem;
         box-sizing: border-box;
         font-weight: bold;
@@ -217,14 +217,14 @@ export default {
       }
       .map {
         width:100%;
-        height: 96.7%;
+        height: 56vh;
       }
     }
     .right-bottom-wrapper {
       width: 48.5%;
       border: 1px solid #ccc;
       box-sizing: border-box;
-      height: 69%;
+      height: 61vh;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
@@ -238,7 +238,7 @@ export default {
           border-bottom: 1px solid #ccc;
           height: 3rem;
           line-height: 3rem;
-          font-size: 1.5rem;
+          font-size: 1vw;
           padding-left: 1rem;
           box-sizing: border-box;
           font-weight: bold;

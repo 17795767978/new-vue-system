@@ -2,8 +2,8 @@
   <div class="total-data">
     <header>
       <h2 style="margin-top: 2.5%">
-        <span style="margin-right: 30%;">时间：{{date}}</span>
-        <span>当日累计-客流量: <span style="color: #f00">{{totalPassenger}}</span>人次</span>
+        <span style="margin-right: 30%; font-size: 1vw;">时间：{{date}}</span>
+        <span style="font-size: 1vw;">当日累计-客流量: <span style="color: #f00; font-size: 1vw;">{{totalPassenger}}</span>人次</span>
       </h2>
     </header>
     <div class="cul-wrapper">
@@ -143,23 +143,21 @@ export default {
     .left {
       width: 48%;
       background: #5d9ade;
-      height: 120px;
       margin-right: 4%;
       border-radius: 6px;
-      padding: 4.5%;
+      padding: 2%;
       box-sizing: border-box;
-      font-size: 1.2rem;
+      font-size: .6vw;
       font-weight: 700;
       color: #fff;
     }
     .right {
       width: 48%;
       background: #43c6c3;
-      height: 120px;
       border-radius: 6px;
-      padding: 4.5%;
+      padding: 2%;
       box-sizing: border-box;
-      font-size: 1.2rem;
+      font-size: .6vw;
       font-weight: 700;
       color: #fff;
     }
