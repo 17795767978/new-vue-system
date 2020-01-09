@@ -45,10 +45,12 @@
       </el-row>
       <el-form-item label="选择日期">
          <el-date-picker
+         :picker-options="pickerOptions"
           v-model="formInline.valueTime"
           type="datetimerange"
           range-separator="至"
           start-placeholder="开始日期"
+          :default-time="['00:00:00', '23:59:59']"
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
@@ -97,6 +99,12 @@ export default {
   },
   data () {
     return {
+      pickerOptions: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+          return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+        }
+      },
       formInline: {
         orgId: '',
         lineId: '',
@@ -215,11 +223,22 @@ export default {
     'formInline.radio': {
       handler (newV) {
         if (newV === '1') {
+          this.pickerOptions = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+              return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+            }
+          }
           let timeStart = moment().format('YYYY-MM-DD 00:00:00')
           let timeEnd = moment().format('YYYY-MM-DD 23:59:59')
           this.formInline.valueTime = [timeStart, timeEnd]
         } else {
           this.formInline.valueTime = []
+          this.pickerOptions = {
+            disabledDate (time) {
+              return time.getTime() > moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 3600 * 24 * 1000
+            }
+          }
         }
       }
     }
@@ -239,9 +258,13 @@ export default {
   methods: {
     onSubmit () {
       // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD');
-      this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
-      this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
-      this.$emit('configCheck', this.formInline)
+      if (this.formInline.valueTime.length > 0) {
+        this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+        this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+        this.$emit('configCheck', this.formInline)
+      } else {
+        this.$message.error('请选择日期时间段')
+      }
     },
     onclear () {
       this.formInline = {

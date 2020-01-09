@@ -348,6 +348,14 @@ export const tiredMonitoringApi = {
         pageSize: ''
       },
       desc: '更新疲劳处理状态'
+    },
+    {
+      name: 'export',
+      method: 'POST',
+      path: '/deviceStatus/export',
+      mockPath: '/deviceStatus/export',
+      params: {},
+      desc: '设备状态excel'
     }
   ]
 }

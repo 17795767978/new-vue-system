@@ -16,6 +16,8 @@
     >
     <el-form-item label="选择日期">
       <el-date-picker
+        :picker-options="pickerOptions"
+        :default-time="['00:00:00', '23:59:59']"
         v-model="timeArr"
         :clearable="false"
         type="datetimerange"
@@ -45,6 +47,12 @@ export default {
   name: 'busPassenger',
   data () {
     return {
+      pickerOptions: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+          return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+        }
+      },
       timeArr: [],
       isHistory: '0',
       selectData: {},
@@ -62,7 +70,18 @@ export default {
         let dateBefore = moment().format('YYYY-MM-DD 00:00:00')
         let dateAfter = moment().format('YYYY-MM-DD 23:59:59')
         this.timeArr = [dateBefore, dateAfter]
+        this.pickerOptions = {
+          disabledDate (time) {
+            const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+            return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+          }
+        }
       } else {
+        this.pickerOptions = {
+          disabledDate (time) {
+            return time.getTime() > moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 3600 * 24 * 1000
+          }
+        }
         this.timeArr = []
       }
     }

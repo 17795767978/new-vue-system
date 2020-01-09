@@ -137,6 +137,7 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDateTo">
         <el-date-picker
+          :picker-options="pickerOptions"
           :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.dateArray"
           type="daterange"
@@ -306,6 +307,11 @@ export default {
   },
   data () {
     return {
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
+        }
+      },
       formInline: {
         orgId: '',
         lineOrgId: '',
@@ -542,6 +548,11 @@ export default {
           this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
         } else {
           this.formInline.dateArray = []
+          this.pickerOptions = {
+            disabledDate (time) {
+              return time.getTime() > Date.now() - 24 * 3600 * 1000
+            }
+          }
         }
       }
     },
