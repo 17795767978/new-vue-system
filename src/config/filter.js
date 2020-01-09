@@ -19,9 +19,13 @@ const timestampToTime = function (val, column) {
 }
 const handleType = function (val, type) {
   let dataObj = {
-    status: {
+    taskStatus: {
       '0': '失败',
       '1': '成功'
+    },
+    devOnlineStatus: {
+      '0': '离线',
+      '1': '在线'
     }
   }
   if (dataObj[type]) {

@@ -12,6 +12,9 @@
         width="60"
         type="index"
         label="序号">
+        <template slot-scope="scope">
+          <span> {{scope.$index + (currentPage - 1) * 10 + 1}} </span>
+        </template>
       </el-table-column>
       <el-table-column
         align="center"

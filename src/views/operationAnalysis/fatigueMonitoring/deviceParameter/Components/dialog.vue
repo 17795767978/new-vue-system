@@ -2,47 +2,60 @@
   <div class="alarm-dialog">
     <el-dialog :title="title" :visible="true" :close-on-click-modal="false" @close="close">
       <el-form :model="formData" :rules="rules" ref="ruleForm" :inline="true" label-width="100px">
-        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="DSM" name="DSM">
-            <commonFormSelect
-              placeholder="请选择"
-              label="拍照分辨率"
-              v-model="formData.dsmPhotoResolution"
-              :selectData='selectData'
-              >
-            </commonFormSelect>
-            <commonFormSelect
-              placeholder="请选择"
-              label="视频分辨率"
-              v-model="formData.dsmVideoResolution"
-              :selectData='selectData'
-              >
-            </commonFormSelect>
-          </el-tab-pane>
-          <el-tab-pane label="ADAS" name="ADAS">
-            <commonFormSelect
-              placeholder="请选择"
-              label="拍照分辨率"
-              v-model="formData.adasPhotoResolution"
-              :selectData='selectData'
-              >
-            </commonFormSelect>
-            <commonFormSelect
-              placeholder="请选择"
-              label="视频分辨率"
-              v-model="formData.adasVideoResolution"
-              :selectData='selectData'
-              >
-            </commonFormSelect>
-          </el-tab-pane>
-      </el-tabs>
+          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="DSM" name="DSM">
+              <transition-group name="component-fade" mode="out-in">
+              <template v-if="activeName === 'DSM'">
+                <commonFormSelect
+                  placeholder="请选择"
+                  label="拍照分辨率"
+                  key="dsmPhotoResolution"
+                  v-model="formData.dsmPhotoResolution"
+                  :selectData='selectPhoto'
+                  >
+                </commonFormSelect>
+                <commonFormSelect
+                  placeholder="请选择"
+                  label="视频分辨率"
+                  key="dsmVideoResolution"
+                  v-model="formData.dsmVideoResolution"
+                  :selectData='selectVideo'
+                  >
+                </commonFormSelect>
+              </template>
+              </transition-group>
+            </el-tab-pane>
+            <el-tab-pane label="ADAS" name="ADAS">
+              <transition-group name="component-fade" mode="out-in">
+               <template v-if="activeName === 'ADAS'">
+                <commonFormSelect
+                  placeholder="请选择"
+                  label="拍照分辨率"
+                  key="adasPhotoResolution"
+                  v-model="formData.adasPhotoResolution"
+                  :selectData='selectPhoto'
+                  >
+                </commonFormSelect>
+                <commonFormSelect
+                  placeholder="请选择"
+                  label="视频分辨率"
+                  key="adasVideoResolution"
+                  v-model="formData.adasVideoResolution"
+                  :selectData='selectVideo'
+                  >
+                </commonFormSelect>
+                </template>
+               </transition-group>
+            </el-tab-pane>
+          </el-tabs>
       <div v-if="isDeviceParameter">
         <el-form-item label="任务名称" prop="taskName">
           <el-input class="font-style" v-model="formData.taskName"></el-input>
         </el-form-item>
         <el-form-item label="备        注">
-          <el-input class="font-style" v-model="formData.ramark"></el-input>
+          <el-input class="font-style" v-model="formData.remark"></el-input>
         </el-form-item>
+        <div class="form-tree">
         <el-tree
           :data="treeData"
           v-loading="loading"
@@ -53,6 +66,7 @@
           :props="defaultProps"
           @check="handleNodeClick">
         </el-tree>
+        </div>
       </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -101,7 +115,7 @@ export default {
         adasVideoResolution: '',
         adasPhotoResolution: '',
         taskName: '',
-        ramark: '',
+        remark: '',
         devList: [],
         taskIssueNum: 0,
         jsonData: []
@@ -109,8 +123,13 @@ export default {
       rules: {
         taskName: { type: 'string', required: true, message: '请输入任务名称', trigger: 'blur' }
       },
-      selectData: [
+      selectPhoto: [
         { label: '高', value: 5 },
+        { label: '中', value: 3 },
+        { label: '低', value: 1 }
+      ],
+      selectVideo: [
+        { label: '高', value: 6 },
         { label: '中', value: 3 },
         { label: '低', value: 1 }
       ]
@@ -130,7 +149,7 @@ export default {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
           let data = {}
-          let { taskName, devList, ramark, dsmPhotoResolution, dsmVideoResolution, adasVideoResolution, adasPhotoResolution } = this.formData
+          let { taskName, devList, remark, dsmPhotoResolution, dsmVideoResolution, adasVideoResolution, adasPhotoResolution } = this.formData
           data.jsonData = []
           let dsm = [{
             alarmType: 'dsm',
@@ -150,8 +169,12 @@ export default {
           if (!this.rowData.taskUuid) {
             data.devList = devList
             data.taskName = taskName
+            data.remark = remark
             data.taskIssueNum = devList.length
-            data.ramark = ramark
+            if (!data.taskIssueNum) {
+              this.$message.error('请至少选择一台设备')
+              return
+            }
             this.$api['tiredMonitoring.taskAdd'](data).then(res => {
               this.$message.success('创建成功')
               this.$emit('updateTable')
@@ -201,5 +224,15 @@ export default {
 }
 .font-style {
   width: 193px;
+}
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .3s ease;
+}
+.component-fade-enter, .component-fade-leave-to {
+  opacity: 0;
+}
+.form-tree{
+  max-height: 300px;
+  overflow: auto;
 }
 </style>

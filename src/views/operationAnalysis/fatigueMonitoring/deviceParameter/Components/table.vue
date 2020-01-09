@@ -7,6 +7,14 @@
           width="55">
         </el-table-column>
         <el-table-column
+          align="center"
+          width="60"
+          label="序号">
+          <template slot-scope="scope">
+            <span> {{scope.$index + (parseInt(currentPage) - 1) * 10 + 1}} </span>
+          </template>
+        </el-table-column>
+        <el-table-column
           v-for="(th, key) in tableKey"
           :key="key"
           :prop="th.prop"
@@ -23,7 +31,10 @@
             {{scope.row.taskCreateTime | timestampToTime}}
           </div>
           <div v-else-if="th.prop === 'taskStatus'">
-            {{scope.row.taskStatus | handleType('status')}}
+            {{scope.row.taskStatus | handleType('taskStatus')}}
+          </div>
+          <div v-else-if="th.prop === 'devOnlineStatus'">
+            {{scope.row.taskStatus | handleType('devOnlineStatus')}}
           </div>
           <div v-else>
             <span>{{ scope.row[th.prop] }}</span>
@@ -50,6 +61,9 @@ export default {
     },
     isDeviceParameter: {
       type: Boolean
+    },
+    currentPage: {
+      type: Number
     },
     tableKey: {
       type: Array,

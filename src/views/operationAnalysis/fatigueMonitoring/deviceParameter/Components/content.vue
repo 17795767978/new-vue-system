@@ -3,10 +3,11 @@
     <el-row class="title-box">
       <el-button type="success" @click="AddTask">{{title}}</el-button>
     </el-row>
-    <headerNav v-show="isDeviceParameter" @configCheck="configCheck"></headerNav>
+    <headerNav :isDeviceParameter="isDeviceParameter" @configCheck="configCheck"></headerNav>
     <tableWrapper
       :table-data="tableData"
       :table-key="cloumns"
+      :currentPage="currentPage"
       :isDeviceParameter="isDeviceParameter"
       @handleClick="handleClick"
       @handleSelectionChange="handleSelectionChange"
@@ -48,11 +49,11 @@ export default {
       total: 0,
       tableData: [],
       rowData: {},
+      selectData: {},
       currentPage: 1,
       dialogFormVisible: false,
       title: '参数设置',
       isDeviceParameter: true,
-      taskName: '',
       treeData: [],
       defaultProps: {
         children: 'children',
@@ -62,12 +63,7 @@ export default {
       loading: true,
       titleArr: ['参数设置', '参数补发'],
       cloumns: [],
-      cloumnsList: [{
-        prop: 'taskUuid',
-        label: '序号',
-        width: 100,
-        align: 'center'
-      },
+      cloumnsList: [
       {
         prop: 'taskName',
         label: '任务名称',
@@ -97,12 +93,7 @@ export default {
         width: 100,
         align: 'center'
       }],
-      cloumnsDetail: [{
-        prop: 'taskDetailUuid',
-        label: '序号',
-        width: 100,
-        align: 'center'
-      },
+      cloumnsDetail: [
       {
         prop: 'busPlateNumber',
         label: '车牌号',
@@ -118,6 +109,12 @@ export default {
       {
         prop: 'devCode',
         label: '设备号',
+        width: 100,
+        align: 'center'
+      },
+      {
+        prop: 'devOnlineStatus',
+        label: '在线状态',
         width: 100,
         align: 'center'
       },
@@ -142,17 +139,14 @@ export default {
   },
   watch: {
     '$route' (to, from) {
+      this.currentPage = 1
       this.handleListChange(to.name, to.query.id)
     }
   },
   methods: {
     configCheck (data) {
-      this.taskName = data.taskName
-      this.getTaskPageList({
-        taskName: this.taskName,
-        pageSize: 10,
-        pageNum: this.currentPage
-      })
+      this.selectData = data
+      this.updateTable()
     },
     getTaskPageList (params) {
       this.$api['tiredMonitoring.getTaskPageList'](params).then(res => {
@@ -209,6 +203,7 @@ export default {
     updateTable () {
       if (this.isDeviceParameter) {
         this.getTaskPageList({
+          taskName: this.selectData.taskName,
           pageSize: 10,
           pageNum: this.currentPage
         })
@@ -216,6 +211,7 @@ export default {
         this.getTaskDetailPage({
           taskUuid: this.$route.query.id,
           pageSize: 10,
+          taskStatus: this.selectData.taskStatus,
           pageNum: this.currentPage
         })
       }
@@ -224,7 +220,7 @@ export default {
       if (name === 'deviceParameter') {
         this.getOrgLineBusTree() // 获取结构树
         this.getTaskPageList({
-          taskName: this.taskName,
+          taskName: this.selectData.taskName,
           pageSize: 10,
           pageNum: this.currentPage
         })
@@ -237,6 +233,7 @@ export default {
         this.getTaskDetailPage({
           taskUuid: taskUuid,
           pageSize: 10,
+          taskStatus: this.selectData.taskStatus,
           pageNum: this.currentPage
         })
         this.cloumns = this.cloumnsDetail

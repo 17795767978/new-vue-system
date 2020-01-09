@@ -1,8 +1,12 @@
 <template>
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
-      <el-form-item label="任务名称">
+      <el-form-item label="任务名称" v-if="isDeviceParameter">
         <el-input class="font-style" v-model="formInline.taskName" filterable></el-input>
+      </el-form-item>
+      <el-form-item label="下发状态" v-else>
+        <el-radio v-model="formInline.taskStatus" label="1">在线</el-radio>
+        <el-radio v-model="formInline.taskStatus" label="0">离线</el-radio>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onCheck">查询</el-button>
@@ -21,6 +25,17 @@ export default {
       }
     }
   },
+  props: {
+    tableData: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    isDeviceParameter: {
+      type: Boolean
+    }
+  },
   computed: {
   },
   mounted () {
@@ -33,7 +48,7 @@ export default {
   },
   methods: {
     onCheck () {
-      if (this.formInline.taskName === '') {
+      if ((this.isDeviceParameter&& !this.formInline.taskName) ||(!this.isDeviceParameter&& !this.formInline.taskStatus)) {
         this.$message.error('请添加完整的查询条件')
         return
       }
@@ -41,6 +56,7 @@ export default {
     },
     onClear () {
       this.formInline.taskName = ''
+      this.formInline.taskStatus = ''
     }
   }
 }
