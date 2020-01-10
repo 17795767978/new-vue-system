@@ -34,7 +34,7 @@
             {{scope.row.taskStatus | handleType('taskStatus')}}
           </div>
           <div v-else-if="th.prop === 'devOnlineStatus'">
-            {{scope.row.taskStatus | handleType('devOnlineStatus')}}
+            {{scope.row.devOnlineStatus | handleType('devOnlineStatus')}}
           </div>
           <div v-else>
             <span>{{ scope.row[th.prop] }}</span>
