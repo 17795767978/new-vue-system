@@ -79,6 +79,7 @@ export default {
       }
     }
   },
+  // test
   methods: {
     _getAlarmTypeRatioAnalysis (params) {
       this.loading = true
