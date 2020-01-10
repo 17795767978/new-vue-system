@@ -5,8 +5,8 @@
         <el-input class="font-style" v-model="formInline.taskName" filterable></el-input>
       </el-form-item>
       <el-form-item label="下发状态" v-else>
-        <el-radio v-model="formInline.taskStatus" label="1">在线</el-radio>
-        <el-radio v-model="formInline.taskStatus" label="0">离线</el-radio>
+        <el-radio v-model="formInline.taskStatus" label="1">成功</el-radio>
+        <el-radio v-model="formInline.taskStatus" label="0">失败</el-radio>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onCheck">查询</el-button>
@@ -21,7 +21,8 @@ export default {
   data () {
     return {
       formInline: {
-        taskName: ''
+        taskName: '',
+        taskStatus: ''
       }
     }
   },
@@ -57,6 +58,7 @@ export default {
     onClear () {
       this.formInline.taskName = ''
       this.formInline.taskStatus = ''
+      this.$emit('configCheck', this.formInline)
     }
   }
 }
