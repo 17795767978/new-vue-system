@@ -355,7 +355,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '设备参数下发',
             icon: 'nocturne icon-dash',
-            roles: ['/device-status']
+            roles: ['/device-parameter']
           }
         },
         // parameterSetting
