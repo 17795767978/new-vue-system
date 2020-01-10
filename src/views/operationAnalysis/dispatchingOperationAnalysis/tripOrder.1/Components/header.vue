@@ -61,7 +61,8 @@
             start: '06:00',
             step: '01:00',
             end: '23:00',
-            minTime: formInline.startHour
+            minTime: formInline.startHour,
+            maxTime: maxTime
           }">
         </el-time-select>
       </el-form-item>
@@ -87,7 +88,7 @@ export default {
         dateTime: '',
         type: '1',
         startHour: '07:00',
-        endHour: '09:00',
+        endHour: '08:00',
         endHourFormatter: '',
         busPlateNumbers: [],
         radio: '0'
@@ -110,7 +111,8 @@ export default {
           // console.log(time.getTime() > Date.now())
           return time.getTime() < moment(date).valueOf()
         }
-      }
+      },
+      maxTime: ''
     }
   },
   computed: {
@@ -121,9 +123,16 @@ export default {
       this.lineOptions = res
       this.formInline.lineId = this.lineOptions[0].value
     })
-    // this._getCar(this.initLineId)
     let data = new Date() - 1000 * 3600 * 24
     this.formInline.dateTime = moment(data).format('YYYY-MM-DD')
+  },
+  mounted () {
+    let time = this.formInline.startHour && Number(this.formInline.startHour.substring(0, 2)) + 2
+    if (this.formInline.startHour && time < 10) {
+      this.maxTime = `0${time}:00`
+    } else {
+      this.maxTime = `${time}:00`
+    }
   },
   watch: {
     'formInline.lineId': {
@@ -143,6 +152,7 @@ export default {
             }
           }
         } else {
+          this.formInline.dateTime = ''
           this.pickerOptions = {
             disabledDate (time) {
               let date = moment(new Date()).format('YYYY-MM-01')
@@ -150,6 +160,18 @@ export default {
             }
           }
         }
+      }
+    },
+    'formInline.startHour': {
+      handler (newV) {
+        let time = newV && Number(newV.substring(0, 2)) + 2
+        this.formInline.endHour = ''
+        if (newV && time < 10) {
+          this.maxTime = `0${time}:00`
+        } else {
+          this.maxTime = `${time}:00`
+        }
+        console.log(this.maxTime)
       }
     },
     'formInline.dateTime': {
@@ -181,7 +203,7 @@ export default {
       })
     },
     onSubmit () {
-      if (this.formInline.endHour !== '') {
+      if (this.formInline.endHour && this.formInline.endHour !== '') {
         this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
       }
       if (this.formInline.lineId === '' || this.formInline.dateTime === '' || this.formInline.dateTime === null || this.formInline.type === '' || this.formInline.startHour === null || this.formInline.endHour === null) {

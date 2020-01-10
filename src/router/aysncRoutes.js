@@ -155,6 +155,16 @@ export const aysncRoutesMap = [
           }
         },
         {
+          path: 'simple-passenger-flow',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/simplePassengerFlow/index'),
+          name: 'tripOrder',
+          meta: {
+            title: '单车客流统计图',
+            icon: 'nocturne icon-dash',
+            roles: ['/trip-order']
+          }
+        },
+        {
           path: 'full-load-rate',
           component: _import_('operationAnalysis/dispatchingOperationAnalysis/fullLoadRate/index'),
           name: 'fullLoadRate',

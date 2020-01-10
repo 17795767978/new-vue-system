@@ -78,6 +78,20 @@ export const schedulingAnalysisApi = {
       desc: '车辆发车趟次时序图'
     },
     {
+      name: 'getSequenceChartDatasOfBubble',
+      method: 'POST',
+      path: '/zhfxpt/analysis/getSequenceChartDatasOfBubble',
+      mockPath: '/zhfxpt/analysis/getSequenceChartDatasOfBubble',
+      params: {
+        lineId: '',
+        type: '',
+        dateTime: '',
+        startHour: '',
+        endHour: ''
+      },
+      desc: '单车客流统计'
+    },
+    {
       name: 'getUpLineCapacityChartDatas',
       method: 'POST',
       path: '/zhfxpt/analysis/getUpLineCapacityChartDatas',

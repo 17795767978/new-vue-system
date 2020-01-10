@@ -20,6 +20,7 @@ import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
 import { max, min } from '../../../../../utils/max.js'
 import { mapGetters } from 'vuex'
+const COLOR_ARR = ['#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000']
 export default {
   props: {
     selectData: {
@@ -51,7 +52,7 @@ export default {
       dateTime: date,
       type: '1',
       startHour: '07',
-      endHour: '08',
+      endHour: '07',
       busPlateNumbers: [],
       isHistory: '0'
     })
@@ -80,28 +81,34 @@ export default {
   },
   methods: {
     _tripOrder (params) {
-      this.$api['schedulingAnalysis.getSequenceChartDatas'](params).then(res => {
+      this.$api['schedulingAnalysis.getSequenceChartDatasOfBubble'](params).then(res => {
+        let abs = []
         this.beforeDate = false
         this.echartDatas = res.datas
         this.carData = res.legendNames
         // Object.freeze(this.echartDatas)
         this.echartDatas.forEach((date, index) => {
-          this.echartDatas[index] = date.map(num => {
-            if (num !== null && num !== undefined) {
-              return num * 1000
+          // this.echartDatas[index] = date.map(num => {
+          //   if (num !== null && num !== undefined) {
+          //     return num * 1000
+          //   }
+          // })
+          date.forEach(item => {
+            if (item[1]) {
+              item[1] = item[1] * 1000
             }
           })
         })
+        console.log(this.echartDatas)
         if (this.echartDatas.length > 0 && this.echartDatas[0][0] === undefined) {
           this.beforeDate = true
           this.echartDatas[0][0] = moment(this.selectData.date + ' ' + this.selectData.startTime + '00').valueOf()
         }
         this.legendNames = res.legendNames
         this.xAxisNames = res.xAxisNames
-        let abs = []
         this.echartDatas.forEach(item => {
           item.forEach(item => {
-            abs.push(item)
+            abs.push(item[1])
           })
         })
         abs = abs.filter(num => !isNaN(num))
@@ -169,7 +176,7 @@ export default {
             type: 'shadow'
           },
           formatter: (params) => {
-            return `${params.name}<br />${params.seriesName}<br />${moment(params.value).format('YYYY-MM-DD HH:mm:ss')}`
+            return `${moment(params.data[1]).format('YYYY-MM-DD HH:mm:ss')}<br />${params.name}<br />${params.data[3]}<br />上车人数：${params.data[2]}`
           }
         },
         xAxis: {
@@ -204,7 +211,44 @@ export default {
             }
           }
         },
-        series
+        series: (() => {
+          let series = []
+          this.echartDatas.forEach((item, index) => {
+            series.push({
+              data: item,
+              type: 'scatter',
+              symbolSize: function (data) {
+                return Math.sqrt(data[2]) * 10
+              },
+              // label: {
+              //   emphasis: {
+              //     show: true,
+              //     formatter: function (param) {
+              //       console.log(param)
+              //       let date = param.data[1] && moment(param.data[1]).format('YYYY-MM-DD HH:mm:ss')
+              //       return `${param.data[0]}<br/>${date}<br/>上车人数：${param.data[2]}`
+              //     },
+              //     position: 'top'
+              //   }
+              // },
+              itemStyle: {
+                normal: {
+                  shadowBlur: 10,
+                  shadowColor: COLOR_ARR[index],
+                  shadowOffsetY: 5,
+                  color: new this.$echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                    offset: 0,
+                    color: COLOR_ARR[index]
+                  }, {
+                    offset: 1,
+                    color: COLOR_ARR[index + 1]
+                  }])
+                }
+              }
+            })
+          })
+          return series
+        })()
       }, true)
     }
   }
