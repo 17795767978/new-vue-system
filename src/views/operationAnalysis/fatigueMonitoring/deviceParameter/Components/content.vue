@@ -65,75 +65,75 @@ export default {
       titleArr: ['参数设置', '参数补发'],
       cloumns: [],
       cloumnsList: [
-      {
-        prop: 'taskName',
-        label: '任务名称',
-        width: 200,
-        align: 'center'
-      },
-      {
-        prop: 'taskCreateTime',
-        label: '下发时间',
-        width: 180,
-        align: 'center'
-      },
-      {
-        prop: 'remark',
-        label: '备注',
-        width: 100,
-        align: 'center'
-      },
-      {
-        prop: 'taskIssueNum',
-        label: '下发数量',
-        width: 100,
-        align: 'center'
-      },
-      {
-        label: '操作',
-        width: 100,
-        align: 'center'
-      }],
+        {
+          prop: 'taskName',
+          label: '任务名称',
+          width: 200,
+          align: 'center'
+        },
+        {
+          prop: 'taskCreateTime',
+          label: '下发时间',
+          width: 180,
+          align: 'center'
+        },
+        {
+          prop: 'remark',
+          label: '备注',
+          width: 100,
+          align: 'center'
+        },
+        {
+          prop: 'taskIssueNum',
+          label: '下发数量',
+          width: 100,
+          align: 'center'
+        },
+        {
+          label: '操作',
+          width: 100,
+          align: 'center'
+        }],
       cloumnsDetail: [
-      {
-        prop: 'orgName',
-        label: '所属机构',
-        width: 180,
-        align: 'center'
-      },
-      {
-        prop: 'lineName',
-        label: '所属线路',
-        align: 'center'
-      },
-      {
-        prop: 'busPlateNumber',
-        label: '车牌号',
-        align: 'center'
-      },
-      {
-        prop: 'busSelfCode',
-        label: '编号',
-        align: 'center'
-      },
-      {
-        prop: 'devCode',
-        label: '设备号',
-        width: 100,
-        align: 'center'
-      },
-      {
-        prop: 'devOnlineStatus',
-        label: '在线状态',
-        width: 100,
-        align: 'center'
-      },
-      {
-        prop: 'taskStatus',
-        label: '状态',
-        width: 100,
-        align: 'center'
-      }]
+        {
+          prop: 'orgName',
+          label: '所属机构',
+          width: 180,
+          align: 'center'
+        },
+        {
+          prop: 'lineName',
+          label: '所属线路',
+          align: 'center'
+        },
+        {
+          prop: 'busPlateNumber',
+          label: '车牌号',
+          align: 'center'
+        },
+        {
+          prop: 'busSelfCode',
+          label: '编号',
+          align: 'center'
+        },
+        {
+          prop: 'devCode',
+          label: '设备号',
+          width: 100,
+          align: 'center'
+        },
+        {
+          prop: 'devOnlineStatus',
+          label: '在线状态',
+          width: 100,
+          align: 'center'
+        },
+        {
+          prop: 'taskStatus',
+          label: '状态',
+          width: 100,
+          align: 'center'
+        }]
     }
   },
   components: {

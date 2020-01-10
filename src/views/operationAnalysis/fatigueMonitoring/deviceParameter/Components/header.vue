@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     onCheck () {
-      if ((this.isDeviceParameter&& !this.formInline.taskName) ||(!this.isDeviceParameter&& !this.formInline.taskStatus)) {
+      if ((this.isDeviceParameter && !this.formInline.taskName) || (!this.isDeviceParameter && !this.formInline.taskStatus)) {
         this.$message.error('请添加完整的查询条件')
         return
       }
