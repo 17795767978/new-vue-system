@@ -101,7 +101,7 @@ export const aysncRoutesMap = [
         title: '调度运营分析',
         icon: 'nocturne icon-dash',
         path: 'runtime-analysis',
-        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', 'search-passenger', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity']
+        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', 'search-passenger', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/simple-passenger-flow']
       },
       children: [
         {
@@ -157,11 +157,11 @@ export const aysncRoutesMap = [
         {
           path: 'simple-passenger-flow',
           component: _import_('operationAnalysis/dispatchingOperationAnalysis/simplePassengerFlow/index'),
-          name: 'tripOrder',
+          name: 'simplePassengerFlow',
           meta: {
             title: '单车客流统计图',
             icon: 'nocturne icon-dash',
-            roles: ['/trip-order']
+            roles: ['/simple-passenger-flow']
           }
         },
         {
