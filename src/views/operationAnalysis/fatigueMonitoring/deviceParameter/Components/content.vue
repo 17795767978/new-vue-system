@@ -49,6 +49,7 @@ export default {
       total: 0,
       tableData: [],
       rowData: {},
+      id: '',
       selectData: {},
       currentPage: 1,
       dialogFormVisible: false,
@@ -95,15 +96,24 @@ export default {
       }],
       cloumnsDetail: [
       {
+        prop: 'orgName',
+        label: '所属机构',
+        width: 180,
+        align: 'center'
+      },
+      {
+        prop: 'lineName',
+        label: '所属线路',
+        align: 'center'
+      },
+      {
         prop: 'busPlateNumber',
         label: '车牌号',
-        width: 200,
         align: 'center'
       },
       {
         prop: 'busSelfCode',
         label: '编号',
-        width: 180,
         align: 'center'
       },
       {
@@ -132,15 +142,15 @@ export default {
     tableWrapper
   },
   created () {
-    let id = this.$route.query.id
-    this.handleListChange(this.$route.name, id)
+    this.id = this.$route.query.id
+    this.handleListChange(this.$route.name, this.id)
   },
   mounted () {
   },
   watch: {
     '$route' (to, from) {
       this.currentPage = 1
-      this.handleListChange(to.name, to.query.id)
+      this.handleListChange(to.name, this.id)
     }
   },
   methods: {
@@ -171,10 +181,11 @@ export default {
     },
     handleClick (row) {
       this.cloumns = this.cloumnsDetail
+      this.id = row.taskUuid
       this.$router.push({
         name: 'parameterSetting',
         query: {
-          id: row.taskUuid
+          id: this.id
         }
       })
     },
@@ -191,12 +202,10 @@ export default {
     handleSelectionChange (val) {
       let arr = []
       val.map((item) => {
-        if (item.taskStatus === '0') {
-          arr.push({
-            devUuid: item.devUuid,
-            devCode: item.devCode
-          })
-        }
+        arr.push({
+          devUuid: item.devUuid,
+          devCode: item.devCode
+        })
       })
       this.rowData.devList = arr
     },
@@ -209,7 +218,7 @@ export default {
         })
       } else {
         this.getTaskDetailPage({
-          taskUuid: this.$route.query.id,
+          taskUuid: this.id,
           pageSize: 10,
           taskStatus: this.selectData.taskStatus,
           pageNum: this.currentPage
