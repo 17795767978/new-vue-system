@@ -11,7 +11,7 @@
           width="60"
           label="序号">
           <template slot-scope="scope">
-            <span> {{scope.$index + (parseInt(currentPage) - 1) * 10 + 1}} </span>
+            {{scope.$index + (parseInt(currentPage) - 1) * 10 + 1}}
           </template>
         </el-table-column>
         <el-table-column

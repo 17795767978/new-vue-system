@@ -98,7 +98,6 @@ export default {
       {
         prop: 'orgName',
         label: '所属机构',
-        width: 180,
         align: 'center'
       },
       {
@@ -227,17 +226,24 @@ export default {
     },
     handleListChange (name, taskUuid) {
       if (name === 'deviceParameter') {
+        this.rowData.taskUuid = ''
+        this.cloumns = this.cloumnsList
+        this.$nextTick(() => {
+          this.isDeviceParameter = true
+        })
+        this.title = this.titleArr[0]
         this.getOrgLineBusTree() // 获取结构树
         this.getTaskPageList({
           taskName: this.selectData.taskName,
           pageSize: 10,
           pageNum: this.currentPage
         })
-        this.rowData.taskUuid = ''
-        this.cloumns = this.cloumnsList
-        this.isDeviceParameter = true
-        this.title = this.titleArr[0]
       } else {
+        this.cloumns = this.cloumnsDetail
+        this.$nextTick(() => {
+          this.isDeviceParameter = false
+        })
+        this.title = this.titleArr[1]
         this.rowData.taskUuid = taskUuid
         this.getTaskDetailPage({
           taskUuid: taskUuid,
@@ -245,9 +251,6 @@ export default {
           taskStatus: this.selectData.taskStatus,
           pageNum: this.currentPage
         })
-        this.cloumns = this.cloumnsDetail
-        this.isDeviceParameter = false
-        this.title = this.titleArr[1]
       }
     }
   }
