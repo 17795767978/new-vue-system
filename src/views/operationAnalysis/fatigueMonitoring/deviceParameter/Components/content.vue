@@ -65,35 +65,35 @@ export default {
       titleArr: ['参数设置', '参数补发'],
       cloumns: [],
       cloumnsList: [
-      {
-        prop: 'taskName',
-        label: '任务名称',
-        width: 200,
-        align: 'center'
-      },
-      {
-        prop: 'taskCreateTime',
-        label: '下发时间',
-        width: 180,
-        align: 'center'
-      },
-      {
-        prop: 'remark',
-        label: '备注',
-        width: 100,
-        align: 'center'
-      },
-      {
-        prop: 'taskIssueNum',
-        label: '下发数量',
-        width: 100,
-        align: 'center'
-      },
-      {
-        label: '操作',
-        width: 100,
-        align: 'center'
-      }],
+        {
+          prop: 'taskName',
+          label: '任务名称',
+          width: 200,
+          align: 'center'
+        },
+        {
+          prop: 'taskCreateTime',
+          label: '下发时间',
+          width: 180,
+          align: 'center'
+        },
+        {
+          prop: 'remark',
+          label: '备注',
+          width: 100,
+          align: 'center'
+        },
+        {
+          prop: 'taskIssueNum',
+          label: '下发数量',
+          width: 100,
+          align: 'center'
+        },
+        {
+          label: '操作',
+          width: 100,
+          align: 'center'
+        }],
       cloumnsDetail: [
       {
         prop: 'orgName',
