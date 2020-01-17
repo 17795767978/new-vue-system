@@ -2,6 +2,26 @@
   <div class="right-search-wrapper">
     <div class="top-search">
       <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
+        <el-form-item label="选择机构">
+        <el-select class="font-style" v-model="formInline.orgId" placeholder="请选择" filterable>
+          <el-option
+            v-for="item in comOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择线路">
+        <el-select class="font-style" filterable v-model="formInline.lineId" placeholder="请选择">
+          <el-option
+            v-for="item in lineOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
         <el-form-item label="设备编号">
           <el-input v-model="formInline.devCode" placeholder="请输设备编号" clearable></el-input>
         </el-form-item>
@@ -218,7 +238,9 @@ export default {
       centerDialogVisible: false,
       loading: true,
       downloadLoading: true,
-      code: '加载中'
+      code: '加载中',
+      comOptions: [],
+      lineOptions: []
     }
   },
   computed: {
@@ -231,6 +253,12 @@ export default {
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
+      this.$store.dispatch('getComList').then(res => {
+        this.comOptions = res
+      })
+      this.$store.dispatch('getLineList').then(res => {
+        this.lineOptions = res
+      })
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
     this._alarmType({
@@ -299,6 +327,63 @@ export default {
       this._alarmType({
         warnLevel: this.formInline.warnLevel
       })
+    },
+    'formInline.orgId': {
+      handler (newValue) {
+        this.formInline.lineId = ''
+        this.formInline.busNumber = ''
+        let orgId = newValue === '1' ? '' : newValue
+        this.$api['wholeInformation.getLine']({
+          lineId: '',
+          lineName: '',
+          orgId: orgId
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.lineName,
+              value: item.lineUuid
+            })
+          })
+          this.lineOptions = list
+        })
+        this.$api['wholeInformation.getCar']({
+          lineId: '',
+          lineName: '',
+          orgId: orgId
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              value: item.busPlateNumber,
+              label: item.busPlateNumber
+            })
+          })
+          console.log(this.comOptions)
+          this.carOptions = list
+        })
+      }
+    },
+    'formInline.lineId': {
+      handler (newValue) {
+        this.formInline.busNumber = ''
+        if (newValue !== '') {
+          this.$api['wholeInformation.getCar']({
+            lineId: newValue,
+            lineName: '',
+            orgId: ''
+          }).then(res => {
+            let list = []
+            res.forEach(item => {
+              list.push({
+                value: item.busPlateNumber,
+                label: item.busPlateNumber
+              })
+            })
+            this.carOptions = list
+          })
+        }
+      }
     }
   },
   methods: {
@@ -352,7 +437,7 @@ export default {
       this.pageNum = val
       let defaultData = this.$store.getters.formData
       this._tableList({
-        orgId: this.formInline.orgId.length > 0 ? this.formInline.orgId : '', // 组织机构id
+        orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号
@@ -367,12 +452,23 @@ export default {
       })
     },
     handleClick (row) {
-      this.$router.push({
-        name: 'alarmContent',
-        query: {
-          id: row.warnUuid
-        }
-      })
+      if (row.warnType === 'OVERSPEED') {
+        this.$router.push({
+          name: 'alarmContent',
+          query: {
+            row: JSON.stringify(row),
+            type: 'overspeed'
+          }
+        })
+      } else {
+        this.$router.push({
+          name: 'alarmContent',
+          query: {
+            id: row.warnUuid,
+            type: 'normal'
+          }
+        })
+      }
     },
     onSubmit () {
       let dateArr = []
@@ -385,7 +481,7 @@ export default {
       }
       this.pageNum = 1
       this._tableList({
-        orgId: this.formInline.orgId, // 组织机构id
+        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号

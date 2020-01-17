@@ -95,44 +95,44 @@ export default {
           align: 'center'
         }],
       cloumnsDetail: [
-      {
-        prop: 'orgName',
-        label: '所属机构',
-        align: 'center'
-      },
-      {
-        prop: 'lineName',
-        label: '所属线路',
-        align: 'center'
-      },
-      {
-        prop: 'busPlateNumber',
-        label: '车牌号',
-        align: 'center'
-      },
-      {
-        prop: 'busSelfCode',
-        label: '编号',
-        align: 'center'
-      },
-      {
-        prop: 'devCode',
-        label: '设备号',
-        width: 100,
-        align: 'center'
-      },
-      {
-        prop: 'devOnlineStatus',
-        label: '在线状态',
-        width: 100,
-        align: 'center'
-      },
-      {
-        prop: 'taskStatus',
-        label: '状态',
-        width: 100,
-        align: 'center'
-      }]
+        {
+          prop: 'orgName',
+          label: '所属机构',
+          align: 'center'
+        },
+        {
+          prop: 'lineName',
+          label: '所属线路',
+          align: 'center'
+        },
+        {
+          prop: 'busPlateNumber',
+          label: '车牌号',
+          align: 'center'
+        },
+        {
+          prop: 'busSelfCode',
+          label: '编号',
+          align: 'center'
+        },
+        {
+          prop: 'devCode',
+          label: '设备号',
+          width: 100,
+          align: 'center'
+        },
+        {
+          prop: 'devOnlineStatus',
+          label: '在线状态',
+          width: 100,
+          align: 'center'
+        },
+        {
+          prop: 'taskStatus',
+          label: '状态',
+          width: 100,
+          align: 'center'
+        }]
     }
   },
   components: {

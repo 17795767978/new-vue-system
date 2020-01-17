@@ -1,12 +1,12 @@
 <template>
   <div class="alarm-center">
     <el-row :gutter="12">
-      <el-col :span="4">
+      <!-- <el-col :span="4">
         <div class="left-wrapper">
           <leftWrapper @selectCar="selectCar" :isClear="isClear" @isClearTo="isClearTo"></leftWrapper>
         </div>
-      </el-col>
-      <el-col :span="20">
+      </el-col> -->
+      <el-col :span="24">
         <div class="right-content">
           <rightWrapper
             :selectCarData="selectCarData"
@@ -19,7 +19,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import leftWrapper from './Components/leftWrapper'
+// import leftWrapper from './Components/leftWrapper'
 import rightWrapper from './Components/rightWrapper'
 import moment from 'moment'
 export default {
@@ -31,7 +31,7 @@ export default {
     }
   },
   components: {
-    leftWrapper,
+    // leftWrapper,
     rightWrapper
   },
   mounted () {

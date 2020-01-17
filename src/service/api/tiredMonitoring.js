@@ -400,6 +400,15 @@ export const tiredMonitoringApi = {
       mockPath: '/deviceStatus/export',
       params: {},
       desc: '设备状态excel'
+    },
+    {
+      name: 'overWarnInfoDetail',
+      method: 'POST',
+      path: '/warns/overWarnInfoDetail/get',
+      mockPath: '/warns/overWarnInfoDetail/get',
+      params: {
+      },
+      desc: '超速报警'
     }
   ]
 }

@@ -16,7 +16,7 @@
         animation="BMAP_ANIMATION_BOUNCE"
         >
       </bm-marker>
-      <bm-info-window :position="center" title="位置信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen" v-show="!isErrorPosition">
+      <bm-info-window :position="center" title="位置信息" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen" v-show="isErrorPosition">
         <p class="font-style" style="margin-bottom: 5px;">位置：{{address}}</p>
       </bm-info-window>
       <bm-overlay

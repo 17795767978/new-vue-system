@@ -1,25 +1,33 @@
 <template>
-  <div class="alarm-content">
+  <div class="alarm-content" v-loading="load">
     <el-row class="pic">
       <el-card shadow="hover" class="person-detail">
-        <personDetail :busDetails="busDetails" />
+        <personDetail :busDetails="busDetails" :overspeedDetails="overspeedDetails" :position="position"/>
       </el-card>
     </el-row>
-    <el-row class="pic" :gutter="12">
-      <el-col :span="12">
+    <el-row class="pic-middle" :gutter="12">
+      <el-col :span="12" v-show="Object.keys(this.busDetails).length > 0">
         <el-card shadow="hover" class="pic-detail">
           <picDetail :busDetails="busDetails.warnPicList"/>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" v-show="Object.keys(this.busDetails).length > 0">
         <el-card shadow="hover" class="video-detail">
           <videoDetail :busDetails="busDetails.warnMediaList"/>
         </el-card>
       </el-col>
+      <el-col :span="24" v-show="Object.keys(overspeedDetails).length > 0">
+        <el-card shadow="hover" class="speed-detail">
+          <speedEchart :canDatas="overspeedDetails.canDatas"/>
+        </el-card>
+      </el-col>
     </el-row>
-    <el-row class="pic">
-      <el-card shadow="hover" class="map-detail">
+    <el-row class="pic-bottom">
+      <el-card shadow="hover" class="map-detail" v-show="Object.keys(busDetails).length > 0">
         <mapDetail :busDetails="busDetails"/>
+      </el-card>
+      <el-card shadow="hover" class="speed-map-detail" v-show="Object.keys(overspeedDetails).length > 0">
+        <overSpeedMap class="maps" :warnTrails="overspeedDetails.warnTrails" @getLocation="getLocation"></overSpeedMap>
       </el-card>
     </el-row>
   </div>
@@ -31,38 +39,83 @@ import personDetail from './Components/personDetail'
 import picDetail from './Components/picDetail'
 import videoDetail from './Components/videoDetail'
 import mapDetail from './Components/mapDetail'
+import overSpeedMap from './Components/overSpeedMap'
+import speedEchart from './Components/echarts'
 // import moment from 'moment';
 export default {
   name: 'alarmContent',
   data () {
     return {
+      load: false,
       busDetails: {},
       isClear: false,
-      warnUuid: ''
+      warnUuid: '',
+      overspeedDetails: {},
+      position: ''
     }
+  },
+  provide () {
+    return { parent: this }
   },
   components: {
     personDetail,
     picDetail,
     videoDetail,
-    mapDetail
+    mapDetail,
+    overSpeedMap,
+    speedEchart
   },
   created () {
-    // this.$route.query.id = JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
-    this._warnInfoDetail(this.$route.query.id)
+    if (Object.keys(this.$route.query).length > 0) {
+      if (this.$route.query.type === 'normal') {
+        this._warnInfoDetail(this.$route.query.id)
+      } else {
+        this.position = ''
+        this._getOverWarnInfoDetail(this.$route.query.row)
+      }
+    } else {
+      this.$router.push({
+        name: 'alarmCenter'
+      })
+    }
   },
   activated () {
-    // this.$route.query.id = JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
-    this._warnInfoDetail(this.$route.query.id)
+    if (Object.keys(this.$route.query).length > 0) {
+      if (this.$route.query.type === 'normal') {
+        this.overspeedDetails = {}
+        this._warnInfoDetail(this.$route.query.id)
+      } else {
+        this.busDetails = {}
+        this.position = ''
+        this._getOverWarnInfoDetail(this.$route.query.row)
+      }
+    }
   },
   watch: {},
   methods: {
     _warnInfoDetail (params) {
+      this.load = true
       this.$api['tiredMonitoring.getWarnDetail']({
         warnUuid: params
       }).then(res => {
         this.busDetails = res
+        this.load = false
       })
+    },
+    _getOverWarnInfoDetail (params) {
+      this.load = true
+      const { busPlateNumber, busSelfCode, busUuid, driverName, lineName, orgName, speed, warnEndTime, warnStartTime, warnTypeName, duration } = JSON.parse(params)
+      this.$api['tiredMonitoring.overWarnInfoDetail']({
+        busUuid, busPlateNumber, busSelfCode, driverName, lineName, orgName, speed, warnEndTime, warnStartTime, warnTypeName, duration
+      }).then(res => {
+        this.overspeedDetails = res
+        this.load = false
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
+    },
+    getLocation (address) {
+      this.position = address
     }
   }
 }
@@ -71,23 +124,49 @@ export default {
 <style lang="scss" scoped>
 .alarm-content {
   width: 100%;
-  padding: 10px 10px;
+  height: 100%;
+  padding: 1vh 1vw;
   box-sizing: border-box;
   background-color: #f0f2f5;
   .pic {
-    margin-bottom: 10px;
+    margin-bottom: 1vh;
+  }
+  .pic-middle {
+    margin-bottom: 1vh;
+  }
+  .pic-end {
+    margin-bottom: 1vh;
   }
   .person-detail {
-    height: 140px;
+    height: 14vh;
   }
   .pic-detail {
-    height: 300px;
+    height: 35vh;
   }
   .video-detail {
-    height: 300px;
+    height: 35vh;
+  }
+  .speed-detail {
+    height: 20vh;
+    /deep/ .el-card__body {
+      padding: 1vh 1vw;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+    }
   }
   .map-detail {
-    height: 350px;
+    height: 38vh;
+  }
+  .speed-map-detail {
+    width: 100%;
+    height: 53vh;
+    /deep/ .el-card__body {
+      padding: 1vh 1vw;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+    }
   }
 }
 </style>
