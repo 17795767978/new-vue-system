@@ -50,8 +50,8 @@ export default {
         setTimeout(() => {
           this.loading = false
           this.echartDatas = newV
-          let datas = this.echartDatas.map(item => item.speed)
-          let xDatas = this.echartDatas.map(item => moment(item.sendtime).format('HH:mm:ss'))
+          let datas = this.echartDatas && this.echartDatas.length > 0 ? this.echartDatas.map(item => item.speed) : []
+          let xDatas = this.echartDatas && this.echartDatas.length > 0 ? this.echartDatas.map(item => moment(item.sendtime).format('HH:mm:ss')) : []
           this._getMonthData(datas, xDatas)
         }, 1000)
       }
