@@ -64,7 +64,7 @@ export default {
     return {
       moment: '',
       tableData: [],
-      tableTitle: [{ key: '机构', value: 'orgName' }, { key: 'IC卡线路', value: 'icLineName' }, { key: '线路', value: 'lineName' }, { key: '车辆', value: 'busPlateNumber' }, { key: '刷卡时间', value: 'uploadTime' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }],
+      tableTitle: [{ key: '机构', value: 'orgName' }, { key: '线路', value: 'lineName' }, { key: '车辆', value: 'busPlateNumber' }, { key: '刷卡时间', value: 'uploadTime' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }],
       total: 0,
       pageNumber: 1,
       pageSize: 15,
@@ -115,7 +115,7 @@ export default {
       this.loading = true
       this.isDisabled = true
       if (type === '1') {
-        this.tableTitle = [{ key: '机构', value: 'orgName' }, { key: 'IC卡线路', value: 'icLineName' }, { key: '线路', value: 'lineName' }, { key: '车辆自编号', value: 'busSelfCode' }, { key: '车辆', value: 'busPlateNumber' }, { key: '刷卡时间', value: 'uploadTime' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }]
+        this.tableTitle = [{ key: '机构', value: 'orgName' }, { key: '线路', value: 'lineName' }, { key: '车辆自编号', value: 'busSelfCode' }, { key: '车辆', value: 'busPlateNumber' }, { key: '刷卡时间', value: 'uploadTime' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }]
         this.$api['passengerFlow.todayList'](params).then(res => {
           this.tableData = res.list
           this.total = res.total
@@ -128,7 +128,7 @@ export default {
           this.isDisabled = false
         })
       } else {
-        this.tableTitle = [{ key: '机构', value: 'orgName' }, { key: 'IC卡线路', value: 'icLineName' }, { key: '线路', value: 'lineName' }, { key: '车辆', value: 'busPlateNumber' }, { key: '方向', value: 'lineType' }, { key: '站序', value: 'staSequence' }, { key: '站点名称', value: 'staName' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }, { key: '刷卡时间', value: 'uploadTime' }]
+        this.tableTitle = [{ key: '机构', value: 'orgName' }, { key: '线路', value: 'lineName' }, { key: '车辆', value: 'busPlateNumber' }, { key: '方向', value: 'lineType' }, { key: '站序', value: 'staSequence' }, { key: '站点名称', value: 'staName' }, { key: '卡号', value: 'icCardUuid' }, { key: '卡类型', value: 'icCardType' }, { key: '刷卡时间', value: 'uploadTime' }]
         this.$api['passengerFlow.list'](params).then(res => {
           this.tableData = res.list
           this.total = res.total

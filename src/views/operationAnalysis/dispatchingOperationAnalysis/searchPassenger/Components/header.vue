@@ -32,7 +32,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="方向">
+      <el-form-item label="方向" v-if="isType">
         <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
           <el-option
             v-for="item in turnOptions"
@@ -126,8 +126,9 @@ export default {
       code: '加载中',
       disabled: false,
       isLoading: false,
-      isBusNumber: false,
-      isBusSelfNumber: true
+      isBusNumber: true,
+      isBusSelfNumber: true,
+      isType: false
     }
   },
   created () {
@@ -222,12 +223,12 @@ export default {
       handler (newV) {
         if (newV === '1') {
           this.formInline.valueTime = [moment().format('YYYY-MM-DD 00:00:00'), moment().format('YYYY-MM-DD 23:59:59')]
-          this.isBusNumber = false
           this.isBusSelfNumber = true
-          this.formInline.busNumber = ''
+          this.isType = false
+          this.formInline.lineType = ''
         } else {
           this.formInline.valueTime = []
-          this.isBusNumber = true
+          this.isType = true
           this.isBusSelfNumber = false
           this.formInline.busSelfNumber = ''
         }
@@ -303,7 +304,8 @@ export default {
         this.$api['downLoad.todayExport']({
           orgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
           lineUuid: this.formInline.lineId,
-          lineType: this.formInline.lineType,
+          lineType: '',
+          busPlateNumber: this.formInline.busNumber,
           busSelfCode: this.formInline.busSelfNumber,
           sTime: this.formInline.startTime,
           eTime: this.formInline.endTime
