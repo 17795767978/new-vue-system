@@ -456,7 +456,7 @@ export default {
         this.$router.push({
           name: 'alarmContent',
           query: {
-            row: JSON.stringify(row),
+            id: row.warnUuid,
             type: 'overspeed'
           }
         })

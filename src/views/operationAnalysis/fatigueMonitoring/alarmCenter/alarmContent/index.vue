@@ -67,12 +67,16 @@ export default {
   },
   created () {
     if (Object.keys(this.$route.query).length > 0) {
-      if (this.$route.query.type === 'normal') {
-        this._warnInfoDetail(this.$route.query.id)
-      } else {
+      this._warnInfoDetail(this.$route.query.id)
+      if (this.$route.query.type !== 'normal') {
         this.position = ''
-        this._getOverWarnInfoDetail(this.$route.query.row)
-      }
+      } 
+      // if (this.$route.query.type === 'normal') {
+      //   this._warnInfoDetail(this.$route.query.id)
+      // } else {
+      //   this.position = ''
+      //   this._getOverWarnInfoDetail(this.$route.query.row)
+      // }
     } else {
       this.$router.push({
         name: 'alarmCenter'
@@ -81,13 +85,12 @@ export default {
   },
   activated () {
     if (Object.keys(this.$route.query).length > 0) {
+      this._warnInfoDetail(this.$route.query.id)
       if (this.$route.query.type === 'normal') {
         this.overspeedDetails = {}
-        this._warnInfoDetail(this.$route.query.id)
       } else {
         this.busDetails = {}
         this.position = ''
-        this._getOverWarnInfoDetail(this.$route.query.row)
       }
     }
   },
@@ -98,22 +101,28 @@ export default {
       this.$api['tiredMonitoring.getWarnDetail']({
         warnUuid: params
       }).then(res => {
-        this.busDetails = res
         this.load = false
-      })
-    },
-    _getOverWarnInfoDetail (params) {
-      this.load = true
-      const { busPlateNumber, busSelfCode, busUuid, driverName, lineName, orgName, speed, warnEndTime, warnStartTime, warnTypeName, duration } = JSON.parse(params)
-      this.$api['tiredMonitoring.overWarnInfoDetail']({
-        busUuid, busPlateNumber, busSelfCode, driverName, lineName, orgName, speed, warnEndTime, warnStartTime, warnTypeName, duration
-      }).then(res => {
-        this.overspeedDetails = res
-        this.load = false
+        if (this.$route.query.type === 'normal') {
+          this.busDetails = res
+        } else {
+          this.overspeedDetails = res
+        }
       }).catch(err => {
         this.$message.error(err.message)
       })
     },
+    // _getOverWarnInfoDetail (params) {
+    //   this.load = true
+    //   const { busPlateNumber, busSelfCode, busUuid, driverName, lineName, orgName, speed, warnEndTime, warnStartTime, warnTypeName, duration } = JSON.parse(params)
+    //   this.$api['tiredMonitoring.overWarnInfoDetail']({
+    //     busUuid, busPlateNumber, busSelfCode, driverName, lineName, orgName, speed, warnEndTime, warnStartTime, warnTypeName, duration
+    //   }).then(res => {
+    //     this.overspeedDetails = res
+    //     this.load = false
+    //   }).catch(err => {
+    //     this.$message.error(err.message)
+    //   })
+    // },
     getLocation (address) {
       this.position = address
     }

@@ -1,15 +1,20 @@
 <template>
   <div class="map-wrapper" v-loading="show">
-    <el-button v-if="path && path.length > 0" type="primary" size="small" style="position: absolute; z-index: 999; top: 3vh; left: 2vw;" @click="go">重播</el-button>
+    <!-- <el-button v-if="path && path.length > 0" type="primary" size="small" style="position: absolute; z-index: 999; top: 3vh; left: 2vw;" @click="go">重播</el-button> -->
     <div class="no-data" v-if="path && path.length === 0">暂无报警轨迹数据</div>
-    <baidu-map class="map" :center="{lng: 104.61947, lat: 28.76593}" :zoom="15" :style="{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0, 0.5)'} " :ak="'7vVOlMOKr03PaWX82WajF6m'"
+    <baidu-map class="map" :center="path && path.length > 0 ? {lng: path[0].lng, lat: path[0].lat} : {lng: 104.61947, lat: 28.76593}" :zoom="16" :style="{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0, 0.5)'} " :ak="'7vVOlMOKr03PaWX82WajF6m'"
       :mapClick="false"
       :scroll-wheel-zoom="true"
       @ready="handler">
-      <bm-marker  style="z-index: 9999; position: absolute" v-for="(item, index) in path.slice(0, path.length - 1)" :position="{lng: item.lng, lat: item.lat}" :key="index"  @click="handleInfo"  :title="`${item.lng}-${item.lat}`">
-      </bm-marker>
-      <bm-driving v-if="path && path.length > 0" v-loading="show" :start="path && path[0]" :end="path && path[path.length - 1]" :panel="false" :autoViewport="false"></bm-driving>
-      <bml-lushu
+      <div v-for="(item, index) in path" :key="item.lng + item.lat + index" >
+        <bm-marker  :position="{lng: item.lng, lat: item.lat}"  @click="handleInfo"  :title="`${item.lng}-${item.lat}`">
+          <bm-label v-if="index === 0 || index === path.length - 1" :content="index === 0 ? '起点' : '终点'" :labelStyle="{color: 'black', fontSize : '14px', border: '1px solid #fff'}" :offset="{width: 20, height: 5}"/>
+          <!-- <bm-info-window :show="isShowWindow" @close="infoWindowClose" @open="infoWindowOpen">位置: {{address}}</bm-info-window> -->
+        </bm-marker>
+      </div>
+      
+      <!-- <bm-driving v-if="path && path.length > 0" v-loading="show" :start="path && path[0]" :end="path && path[path.length - 1]" :panel="false" :autoViewport="false"></bm-driving> -->
+      <!-- <bml-lushu
         v-if="path && path.length > 0"
         @stop="reset"
         :path="path"
@@ -19,13 +24,13 @@
         :content="content"
         :autoView="true"
         :rotation="true">
-      </bml-lushu>
+      </bml-lushu> -->
     </baidu-map>
   </div>
 </template>
 
 <script>
-import { BaiduMap, BmlLushu, BmDriving, BmMarker } from 'vue-baidu-map'
+import { BaiduMap, BmlLushu, BmDriving, BmMarker, BmLabel } from 'vue-baidu-map'
 export default {
   props: {
     warnTrails: {
@@ -36,7 +41,8 @@ export default {
     BaiduMap,
     BmlLushu,
     BmDriving,
-    BmMarker
+    BmMarker,
+    BmLabel
   },
   inject: ['parent'],
   data () {
@@ -44,6 +50,7 @@ export default {
       center: {},
       address: '',
       show: true,
+      isShowWindow: true,
       content: '车',
       play: true,
       dataTo: [],
@@ -98,7 +105,15 @@ export default {
     go () {
       this.play = true
     },
+    infoWindowClose () {
+      this.isShowWindow = false
+    },
+    infoWindowOpen () {
+      this.isShowWindow = true
+    },
     handleInfo (e) {
+      console.log(e.point)
+      this.isShowWindow = true
       this.geocoder.getLocation(e.point, res => {
         this.address = res.address
         this.$emit('getLocation', this.address)
