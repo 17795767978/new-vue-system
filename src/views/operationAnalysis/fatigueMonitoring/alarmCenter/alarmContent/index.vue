@@ -70,7 +70,7 @@ export default {
       this._warnInfoDetail(this.$route.query.id)
       if (this.$route.query.type !== 'normal') {
         this.position = ''
-      } 
+      }
       // if (this.$route.query.type === 'normal') {
       //   this._warnInfoDetail(this.$route.query.id)
       // } else {

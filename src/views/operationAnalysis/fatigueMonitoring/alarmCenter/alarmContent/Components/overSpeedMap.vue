@@ -12,7 +12,6 @@
           <!-- <bm-info-window :show="isShowWindow" @close="infoWindowClose" @open="infoWindowOpen">位置: {{address}}</bm-info-window> -->
         </bm-marker>
       </div>
-      
       <!-- <bm-driving v-if="path && path.length > 0" v-loading="show" :start="path && path[0]" :end="path && path[path.length - 1]" :panel="false" :autoViewport="false"></bm-driving> -->
       <!-- <bml-lushu
         v-if="path && path.length > 0"
@@ -30,7 +29,13 @@
 </template>
 
 <script>
-import { BaiduMap, BmlLushu, BmDriving, BmMarker, BmLabel } from 'vue-baidu-map'
+import {
+  BaiduMap,
+  // BmlLushu,
+  // BmDriving,
+  BmMarker,
+  BmLabel
+} from 'vue-baidu-map'
 export default {
   props: {
     warnTrails: {
@@ -39,8 +44,8 @@ export default {
   },
   components: {
     BaiduMap,
-    BmlLushu,
-    BmDriving,
+    // BmlLushu,
+    // BmDriving,
     BmMarker,
     BmLabel
   },

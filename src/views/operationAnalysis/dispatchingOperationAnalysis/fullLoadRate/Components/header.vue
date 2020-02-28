@@ -163,11 +163,10 @@ export default {
 .header {
   width: 100%;
   border-bottom: 1px solid #eee;
-  padding: 20px 20px;
+  padding: 20px 20px 0 20px;
   box-sizing: border-box;
   box-shadow: 0 1px 10px rgba(0,0,0, 0.5);
   .form-inline {
-   height: 38px;
    .font-style {
      width: 130px;
    }

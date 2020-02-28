@@ -122,11 +122,13 @@ export default {
   },
   methods: {
     goToDetail (data) {
-      console.log(data.warnUuid)
+      console.log(data)
+      const type = data.warnType === 'OVERSPEED' ? 'overspeed' : 'normal'
       this.$router.push({
         path: '/fatigue-monitoring/alarm-content',
         query: {
-          id: data.warnUuid
+          id: data.warnUuid,
+          type
         }
       })
     },

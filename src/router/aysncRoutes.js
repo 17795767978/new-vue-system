@@ -278,6 +278,36 @@ export const aysncRoutesMap = [
           }
         },
         {
+          path: 'car-sort',
+          component: _import_('operationAnalysis/fatigueMonitoring/carSort/index'),
+          name: 'carSort',
+          meta: {
+            title: '车辆排行',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-drive']
+          }
+        },
+        {
+          path: 'monitoring-ledger',
+          component: _import_('operationAnalysis/fatigueMonitoring/monitoringLedger/index'),
+          name: 'monitoringLedger',
+          meta: {
+            title: '监测台账',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-drive']
+          }
+        },
+        {
+          path: 'diary-table',
+          component: _import_('operationAnalysis/fatigueMonitoring/diaryTable/index'),
+          name: 'diaryTable',
+          meta: {
+            title: '统计日报表',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-drive']
+          }
+        },
+        {
           path: 'alarm-type',
           component: _import_('operationAnalysis/fatigueMonitoring/alarmType/index'),
           name: 'alarmType',

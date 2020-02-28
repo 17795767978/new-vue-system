@@ -61,6 +61,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="司机工号" v-if="isDriverNum">
+        <el-input class="font-style" v-model="formInline.driverNum"></el-input>
+      </el-form-item>
       <el-form-item label="方向" v-if="isTurn">
         <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
           <el-option
@@ -297,6 +300,9 @@ export default {
     },
     isLineEmpty: {
       type: Boolean
+    },
+    isDriverNum: {
+      type: Boolean
     }
   },
   data () {
@@ -321,7 +327,8 @@ export default {
         startStation: {},
         endStation: {},
         dateArray: [],
-        radio: '1'
+        radio: '1',
+        driverNum: ''
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -619,7 +626,8 @@ export default {
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        driverNum: this.formInline.driverNum
       }
       this.$emit('configCheck', configData)
     },
@@ -645,7 +653,8 @@ export default {
         warnTypeId: [],
         dateArray: [],
         lineIds: [],
-        radio: '2'
+        radio: '2',
+        driverNum: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -667,7 +676,8 @@ export default {
         dateArray: this.formInline.dateArray,
         dataCurrent: date,
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        driverNum: this.formInline.driverNum
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -733,7 +743,8 @@ export default {
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        driverNum: this.formInline.driverNum
       }
       this.$emit('configCheckMul', configData)
     },
@@ -780,12 +791,12 @@ export default {
 <style lang="scss" scoped>
 .header {
   width: 100%;
+  // min-height: 10vh;
   border-bottom: 1px solid #eee;
-  padding: 20px 20px;
+  padding: 20px 20px 0px 20px;
   box-sizing: border-box;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
   .form-inline {
-    height: 4vh;
     .font-style {
       width: 130px;
     }
