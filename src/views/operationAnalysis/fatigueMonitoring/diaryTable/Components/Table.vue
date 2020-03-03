@@ -40,6 +40,9 @@
           :key="item.value"
         >
           <div class="grade-item border">
+            一级
+          </div>
+          <div class="grade-item border">
             二级
           </div>
           <div class="grade-item">
@@ -65,6 +68,8 @@
         >
           <div class="grade-item border">
           </div>
+          <div class="grade-item border">
+          </div>
           <div class="grade-item">
           </div>
         </div>
@@ -85,6 +90,8 @@
         <div class="select-grade-group" v-for="item in colSelectData"
           :key="item.value"
         >
+          <div class="grade-item border">
+          </div>
           <div class="grade-item border">
           </div>
           <div class="grade-item">
@@ -135,6 +142,9 @@
           :key="item.value"
         >
           <div class="grade-item border">
+            一级
+          </div>
+          <div class="grade-item border">
             二级
           </div>
           <div class="grade-item">
@@ -160,6 +170,8 @@
         >
           <div class="grade-item border">
           </div>
+          <div class="grade-item border">
+          </div>
           <div class="grade-item">
           </div>
         </div>
@@ -182,6 +194,8 @@
         >
           <div class="grade-item border">
           </div>
+          <div class="grade-item border">
+          </div>
           <div class="grade-item">
           </div>
         </div>
@@ -202,7 +216,9 @@ export default {
       colDisposeData: [
         {
           label: '抽烟',
-          value: 'SMOKING'
+          value: 'SMOKING',
+          smokingNumFirst: '10',
+          smokingSecL: '20'
         },
         {
           label: '疲劳驾驶',
@@ -263,7 +279,7 @@ export default {
   },
   mounted () {
     this.disposeHeight = `${3 * 3 * this.colDisposeData.length + 3}vh`
-    this.selectHeight = `${2 * 3 * this.colSelectData.length}vh`
+    this.selectHeight = `${3 * 3 * this.colSelectData.length}vh`
   },
   methods: {
   }
@@ -274,7 +290,7 @@ export default {
 .table {
   width: 100%;
   height: 75vh;
-  overflow: scroll;
+  // overflow: scroll;
   display: flex;
   .left-table-title {
     width: 100%;
@@ -348,8 +364,8 @@ export default {
       }
       .select-alarm-type-group {
         width: 100%;
-        height: 6vh;
-        line-height: 6vh;
+        height: 9vh;
+        line-height: 9vh;
         text-align: center;
         box-sizing: border-box;
         border-right: 1px solid #ebeef5;
@@ -394,8 +410,8 @@ export default {
       }
       .select-grade-group {
         width: 100%;
-        height: 6vh;
-        line-height: 6vh;
+        height: 9vh;
+        line-height: 9vh;
         text-align: center;
         box-sizing: border-box;
         border-right: 1px solid #ebeef5;

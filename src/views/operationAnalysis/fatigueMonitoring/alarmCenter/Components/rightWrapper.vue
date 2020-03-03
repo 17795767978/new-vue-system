@@ -51,6 +51,16 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="处理结果">
+          <el-select v-model="formInline.checkType">
+            <el-option
+              v-for="item in checkOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="选择时间">
           <el-date-picker
             v-model="formInline.timeValue"
@@ -136,12 +146,14 @@
           align="center"
           prop="speed"
           label="报警速度(KM/H)"
+          width="120"
           >
         </el-table-column>
         <el-table-column
           align="center"
           prop="warnTime"
           label="报警时间"
+          width="200"
           :formatter="formatterTime"
           >
         </el-table-column>
@@ -152,6 +164,23 @@
           width="120">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          fixed="right"
+          label="处理"
+          width="150"
+        >
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.warnLevel" size="mini">
+              <el-option
+                v-for="item in checkOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
           </template>
         </el-table-column>
       </el-table>
@@ -215,7 +244,8 @@ export default {
         busSelfCode: '',
         warnLevel: '',
         warnTypeId: [],
-        timeValue: []
+        timeValue: [],
+        checkType: ''
       },
       levelOptions: [
         {
@@ -227,6 +257,20 @@ export default {
         }, {
           value: '3',
           label: 'L3'
+        }
+      ],
+      checkOptions: [
+        {
+          value: '0',
+          label: '未处理'
+        },
+        {
+          value: '1',
+          label: '已处理'
+        },
+        {
+          value: '2',
+          label: '误报'
         }
       ],
       warnOptions: [],
