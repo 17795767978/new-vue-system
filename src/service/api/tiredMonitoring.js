@@ -409,6 +409,47 @@ export const tiredMonitoringApi = {
       params: {
       },
       desc: '超速报警'
+    },
+    {
+      name: 'getCarAlarmList',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingBusRanking',
+      mockPath: '/zhfxpt/getBadDrivingBusRanking',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: []
+      },
+      desc: '车辆排行'
+    },
+    {
+      name: 'getDrivingBehaviorDay',
+      method: 'POST',
+      path: '/zhfxpt/getDrivingBehaviorDay',
+      mockPath: '/zhfxpt/getDrivingBehaviorDay',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        busNumber: '',
+        driverNum: '',
+        warnTypes: []
+      },
+      desc: '监测台账'
+    },
+    {
+      name: 'getAlarmUploadReportDay',
+      method: 'POST',
+      path: '/zhfxpt/getAlarmUploadReportDay',
+      mockPath: '/zhfxpt/getAlarmUploadReportDay',
+      params: {
+        orgId: '',
+        warnDate: ''
+      },
+      desc: '上传统计日报'
     }
   ]
 }

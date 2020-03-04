@@ -10,7 +10,7 @@
     />
     <!-- <h2 class="title">不良驾驶行为分析报警车辆排行</h2> -->
     <div class="table-style">
-      <Table :selectData="selectData" />
+      <Table :searchData="searchData" />
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   name: 'carSort',
   data () {
     return {
-      selectData: {}
+      searchData: {}
     }
   },
   components: {
@@ -31,8 +31,7 @@ export default {
   },
   methods: {
     getSearch (data) {
-      this.selectData = data
-      console.log(data)
+      this.searchData = data
     }
   }
 }

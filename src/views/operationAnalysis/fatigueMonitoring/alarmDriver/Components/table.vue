@@ -4,7 +4,7 @@
     <el-table
       ref="tableWrapper"
       :data="tableData"
-      height="50vh"
+      height="70vh"
       border
       @sort-change="changeTableSort"
       style="width: 100%">
@@ -22,10 +22,10 @@
         :prop="item.plvalue"
         :width="getWidth(item, index)"
         :label="item.pldisplay">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <el-button v-if="item.plvalue === 'drivername'" type="primary" size="mini" @click="getrowData(scope.row)">{{scope.row.drivername}}</el-button>
           <span v-else>{{scope.row[item.plvalue]}}</span>
-        </template>
+        </template> -->
       </el-table-column>
     </el-table>
   </div>

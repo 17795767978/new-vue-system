@@ -109,7 +109,7 @@ export default {
   methods: {
     _getTableData (params) {
       this.isloading = true
-      this.$api['tiredMonitoring.getBadDrivingDriverRanking'](params).then(res => {
+      this.$api['tiredMonitoring.getCarAlarmList'](params).then(res => {
         setTimeout(() => {
           this.isloading = false
         }, 100)

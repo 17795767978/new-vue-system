@@ -1,5 +1,5 @@
 <template>
-<div class="table">
+<div class="table" v-loading="isLoading">
   <div style="width: 48%;margin-right: 2%;">
     <h2 class="left-table-title">驾驶员行为监测报警</h2>
     <div class="left-table">
@@ -12,7 +12,7 @@
       </div>
       <div class="table-alarmType">
         <div class="col-title">项目</div>
-        <div v-for="item in colDisposeData" :key="item.value" class="dispose-alarm-type-group">{{item.label}}</div>
+        <div v-for="item in colDisposeData" :key="item.plvalue" class="dispose-alarm-type-group">{{item.pldisplay}}</div>
         <div class="col-title no-right-border"></div>
         <div class="select-alarm-type-group" v-for="item in colSelectData"
           :key="item.value"
@@ -24,7 +24,7 @@
       </div>
       <div class="table-grade-group">
         <div class="col-title">级别</div>
-        <div v-for="item in colDisposeData" :key="item.value" class="dispose-grade-group">
+        <div v-for="item in colDisposeData" :key="item.plvalue" class="dispose-grade-group">
           <div class="grade-item">
             一级
           </div>
@@ -54,15 +54,19 @@
       </div>
       <div class="alarm-num-group">
         <div class="col-title">次数</div>
-        <div v-for="item in colDisposeData" :key="item.value" class="dispose-grade-group">
-          <div class="grade-item">
+        <div v-for="item in colDisposeData" :key="item.plvalue" class="dispose-grade-group">
+          <div class="grade-item" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[0]]}}
           </div>
-          <div class="grade-item border">
+          <div class="grade-item border" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[2]]}}
           </div>
-          <div class="grade-item">
+          <div class="grade-item" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[0]] + datas[item.level[2]]}}
+            <!-- {{item.level && getTotal(datas[item.level[0]], datas[item.level[2]])}} -->
           </div>
         </div>
-        <div class="col-title"></div>
+        <div class="col-title" style="font-size: 0.8vw">{{disposeNumTotal}}</div>
         <div class="select-grade-group" v-for="item in colSelectData"
           :key="item.value"
         >
@@ -74,19 +78,22 @@
           </div>
         </div>
         <div class="col-title"></div>
-        <div class="col-title no-bottom"></div>
+        <div class="col-title no-bottom" style="font-size: 0.8vw">{{disposeNumTotal}}</div>
       </div>
       <div class="car-num-group">
         <div class="col-title">车台数</div>
         <div v-for="item in colDisposeData" :key="item.value" class="dispose-grade-group">
-          <div class="grade-item">
+          <div class="grade-item" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[1]]}}
           </div>
-          <div class="grade-item border">
+          <div class="grade-item border" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[3]]}}
           </div>
-          <div class="grade-item">
+          <div class="grade-item" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[1]] + datas[item.level[3]]}}
           </div>
         </div>
-        <div class="col-title"></div>
+        <div class="col-title" style="font-size: 0.8vw">{{disposeCountTotal}}</div>
         <div class="select-grade-group" v-for="item in colSelectData"
           :key="item.value"
         >
@@ -98,7 +105,7 @@
           </div>
         </div>
         <div class="col-title"></div>
-        <div class="col-title no-bottom"></div>
+        <div class="col-title no-bottom" style="font-size: 0.8vw">{{disposeCountTotal}}</div>
       </div>
     </div>
   </div>
@@ -106,7 +113,7 @@
     <h2 class="left-table-title">驾驶员辅助功能</h2>
     <div class="left-table">
       <div class="table-col-first">
-        <div class="table-dispose" :style="{height: disposeHeight, lineHeight: disposeHeight}">主配</div>
+        <div class="table-dispose" :style="{height: assistColumnDataHeight, lineHeight: assistColumnDataHeight}">主配</div>
         <div class="dispose-total">共计</div>
         <div class="table-select-dispose" :style="{height: selectHeight, lineHeight: selectHeight}">选配</div>
         <div class="select-dispose-total">共计</div>
@@ -114,7 +121,7 @@
       </div>
       <div class="table-alarmType">
         <div class="col-title">项目</div>
-        <div v-for="item in colDisposeData" :key="item.value" class="dispose-alarm-type-group">{{item.label}}</div>
+        <div v-for="item in assistColumnData" :key="item.plvalue" class="dispose-alarm-type-group">{{item.pldisplay}}</div>
         <div class="col-title no-right-border"></div>
         <div class="select-alarm-type-group" v-for="item in colSelectData"
           :key="item.value"
@@ -126,7 +133,7 @@
       </div>
       <div class="table-grade-group">
         <div class="col-title">级别</div>
-        <div v-for="item in colDisposeData" :key="item.value" class="dispose-grade-group">
+        <div v-for="item in assistColumnData" :key="item.plvalue" class="dispose-grade-group">
           <div class="grade-item">
             一级
           </div>
@@ -156,15 +163,19 @@
       </div>
       <div class="alarm-num-group">
         <div class="col-title">次数</div>
-        <div v-for="item in colDisposeData" :key="item.value" class="dispose-grade-group">
-          <div class="grade-item">
+        <div v-for="item in assistColumnData" :key="item.plvalue" class="dispose-grade-group">
+          <div class="grade-item" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[0]]}}
           </div>
-          <div class="grade-item border">
+          <div class="grade-item border" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[2]]}}
           </div>
-          <div class="grade-item">
+          <div class="grade-item" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[0]] + datas[item.level[2]]}}
+            <!-- {{item.level && getTotal(datas[item.level[0]], datas[item.level[2]])}} -->
           </div>
         </div>
-        <div class="col-title"></div>
+        <div class="col-title" style="font-size: 0.8vw">{{assistNumTotal}}</div>
         <div class="select-grade-group" v-for="item in colSelectData"
           :key="item.value"
         >
@@ -176,19 +187,22 @@
           </div>
         </div>
         <div class="col-title"></div>
-        <div class="col-title no-bottom"></div>
+        <div class="col-title no-bottom" style="font-size: 0.8vw">{{assistNumTotal}}</div>
       </div>
       <div class="car-num-group">
         <div class="col-title">车台数</div>
-        <div v-for="item in colDisposeData" :key="item.value" class="dispose-grade-group">
-          <div class="grade-item">
+        <div v-for="item in assistColumnData" :key="item.plvalue" class="dispose-grade-group">
+          <div class="grade-item" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[1]]}}
           </div>
-          <div class="grade-item border">
+          <div class="grade-item border" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[3]]}}
           </div>
-          <div class="grade-item">
+          <div class="grade-item" style="font-size: 0.8vw">
+            {{item.level && datas[item.level[1]] + datas[item.level[3]]}}
           </div>
         </div>
-        <div class="col-title"></div>
+        <div class="col-title" style="font-size: 0.8vw">{{assistCountTotal}}</div>
         <div class="select-grade-group" v-for="item in colSelectData"
           :key="item.value"
         >
@@ -200,7 +214,7 @@
           </div>
         </div>
         <div class="col-title"></div>
-        <div class="col-title no-bottom"></div>
+        <div class="col-title no-bottom" style="font-size: 0.8vw">{{assistCountTotal}}</div>
       </div>
     </div>
   </div>
@@ -208,20 +222,32 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
+  props: {
+    selectData: {
+      type: Object
+    }
+  },
   data () {
     return {
       disposeHeight: '',
       selectHeight: '',
+      assistColumnDataHeight: '',
+      isLoading: false,
+      disposeNumTotal: 0,
+      disposeCountTotal: 0,
+      assistNumTotal: 0,
+      assistCountTotal: 0,
+      datas: {},
       colDisposeData: [
         {
-          label: '抽烟',
-          value: 'SMOKING',
-          smokingNumFirst: '10',
-          smokingSecL: '20'
+          label: '打哈欠',
+          value: 'SMOKING'
         },
         {
-          label: '疲劳驾驶',
+          label: '接打手持电话',
           value: 'TIRED1'
         },
         {
@@ -259,29 +285,127 @@ export default {
       ],
       colSelectData: [
         {
-          label: '疲劳驾驶',
+          label: '---',
           value: 'TIRED12'
         },
         {
-          label: '疲劳驾驶',
+          label: '---',
           value: 'TIRED13'
         },
         {
-          label: '疲劳驾驶',
+          label: '---',
           value: 'TIRED14'
+        }
+      ],
+      assistColumnData: [
+        {
+          label: '打哈欠',
+          value: 'SMOKING'
+        },
+        {
+          label: '接打手持电话',
+          value: 'TIRED1'
         },
         {
           label: '疲劳驾驶',
-          value: 'TIRED15'
+          value: 'TIRED2'
         }
       ]
     }
   },
+  computed: {
+    ...mapGetters(['formData', 'userId'])
+  },
+  created () {
+    const warnDate = moment().format('YYYY-MM-DD')
+    this._getAlarmUploadReportDay({
+      orgId: this.userId === '1' ? '' : this.userId,
+      warnDate
+    })
+  },
   mounted () {
     this.disposeHeight = `${3 * 3 * this.colDisposeData.length + 3}vh`
     this.selectHeight = `${3 * 3 * this.colSelectData.length}vh`
+    this.assistColumnDataHeight = `${3 * 3 * this.assistColumnDataHeight.length + 3}vh`
+  },
+  watch: {
+    selectData: {
+      deep: true,
+      handler (newV) {
+        this._getAlarmUploadReportDay({
+          orgId: newV.orgId === '1' ? '' : newV.orgId,
+          warnDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
+        })
+      }
+    }
   },
   methods: {
+    _getAlarmUploadReportDay (params) {
+      this.disposeNumTotal = 0
+      this.disposeCountTotal = 0
+      this.assistNumTotal = 0
+      this.assistCountTotal = 0
+      this.isLoading = true
+      this.$api['tiredMonitoring.getAlarmUploadReportDay'](params).then(res => {
+        this.isLoading = false
+        this.colDisposeData = res.alarmColumnData
+        this.assistColumnData = res.assistColumnData
+        this.datas = res.data[0]
+        this.disposeHeight = `${3 * 3 * this.colDisposeData.length + 3}vh`
+        this.assistColumnDataHeight = `${3 * 3 * this.assistColumnData.length + 3}vh`
+        this.getTotal(res.alarmColumnData, res.data[0], res.assistColumnData)
+      })
+    },
+    getTotal (leftCol, data, rightCol) {
+      // 左侧所有key
+      let leftColArr = []
+      // 右侧所有KEY
+      let rightColArr = []
+      // 左侧次数的集合
+      let newLeftNumArr = []
+      // 左侧台数的集合
+      let newLeftCountArr = []
+      // 右侧次数的集合
+      let newRightNumArr = []
+      // 右侧台数数的集合
+      let newRightCountArr = []
+      leftCol.forEach(item => {
+        leftColArr.push(...item.level)
+      })
+      rightCol.forEach(item => {
+        rightColArr.push(...item.level)
+      })
+      leftColArr.forEach(item => {
+        if (item.indexOf('First') + 5 === item.length || item.indexOf('Second') + 6 === item.length) {
+          newLeftNumArr.push(item)
+        } else {
+          newLeftCountArr.push(item)
+        }
+      })
+      rightColArr.forEach(item => {
+        if (item.indexOf('First') + 5 === item.length || item.indexOf('Second') + 6 === item.length) {
+          newRightNumArr.push(item)
+        } else {
+          newRightCountArr.push(item)
+        }
+      })
+      // 左侧所有的次数
+      newLeftNumArr.forEach(item => {
+        this.disposeNumTotal += Number(data[item])
+      })
+      // 左侧所有的车台数
+      newLeftCountArr.forEach(item => {
+        this.disposeCountTotal += Number(data[item])
+      })
+      // 右侧的所有次数
+      newRightNumArr.forEach(item => {
+        this.assistNumTotal += Number(data[item])
+      })
+      // 右侧的所有车台数
+      newRightCountArr.forEach(item => {
+        this.assistCountTotal += Number(data[item])
+      })
+    }
   }
 }
 </script>
@@ -304,7 +428,7 @@ export default {
     border: 1px solid #eee;
     border-right: hidden;
     box-sizing: border-box;
-    overflow: scroll;
+    overflow-y: scroll;
     display: flex;
     .table-col-first {
       width: 15%;

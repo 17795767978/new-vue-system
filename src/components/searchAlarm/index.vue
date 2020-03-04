@@ -422,7 +422,6 @@ export default {
   },
   activated () {
     setTimeout(() => {
-      console.log(this.queryData)
       if (this.queryData && Object.keys(this.queryData).length > 0) {
         this.formInline.lineOrgId = this.queryData.company
         this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber

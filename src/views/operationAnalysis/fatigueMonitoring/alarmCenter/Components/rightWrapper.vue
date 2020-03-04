@@ -101,8 +101,9 @@
         <el-table-column
           prop="orgName"
           align="center"
+          width="100"
           label="所属公司"
-          width="100">
+          >
         </el-table-column>
         <el-table-column
           align="center"
@@ -120,7 +121,7 @@
           align="center"
           prop="busSelfCode"
           label="车辆自编号"
-          width="150">
+          width="100">
         </el-table-column>
         <el-table-column
           align="center"
@@ -132,7 +133,7 @@
           align="center"
           prop="warnTypeName"
           label="报警类型"
-          width="120">
+          width="150">
         </el-table-column>
         <el-table-column
           align="center"
@@ -153,34 +154,38 @@
           align="center"
           prop="warnTime"
           label="报警时间"
-          width="200"
           :formatter="formatterTime"
+          width="150"
           >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="warnTime"
+          fixed="right"
+          label="处理结果"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <span v-if="scope.row.handleResult === '0'">未处理</span>
+            <span v-else-if="scope.row.handleResult === '1'">已处理</span>
+            <span v-else>误报</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="handleSuggestion"
+          fixed="right"
+          label="处理意见"
+        >
         </el-table-column>
         <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="120">
+          width="180">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column
-          align="center"
-          fixed="right"
-          label="处理"
-          width="150"
-        >
-          <template slot-scope="scope">
-            <el-select v-model="scope.row.warnLevel" size="mini">
-              <el-option
-                v-for="item in checkOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+            <el-button @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -205,15 +210,31 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="getExcel">确认</el-button>
-        <!-- <downloadExcel
-          :data= "json_data"
-          type="xls"
-          style="display: inline-block; margin-left: 10px;"
-          name= "报警中心报表.xls"
-        > -->
-        <!-- warnExport -->
-
-        <!-- </downloadExcel> -->
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="处理操作"
+      :visible.sync="checkDialog"
+      width="30%"
+      center>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="处理状态" prop="status">
+          <el-select v-model="ruleForm.status">
+            <el-option
+              v-for="item in checkOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="处理意见" prop="suggestion">
+          <el-input type="textarea" v-model="ruleForm.suggestion"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="checkDialog = false">取 消</el-button>
+        <el-button type="primary" @click="upDateCheck">确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -246,6 +267,18 @@ export default {
         warnTypeId: [],
         timeValue: [],
         checkType: ''
+      },
+      ruleForm: {
+        status: '',
+        suggestion: ''
+      },
+      rules: {
+        status: [
+          { required: true, message: '请选择处理状态', trigger: 'change' }
+        ],
+        suggestion: [
+          { required: true, message: '请填写处理意见', trigger: 'blur' }
+        ]
       },
       levelOptions: [
         {
@@ -282,6 +315,8 @@ export default {
       centerDialogVisible: false,
       loading: true,
       downloadLoading: true,
+      checkDialog: false,
+      checkMsg: {},
       code: '加载中',
       comOptions: [],
       lineOptions: []
@@ -428,6 +463,15 @@ export default {
           })
         }
       }
+    },
+    'ruleForm.status': {
+      handler (newV) {
+        if (newV === '1') {
+          this.ruleForm.suggestion = '属实'
+        } else {
+          this.ruleForm.suggestion = '误报'
+        }
+      }
     }
   },
   methods: {
@@ -513,6 +557,14 @@ export default {
           }
         })
       }
+    },
+    handleCheck (row) {
+      this.checkMsg.warnUuid = row.warnUuid
+      this.checkDialog = true
+      this.ruleForm.status = row.handleResult
+    },
+    upDateCheck () {
+
     },
     onSubmit () {
       let dateArr = []
@@ -623,7 +675,6 @@ export default {
   width: 100%;
   padding: 20px 10px;
   box-sizing: border-box;
-  max-height: 800px;
   overflow: auto;
 }
 </style>

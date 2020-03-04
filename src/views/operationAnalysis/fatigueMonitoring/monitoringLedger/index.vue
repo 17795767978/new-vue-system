@@ -28,7 +28,6 @@ export default {
   methods: {
     getSearch (data) {
       this.selectData = data
-      console.log(data)
     }
   },
   components: {
