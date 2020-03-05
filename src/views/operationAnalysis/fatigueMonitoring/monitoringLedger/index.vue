@@ -8,6 +8,8 @@
       :isDate="true"
       :isEmpty="true"
       :isWarntype="true"
+      :isDownload="true"
+      :downLoadName="downLoadName"
       @configCheck="getSearch" />
       <div class="table-style">
         <Table :selectData="selectData"/>
@@ -22,7 +24,8 @@ export default {
   name: 'monitoringLedger',
   data () {
     return {
-      selectData: {}
+      selectData: {},
+      downLoadName: 'downLoad.getBadDrivingDriverRankingExport'
     }
   },
   methods: {

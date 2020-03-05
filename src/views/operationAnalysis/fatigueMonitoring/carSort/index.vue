@@ -6,6 +6,8 @@
       :isDateTo="true"
       :isEmpty="true"
       :isWarntype="true"
+      :isDownload="true"
+      :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
     <!-- <h2 class="title">不良驾驶行为分析报警车辆排行</h2> -->
@@ -22,7 +24,8 @@ export default {
   name: 'carSort',
   data () {
     return {
-      searchData: {}
+      searchData: {},
+      downLoadName: 'downLoad.getBadDrivingBusRankingExport'
     }
   },
   components: {

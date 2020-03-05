@@ -388,7 +388,7 @@ export default {
     this._stationList()
   },
   computed: {
-    ...mapGetters(['userId', 'formDown'])
+    ...mapGetters(['userId', 'formDown', 'formData'])
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
@@ -632,14 +632,15 @@ export default {
     },
     onclear () {
       let date = moment(new Date()).format('YYYY-MM-DD')
+      let yestody = new Date() - 1000 * 24 * 3600
       this.formInline = {
         orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
         busNumber: '',
         valueTime: [],
         lineType: '',
-        startTime: '',
-        endTime: '',
+        startTime: moment(yestody).format('YYYY-MM-DD 00:00:00'),
+        endTime: moment(yestody).format('YYYY-MM-DD 23:59:59'),
         startHour: '',
         endHour: '',
         endHourFormatter: '',
@@ -748,8 +749,10 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
+      console.log(this.formInline.dateArray)
       let lineArr = []
       this.downLoadLoading = true
+      let defaultForm = this.formData
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
         console.log(this.formInline.lineLineId)
         lineArr = this.formInline.lineLineId.split('+')
@@ -767,7 +770,10 @@ export default {
         endTime: this.formInline.dateArray[1],
         data: this.formDown,
         sStation: this.isStation ? this.formInline.startStation.value : '',
-        eStation: this.isStation ? this.formInline.endStation.value : ''
+        eStation: this.isStation ? this.formInline.endStation.value : '',
+        warnTypes: this.formInline.warnTypeId.length > 0 ? this.formInline.warnTypeId : defaultForm.warningArr,
+        busNumber: this.formInline.busNumber,
+        driverNum: this.formInline.driverNum
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

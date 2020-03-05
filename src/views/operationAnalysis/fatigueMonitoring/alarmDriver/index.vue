@@ -6,6 +6,8 @@
       :isDateTo="true"
       :isEmpty="true"
       :isWarntype="true"
+      :isDownload="true"
+      :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
     <div class="table">
@@ -26,7 +28,8 @@ export default {
   data () {
     return {
       searchData: {},
-      driverData: {}
+      driverData: {},
+      downLoadName: 'downLoad.getBadDrivingDriverRankingExport'
     }
   },
   components: {

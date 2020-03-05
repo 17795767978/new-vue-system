@@ -89,6 +89,50 @@ export const downLoadApi = {
         endDate: ''
       },
       desc: '客流查询导出'
+    },
+    {
+      name: 'getBadDrivingDriverRankingExport',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingDriverRankingExport',
+      mockPath: '/zhfxpt/getBadDrivingDriverRankingExport',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: ''
+      },
+      desc: '不良驾驶行为分析报警司机排行导出'
+    },
+    {
+      name: 'getBadDrivingBusRankingExport',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingBusRankingExport',
+      mockPath: '/zhfxpt/getBadDrivingBusRankingExport',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: ''
+      },
+      desc: '不良驾驶行为分析报警车辆排行导出'
+    },
+    {
+      name: 'getDrivingBehaviorDayExport',
+      method: 'POST',
+      path: '/zhfxpt/getDrivingBehaviorDayExport',
+      mockPath: '/zhfxpt/getDrivingBehaviorDayExport',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: '',
+        busNumber: '',
+        driverNum: ''
+      },
+      desc: '驾驶员行为监测台账（日报）导出'
     }
   ]
 }

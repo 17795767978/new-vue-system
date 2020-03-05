@@ -185,7 +185,7 @@
           width="180">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
-            <el-button @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
+            <el-button :disabled="scope.row.handleResult !== '0'" @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -221,7 +221,7 @@
         <el-form-item label="处理状态" prop="status">
           <el-select v-model="ruleForm.status">
             <el-option
-              v-for="item in checkOptions"
+              v-for="item in checkOptions.slice(1)"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -274,7 +274,7 @@ export default {
       },
       rules: {
         status: [
-          { required: true, message: '请选择处理状态', trigger: 'change' }
+          { required: true, message: '请选择处理状态', trigger: 'blur' }
         ],
         suggestion: [
           { required: true, message: '请填写处理意见', trigger: 'blur' }
@@ -438,7 +438,6 @@ export default {
               label: item.busPlateNumber
             })
           })
-          console.log(this.comOptions)
           this.carOptions = list
         })
       }
@@ -468,8 +467,10 @@ export default {
       handler (newV) {
         if (newV === '1') {
           this.ruleForm.suggestion = '属实'
-        } else {
+        } else if (newV === '2') {
           this.ruleForm.suggestion = '误报'
+        } else {
+          this.ruleForm.suggestion = ''
         }
       }
     }
@@ -561,10 +562,37 @@ export default {
     handleCheck (row) {
       this.checkMsg.warnUuid = row.warnUuid
       this.checkDialog = true
-      this.ruleForm.status = row.handleResult
+      this.ruleForm = {
+        status: '',
+        suggestion: ''
+      }
     },
     upDateCheck () {
-
+      this.$api['tiredMonitoring.wsUpdate']({
+        warnUuid: this.checkMsg.warnUuid,
+        handleResult: this.ruleForm.status,
+        handleSuggestion: this.ruleForm.suggestion
+      }).then(res => {
+        this.$message.success('已处理')
+        this.checkDialog = false
+        let defaultData = this.$store.getters.formData
+        this._tableList({
+          orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
+          lineId: this.formInline.lineId, // 线路id
+          busUuid: this.formInline.busUuid, // 车辆id
+          devCode: this.formInline.devCode, // 设备号
+          busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+          busSelfCode: this.formInline.busSelfCode, // 自编号
+          warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+          warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
+          startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+          endTime: this.formInline.timeValue[1],
+          pageSize: 10,
+          pageNum: this.pageNum
+        })
+      }).catch(err => {
+        this.$message.error(err.msg)
+      })
     },
     onSubmit () {
       let dateArr = []
