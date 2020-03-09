@@ -25,7 +25,7 @@ export default {
   data () {
     return {
       selectData: {},
-      downLoadName: 'downLoad.getBadDrivingDriverRankingExport'
+      downLoadName: 'downLoad.getDrivingBehaviorDayExport'
     }
   },
   methods: {

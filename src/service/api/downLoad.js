@@ -133,6 +133,17 @@ export const downLoadApi = {
         driverNum: ''
       },
       desc: '驾驶员行为监测台账（日报）导出'
+    },
+    {
+      name: 'getAlarmUploadReportDayExcel',
+      method: 'POST',
+      path: '/zhfxpt/getAlarmUploadReportDayExcel',
+      mockPath: '/zhfxpt/getAlarmUploadReportDayExcel',
+      params: {
+        orgId: '',
+        warnDate: ''
+      },
+      desc: '统计日报表导出'
     }
   ]
 }

@@ -3,6 +3,8 @@
     <Search
       :isOrg='true'
       :isDataCurrent="true"
+      :isDownload="true"
+      :downLoadName="downLoadName"
       @configCheck="getSearch" />
       <div class="table-style">
         <Table :selectData="selectData"/>
@@ -17,7 +19,8 @@ export default {
   name: 'diaryTable',
   data () {
     return {
-      selectData: {}
+      selectData: {},
+      downLoadName: 'downLoad.getAlarmUploadReportDayExcel'
     }
   },
   methods: {

@@ -766,14 +766,15 @@ export default {
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
-        startTime: this.formInline.dateArray[0],
-        endTime: this.formInline.dateArray[1],
+        startTime: this.isDateTo ? this.formInline.dateArray[0] : this.formInline.valueTime[0],
+        endTime: this.isDateTo ? this.formInline.dateArray[1] : this.formInline.valueTime[1],
         data: this.formDown,
         sStation: this.isStation ? this.formInline.startStation.value : '',
         eStation: this.isStation ? this.formInline.endStation.value : '',
         warnTypes: this.formInline.warnTypeId.length > 0 ? this.formInline.warnTypeId : defaultForm.warningArr,
         busNumber: this.formInline.busNumber,
-        driverNum: this.formInline.driverNum
+        driverNum: this.formInline.driverNum,
+        warnDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD')
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)
