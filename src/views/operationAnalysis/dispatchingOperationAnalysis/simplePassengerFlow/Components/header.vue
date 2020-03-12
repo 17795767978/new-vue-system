@@ -67,7 +67,7 @@
         </el-time-select>
       </el-form-item>
       <el-form-item label="查询时间">
-        <el-radio v-model="formInline.radio" label="0">当月</el-radio>
+        <el-radio v-model="formInline.radio" label="0">当日</el-radio>
         <el-radio v-model="formInline.radio" label="1">历史</el-radio>
       </el-form-item>
       <el-form-item>
@@ -104,12 +104,8 @@ export default {
       busOptions: [],
       pickerOptions: {
         disabledDate (time) {
-          let date = moment(new Date()).format('YYYY-MM-01')
-          // console.log(moment(date).valueOf())
-          // console.log(moment(time.getTime()).format('YYYY-MM-DD'))
-          // console.log(moment(Date.now()).format('YYYY-MM-DD'))
-          // console.log(time.getTime() > Date.now())
-          return time.getTime() < moment(date).valueOf()
+          let date = moment(new Date()).format('YYYY-MM-DD')
+          return time.getTime() !== moment(date).valueOf()
         }
       },
       maxTime: ''
@@ -123,7 +119,7 @@ export default {
       this.lineOptions = res
       this.formInline.lineId = this.lineOptions[0].value
     })
-    let data = new Date() - 1000 * 3600 * 24
+    let data = new Date()
     this.formInline.dateTime = moment(data).format('YYYY-MM-DD')
   },
   mounted () {
@@ -147,7 +143,7 @@ export default {
           this.formInline.dateTime = ''
           this.pickerOptions = {
             disabledDate (time) {
-              let date = moment(new Date()).format('YYYY-MM-01')
+              let date = moment(new Date()).format('YYYY-MM-DD')
               return time.getTime() >= moment(date).valueOf()
             }
           }
@@ -155,8 +151,8 @@ export default {
           this.formInline.dateTime = ''
           this.pickerOptions = {
             disabledDate (time) {
-              let date = moment(new Date()).format('YYYY-MM-01')
-              return time.getTime() < moment(date).valueOf()
+              let date = moment(new Date()).format('YYYY-MM-DD')
+              return time.getTime() !== moment(date).valueOf()
             }
           }
         }
@@ -171,14 +167,13 @@ export default {
         } else {
           this.maxTime = `${time}:00`
         }
-        console.log(this.maxTime)
       }
     },
     'formInline.dateTime': {
       handler (newV) {
         let selectDate = moment(newV).valueOf()
         let currentDate = moment().format('YYYY-MM-DD')
-        if (selectDate >= moment(currentDate).valueOf()) {
+        if (selectDate > moment(currentDate).valueOf()) {
           this.$message.error('只能选择当天之前的日期')
           this.formInline.dateTime = ''
         }

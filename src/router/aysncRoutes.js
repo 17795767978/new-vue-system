@@ -161,7 +161,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '单车客流统计图',
             icon: 'nocturne icon-dash',
-            roles: ['/simple-passenger-flow']
+            roles: ['/full-load-rate']
           }
         },
         {
@@ -220,6 +220,36 @@ export const aysncRoutesMap = [
           name: 'searchPassenger',
           meta: {
             title: '客流数据明细查询',
+            icon: 'nocturne icon-dash',
+            roles: ['/search-passenger']
+          }
+        },
+        {
+          path: 'bus-passenger',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/busPassenger/index'),
+          name: 'busPassenger',
+          meta: {
+            title: '单车客流统计',
+            icon: 'nocturne icon-dash',
+            roles: ['/search-passenger']
+          }
+        },
+        {
+          path: 'line-passenger-flow',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/linePassengerFlow/index'),
+          name: 'linePassengerFlow',
+          meta: {
+            title: '线路客流查询',
+            icon: 'nocturne icon-dash',
+            roles: ['/search-passenger']
+          }
+        },
+        {
+          path: 'comprehensive-query',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/comprehensiveQuery/index'),
+          name: 'comprehensiveQuery',
+          meta: {
+            title: '线路站点客流查询',
             icon: 'nocturne icon-dash',
             roles: ['/search-passenger']
           }
@@ -354,6 +384,16 @@ export const aysncRoutesMap = [
           name: 'alarmManagement',
           meta: {
             title: '报警类型管理',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-management']
+          }
+        },
+        {
+          path: 'status-management',
+          component: _import_('operationAnalysis/fatigueMonitoring/statusManagement/index'),
+          name: 'statusManagement',
+          meta: {
+            title: '数据质量排查',
             icon: 'nocturne icon-dash',
             roles: ['/alarm-management']
           }

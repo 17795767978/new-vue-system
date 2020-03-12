@@ -46,15 +46,15 @@ export default {
   },
   created () {
     let date = new Date()
-    date = moment(date).subtract(1, 'day').format('YYYY-MM-DD')
+    date = moment(date).subtract(0, 'day').format('YYYY-MM-DD')
     this._tripOrder({
       lineId: this.initLineId,
       dateTime: date,
       type: '1',
-      startHour: '07',
-      endHour: '07',
-      busPlateNumbers: [],
-      isHistory: '0'
+      startHour: 7,
+      endHour: 7,
+      // busPlateNumbers: [],
+      isHistory: false
     })
   },
   mounted () {
@@ -73,7 +73,7 @@ export default {
           startHour: this.selectData.startHour.substring(0, 2),
           endHour: this.selectData.endHourFormatter,
           busPlateNumbers: this.selectData.busPlateNumbers,
-          isHistory: this.selectData.radio
+          isHistory: this.selectData.radio !== '0'
         })
       }
       this.$emit('isUpdateTo', false)

@@ -80,8 +80,8 @@ export const schedulingAnalysisApi = {
     {
       name: 'getSequenceChartDatasOfBubble',
       method: 'POST',
-      path: '/zhfxpt/analysis/getSequenceChartDatasOfBubble',
-      mockPath: '/zhfxpt/analysis/getSequenceChartDatasOfBubble',
+      path: '/zhfxpt/getBusKlChartDatasOfBubble',
+      mockPath: '/zhfxpt/getBusKlChartDatasOfBubble',
       params: {
         lineId: '',
         type: '',
@@ -89,7 +89,7 @@ export const schedulingAnalysisApi = {
         startHour: '',
         endHour: ''
       },
-      desc: '单车客流统计'
+      desc: '单车客流对比分析'
     },
     {
       name: 'getUpLineCapacityChartDatas',

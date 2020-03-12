@@ -347,6 +347,25 @@ export const tiredMonitoringApi = {
         pageSize: ''
       },
       desc: '更新疲劳处理状态'
+    },
+    {
+      name: 'getDevData',
+      method: 'POST',
+      path: '/zhfxpt/getDevData',
+      mockPath: '/zhfxpt/getDevData',
+      params: {
+        devClass: '',
+        devCode: '',
+        orgUuid: '',
+        lineUuid: '',
+        busUuid: '',
+        busSelfCode: '',
+        startTime: '',
+        endTime: '',
+        deviceOnlineStatus: '',
+        dayOrhistory: ''
+      },
+      desc: '设备管理列表'
     }
   ]
 }

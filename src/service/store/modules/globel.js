@@ -74,26 +74,26 @@ const globel = {
         }
       })
     },
-    getLineSecList ({ commit }, id) {
-      return new Promise((resolve, reject) => {
-        api['wholeInformation.getLineSec']({
-          lineID: '',
-          company: id
-        }).then(res => {
-          let list = []
-          res.forEach(item => {
-            list.push({
-              label: item.lineNumber,
-              value: item.lineUuid + '+' + item.lineNumber
-            })
-          })
-          commit('LINE_DATA_SEC', list)
-          resolve(list)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
+    // getLineSecList ({ commit }, id) {
+    //   return new Promise((resolve, reject) => {
+    //     api['wholeInformation.getLineSec']({
+    //       lineID: '',
+    //       company: id
+    //     }).then(res => {
+    //       let list = []
+    //       res.forEach(item => {
+    //         list.push({
+    //           label: item.lineNumber,
+    //           value: item.lineUuid + '+' + item.lineNumber
+    //         })
+    //       })
+    //       commit('LINE_DATA_SEC', list)
+    //       resolve(list)
+    //     }).catch(error => {
+    //       reject(error)
+    //     })
+    //   })
+    // },
     getStationList ({ commit }) {
       return new Promise((resolve, reject) => {
         api['wholeInformation.getStation']().then(res => {

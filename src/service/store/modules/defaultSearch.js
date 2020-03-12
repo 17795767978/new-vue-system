@@ -8,6 +8,7 @@ const defaultSearch = {
   },
   mutations: {
     DEFAULT_SEARCH: (state, defaultSearch) => {
+      console.log(defaultSearch)
       state.defaultSearch = defaultSearch
     },
     FORM_DOWN: (state, data) => {

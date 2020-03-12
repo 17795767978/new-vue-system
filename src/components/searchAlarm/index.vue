@@ -71,6 +71,22 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="设备类型" v-if="isStatusType">
+        <el-select class="font-style" v-model="formInline.statusType" placeholder="请选择">
+          <el-option
+            v-for="item in statusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="输入设备号" v-if="isStatusNum">
+        <el-input class="font-style" v-model="formInline.statusNumber"></el-input>
+      </el-form-item>
+      <el-form-item label="输入自编号" v-if="isSelfNum">
+        <el-input class="font-style" v-model="formInline.selfNumber"></el-input>
+      </el-form-item>
       <el-form-item label="月份" v-if="isMonth">
         <el-date-picker
           v-model="formInline.month"
@@ -120,6 +136,7 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDataCurrent">
         <el-date-picker
+          :picker-options="pickerOptions"
           v-model="formInline.dataCurrent"
           type="date"
           :editable="false"
@@ -128,6 +145,7 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDate">
          <el-date-picker
+          :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.valueTime"
           type="datetimerange"
           range-separator="至"
@@ -169,9 +187,14 @@
           }">
         </el-time-select>
       </el-form-item>
+      <slot></slot>
       <el-form-item v-if="isRadio" label="查询时间">
         <el-radio v-model="formInline.radio" label="1">当天</el-radio>
         <el-radio v-model="formInline.radio" label="2">历史</el-radio>
+      </el-form-item>
+      <el-form-item v-if="isOnline" label="在线状态">
+        <el-radio v-model="formInline.onLine" label="1">在线</el-radio>
+        <el-radio v-model="formInline.onLine" label="0">离线</el-radio>
       </el-form-item>
       <el-form-item label="报警类型" v-if="isWarntype">
           <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
@@ -294,10 +317,28 @@ export default {
     },
     isRadio: {
       type: Boolean
+    },
+    isStatusNum: {
+      type: Boolean
+    },
+    isSelfNum: {
+      type: Boolean
+    },
+    isStatusType: {
+      type: Boolean
+    },
+    isOnline: {
+      type: Boolean
     }
   },
   data () {
     return {
+      pickerOptions: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() !== endTime
+        }
+      },
       formInline: {
         orgId: '',
         lineOrgId: '',
@@ -318,7 +359,11 @@ export default {
         startStation: {},
         endStation: {},
         dateArray: [],
-        radio: '1'
+        radio: '1',
+        statusNumber: '',
+        selfNumber: '',
+        statusType: '2',
+        onLine: '1'
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -331,6 +376,7 @@ export default {
         value: '2',
         label: '下行'
       }],
+      statusOptions: [],
       lineOptions: [],
       lineOptionsSec: [],
       carOptions: [],
@@ -358,12 +404,12 @@ export default {
       this.carOptions = res
     })
     if (!this.isDefault) {
-      this.$store.dispatch('getComSecList').then(res => {
-        this.comOptionsSec = res
-      })
-      this.$store.dispatch('getLineSecList').then(res => {
-        this.lineOptionsSec = res
-      })
+      // this.$store.dispatch('getComSecList').then(res => {
+      //   this.comOptionsSec = res
+      // })
+      // this.$store.dispatch('getLineSecList').then(res => {
+      //   this.lineOptionsSec = res
+      // })
     }
     this._alarmType({
       warnLevel: ''
@@ -375,13 +421,15 @@ export default {
     setTimeout(() => {
       this.formInline.valueTime = [timeStart, timeEnd]
     }, 20)
-    this._stationList()
+    // this._stationList()
+    this._getDevType()
   },
   computed: {
     ...mapGetters(['userId', 'formDown'])
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
+    console.log(defaultForm)
     if (this.userId !== '1') {
       this.disabled = true
       this.formInline.orgId = this.userId
@@ -392,6 +440,12 @@ export default {
     if (this.formInline.radio === '1' && this.isRadio) {
       let date = new Date()
       this.formInline.dateArray = [date, date]
+      let endTime = date.getTime()
+      let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
+      let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
+      setTimeout(() => {
+        this.formInline.valueTime = [timeStart, timeEnd]
+      }, 20)
     } else {
       this.formInline.dateArray = defaultForm.dateArray
     }
@@ -461,12 +515,12 @@ export default {
     },
     'formInline.lineOrgId': {
       handler (newV) {
-        this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
-          this.lineOptionsSec = res
-        })
-        if (this.isLinkage) {
-          this.formInline.lineLineId = ''
-        }
+        // this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
+        //   this.lineOptionsSec = res
+        // })
+        // if (this.isLinkage) {
+        //   this.formInline.lineLineId = ''
+        // }
         // this.formInline.lineLineId = ''
       }
     },
@@ -511,17 +565,18 @@ export default {
         let date = new Date()
         date = moment(date).valueOf() - 3600 * 1000 * 24
         if (newV) {
-          this.$store.dispatch('getComSecList').then(res => {
-            this.comOptionsSec = res
-            this.formInline.lineOrgId = this.comOptionsSec[0].value
-            this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
-              this.lineOptionsSec = res
-              this.formInline.lineLineId = this.lineOptionsSec[0].value
-            })
-          })
+          // this.$store.dispatch('getComSecList').then(res => {
+          //   this.comOptionsSec = res
+          //   this.formInline.lineOrgId = this.comOptionsSec[0].value
+          //   this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
+          //     this.lineOptionsSec = res
+          //     this.formInline.lineLineId = this.lineOptionsSec[0].value
+          //   })
+          // })
           this.formInline.lineType = this.turnOptions[0].value
           this.formInline.dataCurrent = date
           this.$store.dispatch('getDefaultSearch', this.formInline)
+          console.log(this.formInline)
         }
       }
     },
@@ -533,15 +588,48 @@ export default {
         if (newV === '1') {
           console.log(this.formInline.dataCurrent)
           this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
+          this.formInline.valueTime = [moment().format('YYYY-MM-DD 00:00:00'), moment().format('YYYY-MM-DD 23:59:59')]
+          this.formInline.dataCurrent = moment().format('YYYY-MM-DD')
+          this.pickerOptions = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+              return time.getTime() !== endTime
+            }
+          }
         } else {
+          this.pickerOptions = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+              return time.getTime() >= endTime
+            }
+          }
+          this.formInline.dataCurrent = moment().subtract(1, 'days').format('YYYY-MM-DD')
           this.formInline.dateArray = []
+          this.formInline.valueTime = []
         }
+      }
+    },
+    isRadio (newV) {
+      if (newV) {
+        console.log(123)
       }
     }
   },
   updated () {
   },
   methods: {
+    _getDevType () {
+      this.$api['wholeInformation.getDevType']().then(res => {
+        let list = []
+        res.forEach(item => {
+          list.push({
+            value: item.typeValue,
+            label: item.typeName
+          })
+        })
+        this.statusOptions = list
+      })
+    },
     _stationList () {
       this.$api['wholeInformation.getAllBaseStationNamesListData']().then(res => {
         let arr = res
@@ -612,7 +700,11 @@ export default {
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        statusNumber: this.formInline.statusNumber,
+        selfNumber: this.formInline.selfNumber,
+        statusType: this.formInline.statusType,
+        onLine: this.formInline.onLine
       }
       this.$emit('configCheck', configData)
     },
@@ -638,7 +730,11 @@ export default {
         warnTypeId: [],
         dateArray: [],
         lineIds: [],
-        radio: '2'
+        radio: '2',
+        statusNumber: '',
+        selfNumber: '',
+        onLine: '1',
+        statusType: '2'
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -660,7 +756,11 @@ export default {
         dateArray: this.formInline.dateArray,
         dataCurrent: date,
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        statusNumber: this.formInline.statusNumber,
+        selfNumber: this.formInline.selfNumber,
+        statusType: this.formInline.statusType,
+        onLine: this.formInline.onLine
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -726,7 +826,11 @@ export default {
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        statusNumber: this.formInline.statusNumber,
+        selfNumber: this.formInline.selfNumber,
+        statusType: this.formInline.statusType,
+        onLine: this.formInline.onLine
       }
       this.$emit('configCheckMul', configData)
     },
@@ -772,11 +876,11 @@ export default {
 .header {
   width: 100%;
   border-bottom: 1px solid #eee;
-  padding: 20px 20px;
+  padding: 20px 20px 10px 20px;
   box-sizing: border-box;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
   .form-inline {
-    height: 4vh;
+    // height: 4vh;
     .font-style {
       width: 130px;
     }

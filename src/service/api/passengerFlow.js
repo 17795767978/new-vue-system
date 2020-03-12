@@ -139,6 +139,51 @@ export const passengerFlowApi = {
         orgId: ''
       },
       desc: '线路当日累计客流（人次）'
+    },
+    {
+      name: 'pageBusPersonTotalList',
+      method: 'POST',
+      path: '/zhfxpt/getBusKlStatistical',
+      mockPath: '/zhfxpt/getBusKlStatistical',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        busUuid: '',
+        dayOrhistory: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '单车客流统计'
+    },
+    {
+      name: 'getMidLinePFData',
+      method: 'POST',
+      path: '/zhfxpt/getLineKlList',
+      mockPath: '/zhfxpt/getLineKlList',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        busUuid: '',
+        dayOrhistory: '',
+        dateTime: '',
+        lineType: ''
+      },
+      desc: '线路客流查询列表'
+    },
+    {
+      name: 'getMidLinePFGridData',
+      method: 'POST',
+      path: '/zhfxpt/getLineKlGrid',
+      mockPath: '/zhfxpt/getLineKlGrid',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        busUuid: '',
+        dayOrhistory: '',
+        dateTime: '',
+        lineType: ''
+      },
+      desc: '线路客流查询echart'
     }
   ]
 }

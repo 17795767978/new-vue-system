@@ -95,6 +95,14 @@ export const wholeInformationApi = {
       mockPath: '/api/base/bus/video/info/update',
       params: {},
       desc: '车辆视频位置关系-更新'
+    },
+    {
+      name: 'getDevType',
+      method: 'POST',
+      path: '/zhfxpt/getDevType',
+      mockPath: '/zhfxpt/getDevType',
+      params: {},
+      desc: '设备列表'
     }
   ]
 }
