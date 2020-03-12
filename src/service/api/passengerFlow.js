@@ -184,6 +184,49 @@ export const passengerFlowApi = {
         lineType: ''
       },
       desc: '线路客流查询echart'
+    },
+    // /zhfxpt/getLineStaUpDown
+    {
+      name: 'getLineStaKl',
+      method: 'POST',
+      path: '/zhfxpt/getLineStaKl',
+      mockPath: '/zhfxpt/getLineStaKl',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        dayOrhistory: '',
+        dateTime: '',
+        lineType: ''
+      },
+      desc: '线路站点客流查询'
+    },
+    {
+      name: 'getLineStaUpDown',
+      method: 'POST',
+      path: '/zhfxpt/getLineStaUpDown',
+      mockPath: '/zhfxpt/getLineStaUpDown',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        dayOrhistory: '',
+        dateTime: '',
+        lineType: ''
+      },
+      desc: '线路站点登降量'
+    },
+    {
+      name: 'getLineTimeUpDown',
+      method: 'POST',
+      path: '/zhfxpt/getLineTimeUpDown',
+      mockPath: '/zhfxpt/getLineTimeUpDown',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        dayOrhistory: '',
+        dateTime: '',
+        lineType: ''
+      },
+      desc: '线路时间登降量'
     }
   ]
 }

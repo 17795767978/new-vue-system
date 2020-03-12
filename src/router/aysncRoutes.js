@@ -304,7 +304,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '安全运营首页',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-home']
+            roles: ['/alarm-center']
           }
         },
         {

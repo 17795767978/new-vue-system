@@ -48,10 +48,11 @@ export default {
       let arr = this.$store.getters.defaultSearch
       if (arr.lineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
         this._getPfBaseUpDownGrid({
-          orgUuid: arr.orgId,
+          orgUuid: arr.orgId === '1' ? '' : arr.orgId,
           lineUuid: arr.lineId,
           lineType: arr.lineType,
-          date: moment(arr.dataCurrent).format('YYYY-MM-DD')
+          dateTime: moment(arr.dataCurrent).format('YYYY-MM-DD'),
+          dayOrhistory: '1'
         })
       } else {
         this.$message.error('请添加完整的查询条件')
@@ -64,10 +65,11 @@ export default {
       handler (newV) {
         if (newV.lineId !== '' && newV.lineType !== '' && newV.dataCurrent !== '') {
           this._getPfBaseUpDownGrid({
-            orgUuid: newV.orgId,
+            orgUuid: newV.orgId === '1' ? '' : newV.orgId,
             lineUuid: newV.lineId,
             lineType: newV.lineType,
-            date: moment(newV.dataCurrent).format('YYYY-MM-DD')
+            dateTime: moment(newV.dataCurrent).format('YYYY-MM-DD'),
+            dayOrhistory: newV.radio
           })
         }
       }
@@ -85,24 +87,27 @@ export default {
         }
         if (newV === '1') {
           this._getPfBaseUpDownGrid({
-            orgUuid: data.orgId,
+            orgUuid: data.orgId === '1' ? '' : data.orgId,
             lineUuid: data.lineId,
             lineType: data.lineType,
-            date: moment(data.dataCurrent).format('YYYY-MM-DD')
+            dateTime: moment(data.dataCurrent).format('YYYY-MM-DD'),
+            dayOrhistory: data.radio
           })
         } else if (newV === '2') {
           this._getTimeData({
-            orgUuid: data.orgId,
+            orgUuid: data.orgId === '1' ? '' : data.orgId,
             lineUuid: data.lineId,
             lineType: data.lineType,
-            date: moment(data.dataCurrent).format('YYYY-MM-DD')
+            dateTime: moment(data.dataCurrent).format('YYYY-MM-DD'),
+            dayOrhistory: data.radio
           })
         } else if (newV === '3') {
           this._getRateData({
-            orgUuid: data.orgId,
+            orgUuid: data.orgId === '1' ? '' : data.orgId,
             lineUuid: data.lineId,
             lineType: data.lineType,
-            date: moment(data.dataCurrent).format('YYYY-MM-DD')
+            dateTime: moment(data.dataCurrent).format('YYYY-MM-DD'),
+            dayOrhistory: data.radio
           })
         }
       }
@@ -111,7 +116,7 @@ export default {
   methods: {
     _getPfBaseUpDownGrid (params) {
       this.loading = true
-      this.$api['lineNet.getPfStationDayListGridData'](params).then(res => {
+      this.$api['passengerFlow.getLineStaUpDown'](params).then(res => {
         setTimeout(() => {
           this.loading = false
         }, 1000)
@@ -202,7 +207,7 @@ export default {
     },
     _getTimeData (params) {
       this.loading = true
-      this.$api['lineNet.getPfBaseUpDownGrid'](params).then(res => {
+      this.$api['passengerFlow.getLineTimeUpDown'](params).then(res => {
         console.log(res)
         setTimeout(() => {
           this.loading = false

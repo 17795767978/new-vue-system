@@ -52,21 +52,22 @@ export default {
     let defaultData = this.$store.getters.formData
     this._getDriverTable({
       orgId: defaultData.orgId === '1' ? '' : defaultData.orgId,
-      lineId: defaultData.lineId,
+      lineId: '',
       busNumber: '',
-      warnTypes: []
+      warnTypes: defaultData.warningArr
     })
   },
   watch: {
     searchData: {
       deep: true,
       handler (newV) {
+        let defaultData = this.$store.getters.formData
         const { orgId, lineId, busNumber, warnTypeId } = newV
         this._getDriverTable({
           orgId: orgId === '1' ? '' : orgId,
           lineId,
           busNumber: busNumber,
-          warnTypes: warnTypeId
+          warnTypes: warnTypeId.length === 0 ? defaultData.warningArr : warnTypeId
         })
       }
     }

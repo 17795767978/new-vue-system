@@ -449,10 +449,10 @@ export default {
     } else {
       this.formInline.dateArray = defaultForm.dateArray
     }
-    this.formInline.lineOrgId = defaultForm.lineOrgId
-    this.formInline.lineLineId = defaultForm.lineLineId
-    this.formInline.lineId = defaultForm.lineId
-    this.formInline.lineIds = defaultForm.lineIds
+    if (this.isDefault) {
+      this.formInline.lineId = defaultForm.lineId
+      this.formInline.lineIds = defaultForm.lineIds
+    }
     this.formInline.lineType = defaultForm.lineType
     this.formInline.dataCurrent = defaultForm.currentDate
     this.formInline.startHour = defaultForm.startHour
@@ -576,7 +576,6 @@ export default {
           this.formInline.lineType = this.turnOptions[0].value
           this.formInline.dataCurrent = date
           this.$store.dispatch('getDefaultSearch', this.formInline)
-          console.log(this.formInline)
         }
       }
     },

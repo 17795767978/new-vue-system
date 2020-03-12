@@ -139,7 +139,8 @@ const user = {
           dateArray: [dateBefore, data],
           startStation: '',
           endStation: '',
-          lineIds: []
+          lineIds: [],
+          warningArr: []
         }
         store.dispatch('getLineList').then(res => {
           if (res.length > 0) {
@@ -154,6 +155,15 @@ const user = {
               if (res.length > 0) {
                 form.lineId = res[0].value
               }
+            })
+          })
+          api['tiredMonitoring.getWarntypes']({
+            warnLevel: ''
+          }).then(res => {
+            form.warningArr = []
+            let dataArr = res
+            dataArr.forEach((list, index) => {
+              form.warningArr[index] = list.code
             })
           })
           // store.dispatch('getComSecList').then(res => {

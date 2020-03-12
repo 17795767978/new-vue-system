@@ -333,12 +333,13 @@ export default {
       handler (newV) {
         clearTimeout(this.timerRate)
         this.timerRate = null
+        let dataForm = this.$store.getters.formData
         let orgId = newV.orgId === '1' ? '' : newV.orgId
         this._positionRating({
           orgId,
           lineId: newV.lineId,
           busNumber: newV.busNumber,
-          warnTypes: newV.warnTypeId
+          warnTypes: newV.warnTypeId.length === 0 ? dataForm.warningArr : newV.warnTypeId
         })
       }
     }
@@ -346,6 +347,7 @@ export default {
   methods: {
     _getInitMap () {
       let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+      const defaultData = this.$store.getters.formData
       if (this.isSelect) {
         this._hotDataLine({
           orgId
@@ -359,7 +361,7 @@ export default {
           orgId,
           lineId: '',
           busNumber: '',
-          warnTypes: ''
+          warnTypes: defaultData.warningArr
         })
       } else if (this.isLineMap) {
       }

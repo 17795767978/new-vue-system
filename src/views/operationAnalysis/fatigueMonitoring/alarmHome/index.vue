@@ -4,11 +4,6 @@
       :isOrg='true'
       :isLine="true"
       :isBus="true"
-      :isDate="false"
-      :isTime="false"
-      :isTurn="false"
-      :isDownload="false"
-      :isDefault="true"
       :isEmpty="true"
       :isWarntype="true"
       @configCheck="getSearch"
@@ -176,7 +171,7 @@ export default {
     _getApi (data, type) {
       let params = {
         orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
-        lineId: this.currentData.lineId,
+        lineId: Object.keys(this.searchData).length === 0 ? '' : this.currentData.lineId,
         busNumber: this.currentData.busNumber,
         warnTypes: type === 'charts' ? [data.data.warnType] : this.currentData.warnTypeId,
         driverNum: data.driverNum,

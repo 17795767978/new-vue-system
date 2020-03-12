@@ -4,6 +4,7 @@
       :data="tableData"
       height="36vh"
       border
+      size="mini"
       style="width: 100%">
       <el-table-column
         prop="orgName"
@@ -79,10 +80,11 @@ export default {
       let arr = this.$store.getters.defaultSearch
       if (arr.lineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
         this._getMidLinePFData({
-          orgUuid: arr.orgId,
+          orgUuid: arr.orgId === '1' ? '' : arr.orgId,
           lineUuid: arr.lineId,
           lineType: arr.lineType,
-          date: moment(arr.dataCurrent).format('YYYY-MM-DD')
+          dateTime: moment(arr.dataCurrent).format('YYYY-MM-DD'),
+          dayOrhistory: '1'
         })
       } else {
         this.$message.error('请添加完整的查询条件')
@@ -95,10 +97,11 @@ export default {
       handler (newV) {
         if (newV.lineId !== '' && newV.lineType !== '' && newV.dataCurrent !== '') {
           this._getMidLinePFData({
-            orgUuid: newV.orgId,
+            orgUuid: newV.orgId === '1' ? '' : newV.orgId,
             lineUuid: newV.lineId,
             lineType: newV.lineType,
-            date: moment(newV.dataCurrent).format('YYYY-MM-DD')
+            dateTime: moment(newV.dataCurrent).format('YYYY-MM-DD'),
+            dayOrhistory: newV.radio
           })
         } else {
           this.$message.error('请添加完整的查询条件')
@@ -108,7 +111,7 @@ export default {
   },
   methods: {
     _getMidLinePFData (params) {
-      this.$api['lineNet.getPfBaseListData'](params).then(res => {
+      this.$api['passengerFlow.getLineStaKl'](params).then(res => {
         this.tableData = res
       })
     }
