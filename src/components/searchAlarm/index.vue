@@ -316,7 +316,8 @@ export default {
       type: Boolean
     },
     isRadio: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     isStatusNum: {
       type: Boolean
@@ -329,6 +330,9 @@ export default {
     },
     isOnline: {
       type: Boolean
+    },
+    select: {
+      type: Object
     }
   },
   data () {
@@ -336,7 +340,7 @@ export default {
       pickerOptions: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
-          return time.getTime() !== endTime
+          return time.getTime() > endTime
         }
       },
       formInline: {
@@ -429,7 +433,14 @@ export default {
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
-    console.log(defaultForm)
+    if (this.isRadio) {
+      this.pickerOptions = {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() !== endTime
+        }
+      }
+    }
     if (this.userId !== '1') {
       this.disabled = true
       this.formInline.orgId = this.userId
@@ -610,7 +621,6 @@ export default {
     },
     isRadio (newV) {
       if (newV) {
-        console.log(123)
       }
     }
   },
@@ -834,6 +844,8 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
+      console.log(this.formInline)
+      console.log(this.select)
       let lineArr = []
       this.downLoadLoading = true
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
@@ -849,9 +861,17 @@ export default {
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
-        startTime: this.formInline.dateArray[0],
-        endTime: this.formInline.dateArray[1],
-        data: this.formDown
+        startTime: this.select ? this.select.date[0] : this.formInline.dateArray[0],
+        endTime: this.select ? this.select.date[1] : this.formInline.dateArray[1],
+        data: this.formDown,
+        orgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
+        lineUuid: this.formInline.lineId,
+        busUuid: this.formInline.busNumber,
+        dayOrhistory: this.select ? this.select.isHistory : this.formInline.radio,
+        dateTime: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
+        lineType: this.formInline.lineType,
+        date: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
+        uploadDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD')
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

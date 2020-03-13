@@ -253,6 +253,26 @@ export const aysncRoutesMap = [
             icon: 'nocturne icon-dash',
             roles: ['/search-passenger']
           }
+        },
+        {
+          path: 'hot-map',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/hotMap/index'),
+          name: 'hotMap',
+          meta: {
+            title: '客流热力分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-management']
+          }
+        },
+        {
+          path: 'line-od',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/lineOD/index'),
+          name: 'lineOD',
+          meta: {
+            title: '线路OD',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-management']
+          }
         }
       ]
     },

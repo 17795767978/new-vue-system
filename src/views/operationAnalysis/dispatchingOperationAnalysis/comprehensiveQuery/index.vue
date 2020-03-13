@@ -37,7 +37,7 @@ export default {
   data () {
     return {
       selectData: {},
-      downLoadName: 'downLoad.totalDataExport'
+      downLoadName: 'downLoad.getLineStaKlExport'
     }
   },
   methods: {

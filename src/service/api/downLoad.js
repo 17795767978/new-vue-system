@@ -89,6 +89,62 @@ export const downLoadApi = {
         endDate: ''
       },
       desc: '客流查询导出'
+    },
+    {
+      name: 'busTotalPersonExport',
+      method: 'POST',
+      path: '/zhfxpt/getBusKlStatisticalExport',
+      mockPath: '/zhfxpt/getBusKlStatisticalExport',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        busUuid: '',
+        dayOrhistory: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '单车客流统计-导出'
+    },
+    {
+      name: 'getLineKlListExport',
+      method: 'POST',
+      path: '/zhfxpt/getLineKlListExport',
+      mockPath: '/zhfxpt/getLineKlListExport',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        dayOrhistory: '',
+        dateTime: ''
+      },
+      desc: '线路客流查询列表_导出'
+    },
+    {
+      name: 'getLineStaKlExport',
+      method: 'POST',
+      path: '/zhfxpt/getLineStaKlExport',
+      mockPath: '/zhfxpt/getLineStaKlExport',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        dayOrhistory: '',
+        date: ''
+      },
+      desc: '线路站点客流列表_导出'
+    },
+    {
+      name: 'getLineOdCountListDataExport',
+      method: 'POST',
+      path: '/api/aly/net/index/pf/lineod/getLineOdCountListDataExport',
+      mockPath: '/api/aly/net/index/pf/lineod/getLineOdCountListDataExport',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        uploadDate: ''
+      },
+      desc: '线路od_导出'
     }
   ]
 }

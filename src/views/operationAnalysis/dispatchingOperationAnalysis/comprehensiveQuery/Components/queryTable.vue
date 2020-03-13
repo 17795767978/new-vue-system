@@ -83,7 +83,7 @@ export default {
           orgUuid: arr.orgId === '1' ? '' : arr.orgId,
           lineUuid: arr.lineId,
           lineType: arr.lineType,
-          dateTime: moment(arr.dataCurrent).format('YYYY-MM-DD'),
+          date: moment(arr.dataCurrent).format('YYYY-MM-DD'),
           dayOrhistory: '1'
         })
       } else {
@@ -100,7 +100,7 @@ export default {
             orgUuid: newV.orgId === '1' ? '' : newV.orgId,
             lineUuid: newV.lineId,
             lineType: newV.lineType,
-            dateTime: moment(newV.dataCurrent).format('YYYY-MM-DD'),
+            date: moment(newV.dataCurrent).format('YYYY-MM-DD'),
             dayOrhistory: newV.radio
           })
         } else {

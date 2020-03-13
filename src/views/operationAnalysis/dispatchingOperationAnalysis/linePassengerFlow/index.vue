@@ -31,7 +31,7 @@ export default {
     return {
       selectData: {},
       echartsData: {},
-      downLoadName: 'downLoad.lineFlowExports'
+      downLoadName: 'downLoad.getLineKlListExport'
     }
   },
   methods: {

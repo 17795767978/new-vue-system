@@ -227,6 +227,44 @@ export const passengerFlowApi = {
         lineType: ''
       },
       desc: '线路时间登降量'
+    },
+    {
+      name: 'getHeatMapData',
+      method: 'POST',
+      path: '/zhfxpt/getHeatMapData',
+      mockPath: '/zhfxpt/getHeatMapData',
+      params: {
+        payTimeIntervalMin: '',
+        payTimeIntervalMax: '',
+        uploadMonth: ''
+      },
+      desc: '线路时间登降量'
+    },
+    {
+      name: 'getLineOdCountListData',
+      method: 'POST',
+      path: '/api/aly/net/index/pf/lineod/getLineOdCountListData',
+      mockPath: '/api/aly/net/index/pf/lineod/getLineOdCountListData',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        uploadDate: ''
+      },
+      desc: '线路OD图'
+    },
+    {
+      name: 'getAnalLineOdDataListData',
+      method: 'POST',
+      path: '/api/aly/net/index/pf/lineod/getAnalLineOdDataListData',
+      mockPath: '/api/aly/net/index/pf/lineod/getAnalLineOdDataListData',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        lineType: '',
+        uploadDate: ''
+      },
+      desc: '线路OD列表'
     }
   ]
 }

@@ -3,7 +3,6 @@
     <Search
       :isOrg='true'
       :isLine="true"
-      :isDefault="true"
       :isEmpty="true"
       :isBus="true"
       :isDownload="true"
@@ -56,7 +55,7 @@ export default {
       timeArr: [],
       isHistory: '1',
       selectData: {},
-      downLoadName: 'passengerFlow.busTotalPersonExport'
+      downLoadName: 'downLoad.busTotalPersonExport'
     }
   },
   created () {
