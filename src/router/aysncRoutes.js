@@ -101,7 +101,7 @@ export const aysncRoutesMap = [
         title: '调度运营分析',
         icon: 'nocturne icon-dash',
         path: 'runtime-analysis',
-        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', 'search-passenger', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/simple-passenger-flow']
+        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', 'search-passenger', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/simple-passenger-flow', '/bus-passenger', '/line-passenger-flow', '/comprehensive-query', '/hot-map', '/line-od']
       },
       children: [
         {
@@ -159,9 +159,9 @@ export const aysncRoutesMap = [
           component: _import_('operationAnalysis/dispatchingOperationAnalysis/simplePassengerFlow/index'),
           name: 'simplePassengerFlow',
           meta: {
-            title: '单车客流统计图',
+            title: '单车客流详情分析',
             icon: 'nocturne icon-dash',
-            roles: ['/full-load-rate']
+            roles: ['/simple-passenger-flow']
           }
         },
         {
@@ -231,7 +231,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '单车客流统计',
             icon: 'nocturne icon-dash',
-            roles: ['/search-passenger']
+            roles: ['/bus-passenger']
           }
         },
         {
@@ -241,7 +241,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '线路客流查询',
             icon: 'nocturne icon-dash',
-            roles: ['/search-passenger']
+            roles: ['/line-passenger-flow']
           }
         },
         {
@@ -251,7 +251,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '线路站点客流查询',
             icon: 'nocturne icon-dash',
-            roles: ['/search-passenger']
+            roles: ['/comprehensive-query']
           }
         },
         {
@@ -261,7 +261,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '客流热力分析',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-management']
+            roles: ['/hot-map']
           }
         },
         {
@@ -271,7 +271,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '线路OD',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-management']
+            roles: ['/line-od']
           }
         }
       ]
@@ -314,7 +314,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '疲劳监测',
         icon: 'nocturne icon-dash',
-        roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed']
+        roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/status-management']
       },
       children: [
         {
@@ -324,7 +324,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '安全运营首页',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-center']
+            roles: ['/alarm-home']
           }
         },
         {
@@ -415,7 +415,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '数据质量排查',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-management']
+            roles: ['/status-management']
           }
         }
       ]

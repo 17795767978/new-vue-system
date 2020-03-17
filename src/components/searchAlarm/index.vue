@@ -134,6 +134,10 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item v-if="isOnline" label="在线状态">
+        <el-radio v-model="formInline.onLine" label="1">在线</el-radio>
+        <el-radio v-model="formInline.onLine" label="0">离线</el-radio>
+      </el-form-item>
       <el-form-item label="选择日期" v-if="isDataCurrent">
         <el-date-picker
           :picker-options="pickerOptions"
@@ -148,6 +152,7 @@
           :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.valueTime"
           type="datetimerange"
+          :default-time="['00:00:00', '23:59:59']"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
@@ -191,10 +196,6 @@
       <el-form-item v-if="isRadio" label="查询时间">
         <el-radio v-model="formInline.radio" label="1">当天</el-radio>
         <el-radio v-model="formInline.radio" label="2">历史</el-radio>
-      </el-form-item>
-      <el-form-item v-if="isOnline" label="在线状态">
-        <el-radio v-model="formInline.onLine" label="1">在线</el-radio>
-        <el-radio v-model="formInline.onLine" label="0">离线</el-radio>
       </el-form-item>
       <el-form-item label="报警类型" v-if="isWarntype">
           <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">

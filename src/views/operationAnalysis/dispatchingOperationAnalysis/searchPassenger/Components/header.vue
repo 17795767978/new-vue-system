@@ -43,6 +43,11 @@
         </el-select>
       </el-form-item>
       </el-row>
+      <el-form-item label="趟次">
+        <el-input  style="width: 7vw" min="0" v-model="formInline.startTrips" size="mini" type="number"></el-input>
+        -
+        <el-input style="width: 7vw" min="0" max="50" v-model="formInline.endTrips" size="mini" type="number"></el-input>
+      </el-form-item>
       <el-form-item label="选择日期">
          <el-date-picker
           v-model="formInline.valueTime"
@@ -105,7 +110,9 @@ export default {
         lineType: '',
         startTime: '',
         endTime: '',
-        radio: '1'
+        radio: '1',
+        startTrips: '',
+        endTrips: ''
       },
       comOptions: [],
       turnOptions: [{
@@ -221,6 +228,16 @@ export default {
           this.formInline.valueTime = []
         }
       }
+    },
+    'formInline.startTrips': {
+      handler (newV) {
+        this.handleFieldZero(newV, 'startTrips')
+      }
+    },
+    'formInline.endTrips': {
+      handler (newV) {
+        this.handleFieldZero(newV, 'endTrips')
+      }
     }
   },
   updated () {
@@ -236,10 +253,38 @@ export default {
     // }
   },
   methods: {
+    handleFieldZero (num, type) {
+      if (Number(num) < 0) {
+        this.formInline[type] = ''
+        this.$message.warning('值不能小于0')
+      }
+    },
+    // 验证结束大于开始
+    handleAbout (num, type, com) {
+      return new Promise((resolve, reject) => {
+        if (Number(num) < Number(this.formInline[com])) {
+          this.formInline[type] = ''
+          const err = '趟次结束值必须大于开始值'
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    },
     onSubmit () {
-      this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
-      this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
-      this.$emit('configCheck', this.formInline)
+      if (this.formInline.endTrips !== '') {
+        this.handleAbout(this.formInline.endTrips, 'endTrips', 'startTrips').then(() => {
+          this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+          this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+          this.$emit('configCheck', this.formInline)
+        }).catch(err => {
+          this.$message.warning(err)
+        })
+      } else {
+        this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+        this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+        this.$emit('configCheck', this.formInline)
+      }
     },
     onclear () {
       this.formInline = {
@@ -250,7 +295,9 @@ export default {
         lineType: '',
         startTime: '',
         endTime: '',
-        radio: '2'
+        radio: '2',
+        startTrips: '',
+        endTrips: ''
       }
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
@@ -288,7 +335,9 @@ export default {
         busNumber: this.formInline.busNumber,
         startTime: this.formInline.startTime,
         endTime: this.formInline.endTime,
-        isHistory: this.formInline.radio === '2'
+        isHistory: this.formInline.radio === '2',
+        startTrips: this.formInline.startTrips,
+        endTrips: this.formInline.endTrips
       }).then(res => {
         // console.log(res)
         window.open(res.url)

@@ -4,7 +4,7 @@
       <headerNav @configType="configType"></headerNav>
     </header>
     <div class="content">
-      <h2 class="title">发车趟次时序图</h2>
+      <h2 class="title">单车客流详情分析</h2>
       <!-- <h4 class="title time">刷新时间：{{timeNow}}</h4> -->
       <contentWrapper :selectData="selectData" :isUpdate='isUpdate' @isUpdateTo="isUpdateTo"></contentWrapper>
       <!-- <Chart></Chart> -->
@@ -28,8 +28,8 @@ export default {
       selectData: {},
       isUpdate: false,
       msg: {
-        methods: '车辆发车趟次时序图横坐标为线路站点，纵坐标为发车时间，每一条折线代表一辆车的一趟每站的到站时间，展示了某条线路在某方向(上、下行)上的发车时刻以及各个站间的运行时长。',
-        aim: '通过该图可直观展示当日发车是否存在大间隔(两条折线起点处间距过大)，发车间隔过小(两条折线起点处间距较小)，串车(两条折线有交叉)等情况发生，可对调度排班、线路运行情况等进行直观评价。'
+        methods: '',
+        aim: ''
       }
     }
   },

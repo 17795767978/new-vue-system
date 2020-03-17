@@ -4,12 +4,12 @@
       <span class="main-title">公交管理综合分析决策系统</span>
     </el-row>
     <el-row class="main-card" :gutter="50">
-      <el-col style="margin-left: 50px;" :span="8">
+      <el-col style="margin-left: 50px;" :span="4">
         <h3 style="font-size: 20px;">运营监控</h3>
         <div class="tab-con" :class="isScreen ? '' : 'tab-con-dis'" @click="goToContral()">
         </div>
       </el-col>
-      <el-col :span="7">
+      <el-col :span="10">
         <h3 style="font-size: 20px;">调度运营分析</h3>
         <div class="tab-ans">
           <ul class="item-fam">
@@ -30,7 +30,7 @@
           </ul>
         </div>
       </el-col>
-      <el-col :span="7">
+      <el-col :span="8">
         <h3 style="font-size: 20px;">疲劳监测</h3>
         <div class="tab-contral">
           <ul class="item-fam">
@@ -70,7 +70,12 @@ const PER_ANA = [
   { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false },
   { name: '客流数据查询', icon: iconHomeKlgf, path: '/search-passenger-flow', admin: false },
   { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false },
-  { name: '客流数据明细查询', icon: iconHomeMzl, path: '/search-passenger', admin: false }
+  { name: '单车客流详情分析', icon: iconHomeKlfx, path: '/simple-passenger-flow', admin: false },
+  { name: '单车客流统计', icon: iconHomeYlyl, path: '/bus-passenger', admin: false },
+  { name: '线路客流查询', icon: iconHomeKlfx, path: '/line-passenger-flow', admin: false },
+  { name: '线路站点客流查询', icon: iconHomeFctc, path: '/comprehensive-query', admin: false },
+  { name: '客流热力分析', icon: iconHomeFctc, path: '/hot-map', admin: false },
+  { name: '线路OD', icon: iconHomeMzl, path: '/line-od', admin: false }
 ]
 const SIMPLE = [
   // { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false },
@@ -80,7 +85,8 @@ const TIRED_CONTRAL = [
   { name: '驾驶行为监测', icon: iconHomeBjzx, path: '/alarm-center', admin: false },
   { name: '设备状态', icon: iconHomeBjzt, path: '/device-status', admin: false },
   { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false },
-  { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management', admin: false }
+  { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management', admin: false },
+  { name: '数据质量排查', icon: iconHomeMzl, path: '/status-management', admin: false }
 ]
 export default {
   name: 'Homepage',
@@ -211,7 +217,7 @@ export default {
   .main-card {
     .tab-con {
       width: 100%;
-      height: 400px;
+      height: 250px;
       background-image: url(../../assets/images/yunying.png);
       background-repeat: no-repeat;
       background-size: 100% 100%;
@@ -228,7 +234,6 @@ export default {
     }
     .tab-ans {
       width: 100%;
-      height: 400px;
       color: #fff;
       .item-fam {
         width: 100%;
@@ -236,7 +241,7 @@ export default {
         flex-wrap: wrap;
         justify-content: space-between;
         .item-font {
-          width: 32%;
+          width: 24%;
           height: 133px;
           background-color:  #4fa3e4;
           margin-bottom: 8px;
@@ -299,8 +304,7 @@ export default {
       }
     }
     .tab-contral {
-       width: 100%;
-      height: 400px;
+      width: 100%;
       color: #fff;
       .item-fam {
         width: 100%;
@@ -309,7 +313,7 @@ export default {
         justify-content: space-between;
         .item-font {
           width: 48%;
-          height: 195px;
+          height: 180px;
           background-color:  #4fa3e4;
           margin-bottom: 8px;
           border-radius: 6px;

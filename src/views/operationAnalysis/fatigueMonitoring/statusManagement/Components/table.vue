@@ -57,6 +57,7 @@
       <el-table-column
         align="center"
         prop="onlineTime"
+        :formatter="getTime"
         label="离线时间">
       </el-table-column>
       <el-table-column
@@ -138,6 +139,9 @@ export default {
         this.pageNumber = 1
         this.$message.success('数据更新成功')
       })
+    },
+    getTime (data) {
+      return moment(data.onlineTime).format('YYYY-MM-DD HH:mm:ss')
     },
     handleCurrentChangeLine (val) {
       this.pageNumber = val

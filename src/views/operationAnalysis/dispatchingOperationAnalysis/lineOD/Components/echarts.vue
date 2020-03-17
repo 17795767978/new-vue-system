@@ -74,7 +74,7 @@ export default {
       window.addEventListener('resize', () => { charts.resize() })
       charts.setOption({
         title: [{
-          text: '站点OD图',
+          text: '线路OD图',
           top: 10,
           left: 'center'
         }
@@ -156,6 +156,7 @@ export default {
           })
         } else {
           this.lineStations = []
+          this.$message.warning('暂无数据')
         }
         if (res.edges.length > 0) {
           res.edges.forEach((item, index) => {
