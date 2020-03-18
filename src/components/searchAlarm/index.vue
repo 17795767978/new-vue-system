@@ -121,6 +121,12 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="设备编号" v-if="isDeviceCode">
+        <el-input type="text" style="width: 12vw" v-model="formInline.deviceCode" placeholder="设备编号"></el-input>
+      </el-form-item>
+      <el-form-item label="设备编号" v-if="isSelfCode">
+        <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
+      </el-form-item>
       <el-form-item label="选择日期" v-if="isDataCurrent">
         <el-date-picker
           v-model="formInline.dataCurrent"
@@ -132,6 +138,7 @@
       <el-form-item label="选择日期" v-if="isDate">
          <el-date-picker
           v-model="formInline.valueTime"
+          :default-time="['00:00:00', '23:59:59']"
           type="datetimerange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -303,6 +310,12 @@ export default {
     },
     isDriverNum: {
       type: Boolean
+    },
+    isDeviceCode: {
+      type: Boolean
+    },
+    isSelfCode: {
+      type: Boolean
     }
   },
   data () {
@@ -328,7 +341,9 @@ export default {
         endStation: {},
         dateArray: [],
         radio: '1',
-        driverNum: ''
+        driverNum: '',
+        deviceCode: '',
+        selfCode: ''
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -626,7 +641,9 @@ export default {
         dateArray: this.formInline.dateArray,
         lineIds: this.formInline.lineIds,
         radio: this.formInline.radio,
-        driverNum: this.formInline.driverNum
+        driverNum: this.formInline.driverNum,
+        deviceCode: this.formInline.deviceCode,
+        selfCode: this.formInline.selfCode
       }
       this.$emit('configCheck', configData)
     },
@@ -654,7 +671,9 @@ export default {
         dateArray: [],
         lineIds: [],
         radio: '2',
-        driverNum: ''
+        driverNum: '',
+        deviceCode: '',
+        selfCode: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -677,7 +696,9 @@ export default {
         dataCurrent: date,
         lineIds: this.formInline.lineIds,
         radio: this.formInline.radio,
-        driverNum: this.formInline.driverNum
+        driverNum: this.formInline.driverNum,
+        deviceCode: this.formInline.deviceCode,
+        selfCode: this.formInline.selfCode
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -744,7 +765,9 @@ export default {
         dateArray: this.formInline.dateArray,
         lineIds: this.formInline.lineIds,
         radio: this.formInline.radio,
-        driverNum: this.formInline.driverNum
+        driverNum: this.formInline.driverNum,
+        deviceCode: this.formInline.deviceCode,
+        selfCode: this.formInline.selfCode
       }
       this.$emit('configCheckMul', configData)
     },
@@ -774,7 +797,9 @@ export default {
         warnTypes: this.formInline.warnTypeId.length > 0 ? this.formInline.warnTypeId : defaultForm.warningArr,
         busNumber: this.formInline.busNumber,
         driverNum: this.formInline.driverNum,
-        warnDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD')
+        warnDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
+        deviceCode: this.formInline.deviceCode,
+        selfCode: this.formInline.selfCode
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

@@ -379,6 +379,16 @@ export const aysncRoutesMap = [
           }
         },
         {
+          path: 'equipment-capture',
+          component: _import_('operationAnalysis/fatigueMonitoring/equipmentCapture/index'),
+          name: 'equipmentCapture',
+          meta: {
+            title: '设备抓拍',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-management']
+          }
+        },
+        {
           path: 'device-parameter',
           component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
           name: 'deviceParameter',
@@ -422,6 +432,16 @@ export const aysncRoutesMap = [
           title: '通道配置',
           icon: 'nocturne icon-dash',
           roles: ['/channel-management']
+        }
+      },
+      {
+        path: 'device-snap-management',
+        component: _import_('systemAdmin/deviceSnapManagement/index'),
+        name: 'deviceSnapManagement',
+        meta: {
+          title: '设备抓拍配置',
+          icon: 'nocturne icon-dash',
+          roles: ['/device-snap-management']
         }
       }
     ]

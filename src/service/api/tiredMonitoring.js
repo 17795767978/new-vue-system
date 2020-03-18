@@ -450,6 +450,25 @@ export const tiredMonitoringApi = {
         warnDate: ''
       },
       desc: '上传统计日报'
+    },
+    {
+      name: 'devicePhotoList',
+      method: 'POST',
+      path: '/takePhoto/warnPage/get',
+      mockPath: '/takePhoto/warnPage/get',
+      params: {
+        orgId: '',
+        lineId: '',
+        devCode: '',
+        busPlateNumber: '',
+        busSelfCode: '',
+        warnTypeId: ['ADASSNAP', 'DMSTOSNAP'],
+        pageNum: '',
+        pageSize: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '设备抓拍-列表'
     }
   ]
 }
