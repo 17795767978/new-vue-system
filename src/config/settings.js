@@ -21,8 +21,8 @@ if (ip.indexOf('192.168') !== -1) {
 } else {
   baseUrl = 'http://111.62.52.35:8089'
 }
-// export const WSAPI = `ws://${baseUrl.substring(7, baseUrl.length)}/websocket/mesgshow/${id}`
-export const WSAPI = `ws://192.168.10.33:8081/websocket/mesgshow/${id}`
+export const WSAPI = `ws://${baseUrl.substring(7, baseUrl.length)}/websocket/mesgshow/${id}`
+// export const WSAPI = `ws://192.168.10.33:8081/websocket/mesgshow/${id}`
 export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://192.168.10.145:8082',
   // mockBaseUrl: 'http://111.62.52.35:8089',

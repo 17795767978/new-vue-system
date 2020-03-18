@@ -104,7 +104,7 @@ export default {
       busSelfCode: '',
       startTime: moment().format('YYYY-MM-DD 00:00:00'),
       endTime: moment().format('YYYY-MM-DD 23:59:59'),
-      deviceOnlineStatus: '1',
+      deviceOnlineStatus: '',
       dayOrhistory: '1'
     })
   },

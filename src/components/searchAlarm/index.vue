@@ -149,7 +149,6 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDate">
          <el-date-picker
-          :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.valueTime"
           type="datetimerange"
           :default-time="['00:00:00', '23:59:59']"
@@ -219,7 +218,7 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-       <p>导出只支持最大下载量为65536条，如果超过65536条默认下载前65536条</p>
+       <p>导出只支持最大下载量为1048576条，如果超过1048576条默认下载前1048576条</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="getExcel"  :loading="downLoadLoading">确认</el-button>
@@ -368,7 +367,7 @@ export default {
         statusNumber: '',
         selfNumber: '',
         statusType: '2',
-        onLine: '1'
+        onLine: ''
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -743,7 +742,7 @@ export default {
         radio: '2',
         statusNumber: '',
         selfNumber: '',
-        onLine: '1',
+        onLine: '',
         statusType: '2'
       }
       let configData = {
