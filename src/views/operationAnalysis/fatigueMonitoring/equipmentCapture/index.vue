@@ -21,7 +21,7 @@
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
 export default {
-  name: 'monitoringLedger',
+  name: 'equipmentCapture',
   data () {
     return {
       selectData: {},
@@ -30,7 +30,6 @@ export default {
   },
   methods: {
     getSearch (data) {
-      console.log(data)
       this.selectData = data
     }
   },

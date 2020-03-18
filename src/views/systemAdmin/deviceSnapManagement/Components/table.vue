@@ -2,7 +2,7 @@
   <div v-loading="isLoading">
     <el-table
       :data="tableData"
-      height="70vh"
+      height="67vh"
       size="mini"
       border
       style="width: 100%">
@@ -19,52 +19,73 @@
         prop="orgName"
         align="center"
         label="所属机构"
-        width="150"
-        :formatter="getDate"
+        width="120"
         >
       </el-table-column>
       <el-table-column
         prop="lineName"
         align="center"
         label="所属线路"
-        width="120">
+        width="100">
       </el-table-column>
       <el-table-column
         prop="busPlateNumber"
         align="center"
         label="车牌号"
-        width="150">
+        width="120">
       </el-table-column>
       <el-table-column
         prop="busSelfCode"
         align="center"
         label="车辆自编号"
-        width="120">
+        width="100">
       </el-table-column>
       <el-table-column
-        prop="devCode"
+        prop="deviceCode"
         align="center"
         label="设备编号"
-        width="200">
+        width="150">
       </el-table-column>
       <el-table-column
-        prop="warnTypeName"
+        prop="startDate"
         align="center"
-        label="抓拍类型"
+        label="开始日期"
+        :formatter="getStartDate"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="speed"
+        prop="endDate"
         align="center"
-        label="抓拍速度(km/h)"
+        label="结束日期"
+        :formatter="getEndDate"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="warnTime"
+        prop="startTime"
         align="center"
-        label="抓拍时间"
-        :formatter="getDate"
-        width="200">
+        label="开始时间"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="endTime"
+        align="center"
+        label="结束时间"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="duration"
+        align="center"
+        label="采集间隔(min)"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="isvalid"
+        align="center"
+        label="状态"
+        width="80">
+        <template slot-scope="scope">
+          <span>{{scope.row.isvalid === '1' ? '启用' : '禁用'}}</span>
+        </template>
       </el-table-column>
       <el-table-column
           align="center"
@@ -72,7 +93,8 @@
           label="操作"
           >
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
+            <el-button @click="handleClick(scope.row)" type="primary" size="mini">操作</el-button>
+            <el-button @click="handleDelete(scope.row)" type="danger" size="mini">删除</el-button>
           </template>
         </el-table-column>
     </el-table>
@@ -111,14 +133,14 @@ export default {
   },
   created () {
     let today = new Date()
-    let startTime = moment(today - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 00:00:00')
-    let endTime = moment(today - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 23:59:59')
+    let startDate = moment(today - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
+    let endDate = moment(today - 24 * 60 * 60 * 1000 * 7).format('YYYY-MM-DD')
     this._getDevicePhotoList(
       {
         orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
-        startTime,
-        endTime,
+        startDate,
+        endDate,
         pageNum: 1,
         pageSize: 15,
         busSelfCode: '',
@@ -135,8 +157,8 @@ export default {
         this._getDevicePhotoList({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
-          startTime: newV.startTime,
-          endTime: newV.endTime,
+          startDate: newV.dateArray[0],
+          endDate: newV.dateArray[1],
           pageNum: 1,
           pageSize: 15,
           busSelfCode: newV.selfCode,
@@ -149,7 +171,7 @@ export default {
   methods: {
     _getDevicePhotoList (params) {
       this.isLoading = true
-      this.$api['tiredMonitoring.devicePhotoList'](params).then(res => {
+      this.$api['wholeInformation.deviceManageList'](params).then(res => {
         this.isLoading = false
         this.tableData = res.list
         this.total = res.total
@@ -159,8 +181,11 @@ export default {
       })
     },
     // 时间格式化
-    getDate (row) {
-      return moment(row.warntime).format('YYYY-MM-DD HH:mm:ss')
+    getStartDate (row) {
+      return moment(row.startDate).format('YYYY-MM-DD')
+    },
+    getEndDate (row) {
+      return moment(row.endDate).format('YYYY-MM-DD')
     },
     handleCurrentChange (val) {
       this.pageNum = val
@@ -168,8 +193,8 @@ export default {
         this._getDevicePhotoList({
           orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
           lineId: this.selectData.lineId,
-          startTime: this.selectData.startTime,
-          endTime: this.selectData.endTime,
+          startDate: this.selectData.dateArray[0],
+          endDate: this.selectData.dateArray[1],
           busPlateNumber: this.selectData.busNumber,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -178,13 +203,13 @@ export default {
         })
       } else {
         let yestoday = new Date()
-        let startTime = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 00:00:00')
-        let endTime = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 23:59:59')
+        let startDate = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
+        let endDate = moment(yestoday - 24 * 60 * 60 * 1000 * 7).format('YYYY-MM-DD')
         this._getDevicePhotoList({
           orgId: this.userId === '1' ? '' : this.userId,
           lineId: '',
-          startTime,
-          endTime,
+          startDate,
+          endDate,
           busPlateNumber: '',
           driverNum: '',
           busSelfCode: '',
@@ -194,23 +219,39 @@ export default {
       }
     },
     handleClick (row) {
-      if (row.warnType === 'OVERSPEED') {
-        this.$router.push({
-          name: 'alarmContent',
-          query: {
-            id: row.warnUuid,
-            type: 'overspeed'
-          }
+      console.log(row)
+    },
+    handleDelete (row) {
+      this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api['wholeInformation.deletePhoto']({
+          takePhotoUuids: [row.takePhotoUuid]
+        }).then(res => {
+          this._getDevicePhotoList({
+            orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
+            lineId: this.selectData.lineId,
+            startDate: this.selectData.dateArray[0],
+            endDate: this.selectData.dateArray[1],
+            busPlateNumber: this.selectData.busNumber,
+            pageNum: this.pageNum,
+            pageSize: this.pageSize,
+            busSelfCode: this.selectData.selfCode,
+            devCode: this.selectData.devCode
+          })
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
         })
-      } else {
-        this.$router.push({
-          name: 'alarmContent',
-          query: {
-            id: row.warnUuid,
-            type: 'normal'
-          }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         })
-      }
+      })
     }
   }
 }

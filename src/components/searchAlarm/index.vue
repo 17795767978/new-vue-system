@@ -121,10 +121,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="设备编号" v-if="isDeviceCode">
+      <el-form-item label="输入设备编号" v-if="isDeviceCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.deviceCode" placeholder="设备编号"></el-input>
       </el-form-item>
-      <el-form-item label="设备编号" v-if="isSelfCode">
+      <el-form-item label="输入自编号" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDataCurrent">
@@ -826,7 +826,7 @@ export default {
   border-bottom: 1px solid #eee;
   padding: 20px 20px 0px 20px;
   box-sizing: border-box;
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
   .form-inline {
     .font-style {
       width: 130px;

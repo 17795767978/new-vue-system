@@ -95,6 +95,72 @@ export const wholeInformationApi = {
       mockPath: '/api/base/bus/video/info/update',
       params: {},
       desc: '车辆视频位置关系-更新'
+    },
+    {
+      name: 'deviceManageList',
+      method: 'POST',
+      path: '/takePhoto/takephotoPage/get',
+      mockPath: '/takePhoto/takephotoPage/get',
+      params: {
+        orgId: '', // 组织机构id
+        lineId: '', // 线路id
+        devCode: '', // 设备号
+        busPlateNumber: '', // 车牌号
+        busSelfCode: '', // 自编号
+        startDate: '', // 日期
+        endDate: '',
+        pageSize: '',
+        pageNum: ''
+      },
+      desc: '设备抓拍设置-列表'
+    },
+    {
+      name: 'deletePhoto',
+      method: 'POST',
+      path: '/takePhoto/delete',
+      mockPath: '/takePhoto/delete',
+      params: {
+        takePhotoUuids: []
+      },
+      desc: '设备抓拍设置-删除'
+    },
+    // {
+    //   name: 'deletePhoto',
+    //   method: 'POST',
+    //   path: '/takePhoto/delete',
+    //   mockPath: '/takePhoto/delete',
+    //   params: {
+    //     takePhotoUuids: []
+    //   },
+    //   desc: '设备抓拍设置-删除'
+    // },
+    {
+      name: 'addPhoto',
+      method: 'POST',
+      path: '/takePhoto/add',
+      mockPath: '/takePhoto/add',
+      params: {
+        startDate: '',
+        endDate: '',
+        isvalid: '',
+        timingClass: '',
+        timingRemark: '',
+        startTime: '',
+        endTime: '',
+        duration: '',
+        devList: []
+      },
+      desc: '设备抓拍设置-新增'
+    },
+    {
+      name: 'minieyeBusList',
+      method: 'POST',
+      path: '/takePhoto/minieyeBusList/get',
+      mockPath: '/takePhoto/minieyeBusList/get',
+      params: {
+        lineIds: ''
+      },
+      desc: '设备抓拍设置-根据线路查车辆'
     }
   ]
 }
