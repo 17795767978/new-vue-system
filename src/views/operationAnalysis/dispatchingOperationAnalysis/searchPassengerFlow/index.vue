@@ -40,8 +40,9 @@ export default {
   },
   methods: {
     getSearch (data) {
-      console.log(data)
-      this.selectData = data
+      if (data.dateArray.length > 0) {
+        this.selectData = data
+      }
     }
   }
 }

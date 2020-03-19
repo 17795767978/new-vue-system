@@ -444,7 +444,6 @@ export default {
     if (this.userId !== '1') {
       this.disabled = true
       this.formInline.orgId = this.userId
-      console.log(this.formInline.orgId)
     } else {
       this.formInline.orgId = defaultForm.orgId
     }
@@ -571,24 +570,27 @@ export default {
       }
     },
     'isDefault': {
-      immediate: true,
       handler (newV) {
         let date = new Date()
         date = moment(date).valueOf() - 3600 * 1000 * 24
         if (newV) {
-          // this.$store.dispatch('getComSecList').then(res => {
-          //   this.comOptionsSec = res
-          //   this.formInline.lineOrgId = this.comOptionsSec[0].value
-          //   this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
-          //     this.lineOptionsSec = res
-          //     this.formInline.lineLineId = this.lineOptionsSec[0].value
-          //   })
-          // })
+          if (this.userId === '1') {
+            this.$store.dispatch('getLineList').then(res => {
+              this.lineOptions = res
+              this.formInline.lineId = this.lineOptions[0].value
+            })
+          } else {
+            this.$store.dispatch('getLineList', this.userId).then(res => {
+              this.lineOptions = res
+              this.formInline.lineId = this.lineOptions[0].value
+            })
+          }
           this.formInline.lineType = this.turnOptions[0].value
           this.formInline.dataCurrent = date
           this.$store.dispatch('getDefaultSearch', this.formInline)
         }
-      }
+      },
+      immediate: true
     },
     downLoadName (newV) {
       this.downLoadStr = newV
@@ -597,9 +599,9 @@ export default {
       handler (newV) {
         if (newV === '1') {
           console.log(this.formInline.dataCurrent)
-          this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
           this.formInline.valueTime = [moment().format('YYYY-MM-DD 00:00:00'), moment().format('YYYY-MM-DD 23:59:59')]
           this.formInline.dataCurrent = moment().format('YYYY-MM-DD')
+          this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
           this.pickerOptions = {
             disabledDate (time) {
               const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
@@ -724,7 +726,7 @@ export default {
         lineId: '',
         busNumber: '',
         valueTime: [],
-        lineType: '',
+        lineType: '1',
         startTime: '',
         endTime: '',
         startHour: '',
@@ -739,7 +741,7 @@ export default {
         warnTypeId: [],
         dateArray: [],
         lineIds: [],
-        radio: '2',
+        radio: '1',
         statusNumber: '',
         selfNumber: '',
         onLine: '',
@@ -792,12 +794,11 @@ export default {
         })
         this.carOptions = list
       })
-      let dataNow = new Date()
-      let endTime = dataNow.getTime() - 24 * 3600 * 1000
-      let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-      let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
+      let timeStart = moment().format('YYYY-MM-DD 00:00:00')
+      let timeEnd = moment().format('YYYY-MM-DD 23:59:59')
       setTimeout(() => {
         this.formInline.valueTime = [timeStart, timeEnd]
+        this.formInline.dateArray = [date, date]
       }, 20)
     },
     onSave () {

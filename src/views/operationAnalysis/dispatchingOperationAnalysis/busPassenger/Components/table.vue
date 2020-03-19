@@ -117,6 +117,9 @@ export default {
     _pageBusPersonTotalList (params) {
       this.loading = true
       this.$api['passengerFlow.pageBusPersonTotalList'](params).then(res => {
+        if (res.length === 0) {
+          this.$message.warning('暂无数据')
+        }
         this.loading = false
         this.tableAllData = res
         this.tableData = res.slice(0, 15)

@@ -5,6 +5,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { mapGetters } from 'vuex'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 export default {
   props: {
@@ -28,10 +29,13 @@ export default {
       echartsData: {}
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   created () {
     let defaultData = this.$store.getters.formData
     this._getDriver({
-      orgId: defaultData.orgId === '1' ? '' : defaultData.orgId,
+      orgId: this.userId === '1' ? '' : this.userId,
       lineId: '',
       busNumber: '',
       warnTypes: defaultData.warningArr

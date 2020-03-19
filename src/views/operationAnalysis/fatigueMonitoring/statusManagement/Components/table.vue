@@ -78,6 +78,7 @@
 
 <script>
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
@@ -94,11 +95,14 @@ export default {
       isLoading: false
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   created () {
     this._getDevData({
       devClass: '2',
       devCode: '',
-      orgUuid: '',
+      orgUuid: this.userId === '1' ? '' : this.userId,
       lineUuid: '',
       busUuid: '',
       busSelfCode: '',
@@ -112,6 +116,7 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
+        console.log(newV)
         this._getDevData({
           devClass: newV.statusType,
           devCode: newV.statusNumber,
@@ -119,8 +124,8 @@ export default {
           lineUuid: newV.lineId,
           busUuid: newV.busNumber,
           busSelfCode: newV.selfNumber,
-          startTime: moment(newV.valueTime[0]).format('YYYY-MM-DD HH:mm:ss'),
-          endTime: moment(newV.valueTime[1]).format('YYYY-MM-DD HH:mm:ss'),
+          startTime: newV.valueTime[0] ? moment(newV.valueTime[0]).format('YYYY-MM-DD HH:mm:ss') : moment(newV.valueTime[0]).format('YYYY-MM-DD 00:00:00'),
+          endTime: newV.valueTime[1] ? moment(newV.valueTime[1]).format('YYYY-MM-DD HH:mm:ss') : moment(newV.valueTime[1]).format('YYYY-MM-DD 23:59:59'),
           deviceOnlineStatus: newV.onLine,
           dayOrhistory: newV.radio
         })
@@ -141,7 +146,11 @@ export default {
       })
     },
     getTime (data) {
-      return moment(data.onlineTime).format('YYYY-MM-DD HH:mm:ss')
+      if (data.onlineTime) {
+        return moment(data.onlineTime).format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        return '-'
+      }
     },
     handleCurrentChangeLine (val) {
       this.pageNumber = val
