@@ -20,7 +20,6 @@
         align="center"
         label="所属机构"
         width="150"
-        :formatter="getDate"
         >
       </el-table-column>
       <el-table-column
@@ -160,7 +159,8 @@ export default {
     },
     // 时间格式化
     getDate (row) {
-      return moment(row.warntime).format('YYYY-MM-DD HH:mm:ss')
+      console.log(row.warnTime)
+      return moment(row.warnTime).format('YYYY-MM-DD HH:mm:ss')
     },
     handleCurrentChange (val) {
       this.pageNum = val
