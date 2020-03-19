@@ -5,10 +5,11 @@
     :close-on-click-modal="false"
     width="40%">
     <el-form ref="form" :model="formData" label-width="80px">
-      <div class="basic-info info">
+      <div class="basic-info info" v-if="device.type !== '主动抓拍'">
         <p class="title">基础信息</p>
         <el-form-item label="开始时间">
           <el-date-picker
+            :picker-options="pickerOptions"
             v-model="formData.startDate"
             type="date"
             placeholder="选择日期">
@@ -16,6 +17,7 @@
         </el-form-item>
         <el-form-item label="结束时间">
           <el-date-picker
+            :picker-options="pickerOptions"
             v-model="formData.endDate"
             type="date"
             placeholder="选择日期">
@@ -27,7 +29,7 @@
           <span style="margin-left: 5vw; color: red">提示：结束日期为空则无结束时间</span>
         </el-form-item>
       </div>
-      <div class="hight-info info">
+      <div class="hight-info info" v-if="device.type !== '主动抓拍'">
         <p class="title">高级设置</p>
         <el-form-item label="定时类型">
           <el-radio v-model="formData.timeType" label="1">每天</el-radio>
@@ -79,7 +81,7 @@
           </el-form-item>
         </div>
       </div>
-      <div class="time-info info">
+      <div class="time-info info" v-if="device.type !== '修改'">
         <p class="title">定时信息</p>
         <el-form-item label="选择线路">
           <el-select style="width: 95%;" filterable v-model="formData.lineIds" multiple collapse-tag placeholder="请选择">
@@ -121,11 +123,17 @@ export default {
   },
   data () {
     return {
+      pickerOptions: {
+        disabledDate (time) {
+          let date = moment().format('YYYY-MM-DD')
+          return time.getTime() < moment(date).valueOf()
+        }
+      },
       deviceShow: false,
       formData: {
         startDate: '',
         endDate: '',
-        isvalid: '',
+        isvalid: '1',
         timeType: '1',
         startTime: '06:00',
         endTime: '22:00',
@@ -177,6 +185,25 @@ export default {
     })
   },
   watch: {
+    'device.type': {
+      handler (newV) {
+        if (newV === '新增') {
+          this.formData = {
+            startDate: moment().format('YYYY-MM-DD'),
+            endDate: '',
+            isvalid: '1',
+            timeType: '1',
+            startTime: '06:00',
+            endTime: '22:00',
+            duration: '5',
+            weekDate: [],
+            monthData: [],
+            lineIds: [],
+            busInfo: []
+          }
+        }
+      }
+    },
     'formData.timeType': {
       handler (newV) {
         if (newV === '1') {
@@ -188,26 +215,37 @@ export default {
         }
       }
     },
-    'formData.weekDate': {
-      handler (newV) {
-        console.log(newV)
-      }
-    },
-    'formData.monthData': {
-      handler (newV) {
-        console.log(newV)
-      }
-    },
     'formData.lineIds': {
       handler (newV) {
-        this._minieyeBusList({
-          lineIds: newV
-        })
+        if (newV.length > 0) {
+          this._minieyeBusList({
+            lineIds: newV
+          })
+        }
       }
     },
-    'formData.busInfo': {
+    'device.rowData': {
+      deep: true,
       handler (newV) {
-        console.log(newV)
+        if (Object.keys(newV).length > 0) {
+          this.formData.weekDate = []
+          this.formData.monthData = []
+          this.formData.startDate = this.device.rowData.startDate
+          this.formData.endDate = this.device.rowData.endDate
+          this.formData.isvalid = this.device.rowData.isvalid
+          this.formData.timeType = this.device.rowData.timingClass
+          this.formData.startTime = this.device.rowData.startTime
+          this.formData.endTime = this.device.rowData.endTime
+          this.formData.duration = Number(this.device.rowData.duration)
+          if (newV.timingClass === '2') {
+            this.formData.weekDate = this.device.rowData.timingRemark.split(',')
+          } else if (newV.timingClass === '3') {
+            let arr = this.device.rowData.timingRemark.split(',')
+            arr.forEach(item => {
+              this.formData.monthData.push(Number(item))
+            })
+          }
+        }
       }
     }
   },
@@ -224,27 +262,153 @@ export default {
         this.busDeviceData = formatterData
       })
     },
+    // 新增
     _addPhoto (params) {
       this.$api['wholeInformation.addPhoto'](params).then(res => {
-        console.log(res)
+        this.deviceShow = false
+        this.$message.success('添加成功')
+        this.formData = {
+          startDate: moment().format('YYYY-MM-DD'),
+          endDate: '',
+          isvalid: '1',
+          timeType: '1',
+          startTime: '06:00',
+          endTime: '22:00',
+          duration: '5',
+          weekDate: [],
+          monthData: [],
+          lineIds: [],
+          busInfo: []
+        }
+        this.busDeviceData = []
+      })
+    },
+    // 主动抓拍
+    _manual (params) {
+      this.$api['wholeInformation.manual'](params).then(res => {
+        // console.log(res)
+        this.busDeviceData = []
+        this.deviceShow = false
+        this.formData.lineIds = []
+        this.$message.success('添加成功')
+      })
+    },
+    // 修改
+    _photoUpdate (params) {
+      this.$api['wholeInformation.photoUpdate'](params).then(res => {
+        // console.log(res)
+        this.busDeviceData = []
+        this.deviceShow = false
+        this.formData = {
+          startDate: moment().format('YYYY-MM-DD'),
+          endDate: '',
+          isvalid: '1',
+          timeType: '1',
+          startTime: '06:00',
+          endTime: '22:00',
+          duration: '5',
+          weekDate: [],
+          monthData: [],
+          lineIds: [],
+          busInfo: []
+        }
+        this.$message.success('修改成功')
+        this.$emit('updateList')
       })
     },
     handlerSub () {
       if (this.device.type === '新增') {
-        // const { startDate, endDate, isvalid, timeType, startTime, endTime, duration, weekDate, monthData, lineIds, busInfo } = this.formData
-        // let devList = []
-        // if (busInfo.length > 0) {
-        //   busInfo.forEach(item => {
-        //     console.log(item)
-        //   })
-        // }
-        // this._addPhoto({
-        //   startDate,
-        //   endDate,
-        //   isvalid,
-        //   timingClass: timeType
-
-        // })
+        if (!this.formData.startDate || !this.formData.endDate) {
+          this.$message.error('请选择日期')
+          return
+        }
+        if (this.formData.busInfo.length === 0) {
+          this.$message.error('请选择抓拍车辆')
+          return
+        }
+        const { startDate, endDate, isvalid, timeType, startTime, endTime, duration, weekDate, monthData, busInfo } = this.formData
+        let devList = []
+        let timingRemark = ''
+        if (busInfo.length > 0) {
+          busInfo.forEach(item => {
+            let arr = item.split('+')
+            devList.push({
+              devUuid: arr[0],
+              devCode: arr[1]
+            })
+          })
+        }
+        if (timeType === '1') {
+          timingRemark = '1'
+        } else if (timeType === '2') {
+          timingRemark = weekDate.join(',')
+        } else if (timeType === '3') {
+          timingRemark = monthData.join(',')
+        }
+        if (timingRemark === '') {
+          this.$message.error('请勾选高级设置中的日期')
+          return
+        }
+        this._addPhoto({
+          startDate: moment(startDate).format('YYYY-MM-DD'),
+          endDate: moment(endDate).format('YYYY-MM-DD'),
+          isvalid,
+          timingClass: timeType,
+          startTime,
+          endTime,
+          duration,
+          timingRemark,
+          devList
+        })
+      } else if (this.device.type === '主动抓拍') {
+        let devList = []
+        if (this.formData.busInfo.length === 0) {
+          this.$message.error('请选择抓拍车辆')
+          return
+        }
+        if (this.formData.busInfo.length > 0) {
+          this.formData.busInfo.forEach(item => {
+            let arr = item.split('+')
+            devList.push({
+              devUuid: arr[0],
+              devCode: arr[1]
+            })
+          })
+        }
+        this._manual({
+          devList
+        })
+      } else if (this.device.type === '修改') {
+        if (!this.formData.startDate || !this.formData.endDate) {
+          this.$message.error('请选择日期')
+          return
+        }
+        const { startDate, endDate, isvalid, timeType, startTime, endTime, duration, weekDate, monthData } = this.formData
+        let timingRemark = ''
+        if (timeType === '1') {
+          timingRemark = '1'
+        } else if (timeType === '2') {
+          timingRemark = weekDate.join(',')
+        } else if (timeType === '3') {
+          timingRemark = monthData.join(',')
+        }
+        if (timingRemark === '') {
+          this.$message.error('请勾选高级设置中的日期')
+          return
+        }
+        this._photoUpdate({
+          takePhotoUuid: this.device.rowData.takePhotoUuid,
+          startDate,
+          endDate,
+          isvalid,
+          timingClass: timeType,
+          timingRemark,
+          startTime,
+          endTime,
+          duration,
+          deviceCode: this.device.rowData.deviceCode,
+          deviceId: this.device.rowData.deviceId
+        })
       }
     }
   }

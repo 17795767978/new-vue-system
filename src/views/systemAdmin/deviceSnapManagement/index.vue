@@ -3,7 +3,7 @@
     <div class="select-type-card">
       <el-button-group>
         <el-button size="small" icon="el-icon-user" @click="takePhoto">主动抓拍</el-button>
-        <el-button size="small" icon="el-icon-circle-plus-outline"  @click="handleAdd">增加</el-button>
+        <el-button size="small" icon="el-icon-circle-plus-outline"  @click="handleAdd">新增</el-button>
       </el-button-group>
     </div>
     <Search
@@ -16,9 +16,9 @@
       :isDeviceCode="true"
       @configCheck="getSearch" />
       <div class="table-style">
-        <Table :selectData="selectData"/>
+        <Table :selectData="selectData" @checkPhoto="checkPhoto" :isUpdate="isUpdate"/>
       </div>
-      <Dialog :device="device"/>
+      <Dialog :device="device" @updateList="updateList"/>
   </div>
 </template>
 
@@ -32,7 +32,8 @@ export default {
     return {
       selectData: {},
       downLoadName: 'downLoad.getDrivingBehaviorDayExport',
-      device: {}
+      device: {},
+      isUpdate: false
     }
   },
   methods: {
@@ -41,17 +42,31 @@ export default {
       this.selectData = data
     },
     takePhoto () {
-      console.log(this.$children)
       this.$children[3].deviceShow = true
       this.device = {
-        type: '主动抓拍'
+        type: '主动抓拍',
+        rowData: {}
       }
     },
     handleAdd () {
       this.$children[3].deviceShow = true
       this.device = {
-        type: '增加'
+        type: '新增',
+        rowData: {}
       }
+    },
+    checkPhoto (data) {
+      this.$children[3].deviceShow = true
+      this.device = {
+        type: '修改',
+        rowData: data
+      }
+    },
+    updateList () {
+      this.isUpdate = true
+      setTimeout(() => {
+        this.isUpdate = false
+      }, 20)
     }
   },
   components: {

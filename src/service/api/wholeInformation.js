@@ -153,6 +153,25 @@ export const wholeInformationApi = {
       desc: '设备抓拍设置-新增'
     },
     {
+      name: 'manual',
+      method: 'POST',
+      path: '/takePhoto/manual',
+      mockPath: '/takePhoto/manual',
+      params: {
+        devList: []
+      },
+      desc: '设备抓拍设置-主动抓拍'
+    },
+    {
+      name: 'photoUpdate',
+      method: 'POST',
+      path: '/takePhoto/update',
+      mockPath: '/takePhoto/update',
+      params: {
+      },
+      desc: '设备抓拍设置-修改'
+    },
+    {
       name: 'minieyeBusList',
       method: 'POST',
       path: '/takePhoto/minieyeBusList/get',

@@ -117,6 +117,9 @@ export default {
   props: {
     selectData: {
       type: Object
+    },
+    isUpdate: {
+      type: Boolean
     }
   },
   computed: {
@@ -126,7 +129,7 @@ export default {
     return {
       tableData: [],
       pageNum: 1,
-      pageSize: 15,
+      pageSize: 13,
       total: 0,
       isLoading: false
     }
@@ -142,7 +145,7 @@ export default {
         startDate,
         endDate,
         pageNum: 1,
-        pageSize: 15,
+        pageSize: 13,
         busSelfCode: '',
         devCode: '',
         busPlateNumber: ''
@@ -160,11 +163,43 @@ export default {
           startDate: newV.dateArray[0],
           endDate: newV.dateArray[1],
           pageNum: 1,
-          pageSize: 15,
+          pageSize: 13,
           busSelfCode: newV.selfCode,
           devCode: newV.deviceCode,
           busPlateNumber: newV.busNumber
         })
+      }
+    },
+    isUpdate (newV) {
+      if (newV) {
+        if (Object.keys(this.selectData).length > 0) {
+          this._getDevicePhotoList({
+            orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
+            lineId: this.selectData.lineId,
+            startDate: this.selectData.dateArray[0],
+            endDate: this.selectData.dateArray[1],
+            busPlateNumber: this.selectData.busNumber,
+            pageNum: this.pageNum,
+            pageSize: this.pageSize,
+            busSelfCode: this.selectData.selfCode,
+            devCode: this.selectData.devCode
+          })
+        } else {
+          let yestoday = new Date()
+          let startDate = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
+          let endDate = moment(yestoday - 24 * 60 * 60 * 1000 * 7).format('YYYY-MM-DD')
+          this._getDevicePhotoList({
+            orgId: this.userId === '1' ? '' : this.userId,
+            lineId: '',
+            startDate,
+            endDate,
+            busPlateNumber: '',
+            driverNum: '',
+            busSelfCode: '',
+            devCode: '',
+            pageNum: this.pageNum,
+            pageSize: 13 })
+        }
       }
     }
   },
@@ -215,11 +250,11 @@ export default {
           busSelfCode: '',
           devCode: '',
           pageNum: this.pageNum,
-          pageSize: 15 })
+          pageSize: 13 })
       }
     },
     handleClick (row) {
-      console.log(row)
+      this.$emit('checkPhoto', row)
     },
     handleDelete (row) {
       this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
