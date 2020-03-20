@@ -90,7 +90,7 @@ export default {
     Dialog
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   mounted () {
     this.alarmAudio = alarmAudio
@@ -169,6 +169,9 @@ export default {
       this._getApi(data, 'charts')
     },
     _getApi (data, type) {
+      if (this.userId !== '1') {
+        this.currentData.orgId = this.userId
+      }
       let params = {
         orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
         lineId: Object.keys(this.searchData).length === 0 ? '' : this.currentData.lineId,

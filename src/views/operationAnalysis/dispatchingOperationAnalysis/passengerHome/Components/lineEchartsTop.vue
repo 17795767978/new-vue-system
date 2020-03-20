@@ -31,14 +31,17 @@ export default {
   created () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._getLines({
-      orgId
+      orgId,
+      lineUuids: []
     })
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
+    console.log(123)
   },
   watch: {
     sendLineIds (newV) {
+      console.log(newV)
       let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
       this._getLines({
         orgId,

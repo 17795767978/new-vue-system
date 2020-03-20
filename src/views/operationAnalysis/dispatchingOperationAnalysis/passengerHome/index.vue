@@ -94,6 +94,8 @@ export default {
     this._getLinesList()
   },
   mounted () {
+    this.lineIds = []
+    this.stations = []
   },
   watch: {
     stations (newV) {
