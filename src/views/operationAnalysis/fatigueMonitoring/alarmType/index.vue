@@ -49,7 +49,7 @@ export default {
   methods: {
     getSearch (item) {
       if (item.dateArray.length === 0) {
-        this.$message.warning('请添加事件段查询')
+        this.$message.warning('请添加时间段查询')
       } else {
         this.searchData = item
       }
