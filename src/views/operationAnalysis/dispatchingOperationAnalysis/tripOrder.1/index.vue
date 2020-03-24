@@ -19,7 +19,7 @@ import contentWrapper from './Components/content'
 import introduceWrapper from '@/components/introduce/'
 import moment from 'moment'
 export default {
-  name: 'tripOrder',
+  name: 'simplePassengerFlow',
   data () {
     return {
       busLine: '1路',
@@ -35,6 +35,7 @@ export default {
   },
   mounted () {
     this.timeNow = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    console.log(123123)
   },
   components: {
     headerNav,

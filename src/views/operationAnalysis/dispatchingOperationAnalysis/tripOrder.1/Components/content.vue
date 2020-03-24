@@ -20,7 +20,7 @@ import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
 import { max, min } from '../../../../../utils/max.js'
 import { mapGetters } from 'vuex'
-const COLOR_ARR = ['#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000']
+// const COLOR_ARR = ['#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000']
 export default {
   props: {
     selectData: {
@@ -99,7 +99,6 @@ export default {
             }
           })
         })
-        console.log(this.echartDatas)
         if (this.echartDatas.length > 0 && this.echartDatas[0][0] === undefined) {
           this.beforeDate = true
           this.echartDatas[0][0] = moment(this.selectData.date + ' ' + this.selectData.startTime + '00').valueOf()
@@ -214,6 +213,7 @@ export default {
         series: (() => {
           let series = []
           this.echartDatas.forEach((item, index) => {
+            console.log(index)
             series.push({
               data: item,
               type: 'scatter',
@@ -234,15 +234,15 @@ export default {
               itemStyle: {
                 normal: {
                   shadowBlur: 10,
-                  shadowColor: COLOR_ARR[index],
-                  shadowOffsetY: 5,
-                  color: new this.$echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
-                    offset: 0,
-                    color: COLOR_ARR[index]
-                  }, {
-                    offset: 1,
-                    color: COLOR_ARR[index + 1]
-                  }])
+                  // shadowColor: COLOR_ARR[index],
+                  shadowOffsetY: 5
+                  // color: new this.$echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                  //   offset: 0,
+                  //   color: COLOR_ARR[index]
+                  // }, {
+                  //   offset: 1,
+                  //   color: COLOR_ARR[index + 1]
+                  // }])
                 }
               }
             })

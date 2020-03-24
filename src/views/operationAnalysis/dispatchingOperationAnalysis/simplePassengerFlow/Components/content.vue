@@ -18,9 +18,9 @@
 // import { tripOrder } from 'server/interface'
 import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
-import { max, min } from '../../../../../utils/max.js'
+// import { max, min } from '../../../../../utils/max.js'
 import { mapGetters } from 'vuex'
-const COLOR_ARR = ['#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000']
+const COLOR_ARR = ['#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000', '#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33']
 export default {
   props: {
     selectData: {
@@ -99,7 +99,6 @@ export default {
             }
           })
         })
-        console.log(this.echartDatas)
         if (this.echartDatas.length > 0 && this.echartDatas[0][0] === undefined) {
           this.beforeDate = true
           this.echartDatas[0][0] = moment(this.selectData.date + ' ' + this.selectData.startTime + '00').valueOf()
@@ -113,8 +112,10 @@ export default {
         })
         abs = abs.filter(num => !isNaN(num))
         // console.log(abs.map((a) => moment(a).format('YYYY-MM-DD HH:mm:ss')))
-        this.maxDate = max(abs)
-        this.minDate = min(abs)
+        // this.maxDate = max(abs)
+        // this.minDate = min(abs)
+        this.minDate = moment(`${this.selectData.dateTime} ${this.selectData.startHour}:00`).valueOf()
+        this.maxDate = moment(`${this.selectData.dateTime} ${this.selectData.endHour}:00`).valueOf()
         // console.log(this.maxDate)
         // console.log(this.minDate)
         if (this.minDate === this.maxDate) {
@@ -182,7 +183,7 @@ export default {
         xAxis: {
           type: 'category',
           data: this.xAxisNames,
-          splitLine: { // y轴刻度线
+          splitLine: { // x轴刻度线
             'show': true
           },
           axisTick: {
