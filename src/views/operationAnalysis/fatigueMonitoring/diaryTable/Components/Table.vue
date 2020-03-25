@@ -8,8 +8,8 @@
       <div class="table-col-first">
         <div class="table-dispose" :style="{height: disposeHeight, lineHeight: disposeHeight}">主配</div>
         <div class="dispose-total">共计</div>
-        <div class="table-select-dispose" :style="{height: selectHeight, lineHeight: selectHeight}">选配</div>
-        <div class="select-dispose-total">共计</div>
+        <div class="table-select-dispose" :style="{height: selectHeight, lineHeight: selectHeight}" v-show="selectHeight > 0">选配</div>
+        <div class="select-dispose-total" v-show="selectHeight > 0">共计</div>
         <div class="alldispose-total">总计</div>
       </div>
       <div class="table-alarmType">
@@ -21,7 +21,7 @@
         >
         {{item.label}}
         </div>
-        <div class="col-title no-border"></div>
+        <!-- <div class="col-title no-border"></div> -->
         <div class="col-title no-border"></div>
       </div>
       <div class="table-grade-group">
@@ -51,7 +51,7 @@
             合计
           </div>
         </div>
-        <div class="col-title no-border"></div>
+        <!-- <div class="col-title no-border"></div> -->
         <div class="col-title no-bottom"></div>
       </div>
       <div class="alarm-num-group">
@@ -79,7 +79,7 @@
           <div class="grade-item">
           </div>
         </div>
-        <div class="col-title"></div>
+        <!-- <div class="col-title"></div> -->
         <div class="col-title no-bottom" style="font-size: 0.8vw">{{disposeNumTotal}}</div>
       </div>
       <div class="car-num-group">
@@ -106,7 +106,7 @@
           <div class="grade-item">
           </div>
         </div>
-        <div class="col-title"></div>
+        <!-- <div class="col-title"></div> -->
         <div class="col-title no-bottom" style="font-size: 0.8vw">{{disposeCountTotal}}</div>
       </div>
     </div>
@@ -117,8 +117,8 @@
       <div class="table-col-first">
         <div class="table-dispose" :style="{height: assistColumnDataHeight, lineHeight: assistColumnDataHeight}">主配</div>
         <div class="dispose-total">共计</div>
-        <div class="table-select-dispose" :style="{height: selectHeight, lineHeight: selectHeight}">选配</div>
-        <div class="select-dispose-total">共计</div>
+        <div class="table-select-dispose" :style="{height: selectHeight, lineHeight: selectHeight}" v-show="selectHeight > 0">选配</div>
+        <div class="select-dispose-total" v-show="selectHeight > 0">共计</div>
         <div class="alldispose-total">总计</div>
       </div>
       <div class="table-alarmType">
@@ -130,7 +130,7 @@
         >
         {{item.label}}
         </div>
-        <div class="col-title no-border"></div>
+        <!-- <div class="col-title no-border"></div> -->
         <div class="col-title no-border"></div>
       </div>
       <div class="table-grade-group">
@@ -160,7 +160,7 @@
             合计
           </div>
         </div>
-        <div class="col-title no-border"></div>
+        <!-- <div class="col-title no-border"></div> -->
         <div class="col-title no-bottom"></div>
       </div>
       <div class="alarm-num-group">
@@ -188,7 +188,7 @@
           <div class="grade-item">
           </div>
         </div>
-        <div class="col-title"></div>
+        <!-- <div class="col-title"></div> -->
         <div class="col-title no-bottom" style="font-size: 0.8vw">{{assistNumTotal}}</div>
       </div>
       <div class="car-num-group">
@@ -215,7 +215,7 @@
           <div class="grade-item">
           </div>
         </div>
-        <div class="col-title"></div>
+        <!-- <div class="col-title"></div> -->
         <div class="col-title no-bottom" style="font-size: 0.8vw">{{assistCountTotal}}</div>
       </div>
     </div>
@@ -246,74 +246,10 @@ export default {
       assistCountTotal: 0,
       datas: {},
       colDisposeData: [
-        {
-          label: '打哈欠',
-          value: 'SMOKING'
-        },
-        {
-          label: '接打手持电话',
-          value: 'TIRED1'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED2'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED3'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED4'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED5'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED6'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED7'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED8'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED9'
-        }
       ],
       colSelectData: [
-        {
-          label: '---',
-          value: 'TIRED12'
-        },
-        {
-          label: '---',
-          value: 'TIRED13'
-        },
-        {
-          label: '---',
-          value: 'TIRED14'
-        }
       ],
       assistColumnData: [
-        {
-          label: '打哈欠',
-          value: 'SMOKING'
-        },
-        {
-          label: '接打手持电话',
-          value: 'TIRED1'
-        },
-        {
-          label: '疲劳驾驶',
-          value: 'TIRED2'
-        }
       ]
     }
   },
@@ -362,6 +298,9 @@ export default {
         this.disposeHeight = `${3 * 3 * this.colDisposeData.length + 3}vh`
         this.assistColumnDataHeight = `${3 * 3 * this.assistColumnData.length + 3}vh`
         this.getTotal(res.alarmColumnData, res.data[0], res.assistColumnData)
+      }).catch(err => {
+        this.isLoading = false
+        this.$message.error(err.message)
       })
     },
     getTotal (leftCol, data, rightCol) {

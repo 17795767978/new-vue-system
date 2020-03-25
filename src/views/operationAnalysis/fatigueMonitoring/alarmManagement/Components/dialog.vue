@@ -14,13 +14,13 @@
         <el-form-item label="报警类型备注" prop="plRemark">
           <el-input v-model="form.plRemark" style="width: 300px;"></el-input>
         </el-form-item>
-        <el-form-item label="报警类型级别" prop="plWarnLevel">
+        <!-- <el-form-item label="报警类型级别" prop="plWarnLevel">
           <el-select v-model="form.plWarnLevel" placeholder="请选择报警级别">
             <el-option label="1级" value="1"></el-option>
             <el-option label="2级" value="2"></el-option>
             <el-option label="3级" value="3"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="报警类型状态" prop="plIsvalid">
           <el-select v-model="form.plIsvalid" placeholder="请选择报警状态">
             <el-option label="启用" value="1"></el-option>
@@ -48,7 +48,7 @@ export default {
     return {
       form: {
         plValue: '',
-        plWarnLevel: '',
+        // plWarnLevel: '',
         plDisplay: '',
         plSort: '',
         plRemark: '',
@@ -59,9 +59,9 @@ export default {
         plValue: [
           { required: true, message: '请输入报警编码', trigger: 'change' }
         ],
-        plWarnLevel: [
-          { type: 'string', required: true, message: '请选择一个报警等级', trigger: 'change' }
-        ],
+        // plWarnLevel: [
+        //   { type: 'string', required: true, message: '请选择一个报警等级', trigger: 'change' }
+        // ],
         plIsvalid: [
           { type: 'string', required: true, message: '请选择报警状态', trigger: 'change' }
         ],
@@ -98,6 +98,7 @@ export default {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
           if (!this.form.plUuid) {
+            console.log(this.form)
             this.$api['tiredMonitoring.createWarntype'](this.form).then(res => {
               this.$message.success('创建成功')
               this.$emit('updateTable')

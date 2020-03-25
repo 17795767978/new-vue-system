@@ -2,6 +2,7 @@
   <div v-loading="isloading">
     <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">不良驾驶行为分析报警司机排行</h2>
     <el-table
+      v-show="tableData.length > 0"
       ref="tableWrapper"
       :data="tableData"
       height="70vh"
@@ -126,6 +127,10 @@ export default {
           this.tableData = this.tableAllData
           this.bigTable()
         }
+      }).catch(err => {
+        this.isloading = false
+        this.$message.error(err.message)
+        this.tableData = []
       })
     },
     bigTable () {

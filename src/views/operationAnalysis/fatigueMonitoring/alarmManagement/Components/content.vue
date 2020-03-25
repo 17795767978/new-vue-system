@@ -36,14 +36,14 @@
         prop="plSort"
         label="排序">
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         align="center"
         prop="plWarnLevel"
         label="报警级别">
         <template slot-scope="scope">
           {{scope.row.plWarnLevel}}级
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         align="center"
         label="报警状态">

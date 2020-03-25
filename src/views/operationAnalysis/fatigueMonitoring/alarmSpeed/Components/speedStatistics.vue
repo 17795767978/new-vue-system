@@ -88,6 +88,9 @@ export default {
         }]
         this.grid = {
         }
+      }).catch(err => {
+        this.loading = false
+        this.$message.error(err.message)
       })
     },
     getEchartsData (data) {

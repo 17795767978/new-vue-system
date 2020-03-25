@@ -169,6 +169,10 @@ export default {
         this.timerOption = setTimeout(() => {
           this._badDrivingBehavior()
         }, TIME)
+      }).catch(err => {
+        clearTimeout(this.timerOption)
+        this.loading = false
+        this.$message.error(err.message)
       })
     },
     getNumberArry () {

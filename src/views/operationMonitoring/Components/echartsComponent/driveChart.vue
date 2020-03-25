@@ -59,6 +59,10 @@ export default {
         this.timer = setTimeout(() => {
           this._badDrivingBehavior(params)
         }, TIME)
+      }).catch(err => {
+        clearTimeout(this.timer)
+        this.loading = false
+        this.$message.error(err.message)
       })
     },
     drawLine () {

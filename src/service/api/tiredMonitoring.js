@@ -157,7 +157,7 @@ export const tiredMonitoringApi = {
       path: '/warntype/create',
       mockPath: '/warntype/create',
       params: {
-        plWarnLevel: '',
+        // plWarnLevel: '',
         plIsvalid: '',
         plValue: '',
         plDisplay: '',
@@ -173,7 +173,7 @@ export const tiredMonitoringApi = {
       mockPath: '/warntype/update',
       params: {
         plUuid: '',
-        plWarnLevel: '',
+        // plWarnLevel: '',
         plIsvalid: '',
         plValue: '',
         plDisplay: '',

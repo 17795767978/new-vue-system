@@ -504,6 +504,9 @@ export default {
         this.tableData = res.list
         this.total = res.total
         this.loading = false
+      }).catch(err => {
+        this.loading = false
+        this.$message.error(err.message)
       })
     },
     // 左侧点击是否显示右侧搜索内容，0 总公司 1 公司 2 线路 3 车牌号

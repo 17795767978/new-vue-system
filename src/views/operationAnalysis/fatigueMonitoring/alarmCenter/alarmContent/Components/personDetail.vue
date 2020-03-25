@@ -56,7 +56,7 @@
        </el-col>
     </el-row>
     <el-row :gutter="24" v-if="overspeedDetails !== {}">
-      <el-col :span="6" v-if="overspeedDetails.duration">
+      <el-col :span="6" v-if="Object.keys(overspeedDetails).length > 0">
         <i class="fa fa-clock-o"></i>
         <span>持续时间：</span>
         <span>{{overspeedDetails.duration}}</span>
@@ -102,6 +102,14 @@ export default {
     },
     timeFormatEnd () {
       return moment(this.overspeedDetails.warnEndTime).format('YYYY-MM-DD HH:mm:ss')
+    }
+  },
+  watch: {
+    'overspeedDetails': {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+      }
     }
   },
   methods: {
