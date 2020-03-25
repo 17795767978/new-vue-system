@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <Dialog :diaData="diaData" :isSee="isSee" @close="close" :clickData="clickData" :echartsData="echartsData"/>
+    <Dialog :diaData="diaData" :isSee="isSee" @close="close" :clickData="clickData" :echartsData="echartsData" @updateTable="updateTable"/>
     <audio :src="alarmAudio" ref="audioWrapper" class="audio" muted="muted"></audio>
   </div>
 </template>
@@ -84,7 +84,9 @@ export default {
       wsDataClose: false,
       alarmAudio: '',
       audioDom: '',
-      time: 0
+      time: 0,
+      tableObj: {},
+      chartsObj: {}
     }
   },
   components: {
@@ -95,11 +97,12 @@ export default {
     Dialog
   },
   computed: {
-    ...mapGetters(['formData'])
+    ...mapGetters(['formData', 'userId'])
   },
   mounted () {
     this.alarmAudio = alarmAudio
     this.currentData = this.formData
+    this.currentData.orgId = this.userId
     this.openWs()
   },
   watch: {
@@ -168,9 +171,13 @@ export default {
       this.openWs()
     },
     getDetail (data) {
+      this.tableObj = data
+      this.chartsObj = {}
       this._getApi(data, 'table')
     },
     getwarnTypeData (data) {
+      this.chartsObj = data
+      this.tableObj = {}
       this._getApi(data, 'charts')
     },
     _getApi (data, type) {
@@ -192,10 +199,20 @@ export default {
         this.isSee.dataType = type
         this.wsDataClose = false
       })
+    },
+    updateTable (type) {
+      if (type === 'charts') {
+        this._getApi(this.chartsObj, type)
+      } else {
+        this._getApi(this.tableObj, type)
+      }
     }
   },
   destroyed () {
     this.closeWs()
+    this.chartsObj = {}
+    this.tableObj = {}
+    console.log(1231231313)
   }
 }
 </script>

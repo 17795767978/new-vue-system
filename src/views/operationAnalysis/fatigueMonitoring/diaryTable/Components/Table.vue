@@ -1,4 +1,6 @@
 <template>
+<div>
+  <h2 class="main-title">主动安全智能防控系统报警上传统计日报表（{{dateTitle}}）</h2>
 <div class="table" v-loading="isLoading">
   <div style="width: 48%;margin-right: 2%;">
     <h2 class="left-table-title">驾驶员行为监测报警</h2>
@@ -219,6 +221,7 @@
     </div>
   </div>
 </div>
+</div>
 </template>
 
 <script>
@@ -232,6 +235,7 @@ export default {
   },
   data () {
     return {
+      dateTitle: '',
       disposeHeight: '',
       selectHeight: '',
       assistColumnDataHeight: '',
@@ -318,9 +322,11 @@ export default {
   },
   created () {
     const warnDate = moment().format('YYYY-MM-DD')
+    this.dateTitle = warnDate
     this._getAlarmUploadReportDay({
       orgId: this.userId === '1' ? '' : this.userId,
-      warnDate
+      warnDate,
+      warnTypes: this.formData.warningArr
     })
   },
   mounted () {
@@ -332,9 +338,11 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
+        this.dateTitle = moment(newV.dataCurrent).format('YYYY-MM-DD')
         this._getAlarmUploadReportDay({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
-          warnDate: moment(newV.dataCurrent).format('YYYY-MM-DD')
+          warnDate: moment(newV.dataCurrent).format('YYYY-MM-DD'),
+          warnTypes: this.formData.warningArr
         })
       }
     }
@@ -411,6 +419,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.main-title {
+    width: 100%;
+    text-align: center;
+    line-height: 1.2;
+    font-size: 1.2vw;
+    margin-bottom: 0;
+    margin-top: 0vh;
+  }
 .table {
   width: 100%;
   height: 75vh;
@@ -420,11 +436,11 @@ export default {
     width: 100%;
     text-align: center;
     line-height: 1.2;
-    font-size: 1.5vw;
+    font-size: 1vw;
   }
   .left-table {
     width: 100%;
-    height: 65vh;
+    max-height: 65vh;
     border: 1px solid #eee;
     border-right: hidden;
     box-sizing: border-box;

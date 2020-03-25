@@ -14,6 +14,18 @@
         width="120">
       </el-table-column>
       <el-table-column
+        prop="lineName"
+        label="线路"
+        align="center"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="busPlateNumber"
+        label="车牌号"
+        align="center"
+        width="120">
+      </el-table-column>
+      <el-table-column
         prop="driverNum"
         label="工号"
         align="center"
@@ -22,6 +34,7 @@
       <el-table-column
         prop="driverName"
         align="center"
+        width="120"
         label="司机">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="goToDetail(scope.row)">{{scope.row.driverName}}</el-button>

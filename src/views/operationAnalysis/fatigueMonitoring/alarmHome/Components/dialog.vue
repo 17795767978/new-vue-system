@@ -135,7 +135,6 @@ export default {
     diaData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         this.wsData = newV
       }
     },
@@ -143,12 +142,18 @@ export default {
       deep: true,
       handler (newV) {
         this.tableData = newV
+        this.selectAllData = this.tableData
+        this.total = this.selectAllData.length
+        this.handleCurrentChange(this.pageNumber)
       }
     },
     echartsData: {
       deep: true,
       handler (newV) {
         this.chartData = newV
+        this.selectAllData = this.chartData
+        this.total = this.selectAllData.length
+        this.handleCurrentChange(this.pageNumber)
       }
     },
     isSee: {
@@ -211,7 +216,6 @@ export default {
       //   row.handleResult = '1'
       // })
       this.closeRow = index + (this.pageNumber - 1) * 15
-      console.log(this.closeRow)
       this.checkMsg.warnUuid = row.warnUuid
       this.checkDialog = true
       this.ruleForm = {
@@ -229,21 +233,19 @@ export default {
         this.checkDialog = false
         if (this.isSee.dataType === 'ws') {
           this.wsData.splice(this.closeRow, 1)
-          console.log(this.wsData)
-          console.log(this.pageNumber)
           this.selectAllData = this.wsData
           this.total = this.selectAllData.length
           this.handleCurrentChange(this.pageNumber)
         } else if (this.isSee.dataType === 'table') {
-          this.tableData.splice(this.closeRow, 1)
           this.selectAllData = this.tableData
           this.total = this.selectAllData.length
           this.handleCurrentChange(this.pageNumber)
+          this.$emit('updateTable', 'table')
         } else if (this.isSee.dataType === 'charts') {
-          this.chartData.splice(this.closeRow, 1)
           this.selectAllData = this.chartData
           this.total = this.selectAllData.length
           this.handleCurrentChange(this.pageNumber)
+          this.$emit('updateTable', 'charts')
         }
       }).catch(err => {
         this.$message.error(err.msg)

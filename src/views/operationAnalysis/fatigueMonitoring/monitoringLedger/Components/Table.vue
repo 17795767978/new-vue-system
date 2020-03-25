@@ -105,7 +105,7 @@ export default {
     let yestoday = new Date()
     let defaultForm = this.formData
     let startTime = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 00:00:00')
-    let endTime = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 23:59:59')
+    let endTime = moment().format('YYYY-MM-DD 23:59:59')
     this._getDrivingBehaviorDay({
       orgId: this.userId === '1' ? '' : this.userId,
       lineId: '',
@@ -121,6 +121,7 @@ export default {
     'selectData': {
       deep: true,
       handler (newV) {
+        console.log(newV)
         let defaultForm = this.formData
         this.pageNumber = 1
         this._getDrivingBehaviorDay({

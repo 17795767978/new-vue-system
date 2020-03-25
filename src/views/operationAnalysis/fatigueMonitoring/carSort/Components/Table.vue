@@ -5,7 +5,6 @@
       ref="tableWrapper"
       :data="tableData"
       height="65vh"
-      size="mini"
       border
       @sort-change="changeTableSort"
       style="width: 100%">

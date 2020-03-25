@@ -137,6 +137,7 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDate">
          <el-date-picker
+          :picker-options="pickerOptionsDate"
           v-model="formInline.valueTime"
           :default-time="['00:00:00', '23:59:59']"
           type="datetimerange"
@@ -147,6 +148,7 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDateTo">
         <el-date-picker
+          :picker-options="pickerOptionsDateTo"
           :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.dateArray"
           type="daterange"
@@ -316,10 +318,25 @@ export default {
     },
     isSelfCode: {
       type: Boolean
+    },
+    isNotDateLimit: {
+      type: Boolean
     }
   },
   data () {
     return {
+      pickerOptionsDateTo: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() > endTime
+        }
+      },
+      pickerOptionsDate: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() > endTime
+        }
+      },
       formInline: {
         orgId: '',
         lineOrgId: '',
@@ -396,7 +413,7 @@ export default {
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 24 * 3600 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-    let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
+    let timeEnd = moment().format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
       this.formInline.valueTime = [timeStart, timeEnd]
     }, 20)
@@ -556,14 +573,42 @@ export default {
       handler (newV) {
         if (newV === '1') {
           this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
+          this.pickerOptionsDateTo = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+              return time.getTime() !== endTime
+            }
+          }
         } else {
-          this.formInline.dateArray = []
+          let yestody = new Date() - 24 * 3600 * 1000
+          this.formInline.dateArray = [moment(yestody).format('YYYY-MM-DD'), moment(yestody).format('YYYY-MM-DD')]
+          this.pickerOptionsDateTo = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+              return time.getTime() >= endTime
+            }
+          }
         }
       }
     },
     isLineEmpty (newV) {
       if (newV) {
         this.formInline.lineLineId = ''
+      }
+    },
+    'isNotDateLimit': {
+      immediate: true,
+      handler (newV) {
+        if (!newV) {
+          this.pickerOptionsDateTo = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+              return time.getTime() > endTime
+            }
+          }
+        } else {
+          this.pickerOptionsDateTo = {}
+        }
       }
     }
   },
@@ -648,16 +693,15 @@ export default {
       this.$emit('configCheck', configData)
     },
     onclear () {
-      let date = moment(new Date()).format('YYYY-MM-DD')
-      let yestody = new Date() - 1000 * 24 * 3600
+      let date = moment().format('YYYY-MM-DD')
       this.formInline = {
         orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
         busNumber: '',
         valueTime: [],
         lineType: '',
-        startTime: moment(yestody).format('YYYY-MM-DD 00:00:00'),
-        endTime: moment(yestody).format('YYYY-MM-DD 23:59:59'),
+        startTime: moment().format('YYYY-MM-DD 00:00:00'),
+        endTime: moment().format('YYYY-MM-DD 23:59:59'),
         startHour: '',
         endHour: '',
         endHourFormatter: '',
@@ -668,9 +712,9 @@ export default {
         endStation: {},
         dataCurrent: date,
         warnTypeId: [],
-        dateArray: [],
+        dateArray: [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')],
         lineIds: [],
-        radio: '2',
+        radio: '1',
         driverNum: '',
         deviceCode: '',
         selfCode: ''
@@ -722,7 +766,7 @@ export default {
         this.carOptions = list
       })
       let dataNow = new Date()
-      let endTime = dataNow.getTime() - 24 * 3600 * 1000
+      let endTime = dataNow.getTime()
       let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
       let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
       setTimeout(() => {

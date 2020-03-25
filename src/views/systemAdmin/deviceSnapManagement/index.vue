@@ -13,6 +13,7 @@
       :isDateTo="true"
       :isEmpty="true"
       :isSelfCode="true"
+      :isNotDateLimit="true"
       :isDeviceCode="true"
       @configCheck="getSearch" />
       <div class="table-style">

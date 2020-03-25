@@ -3,7 +3,7 @@
     <div class="top-search">
       <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
         <el-form-item label="选择机构">
-        <el-select class="font-style" v-model="formInline.orgId" placeholder="请选择" filterable>
+        <el-select class="font-style" v-model="formInline.orgId" :disabled="this.userId !== '1'" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptions"
             :key="item.value"
@@ -63,7 +63,9 @@
         </el-form-item>
         <el-form-item label="选择时间">
           <el-date-picker
+            :picker-options="pickerOptionsDate"
             v-model="formInline.timeValue"
+            :default-time="['00:00:00', '23:59:59']"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -256,6 +258,12 @@ export default {
   },
   data () {
     return {
+      pickerOptionsDate: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+          return time.getTime() > endTime
+        }
+      },
       formInline: {
         orgId: '',
         lineId: '',
@@ -283,13 +291,10 @@ export default {
       levelOptions: [
         {
           value: '1',
-          label: 'L1'
+          label: '1级'
         }, {
           value: '2',
-          label: 'L2'
-        }, {
-          value: '3',
-          label: 'L3'
+          label: '2级'
         }
       ],
       checkOptions: [
@@ -355,7 +360,8 @@ export default {
       startTime: this.formInline.timeValue[0] || timeStart, // 时间格式   开始结束默认查近7天的
       endTime: this.formInline.timeValue[1] || timeEnd,
       pageSize: 10,
-      pageNum: 1
+      pageNum: 1,
+      handleResult: ''
     })
   },
   mounted () {
@@ -367,9 +373,10 @@ export default {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
     // console.log(this.formInline);
-    if (this.userId !== '1') {
-      this.formInline.orgId = this.userId
-    }
+    // if (this.userId !== '1') {
+    //   this.disabled = true
+    // }
+    this.formInline.orgId = this.userId
   },
   activeted () {
   },
@@ -383,6 +390,7 @@ export default {
         this.formInline.timeValue.forEach(time => {
           time = moment(time).format('YYYY-MM-DD HH:mm:ss')
         })
+        console.log(newValue)
         if (newValue.levelsType !== '0') {
           this._tableList({
             orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
@@ -396,7 +404,8 @@ export default {
             startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
             endTime: this.formInline.timeValue[1],
             pageSize: 10,
-            pageNum: 1
+            pageNum: 1,
+            handleResult: newValue.checkType
           })
         }
       }
@@ -537,7 +546,8 @@ export default {
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
         pageSize: 10,
-        pageNum: this.pageNum
+        pageNum: this.pageNum,
+        handleResult: this.formInline.checkType
       })
     },
     handleClick (row) {
@@ -616,14 +626,15 @@ export default {
         startTime: dateArr[0], // 时间格式   开始结束默认查近7天的
         endTime: dateArr[1],
         pageSize: 10,
-        pageNum: 1
+        pageNum: 1,
+        handleResult: this.formInline.checkType
       })
     },
     onClear () {
       let dataNow = new Date()
       let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
       this.formInline = {
-        orgId: '',
+        orgId: this.userId,
         lineId: '',
         devCode: '',
         busPlateNumber: '',

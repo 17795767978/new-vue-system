@@ -46,6 +46,8 @@
       <el-form-item label="选择日期">
          <el-date-picker
           v-model="formInline.valueTime"
+          :picker-options="pickerOptionsDate"
+          :default-time="['00:00:00', '23:59:59']"
           type="datetimerange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -97,6 +99,13 @@ export default {
   },
   data () {
     return {
+      pickerOptionsDate: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+          const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+          return time.getTime() > endTime || time.getTime() < startTime
+        }
+      },
       formInline: {
         orgId: '',
         lineId: '',
@@ -218,7 +227,20 @@ export default {
           let timeStart = moment().format('YYYY-MM-DD 00:00:00')
           let timeEnd = moment().format('YYYY-MM-DD 23:59:59')
           this.formInline.valueTime = [timeStart, timeEnd]
+          this.pickerOptionsDate = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+              const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              return time.getTime() > endTime || time.getTime() < startTime
+            }
+          }
         } else {
+          this.pickerOptionsDate = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              return time.getTime() >= endTime
+            }
+          }
           this.formInline.valueTime = []
         }
       }

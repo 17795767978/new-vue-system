@@ -180,6 +180,42 @@ export const wholeInformationApi = {
         lineIds: ''
       },
       desc: '设备抓拍设置-根据线路查车辆'
+    },
+    {
+      name: 'paramsListGet',
+      method: 'POST',
+      path: '/api/base/sys/param/info/parampage/get',
+      mockPath: '/api/base/sys/param/info/parampage/get',
+      params: {
+      },
+      desc: '系统参数列表'
+    },
+    {
+      name: 'paramsCreate',
+      method: 'POST',
+      path: '/api/base/sys/param/info/add',
+      mockPath: '/api/base/sys/param/info/add',
+      params: {
+      },
+      desc: '系统参数新增'
+    },
+    {
+      name: 'paramsUpdate',
+      method: 'POST',
+      path: '/api/base/sys/param/info/update',
+      mockPath: '/api/base/sys/param/info/update',
+      params: {
+      },
+      desc: '系统参数修改更新'
+    },
+    {
+      name: 'paramsDelete',
+      method: 'POST',
+      path: '/api/base/sys/param/info/delete',
+      mockPath: '/api/base/sys/param/info/delete',
+      params: {
+      },
+      desc: '系统参数删除'
     }
   ]
 }
