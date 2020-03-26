@@ -1,16 +1,16 @@
 <template>
-  <div class="passenger-vol" ref="wrapper" v-loading="loading" >
+  <div class="passenger-card-map" ref="wrapper" v-loading="loading" >
     <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { max } from '../../../../../utils/max.js'
+// import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 import moment from 'moment'
 export default {
   props: {
-    sendType: {
+    sendCardType: {
       type: Object
     }
   },
@@ -24,7 +24,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: 0,
-      id: 'lineHotDate',
+      id: 'cardTypes',
       grid: {},
       loading: true
     }
@@ -41,16 +41,13 @@ export default {
     // console.log(this.$refs.wrapper.style)
   },
   watch: {
-    sendType: {
-      handler (newV) {
-        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-        this._getLines({
-          orgId,
-          lineUuids: newV.lineIds,
-          date: moment(newV.date).format('YYYY-MM-DD')
-        })
-      },
-      deep: true
+    sendLineIds (newV) {
+      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+      this._getLines({
+        orgId,
+        lineUuids: newV,
+        date: moment(newV.date).format('YYYY-MM-DD')
+      })
     }
   },
   methods: {
@@ -60,8 +57,8 @@ export default {
         this.loading = false
         this.title = {}
         this.lineData = [{
-          name: '上车人数',
-          type: 'bar',
+          name: '上车客流',
+          type: 'pie',
           radius: ['100%', '60%'],
           data: res.datas[0],
           barWidth: 20,
@@ -70,7 +67,6 @@ export default {
             emphasis: {
               barBorderRadius: 30
             },
-
             normal: {
               // 柱形图圆角，初始化效果
               barBorderRadius: [0, 10, 10, 0],
@@ -99,53 +95,11 @@ export default {
           y2: 30,
           borderWidth: 1
         }
-        this.maxNum = max(res.datas[0])
-        this.dataLength = 2
         this.legend = {
-          data: [''],
-          top: 10,
-          right: 10,
-          textStyle: {
-            color: '#000'
-          }
+          orient: 'vertical',
+          left: 10,
+          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
         }
-        this.yData = [
-          {
-            type: 'category',
-            data: res.xAxisNames,
-            axisPointer: {
-              type: 'shadow'
-            },
-            axisLabel: {
-              inside: false,
-              // interval: 0,
-              textStyle: {
-                color: '#000',
-                fontSize: '10',
-                borderRadius: '6'
-              }
-            }
-          }
-        ]
-        this.xData = [
-          {
-            min: 0,
-            max: this.maxNum,
-            interval: Math.ceil(this.maxNum / 6),
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
-            axisLabel: {
-              inside: false,
-              interval: 0,
-              textStyle: {
-                color: '#000',
-                fontSize: '10',
-                borderRadius: '6'
-              }
-            }
-          }
-        ]
       })
     }
   },
@@ -156,7 +110,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.passenger-vol {
+.passenger-card-map {
   width:100%;
   box-sizing: border-box;
   height: 100%;

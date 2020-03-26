@@ -47,8 +47,8 @@
       </el-form-item>
       <el-form-item>
         <el-checkbox-group size="mini" style="transform: scale(0.9)" v-model="tabType" @change="changeType">
-          <el-checkbox label="上车人数" name="type"></el-checkbox>
-          <el-checkbox label="下车人数" name="type"></el-checkbox>
+          <el-checkbox label="登量" name="type"></el-checkbox>
+          <el-checkbox label="降量" name="type"></el-checkbox>
           <el-checkbox label="断面客流" name="type"></el-checkbox>
           <el-checkbox label="满载率" name="type"></el-checkbox>
         </el-checkbox-group>
@@ -79,7 +79,7 @@ export default {
         // typeStream: '',
         // typeFullRate: ''
       },
-      tabType: ['上车人数', '下车人数', '断面客流', '满载率'],
+      tabType: ['登量', '降量', '断面客流', '满载率'],
       lineOptions: [],
       pickerOptions: {
         disabledDate (time) {

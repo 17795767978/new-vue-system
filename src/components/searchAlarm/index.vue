@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
-      <el-form-item label="选择机构" v-if="isOrg">
+      <el-form-item label="所属机构" v-if="isOrg">
         <el-select class="font-style" @visible-change="changed" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptions"
@@ -61,7 +61,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="方向" v-if="isTurn">
+      <el-form-item label="上下行" v-if="isTurn">
         <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
           <el-option
             v-for="item in turnOptions"
@@ -78,7 +78,9 @@
           placeholder="选择月">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="站位A" v-if="isStation">
+      <!-- 附加的功能 -->
+      <slot></slot>
+      <el-form-item label="出发站点" v-if="isStation">
         <el-select
           ref="elSelectWrapperUp"
           style="width:200px;"
@@ -98,7 +100,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="站位B" v-if="isStation">
+      <el-form-item label="到达站点" v-if="isStation">
         <el-select
           ref="elSelectWrapperUp"
           style="width:200px;"
@@ -183,8 +185,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- 附加的功能 -->
-      <slot></slot>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
@@ -792,11 +792,10 @@ export default {
 .header {
   width: 100%;
   border-bottom: 1px solid #eee;
-  padding: 20px 20px;
+  padding: 20px 20px 0px 20px;
   box-sizing: border-box;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
   .form-inline {
-    height: 4vh;
     .font-style {
       width: 130px;
     }

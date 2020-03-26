@@ -95,6 +95,14 @@ export const wholeInformationApi = {
       mockPath: '/api/base/bus/video/info/update',
       params: {},
       desc: '车辆视频位置关系-更新'
+    },
+    {
+      name: 'getNoStaffIcCardType',
+      method: 'POST',
+      path: '/api/temp/card/type/info/getNoStaffIcCardType',
+      mockPath: '/api/temp/card/type/info/getNoStaffIcCardType',
+      params: {},
+      desc: '卡类型查询（剔除员工类型）'
     }
   ]
 }

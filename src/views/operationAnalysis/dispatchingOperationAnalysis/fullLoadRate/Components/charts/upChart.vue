@@ -52,7 +52,7 @@ export default {
       tabType: [],
       maxNum: '',
       maxRate: '',
-      defaultData: ['上车人数', '下车人数', '断面客流', '满载率']
+      defaultData: ['登量', '降量', '断面客流', '满载率']
     }
   },
   computed: {
@@ -128,19 +128,19 @@ export default {
         this.fullRate = []
       } else {
         this.tabType = []
-        let isTypeUp = this.defaultData.some(item => item === '上车人数')
-        let isTypeDown = this.defaultData.some(item => item === '下车人数')
+        let isTypeUp = this.defaultData.some(item => item === '登量')
+        let isTypeDown = this.defaultData.some(item => item === '降量')
         let isPassFlow = this.defaultData.some(item => item === '断面客流')
         let isFullRate = this.defaultData.some(item => item === '满载率')
         if (isTypeUp) {
           this.upPersonNum = this.dataSource[0]
-          this.tabType.push('上车人数')
+          this.tabType.push('登量（人次）')
         } else {
           this.upPersonNum = []
         }
         if (isTypeDown) {
           this.downPersonNum = this.dataSource[1]
-          this.tabType.push('下车人数')
+          this.tabType.push('降量（人次）')
         } else {
           this.downPersonNum = []
         }
@@ -260,7 +260,7 @@ export default {
         ],
         series: [
           {
-            name: '上车人数',
+            name: '登量（人次）',
             type: 'bar',
             barWidth: '10',
             // barGap: '-100%',
@@ -276,7 +276,7 @@ export default {
             data: this.upPersonNum
           },
           {
-            name: '下车人数',
+            name: '降量（人次）',
             type: 'bar',
             barWidth: '10',
             yAxisIndex: 0,

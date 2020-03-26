@@ -28,12 +28,12 @@
       <el-table-column
         prop="staSequence"
         align="center"
-        label="站序号">
+        label="站序">
       </el-table-column>
       <el-table-column
         prop="staName"
         align="center"
-        label="站名">
+        label="站点">
       </el-table-column>
       <el-table-column
         prop="upPayNumber"
@@ -48,7 +48,7 @@
       <el-table-column
         prop="passNumber"
         align="center"
-        label="通过量（人次）">
+        label="断面客流">
       </el-table-column>
       <!-- <el-table-column
         prop="approval"

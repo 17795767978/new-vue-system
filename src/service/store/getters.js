@@ -31,7 +31,9 @@ const getters = {
   // router路由的参数
   routerData: state => state.routerData.data,
   // 导出内容序列化
-  formDown: state => state.defaultSearch.formDown
+  formDown: state => state.defaultSearch.formDown,
+  // 卡类型
+  cardTypeData: state => state.globel.cardTypeData
 }
 
 export default getters

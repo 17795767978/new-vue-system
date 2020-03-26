@@ -158,6 +158,8 @@ const user = {
               }
             })
           })
+          // 卡类型
+          store.dispatch('getCardType')
           // store.dispatch('getComSecList').then(res => {
           //   if (res.length > 0) {
           //     form.lineOrgId = res[0].value

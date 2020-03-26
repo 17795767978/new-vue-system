@@ -2,7 +2,7 @@
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-row>
-      <el-form-item label="选择机构">
+      <el-form-item label="所属机构">
         <el-select class="font-style" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptions"
@@ -32,7 +32,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="方向" v-if="isType">
+      <el-form-item label="上下行" v-if="isType">
         <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
           <el-option
             v-for="item in turnOptions"
@@ -45,6 +45,16 @@
       </el-row>
       <el-form-item label="输入自编号" v-if="isBusSelfNumber">
         <el-input type="text" v-model="formInline.busSelfNumber"></el-input>
+      </el-form-item>
+      <el-form-item label="选择卡类型">
+        <el-select filterable v-model="formInline.cardTypes" multiple collapse-tags placeholder="请选择卡类型">
+          <el-option
+            v-for="item in cardTypeData"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="选择日期">
          <el-date-picker
@@ -109,7 +119,8 @@ export default {
         startTime: '',
         endTime: '',
         busSelfNumber: '',
-        radio: '1'
+        radio: '1',
+        cardTypes: []
       },
       comOptions: [],
       turnOptions: [{
@@ -153,7 +164,7 @@ export default {
     }, 20)
   },
   computed: {
-    ...mapGetters(['userId'])
+    ...mapGetters(['userId', 'cardTypeData'])
   },
   mounted () {
     if (this.userId !== '1') {

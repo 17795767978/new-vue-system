@@ -8,9 +8,27 @@
         <passengerVol />
       </div>
       <div class="left-bottom-wrapper">
-        <div class="title">客流热力图</div>
+        <div class="title">
+          <div>IC卡类型统计分析</div>
+          <el-date-picker
+              style="width:200px;margin-right:220px;position: absolute;right: 6vw; top: 4.5vh; z-index: 999" size="small"
+              v-model="selectDate"
+              type="date"
+              :picker-options="pickerOptions"
+              placeholder="选择日期">
+            </el-date-picker>
+            <el-select style="width:200px;margin-right:10px;position: absolute;right: 5vw; top: 4.5vh;z-index: 999" size="mini" filterable v-model="cardTypes" multiple collapse-tags placeholder="请选择卡类型">
+              <el-option
+                v-for="item in cardTypeData"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <el-button style="position: relative; z-index: 999;position: absolute;right: 1vw; top: 5vh;" type="primary" size="mini" @click="getTopOpts('cardType')">查询</el-button>
+        </div>
         <div class="map">
-          <passengerHotmap />
+          <passengerCard :sendCardType="sendCardType"/>
         </div>
       </div>
       <div class="right-bottom-wrapper">
@@ -49,10 +67,11 @@
             <el-date-picker
               style="width:200px;margin-right:220px;position: absolute;right: 6vw; top: 4.5vh; z-index: 999" size="small"
               v-model="selectDate"
+              :picker-options="pickerOptions"
               type="date"
               placeholder="选择日期">
             </el-date-picker>
-            <el-select style="width:200px;margin-right:10px;position: absolute;right: 5vw; top: 4.5vh;z-index: 999" size="mini" filterable v-model="lineIds" multiple collapse-tags placeholder="请搜索线路">
+            <el-select style="width:200px;margin-right:10px;position: absolute;right: 5vw; top: 4.5vh;z-index: 999" size="mini" filterable v-model="lineIds" multiple collapse-tags placeholder="请选择线路">
               <el-option
                 v-for="item in lineOptions"
                 :key="item.value"
@@ -63,7 +82,7 @@
             <el-button style="position: relative; z-index: 999;position: absolute;right: 1vw; top: 5vh;" type="primary" size="mini" @click="getTopOpts('lines')">查询</el-button>
           </div>
           <div class="map">
-            <lineEchartsTop :sendLineIds="sendLineIds"/>
+            <lineEchartsTop :sendType="sendType"/>
           </div>
         </div>
         <div class="month-wrapper">
@@ -77,25 +96,35 @@
 <script type="text/ecmascript-6">
 import totalData from './Components/totalData.vue'
 import passengerVol from './Components/passengerVol.vue'
-import passengerHotmap from './Components/passengerHotmap.vue'
-// import stationEcharts from './Components/stationEcharts.vue'
+// import passengerHotmap from './Components/passengerHotmap.vue'
+import passengerCard from './Components/passengerCard.vue'
 import lineEchartsTop from './Components/lineEchartsTop.vue'
 import monthEcharts from './Components/month.vue'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   name: 'passengerHome',
   data () {
     return {
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
+        }
+      },
       stations: [],
       loading: false,
       searchStationOptions: [],
       stationOptions: [],
-      sendStations: [],
+      sendCardType: {},
       lineOptions: [],
       lineIds: [],
-      sendLineIds: [],
-      selectDate: moment().format('YYYY-MM-DD')
+      sendType: {},
+      selectDate: moment().format('YYYY-MM-DD'),
+      cardTypes: []
     }
+  },
+  computed: {
+    ...mapGetters(['cardTypeData'])
   },
   created () {
     this._stationList()
@@ -139,10 +168,16 @@ export default {
       }
     },
     getTopOpts (opts) {
-      if (opts === 'stations') {
-        this.sendStations = this.stations.map(item => item.value)
+      if (opts === 'cardType') {
+        this.sendCardType = {
+          cardTypes: this.cardTypes,
+          date: this.selectDate
+        }
       } else {
-        this.sendLineIds = this.lineIds
+        this.sendType = {
+          lineIds: this.lineIds,
+          date: this.selectDate
+        }
       }
     },
     remoteMethod (query) {
@@ -163,7 +198,7 @@ export default {
   components: {
     totalData,
     passengerVol,
-    passengerHotmap,
+    passengerCard,
     // stationEcharts,
     lineEchartsTop,
     monthEcharts

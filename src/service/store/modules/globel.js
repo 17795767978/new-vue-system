@@ -10,7 +10,8 @@ const globel = {
     comData: [],
     carData: [],
     comDataSec: [],
-    lineDataSec: []
+    lineDataSec: [],
+    cardTypeData: []
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -30,6 +31,9 @@ const globel = {
     },
     CAR_DATA: (state, carData) => {
       state.comData = carData
+    },
+    CARD_TYPE_DATA: (state, cardTypeData) => {
+      state.cardTypeData = cardTypeData
     }
   },
   actions: {
@@ -182,6 +186,18 @@ const globel = {
             reject(error)
           })
         }
+      })
+    },
+    getCardType ({ commit }) {
+      api['wholeInformation.getNoStaffIcCardType']().then(res => {
+        let list = []
+        res.forEach(item => {
+          list.push({
+            label: item.cardTypeName,
+            value: item.cardSelfCode
+          })
+        })
+        commit('CARD_TYPE_DATA', list)
       })
     }
   }

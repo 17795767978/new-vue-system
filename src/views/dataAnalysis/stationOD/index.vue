@@ -3,6 +3,7 @@
     <Search
       :isMonth="true"
       :isEmpty="true"
+      :isStation="true"
       @configCheck="getSearch"
       @emptySelect="handlerEmpty"
     >
@@ -31,7 +32,6 @@
           minTime: slotData.stHour
         }">
       </el-time-select>
-
       <span style="margin-right: 0.5vw;">直线距离（km）</span>
       <el-input class="default" min="0" v-model="slotData.startDis" size="mini"
         style="width: 7vw" placeholder="起始距离" type="number"></el-input>

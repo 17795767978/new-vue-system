@@ -35,7 +35,7 @@
       <el-table-column
         prop="upStaName"
         align="center"
-        label="上车站位名">
+        label="上车站点">
       </el-table-column>
       <el-table-column
         prop="upStaSequence"
@@ -46,7 +46,7 @@
       <el-table-column
         prop="downStaName"
         align="center"
-        label="下车站位名">
+        label="下车站点">
       </el-table-column>
       <el-table-column
         prop="downStaSequence"
