@@ -386,7 +386,7 @@ export default {
     setTimeout(() => {
       this.formInline.valueTime = [timeStart, timeEnd]
     }, 20)
-    // this._stationList()
+    this._stationList()
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
@@ -560,12 +560,21 @@ export default {
   },
   methods: {
     _stationList () {
-      this.$api['wholeInformation.getAllBaseStationNamesListData']().then(res => {
+      // this.$api['wholeInformation.getAllBaseStationNamesListData']().then(res => {
+      //   let arr = res
+      //   arr.forEach(item => {
+      //     this.stationOptions.push({
+      //       value: item.stationName,
+      //       label: item.stationName
+      //     })
+      //   })
+      // })
+      this.$store.dispatch('getStationList').then(res => {
         let arr = res
         arr.forEach(item => {
           this.stationOptions.push({
-            value: item.stationName,
-            label: item.stationName
+            value: item.staUuid,
+            label: item.staName
           })
         })
       })

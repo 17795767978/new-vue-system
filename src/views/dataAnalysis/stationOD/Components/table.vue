@@ -76,12 +76,15 @@ export default {
       payTimeIntervalMin: '',
       payTimeIntervalMax: '',
       pageNumber: this.pageNumber,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
+      downStaUuids: '',
+      upStaUuids: ''
     })
   },
   watch: {
     selectData (newV) {
       this.pageNumber = 1
+      console.log(newV)
       this._getAnalStaOdDataListData({
         month: moment(newV.month).format('YYYY-MM'),
         linearDistanceMin: newV.startDis,
@@ -91,7 +94,9 @@ export default {
         payTimeIntervalMin: newV.stHour,
         payTimeIntervalMax: newV.edHour,
         pageNumber: this.pageNumber,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        downStaUuids: Object.keys(newV.endStation).length > 0 ? newV.endStation.value : '',
+        upStaUuids: Object.keys(newV.startStation).length > 0 ? newV.startStation.value : ''
       })
     }
   },
@@ -114,7 +119,9 @@ export default {
           payTimeIntervalMin: '',
           payTimeIntervalMax: '',
           pageNumber: this.pageNumber,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          downStaUuids: '',
+          upStaUuids: ''
         })
       } else {
         this._getAnalStaOdDataListData({
@@ -126,7 +133,9 @@ export default {
           payTimeIntervalMin: this.selectData.stHour,
           payTimeIntervalMax: this.selectData.edHour,
           pageNumber: this.pageNumber,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          downStaUuids: Object.keys(this.selectData.endStation).length > 0 ? this.selectData.endStation.value : '',
+          upStaUuids: Object.keys(this.selectData.startStation).length > 0 ? this.selectData.startStation.value : ''
         })
       }
     }

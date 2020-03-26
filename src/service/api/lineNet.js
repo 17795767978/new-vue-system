@@ -309,7 +309,9 @@ export const lineNetApi = {
         payNumberMin: '',
         payNumberMax: '',
         payTimeIntervalMin: '',
-        payTimeIntervalMax: ''
+        payTimeIntervalMax: '',
+        upStaUuids: '',
+        downStaUuids: ''
       },
       desc: '全市站点OD矩阵'
     },
