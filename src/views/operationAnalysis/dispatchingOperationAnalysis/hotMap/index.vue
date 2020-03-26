@@ -36,6 +36,7 @@
   <div class="station-echarts">
     <Echarts :datas="datas.heatMapStaTOP10DataLists" :ids="'station'"/>
   </div>
+  <introduceWrapper :msg="msg"/>
   </div>
 </template>
 
@@ -43,6 +44,7 @@
 import HotMap from './Components/map'
 import Dialog from './Components/dialog'
 import Echarts from './Components/echarts'
+import introduceWrapper from '@/components/introduce/'
 import moment from 'moment'
 const TIME_DATA = ['06:00-07:00', '07:00-08:00', '08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00',
   '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00', '17:00-18:00', '18:00-19:00',
@@ -59,7 +61,11 @@ export default {
       setTimer: null,
       datas: {},
       current: 0,
-      currentStop: false
+      currentStop: false,
+      msg: {
+        methods: '该分析页面为月报，当月可查询之前月份每个小时的客流热力分布图以及线路和站点TOP排行，页面上方的时间轴代表的是小时时间，可单击暂停或继续。',
+        aim: '统计查询日期内不同时段的客流热力分布情况以及该时段的热门线路、站点的TOP排行情况。'
+      }
     }
   },
   created () {
@@ -153,7 +159,8 @@ export default {
   components: {
     HotMap,
     Dialog,
-    Echarts
+    Echarts,
+    introduceWrapper
   }
 }
 </script>

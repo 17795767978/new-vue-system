@@ -27,6 +27,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <introduceWrapper :msg="msg"/>
   </div>
 </template>
 
@@ -35,6 +36,7 @@ import Search from '@/components/searchAlarm'
 import Table from './Components/table'
 import Echarts from './Components/echarts'
 import Immutable from 'immutable'
+import introduceWrapper from '@/components/introduce/'
 export default {
   name: 'lineOD',
   data () {
@@ -42,7 +44,11 @@ export default {
       selectData: {},
       echartsData: {},
       activeName: 'first',
-      downLoadName: 'downLoad.getLineOdCountListDataExport'
+      downLoadName: 'downLoad.getLineOdCountListDataExport',
+      msg: {
+        methods: '图中横坐标为线路该方向上的站点，弧线代表一个站到另外一个站的人流总数，颜色从绿色到橘红色，颜色越深线条越粗代表人流总数越大，鼠标放在某条弧线上会显示该OD的详情',
+        aim: '图中横坐标为线路该方向上的站点，弧线代表一个站到另外一个站的人流总数，颜色从绿色到橘红色，颜色越深线条越粗代表人流总数越大，鼠标放在某条弧线上会显示该OD的详情'
+      }
     }
   },
   methods: {
@@ -71,7 +77,8 @@ export default {
   components: {
     Search,
     Table,
-    Echarts
+    Echarts,
+    introduceWrapper
   }
 }
 </script>
