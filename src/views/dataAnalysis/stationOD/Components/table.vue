@@ -84,7 +84,6 @@ export default {
   watch: {
     selectData (newV) {
       this.pageNumber = 1
-      console.log(newV)
       this._getAnalStaOdDataListData({
         month: moment(newV.month).format('YYYY-MM'),
         linearDistanceMin: newV.startDis,
@@ -103,6 +102,9 @@ export default {
   methods: {
     async _getAnalStaOdDataListData (params) {
       let result = await this.$api['lineNet.getAnalStaOdDataListData'](params)
+      if (result.list.length === 0) {
+        this.$message.warning('暂无数据')
+      }
       this.tableData = result.list
       this.total = result.total
     },
