@@ -46,7 +46,13 @@
         <div class="line-wrapper">
           <div class="title">
             <div>客流最热线路TOP10(登量)</div>
-            <el-select style="width:200px;margin-right:10px;position: absolute;right: 4vw; top: 4.5vh;" size="mini" filterable v-model="lineIds" multiple collapse-tags placeholder="请选择">
+            <el-date-picker
+              style="width:200px;margin-right:220px;position: absolute;right: 6vw; top: 4.5vh; z-index: 999" size="small"
+              v-model="selectDate"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+            <el-select style="width:200px;margin-right:10px;position: absolute;right: 5vw; top: 4.5vh;z-index: 999" size="mini" filterable v-model="lineIds" multiple collapse-tags placeholder="请搜索线路">
               <el-option
                 v-for="item in lineOptions"
                 :key="item.value"
@@ -75,6 +81,7 @@ import passengerHotmap from './Components/passengerHotmap.vue'
 // import stationEcharts from './Components/stationEcharts.vue'
 import lineEchartsTop from './Components/lineEchartsTop.vue'
 import monthEcharts from './Components/month.vue'
+import moment from 'moment'
 export default {
   name: 'passengerHome',
   data () {
@@ -86,7 +93,8 @@ export default {
       sendStations: [],
       lineOptions: [],
       lineIds: [],
-      sendLineIds: []
+      sendLineIds: [],
+      selectDate: moment().format('YYYY-MM-DD')
     }
   },
   created () {
