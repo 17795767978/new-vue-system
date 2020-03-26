@@ -51,7 +51,7 @@ export default {
           this.loading = false
           this.echartDatas = newV
           let datas = this.echartDatas && this.echartDatas.length > 0 ? this.echartDatas.map(item => item.speed) : []
-          let xDatas = this.echartDatas && this.echartDatas.length > 0 ? this.echartDatas.map(item => moment(item.sendtime).format('HH:mm:ss')) : []
+          let xDatas = this.echartDatas && this.echartDatas.length > 0 ? this.echartDatas.map(item => moment(item.warnTime).format('HH:mm:ss')) : []
           this._getMonthData(datas, xDatas)
         }, 1000)
       }
