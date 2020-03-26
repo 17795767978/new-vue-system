@@ -149,7 +149,8 @@ export default {
         if (res.nodes.length > 0) {
           res.nodes.forEach((item, index) => {
             this.lineStations.push({
-              'name': item.upStaName,
+              'name': item.upStaSequence + item.upStaName,
+              // 'squence': item.upStaSequence,
               'y': 50,
               'x': 400 + index * 200
             })
@@ -161,8 +162,8 @@ export default {
         if (res.edges.length > 0) {
           res.edges.forEach((item, index) => {
             this.datas.push({
-              'source': item.upStaName,
-              'target': item.downStaName,
+              'source': item.upStaSequence + item.upStaName,
+              'target': item.downStaSequence + item.downStaName,
               'lineStyle': {
                 'normal': {
                   'width': 0.1 * item.payNumbers,
