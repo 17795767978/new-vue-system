@@ -2,7 +2,7 @@
   <div class="total-data">
     <header>
       <h2 style="margin-top: 2.5%">
-        <span style="margin-right: 30%; font-size: 1vw;">时间：{{date}}</span>
+        <span style="margin-right: 20%; font-size: 1vw;">时间：{{date}}</span>
         <span style="font-size: 1vw;">当日累计-客流量: <span style="color: #f00; font-size: 1vw;">{{totalPassenger}}</span>人次</span>
       </h2>
     </header>

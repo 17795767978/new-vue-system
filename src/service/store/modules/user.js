@@ -93,6 +93,7 @@ const user = {
           localStorage.setItem('userName', res.userInfo.userAccount)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
           localStorage.setItem('id', res.userInfo.userId)
+          localStorage.setItem('userOrgUuid', res.userInfo.userOrgUuid)
           resolve()
         }).catch(err => {
           reject(err)
@@ -119,6 +120,7 @@ const user = {
         // 清除用户的id 清除权限
         localStorage.removeItem('id')
         localStorage.removeItem('userName')
+        localStorage.removeItem('userOrgUuid')
         resolve()
       })
     },
@@ -143,21 +145,23 @@ const user = {
           endStation: '',
           lineIds: []
         }
+        store.dispatch('getComList').then(res => {
+          let orgInit = []
+          if (localStorage.getItem('userOrgUuid') === '1') {
+            orgInit = res.filter(item => item.value === '1')
+          } else {
+            orgInit = res.filter(item => item.value === localStorage.getItem('userOrgUuid'))
+          }
+          if (res.length > 0) {
+            form.orgId = orgInit[0].value
+          }
+        })
         store.dispatch('getLineList').then(res => {
           if (res.length > 0) {
-            form.lineId = ''
+            form.lineId = res[0].value
           }
           commit('SET_LINEID', res.length > 0 && res[0].value)
-          store.dispatch('getComList').then(res => {
-            if (res.length > 0) {
-              form.orgId = res[0].value
-            }
-            store.dispatch('getLineList', form.orgId).then(res => {
-              if (res.length > 0) {
-                form.lineId = res[0].value
-              }
-            })
-          })
+          store.dispatch('getCarList')
           // 卡类型
           store.dispatch('getCardType')
           // store.dispatch('getComSecList').then(res => {

@@ -358,16 +358,16 @@ export default {
     this.formInline.orgId = ''
     this.formInline.busNumber = ''
     this.formInline.lineId = ''
-    this.$store.dispatch('getComList').then(res => {
-      this.comOptions = res
-    })
-    this.$store.dispatch('getLineList', this.userId).then(res => {
-      this.lineOptions = res
-      this.lineId = this.lineOptions[0].value
-    })
-    this.$store.dispatch('getCarList').then(res => {
-      this.carOptions = res
-    })
+    // this.$store.dispatch('getComList').then(res => {
+    //   this.comOptions = res
+    // })
+    // this.$store.dispatch('getLineList', this.userId).then(res => {
+    //   this.lineOptions = res
+    //   this.lineId = this.lineOptions[0].value
+    // })
+    // this.$store.dispatch('getCarList').then(res => {
+    //   this.carOptions = res
+    // })
     // if (!this.isDefault) {
     //   this.$store.dispatch('getComSecList').then(res => {
     //     this.comOptionsSec = res
@@ -390,7 +390,12 @@ export default {
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
+    let globelData = this.$store.state.globel
     let month = moment().subtract(30, 'days').format('YYYY-MM')
+    this.comOptions = globelData.comData
+    this.lineOptions = globelData.lineData
+    this.carOptions = globelData.carData
+    this.lineId = this.lineOptions[0].value
     setTimeout(() => {
       if (this.userId !== '1') {
         this.disabled = true
@@ -400,7 +405,7 @@ export default {
         }
       } else {
         if (!this.isDefaultEmpty) {
-          this.formInline.orgId = defaultForm.orgId === '1' ? '' : defaultForm.orgId
+          this.formInline.orgId = defaultForm.orgId
           this.formInline.lineId = defaultForm.lineId
         } else {
           this.formInline.orgId = ''
@@ -643,7 +648,7 @@ export default {
       this.$emit('configCheck', configData)
     },
     onclear () {
-      let date = moment(new Date()).format('YYYY-MM-DD')
+      let date = moment().format('YYYY-MM-DD')
       let month = moment().subtract(30, 'days').format('YYYY-MM')
       this.formInline = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -663,9 +668,9 @@ export default {
         endStation: {},
         dataCurrent: date,
         warnTypeId: [],
-        dateArray: [],
+        dateArray: [date, date],
         lineIds: [],
-        radio: ''
+        radio: '1'
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -716,6 +721,7 @@ export default {
       let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
       setTimeout(() => {
         this.formInline.valueTime = [timeStart, timeEnd]
+        this.formInline.dateArray = [new Date(), new Date()]
       }, 20)
       this.$emit('emptySelect')
     },

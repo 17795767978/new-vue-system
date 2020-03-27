@@ -98,11 +98,11 @@ export const passengerFlowApi = {
     {
       name: 'getOnOffPersonCountlist',
       method: 'POST',
-      path: '/api/passenger/flow/result/getOnOffPersonCountlist',
-      mockPath: '/api/passenger/flow/result/getOnOffPersonCountlist',
+      path: '/api/mid/pf/detail/data/getLinePFStatisticsByHis',
+      mockPath: '/api/mid/pf/detail/data/getLinePFStatisticsByHis',
       params: {
-        orgId: '',
-        lineId: '',
+        orgUuid: '',
+        lineUuids: '',
         startDate: '',
         endDate: ''
       },
@@ -111,11 +111,11 @@ export const passengerFlowApi = {
     {
       name: 'getTodayOnOffPersonCountlist',
       method: 'POST',
-      path: '/api/passenger/flow/result/getTodayOnOffPersonCountlist',
-      mockPath: '/api/passenger/flow/result/getTodayOnOffPersonCountlist',
+      path: '/api/temp/ic/card/data/getLinePFStatisticsByDay',
+      mockPath: '/api/temp/ic/card/data/getLinePFStatisticsByDay',
       params: {
-        orgId: '',
-        lineId: '',
+        orgUuid: '',
+        lineUuids: '',
         startDate: '',
         endDate: ''
       },
@@ -149,6 +149,50 @@ export const passengerFlowApi = {
         orgId: ''
       },
       desc: '线路登量TOP10'
+    },
+    {
+      name: 'getSingleBusPFStatisticsByDay',
+      method: 'POST',
+      path: '/api/temp/ic/card/data/getSingleBusPFStatisticsByDay',
+      mockPath: '/api/temp/ic/card/data/getSingleBusPFStatisticsByDay',
+      params: {
+        lineUuid: '',
+        // pageNumber: '',
+        // pageSize: '',
+        sTime: '',
+        eTime: '',
+        orgUuid: '',
+        busPlateNumber: ''
+      },
+      desc: '单车客流统计（当日）'
+    },
+    {
+      name: 'getSingleBusPFStatisticsByHis',
+      method: 'POST',
+      path: '/api/mid/id/card/data/getSingleBusPFStatisticsByHis',
+      mockPath: '/api/mid/id/card/data/getSingleBusPFStatisticsByHis',
+      params: {
+        lineUuid: '',
+        // pageNumber: '',
+        // pageSize: '',
+        sTime: '',
+        eTime: '',
+        orgUuid: '',
+        busPlateNumber: ''
+      },
+      desc: '单车客流统计（历史）'
+    },
+    {
+      name: 'ICCardTypeAnalysis',
+      method: 'POST',
+      path: '/api/mid/id/card/data/ICCardTypeAnalysis',
+      mockPath: '/api/mid/id/card/data/ICCardTypeAnalysis',
+      params: {
+        cardSelfCodes: '',
+        date: '',
+        orgUuid: ''
+      },
+      desc: 'IC卡类型统计分析'
     }
   ]
 }

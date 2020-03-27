@@ -12,7 +12,7 @@
           <div>IC卡类型统计分析</div>
           <el-date-picker
               style="width:200px;margin-right:220px;position: absolute;right: 6vw; top: 4.5vh; z-index: 999" size="small"
-              v-model="selectDate"
+              v-model="idSelectDate"
               type="date"
               :picker-options="pickerOptions"
               placeholder="选择日期">
@@ -28,7 +28,7 @@
             <el-button style="position: relative; z-index: 999;position: absolute;right: 1vw; top: 5vh;" type="primary" size="mini" @click="getTopOpts('cardType')">查询</el-button>
         </div>
         <div class="map">
-          <passengerCard :sendCardType="sendCardType"/>
+          <passengerCard :sendCardType="sendCardType" @getIdType="getIdType"/>
         </div>
       </div>
       <div class="right-bottom-wrapper">
@@ -82,11 +82,11 @@
             <el-button style="position: relative; z-index: 999;position: absolute;right: 1vw; top: 5vh;" type="primary" size="mini" @click="getTopOpts('lines')">查询</el-button>
           </div>
           <div class="map">
-            <lineEchartsTop :sendType="sendType"/>
+            <lineEchartsTop :sendType="sendType" @getLineData="getLineData"/>
           </div>
         </div>
         <div class="month-wrapper">
-          <monthEcharts></monthEcharts>
+          <monthEcharts @getLineTime="getLineTime"></monthEcharts>
         </div>
       </div>
     </div>
@@ -120,6 +120,7 @@ export default {
       lineIds: [],
       sendType: {},
       selectDate: moment().format('YYYY-MM-DD'),
+      idSelectDate: moment().format('YYYY-MM-DD'),
       cardTypes: []
     }
   },
@@ -171,7 +172,7 @@ export default {
       if (opts === 'cardType') {
         this.sendCardType = {
           cardTypes: this.cardTypes,
-          date: this.selectDate
+          date: this.idSelectDate
         }
       } else {
         this.sendType = {
@@ -193,6 +194,36 @@ export default {
       } else {
         this.options = []
       }
+    },
+    // 点击最热线路
+    getLineData (data) {
+      this.$router.push({
+        name: 'searchPassenger',
+        query: {
+          type: 'line',
+          lineName: data,
+          date: moment(this.selectDate).format('YYYY-MM-DD')
+        }
+      })
+    },
+    getIdType (data) {
+      this.$router.push({
+        name: 'searchPassenger',
+        query: {
+          type: 'idCard',
+          idCard: data,
+          date: moment(this.idSelectDate).format('YYYY-MM-DD')
+        }
+      })
+    },
+    getLineTime (data) {
+      this.$router.push({
+        name: 'searchPassenger',
+        query: {
+          type: 'month',
+          date: data
+        }
+      })
     }
   },
   components: {

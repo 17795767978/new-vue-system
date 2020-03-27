@@ -1,7 +1,7 @@
 <template>
   <div class="passenger-search">
     <header>
-      <header-nav @configCheck="configCheck" @isDownload="isDownload" :excelData="excelData" :totle="totle"/>
+      <header-nav @configCheck="configCheck" @isDownload="isDownload" :excelData="excelData" :totle="totle" :echartsData="echartsData" @clearEcahrtsData="clearEcahrtsData"/>
     </header>
     <div class="content">
       <contentWrapper
@@ -11,6 +11,7 @@
         @isUpdateTo="isUpdateTo"
         @isDownLoadTo="isDownLoadTo"
         @getData="getData"
+        :echartsData="echartsData"
       ></contentWrapper>
     </div>
   </div>
@@ -29,7 +30,8 @@ export default {
       isUpdate: false,
       isDownLoad: false,
       excelData: [],
-      totle: 0
+      totle: 0,
+      echartsData: {}
     }
   },
   components: {
@@ -37,6 +39,10 @@ export default {
     contentWrapper
   },
   mounted () {
+    this.echartsData = JSON.parse(JSON.stringify(this.$route.query))
+  },
+  activated () {
+    this.echartsData = JSON.parse(JSON.stringify(this.$route.query))
   },
   watch: {
     headerParams: {
@@ -69,6 +75,9 @@ export default {
     getData (list, num) {
       this.excelData = list
       this.totle = num
+    },
+    clearEcahrtsData () {
+      this.echartsData = {}
     }
   }
 }

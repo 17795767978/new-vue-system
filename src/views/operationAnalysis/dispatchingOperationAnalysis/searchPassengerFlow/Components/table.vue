@@ -53,7 +53,7 @@
       <el-table-column
         prop="orgName"
         align="center"
-        label="公司">
+        label="所属机构">
       </el-table-column>
        <!-- v-if="selectData.lineIds && selectData.lineIds.length > 0" -->
       <el-table-column
@@ -63,19 +63,14 @@
         label="线路">
       </el-table-column>
       <el-table-column
-        prop="uploadTime"
+        prop="uploadDate"
         align="center"
         label="日期">
       </el-table-column>
       <el-table-column
-        prop="onPersonCount"
+        prop="payNumber"
         align="center"
-        label="上车人数">
-      </el-table-column>
-      <el-table-column
-        prop="offPersonCount"
-        align="center"
-        label="下车人数">
+        label="刷卡总量">
       </el-table-column>
     </el-table>
   </div>
@@ -127,10 +122,14 @@ export default {
       vWrapper.appendChild(tableBody)
       tableBody.appendChild(emptyBlock)
     })
+    // orgUuid: '',
+    //     lineUuid: '',
+    //     startTime: '',
+    //     endTime: ''
     let date = moment().format('YYYY-MM-DD')
     this._getOnOffPersonCountlist({
-      orgId: this.formData.orgId === '1' ? '' : this.formData.orgId,
-      lineIds: this.formData.lineIds,
+      orgUuid: this.formData.orgId === '1' ? '' : this.formData.orgId,
+      lineUuids: this.formData.lineIds,
       startDate: date,
       endDate: date
     }, '1')
@@ -141,8 +140,8 @@ export default {
       handler (newV) {
         console.log(newV.radio)
         this._getOnOffPersonCountlist({
-          orgId: newV.orgId === '1' ? '' : newV.orgId,
-          lineIds: newV.lineIds,
+          orgUuid: newV.orgId === '1' ? '' : newV.orgId,
+          lineUuids: newV.lineIds,
           startDate: newV.dateArray[0],
           endDate: newV.dateArray[1]
         }, newV.radio)
@@ -216,17 +215,16 @@ export default {
       let index = 0
       for (let key of initData) { // 遍历Set
         let arrOrg = res.filter(item => item.orgName === key)
-        let getOnArr = arrOrg.map(item => Number(item.onPersonCount))
-        let getOffArr = arrOrg.map(item => Number(item.offPersonCount))
+        let getPayNumberArr = arrOrg.map(item => Number(item.payNumber))
+        console.log(arrOrg)
         index += arrOrg.length
         this.indexArr.push(index)
         let currentData = {
           orgName: '合计',
           mark: arrOrg.length,
           lineName: '——',
-          uploadTime: '——',
-          onPersonCount: JSON.stringify(getOnArr.reduce((prev, next) => prev + next)),
-          offPersonCount: JSON.stringify(getOffArr.reduce((prev, next) => prev + next))
+          uploadDate: '——',
+          payNumber: JSON.stringify(getPayNumberArr.reduce((prev, next) => prev + next))
         }
         this.getTable(allTable, this.indexArr, currentData, res)
       }
@@ -295,9 +293,9 @@ export default {
       return () => {
         let columns = []
         if (this.selectData.lineIds && this.selectData.lineIds.length > 0) {
-          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+          columns = ['id', 'orgName', 'lineName', 'uploadDate', 'payNumber']
         } else {
-          columns = ['id', 'orgName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+          columns = ['id', 'orgName', 'uploadDate', 'payNumber']
         }
 
         const sums = []

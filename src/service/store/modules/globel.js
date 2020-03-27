@@ -1,5 +1,5 @@
 import api from '@/plugins/api'
-import store from '@/plugins/store'
+// import store from '@/plugins/store'
 /**
  * Globel STORE
  */
@@ -30,7 +30,7 @@ const globel = {
       state.comDataSec = comData
     },
     CAR_DATA: (state, carData) => {
-      state.comData = carData
+      state.carData = carData
     },
     CARD_TYPE_DATA: (state, cardTypeData) => {
       state.cardTypeData = cardTypeData
@@ -39,11 +39,11 @@ const globel = {
   actions: {
     getLineList ({ commit }) {
       return new Promise((resolve, reject) => {
-        if (store.getters.userId !== '1') {
+        if (localStorage.getItem('userOrgUuid') !== '1') {
           api['wholeInformation.getLine']({
             lineId: '',
             lineName: '',
-            orgId: store.getters.userId
+            orgId: localStorage.getItem('userOrgUuid')
           }).then(res => {
             let list = []
             res.forEach(item => {
@@ -149,7 +149,7 @@ const globel = {
     },
     getCarList ({ commit }) {
       return new Promise((resolve, reject) => {
-        if (store.getters.userId === '1') {
+        if (localStorage.getItem('userOrgUuid') === '1') {
           api['wholeInformation.getCar']({
             orgId: '',
             orgName: '',
@@ -169,7 +169,7 @@ const globel = {
           })
         } else {
           api['wholeInformation.getCar']({
-            orgId: store.getters.userId,
+            orgId: localStorage.getItem('userOrgUuid'),
             orgName: '',
             lineId: ''
           }).then(res => {

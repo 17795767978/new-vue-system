@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-card-map" ref="wrapper" v-loading="loading" >
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" :tooltip="tooltip" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
@@ -26,14 +26,15 @@ export default {
       maxNum: 0,
       id: 'cardTypes',
       grid: {},
-      loading: true
+      loading: true,
+      tooltip: {}
     }
   },
   created () {
-    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    let orgUuid = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._getLines({
-      orgId,
-      lineUuids: [],
+      orgUuid,
+      cardSelfCodes: [],
       date: moment().format('YYYY-MM-DD')
     })
   },
@@ -41,50 +42,36 @@ export default {
     // console.log(this.$refs.wrapper.style)
   },
   watch: {
-    sendLineIds (newV) {
-      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-      this._getLines({
-        orgId,
-        lineUuids: newV,
-        date: moment(newV.date).format('YYYY-MM-DD')
-      })
+    sendCardType: {
+      deep: true,
+      handler (newV) {
+        let orgUuid = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+        this._getLines({
+          orgUuid,
+          cardSelfCodes: newV.cardTypes,
+          date: moment(newV.date).format('YYYY-MM-DD')
+        })
+      }
     }
   },
   methods: {
     _getLines (params) {
       this.loading = true
-      this.$api['passengerSimple.getHotlines'](params).then(res => {
+      this.$api['passengerFlow.ICCardTypeAnalysis'](params).then(res => {
+        console.log(res)
         this.loading = false
         this.title = {}
         this.lineData = [{
-          name: '上车客流',
+          name: '刷卡次数',
           type: 'pie',
-          radius: ['100%', '60%'],
-          data: res.datas[0],
+          center: ['50%', '60%'],
+          data: res,
           barWidth: 20,
+          color: ['#ff8f8f', '#eb6f49', '#f0f', '#fdb628', '#67e0e3', '#44ff9b', '#00f8f8', '#99dd1f', '#007130', '#d2a0ef'],
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
             emphasis: {
               barBorderRadius: 30
-            },
-            normal: {
-              // 柱形图圆角，初始化效果
-              barBorderRadius: [0, 10, 10, 0],
-              label: {
-                show: true, // 是否展示
-                textStyle: {
-                  fontWeight: 'bolder',
-                  fontSize: '12',
-                  fontFamily: '微软雅黑'
-                }
-              },
-              color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 1, [{
-                offset: 0,
-                color: '#fdc14d'
-              }, {
-                offset: 1,
-                color: '#ed8237'
-              }])
             }
           }
         }]
@@ -95,12 +82,21 @@ export default {
           y2: 30,
           borderWidth: 1
         }
+        this.tooltip = {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        }
         this.legend = {
           orient: 'vertical',
           left: 10,
-          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+          data: (() => {
+            return res.map(item => item.name)
+          })()
         }
       })
+    },
+    getEchartsData (data) {
+      this.$emit('getIdType', data.data.cardSelfCode)
     }
   },
   components: {
@@ -113,6 +109,7 @@ export default {
 .passenger-card-map {
   width:100%;
   box-sizing: border-box;
-  height: 100%;
+  height: 80%;
+  margin-top: 9%;
 }
 </style>

@@ -106,6 +106,9 @@ export default {
     },
     isClose: {
       type: Boolean
+    },
+    echartsData: {
+      type: Object
     }
   },
   data () {
@@ -159,9 +162,11 @@ export default {
     let endTime = dataNow.getTime()
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
-    setTimeout(() => {
-      this.formInline.valueTime = [timeStart, timeEnd]
-    }, 20)
+    if (!this.echartsData.date) {
+      setTimeout(() => {
+        this.formInline.valueTime = [timeStart, timeEnd]
+      }, 20)
+    }
   },
   computed: {
     ...mapGetters(['userId', 'cardTypeData'])
@@ -238,10 +243,29 @@ export default {
           this.isType = false
           this.formInline.lineType = ''
         } else {
-          this.formInline.valueTime = []
           this.isType = true
           this.isBusSelfNumber = false
           this.formInline.busSelfNumber = ''
+        }
+      }
+    },
+    'echartsData': {
+      deep: true,
+      handler (newV) {
+        if (Object.keys(newV).length > 0) {
+          this.formInline.radio = newV.date === moment().format('YYYY-MM-DD') ? '1' : '2'
+          let globelData = this.$store.state.globel
+          this.formInline.valueTime = [moment(newV.date).format('YYYY-MM-DD 00:00:00'), moment(newV.date).format('YYYY-MM-DD 23:59:59')]
+          if (newV.type === 'line') {
+            this.formInline.lineId = globelData.lineData.filter(item => item.label === newV.lineName)[0].value
+            this.formInline.cardTypes = []
+          } else if (newV.type === 'idCard') {
+            this.formInline.lineId = ''
+            this.formInline.cardTypes = [newV.idCard]
+          } else {
+            this.formInline.lineId = ''
+            this.formInline.cardTypes = []
+          }
         }
       }
     }
@@ -302,6 +326,7 @@ export default {
       setTimeout(() => {
         this.formInline.valueTime = [timeStart, timeEnd]
       }, 20)
+      this.$emit('clearEcahrtsData')
     },
     onSave () {
       // this.$emit('isDownload')

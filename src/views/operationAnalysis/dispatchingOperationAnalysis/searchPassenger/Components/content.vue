@@ -59,6 +59,9 @@ export default {
     },
     isDownLoad: {
       type: Boolean
+    },
+    echartsData: {
+      type: Object
     }
   },
   data () {
@@ -83,6 +86,39 @@ export default {
     this.moment = moment
   },
   watch: {
+    'echartsData': {
+      deep: true,
+      handler (newV) {
+        if (Object.keys(newV).length > 0) {
+          let globelData = this.$store.state.globel
+          let valueTime = [moment(newV.date).format('YYYY-MM-DD 00:00:00'), moment(newV.date).format('YYYY-MM-DD 23:59:59')]
+          let lineId = ''
+          let cardTypes = ''
+          if (newV.type === 'line') {
+            lineId = globelData.lineData.filter(item => item.label === newV.lineName)[0].value
+            cardTypes = []
+          } else if (newV.type === 'idCard') {
+            lineId = ''
+            cardTypes = [newV.idCard]
+          } else {
+            lineId = ''
+            cardTypes = []
+          }
+          this._passengerFlow({
+            orgUuid: '',
+            lineUuid: lineId,
+            busSelfCode: '',
+            busPlateNumber: '',
+            lineType: '',
+            sTime: valueTime[0],
+            eTime: valueTime[1],
+            pageSize: 15,
+            pageNumber: 1,
+            cardSelfCodes: cardTypes
+          }, newV.date === moment().format('YYYY-MM-DD') ? '1' : '2')
+        }
+      }
+    },
     isUpdate () {
       if (this.isUpdate) {
         this.pageNumber = 1
@@ -98,7 +134,7 @@ export default {
           eTime: this.selectData.endTime,
           pageSize: this.selectData.pageSize,
           pageNumber: this.selectData.pageNumber,
-          icCardType: this.selectData.cardTypes
+          cardSelfCodes: this.selectData.cardTypes
         }, this.selectData.radio)
         this.$emit('isUpdateTo')
       }
@@ -179,17 +215,47 @@ export default {
       this.selectData.pageNumber = val
       this.selectData.pageSize = 15
       this.pageNumber = val
-      this._passengerFlow({
-        orgUuid: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
-        lineUuid: this.selectData.lineId,
-        busPlateNumber: this.selectData.busNumber,
-        busSelfCode: this.selectData.busSelfNumber,
-        lineType: this.selectData.lineType,
-        sTime: this.selectData.startTime,
-        eTime: this.selectData.endTime,
-        pageSize: this.selectData.pageSize,
-        pageNumber: this.selectData.pageNumber
-      }, this.selectData.radio)
+      if (Object.keys(this.echartsData).length === 0) {
+        this._passengerFlow({
+          orgUuid: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
+          lineUuid: this.selectData.lineId,
+          busPlateNumber: this.selectData.busNumber,
+          busSelfCode: this.selectData.busSelfNumber,
+          lineType: this.selectData.lineType,
+          sTime: this.selectData.startTime,
+          eTime: this.selectData.endTime,
+          pageSize: this.selectData.pageSize,
+          pageNumber: this.selectData.pageNumber,
+          cardSelfCodes: this.selectData.cardTypes
+        }, this.selectData.radio)
+      } else {
+        let globelData = this.$store.state.globel
+        let valueTime = [moment(this.echartsData.date).format('YYYY-MM-DD 00:00:00'), moment(this.echartsData.date).format('YYYY-MM-DD 23:59:59')]
+        let lineId = ''
+        let cardTypes = ''
+        if (this.echartsData.type === 'line') {
+          lineId = globelData.lineData.filter(item => item.label === this.echartsData.lineName)[0].value
+          cardTypes = []
+        } else if (this.echartsData.type === 'idCard') {
+          lineId = ''
+          cardTypes = [this.echartsData.idCard]
+        } else {
+          lineId = ''
+          cardTypes = []
+        }
+        this._passengerFlow({
+          orgUuid: '',
+          lineUuid: lineId,
+          busSelfCode: '',
+          busPlateNumber: '',
+          lineType: '',
+          sTime: valueTime[0],
+          eTime: valueTime[1],
+          pageSize: 15,
+          pageNumber: this.selectData.pageNumber,
+          cardSelfCodes: cardTypes
+        }, this.echartsData.date === moment().format('YYYY-MM-DD') ? '1' : '2')
+      }
     }
   }
 }
