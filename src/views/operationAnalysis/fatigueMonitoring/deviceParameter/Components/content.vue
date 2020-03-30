@@ -189,8 +189,14 @@ export default {
       })
     },
     AddTask () {
-      this.dialogFormVisible = true
-      if (!this.isDeviceParameter && !this.rowData.devList.length) {
+      console.log(12313123)
+
+      if (this.rowData.devList && this.rowData.devList.length > 0) {
+        this.dialogFormVisible = true
+      } else {
+        this.$message.warning('请勾补发项')
+      }
+      if (!this.isDeviceParameter && this.rowData.devList && !this.rowData.devList.length) {
         this.handleSelectionChange(this.tableData)
       }
     },

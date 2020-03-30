@@ -52,7 +52,7 @@
         label="总站"
         width="120">
       </el-table-column>
-      <el-table-column label="驾驶行为监测报警" align="center">
+      <el-table-column label="驾驶行为监测报警台账" align="center">
         <el-table-column align="center" v-for="item in tableAlarmTypeTitle" :key="item.plvalue" :label="item.pldisplay">
           <el-table-column align="center" label="一级" :prop="item.level[0]">
             <template slot-scope="scope">

@@ -235,8 +235,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="checkDialog = false">取 消</el-button>
-        <el-button type="primary" @click="upDateCheck">确认</el-button>
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button type="primary" @click="upDateCheck('ruleForm')">确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -580,32 +580,43 @@ export default {
         suggestion: ''
       }
     },
-    upDateCheck () {
-      this.$api['tiredMonitoring.wsUpdate']({
-        warnUuid: this.checkMsg.warnUuid,
-        handleResult: this.ruleForm.status,
-        handleSuggestion: this.ruleForm.suggestion
-      }).then(res => {
-        this.$message.success('已处理')
-        this.checkDialog = false
-        let defaultData = this.$store.getters.formData
-        this._tableList({
-          orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
-          lineId: this.formInline.lineId, // 线路id
-          busUuid: this.formInline.busUuid, // 车辆id
-          devCode: this.formInline.devCode, // 设备号
-          busPlateNumber: this.formInline.busPlateNumber, // 车牌号
-          busSelfCode: this.formInline.busSelfCode, // 自编号
-          warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-          warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
-          startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
-          endTime: this.formInline.timeValue[1],
-          pageSize: 10,
-          pageNum: this.pageNum
-        })
-      }).catch(err => {
-        this.$message.error(err.msg)
+    upDateCheck (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$api['tiredMonitoring.wsUpdate']({
+            warnUuid: this.checkMsg.warnUuid,
+            handleResult: this.ruleForm.status,
+            handleSuggestion: this.ruleForm.suggestion
+          }).then(res => {
+            this.$message.success('已处理')
+            this.checkDialog = false
+            let defaultData = this.$store.getters.formData
+            this._tableList({
+              orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
+              lineId: this.formInline.lineId, // 线路id
+              busUuid: this.formInline.busUuid, // 车辆id
+              devCode: this.formInline.devCode, // 设备号
+              busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+              busSelfCode: this.formInline.busSelfCode, // 自编号
+              warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+              warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
+              startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+              endTime: this.formInline.timeValue[1],
+              pageSize: 10,
+              pageNum: this.pageNum
+            })
+          }).catch(err => {
+            this.$message.error(err.msg)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
+    },
+    resetForm (formName) {
+      this.checkDialog = false
+      this.$refs[formName].resetFields()
     },
     onSubmit () {
       let dateArr = []

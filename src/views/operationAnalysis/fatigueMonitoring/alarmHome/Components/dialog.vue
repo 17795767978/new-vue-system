@@ -65,8 +65,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="checkDialog = false">取 消</el-button>
-        <el-button type="primary" @click="upDateCheck">确认</el-button>
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button type="primary" @click="upDateCheck('ruleForm')">确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -223,33 +223,44 @@ export default {
         suggestion: ''
       }
     },
-    upDateCheck () {
-      this.$api['tiredMonitoring.wsUpdate']({
-        warnUuid: this.checkMsg.warnUuid,
-        handleResult: this.ruleForm.status,
-        handleSuggestion: this.ruleForm.suggestion
-      }).then(res => {
-        this.$message.success('已处理')
-        this.checkDialog = false
-        if (this.isSee.dataType === 'ws') {
-          this.wsData.splice(this.closeRow, 1)
-          this.selectAllData = this.wsData
-          this.total = this.selectAllData.length
-          this.handleCurrentChange(this.pageNumber)
-        } else if (this.isSee.dataType === 'table') {
-          this.selectAllData = this.tableData
-          this.total = this.selectAllData.length
-          this.handleCurrentChange(this.pageNumber)
-          this.$emit('updateTable', 'table')
-        } else if (this.isSee.dataType === 'charts') {
-          this.selectAllData = this.chartData
-          this.total = this.selectAllData.length
-          this.handleCurrentChange(this.pageNumber)
-          this.$emit('updateTable', 'charts')
+    upDateCheck (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$api['tiredMonitoring.wsUpdate']({
+            warnUuid: this.checkMsg.warnUuid,
+            handleResult: this.ruleForm.status,
+            handleSuggestion: this.ruleForm.suggestion
+          }).then(res => {
+            this.$message.success('已处理')
+            this.checkDialog = false
+            if (this.isSee.dataType === 'ws') {
+              this.wsData.splice(this.closeRow, 1)
+              this.selectAllData = this.wsData
+              this.total = this.selectAllData.length
+              this.handleCurrentChange(this.pageNumber)
+            } else if (this.isSee.dataType === 'table') {
+              this.selectAllData = this.tableData
+              this.total = this.selectAllData.length
+              this.handleCurrentChange(this.pageNumber)
+              this.$emit('updateTable', 'table')
+            } else if (this.isSee.dataType === 'charts') {
+              this.selectAllData = this.chartData
+              this.total = this.selectAllData.length
+              this.handleCurrentChange(this.pageNumber)
+              this.$emit('updateTable', 'charts')
+            }
+          }).catch(err => {
+            this.$message.error(err.msg)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
-      }).catch(err => {
-        this.$message.error(err.msg)
       })
+    },
+    resetForm (formName) {
+      this.checkDialog = false
+      this.$refs[formName].resetFields()
     },
     formatter (row) {
       return moment(row.warnTime).format('YYYY-MM-DD HH:mm:ss')

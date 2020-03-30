@@ -333,7 +333,7 @@ export default {
       },
       pickerOptionsDate: {
         disabledDate (time) {
-          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          const endTime = moment(moment().format('YYYY-MM-DD  23:59:59')).valueOf()
           return time.getTime() > endTime
         }
       },
