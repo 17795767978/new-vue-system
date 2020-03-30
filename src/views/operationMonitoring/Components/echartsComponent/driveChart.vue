@@ -30,7 +30,7 @@ export default {
       orgId,
       startTime: '',
       endTime: '',
-      warnTypes: ''
+      warnTypes: []
     })
   },
   mounted () {

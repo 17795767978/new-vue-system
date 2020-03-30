@@ -39,7 +39,7 @@ export default {
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1],
-      warnTypes: ''
+      warnTypes: []
     })
   },
   mounted () {
@@ -54,7 +54,7 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
-          warnTypes: ''
+          warnTypes: []
         })
       }
     }
