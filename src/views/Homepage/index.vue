@@ -40,7 +40,7 @@ import iconHomeYlyl from '../../assets/images/homeIcon/ylyl.png'
 import iconHomeKlgf from '../../assets/images/homeIcon/klgf.png'
 import iconHomeYxsj from '../../assets/images/homeIcon/yxsj.png'
 import iconHomeBjfx from '../../assets/images/homeIcon/bjfx.png'
-// import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
+import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
 import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
 import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
 const PER_ANA = [
@@ -55,7 +55,9 @@ const LINE_NET = [
   { name: '站点OD矩阵', icon: iconHomeYxsj, path: '/station-od', admin: false },
   { name: '线路客流查询', icon: iconHomeBjfx, path: '/line-passenger-flow', admin: false },
   { name: '客流热力分析', icon: iconHomeKlgf, path: '/hot-map', admin: false },
-  { name: '站点OD电子地图', icon: iconHomeBjzt, path: '/station-map', admin: false }
+  { name: '站点OD电子地图', icon: iconHomeBjzt, path: '/station-map', admin: false },
+  { name: '单车客流统计', icon: iconHomeBjlx, path: '/bus-passenger', admin: false },
+  { name: '客流数据查询', icon: iconHomeKlfx, path: '/search-passenger-flow', admin: false }
 ]
 // const LINE_NET = []
 export default {
@@ -146,7 +148,7 @@ export default {
   padding: 20px;
   box-sizing: border-box;
   .main-title {
-    margin-top: 50px;
+    margin-top: 20px;
     font-size: 30px;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     font-weight: bold;
@@ -182,7 +184,7 @@ export default {
         justify-content: space-between;
         .item-font {
           width: 32%;
-          height: 15vh;
+          height: 14vh;
           background-color:  #4fa3e4;
           margin-bottom: 8px;
           border-radius: 6px;

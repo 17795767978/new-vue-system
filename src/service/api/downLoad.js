@@ -87,16 +87,30 @@ export const downLoadApi = {
       },
       desc: '线路OD导出'
     },
+    // {
+    //   name: 'passengerFlowExport',
+    //   method: 'POST',
+    //   path: '/api/passenger/flow/result/export',
+    //   mockPath: '/api/passenger/flow/result/export',
+    //   params: {
+    //     orgId: '',
+    //     lineId: '',
+    //     startDate: '',
+    //     endDate: ''
+    //   },
+    //   desc: '客流查询导出'
+    // },
     {
       name: 'passengerFlowExport',
       method: 'POST',
-      path: '/api/passenger/flow/result/export',
-      mockPath: '/api/passenger/flow/result/export',
+      path: '/api/mid/pf/detail/data/linePFStatisticsExport',
+      mockPath: '/api/mid/pf/detail/data/linePFStatisticsExport',
       params: {
         orgId: '',
         lineId: '',
         startDate: '',
-        endDate: ''
+        endDate: '',
+        dateType: ''
       },
       desc: '客流查询导出'
     },
@@ -130,6 +144,21 @@ export const downLoadApi = {
         date: ''
       },
       desc: '线路客流查询-列表导出'
+    },
+    {
+      name: 'singleBusPFStaExport',
+      method: 'POST',
+      path: '/api/mid/id/card/data/singleBusPFStaExport',
+      mockPath: '/api/mid/id/card/data/singleBusPFStaExport',
+      params: {
+        orgUuid: '',
+        lineUuid: '',
+        busPlateNumber: '',
+        sTime: '',
+        dateType: '',
+        eTime: ''
+      },
+      desc: '单车客流查询导出'
     }
   ]
 }

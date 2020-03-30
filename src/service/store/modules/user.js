@@ -182,6 +182,16 @@ const user = {
             id: localStorage.getItem('id')
           }).then(res => {
             const data = res
+            let menuData = []
+            res.resourceMenu.forEach(item => {
+              menuData.push({
+                path: item.icon,
+                name: item.title,
+                id: item.id,
+                meta: JSON.parse(item.roles)
+              })
+            })
+            store.dispatch('initShortcutMenu', menuData)
             if (data.resourceTree && data.resourceTree.length > 0) {
               commit('SET_ROLES', data.resourceTree)
               commit('SET_USERINFO', data.userOrgId)

@@ -8,7 +8,7 @@
         <beauti-contextmenu-item @click="closeRightTabByContextmenu">关闭右侧标签页</beauti-contextmenu-item>
         <beauti-contextmenu-item divider />
         <beauti-contextmenu-item :disabled="isDisableCloseItem" @click="addToShortcutMenu">添加为快捷菜单</beauti-contextmenu-item>
-        <beauti-contextmenu-item :disabled="isDisableCloseItem" @click="removeShortcutMenu">移除快捷菜单</beauti-contextmenu-item>
+        <!-- <beauti-contextmenu-item :disabled="isDisableCloseItem" @click="removeShortcutMenu">移除快捷菜单</beauti-contextmenu-item> -->
       </beauti-contextmenu>
     </beauti-context>
     <scroll-pane>
@@ -128,20 +128,20 @@ export default {
       })
     },
     addToShortcutMenu (contextmenu, event, { path, name, meta }) {
-      console.log(path)
-      console.log(name)
-      console.log(meta)
       this.$api['wholeInformation.addMenu']({
+        userId: localStorage.getItem('id'),
         icon: path,
         roles: JSON.stringify(meta),
         title: name
       }).then(res => {
-        this.$message.success('修改成功')
+        this.$message.success('添加成功')
+      }).catch(err => {
+        this.$message.warning(err.message)
       })
       const menuItem = { path, name, meta }
       this.$store.dispatch('addShortcutMenu', menuItem)
     },
-    removeShortcutMenu (contextmenu, event, { path, name, meta }) {
+    removeShortcutMenu (contextmenu, event, { path, name, meta, id }) {
       const menuItem = { path, name, meta }
       this.$store.dispatch('removeShortcutMenu', menuItem)
     },

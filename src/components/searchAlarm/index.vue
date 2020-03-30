@@ -61,7 +61,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="上下行" v-if="isTurn">
+      <el-form-item label="方向" v-if="isTurn">
         <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
           <el-option
             v-for="item in turnOptions"
@@ -300,6 +300,12 @@ export default {
     },
     isDefaultEmpty: {
       type: Boolean
+    },
+    selectData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data () {
@@ -380,7 +386,7 @@ export default {
     //   warnLevel: ''
     // })
     let dataNow = new Date()
-    let endTime = dataNow.getTime() - 24 * 3600 * 1000
+    let endTime = dataNow.getTime()
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
@@ -654,7 +660,7 @@ export default {
         orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
         busNumber: '',
-        valueTime: [],
+        valueTime: [moment().format('YYYY-MM-DD 00:00:00'), moment().format('YYYY-MM-DD 23:59:59')],
         lineType: '',
         startTime: '',
         endTime: '',
@@ -716,7 +722,7 @@ export default {
         this.carOptions = list
       })
       let dataNow = new Date()
-      let endTime = dataNow.getTime() - 24 * 3600 * 1000
+      let endTime = dataNow.getTime()
       let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
       let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
       setTimeout(() => {
@@ -765,6 +771,7 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
+      console.log(this.selectData)
       let lineArr = []
       this.downLoadLoading = true
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
@@ -783,7 +790,11 @@ export default {
         startTime: this.formInline.dateArray[0],
         endTime: this.formInline.dateArray[1],
         data: this.formDown,
-        date: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : ''
+        date: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
+        dateType: Object.keys(this.selectData).length > 0 ? this.selectData.isHistory : this.formInline.radio,
+        sTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.startTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 00:00:00'),
+        eTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.endTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 23:59:59'),
+        busPlateNumber: this.formInline.busNumber
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

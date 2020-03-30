@@ -78,6 +78,12 @@ export default {
       this.$router.push({ name: item.name })
     },
     removeShortcut (contextmenu, event, item) {
+      console.log(item)
+      this.$api['wholeInformation.deleteMenu']({
+        id: item.id
+      }).then(res => {
+        this.$message.success('删除成功')
+      })
       this.$store.dispatch('removeShortcutMenu', item)
     }
   },

@@ -54,7 +54,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '数据分析',
       icon: 'nocturne icon-dash',
-      roles: ['/trip-order', '/line-od', '/comprehensive-query', '/full-load-rate', '/search-passenger', 'station-od', 'line-passenger-flow', 'hot-map', 'station-map']
+      roles: ['/trip-order', '/line-od', '/comprehensive-query', '/full-load-rate', '/search-passenger', 'station-od', 'line-passenger-flow', 'hot-map', 'station-map', 'bus-passenger', 'search-passenger-flow']
     },
     children: [
       {
@@ -154,7 +154,7 @@ export const aysncRoutesMap = [
         meta: {
           title: '单车客流统计',
           icon: 'nocturne icon-dash',
-          roles: ['/station-map']
+          roles: ['/bus-passenger']
         }
       },
       {
@@ -164,7 +164,7 @@ export const aysncRoutesMap = [
         meta: {
           title: '客流数据查询',
           icon: 'nocturne icon-dash',
-          roles: ['/station-map']
+          roles: ['/search-passenger-flow']
         }
       }
     ]

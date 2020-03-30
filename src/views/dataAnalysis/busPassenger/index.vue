@@ -7,6 +7,7 @@
       :isBus="true"
       :isDownload="true"
       :downLoadName="downLoadName"
+      :selectData="selectData"
       :select="{
         date: [...timeArr],
         isHistory
@@ -55,7 +56,7 @@ export default {
       timeArr: [],
       isHistory: '1',
       selectData: {},
-      downLoadName: 'downLoad.busTotalPersonExport'
+      downLoadName: 'downLoad.singleBusPFStaExport'
     }
   },
   created () {

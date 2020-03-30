@@ -90,6 +90,7 @@ export default {
       deep: true,
       handler (newV) {
         if (Object.keys(newV).length > 0) {
+          this.pageNumber = 1
           let globelData = this.$store.state.globel
           let valueTime = [moment(newV.date).format('YYYY-MM-DD 00:00:00'), moment(newV.date).format('YYYY-MM-DD 23:59:59')]
           let lineId = ''
@@ -99,13 +100,13 @@ export default {
             cardTypes = []
           } else if (newV.type === 'idCard') {
             lineId = ''
-            cardTypes = [newV.idCard]
+            cardTypes = newV.idCard
           } else {
             lineId = ''
             cardTypes = []
           }
           this._passengerFlow({
-            orgUuid: '',
+            orgUuid: this.userId === '1' ? '' : this.userId,
             lineUuid: lineId,
             busSelfCode: '',
             busPlateNumber: '',
@@ -238,13 +239,14 @@ export default {
           cardTypes = []
         } else if (this.echartsData.type === 'idCard') {
           lineId = ''
-          cardTypes = [this.echartsData.idCard]
+          cardTypes = this.echartsData.idCard
         } else {
           lineId = ''
           cardTypes = []
         }
+        console.log(cardTypes)
         this._passengerFlow({
-          orgUuid: '',
+          orgUuid: this.userId === '1' ? '' : this.userId,
           lineUuid: lineId,
           busSelfCode: '',
           busPlateNumber: '',

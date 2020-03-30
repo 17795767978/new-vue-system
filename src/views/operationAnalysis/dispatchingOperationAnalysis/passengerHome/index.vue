@@ -28,7 +28,7 @@
             <el-button style="position: relative; z-index: 999;position: absolute;right: 1vw; top: 5vh;" type="primary" size="mini" @click="getTopOpts('cardType')">查询</el-button>
         </div>
         <div class="map">
-          <passengerCard :sendCardType="sendCardType" @getIdType="getIdType"/>
+          <passengerCard :sendCardType="sendCardType" @getIdType="getIdType" @getTotal="getTotal"/>
         </div>
       </div>
       <div class="right-bottom-wrapper">
@@ -211,7 +211,7 @@ export default {
         name: 'searchPassenger',
         params: {
           type: 'idCard',
-          idCard: data,
+          idCard: [data],
           date: moment(this.idSelectDate).format('YYYY-MM-DD')
         }
       })
@@ -222,6 +222,18 @@ export default {
         params: {
           type: 'month',
           date: data
+        }
+      })
+    },
+    getTotal () {
+      let allIdcardId = this.cardTypeData.map(item => item.value)
+      console.log(this.cardTypes)
+      this.$router.push({
+        name: 'searchPassenger',
+        params: {
+          type: 'idCard',
+          idCard: this.cardTypes.length === 0 ? allIdcardId : this.cardTypes,
+          date: moment(this.idSelectDate).format('YYYY-MM-DD')
         }
       })
     }

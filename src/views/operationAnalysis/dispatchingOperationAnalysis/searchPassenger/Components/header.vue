@@ -252,7 +252,6 @@ export default {
       immediate: true,
       handler (newV) {
         if (Object.keys(newV).length > 0) {
-          console.log(newV.date)
           this.formInline.radio = newV.date === moment().format('YYYY-MM-DD') ? '1' : '2'
           let globelData = this.$store.state.globel
           this.formInline.valueTime = [moment(newV.date).format('YYYY-MM-DD 00:00:00'), moment(newV.date).format('YYYY-MM-DD 23:59:59')]
@@ -262,7 +261,7 @@ export default {
             this.formInline.cardTypes = []
           } else if (newV.type === 'idCard') {
             this.formInline.lineId = ''
-            this.formInline.cardTypes = [newV.idCard]
+            this.formInline.cardTypes = newV.idCard
           } else {
             this.formInline.lineId = ''
             this.formInline.cardTypes = []
@@ -346,7 +345,8 @@ export default {
           busPlateNumber: this.formInline.busNumber,
           busSelfCode: this.formInline.busSelfNumber,
           sTime: this.formInline.startTime,
-          eTime: this.formInline.endTime
+          eTime: this.formInline.endTime,
+          cardSelfCodes: this.formInline.cardTypes
         }).then(res => {
         // console.log(res)
           this.isLoading = false
@@ -355,6 +355,8 @@ export default {
           this.centerDialogVisible = false
           this.$message.success('正在下载中。。。')
         }).catch((err) => {
+          this.isLoading = false
+          this.centerDialogVisible = false
           this.$message.error(err.message)
         })
       } else {
@@ -364,7 +366,8 @@ export default {
           lineType: this.formInline.lineType,
           busPlateNumber: this.formInline.busNumber,
           sTime: this.formInline.startTime,
-          eTime: this.formInline.endTime
+          eTime: this.formInline.endTime,
+          cardSelfCodes: this.formInline.cardTypes
         }).then(res => {
         // console.log(res)
           this.isLoading = false
@@ -374,6 +377,8 @@ export default {
           this.$message.success('正在下载中。。。')
         }).catch((err) => {
           this.$message.error(err.message)
+          this.isLoading = false
+          this.centerDialogVisible = false
         })
       }
     }

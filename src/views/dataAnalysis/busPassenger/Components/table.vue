@@ -19,7 +19,7 @@
       <el-table-column
         prop="orgName"
         align="center"
-        label="机构">
+        label="所属机构">
       </el-table-column>
       <el-table-column
         prop="lineName"

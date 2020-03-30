@@ -74,7 +74,7 @@ export default {
       window.addEventListener('resize', () => { charts.resize() })
       charts.setOption({
         title: [{
-          text: '站点OD图',
+          text: '线路OD图',
           top: 10,
           left: 'center'
         }

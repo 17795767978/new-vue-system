@@ -20,7 +20,7 @@
       <el-table-column
         prop="lineType"
         align="center"
-        label="上下行">
+        label="方向">
         <template slot-scope="scope">
           {{scope.row.lineType === '1' ? '上行' : '下行'}}
         </template>

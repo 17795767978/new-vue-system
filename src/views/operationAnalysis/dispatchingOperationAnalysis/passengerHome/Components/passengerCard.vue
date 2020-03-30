@@ -1,5 +1,8 @@
 <template>
   <div class="passenger-card-map" ref="wrapper" v-loading="loading" >
+    <span class="total-num" @click="goToIndex">
+      <el-link type="primary" style="font-size: 1.2vw">刷卡总量：{{totalNum}}</el-link>
+    </span>
     <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" :tooltip="tooltip" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
@@ -27,7 +30,8 @@ export default {
       id: 'cardTypes',
       grid: {},
       loading: true,
-      tooltip: {}
+      tooltip: {},
+      totalNum: 0
     }
   },
   created () {
@@ -56,9 +60,17 @@ export default {
   },
   methods: {
     _getLines (params) {
+      this.totalNum = 0
       this.loading = true
       this.$api['passengerFlow.ICCardTypeAnalysis'](params).then(res => {
         console.log(res)
+        if (res.length === 0) {
+          this.$message.warning('IC卡类型统计暂无数据')
+        } else {
+          res.forEach(item => {
+            this.totalNum += Number(item.value)
+          })
+        }
         this.loading = false
         this.title = {}
         this.lineData = [{
@@ -97,6 +109,13 @@ export default {
     },
     getEchartsData (data) {
       this.$emit('getIdType', data.data.cardSelfCode)
+    },
+    goToIndex () {
+      if (this.totalNum > 0) {
+        this.$emit('getTotal')
+      } else {
+        this.$message.warning('IC卡类型统计暂无数据')
+      }
     }
   },
   components: {
@@ -111,5 +130,14 @@ export default {
   box-sizing: border-box;
   height: 80%;
   margin-top: 9%;
+  position: relative;
+  .total-num {
+    position: absolute;
+    top: 0vh;
+    right: 2vw;
+    text-underline-position: below;
+    z-index: 999;
+    cursor: pointer;
+  }
 }
 </style>

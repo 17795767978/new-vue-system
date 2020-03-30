@@ -112,7 +112,8 @@ export const wholeInformationApi = {
       params: {
         icon: '',
         roles: '',
-        title: ''
+        title: '',
+        userId: ''
       },
       desc: '基础快捷菜单新增'
     },
