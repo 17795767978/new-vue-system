@@ -1,7 +1,7 @@
 <template>
   <div class="passenger-search">
     <header>
-      <header-nav @configCheck="configCheck" @isDownload="isDownload" :excelData="excelData" :totle="totle" :echartsData="echartsData" @clearEcahrtsData="clearEcahrtsData"/>
+      <header-nav @configCheck="configCheck" @isDownload="isDownload" :excelData="excelData" :totle="totle" :echartsData="echartsData" @clearEcahrtsData="clearEcahrtsData" @clearUrlParams="clearUrlParams"/>
     </header>
     <div class="content">
       <contentWrapper
@@ -39,10 +39,10 @@ export default {
     contentWrapper
   },
   mounted () {
-    this.echartsData = JSON.parse(JSON.stringify(this.$route.query))
+    this.echartsData = JSON.parse(JSON.stringify(this.$route.params))
   },
   activated () {
-    this.echartsData = JSON.parse(JSON.stringify(this.$route.query))
+    this.echartsData = JSON.parse(JSON.stringify(this.$route.params))
   },
   watch: {
     headerParams: {
@@ -77,6 +77,9 @@ export default {
       this.totle = num
     },
     clearEcahrtsData () {
+      this.echartsData = {}
+    },
+    clearUrlParams () {
       this.echartsData = {}
     }
   }

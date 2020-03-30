@@ -163,9 +163,7 @@ export default {
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
     if (!this.echartsData.date) {
-      setTimeout(() => {
-        this.formInline.valueTime = [timeStart, timeEnd]
-      }, 20)
+      this.formInline.valueTime = [timeStart, timeEnd]
     }
   },
   computed: {
@@ -251,11 +249,14 @@ export default {
     },
     'echartsData': {
       deep: true,
+      immediate: true,
       handler (newV) {
         if (Object.keys(newV).length > 0) {
+          console.log(newV.date)
           this.formInline.radio = newV.date === moment().format('YYYY-MM-DD') ? '1' : '2'
           let globelData = this.$store.state.globel
           this.formInline.valueTime = [moment(newV.date).format('YYYY-MM-DD 00:00:00'), moment(newV.date).format('YYYY-MM-DD 23:59:59')]
+          console.log(this.formInline.valueTime)
           if (newV.type === 'line') {
             this.formInline.lineId = globelData.lineData.filter(item => item.label === newV.lineName)[0].value
             this.formInline.cardTypes = []
@@ -288,6 +289,7 @@ export default {
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
       this.$emit('configCheck', this.formInline)
+      this.$emit('clearUrlParams')
     },
     onclear () {
       this.formInline = {

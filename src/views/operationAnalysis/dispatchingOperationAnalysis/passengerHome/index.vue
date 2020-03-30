@@ -199,7 +199,7 @@ export default {
     getLineData (data) {
       this.$router.push({
         name: 'searchPassenger',
-        query: {
+        params: {
           type: 'line',
           lineName: data,
           date: moment(this.selectDate).format('YYYY-MM-DD')
@@ -209,7 +209,7 @@ export default {
     getIdType (data) {
       this.$router.push({
         name: 'searchPassenger',
-        query: {
+        params: {
           type: 'idCard',
           idCard: data,
           date: moment(this.idSelectDate).format('YYYY-MM-DD')
@@ -219,7 +219,7 @@ export default {
     getLineTime (data) {
       this.$router.push({
         name: 'searchPassenger',
-        query: {
+        params: {
           type: 'month',
           date: data
         }

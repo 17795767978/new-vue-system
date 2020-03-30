@@ -128,6 +128,7 @@ export default {
       })
     },
     addToShortcutMenu (contextmenu, event, { path, name, meta }) {
+      console.log(path, name, meta)
       const menuItem = { path, name, meta }
       this.$store.dispatch('addShortcutMenu', menuItem)
     },
