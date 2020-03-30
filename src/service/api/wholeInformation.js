@@ -103,6 +103,28 @@ export const wholeInformationApi = {
       mockPath: '/api/temp/card/type/info/getNoStaffIcCardType',
       params: {},
       desc: '卡类型查询（剔除员工类型）'
+    },
+    {
+      name: 'addMenu',
+      method: 'POST',
+      path: '/api/base/resource/menu/add',
+      mockPath: '/api/base/resource/menu/add',
+      params: {
+        icon: '',
+        roles: '',
+        title: ''
+      },
+      desc: '基础快捷菜单新增'
+    },
+    {
+      name: 'deleteMenu',
+      method: 'POST',
+      path: '/api/base/resource/menu/delete',
+      mockPath: '/api/base/resource/menu/delete',
+      params: {
+        id: ''
+      },
+      desc: '基础快捷菜单删除'
     }
   ]
 }

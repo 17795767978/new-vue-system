@@ -128,7 +128,16 @@ export default {
       })
     },
     addToShortcutMenu (contextmenu, event, { path, name, meta }) {
-      console.log(path, name, meta)
+      console.log(path)
+      console.log(name)
+      console.log(meta)
+      this.$api['wholeInformation.addMenu']({
+        icon: path,
+        roles: JSON.stringify(meta),
+        title: name
+      }).then(res => {
+        this.$message.success('修改成功')
+      })
       const menuItem = { path, name, meta }
       this.$store.dispatch('addShortcutMenu', menuItem)
     },
