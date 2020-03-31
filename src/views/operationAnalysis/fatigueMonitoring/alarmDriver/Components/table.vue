@@ -2,7 +2,6 @@
   <div v-loading="isloading">
     <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">不良驾驶行为分析报警司机排行</h2>
     <el-table
-      v-show="tableData.length > 0"
       ref="tableWrapper"
       :data="tableData"
       height="70vh"
@@ -13,7 +12,7 @@
         align="center"
         prop="id"
         label="序号"
-        width="80">
+        :width="columnArr.length === 0 ? '' : '80'">
       </el-table-column>
       <el-table-column
         v-for="(item, index) in columnArr"
@@ -48,7 +47,8 @@ export default {
       plain: true,
       tableLength: 0,
       scrollHeight: 0,
-      isloading: true
+      isloading: true,
+      numHeight: 0
     }
   },
   computed: {
@@ -85,7 +85,7 @@ export default {
     let eleArr = this.$refs.tableWrapper.$el
     let vWrapper = eleArr.getElementsByClassName('v-wrapper')[0]
     if (this.tableAllData.length > 0) {
-      this.tableData = this.tableAllData.slice(0, 10)
+      this.tableData = this.tableAllData.slice(0, 15)
     }
     if (vWrapper) {
       vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
@@ -119,7 +119,7 @@ export default {
           item.id = index + 1
         })
         if (this.tableAllData.length >= 20) {
-          this.tableData = this.tableAllData.slice(0, 10)
+          this.tableData = this.tableAllData.slice(0, 15)
           this.tableLength = this.tableAllData.length
           this.bigTable()
         } else {
@@ -134,6 +134,12 @@ export default {
       })
     },
     bigTable () {
+      // console.log(this.columnArr.length > 15)
+      if (this.columnArr.length > 15) {
+        this.numHeight = 71
+      } else {
+        this.numHeight = 48
+      }
       let eleArr = this.$refs.tableWrapper.$el
       let vDom = eleArr.getElementsByClassName('v-dom')[0]
       let vWrapper = vDom.getElementsByClassName('v-wrapper')[0]
@@ -142,7 +148,7 @@ export default {
       this.scrollHeight = 0
       let tableHeight = table.clientHeight
       if (this.tableLength >= 20) {
-        vDom.style.height = 53 * this.tableLength + 'px'
+        vDom.style.height = this.numHeight * this.tableLength + 'px'
         table.addEventListener('scroll', this.getScroll(table, vDom, vWrapper, tableHeight), true)
       } else {
         table.removeEventListener('scroll', this.getScroll(table, vDom, vWrapper, tableHeight), true)
@@ -151,20 +157,23 @@ export default {
     getScroll (table, vDom, vWrapper, tableHeight) {
       return () => {
         if (this.tableLength >= 20) {
-          if (table.scrollTop < 53 * this.tableLength) {
+          if (table.scrollTop < this.numHeight * this.tableLength) {
             this.scrollHeight = table.scrollTop
           } else {
-            this.scrollHeight = 53 * this.tableLength
+            this.scrollHeight = this.numHeight * this.tableLength
           }
-          let domNum = Math.floor(this.scrollHeight / 53)
-          if (this.scrollHeight >= 53 * this.tableLength - tableHeight) {
+          let domNum = this.scrollHeight / this.numHeight
+          console.log(tableHeight)
+          if (this.scrollHeight > this.numHeight * this.tableLength - tableHeight) {
+            console.log('1111111111111111111111111111111111111111111111111111')
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
             domNum = Math.floor(domNum)
-            this.tableData = this.tableAllData.slice(this.tableLength - 10, this.tableLength + 1)
+            this.tableData = this.tableAllData.slice(this.tableLength - 16, this.tableLength)
           } else {
+            // console.log(this.scrollHeight)
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
             domNum = Math.floor(domNum)
-            this.tableData = this.tableAllData.slice(domNum, domNum + 10)
+            this.tableData = this.tableAllData.slice(domNum, domNum + 15)
           }
         } else {
           console.log('关闭滚动监听事件')
@@ -184,7 +193,7 @@ export default {
         item.id = index + 1
       })
       if (this.tableAllData.length >= 20) {
-        this.tableData = this.tableAllData.slice(0, 10)
+        this.tableData = this.tableAllData.slice(0, 15)
         this.tableLength = this.tableAllData.length
         this.bigTable()
       } else {

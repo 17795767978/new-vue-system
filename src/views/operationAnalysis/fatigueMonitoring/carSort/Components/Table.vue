@@ -2,18 +2,16 @@
   <div v-loading="isloading">
     <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">不良驾驶行为分析报警车辆排行</h2>
     <el-table
-      v-show="tableData.length > 0"
       ref="tableWrapper"
       :data="tableData"
       height="65vh"
       border
-      @sort-change="changeTableSort"
-      style="width: 100%">
+      @sort-change="changeTableSort">
       <el-table-column
         align="center"
         prop="id"
         label="序号"
-        width="80">
+        :width="columnArr.length === 0 ? '' : '80'">
       </el-table-column>
       <el-table-column
         v-for="(item, index) in columnArr"
@@ -85,7 +83,7 @@ export default {
     let eleArr = this.$refs.tableWrapper.$el
     let vWrapper = eleArr.getElementsByClassName('v-wrapper')[0]
     if (this.tableAllData.length > 0) {
-      this.tableData = this.tableAllData.slice(0, 10)
+      this.tableData = this.tableAllData.slice(0, 15)
     }
     if (vWrapper) {
       vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
@@ -119,7 +117,7 @@ export default {
           item.id = index + 1
         })
         if (this.tableAllData.length >= 20) {
-          this.tableData = this.tableAllData.slice(0, 10)
+          this.tableData = this.tableAllData.slice(0, 15)
           this.tableLength = this.tableAllData.length
           this.bigTable()
         } else {
@@ -160,11 +158,11 @@ export default {
           if (this.scrollHeight >= 53 * this.tableLength - tableHeight) {
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
             domNum = Math.floor(domNum)
-            this.tableData = this.tableAllData.slice(this.tableLength - 10, this.tableLength + 1)
+            this.tableData = this.tableAllData.slice(this.tableLength - 15, this.tableLength + 1)
           } else {
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
             domNum = Math.floor(domNum)
-            this.tableData = this.tableAllData.slice(domNum, domNum + 10)
+            this.tableData = this.tableAllData.slice(domNum, domNum + 15)
           }
         } else {
           console.log('关闭滚动监听事件')
@@ -184,7 +182,7 @@ export default {
         item.id = index + 1
       })
       if (this.tableAllData.length >= 20) {
-        this.tableData = this.tableAllData.slice(0, 10)
+        this.tableData = this.tableAllData.slice(0, 15)
         this.tableLength = this.tableAllData.length
         this.bigTable()
       } else {

@@ -607,15 +607,38 @@ export const aysncRoutesMap = [
           roles: ['/role-list']
         }
       }
-      // {
-      //   path: 'source-list',
-      //   component: _import_('permissionManagement/sourceList/index'),
-      //   name: 'sourceList',
-      //   meta: {
-      //     title: '资源列表',
-      //     icon: 'nocturne icon-dash'
-      //   }
-      // }
+    ]
+  },
+  {
+    path: '/log-management',
+    component: Layout,
+    name: 'logManagement',
+    meta: {
+      title: '日志管理',
+      icon: 'nocturne icon-dash',
+      roles: ['/management-list', '/role-list']
+    },
+    children: [
+      {
+        path: 'login-log',
+        component: _import_('logManagement/loginLog/index'),
+        name: 'loginLog',
+        meta: {
+          title: '登录日志',
+          icon: 'nocturne icon-dash',
+          roles: ['/role-list']
+        }
+      },
+      {
+        path: 'access-log',
+        component: _import_('logManagement/accessLog/index'),
+        name: 'loginLog',
+        meta: {
+          title: '页面访问日志',
+          icon: 'nocturne icon-dash',
+          roles: ['/role-list']
+        }
+      }
     ]
   }
   // {
