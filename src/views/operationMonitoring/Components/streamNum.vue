@@ -28,7 +28,7 @@
        <el-col :span="config !== 'fatigueAlarm' ? 5 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-data-line icon"></i>
-          <h3 class="title-style">在线车辆数</h3>
+          <h3 class="title-style">在线运营车辆总数</h3>
           <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}/{{totalBusNumber}}</p>
         </el-card>
        </el-col>
@@ -42,7 +42,7 @@
        <el-col :span="config !== 'fatigueAlarm' ? 5 : 6 ">
         <el-card class="bg-style" shadow="always">
           <i class="el-icon-ship icon"></i>
-          <h3 class="title-style">运营车辆数</h3>
+          <h3 class="title-style">线路运营车辆数</h3>
           <p class="font-style" style="color: #fffc1e">{{operateCarNum}}</p>
         </el-card>
        </el-col>
