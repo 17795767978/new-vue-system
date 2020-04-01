@@ -638,6 +638,16 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/role-list']
         }
+      },
+      {
+        path: 'log-analysis',
+        component: _import_('logManagement/logAnalysis/index'),
+        name: 'loginLog',
+        meta: {
+          title: '日志分析',
+          icon: 'nocturne icon-dash',
+          roles: ['/role-list']
+        }
       }
     ]
   }

@@ -121,6 +121,49 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="用户" v-if="isUser">
+        <el-select style="width: 200px" filterable v-model="formInline.user" placeholder="请选择">
+          <el-option
+            v-for="item in userOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="描述" v-if="isDesc">
+        <el-select class="font-style" filterable v-model="formInline.desc" placeholder="请选择">
+          <el-option
+            v-for="item in descOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="IP" v-if="isIp">
+        <el-input v-model="formInline.ip"  placeholder="请输入"></el-input>
+      </el-form-item>
+      <el-form-item label="模块" v-if="isModules">
+        <el-select style="width: 300px" filterable v-model="formInline.modules" placeholder="请选择">
+          <el-option
+            v-for="item in modulesOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="描述" v-if="isPages">
+        <el-select style="width: 300px" filterable v-model="formInline.pages" placeholder="请选择">
+          <el-option
+            v-for="item in pagesOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="输入设备编号" v-if="isDeviceCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.deviceCode" placeholder="设备编号"></el-input>
       </el-form-item>
@@ -321,6 +364,21 @@ export default {
     },
     isNotDateLimit: {
       type: Boolean
+    },
+    isUser: {
+      type: Boolean
+    },
+    isDesc: {
+      type: Boolean
+    },
+    isIp: {
+      type: Boolean
+    },
+    isModules: {
+      type: Boolean
+    },
+    isPages: {
+      type: Boolean
     }
   },
   data () {
@@ -360,7 +418,10 @@ export default {
         radio: '1',
         driverNum: '',
         deviceCode: '',
-        selfCode: ''
+        selfCode: '',
+        user: '',
+        desc: '',
+        ip: ''
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -373,6 +434,31 @@ export default {
         value: '2',
         label: '下行'
       }],
+      userOptions: [
+        {
+          label: 'admin',
+          value: '1'
+        }
+      ],
+      descOptions: [{
+        label: '登录',
+        value: '1'
+      }, {
+        label: '登出',
+        value: '2'
+      }],
+      modulesOptions: [
+        {
+          label: '运营监控',
+          value: '1'
+        }
+      ],
+      pagesOptions: [
+        {
+          label: '运营监控大屏',
+          value: '1'
+        }
+      ],
       lineOptions: [],
       lineOptionsSec: [],
       carOptions: [],
@@ -446,7 +532,6 @@ export default {
     this.formInline.endHour = defaultForm.endHour
     this.formInline.warnTypeId = defaultForm.warningArr
     if (this.queryData && Object.keys(this.queryData).length > 0) {
-      console.log(this.queryData)
       this.formInline.lineOrgId = this.queryData.company
       this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
       this.formInline.lineType = this.queryData.arrow
@@ -688,7 +773,10 @@ export default {
         radio: this.formInline.radio,
         driverNum: this.formInline.driverNum,
         deviceCode: this.formInline.deviceCode,
-        selfCode: this.formInline.selfCode
+        selfCode: this.formInline.selfCode,
+        user: this.formInline.user,
+        desc: this.formInline.desc,
+        ip: this.formInline.ip
       }
       this.$emit('configCheck', configData)
     },
@@ -717,7 +805,10 @@ export default {
         radio: '1',
         driverNum: '',
         deviceCode: '',
-        selfCode: ''
+        selfCode: '',
+        user: '',
+        desc: '',
+        ip: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -742,7 +833,10 @@ export default {
         radio: this.formInline.radio,
         driverNum: this.formInline.driverNum,
         deviceCode: this.formInline.deviceCode,
-        selfCode: this.formInline.selfCode
+        selfCode: this.formInline.selfCode,
+        user: this.formInline.user,
+        desc: this.formInline.desc,
+        ip: this.formInline.ip
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -811,7 +905,10 @@ export default {
         radio: this.formInline.radio,
         driverNum: this.formInline.driverNum,
         deviceCode: this.formInline.deviceCode,
-        selfCode: this.formInline.selfCode
+        selfCode: this.formInline.selfCode,
+        user: this.formInline.user,
+        desc: this.formInline.desc,
+        ip: this.formInline.ip
       }
       this.$emit('configCheckMul', configData)
     },

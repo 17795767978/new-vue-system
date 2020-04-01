@@ -155,6 +155,7 @@ export default {
     isUpdate () {
       if (this.isUpdate) {
         this.outCurrentPage = 1
+        console.log(this.selectData.orgUuid)
         this._statusTable({
           orgId: this.selectData.orgUuid === '1' ? '' : this.selectData.orgUuid,
           lineId: this.selectData.lineUuid,
