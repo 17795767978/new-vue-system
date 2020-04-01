@@ -231,7 +231,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="处理意见" prop="suggestion">
-          <el-input type="textarea" v-model="ruleForm.suggestion"></el-input>
+          <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100"></el-input>
+          <span>{{ruleForm.suggestion.length}}/100</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -257,6 +258,15 @@ export default {
     // downloadExcel
   },
   data () {
+    let markSuggestion = (rule, value, callback) => {
+      if (value === '') {
+        callback()
+      } else if (value.length && value.length > 150) {
+        return callback(new Error('输入最大100字'))
+      } else {
+        callback()
+      }
+    }
     return {
       pickerOptionsDate: {
         disabledDate (time) {
@@ -285,7 +295,7 @@ export default {
           { required: true, message: '请选择处理状态', trigger: 'blur' }
         ],
         suggestion: [
-          { required: true, message: '请填写处理意见', trigger: 'blur' }
+          { validator: markSuggestion, trigger: 'blur' }
         ]
       },
       levelOptions: [
@@ -337,12 +347,9 @@ export default {
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
-      this.$store.dispatch('getComList').then(res => {
-        this.comOptions = res
-      })
-      this.$store.dispatch('getLineList').then(res => {
-        this.lineOptions = res
-      })
+      this.comOptions = this.$store.state.globel.comData
+
+      this.lineOptions = this.$store.state.globel.lineData
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
     this._alarmType({
@@ -390,7 +397,6 @@ export default {
         this.formInline.timeValue.forEach(time => {
           time = moment(time).format('YYYY-MM-DD HH:mm:ss')
         })
-        console.log(newValue)
         if (newValue.levelsType !== '0') {
           this._tableList({
             orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
@@ -412,9 +418,9 @@ export default {
     },
     'formInline.warnLevel' () {
       // console.log(this.formInline.warnLevel);
-      this._alarmType({
-        warnLevel: this.formInline.warnLevel
-      })
+      // this._alarmType({
+      //   warnLevel: this.formInline.warnLevel
+      // })
     },
     'formInline.orgId': {
       handler (newValue) {
@@ -433,7 +439,9 @@ export default {
               value: item.lineUuid
             })
           })
-          this.lineOptions = list
+          setTimeout(() => {
+            this.lineOptions = list
+          }, 20)
         })
         this.$api['wholeInformation.getCar']({
           lineId: '',
@@ -708,7 +716,8 @@ export default {
         warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
         warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
-        endTime: this.formInline.timeValue[1]
+        endTime: this.formInline.timeValue[1],
+        handleResult: this.formInline.checkType
       }).then(res => {
         // console.log(res)
         window.open(res.url)

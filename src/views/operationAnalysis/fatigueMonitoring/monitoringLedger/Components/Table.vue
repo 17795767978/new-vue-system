@@ -44,13 +44,13 @@
         prop="linename"
         align="center"
         label="线路"
-        width="80">
+        width="150">
       </el-table-column>
       <el-table-column
         prop="orgname"
         align="center"
         label="总站"
-        width="120">
+        width="150">
       </el-table-column>
       <el-table-column label="驾驶行为监测报警台账" align="center">
         <el-table-column align="center" v-for="item in tableAlarmTypeTitle" :key="item.plvalue" :label="item.pldisplay">
@@ -131,7 +131,9 @@ export default {
           endTime: newV.endTime,
           busNumber: newV.busNumber,
           driverNum: newV.driverNum,
-          warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId
+          warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId,
+          pageNumber: 1,
+          pageSize: 15
         })
       }
     }
@@ -154,6 +156,7 @@ export default {
       return moment(row.warntime).format('YYYY-MM-DD HH:mm:ss')
     },
     handleCurrentChange (val) {
+      console.log()
       this.pageNumber = val
       let defaultForm = this.formData
       if (Object.keys(this.selectData).length > 0) {
@@ -172,7 +175,7 @@ export default {
         let yestoday = new Date()
         let defaultForm = this.formData
         let startTime = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 00:00:00')
-        let endTime = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 23:59:59')
+        let endTime = moment(yestoday).format('YYYY-MM-DD 23:59:59')
         this._getDrivingBehaviorDay({
           orgId: this.userId === '1' ? '' : this.userId,
           lineId: '',

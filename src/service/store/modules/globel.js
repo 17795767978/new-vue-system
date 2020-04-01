@@ -29,7 +29,7 @@ const globel = {
       state.comDataSec = comData
     },
     CAR_DATA: (state, carData) => {
-      state.comData = carData
+      state.carData = carData
     }
   },
   actions: {

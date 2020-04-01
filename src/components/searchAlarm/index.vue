@@ -172,6 +172,7 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDataCurrent">
         <el-date-picker
+          :picker-options="pickerOptionsDataCurrent"
           v-model="formInline.dataCurrent"
           type="date"
           :editable="false"
@@ -392,6 +393,12 @@ export default {
       pickerOptionsDate: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD  23:59:59')).valueOf()
+          return time.getTime() > endTime
+        }
+      },
+      pickerOptionsDataCurrent: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
           return time.getTime() > endTime
         }
       },

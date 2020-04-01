@@ -189,12 +189,15 @@ export default {
       })
     },
     AddTask () {
-      console.log(12313123)
-
-      if (this.rowData.devList && this.rowData.devList.length > 0) {
+      console.log(this.title)
+      if (this.title === '参数设置') {
         this.dialogFormVisible = true
-      } else {
-        this.$message.warning('请勾补发项')
+      } else if (this.title === '参数补发') {
+        if (this.rowData.devList && this.rowData.devList.length > 0) {
+          this.dialogFormVisible = true
+        } else {
+          this.$message.warning('请勾补发项')
+        }
       }
       if (!this.isDeviceParameter && this.rowData.devList && !this.rowData.devList.length) {
         this.handleSelectionChange(this.tableData)

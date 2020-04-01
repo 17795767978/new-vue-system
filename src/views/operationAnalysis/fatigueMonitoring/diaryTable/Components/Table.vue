@@ -257,11 +257,11 @@ export default {
     ...mapGetters(['formData', 'userId'])
   },
   created () {
-    const warnDate = moment().format('YYYY-MM-DD')
-    this.dateTitle = warnDate
+    const startTime = moment().format('YYYY-MM-DD')
+    this.dateTitle = startTime
     this._getAlarmUploadReportDay({
       orgId: this.userId === '1' ? '' : this.userId,
-      warnDate,
+      startTime,
       warnTypes: this.formData.warningArr
     })
   },
@@ -277,7 +277,7 @@ export default {
         this.dateTitle = moment(newV.dataCurrent).format('YYYY-MM-DD')
         this._getAlarmUploadReportDay({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
-          warnDate: moment(newV.dataCurrent).format('YYYY-MM-DD'),
+          startTime: moment(newV.dataCurrent).format('YYYY-MM-DD'),
           warnTypes: this.formData.warningArr
         })
       }

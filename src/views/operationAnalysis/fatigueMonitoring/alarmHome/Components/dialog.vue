@@ -61,7 +61,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="处理意见" prop="suggestion">
-          <el-input type="textarea" v-model="ruleForm.suggestion"></el-input>
+          <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100"></el-input>
+          <span>{{ruleForm.suggestion.length}}/100</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -90,6 +91,15 @@ export default {
     }
   },
   data () {
+    let markSuggestion = (rule, value, callback) => {
+      if (value === '') {
+        callback()
+      } else if (value.length && value.length > 150) {
+        return callback(new Error('输入最大100字'))
+      } else {
+        callback()
+      }
+    }
     return {
       selectAllData: [],
       selectData: [],
@@ -112,7 +122,7 @@ export default {
           { required: true, message: '请选择处理状态', trigger: 'blur' }
         ],
         suggestion: [
-          { required: true, message: '请填写处理意见', trigger: 'blur' }
+          { validator: markSuggestion, trigger: 'blur' }
         ]
       },
       checkOptions: [

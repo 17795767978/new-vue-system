@@ -146,10 +146,15 @@ export default {
   },
   methods: {
     handleOperation (ruleForm) {
+      // if (this.formData.devList.length === 0) {
+      //   this.$message.error('请至少选择一台设备')
+      //   return
+      // }
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
           let data = {}
           let { taskName, devList, remark, dsmPhotoResolution, dsmVideoResolution, adasVideoResolution, adasPhotoResolution } = this.formData
+          console.log(devList)
           data.jsonData = []
           let dsm = [{
             alarmType: 'dsm',

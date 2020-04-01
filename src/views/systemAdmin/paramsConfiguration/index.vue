@@ -21,10 +21,13 @@
         stripe
         v-loading="isListLoading"
         size="mini"
-        :data="tableData"
-        @selection-change="selected => selectRow = selected">
-        <el-table-column align="center" type="selection" width="30"></el-table-column>
-        <el-table-column align="center" prop="sysUuid" label="序号"></el-table-column>
+        :data="tableData">
+        <!-- <el-table-column align="center" type="selection" width="30"></el-table-column> -->
+        <el-table-column align="center" prop="index" label="序号">
+          <template slot-scope="scope">
+            <span> {{scope.$index + (pagination.pageNumber - 1) * pagination.pageSize + 1}} </span>
+          </template>
+        </el-table-column>
         <!-- <el-table-column prop="paramName" label="参数名称"></el-table-column> -->
         <el-table-column align="center" prop="paramName" label="参数编码"></el-table-column>
         <el-table-column align="center" prop="paramValue" label="参数值"></el-table-column>

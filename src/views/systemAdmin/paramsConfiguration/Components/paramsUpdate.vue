@@ -69,8 +69,7 @@ export default {
   name: 'ParmasUpdate',
   data () {
     let remarkTo = (rule, value, callback) => {
-      console.log(value)
-      if (value.length > 50) {
+      if (value && value.length > 50) {
         return callback(new Error('50位以内任意字符'))
       } else {
         callback()
