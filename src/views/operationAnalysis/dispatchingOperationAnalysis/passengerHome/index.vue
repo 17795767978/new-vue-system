@@ -128,7 +128,7 @@ export default {
     ...mapGetters(['cardTypeData'])
   },
   created () {
-    this._stationList()
+    // this._stationList()
     this._getLinesList()
   },
   mounted () {

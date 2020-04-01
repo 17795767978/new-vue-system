@@ -5,7 +5,7 @@
       stripe
       border
       size="mini"
-      height="40vh"
+      height="66vh"
       style="width: 100%">
       <el-table-column
         type="index"
@@ -25,9 +25,9 @@
         prop="lineName"
         label="线路号"
         align="center">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handlerChangeEcharts(scope.row)">{{scope.row.lineName}}</el-button>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column
         prop="lineType"
@@ -83,7 +83,7 @@ export default {
     this._getMidLinePFData({
       orgUuid: this.userId === '1' ? '' : this.userId,
       lineUuid: '',
-      lineType: '1',
+      lineType: '',
       date,
       pageNumber: this.pageNumber,
       pageSize: this.pageSize

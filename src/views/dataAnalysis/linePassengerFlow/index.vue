@@ -14,16 +14,16 @@
     <div class="table">
       <Table :selectData="selectData" @changeEcharts="changeEcharts"/>
     </div>
-    <div class="echarts">
+    <!-- <div class="echarts">
       <Echarts :selectData="selectData" :echartsData="echartsData"/>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
-import Echarts from './Components/echarts'
+// import Echarts from './Components/echarts'
 export default {
   name: 'linePassengerFlow',
   data () {
@@ -44,8 +44,8 @@ export default {
   },
   components: {
     Search,
-    Table,
-    Echarts
+    Table
+    // Echarts
   }
 }
 </script>
@@ -54,7 +54,7 @@ export default {
 .table {
   padding: 2vh 10vw 0;
   box-sizing: border-box;
-  height: 49vh;
+  height: 70vh;
   // border-bottom: 0.2vh solid #EBEEF5;
 }
 .echarts {

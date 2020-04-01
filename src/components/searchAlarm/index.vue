@@ -450,7 +450,7 @@ export default {
     this.formInline.lineOrgId = defaultForm.lineOrgId
     this.formInline.lineLineId = defaultForm.lineLineId
     this.formInline.lineIds = defaultForm.lineIds
-    this.formInline.lineType = defaultForm.lineType
+    // this.formInline.lineType = defaultForm.lineType
     this.formInline.dataCurrent = defaultForm.dateYes
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
@@ -834,8 +834,8 @@ export default {
         sTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.startTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 00:00:00'),
         eTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.endTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 23:59:59'),
         busPlateNumber: this.formInline.busNumber,
-        startDate: this.formInline.dateArray[0],
-        endDate: this.formInline.dateArray[1]
+        startDate: moment(this.formInline.dateArray[0]).format('YYYY-MM-DD'),
+        endDate: moment(this.formInline.dateArray[1]).format('YYYY-MM-DD')
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

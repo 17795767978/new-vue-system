@@ -24,8 +24,8 @@ export const wholeInformationApi = {
     {
       name: 'getStation',
       method: 'POST',
-      path: '/zhfxpt/analysis/getStations',
-      mockPath: '/zhfxpt/analysis/getStations',
+      path: '/api/dw/dim/bus/parent/station/selectAll',
+      mockPath: '/api/dw/dim/bus/parent/station/selectAll',
       desc: '获取站点信息'
     },
     {
