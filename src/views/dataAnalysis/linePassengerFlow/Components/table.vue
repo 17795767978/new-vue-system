@@ -70,7 +70,8 @@ export default {
       tableData: [],
       pageNumber: 1,
       pageSize: 15,
-      total: 0
+      total: 0,
+      tableDataAll: []
     }
   },
   computed: {
@@ -84,9 +85,7 @@ export default {
       orgUuid: this.userId === '1' ? '' : this.userId,
       lineUuid: '',
       lineType: '',
-      date,
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize
+      date
     })
   },
   watch: {
@@ -96,9 +95,7 @@ export default {
         orgUuid: newV.orgId,
         lineUuid: newV.lineId,
         lineType: newV.lineType,
-        date: moment(newV.dataCurrent).format('YYYY-MM-DD'),
-        pageNumber: this.pageNumber,
-        pageSize: this.pageSize
+        date: moment(newV.dataCurrent).format('YYYY-MM-DD')
       })
     }
   },
@@ -106,36 +103,41 @@ export default {
     async _getMidLinePFData (params) {
       let result = await this.$api['lineNet.getMidLinePFData'](params)
       // console.log(result)
-      this.tableData = result.list
-      this.total = result.total
+      if (result.length === 0) {
+        this.$message.warning('暂无数据')
+      }
+      this.tableDataAll = result
+      this.total = result.length
+      this.tableData = result.slice(0, this.pageSize)
     },
     handlerChangeEcharts (row) {
       this.$emit('changeEcharts', row)
     },
     handleCurrentChange (val) {
       this.pageNumber = val
-      let date = moment().valueOf()
-      date = date - 24 * 60 * 60 * 1000
-      date = moment(date).format('YYYY-MM-DD')
-      if (Object.keys(this.selectData).length === 0) {
-        this._getMidLinePFData({
-          orgUuid: this.userId === '1' ? '' : this.userId,
-          lineUuid: '',
-          lineType: '1',
-          date,
-          pageNumber: this.pageNumber,
-          pageSize: this.pageSize
-        })
-      } else {
-        this._getMidLinePFData({
-          orgUuid: this.selectData.orgId,
-          lineUuid: this.selectData.lineId,
-          lineType: this.selectData.lineType,
-          date: moment(this.selectData.dataCurrent).format('YYYY-MM-DD'),
-          pageNumber: this.pageNumber,
-          pageSize: this.pageSize
-        })
-      }
+      this.tableData = this.tableDataAll.slice((this.pageNumber - 1) * this.pageSize, this.pageNumber * this.pageSize)
+      // let date = moment().valueOf()
+      // date = date - 24 * 60 * 60 * 1000
+      // date = moment(date).format('YYYY-MM-DD')
+      // if (Object.keys(this.selectData).length === 0) {
+      //   this._getMidLinePFData({
+      //     orgUuid: this.userId === '1' ? '' : this.userId,
+      //     lineUuid: '',
+      //     lineType: '1',
+      //     date,
+      //     pageNumber: this.pageNumber,
+      //     pageSize: this.pageSize
+      //   })
+      // } else {
+      //   this._getMidLinePFData({
+      //     orgUuid: this.selectData.orgId,
+      //     lineUuid: this.selectData.lineId,
+      //     lineType: this.selectData.lineType,
+      //     date: moment(this.selectData.dataCurrent).format('YYYY-MM-DD'),
+      //     pageNumber: this.pageNumber,
+      //     pageSize: this.pageSize
+      //   })
+      // }
     }
   }
 }
