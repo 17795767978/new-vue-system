@@ -70,7 +70,7 @@
       <el-table-column
         prop="payNumber"
         align="center"
-        label="刷卡总量">
+        label="刷卡总量（人次）">
       </el-table-column>
     </el-table>
   </div>

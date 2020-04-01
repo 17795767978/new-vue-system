@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column
         prop="orgName"
-        label="分公司"
+        label="所属机构"
         align="center"
         width="180">
       </el-table-column>

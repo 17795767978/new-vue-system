@@ -59,6 +59,8 @@
       <el-form-item label="选择日期">
          <el-date-picker
           v-model="formInline.valueTime"
+          :picker-options="pickerOptionsDate"
+          :default-time="['00:00:00', '23:59:59']"
           type="datetimerange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -113,6 +115,13 @@ export default {
   },
   data () {
     return {
+      pickerOptionsDate: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+          const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+          return time.getTime() > endTime || time.getTime() < startTime
+        }
+      },
       formInline: {
         orgId: '',
         lineId: '',
@@ -240,7 +249,21 @@ export default {
           this.isBusSelfNumber = true
           this.isType = false
           this.formInline.lineType = ''
+          this.pickerOptionsDate = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+              const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              return time.getTime() > endTime || time.getTime() < startTime
+            }
+          }
         } else {
+          this.formInline.valueTime = []
+          this.pickerOptionsDate = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              return time.getTime() >= endTime
+            }
+          }
           this.isType = true
           this.isBusSelfNumber = false
           this.formInline.busSelfNumber = ''
@@ -298,7 +321,8 @@ export default {
         valueTime: [],
         lineType: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        radio: '1'
       }
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
@@ -320,10 +344,8 @@ export default {
         })
         this.carOptions = list
       })
-      let dataNow = new Date()
-      let endTime = dataNow.getTime() - 24 * 3600 * 1000
-      let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-      let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
+      let timeStart = moment().format('YYYY-MM-DD 00:00:00')
+      let timeEnd = moment().format('YYYY-MM-DD 23:59:59')
       setTimeout(() => {
         this.formInline.valueTime = [timeStart, timeEnd]
       }, 20)

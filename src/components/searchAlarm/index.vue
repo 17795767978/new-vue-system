@@ -74,6 +74,7 @@
       <el-form-item label="月份" v-if="isMonth">
         <el-date-picker
           v-model="formInline.month"
+          :picker-options="pickerOptionsMonth"
           type="month"
           placeholder="选择月">
         </el-date-picker>
@@ -123,6 +124,7 @@
       <el-form-item label="选择日期" v-if="isDataCurrent">
         <el-date-picker
           v-model="formInline.dataCurrent"
+          :picker-options="pickerOptionsDateCurrent"
           type="date"
           :editable="false"
           placeholder="选择日期">
@@ -141,6 +143,7 @@
         <el-date-picker
           :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.dateArray"
+          :picker-options="pickerOptionsDateTo"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -310,6 +313,25 @@ export default {
   },
   data () {
     return {
+      pickerOptionsMonth: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM')).valueOf()
+          return time.getTime() > endTime
+        }
+      },
+      pickerOptionsDateCurrent: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() > endTime
+        }
+      },
+      pickerOptionsDateTo: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+          const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+          return time.getTime() > endTime || time.getTime() < startTime
+        }
+      },
       formInline: {
         orgId: '',
         lineOrgId: '',
@@ -563,6 +585,21 @@ export default {
           let date = moment().valueOf()
           date = moment(date).format('YYYY-MM-DD')
           this.formInline.dateArray = [date, date]
+          this.pickerOptionsDateTo = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+              const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              return time.getTime() > endTime || time.getTime() < startTime
+            }
+          }
+        } else {
+          this.formInline.dateArray = []
+          this.pickerOptionsDateTo = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              return time.getTime() >= endTime
+            }
+          }
         }
       }
     }
@@ -772,6 +809,7 @@ export default {
     },
     getExcel () {
       console.log(this.selectData)
+      console.log(this.formInline)
       let lineArr = []
       this.downLoadLoading = true
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
@@ -782,6 +820,7 @@ export default {
         // orgUuid: this.formInline.lineOrgId,
         lineUuid: this.formInline.lineId,
         lineID: lineArr[0],
+        lineUuids: this.formInline.lineIds,
         orgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
         lineType: this.isTurn ? this.formInline.lineType : '',
         startStation: this.isStation ? this.formInline.startStation : '',
@@ -794,7 +833,9 @@ export default {
         dateType: Object.keys(this.selectData).length > 0 ? this.selectData.isHistory : this.formInline.radio,
         sTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.startTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 00:00:00'),
         eTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.endTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 23:59:59'),
-        busPlateNumber: this.formInline.busNumber
+        busPlateNumber: this.formInline.busNumber,
+        startDate: this.formInline.dateArray[0],
+        endDate: this.formInline.dateArray[1]
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)
