@@ -40,8 +40,11 @@ export default {
   },
   methods: {
     getSearch (data) {
-      console.log(data)
-      this.selectData = data
+      if (data.dateArray && data.dateArray.length === 0) {
+        this.$message.warning('请选择日期')
+      } else {
+        this.selectData = data
+      }
     }
   }
 }

@@ -315,13 +315,13 @@ export default {
     return {
       pickerOptionsMonth: {
         disabledDate (time) {
-          const endTime = moment(moment().format('YYYY-MM')).valueOf()
+          const endTime = moment(moment().format('YYYY-MM')).valueOf() - 3600 * 1000 * 24 * 30
           return time.getTime() > endTime
         }
       },
       pickerOptionsDateCurrent: {
         disabledDate (time) {
-          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf() - 3600 * 1000 * 24
           return time.getTime() > endTime
         }
       },
@@ -709,7 +709,7 @@ export default {
         lineLineId: '',
         startStation: {},
         endStation: {},
-        dataCurrent: date,
+        dataCurrent: moment().subtract(1, 'days').format('YYYY-MM-DD'),
         warnTypeId: [],
         dateArray: [date, date],
         lineIds: [],
@@ -733,7 +733,7 @@ export default {
         endStation: this.formInline.endStation,
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
-        dataCurrent: date,
+        dataCurrent: moment().subtract(1, 'days').format('YYYY-MM-DD'),
         lineIds: this.formInline.lineIds,
         radio: this.formInline.radio
       }

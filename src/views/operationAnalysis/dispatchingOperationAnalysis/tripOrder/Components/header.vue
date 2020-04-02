@@ -98,7 +98,7 @@ export default {
       busOptions: [],
       pickerOptions: {
         disabledDate (time) {
-          return time.getTime() > Date.now()
+          return time.getTime() > Date.now() - 3600000 * 24
         },
         shortcuts: [{
           text: '今天',

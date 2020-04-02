@@ -8,6 +8,7 @@
     <el-date-picker
       size="mini"
       v-model="slotData.month"
+      :picker-options="pickerOptionsMonth"
       type="month"
       style="width: 15vw"
       placeholder="选择月">
@@ -61,6 +62,12 @@ import moment from 'moment'
 export default {
   data () {
     return {
+      pickerOptionsMonth: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM')).valueOf() - 3600 * 1000 * 24 * 30
+          return time.getTime() > endTime
+        }
+      },
       dialogVisible: false,
       loading: false,
       slotData: {
