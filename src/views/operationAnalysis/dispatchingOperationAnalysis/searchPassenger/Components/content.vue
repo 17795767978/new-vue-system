@@ -26,7 +26,7 @@
         :label="item.key">
         <template slot-scope="scope">
           <span v-if="item.value === 'uploadTime'">{{moment(scope.row[item.value]).format('YYYY-MM-DD HH:mm:ss')}}</span>
-          <span v-else-if="item.value === 'lineType'">{{scope.row[item.value] === '1' ? '上行' : '下行'}}</span>
+          <span v-else-if="item.value === 'lineType'">{{scope.row[item.value] ? (scope.row[item.value] === '1' ? '上行' : '下行') : ''}}</span>
           <span v-else>{{scope.row[item.value]}}</span>
         </template>
       </el-table-column>

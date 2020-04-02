@@ -34,7 +34,7 @@
         align="center"
         label="方向">
         <template slot-scope="scope">
-          {{scope.row.lineType === '1' ? '上行' : '下行'}}
+          {{scope.row.lineType ? (scope.row.lineType === '1' ? '上行' : '下行') : ''}}
         </template>
       </el-table-column>
       <el-table-column
