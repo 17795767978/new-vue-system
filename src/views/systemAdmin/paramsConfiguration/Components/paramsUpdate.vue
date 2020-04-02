@@ -136,6 +136,8 @@ export default {
             })
             this.cancel()
             this.$emit('updateList')
+          }).catch(err => {
+            this.$message.error(err.message)
           })
         }
       })

@@ -98,17 +98,20 @@ export default {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
           if (!this.form.plUuid) {
-            console.log(this.form)
             this.$api['tiredMonitoring.createWarntype'](this.form).then(res => {
               this.$message.success('创建成功')
               this.$emit('updateTable')
               this.dialogFormVisible = false
+            }).catch(err => {
+              this.$message.error(err.message)
             })
           } else {
             this.$api['tiredMonitoring.updateWarntype'](this.form).then(res => {
               this.$message.success('修改成功')
               this.$emit('updateTable')
               this.dialogFormVisible = false
+            }).catch(err => {
+              this.$message.error(err.message)
             })
           }
         } else {
