@@ -239,7 +239,7 @@ export default {
         this.legend = [
           {
             data: ['登量（人次）'],
-            right: 100,
+            right: 150,
             top: 10,
             textStyle: {
               color: '#000'
