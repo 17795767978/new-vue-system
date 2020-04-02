@@ -64,7 +64,7 @@
             {{item.level && datas[item.level[2]]}}
           </div>
           <div class="grade-item" style="font-size: 0.8vw">
-            {{item.level && datas[item.level[0]] + datas[item.level[2]]}}
+            {{item.level && datas[item.level[4]]}}
             <!-- {{item.level && getTotal(datas[item.level[0]], datas[item.level[2]])}} -->
           </div>
         </div>
@@ -92,7 +92,7 @@
             {{item.level && datas[item.level[3]]}}
           </div>
           <div class="grade-item" style="font-size: 0.8vw">
-            {{item.level && datas[item.level[1]] + datas[item.level[3]]}}
+            {{item.level && datas[item.level[5]]}}
           </div>
         </div>
         <div class="col-title" style="font-size: 0.8vw">{{disposeCountTotal}}</div>
@@ -173,7 +173,7 @@
             {{item.level && datas[item.level[2]]}}
           </div>
           <div class="grade-item" style="font-size: 0.8vw">
-            {{item.level && datas[item.level[0]] + datas[item.level[2]]}}
+            {{item.level && datas[item.level[4]]}}
             <!-- {{item.level && getTotal(datas[item.level[0]], datas[item.level[2]])}} -->
           </div>
         </div>
@@ -201,7 +201,7 @@
             {{item.level && datas[item.level[3]]}}
           </div>
           <div class="grade-item" style="font-size: 0.8vw">
-            {{item.level && datas[item.level[1]] + datas[item.level[3]]}}
+            {{item.level && datas[item.level[5]]}}
           </div>
         </div>
         <div class="col-title" style="font-size: 0.8vw">{{assistCountTotal}}</div>
@@ -304,6 +304,10 @@ export default {
       })
     },
     getTotal (leftCol, data, rightCol) {
+      this.disposeNumTotal = 0
+      this.disposeCountTotal = 0
+      this.assistNumTotal = 0
+      this.assistCountTotal = 0
       // 左侧所有key
       let leftColArr = []
       // 右侧所有KEY
@@ -325,31 +329,35 @@ export default {
       leftColArr.forEach(item => {
         if (item.indexOf('First') + 5 === item.length || item.indexOf('Second') + 6 === item.length) {
           newLeftNumArr.push(item)
-        } else {
+        } else if (item.indexOf('TotalWarnBusCounts') > 0) {
           newLeftCountArr.push(item)
         }
       })
       rightColArr.forEach(item => {
         if (item.indexOf('First') + 5 === item.length || item.indexOf('Second') + 6 === item.length) {
           newRightNumArr.push(item)
-        } else {
+        } else if (item.indexOf('TotalWarnBusCounts') > 0) {
           newRightCountArr.push(item)
         }
       })
+      console.log(leftColArr)
       // 左侧所有的次数
       newLeftNumArr.forEach(item => {
         this.disposeNumTotal += Number(data[item])
       })
+      console.log(newLeftCountArr)
       // 左侧所有的车台数
       newLeftCountArr.forEach(item => {
         this.disposeCountTotal += Number(data[item])
       })
       // 右侧的所有次数
       newRightNumArr.forEach(item => {
+        console.log(item)
         this.assistNumTotal += Number(data[item])
       })
       // 右侧的所有车台数
       newRightCountArr.forEach(item => {
+        console.log(item)
         this.assistCountTotal += Number(data[item])
       })
     }
