@@ -160,8 +160,8 @@ export default {
           linearDistanceMax: this.slotData.endDis,
           payNumberMin: this.slotData.startNum,
           payNumberMax: this.slotData.endNum,
-          upStaUuid: '',
-          downStaUuid: '',
+          upStaUuids: this.selectData.startStation.value,
+          downStaUuids: this.selectData.endStation.value,
           payTimeIntervalMin: this.slotData.stHour,
           payTimeIntervalMax: this.slotData.edHour
         }).then(res => {

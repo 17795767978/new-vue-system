@@ -835,7 +835,9 @@ export default {
         eTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.endTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 23:59:59'),
         busPlateNumber: this.formInline.busNumber,
         startDate: moment(this.formInline.dateArray[0]).format('YYYY-MM-DD'),
-        endDate: moment(this.formInline.dateArray[1]).format('YYYY-MM-DD')
+        endDate: moment(this.formInline.dateArray[1]).format('YYYY-MM-DD'),
+        upStaUuids: this.isStation ? this.formInline.startStation : '',
+        downStaUuids: this.isStation ? this.formInline.endStation : ''
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)
