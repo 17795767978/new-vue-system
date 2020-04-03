@@ -60,13 +60,13 @@ export default {
   },
   methods: {
     _getLines (params) {
-      this.totalNum = 0
       this.loading = true
       this.$api['passengerFlow.ICCardTypeAnalysis'](params).then(res => {
         console.log(res)
         if (res.length === 0) {
           this.$message.warning('IC卡类型统计暂无数据')
         } else {
+          this.totalNum = 0
           res.forEach(item => {
             this.totalNum += Number(item.value)
           })
