@@ -10,7 +10,8 @@ const globel = {
     comData: [],
     carData: [],
     comDataSec: [],
-    lineDataSec: []
+    lineDataSec: [],
+    userList: []
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -30,6 +31,9 @@ const globel = {
     },
     CAR_DATA: (state, carData) => {
       state.carData = carData
+    },
+    USER_LIST: (state, list) => {
+      state.userList = list
     }
   },
   actions: {
@@ -182,6 +186,19 @@ const globel = {
             reject(error)
           })
         }
+      })
+    },
+    getUserList ({ commit }) {
+      api['permission.userList']({}).then(res => {
+        console.log(res)
+        let list = []
+        res.forEach(item => {
+          list.push({
+            value: item.userId,
+            label: item.userAccount
+          })
+        })
+        commit('USER_LIST', list)
       })
     }
   }

@@ -216,6 +216,21 @@ export const wholeInformationApi = {
       params: {
       },
       desc: '系统参数删除'
+    },
+    {
+      name: 'getLoginList',
+      method: 'POST',
+      path: '/api/base/loginlog/list',
+      mockPath: '/api/base/loginlog/list',
+      params: {
+        orgUuid: '',
+        userAccount: '',
+        accessModel: '',
+        accessIp: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '登录日志'
     }
   ]
 }

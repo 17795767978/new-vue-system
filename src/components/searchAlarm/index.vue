@@ -483,15 +483,15 @@ export default {
     this.formInline.orgId = ''
     this.formInline.busNumber = ''
     this.formInline.lineId = ''
-    this.$store.dispatch('getComList').then(res => {
-      this.comOptions = res
-    })
-    this.$store.dispatch('getLineList').then(res => {
-      this.lineOptions = res
-    })
-    this.$store.dispatch('getCarList').then(res => {
-      this.carOptions = res
-    })
+    // this.$store.dispatch('getComList').then(res => {
+    //   this.comOptions = res
+    // })
+    // this.$store.dispatch('getLineList').then(res => {
+    //   this.lineOptions = res
+    // })
+    // this.$store.dispatch('getCarList').then(res => {
+    //   this.carOptions = res
+    // })
     if (!this.isDefault) {
       this.$store.dispatch('getComSecList').then(res => {
         this.comOptionsSec = res
@@ -517,6 +517,11 @@ export default {
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
+    let globelData = this.$store.state.globel
+    this.comOptions = globelData.comData
+    this.lineOptions = globelData.lineData
+    this.carOptions = globelData.carData
+    this.userOptions = globelData.userList
     if (this.userId !== '1') {
       this.disabled = true
       this.formInline.orgId = this.userId
@@ -562,6 +567,19 @@ export default {
           this.formInline.busNumber = ''
         }
         let orgId = newValue === '1' ? '' : newValue
+        this.$api['permission.userList']({
+          orgId
+        }).then(res => {
+          this.formInline.user = ''
+          let list = []
+          res.forEach(item => {
+            list.push({
+              value: item.userId,
+              label: item.userAccount
+            })
+          })
+          this.userOptions = list
+        })
         this.$api['wholeInformation.getLine']({
           lineId: '',
           lineName: '',

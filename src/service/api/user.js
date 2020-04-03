@@ -22,7 +22,6 @@ export const UserApi = {
       path: '/api/base/login/logout',
       mockPath: '/api/base/login/logout',
       params: {
-        userAccount: '',
         userId: ''
       },
       desc: '用户注销'

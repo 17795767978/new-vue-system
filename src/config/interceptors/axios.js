@@ -25,6 +25,7 @@ export function axiosRequestSucessFunc (config) {
   if (config.data.orgUuid && config.data.orgUuid === '1') {
     config.data.orgUuid = ''
   }
+  config.data.userId = localStorage.getItem('id')
   return config
 }
 

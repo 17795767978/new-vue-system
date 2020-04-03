@@ -87,11 +87,13 @@ export default {
         type: 'info'
       })
         .then(() => {
-          this.$store.dispatch('userLogout', {
-            userAccount: '',
-            userId: ''
-          }).then(() => {
-            location.reload()
+          this.$api['user.logout']().then(res => {
+            this.$store.dispatch('userLogout', {
+              userAccount: '',
+              userId: ''
+            }).then(() => {
+              location.reload()
+            })
           })
         })
         .catch(() => {})

@@ -142,6 +142,7 @@ const user = {
           lineIds: [],
           warningArr: []
         }
+        // 线路
         store.dispatch('getLineList').then(res => {
           if (res.length > 0) {
             form.lineId = ''
@@ -152,19 +153,7 @@ const user = {
               form.orgId = res[0].value
             }
           })
-          // store.dispatch('getComSecList').then(res => {
-          //   if (res.length > 0) {
-          //     form.lineOrgId = res[0].value
-          //     store.dispatch('getLineSecList', form.lineOrgId).then(res => {
-          //       if (res.length > 0) {
-          //         form.lineLineId = res[0].value
-          //       }
-          //     })
-          //   }
-          // })
-          // store.dispatch('getLineSecList').then(res => {
-          //   form.linelineID = res[0].value
-          // })
+          // 报警类型
           api['tiredMonitoring.getWarntypes']({
             warnLevel: ''
           }).then(res => {
@@ -174,6 +163,8 @@ const user = {
               form.warningArr[index] = list.code
             })
           })
+          // 用户列表
+          store.dispatch('getUserList')
           commit('SET_FORM_DATA', form)
           api['platformMenu.list']({
             id: localStorage.getItem('id')
