@@ -11,7 +11,9 @@ const globel = {
     carData: [],
     comDataSec: [],
     lineDataSec: [],
-    userList: []
+    userList: [],
+    modulesList: [],
+    pagesList: []
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -34,6 +36,12 @@ const globel = {
     },
     USER_LIST: (state, list) => {
       state.userList = list
+    },
+    MODULE_LIST: (state, list) => {
+      state.modulesList = list
+    },
+    PAGE_LIST: (state, list) => {
+      state.pagesList = list
     }
   },
   actions: {
@@ -190,7 +198,6 @@ const globel = {
     },
     getUserList ({ commit }) {
       api['permission.userList']({}).then(res => {
-        console.log(res)
         let list = []
         res.forEach(item => {
           list.push({
@@ -199,6 +206,26 @@ const globel = {
           })
         })
         commit('USER_LIST', list)
+      })
+    },
+    getMudeluPageList ({ commit }) {
+      api['wholeInformation.getModelAndPageInfoByUserId']().then(res => {
+        let moduleList = []
+        let pagelist = []
+        res.models.forEach(item => {
+          moduleList.push({
+            value: item,
+            label: item
+          })
+        })
+        res.pages.forEach(item => {
+          pagelist.push({
+            value: item,
+            label: item
+          })
+        })
+        commit('MODULE_LIST', moduleList)
+        commit('PAGE_LIST', pagelist)
       })
     }
   }

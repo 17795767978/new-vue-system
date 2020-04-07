@@ -165,6 +165,8 @@ const user = {
           })
           // 用户列表
           store.dispatch('getUserList')
+          // 页面模块列表
+          store.dispatch('getMudeluPageList')
           commit('SET_FORM_DATA', form)
           api['platformMenu.list']({
             id: localStorage.getItem('id')

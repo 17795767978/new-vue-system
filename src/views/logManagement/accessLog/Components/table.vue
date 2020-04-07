@@ -23,50 +23,52 @@
         >
       </el-table-column>
       <el-table-column
-        prop="userName"
+        prop="roleName"
         align="center"
         label="用户"
         width="150">
       </el-table-column>
       <el-table-column
-        prop="role"
+        prop="userAccount"
         align="center"
         label="角色"
         width="100">
       </el-table-column>
       <el-table-column
-        prop="linename"
+        prop="accessModelName"
         align="center"
         label="模块"
         width="80">
       </el-table-column>
       <el-table-column
-        prop="desc"
+        prop="accessPageName"
         align="center"
         label="页面"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="desc"
+        prop="accessIp"
         align="center"
         label="访问Ip"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="desc"
+        prop="accessTime"
         align="center"
+        :formatter="getAccessTime"
         label="访问时间"
         >
       </el-table-column>
       <el-table-column
-        prop="desc"
+        prop="accessDuration"
         align="center"
         label="耗时"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="desc"
+        prop="createTime"
         align="center"
+        :formatter="getCreateTime"
         label="创建时间">
       </el-table-column>
     </el-table>
@@ -95,7 +97,8 @@ export default {
       tableData: [],
       pageNumber: 1,
       pageSize: 15,
-      total: 0
+      total: 0,
+      searchData: {}
     }
   },
   computed: {
@@ -106,28 +109,54 @@ export default {
     // let defaultForm = this.formData
     let startTime = moment(yestoday - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 00:00:00')
     let endTime = moment().format('YYYY-MM-DD 23:59:59')
-    this._getLoginLogList({
+    this.searchData = {
       orgId: this.userId === '1' ? '' : this.userId,
-      lineId: '',
+      userId: '',
+      accessModelName: '',
+      accessPageName: '',
+      accessIp: '',
       startTime,
       endTime,
-      busNumber: '',
-      driverNum: '',
       pageNumber: 1,
-      pageSize: 15 })
+      pageSize: 15 }
+    this._getPageAssessLog(this.searchData)
   },
   watch: {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
+        this.pageNumber = 1
+        this.searchData = {
+          orgId: newV.orgId === '1' ? '' : newV.orgId,
+          userId: newV.user,
+          accessModelName: newV.modules,
+          accessPageName: newV.pages,
+          accessIp: newV.Ip,
+          startTime: newV.startTime,
+          endTime: newV.endTime,
+          pageNumber: 1,
+          pageSize: 15 }
+        this._getPageAssessLog(this.searchData)
       }
     }
   },
   methods: {
-    _getLoginLogList (params) {},
+    _getPageAssessLog (params) {
+      this.$api['wholeInformation.getPageAssessLog'](params).then(res => {
+        this.total = res.total
+        this.tableData = res.list
+      })
+    },
+    getAccessTime (row) {
+      return moment(row.accessTime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    getCreateTime (row) {
+      return moment(row.createTime).format('YYYY-MM-DD HH:mm:ss')
+    },
     handleCurrentChange (val) {
       this.pageNumber = val
+      this.searchData.pageNumber = val
+      this._getPageAssessLog(this.searchData)
     }
   }
 }

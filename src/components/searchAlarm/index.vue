@@ -154,7 +154,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="描述" v-if="isPages">
+      <el-form-item label="页面" v-if="isPages">
         <el-select style="width: 300px" filterable v-model="formInline.pages" placeholder="请选择">
           <el-option
             v-for="item in pagesOptions"
@@ -428,7 +428,9 @@ export default {
         selfCode: '',
         user: '',
         desc: '',
-        ip: ''
+        ip: '',
+        modules: '',
+        pages: ''
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -454,18 +456,8 @@ export default {
         label: '登出',
         value: '2'
       }],
-      modulesOptions: [
-        {
-          label: '运营监控',
-          value: '1'
-        }
-      ],
-      pagesOptions: [
-        {
-          label: '运营监控大屏',
-          value: '1'
-        }
-      ],
+      modulesOptions: [],
+      pagesOptions: [],
       lineOptions: [],
       lineOptionsSec: [],
       carOptions: [],
@@ -522,6 +514,8 @@ export default {
     this.lineOptions = globelData.lineData
     this.carOptions = globelData.carData
     this.userOptions = globelData.userList
+    this.modulesOptions = globelData.modulesList
+    this.pagesOptions = globelData.pagesList
     if (this.userId !== '1') {
       this.disabled = true
       this.formInline.orgId = this.userId
@@ -801,7 +795,9 @@ export default {
         selfCode: this.formInline.selfCode,
         user: this.formInline.user,
         desc: this.formInline.desc,
-        ip: this.formInline.ip
+        ip: this.formInline.ip,
+        modules: this.formInline.modules,
+        pages: this.formInline.pages
       }
       this.$emit('configCheck', configData)
     },
@@ -833,7 +829,9 @@ export default {
         selfCode: '',
         user: '',
         desc: '',
-        ip: ''
+        ip: '',
+        modules: '',
+        pages: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -861,7 +859,9 @@ export default {
         selfCode: this.formInline.selfCode,
         user: this.formInline.user,
         desc: this.formInline.desc,
-        ip: this.formInline.ip
+        ip: this.formInline.ip,
+        modules: this.formInline.modules,
+        pages: this.formInline.pages
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -933,7 +933,9 @@ export default {
         selfCode: this.formInline.selfCode,
         user: this.formInline.user,
         desc: this.formInline.desc,
-        ip: this.formInline.ip
+        ip: this.formInline.ip,
+        modules: this.formInline.modules,
+        pages: this.formInline.pages
       }
       this.$emit('configCheckMul', configData)
     },

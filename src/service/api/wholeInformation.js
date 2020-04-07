@@ -231,6 +231,67 @@ export const wholeInformationApi = {
         endTime: ''
       },
       desc: '登录日志'
+    },
+    {
+      name: 'getModelAndPageInfoByUserId',
+      method: 'POST',
+      path: '/api/base/accesslog/getModelAndPageInfoByUserId',
+      mockPath: '/api/base/accesslog/getModelAndPageInfoByUserId',
+      params: {
+      },
+      desc: '获取登录用户能访问的模块及页面信息'
+    },
+    {
+      name: 'getPageAssessLog',
+      method: 'POST',
+      path: '/api/base/accesslog/list',
+      mockPath: '/api/base/accesslog/list',
+      params: {
+        orgId: '',
+        userId: '',
+        accessModelName: '',
+        accessPageName: '',
+        accessIp: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '页面访问日志'
+    },
+    {
+      name: 'loginLogStatisticAnalysis',
+      method: 'POST',
+      path: '/api/base/loginlog/loginLogStatisticAnalysis',
+      mockPath: '/api/base/loginlog/loginLogStatisticAnalysis',
+      params: {
+        startTime: '',
+        endTime: '',
+        orgId: ''
+      },
+      desc: '每日登录情况统计'
+    },
+    {
+      name: 'accessLogStatisticAnalysis',
+      method: 'POST',
+      path: '/api/base/accesslog/accessLogStatisticAnalysis',
+      mockPath: '/api/base/accesslog/accessLogStatisticAnalysis',
+      params: {
+        startTime: '',
+        endTime: '',
+        orgId: ''
+      },
+      desc: '分公司用户操作频次统计'
+    },
+    {
+      name: 'pageLogStatisticAnalysis',
+      method: 'POST',
+      path: '/api/base/accesslog/pageLogStatisticAnalysis',
+      mockPath: '/api/base/accesslog/pageLogStatisticAnalysis',
+      params: {
+        startTime: '',
+        endTime: '',
+        orgId: ''
+      },
+      desc: '页面操作频次统计'
     }
   ]
 }

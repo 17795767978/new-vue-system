@@ -34,11 +34,16 @@ export default {
       pickerOptionsDate: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
-          return time.getTime() > endTime
+          const startTime = moment(moment().format('YYYY-MM-DD')).valueOf() - 30 * 3600 * 24 * 1000
+          return time.getTime() > endTime || time.getTime() < startTime
         }
       },
       dateArray: []
     }
+  },
+  mounted () {
+    let startTime = moment().valueOf() - 6 * 3600 * 24 * 1000
+    this.dateArray = [moment(startTime).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
   },
   methods: {
     getDetail () {

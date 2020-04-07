@@ -616,7 +616,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '日志管理',
       icon: 'nocturne icon-dash',
-      roles: ['/management-list', '/role-list']
+      roles: ['/login-log', '/access-log', '/log-analysis']
     },
     children: [
       {
@@ -626,27 +626,27 @@ export const aysncRoutesMap = [
         meta: {
           title: '登录日志',
           icon: 'nocturne icon-dash',
-          roles: ['/role-list']
+          roles: ['/login-log']
         }
       },
       {
         path: 'access-log',
         component: _import_('logManagement/accessLog/index'),
-        name: 'loginLog',
+        name: 'accessLog',
         meta: {
           title: '页面访问日志',
           icon: 'nocturne icon-dash',
-          roles: ['/role-list']
+          roles: ['/access-log']
         }
       },
       {
         path: 'log-analysis',
         component: _import_('logManagement/logAnalysis/index'),
-        name: 'loginLog',
+        name: 'logAnalysis',
         meta: {
           title: '日志分析',
           icon: 'nocturne icon-dash',
-          roles: ['/role-list']
+          roles: ['/log-analysis']
         }
       }
     ]

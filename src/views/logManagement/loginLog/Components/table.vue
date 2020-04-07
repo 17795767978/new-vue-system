@@ -131,7 +131,7 @@ export default {
       handler (newV) {
         this.pageNumber = 1
         this.searchData = {
-          orgId: newV.orgId === '1' ? '' : this.orgId,
+          orgId: newV.orgId === '1' ? '' : newV.orgId,
           userId: newV.user,
           accessModel: newV.desc,
           accessIp: newV.ip,

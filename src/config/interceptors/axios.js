@@ -16,6 +16,7 @@ export function axiosRequestSucessFunc (config) {
   // dosth before request
   // config.headers['Content-type'] = 'application/x-www-form-urlencoded'
   const token = store.getters.token
+  // config.withCredentials = true
   if (token) {
     config.headers.common['authorization'] = token
   }
@@ -25,7 +26,7 @@ export function axiosRequestSucessFunc (config) {
   if (config.data.orgUuid && config.data.orgUuid === '1') {
     config.data.orgUuid = ''
   }
-  config.data.userId = localStorage.getItem('id')
+  config.data.personId = localStorage.getItem('id')
   return config
 }
 
