@@ -25,7 +25,7 @@ export default {
   data () {
     return {
       selectData: {},
-      downLoadName: 'downLoad.getDrivingBehaviorDayExport'
+      downLoadName: 'downLoad.warnExport'
     }
   },
   methods: {

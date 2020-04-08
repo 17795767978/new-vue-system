@@ -22,7 +22,7 @@
 import Search from '@/components/searchAlarm/'
 import Table from './Components/table'
 export default {
-  name: 'acessLog',
+  name: 'accessLog',
   data () {
     return {
       selectData: {}

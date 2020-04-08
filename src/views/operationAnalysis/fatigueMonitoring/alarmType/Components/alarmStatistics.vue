@@ -39,7 +39,8 @@ export default {
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1],
-      warnTypes: []
+      warnTypes: [],
+      handleResults: []
     })
   },
   mounted () {
@@ -54,7 +55,8 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
-          warnTypes: []
+          warnTypes: [],
+          handleResults: newV.checkList
         })
       }
     }
@@ -62,7 +64,7 @@ export default {
   methods: {
     _getAlarmLevelRatioAnalysis (params) {
       this.loading = true
-      this.$api['homeTired.getStatisticDatasByWarnType'](params).then(res => {
+      this.$api['homeTired.getStatisticDatasByWarnTypeAnalysis'](params).then(res => {
         let yData = res.map(item => item.warnLabel)
         let series = res.map(item => ({
           value: item.warnNumber,

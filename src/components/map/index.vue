@@ -339,7 +339,8 @@ export default {
           orgId,
           lineId: newV.lineId,
           busNumber: newV.busNumber,
-          warnTypes: newV.warnTypeId.length === 0 ? dataForm.warningArr : newV.warnTypeId
+          warnTypes: newV.warnTypeId.length === 0 ? dataForm.warningArr : newV.warnTypeId,
+          handleResult: newV.checkList
         })
       }
     }
@@ -361,14 +362,14 @@ export default {
           orgId,
           lineId: '',
           busNumber: '',
-          warnTypes: defaultData.warningArr
+          warnTypes: defaultData.warningArr,
+          handleResult: []
         })
       } else if (this.isLineMap) {
       }
     },
     _getOps () {
       this.$api['wholeInformation.getCityCoordinatePoints']().then(res => {
-        console.log(res)
         this.center.lat = res.lat
         this.center.lng = res.lng
       })

@@ -382,80 +382,6 @@ export const aysncRoutesMap = [
     ]
   },
   {
-    path: '/system-admin',
-    component: Layout,
-    name: 'systemAdmin',
-    meta: {
-      title: '系统管理',
-      icon: 'nocturne icon-dash',
-      roles: ['/channel-management', '/params-configuration', '/device-snap-management', '/alarm-management']
-    },
-    children: [
-      {
-        path: 'channel-management',
-        component: _import_('systemAdmin/channelManagement/index'),
-        name: 'channelManagement',
-        meta: {
-          title: '通道配置',
-          icon: 'nocturne icon-dash',
-          roles: ['/channel-management']
-        }
-      },
-      {
-        path: 'alarm-management',
-        component: _import_('operationAnalysis/fatigueMonitoring/alarmManagement/index'),
-        name: 'alarmManagement',
-        meta: {
-          title: '报警类型管理',
-          icon: 'nocturne icon-dash',
-          roles: ['/alarm-management']
-        }
-      },
-      {
-        path: 'device-snap-management',
-        component: _import_('systemAdmin/deviceSnapManagement/index'),
-        name: 'deviceSnapManagement',
-        meta: {
-          title: '设备抓拍配置',
-          icon: 'nocturne icon-dash',
-          roles: ['/device-snap-management']
-        }
-      },
-      {
-        path: 'params-configuration',
-        component: _import_('systemAdmin/paramsConfiguration/index'),
-        name: 'paramsConfiguration',
-        meta: {
-          title: '参数设置',
-          icon: 'nocturne icon-dash',
-          roles: ['/params-configuration']
-        }
-      },
-      {
-        path: 'device-parameter',
-        component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
-        name: 'deviceParameter',
-        meta: {
-          title: '设备参数下发',
-          icon: 'nocturne icon-dash',
-          roles: ['/device-parameter']
-        }
-      },
-      // parameterSetting
-      {
-        path: 'parameter-setting',
-        component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
-        name: 'parameterSetting',
-        hidden: true,
-        meta: {
-          title: '设备参数下发详情',
-          icon: 'nocturne icon-dash',
-          roles: ['/device-parameter']
-        }
-      }
-    ]
-  },
-  {
     path: '/data-analysis',
     component: Layout,
     name: 'dataAnalysis',
@@ -578,11 +504,85 @@ export const aysncRoutesMap = [
     ]
   },
   {
+    path: '/system-admin',
+    component: Layout,
+    name: 'systemAdmin',
+    meta: {
+      title: '系统管理',
+      icon: 'nocturne icon-dash',
+      roles: ['/channel-management', '/params-configuration', '/device-snap-management', '/alarm-management']
+    },
+    children: [
+      {
+        path: 'channel-management',
+        component: _import_('systemAdmin/channelManagement/index'),
+        name: 'channelManagement',
+        meta: {
+          title: '通道配置',
+          icon: 'nocturne icon-dash',
+          roles: ['/channel-management']
+        }
+      },
+      {
+        path: 'alarm-management',
+        component: _import_('operationAnalysis/fatigueMonitoring/alarmManagement/index'),
+        name: 'alarmManagement',
+        meta: {
+          title: '报警类型管理',
+          icon: 'nocturne icon-dash',
+          roles: ['/alarm-management']
+        }
+      },
+      {
+        path: 'device-snap-management',
+        component: _import_('systemAdmin/deviceSnapManagement/index'),
+        name: 'deviceSnapManagement',
+        meta: {
+          title: '设备抓拍配置',
+          icon: 'nocturne icon-dash',
+          roles: ['/device-snap-management']
+        }
+      },
+      {
+        path: 'params-configuration',
+        component: _import_('systemAdmin/paramsConfiguration/index'),
+        name: 'paramsConfiguration',
+        meta: {
+          title: '参数设置',
+          icon: 'nocturne icon-dash',
+          roles: ['/params-configuration']
+        }
+      },
+      {
+        path: 'device-parameter',
+        component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
+        name: 'deviceParameter',
+        meta: {
+          title: '设备参数下发',
+          icon: 'nocturne icon-dash',
+          roles: ['/device-parameter']
+        }
+      },
+      // parameterSetting
+      {
+        path: 'parameter-setting',
+        component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
+        name: 'parameterSetting',
+        hidden: true,
+        meta: {
+          title: '设备参数下发详情',
+          icon: 'nocturne icon-dash',
+          roles: ['/device-parameter']
+        }
+      }
+    ]
+  },
+  {
     path: '/permission-management',
     component: Layout,
     name: 'permissionManagement',
     meta: {
-      title: '用户管理',
+      title: '权限管理',
       icon: 'nocturne icon-dash',
       roles: ['/management-list', '/role-list']
     },

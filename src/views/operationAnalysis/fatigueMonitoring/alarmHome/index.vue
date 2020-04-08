@@ -10,6 +10,7 @@
       :isDownload="false"
       :isDefault="true"
       :isEmpty="true"
+      :isProcessingResult="true"
       :isWarntype="true"
       @configCheck="getSearch"
     />
@@ -187,7 +188,8 @@ export default {
         busNumber: this.currentData.busNumber,
         warnTypes: type === 'charts' ? [data.data.warnType] : this.currentData.warnTypeId,
         driverNum: data.driverNum,
-        driverName: data.driverName
+        driverName: data.driverName,
+        handleResults: this.currentData.checkList
       }
       this.$api['tiredMonitoring.getBadDrivingBehaviorRankingDetail'](params).then(res => {
         if (type === 'table') {

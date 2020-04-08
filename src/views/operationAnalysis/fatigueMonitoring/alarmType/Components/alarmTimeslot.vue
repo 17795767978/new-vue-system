@@ -50,7 +50,8 @@ export default {
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
-      warnTypes: []
+      warnTypes: [],
+      handleResults: []
     })
   },
   mounted () {
@@ -67,7 +68,8 @@ export default {
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
-          warnTypes: this.selectData.warnTypeId
+          warnTypes: this.selectData.warnTypeId,
+          handleResults: this.selectData.checkList
         })
       }
     },
@@ -80,7 +82,8 @@ export default {
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
-          warnTypes: this.echartsData === '' ? [] : [this.echartsData]
+          warnTypes: this.echartsData === '' ? [] : [this.echartsData],
+          handleResults: this.selectData.checkList
         })
       }
     }

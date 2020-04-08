@@ -40,7 +40,8 @@ export default {
       busNumber: '',
       warnTypes: defaultData.warningArr,
       startTime: '',
-      endTime: ''
+      endTime: '',
+      handleResults: []
     })
   },
   mounted () {
@@ -51,14 +52,14 @@ export default {
       deep: true,
       handler (newV) {
         let defaultData = this.$store.getters.formData
-        console.log(newV)
         this._getDriver({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           busNumber: newV.busNumber,
           warnTypes: newV.warnTypeId.length === 0 ? defaultData.warningArr : newV.warnTypeId,
           startTime: '',
-          endTime: ''
+          endTime: '',
+          handleResults: newV.checkList
         })
       }
     }
@@ -66,7 +67,7 @@ export default {
   methods: {
     _getDriver (params) {
       this.loading = true
-      this.$api['homeTired.getStatisticDatasByWarnType'](params).then(res => {
+      this.$api['homeTired.getStatisticDatasByWarnTypeHome'](params).then(res => {
         this.loading = false
         let data = []
         let dataArrValue = res.map(item => item.warnLabel)

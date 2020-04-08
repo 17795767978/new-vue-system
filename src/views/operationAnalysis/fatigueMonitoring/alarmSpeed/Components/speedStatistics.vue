@@ -37,7 +37,8 @@ export default {
       orgId: this.userId === '1' ? '' : this.userId,
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
-      endTime: formData.dateArray[1]
+      endTime: formData.dateArray[1],
+      handleResults: []
     })
   },
   mounted () {
@@ -51,7 +52,8 @@ export default {
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
-          endTime: newV.dateArray[1]
+          endTime: newV.dateArray[1],
+          handleResults: newV.checkList
         })
       }
     }

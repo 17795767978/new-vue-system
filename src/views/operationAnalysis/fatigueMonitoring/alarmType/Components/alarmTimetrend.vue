@@ -47,7 +47,8 @@ export default {
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
-      warnTypes: []
+      warnTypes: [],
+      handleResults: []
     })
   },
   mounted () {
@@ -57,7 +58,6 @@ export default {
     searchData: {
       deep: true,
       handler (newV) {
-        console.log('11111111111111111111111111111111', newV)
         this.selectData = newV
         this.echartsData = ''
         this.alarmName = ''
@@ -66,7 +66,8 @@ export default {
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
-          warnTypes: this.selectData.warnTypeId
+          warnTypes: this.selectData.warnTypeId,
+          handleResults: this.selectData.checkList
         })
       }
     },
@@ -79,7 +80,8 @@ export default {
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
-          warnTypes: this.echartsData === '' ? [] : [this.echartsData]
+          warnTypes: this.echartsData === '' ? [] : [this.echartsData],
+          handleResults: this.selectData.checkList
         })
       }
     }

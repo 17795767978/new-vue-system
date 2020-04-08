@@ -61,7 +61,8 @@ export default {
       lineId: defaultForm.lineId,
       startTime: defaultForm.dateArray[0],
       endTime: defaultForm.dateArray[1],
-      warnTypes: defaultForm.warningArr
+      warnTypes: defaultForm.warningArr,
+      handleResult: []
     })
   },
   mounted () {
@@ -101,7 +102,8 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0] === undefined ? '' : newV.dateArray[0],
           endTime: newV.dateArray[1] === undefined ? '' : newV.dateArray[1],
-          warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId
+          warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId,
+          handleResults: newV.checkList
         })
       }
     }
@@ -163,9 +165,7 @@ export default {
             this.scrollHeight = this.numHeight * this.tableLength
           }
           let domNum = this.scrollHeight / this.numHeight
-          console.log(tableHeight)
           if (this.scrollHeight > this.numHeight * this.tableLength - tableHeight) {
-            console.log('1111111111111111111111111111111111111111111111111111')
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
             domNum = Math.floor(domNum)
             this.tableData = this.tableAllData.slice(this.tableLength - 16, this.tableLength)

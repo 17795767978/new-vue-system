@@ -197,7 +197,7 @@ const globel = {
       })
     },
     getUserList ({ commit }) {
-      api['permission.userList']({}).then(res => {
+      api['permission.userSelectList']({}).then(res => {
         let list = []
         res.forEach(item => {
           list.push({

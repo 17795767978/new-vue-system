@@ -20,10 +20,17 @@ export const PermissionApi = {
       path: '/api/base/user/list',
       mockPath: '/api/base/user/list',
       params: {
-        pageSize: '',
-        pageNumber: ''
       },
       desc: '用户列表'
+    },
+    {
+      name: 'userSelectList',
+      method: 'POST',
+      path: '/api/base/user/getUserList',
+      mockPath: '/api/base/user/getUserList',
+      params: {
+      },
+      desc: '用户选择列表'
     },
     {
       name: 'update',

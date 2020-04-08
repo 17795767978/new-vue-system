@@ -9,6 +9,7 @@
       :isEmpty="true"
       :isWarntype="true"
       :isDownload="true"
+      :isProcessingResult="true"
       :downLoadName="downLoadName"
       @configCheck="getSearch" />
       <div class="table-style">

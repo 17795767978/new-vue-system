@@ -45,7 +45,8 @@ export default {
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
-      warnLevel: ''
+      warnLevel: '',
+      handleResults: []
     })
   },
   mounted () {
@@ -62,7 +63,8 @@ export default {
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
-          warnLevel: this.echartsData
+          warnLevel: this.echartsData,
+          handleResults: this.selectData.checkList
         })
       }
     },
@@ -74,7 +76,8 @@ export default {
           lineId: this.selectData.lineId,
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
-          warnLevel: this.echartsData
+          warnLevel: this.echartsData,
+          handleResults: this.selectData.checkList
         })
       }
     }

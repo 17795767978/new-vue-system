@@ -262,7 +262,8 @@ export default {
     this._getAlarmUploadReportDay({
       orgId: this.userId === '1' ? '' : this.userId,
       startTime,
-      warnTypes: this.formData.warningArr
+      warnTypes: this.formData.warningArr,
+      handleResults: []
     })
   },
   mounted () {
@@ -278,7 +279,8 @@ export default {
         this._getAlarmUploadReportDay({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           startTime: moment(newV.dataCurrent).format('YYYY-MM-DD'),
-          warnTypes: this.formData.warningArr
+          warnTypes: this.formData.warningArr,
+          handleResults: newV.checkList
         })
       }
     }
@@ -340,24 +342,20 @@ export default {
           newRightCountArr.push(item)
         }
       })
-      console.log(leftColArr)
       // 左侧所有的次数
       newLeftNumArr.forEach(item => {
         this.disposeNumTotal += Number(data[item])
       })
-      console.log(newLeftCountArr)
       // 左侧所有的车台数
       newLeftCountArr.forEach(item => {
         this.disposeCountTotal += Number(data[item])
       })
       // 右侧的所有次数
       newRightNumArr.forEach(item => {
-        console.log(item)
         this.assistNumTotal += Number(data[item])
       })
       // 右侧的所有车台数
       newRightCountArr.forEach(item => {
-        console.log(item)
         this.assistCountTotal += Number(data[item])
       })
     }

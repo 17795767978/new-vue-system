@@ -59,7 +59,8 @@ export default {
       lineId: defaultForm.lineId,
       startTime: defaultForm.dateArray[0],
       endTime: defaultForm.dateArray[1],
-      warnTypes: defaultForm.warningArr
+      warnTypes: defaultForm.warningArr,
+      handleResults: []
     })
   },
   mounted () {
@@ -99,7 +100,8 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0] === undefined ? '' : newV.dateArray[0],
           endTime: newV.dateArray[1] === undefined ? '' : newV.dateArray[1],
-          warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId
+          warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId,
+          handleResults: newV.checkList
         })
       }
     }

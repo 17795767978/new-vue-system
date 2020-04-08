@@ -3,14 +3,9 @@
     <Search
       :isOrg='true'
       :isLine="true"
-      :isBus="false"
-      :isDate="false"
       :isDateTo="true"
-      :isTime="false"
-      :isTurn="false"
-      :isDownload="false"
+      :isProcessingResult="true"
       :isEmpty="true"
-      :isWarntype="false"
       @configCheck="getSearch"
     />
     <div class="content">

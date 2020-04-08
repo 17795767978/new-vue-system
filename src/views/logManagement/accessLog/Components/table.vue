@@ -62,8 +62,11 @@
       <el-table-column
         prop="accessDuration"
         align="center"
-        label="耗时"
+        label="耗时(s)"
         width="120">
+        <template slot-scope="scope">
+          <span>{{(scope.row.accessDuration / 1000).toFixed(2)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -131,7 +134,7 @@ export default {
           userId: newV.user,
           accessModelName: newV.modules,
           accessPageName: newV.pages,
-          accessIp: newV.Ip,
+          accessIp: newV.ip,
           startTime: newV.startTime,
           endTime: newV.endTime,
           pageNumber: 1,

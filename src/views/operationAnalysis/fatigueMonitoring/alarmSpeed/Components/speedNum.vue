@@ -39,7 +39,8 @@ export default {
       orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
-      endTime: this.selectData.dateArray[1]
+      endTime: this.selectData.dateArray[1],
+      handleResults: []
     })
   },
   mounted () {
@@ -53,7 +54,8 @@ export default {
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
-          endTime: newV.dateArray[1]
+          endTime: newV.dateArray[1],
+          handleResults: newV.checkList
         })
       }
     }

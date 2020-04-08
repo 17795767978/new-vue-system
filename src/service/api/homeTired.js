@@ -13,12 +13,32 @@ export const homeTiredApi = {
     {
       name: 'getStatisticDatasByWarnType',
       method: 'POST',
-      path: '/zhfxpt/getStatisticDatasByWarnType',
-      mockPath: '/zhfxpt/getStatisticDatasByWarnType',
+      path: '/zhfxpt/monitorScreen/getStatisticDatasByWarnType',
+      mockPath: '/zhfxpt/monitorScreen/getStatisticDatasByWarnType',
       params: {
         orgId: ''
       },
-      desc: '不良驾驶行为统计'
+      desc: '不良驾驶行为类型--监控大屏'
+    },
+    {
+      name: 'getStatisticDatasByWarnTypeHome',
+      method: 'POST',
+      path: '/zhfxpt/homepage/getStatisticDatasByWarnType',
+      mockPath: '/zhfxpt/homepage/getStatisticDatasByWarnType',
+      params: {
+        orgId: ''
+      },
+      desc: '不良驾驶行为类型--客流首页'
+    },
+    {
+      name: 'getStatisticDatasByWarnTypeAnalysis',
+      method: 'POST',
+      path: '/zhfxpt/warnTypeAnalysis/getStatisticDatasByWarnType',
+      mockPath: '/zhfxpt/warnTypeAnalysis/getStatisticDatasByWarnType',
+      params: {
+        orgId: ''
+      },
+      desc: '不良驾驶行为类型--报警类型分析 '
     },
     {
       name: 'getAnalysisDatasByWarnLeave',

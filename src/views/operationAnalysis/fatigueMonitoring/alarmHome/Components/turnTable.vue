@@ -71,7 +71,8 @@ export default {
       orgId: this.userId === '1' ? '' : this.userId,
       lineId: defaultData.lineId,
       busNumber: '',
-      warnTypes: defaultData.warningArr
+      warnTypes: defaultData.warningArr,
+      handleResults: []
     })
   },
   watch: {
@@ -84,7 +85,8 @@ export default {
           orgId: orgId === '1' ? '' : orgId,
           lineId,
           busNumber: busNumber,
-          warnTypes: warnTypeId.length === 0 ? defaultData.warningArr : warnTypeId
+          warnTypes: warnTypeId.length === 0 ? defaultData.warningArr : warnTypeId,
+          handleResults: newV.checkList
         })
       }
     }

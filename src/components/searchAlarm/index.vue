@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
-      <el-form-item label="选择机构" v-if="isOrg">
+      <el-form-item label="选择机构:" v-if="isOrg">
         <el-select class="font-style" @visible-change="changed" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptions"
@@ -11,7 +11,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择线路" v-if="isLine">
+      <el-form-item label="选择线路:" v-if="isLine">
         <el-select class="font-style" filterable v-model="formInline.lineId" placeholder="请选择">
           <el-option
             v-for="item in lineOptions"
@@ -21,7 +21,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择线路" v-if="islineIdRepeat">
+      <el-form-item label="选择线路:" v-if="islineIdRepeat">
         <el-select style="width: 200px" filterable v-model="formInline.lineIds" multiple collapse-tags placeholder="请选择">
           <el-option
             v-for="item in lineOptions"
@@ -31,7 +31,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择机构" v-if="isOrgSec">
+      <el-form-item label="选择机构:" v-if="isOrgSec">
         <el-select class="font-style" @visible-change="changed" v-model="formInline.lineOrgId" placeholder="请选择" filterable>
           <el-option
             v-for="item in comOptionsSec"
@@ -41,7 +41,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择线路" v-if="isLineSec">
+      <el-form-item label="选择线路:" v-if="isLineSec">
         <el-select class="font-style" filterable v-model="formInline.lineLineId" placeholder="请选择">
           <el-option
             v-for="item in lineOptionsSec"
@@ -51,7 +51,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择车辆" v-if="isBus">
+      <el-form-item label="选择车辆:" v-if="isBus">
         <el-select class="font-style" style="width: 200px" v-model="formInline.busNumber" :multiple="isBusMul" :collapse-tags="isBusMul" filterable placeholder="请选择">
           <el-option
             v-for="item in carOptions"
@@ -61,10 +61,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="司机工号" v-if="isDriverNum">
+      <el-form-item label="司机工号:" v-if="isDriverNum">
         <el-input class="font-style" v-model="formInline.driverNum"></el-input>
       </el-form-item>
-      <el-form-item label="方向" v-if="isTurn">
+      <el-form-item label="方向:" v-if="isTurn">
         <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
           <el-option
             v-for="item in turnOptions"
@@ -74,14 +74,14 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="月份" v-if="isMonth">
+      <el-form-item label="月份:" v-if="isMonth">
         <el-date-picker
           v-model="formInline.month"
           type="month"
           placeholder="选择月">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="站位A" v-if="isStation">
+      <el-form-item label="站位A:" v-if="isStation">
         <el-select
           ref="elSelectWrapperUp"
           style="width:200px;"
@@ -101,7 +101,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="站位B" v-if="isStation">
+      <el-form-item label="站位B:" v-if="isStation">
         <el-select
           ref="elSelectWrapperUp"
           style="width:200px;"
@@ -121,7 +121,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="用户" v-if="isUser">
+      <el-form-item label="用户:" v-if="isUser">
         <el-select style="width: 200px" filterable v-model="formInline.user" placeholder="请选择">
           <el-option
             v-for="item in userOptions"
@@ -131,7 +131,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="描述" v-if="isDesc">
+      <el-form-item label="描述:" v-if="isDesc">
         <el-select class="font-style" filterable v-model="formInline.desc" placeholder="请选择">
           <el-option
             v-for="item in descOptions"
@@ -141,10 +141,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="IP" v-if="isIp">
+      <el-form-item label="IP:" v-if="isIp">
         <el-input v-model="formInline.ip"  placeholder="请输入"></el-input>
       </el-form-item>
-      <el-form-item label="模块" v-if="isModules">
+      <el-form-item label="模块:" v-if="isModules">
         <el-select style="width: 300px" filterable v-model="formInline.modules" placeholder="请选择">
           <el-option
             v-for="item in modulesOptions"
@@ -154,7 +154,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="页面" v-if="isPages">
+      <el-form-item label="页面:" v-if="isPages">
         <el-select style="width: 300px" filterable v-model="formInline.pages" placeholder="请选择">
           <el-option
             v-for="item in pagesOptions"
@@ -164,13 +164,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="输入设备编号" v-if="isDeviceCode">
+      <el-form-item label="输入设备编号:" v-if="isDeviceCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.deviceCode" placeholder="设备编号"></el-input>
       </el-form-item>
-      <el-form-item label="输入自编号" v-if="isSelfCode">
+      <el-form-item label="输入自编号:" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
-      <el-form-item label="选择日期" v-if="isDataCurrent">
+      <el-form-item label="选择日期:" v-if="isDataCurrent">
         <el-date-picker
           :picker-options="pickerOptionsDataCurrent"
           v-model="formInline.dataCurrent"
@@ -179,7 +179,7 @@
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="选择日期" v-if="isDate">
+      <el-form-item label="选择日期:" v-if="isDate">
          <el-date-picker
           :picker-options="pickerOptionsDate"
           v-model="formInline.valueTime"
@@ -190,7 +190,7 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="选择日期" v-if="isDateTo">
+      <el-form-item label="选择日期:" v-if="isDateTo">
         <el-date-picker
           :picker-options="pickerOptionsDateTo"
           :disabled="formInline.radio === '1' && isRadio"
@@ -201,7 +201,7 @@
           end-placeholder="结束日期">
       </el-date-picker>
     </el-form-item>
-      <el-form-item label="时间" v-if="isTime">
+      <el-form-item label="时间:" v-if="isTime">
         <el-time-select
           placeholder="起始时间"
           class="font-style"
@@ -225,20 +225,27 @@
           }">
         </el-time-select>
       </el-form-item>
-      <el-form-item v-if="isRadio" label="查询时间">
+      <el-form-item v-if="isRadio" label="查询时间:">
         <el-radio v-model="formInline.radio" label="1">当天</el-radio>
         <el-radio v-model="formInline.radio" label="2">历史</el-radio>
       </el-form-item>
-      <el-form-item label="报警类型" v-if="isWarntype">
-          <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
-            <el-option
-              v-for="item in warnOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
+      <el-form-item label="报警类型:" v-if="isWarntype">
+        <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in warnOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="处理结果:" v-if="isProcessingResult" size="mini">
+        <el-checkbox-group v-model="formInline.checkList">
+          <el-checkbox label="未处理"></el-checkbox>
+          <el-checkbox label="已处理"></el-checkbox>
+          <el-checkbox label="误报"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
@@ -380,6 +387,9 @@ export default {
     },
     isPages: {
       type: Boolean
+    },
+    isProcessingResult: {
+      type: Boolean
     }
   },
   data () {
@@ -430,7 +440,8 @@ export default {
         desc: '',
         ip: '',
         modules: '',
-        pages: ''
+        pages: '',
+        checkList: []
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -761,6 +772,8 @@ export default {
       }
     },
     onSubmit () {
+      // 处理结果值
+      let checkList = []
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
       if (this.formInline.dateArray.length === 2) {
@@ -768,6 +781,19 @@ export default {
       }
       if (this.formInline.endHour !== '') {
         this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
+      }
+      if (this.formInline.checkList.length > 0) {
+        this.formInline.checkList.forEach(item => {
+          if (item === '未处理') {
+            checkList.push('0')
+          } else if (item === '已处理') {
+            checkList.push('1')
+          } else {
+            checkList.push('2')
+          }
+        })
+      } else {
+        checkList = []
       }
       let configData = {
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
@@ -797,7 +823,8 @@ export default {
         desc: this.formInline.desc,
         ip: this.formInline.ip,
         modules: this.formInline.modules,
-        pages: this.formInline.pages
+        pages: this.formInline.pages,
+        checkList
       }
       this.$emit('configCheck', configData)
     },
@@ -831,7 +858,8 @@ export default {
         desc: '',
         ip: '',
         modules: '',
-        pages: ''
+        pages: '',
+        checkList: []
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -861,7 +889,8 @@ export default {
         desc: this.formInline.desc,
         ip: this.formInline.ip,
         modules: this.formInline.modules,
-        pages: this.formInline.pages
+        pages: this.formInline.pages,
+        checkList: []
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -940,13 +969,25 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
-      console.log(this.formInline.dateArray)
       let lineArr = []
+      let checkList = []
       this.downLoadLoading = true
       let defaultForm = this.formData
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
-        console.log(this.formInline.lineLineId)
         lineArr = this.formInline.lineLineId.split('+')
+      }
+      if (this.formInline.checkList.length > 0) {
+        this.formInline.checkList.forEach(item => {
+          if (item === '未处理') {
+            checkList.push('0')
+          } else if (item === '已处理') {
+            checkList.push('1')
+          } else {
+            checkList.push('2')
+          }
+        })
+      } else {
+        checkList = []
       }
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
@@ -967,7 +1008,9 @@ export default {
         driverNum: this.formInline.driverNum,
         warnDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
         deviceCode: this.formInline.deviceCode,
-        selfCode: this.formInline.selfCode
+        selfCode: this.formInline.selfCode,
+        handleResults: checkList,
+        warnTypeId: ['ADASSNAP', 'DMSTOSNAP']
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)
