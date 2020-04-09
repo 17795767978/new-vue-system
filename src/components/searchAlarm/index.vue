@@ -200,7 +200,7 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-       <p>导出只支持最大下载量为65536条，如果超过65536条默认下载前65536条</p>
+       <p>导出只支持最大下载量为1048575条，如果超过1048575条默认下载前1048575条</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="getExcel"  :loading="downLoadLoading">确认</el-button>
