@@ -118,7 +118,7 @@ export default {
       pickerOptionsDate: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
-          const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+          const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf() - 3600 * 24000
           return time.getTime() > endTime || time.getTime() < startTime
         }
       },
@@ -252,7 +252,7 @@ export default {
           this.pickerOptionsDate = {
             disabledDate (time) {
               const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
-              const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf() - 3600 * 24000
               return time.getTime() > endTime || time.getTime() < startTime
             }
           }
@@ -260,8 +260,8 @@ export default {
           this.formInline.valueTime = []
           this.pickerOptionsDate = {
             disabledDate (time) {
-              const endTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
-              return time.getTime() >= endTime
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 2 * 3600 * 24000
+              return time.getTime() > endTime
             }
           }
           this.isType = true

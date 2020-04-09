@@ -3,15 +3,11 @@
     <Search
       :isOrg='true'
       :isLine="true"
-      :isBus="false"
-      :isTime="false"
       :isTurn="true"
-      :isMonth="false"
       :isDataCurrent="true"
       :isEmpty="true"
       :isDownload="activeName === 'second'"
       :isDefault="true"
-      :isWarntype="false"
       :downLoadName="downLoadName"
       @configCheck="getSearch"
     />

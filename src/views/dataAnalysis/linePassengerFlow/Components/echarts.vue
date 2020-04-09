@@ -40,7 +40,7 @@ export default {
   },
   created () {
     let date = moment().valueOf()
-    date = date - 24 * 60 * 60 * 1000
+    date = date - 48 * 60 * 60 * 1000
     date = moment(date).format('YYYY-MM-DD')
     this._getStationCharts({
       orgUuid: this.userId === '1' ? '' : this.userId,

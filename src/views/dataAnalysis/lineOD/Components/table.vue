@@ -98,6 +98,7 @@ export default {
     }
   },
   mounted () {
+    const time = new Date() - 2 * 3600 * 24000
     this.$nextTick(() => {
       let eleArr = this.$refs.tableWrapper.$el
       let table = eleArr.getElementsByClassName('el-table__body-wrapper')[0]
@@ -118,7 +119,7 @@ export default {
           orgUuid: this.userId === '1' ? '' : this.userId,
           lineUuid: this.lineId === '' ? this.formData.lineId : this.lineId,
           lineType: this.formData.lineType,
-          uploadDate: moment(this.formData.dateYes).format('YYYY-MM-DD')
+          uploadDate: moment(time).format('YYYY-MM-DD')
         })
       }, 500)
     })

@@ -46,13 +46,13 @@ export default {
   mounted () {
     setTimeout(() => {
       let arr = this.$store.getters.defaultSearch
-      console.log(arr)
+      const time = new Date() - 24 * 3600 * 2000
       if (arr.lineId !== '' && arr.lineType !== '' && arr.dataCurrent !== '') {
         this._getPfBaseUpDownGrid({
           orgUuid: arr.orgId,
           lineUuid: arr.lineId,
           lineType: arr.lineType,
-          date: moment(arr.dataCurrent).format('YYYY-MM-DD')
+          date: moment(time).format('YYYY-MM-DD')
         })
       } else {
         this.$message.error('请添加完整的查询条件')

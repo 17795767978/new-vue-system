@@ -60,7 +60,7 @@ export default {
   },
   created () {
     const dataNow = new Date()
-    const dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
+    const dataBefore = moment(new Date(dataNow.getTime() - 2 * 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
     window.addEventListener('resize', () => {
       this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
     })

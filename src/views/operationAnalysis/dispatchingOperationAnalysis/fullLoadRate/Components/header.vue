@@ -83,7 +83,7 @@ export default {
       lineOptions: [],
       pickerOptions: {
         disabledDate (time) {
-          return time.getTime() > Date.now() - 3600000 * 24
+          return time.getTime() > Date.now() - 3600000 * 24 * 2
         },
         shortcuts: [{
           text: '今天',
@@ -110,7 +110,7 @@ export default {
   },
   created () {
     let dataNow = new Date()
-    let dataBefore = new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)
+    let dataBefore = new Date(dataNow.getTime() - 2 * 24 * 60 * 60 * 1000)
     this.formInline.date = moment(dataBefore).format('YYYY-MM-DD')
     this.formInline.startTime = '07:00'
     this.formInline.endTime = '09:00'

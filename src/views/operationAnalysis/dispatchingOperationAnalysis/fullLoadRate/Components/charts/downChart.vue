@@ -54,7 +54,7 @@ export default {
   },
   created () {
     let dataNow = new Date()
-    let dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
+    let dataBefore = moment(new Date(dataNow.getTime() - 2 * 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
     window.addEventListener('resize', () => {
       this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
     })

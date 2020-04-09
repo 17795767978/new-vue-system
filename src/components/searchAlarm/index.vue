@@ -141,7 +141,6 @@
       </el-form-item>
       <el-form-item label="选择日期" v-if="isDateTo">
         <el-date-picker
-          :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.dateArray"
           :picker-options="pickerOptionsDateTo"
           type="daterange"
@@ -321,14 +320,14 @@ export default {
       },
       pickerOptionsDateCurrent: {
         disabledDate (time) {
-          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf() - 3600 * 1000 * 24
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf() - 3600 * 1000 * 24 * 2
           return time.getTime() > endTime
         }
       },
       pickerOptionsDateTo: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
-          const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+          const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf() - 3600 * 1000 * 24
           return time.getTime() > endTime || time.getTime() < startTime
         }
       },
@@ -451,7 +450,7 @@ export default {
     this.formInline.lineLineId = defaultForm.lineLineId
     this.formInline.lineIds = defaultForm.lineIds
     // this.formInline.lineType = defaultForm.lineType
-    this.formInline.dataCurrent = defaultForm.dateYes
+    this.formInline.dataCurrent = defaultForm.dateYes - 24 * 3600 * 1000
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
     this.formInline.month = month
@@ -561,14 +560,6 @@ export default {
         let date = new Date()
         date = moment(date).valueOf() - 3600 * 1000 * 24
         if (newV) {
-          // this.$store.dispatch('getComSecList').then(res => {
-          //   this.comOptionsSec = res
-          //   this.formInline.lineOrgId = this.comOptionsSec[0].value
-          //   this.$store.dispatch('getLineSecList', this.formInline.lineOrgId).then(res => {
-          //     this.lineOptionsSec = res
-          //     this.formInline.lineLineId = this.lineOptionsSec[0].value
-          //   })
-          // })
           this.formInline.lineType = this.turnOptions[0].value
           this.formInline.dataCurrent = date
           this.$store.dispatch('getDefaultSearch', this.formInline)
@@ -581,14 +572,13 @@ export default {
     'formInline.radio': {
       handler (newV) {
         if (newV === '1') {
-          console.log(this.formInline.dataCurrent)
           let date = moment().valueOf()
           date = moment(date).format('YYYY-MM-DD')
           this.formInline.dateArray = [date, date]
           this.pickerOptionsDateTo = {
             disabledDate (time) {
               const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
-              const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf() - 3600 * 1000 * 24
               return time.getTime() > endTime || time.getTime() < startTime
             }
           }
@@ -596,8 +586,8 @@ export default {
           this.formInline.dateArray = []
           this.pickerOptionsDateTo = {
             disabledDate (time) {
-              const endTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
-              return time.getTime() >= endTime
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 3600 * 1000 * 48
+              return time.getTime() > endTime
             }
           }
         }
@@ -709,7 +699,7 @@ export default {
         lineLineId: '',
         startStation: {},
         endStation: {},
-        dataCurrent: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+        dataCurrent: moment().subtract(2, 'days').format('YYYY-MM-DD'),
         warnTypeId: [],
         dateArray: [date, date],
         lineIds: [],
@@ -733,7 +723,7 @@ export default {
         endStation: this.formInline.endStation,
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
-        dataCurrent: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+        dataCurrent: moment().subtract(2, 'days').format('YYYY-MM-DD'),
         lineIds: this.formInline.lineIds,
         radio: this.formInline.radio
       }

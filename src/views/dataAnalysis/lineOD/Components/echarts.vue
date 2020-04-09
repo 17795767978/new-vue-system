@@ -39,6 +39,7 @@ export default {
   },
   mounted () {
     let listenResize = elementResizeDetector()
+    const time = new Date() - 2 * 3600 * 24000
     listenResize.listenTo(this.$refs.topWrapper, (el) => {
       this.$echarts.init(document.getElementsByClassName('passenger-vol')[0]).resize()
     })
@@ -47,7 +48,7 @@ export default {
         orgUuid: this.userId === '1' ? '' : this.userId,
         lineUuid: this.lineId === '' ? this.formData.lineId : this.lineId,
         lineType: this.formData.lineType,
-        uploadDate: moment(this.formData.dateYes).format('YYYY-MM-DD')
+        uploadDate: moment(time).format('YYYY-MM-DD')
       })
     }, 500)
   },

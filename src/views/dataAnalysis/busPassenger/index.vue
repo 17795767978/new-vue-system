@@ -50,7 +50,7 @@ export default {
       pickerOptions: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
-          return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+          return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 48 * 1000)
         }
       },
       timeArr: [],
@@ -73,13 +73,13 @@ export default {
         this.pickerOptions = {
           disabledDate (time) {
             const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
-            return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+            return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 48 * 1000)
           }
         }
       } else {
         this.pickerOptions = {
           disabledDate (time) {
-            return time.getTime() > moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 3600 * 24 * 1000
+            return time.getTime() > moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 3600 * 48 * 1000
           }
         }
         this.timeArr = []
