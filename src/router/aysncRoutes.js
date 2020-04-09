@@ -614,7 +614,7 @@ export const aysncRoutesMap = [
         meta: {
           title: '资源列表',
           icon: 'nocturne icon-dash',
-          roles: ['/role-list']
+          roles: ['/source-list']
         }
       }
     ]

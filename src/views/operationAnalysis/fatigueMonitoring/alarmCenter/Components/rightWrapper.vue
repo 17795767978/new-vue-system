@@ -184,6 +184,11 @@
           fixed="right"
           label="处理意见"
         >
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="light" :content="scope.row.handleSuggestion" placement="top-start">
+            <span>{{scope.row.handleSuggestion && scope.row.handleSuggestion.length > 7 ? `${scope.row.handleSuggestion.substring(0, 6)}...` : scope.row.handleSuggestion}}</span>
+          </el-tooltip>
+        </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -547,6 +552,14 @@ export default {
     },
     formatterTime (row) {
       return moment(row.warnTime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    getSlice (row) {
+      const content = row.handleSuggestion
+      if (content && content.length <= 7) {
+        return row.handleSuggestion
+      } else if (content && content.length > 7) {
+        return `${row.handleSuggestion.substring(0, 5)}...`
+      }
     },
     handleCurrentChange (val) {
       this.pageNum = val
