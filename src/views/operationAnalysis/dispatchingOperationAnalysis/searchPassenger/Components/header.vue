@@ -257,13 +257,13 @@ export default {
             }
           }
         } else {
-          this.formInline.valueTime = []
           this.pickerOptionsDate = {
             disabledDate (time) {
               const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 2 * 3600 * 24000
               return time.getTime() > endTime
             }
           }
+          this.formInline.valueTime = []
           this.isType = true
           this.isBusSelfNumber = false
           this.formInline.busSelfNumber = ''
@@ -275,10 +275,13 @@ export default {
       immediate: true,
       handler (newV) {
         if (Object.keys(newV).length > 0) {
-          this.formInline.radio = newV.date === moment().format('YYYY-MM-DD') ? '1' : '2'
+          this.formInline.radio = moment(newV.date).valueOf() >= moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf() - 3600 * 24000 ? '1' : '2'
           let globelData = this.$store.state.globel
-          this.formInline.valueTime = [moment(newV.date).format('YYYY-MM-DD 00:00:00'), moment(newV.date).format('YYYY-MM-DD 23:59:59')]
-          console.log(this.formInline.valueTime)
+          setTimeout(() => {
+            this.formInline.valueTime = [moment(newV.date).format('YYYY-MM-DD 00:00:00'), moment(newV.date).format('YYYY-MM-DD 23:59:59')]
+            console.log(this.formInline.valueTime)
+          }, 100)
+
           if (newV.type === 'line') {
             this.formInline.lineId = globelData.lineData.filter(item => item.label === newV.lineName)[0].value
             this.formInline.cardTypes = []

@@ -116,7 +116,7 @@ export default {
             pageSize: 15,
             pageNumber: 1,
             cardSelfCodes: cardTypes
-          }, newV.date === moment().format('YYYY-MM-DD') ? '1' : '2')
+          }, moment(newV.date).valueOf() >= moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf() - 3600 * 24000 ? '1' : '2')
         }
       }
     },
