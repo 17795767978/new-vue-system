@@ -52,14 +52,19 @@
           </el-select>
         </el-form-item>
         <el-form-item label="处理结果">
-          <el-select v-model="formInline.checkType">
+          <!-- <el-select v-model="formInline.checkType">
             <el-option
               v-for="item in checkOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             ></el-option>
-          </el-select>
+          </el-select> -->
+          <el-checkbox-group v-model="formInline.checkType">
+            <el-checkbox label="未处理"></el-checkbox>
+            <el-checkbox label="已处理"></el-checkbox>
+            <el-checkbox label="误报"></el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
         <el-form-item label="选择时间">
           <el-date-picker
@@ -284,7 +289,7 @@ export default {
         warnLevel: '',
         warnTypeId: [],
         timeValue: [],
-        checkType: ''
+        checkType: []
       },
       ruleForm: {
         status: '',
@@ -368,7 +373,7 @@ export default {
       endTime: this.formInline.timeValue[1] || timeEnd,
       pageSize: 10,
       pageNum: 1,
-      handleResult: ''
+      handleResults: ''
     })
   },
   mounted () {
@@ -397,6 +402,7 @@ export default {
         this.formInline.timeValue.forEach(time => {
           time = moment(time).format('YYYY-MM-DD HH:mm:ss')
         })
+        let handleResults = this.getCheckType(newValue.checkType)
         if (newValue.levelsType !== '0') {
           this._tableList({
             orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
@@ -411,7 +417,7 @@ export default {
             endTime: this.formInline.timeValue[1],
             pageSize: 10,
             pageNum: 1,
-            handleResult: newValue.checkType
+            handleResults
           })
         }
       }
@@ -545,6 +551,7 @@ export default {
     handleCurrentChange (val) {
       this.pageNum = val
       let defaultData = this.$store.getters.formData
+      let type = this.formInline.checkType
       this._tableList({
         orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -558,7 +565,7 @@ export default {
         endTime: this.formInline.timeValue[1],
         pageSize: 10,
         pageNum: this.pageNum,
-        handleResult: this.formInline.checkType
+        handleResults: this.getCheckType(type)
       })
     },
     handleClick (row) {
@@ -636,6 +643,7 @@ export default {
         this.formInline.orgId = this.userId
       }
       this.pageNum = 1
+      let handleResults = this.formInline.checkType
       this._tableList({
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -649,7 +657,7 @@ export default {
         endTime: dateArr[1],
         pageSize: 10,
         pageNum: 1,
-        handleResult: this.formInline.checkType
+        handleResults: this.getCheckType(handleResults)
       })
     },
     onClear () {
@@ -664,7 +672,8 @@ export default {
         busSelfCode: '',
         warnLevel: '',
         warnTypeId: [],
-        timeValue: [moment(endTime).format('YYYY-MM-DD 00:00:00'), moment(dataNow).format('YYYY-MM-DD 23:59:59')]
+        timeValue: [moment(endTime).format('YYYY-MM-DD 00:00:00'), moment(dataNow).format('YYYY-MM-DD 23:59:59')],
+        checkType: []
       }
       this.$emit('clear')
     },
@@ -706,6 +715,7 @@ export default {
     },
     getExcel () {
       let defaultData = this.$store.getters.formData
+      let handleResults = this.formInline.checkType
       this.$api['downLoad.warnExport']({
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
@@ -717,7 +727,7 @@ export default {
         warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
-        handleResult: this.formInline.checkType
+        handleResults: this.getCheckType(handleResults)
       }).then(res => {
         // console.log(res)
         window.open(res.url)
@@ -727,6 +737,23 @@ export default {
       }).catch((err) => {
         this.$message.error(err.message)
       })
+    },
+    getCheckType (type) {
+      let checkList = []
+      if (type.length > 0) {
+        type.forEach(item => {
+          if (item === '未处理') {
+            checkList.push('0')
+          } else if (item === '已处理') {
+            checkList.push('1')
+          } else {
+            checkList.push('2')
+          }
+        })
+      } else {
+        checkList = []
+      }
+      return checkList
     }
   }
 }

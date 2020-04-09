@@ -125,6 +125,7 @@ export default {
     getSearch (item) {
       this.searchData = item
       this.currentData = item
+      this.openWs()
     },
     seeDetail () {
       if (this.diaData.length > 0) {
@@ -138,8 +139,8 @@ export default {
     },
     openWs () {
       if ('WebSocket' in window) {
-        this.$refs.audioWrapper.pause()
         let url = `${WSAPI}/${localStorage.getItem('id')}`
+        this.$refs.audioWrapper.pause()
         this.ws = new WebSocket(url)
         this.ws.onopen = () => {
           console.log('===============推送开始=============')

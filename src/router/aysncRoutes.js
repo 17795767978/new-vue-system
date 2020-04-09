@@ -606,6 +606,16 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/role-list']
         }
+      },
+      {
+        path: 'source-list',
+        component: _import_('permissionManagement/sourceList/index'),
+        name: 'roleList',
+        meta: {
+          title: '资源列表',
+          icon: 'nocturne icon-dash',
+          roles: ['/role-list']
+        }
       }
     ]
   },
