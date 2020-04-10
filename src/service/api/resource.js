@@ -24,6 +24,23 @@ export const ResourceApi = {
         roleId: ''
       },
       desc: '角色绑定权限（资源）'
+    },
+    {
+      name: 'addResource',
+      method: 'POST',
+      path: '/api/base/resource/add',
+      mockPath: '/api/base/resource/add',
+      params: {
+        resourceName: '',
+        resourceParentId: '',
+        resourceTitle: '',
+        resourceUrl: '',
+        resourceSort: '',
+        resourceImage: '',
+        resourceComponent: '',
+        enabled: ''
+      },
+      desc: '新增资源'
     }
   ]
 }

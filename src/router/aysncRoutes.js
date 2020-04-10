@@ -272,7 +272,7 @@ export const aysncRoutesMap = [
           component: _import_('operationAnalysis/fatigueMonitoring/alarmDriver/index'),
           name: 'alarmDriver',
           meta: {
-            title: '司机排行分析',
+            title: '司机排行',
             icon: 'nocturne icon-dash',
             roles: ['/alarm-drive']
           }
@@ -610,11 +610,11 @@ export const aysncRoutesMap = [
       {
         path: 'source-list',
         component: _import_('permissionManagement/sourceList/index'),
-        name: 'roleList',
+        name: 'sourceList',
         meta: {
           title: '资源列表',
           icon: 'nocturne icon-dash',
-          roles: ['/source-list']
+          roles: ['/role-list']
         }
       }
     ]

@@ -62,7 +62,7 @@
               <el-button
                 size="mini"
                 type="primary"
-                @click="handleEditAdmin(scope.row.userId)"
+                @click="handleEditAdmin(scope.row)"
               >编辑</el-button>
             </div>
           </template>
@@ -78,7 +78,7 @@
         :total="total">
       </el-pagination>
     </div>
-    <Modules ref="modulesWrapper" :parentOptions="parentOptions" :titleMsg="titleMsg"/>
+    <Modules ref="modulesWrapper" :parentOptions="parentOptions" :titleMsg="titleMsg" @updateList="updateList" :moduleRowData="moduleRowData"/>
   </div>
 </template>
 
@@ -87,7 +87,7 @@ import moment from 'moment'
 import { mapGetters } from 'vuex'
 import Modules from './Components/modules.vue'
 export default {
-  name: 'Admin',
+  name: 'sourceList',
   data () {
     return {
       form: {
@@ -98,7 +98,8 @@ export default {
       total: 0,
       parentOptions: [],
       pageSize: 10,
-      titleMsg: ''
+      titleMsg: '',
+      moduleRowData: {}
     }
   },
   components: {
@@ -139,6 +140,16 @@ export default {
       }, 20)
     },
     addPages () {},
+    updateList () {
+      this.getSourceList({
+      // orgId: this.userId === '1' ? '' : this.userId,
+        pageSize: 10000,
+        pageNumber: 1
+      })
+    },
+    // clearForm () {
+    //   this.moduleRowData = {}
+    // },
     handleChangeTabs (tab, event) {},
     getParentList (roles) {
       roles.forEach(item => {
@@ -155,6 +166,19 @@ export default {
     },
     forMatterUpdateTime (row) {
       return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    handleEditAdmin (row) {
+      if (row.resourceLevel === '1') {
+        console.log(row)
+        this.moduleRowData = JSON.parse(JSON.stringify(row))
+        this.titleMsg = '编辑模块'
+        this.$refs.modulesWrapper.dialogVisible = true
+        setTimeout(() => {
+          this.$refs.modulesWrapper.$refs['adminForm'].resetFields()
+        }, 20)
+      } else {
+        this.$message.warning('页面还没开发')
+      }
     }
   }
 }

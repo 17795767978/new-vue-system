@@ -572,7 +572,7 @@ export default {
           this.formInline.busNumber = ''
         }
         let orgId = newValue === '1' ? '' : newValue
-        this.$api['permission.userList']({
+        this.$api['permission.userSelectList']({
           orgId
         }).then(res => {
           this.formInline.user = ''
