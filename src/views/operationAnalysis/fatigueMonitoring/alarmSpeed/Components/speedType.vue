@@ -82,11 +82,7 @@ export default {
       }
     }
   },
-<<<<<<< HEAD
   // hahahaha
-=======
-  // test
->>>>>>> f33f6724342a112172797c499f4aa198da2d2097
   methods: {
     _getAlarmTypeRatioAnalysis (params) {
       this.loading = true

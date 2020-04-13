@@ -21,8 +21,10 @@
 <script>
 import Search from '@/components/searchAlarm/'
 import Table from './Components/table'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'accessLog',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {}
@@ -38,7 +40,6 @@ export default {
   },
   methods: {
     getSearch (data) {
-      console.log(data)
       this.selectData = data
     }
   }

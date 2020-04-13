@@ -221,7 +221,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '单车客流统计',
             icon: 'nocturne icon-dash',
-            roles: ['/bus-passenger']
+            roles: ['/search-passenger']
           }
         }
       ]

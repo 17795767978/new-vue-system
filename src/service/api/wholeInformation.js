@@ -292,6 +292,18 @@ export const wholeInformationApi = {
         orgId: ''
       },
       desc: '页面操作频次统计'
+    },
+    {
+      name: 'getDurations',
+      method: 'POST',
+      path: '/api/base/accesspagelog/add',
+      mockPath: '/api/base/accesspagelog/add',
+      params: {
+        userId: '',
+        accessPageName: '',
+        accessDuration: ''
+      },
+      desc: '获取用户访问行为日志（页面停留时间）'
     }
   ]
 }

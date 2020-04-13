@@ -30,11 +30,7 @@ export default {
       orgId,
       startTime: '',
       endTime: '',
-<<<<<<< HEAD
       warnTypes: []
-=======
-      warnTypes: ''
->>>>>>> f33f6724342a112172797c499f4aa198da2d2097
     })
   },
   mounted () {

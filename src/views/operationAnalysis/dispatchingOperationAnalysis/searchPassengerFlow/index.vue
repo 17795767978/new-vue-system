@@ -40,15 +40,7 @@ export default {
   },
   methods: {
     getSearch (data) {
-<<<<<<< HEAD
       this.selectData = data
-=======
-      if (data.dateArray.length > 0) {
-        this.selectData = data
-      } else {
-        this.$message.error('请添加查询时间段')
-      }
->>>>>>> f33f6724342a112172797c499f4aa198da2d2097
     }
   }
 }
