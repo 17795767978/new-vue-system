@@ -64,7 +64,6 @@ export default {
       if (newV) {
         this.data.forEach(item => {
           // 首层增加空数组
-          console.log(this.defaultId)
           const findIndex = item.children.filter(i => i.id === this.defaultId)
           if (item.id === newV) {
             if (findIndex.length === 0) {
@@ -120,11 +119,10 @@ export default {
     },
     // 修改
     reCheckTreeList (name) {
-      this.data.forEach(item => {
-        if (item.id === this.defaultId) {
-          item.title = name
-        } else {}
-      })
+      console.log(this.parentTreeAnimal)
+      // if (item.id === this.defaultId) {
+      //   item.title = name
+      // } else {}
     },
     // 递归增加空数组
     checkTree (item) {

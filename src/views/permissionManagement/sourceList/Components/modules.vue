@@ -8,7 +8,7 @@
          <el-col :span="12">
            <el-form label-width="100px" :model="adminForm" ref="adminForm" :rules="rules" style="border-right: 1px solid #b5b5b5">
             <el-form-item label="父级模块：">
-              <el-select class="font-style" filterable clearable v-model="adminForm.resourceParentId" placeholder="请选择">
+              <el-select class="font-style" filterable clearable :disabled="titleMsg.indexOf('编辑') > -1" v-model="adminForm.resourceParentId" placeholder="请选择">
                 <el-option
                   v-for="item in parentOptions"
                   :key="item.value"
