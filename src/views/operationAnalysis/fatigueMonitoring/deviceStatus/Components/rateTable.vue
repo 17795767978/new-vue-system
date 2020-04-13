@@ -218,7 +218,6 @@ export default {
     // 外层table
     handleCurrentChange (val) {
       this.outCurrentPage = val
-      console.log(this.selectData)
       this._statusTable({
         orgId: this.selectData.orgUuid || '',
         lineId: this.selectData.lineUuid || '',

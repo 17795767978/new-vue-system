@@ -139,6 +139,26 @@ export const passengerFlowApi = {
         orgId: ''
       },
       desc: '线路当日累计客流（人次）'
+    },
+    {
+      name: 'pageBusPersonTotalList',
+      method: 'POST',
+      path: '/api/passenger/flow/result/pageBusPersonTotalList',
+      mockPath: '/api/passenger/flow/result/pageBusPersonTotalList',
+      params: {
+        orgId: ''
+      },
+      desc: '单车客流查询列表'
+    },
+    {
+      name: 'busTotalPersonExport',
+      method: 'POST',
+      path: '/api/passenger/flow/result/busTotalPerson/export',
+      mockPath: '/api/passenger/flow/result/busTotalPerson/export',
+      params: {
+        orgId: ''
+      },
+      desc: '单车客流查询-导出'
     }
   ]
 }

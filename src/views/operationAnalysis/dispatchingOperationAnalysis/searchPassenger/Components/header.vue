@@ -45,12 +45,14 @@
       </el-row>
       <el-form-item label="选择日期">
          <el-date-picker
+         :picker-options="pickerOptions"
           v-model="formInline.valueTime"
           :picker-options="pickerOptionsDate"
           :default-time="['00:00:00', '23:59:59']"
           type="datetimerange"
           range-separator="至"
           start-placeholder="开始日期"
+          :default-time="['00:00:00', '23:59:59']"
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
@@ -99,11 +101,18 @@ export default {
   },
   data () {
     return {
+<<<<<<< HEAD
       pickerOptionsDate: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
           const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
           return time.getTime() > endTime || time.getTime() < startTime
+=======
+      pickerOptions: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+          return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
         }
       },
       formInline: {
@@ -224,6 +233,12 @@ export default {
     'formInline.radio': {
       handler (newV) {
         if (newV === '1') {
+          this.pickerOptions = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+              return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+            }
+          }
           let timeStart = moment().format('YYYY-MM-DD 00:00:00')
           let timeEnd = moment().format('YYYY-MM-DD 23:59:59')
           this.formInline.valueTime = [timeStart, timeEnd]
@@ -242,6 +257,11 @@ export default {
             }
           }
           this.formInline.valueTime = []
+          this.pickerOptions = {
+            disabledDate (time) {
+              return time.getTime() > moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 3600 * 24 * 1000
+            }
+          }
         }
       }
     }
@@ -261,9 +281,13 @@ export default {
   methods: {
     onSubmit () {
       // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD');
-      this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
-      this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
-      this.$emit('configCheck', this.formInline)
+      if (this.formInline.valueTime.length > 0) {
+        this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+        this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+        this.$emit('configCheck', this.formInline)
+      } else {
+        this.$message.error('请选择日期时间段')
+      }
     },
     onclear () {
       this.formInline = {

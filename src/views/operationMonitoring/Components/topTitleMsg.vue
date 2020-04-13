@@ -54,7 +54,7 @@ export default {
         if (res.result) {
           let lowTemperature = res.result.templow
           let heightTemperature = res.result.temphigh
-          this.temperature = `${lowTemperature}-${heightTemperature} °C`
+          this.temperature = `${lowTemperature}~${heightTemperature} °C`
           this.weather = res.result.weather
           setTimeout(() => {
             this._getWeather()

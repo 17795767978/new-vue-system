@@ -192,7 +192,11 @@
       </el-form-item>
       <el-form-item label="选择日期:" v-if="isDateTo">
         <el-date-picker
+<<<<<<< HEAD
           :picker-options="pickerOptionsDateTo"
+=======
+          :picker-options="pickerOptions"
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
           :disabled="formInline.radio === '1' && isRadio"
           v-model="formInline.dateArray"
           type="daterange"
@@ -200,8 +204,13 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期">
       </el-date-picker>
+<<<<<<< HEAD
     </el-form-item>
       <el-form-item label="时间:" v-if="isTime">
+=======
+      </el-form-item>
+      <el-form-item label="时间" v-if="isTime">
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
         <el-time-select
           placeholder="起始时间"
           class="font-style"
@@ -225,11 +234,20 @@
           }">
         </el-time-select>
       </el-form-item>
+<<<<<<< HEAD
       <el-form-item v-if="isRadio" label="查询时间:">
         <el-radio v-model="formInline.radio" label="1">当天</el-radio>
         <el-radio v-model="formInline.radio" label="2">历史</el-radio>
       </el-form-item>
       <el-form-item label="报警类型:" v-if="isWarntype">
+=======
+      <slot></slot>
+      <el-form-item v-if="isRadio" label="查询时间">
+        <el-radio v-model="formInline.radio" label="1">当天</el-radio>
+        <el-radio v-model="formInline.radio" label="2">历史</el-radio>
+      </el-form-item>
+      <el-form-item label="报警类型" v-if="isWarntype">
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
         <el-select v-model="formInline.warnTypeId" multiple collapse-tags placeholder="请选择">
           <el-option
             v-for="item in warnOptions"
@@ -239,6 +257,7 @@
           </el-option>
         </el-select>
       </el-form-item>
+<<<<<<< HEAD
       <el-form-item label="处理结果:" v-if="isProcessingResult" size="mini">
         <el-checkbox-group v-model="formInline.checkList">
           <el-checkbox label="未处理"></el-checkbox>
@@ -246,10 +265,13 @@
           <el-checkbox label="误报"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
+=======
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
         <el-button type="success" @click="onSave" v-if="isDownload">导出</el-button>
+        <slot name="download"></slot>
         <el-button type="success" @click="getTableData" v-if="isMul">批量设置</el-button>
       </el-form-item>
     </el-form>
@@ -361,6 +383,7 @@ export default {
     isLineEmpty: {
       type: Boolean
     },
+<<<<<<< HEAD
     isDriverNum: {
       type: Boolean
     },
@@ -390,10 +413,15 @@ export default {
     },
     isProcessingResult: {
       type: Boolean
+=======
+    select: {
+      type: Object
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
     }
   },
   data () {
     return {
+<<<<<<< HEAD
       pickerOptionsDateTo: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
@@ -410,6 +438,11 @@ export default {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
           return time.getTime() > endTime
+=======
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
         }
       },
       formInline: {
@@ -695,12 +728,19 @@ export default {
             }
           }
         } else {
+<<<<<<< HEAD
           let yestody = new Date() - 24 * 3600 * 1000
           this.formInline.dateArray = [moment(yestody).format('YYYY-MM-DD'), moment(yestody).format('YYYY-MM-DD')]
           this.pickerOptionsDateTo = {
             disabledDate (time) {
               const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
               return time.getTime() >= endTime
+=======
+          this.formInline.dateArray = []
+          this.pickerOptions = {
+            disabledDate (time) {
+              return time.getTime() > Date.now() - 24 * 3600 * 1000
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
             }
           }
         }
@@ -969,6 +1009,7 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
+      console.log(this.select)
       let lineArr = []
       let checkList = []
       this.downLoadLoading = true
@@ -976,6 +1017,7 @@ export default {
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
         lineArr = this.formInline.lineLineId.split('+')
       }
+<<<<<<< HEAD
       if (this.formInline.checkList.length > 0) {
         this.formInline.checkList.forEach(item => {
           if (item === '未处理') {
@@ -988,16 +1030,22 @@ export default {
         })
       } else {
         checkList = []
+=======
+      if (this.select) {
+        this.formInline.dateArray = [moment(this.select.date[0]).format('YYYY-MM-DD HH:mm:ss'), moment(this.select.date[1]).format('YYYY-MM-DD HH:mm:ss')]
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
       }
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
         lineId: this.formInline.lineId,
-        lineID: lineArr[0],
+        // 判断是否为单车查询页面的导出，后台spring不能区分lineID和lineId，默认取lineID，所以利用this.select做判断传值的问题
+        lineID: this.select ? this.formInline.lineId : lineArr[0],
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
         arrow: this.isTurn ? this.formInline.lineType : '',
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
+<<<<<<< HEAD
         startTime: this.isDateTo ? this.formInline.dateArray[0] : this.formInline.valueTime[0],
         endTime: this.isDateTo ? this.formInline.dateArray[1] : this.formInline.valueTime[1],
         data: this.formDown,
@@ -1011,6 +1059,12 @@ export default {
         selfCode: this.formInline.selfCode,
         handleResults: checkList,
         warnTypeId: ['ADASSNAP', 'DMSTOSNAP']
+=======
+        startTime: this.formInline.dateArray[0],
+        endTime: this.formInline.dateArray[1],
+        data: this.formDown,
+        isHistory: this.select && this.select.isHistory
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

@@ -348,6 +348,7 @@ export const tiredMonitoringApi = {
         pageSize: ''
       },
       desc: '更新疲劳处理状态'
+<<<<<<< HEAD
     }, {
       name: 'getTaskPageList',
       method: 'POST',
@@ -392,6 +393,8 @@ export const tiredMonitoringApi = {
       mockPath: '/api/temp/device/send/task/add2',
       params: {},
       desc: '参数补发'
+=======
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
     },
     {
       name: 'export',
@@ -400,6 +403,7 @@ export const tiredMonitoringApi = {
       mockPath: '/deviceStatus/export',
       params: {},
       desc: '设备状态excel'
+<<<<<<< HEAD
     },
     {
       name: 'overWarnInfoDetail',
@@ -469,6 +473,8 @@ export const tiredMonitoringApi = {
         endTime: ''
       },
       desc: '设备抓拍-列表'
+=======
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
     }
   ]
 }

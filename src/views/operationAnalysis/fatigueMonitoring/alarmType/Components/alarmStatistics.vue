@@ -39,8 +39,12 @@ export default {
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1],
+<<<<<<< HEAD
       warnTypes: [],
       handleResults: []
+=======
+      warnTypes: ''
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
     })
   },
   mounted () {
@@ -55,8 +59,12 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
+<<<<<<< HEAD
           warnTypes: [],
           handleResults: newV.checkList
+=======
+          warnTypes: ''
+>>>>>>> f33f6724342a112172797c499f4aa198da2d2097
         })
       }
     }

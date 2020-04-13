@@ -75,7 +75,8 @@ const PER_ANA = [
   { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate', admin: false },
   { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume', admin: false },
   { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity', admin: false },
-  { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false }
+  { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false },
+  { name: '单车客流统计', icon: iconHomeKlgf, path: '/bus-passenger', admin: false }
 ]
 const TIRED_CONTRAL = [
   { name: '安全运营首页', icon: iconHomeBjzx, path: '/alarm-home', admin: false },
