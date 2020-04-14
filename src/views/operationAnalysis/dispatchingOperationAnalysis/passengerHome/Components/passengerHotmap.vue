@@ -2,7 +2,7 @@
  <div class="map">
    <baidu-map
       ref="baiduMapWrapper"
-      :style="{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0, 0.5)', borderRadius: '6px'}"
+      :style="{width: '96%', height: '90%', backgroundColor: 'rgba(0,0,0, 0.5)', borderRadius: '6px',marginTop: '5%',marginLeft: '2%'}"
       :zoom="zoom"
       :ak="ak"
       :mapClick="false"

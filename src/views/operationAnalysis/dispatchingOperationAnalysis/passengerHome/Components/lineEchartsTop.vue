@@ -25,7 +25,8 @@ export default {
       maxNum: 0,
       id: 'line',
       grid: {},
-      loading: true
+      loading: true,
+      skinType: null
     }
   },
   created () {
@@ -34,19 +35,27 @@ export default {
       orgId,
       lineUuids: []
     })
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
   },
   mounted () {
-    // console.log(this.$refs.wrapper.style)
-    console.log(123)
   },
   watch: {
     sendLineIds (newV) {
-      console.log(newV)
       let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
       this._getLines({
         orgId,
         lineUuids: newV
       })
+    },
+    '$store.state.views.activeNight': {
+      handler (newV) {
+        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+        this.skinType = +newV
+        this._getLines({
+          orgId,
+          lineUuids: this.sendLineIds
+        })
+      }
     }
   },
   methods: {
@@ -57,15 +66,19 @@ export default {
         this.title = {}
         this.lineData = [{
           name: '上车客流',
-          type: 'bar',
-          radius: ['100%', '60%'],
+          // type: 'line',
           data: res.datas[0],
-          barWidth: 20,
+          type: 'bar',
+          showBackground: true,
+          backgroundStyle: {
+            color: 'rgba(0, 0, 0, 0.8)'
+          },
+          barWidth: 13,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
-            emphasis: {
-              barBorderRadius: 30
-            },
+            // emphasis: {
+            //   barBorderRadius: 30
+            // },
 
             normal: {
               // 柱形图圆角，初始化效果
@@ -74,23 +87,24 @@ export default {
                 show: true, // 是否展示
                 textStyle: {
                   fontWeight: 'bolder',
-                  fontSize: '12',
-                  fontFamily: '微软雅黑'
+                  fontSize: 9,
+                  fontFamily: '微软雅黑',
+                  color: '#093000'
                 }
               },
               color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 1, [{
                 offset: 0,
-                color: '#fdc14d'
+                color: '#F0DA1C'
               }, {
                 offset: 1,
-                color: '#ed8237'
+                color: '#F0DA1C'
               }])
             }
           }
         }]
         this.grid = {
           x: 50,
-          y: 50,
+          y: 70,
           x2: 30,
           y2: 30,
           borderWidth: 1
@@ -102,7 +116,7 @@ export default {
           top: 10,
           right: 10,
           textStyle: {
-            color: '#000'
+            color: '#8995CB'
           }
         }
         this.yData = [
@@ -116,10 +130,19 @@ export default {
               inside: false,
               // interval: 0,
               textStyle: {
-                color: '#000',
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
                 fontSize: '10',
                 borderRadius: '6'
               }
+            },
+            splitLine: {
+              show: false
             }
           }
         ]
@@ -131,11 +154,21 @@ export default {
             // axisLabel: {
             //     formatter: '{value} ml'
             // },
+            // show: false,
+            splitLine: {
+              show: false
+            },
             axisLabel: {
               inside: false,
               interval: 0,
               textStyle: {
-                color: '#000',
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
                 fontSize: '10',
                 borderRadius: '6'
               }

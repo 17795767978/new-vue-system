@@ -3,54 +3,152 @@
     <header style="margin-bottom: 20px;">
      <el-row :gutter="20">
        <el-col :span="styleObj.spanBig" v-if="config !== 'fatigueAlarm'">
-        <el-card class="bg-style" shadow="always">
-          <i class="el-icon-user-solid icon"></i>
-          <h3 class="title-style">
-            当日累计客流（人次）
-          </h3>
-          <p class="font-style" style="color: #fffc1e">{{passengeFlowNum}}</p>
+        <el-card class="bg-style" shadow="always" :class="skinType === 0 ? 'cardBg-white' : ''">
+          <div class="stream-content">
+            <div class="corner-1" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-tl.png"/>
+            </div>
+            <div class="corner-2" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-tr.png"/>
+            </div>
+            <div class="corner-3" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-bl.png"/>
+            </div>
+            <div class="corner-4" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-br.png"/>
+            </div>
+            <i class="el-icon-user-solid icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
+            <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">
+              当日累计客流（人次）
+            </h3>
+            <p class="font-style" :style="{color: skinType === 0 ? '#F17700' : '#fffc1e' }">{{passengeFlowNum}}</p>
+          </div>
         </el-card>
        </el-col>
        <el-col :span="styleObj.spanBig" v-if="config !== 'fatigueAlarm'">
-        <el-card class="bg-style" shadow="always">
-          <i class="el-icon-s-custom icon"></i>
-          <h3 class="title-style">实时载客（人）</h3>
-          <p class="font-style" style="color: #00ffff">{{totelPerson}}</p>
+        <el-card class="bg-style" shadow="always" :class="skinType === 0 ? 'cardBg-white' : ''">
+          <div class="stream-content">
+            <div class="corner-1" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-tl.png"/>
+            </div>
+            <div class="corner-2" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-tr.png"/>
+            </div>
+            <div class="corner-3" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-bl.png"/>
+            </div>
+            <div class="corner-4" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-br.png"/>
+            </div>
+            <i class="el-icon-s-custom icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
+            <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">实时载客（人）</h3>
+            <p class="font-style" style="color: #00ffff">{{totelPerson}}</p>
+          </div>
         </el-card>
        </el-col>
        <el-col :span="config !== 'fatigueAlarm' ? 4 : 6 ">
-        <el-card class="bg-style" shadow="always">
-          <i class="el-icon-s-unfold icon"></i>
-          <h3 class="title-style">运营线路</h3>
-          <p class="font-style" style="color: #acf50f">{{operLines}}/{{totalLines}}</p>
+        <el-card class="bg-style" shadow="always" :class="skinType === 0 ? 'cardBg-white' : ''">
+          <div class="stream-content">
+            <div class="corner-1" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-tl.png"/>
+            </div>
+            <div class="corner-2" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-tr.png"/>
+            </div>
+            <div class="corner-3" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-bl.png"/>
+            </div>
+            <div class="corner-4" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-br.png"/>
+            </div>
+             <i class="el-icon-s-unfold icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
+            <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">运营线路</h3>
+            <p class="font-style" style="color: #acf50f">{{operLines}}/{{totalLines}}</p>
+          </div>
         </el-card>
        </el-col>
        <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
-        <el-card class="bg-style" shadow="always">
-          <i class="el-icon-data-line icon"></i>
-          <h3 class="title-style">在线车辆数</h3>
+        <el-card class="bg-style" shadow="always" :class="skinType === 0 ? 'cardBg-white' : ''">
+          <div class="stream-content">
+            <div class="corner-1" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-tl.png"/>
+            </div>
+            <div class="corner-2" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-tr.png"/>
+            </div>
+            <div class="corner-3" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-bl.png"/>
+            </div>
+            <div class="corner-4" v-show="skinType === 1">
+              <img src="../../../assets/images/newScreen/card-br.png"/>
+            </div>
+             <i class="el-icon-data-line icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
+          <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">在线车辆数</h3>
           <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}/{{totalBusNumber}}</p>
+          </div>
         </el-card>
        </el-col>
        <el-col :span="styleObj.spanSmall" v-if="config !== 'fatigueAlarm'">
-        <el-card class="bg-style" shadow="always">
-          <i class="el-icon-s-data icon"></i>
-          <h3 class="title-style">实时满载率</h3>
-          <p class="font-style" style="color: #ff30a0">{{totelFullLoadRate}}%</p>
+        <el-card class="bg-style" shadow="always" :class="skinType === 0 ? 'cardBg-white' : ''">
+          <div class="stream-content">
+              <div class="corner-1" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-tl.png"/>
+              </div>
+              <div class="corner-2" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-tr.png"/>
+              </div>
+              <div class="corner-3" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-bl.png"/>
+              </div>
+              <div class="corner-4" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-br.png"/>
+              </div>
+              <i class="el-icon-s-data icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
+              <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">实时满载率</h3>
+              <p class="font-style" style="color: #ff30a0">{{totelFullLoadRate}}%</p>
+          </div>
         </el-card>
        </el-col>
        <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
-        <el-card class="bg-style" shadow="always">
-          <i class="el-icon-ship icon"></i>
-          <h3 class="title-style">运营车辆数</h3>
-          <p class="font-style" style="color: #fffc1e">{{operateCarNum}}</p>
+        <el-card class="bg-style" shadow="always" :class="skinType === 0 ? 'cardBg-white' : ''">
+           <div class="stream-content">
+              <div class="corner-1" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-tl.png"/>
+              </div>
+              <div class="corner-2" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-tr.png"/>
+              </div>
+              <div class="corner-3" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-bl.png"/>
+              </div>
+              <div class="corner-4" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-br.png"/>
+              </div>
+              <i class="el-icon-ship icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
+              <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">运营车辆数</h3>
+              <p class="font-style" :style="{color: skinType === 0 ? '#E2051F' : '#acf50f' }">{{operateCarNum}}</p>
+          </div>
         </el-card>
        </el-col>
        <el-col :span="config !== 'fatigueAlarm' ? 3 : 6 ">
-        <el-card class="bg-style" shadow="hover">
-          <i class="el-icon-loading icon"></i>
-          <h3 class="title-style">待发车辆数</h3>
-          <p class="font-style" style="color: #21fffc">{{outgoingCarNum}}</p>
+        <el-card class="bg-style" shadow="hover" :class="skinType === 0 ? 'cardBg-white' : ''">
+            <div class="stream-content">
+              <div class="corner-1" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-tl.png"/>
+              </div>
+              <div class="corner-2" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-tr.png"/>
+              </div>
+              <div class="corner-3" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-bl.png"/>
+              </div>
+              <div class="corner-4" v-show="skinType === 1">
+                <img src="../../../assets/images/newScreen/card-br.png"/>
+              </div>
+              <i class="el-icon-loading icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
+              <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">待发车辆数</h3>
+              <p class="font-style" style="color: #21fffc">{{outgoingCarNum}}</p>
+          </div>
         </el-card>
        </el-col>
      </el-row>
@@ -68,6 +166,7 @@ export default {
   },
   data () {
     return {
+      skinType: 0, // 皮肤 0 白色 1 黑色
       passengeFlowNum: '',
       totelPerson: '',
       operLines: '',
@@ -117,6 +216,7 @@ export default {
     })
   },
   mounted () {
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
     setTimeout(() => {
       if (this.config === 'all') {
         return this.styleObj
@@ -241,11 +341,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.cardBg-white {
+  background-color: #FFFFFF!important;
+  color: #000000!important;
+  box-shadow: 0px 0px 15px 0px rgba(4,56,161,0.2);
+}
+.stream-content {
+  // width: 100%;
+  height:100%;
+  position: relative;
+  padding: 10px 20px;
+}
+.corner-1 {
+  position: absolute;
+  top: 0;
+  left: 0px;
+}
+.corner-2 {
+  position: absolute;
+  top: 0;
+  right: 0px;
+}
+.corner-3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.corner-4 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
 .stream-wrapper {
   width: 100%;
   .bg-style {
-    background-color: rgba(0,0,0, 0.8);
-    box-shadow: 2px 2px 10px 2px #066898;
+    background-color: rgba(42,47,85,0.5);
+    // box-shadow: 2px 2px 10px 2px #066898;
     height: auto;
     .icon {
       font-size: 1vw;
@@ -271,7 +402,7 @@ export default {
 <style lang="scss">
 .bg-style {
   .el-card__body {
-    padding: 10px 20px;
+    padding: 0;
     box-sizing: border-box;
     .font-style {
       height: 20px !important;

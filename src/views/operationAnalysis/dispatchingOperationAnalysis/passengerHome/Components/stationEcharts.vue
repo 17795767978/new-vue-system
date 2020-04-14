@@ -25,7 +25,8 @@ export default {
       maxNum: 0,
       id: 'station',
       grid: {},
-      loading: true
+      loading: true,
+      skinType: null
     }
   },
   created () {
@@ -34,6 +35,7 @@ export default {
       orgId,
       staUuids: []
     })
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
@@ -45,6 +47,16 @@ export default {
         orgId,
         staUuids: newV
       })
+    },
+    '$store.state.views.activeNight': {
+      handler (newV) {
+        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+        this.skinType = +newV
+        this._getHotstations({
+          orgId,
+          staUuids: this.sendStations
+        })
+      }
     }
   },
   methods: {
@@ -57,7 +69,7 @@ export default {
           name: '上车客流',
           type: 'bar',
           data: res.datas[0],
-          barWidth: 20,
+          barWidth: 13,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
             emphasis: {
@@ -70,16 +82,17 @@ export default {
                 show: true, // 是否展示
                 textStyle: {
                   fontWeight: 'bolder',
-                  fontSize: '12',
-                  fontFamily: '微软雅黑'
+                  fontSize: 9,
+                  fontFamily: '微软雅黑',
+                  color: '#093000'
                 }
               },
               color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 1, [{
                 offset: 0,
-                color: '#81fff7'
+                color: '#9CDC40'
               }, {
                 offset: 1,
-                color: '#0087d0'
+                color: '#9CDC40'
               }])
             }
           }
@@ -88,7 +101,7 @@ export default {
         this.dataLength = 2
         this.grid = {
           x: 90,
-          y: 50,
+          y: 70,
           x2: 30,
           y2: 30,
           borderWidth: 1
@@ -98,7 +111,7 @@ export default {
           top: 10,
           right: 10,
           textStyle: {
-            color: '#000',
+            color: '#8995CB',
             fontSize: 1
           }
         }
@@ -113,10 +126,19 @@ export default {
               inside: false,
               // interval: 0,
               textStyle: {
-                color: '#000',
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
                 fontSize: '10',
                 borderRadius: '6'
               }
+            },
+            splitLine: {
+              show: false
             }
           }
         ]
@@ -132,10 +154,19 @@ export default {
               inside: false,
               interval: 0,
               textStyle: {
-                color: '#000',
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
                 fontSize: '10',
                 borderRadius: '6'
               }
+            },
+            splitLine: {
+              show: false
             }
           }
         ]
@@ -153,5 +184,6 @@ export default {
   width:100%;
   box-sizing: border-box;
   height: 100%;
+  // margin-top: 14px;
 }
 </style>

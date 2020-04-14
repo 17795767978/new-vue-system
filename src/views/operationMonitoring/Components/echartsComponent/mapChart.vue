@@ -16,6 +16,14 @@ import mapChart from '@/components/map/'
 export default {
   components: {
     mapChart
+  },
+  mounted () {
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
+  },
+  data () {
+    return {
+      skinType: 0 // 皮肤 0 白色 1 黑色
+    }
   }
 }
 </script>

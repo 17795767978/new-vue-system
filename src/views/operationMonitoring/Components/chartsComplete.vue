@@ -1,22 +1,50 @@
 <template>
-  <div class="chart-complete-wrapper">
-    <el-row style="height: 200px" :gutter="5">
-      <el-col style="height: 100%; position: relative" :span="8">
-        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '95%', height: '200px',margin: '0 auto'}"></div>
+  <div class="chart-complete-wrapper" :class="skinType === 0 ? 'cardBg-white' : ''">
+    <div class="corner-1" v-show="skinType === 1">
+      <img src="../../../assets/images/newScreen/card-tl.png"/>
+    </div>
+    <div class="corner-2" v-show="skinType === 1">
+      <img src="../../../assets/images/newScreen/card-tr.png"/>
+    </div>
+    <div class="corner-3" v-show="skinType === 1">
+      <img src="../../../assets/images/newScreen/card-bl.png"/>
+    </div>
+    <div class="corner-4" v-show="skinType === 1">
+      <img src="../../../assets/images/newScreen/card-br.png"/>
+    </div>
+    <el-row style="height: 170px" :gutter="5">
+      <el-col style="height: 100%; position: relative;display:flex;flex-direction: row;" :span="12">
+        <div class="el-row-left-con">
+          <ul>
+            <li class="el-row-li-item el-row-li-item-title" :class="skinType === 0 ? 'el-row-li-white' : ''"><span></span>里程完成情况</li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>计划公里数：</span><span>{{totalPlanTrips}}km</span></li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>实际完成公里数：</span><span>{{totalRealTrips}}km</span></li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>完成率：</span><span>{{(totalRealTrips / totalPlanTrips).toFixed(2) * 100 || '--'}}%</span></li>
+          </ul>
+        </div>
+        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '60%', height: '200px',margin: '0 auto'}"></div>
         <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'-'"></noEcharts>
       </el-col>
-      <el-col :span="8" style="border-left: 1px #fff solid;border-right: 1px #fff solid;height: 100%">
-        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '95%', height: '200px', margin: '0 auto'}">
+      <el-col :span="12" style="border-left: 1px #987DC0 solid;height: 100%; position: relative;display:flex;flex-direction: row;">
+        <div class="el-row-left-con" style="margin-left: 10px">
+          <ul>
+            <li class="el-row-li-item el-row-li-item-title" :class="skinType === 0 ? 'el-row-li-white' : ''"><span></span>趟次完成情况</li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>计划完成趟次：</span><span>{{totalPlanTrips}}次</span></li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>实际完成趟次：</span><span>{{totalRealTrips}}次</span></li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>完成率：</span><span>{{ (totalRealTrips / totalPlanTrips * 100).toFixed(2) || '--'}}%</span></li>
+          </ul>
+        </div>
+        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '60%', height: '200px', margin: '0 auto'}">
         </div>
         <!-- <div v-show="realTimeMileage.length === 0" class="warning">
           <h2 style="text-align:center; color: #fff">暂无数据</h2>
         </div> -->
         <noEcharts v-show="realTimeTrips.length === 0" :eChartsTitle="'-'"></noEcharts>
       </el-col>
-      <el-col style="height: 100%" :span="8">
+      <!-- <el-col style="height: 100%" :span="8">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-right" :style="{width: '95%', height: '200px', margin: '0 auto'}"></div>
         <noEcharts v-show="realTimeShift.length === 0" :eChartsTitle="'-'"></noEcharts>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
@@ -28,6 +56,7 @@ const TIME = 3 * 60 * 1000
 export default {
   data () {
     return {
+      skinType: 0, // 皮肤 0 白色 1 黑色
       loading: true,
       orgNameTrips: [],
       realTimeTrips: [],
@@ -70,6 +99,7 @@ export default {
   mounted () {
     // setTimeout(() => {
     // }, 1000);
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
   },
   activated () {
     this.drawLineLeft()
@@ -134,20 +164,21 @@ export default {
       let leftChart = this.$echarts.init(document.getElementById('echart-left'))
       window.addEventListener('resize', () => { leftChart.resize() })
       leftChart.setOption({
-        title: {
-          text: '里程完成情况',
-          left: 'center',
-          textStyle: {
-            'color': '#fff'
-          },
-          // subtext: `总计划里程：${this.totalPlanTrips}   总实际里程：${this.totalRealTrips}   总百分比：${(this.totalRealTrips / this.totalPlanTrips).toFixed(2) * 100}%`
-          subtext: `${this.totalRealMileage}km / ${this.totalPlanMileage}km  完成率：${this.totalPlanMileage > 0 ? (this.totalRealMileage / this.totalPlanMileage * 100).toFixed(2) : '-'}%`,
-          subtextStyle: {
-            'color': '#fff',
-            'fontSize': 13
-          }
-        },
-        color: ['#03abd0', '#ff30a0'],
+        // title: {
+        //   text: '里程完成情况',
+        //   left: 'center',
+        //   textStyle: {
+        //     'color': this.skinType === 0 ? '#000000' : '#ffffff',
+        //     'fontSize': 14
+        //   },
+        //   // subtext: `总计划里程：${this.totalPlanTrips}   总实际里程：${this.totalRealTrips}   总百分比：${(this.totalRealTrips / this.totalPlanTrips).toFixed(2) * 100}%`
+        //   subtext: `${this.totalRealMileage}km / ${this.totalPlanMileage}km  完成率：${this.totalPlanMileage > 0 ? (this.totalRealMileage / this.totalPlanMileage * 100).toFixed(2) : '-'}%`,
+        //   subtextStyle: {
+        //     'color': this.skinType === 0 ? '#000000' : '#ffffff',
+        //     'fontSize': 13
+        //   }
+        // },
+        color: ['#17D5FF', '#FBCF00'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -156,9 +187,10 @@ export default {
         },
         legend: {
           data: ['计划里程', '实际里程'],
-          bottom: 10,
+          top: 0,
+          right: 10,
           textStyle: {
-            color: '#fff'
+            color: this.skinType === 0 ? '#000000' : '#8995CB'
           }
         },
         calculable: true,
@@ -174,7 +206,7 @@ export default {
               inside: false,
               // interval: 0,
               textStyle: {
-                color: '#fff',
+                color: this.skinType === 0 ? '#000000' : '#8995CB',
                 fontSize: '10',
                 borderRadius: '6'
               }
@@ -196,7 +228,7 @@ export default {
           },
           axisLabel: {
             textStyle: {
-              color: '#fff'
+              color: this.skinType === 0 ? '#000000' : '#8995CB'
             }
           }
         },
@@ -238,18 +270,19 @@ export default {
       let middleChart = this.$echarts.init(document.getElementById('echart-middle'))
       window.addEventListener('resize', () => { middleChart.resize() })
       middleChart.setOption({
-        title: {
-          text: '趟次完成情况',
-          left: 'center',
-          textStyle: {
-            'color': '#fff'
-          },
-          subtext: `${this.totalRealTrips}次 / ${this.totalPlanTrips}次  完成率：${this.totalPlanTrips > 0 ? (this.totalRealTrips / this.totalPlanTrips * 100).toFixed(2) : '-'}%`,
-          subtextStyle: {
-            'color': '#fff',
-            'fontSize': 13
-          }
-        },
+        // title: {
+        //   text: '趟次完成情况',
+        //   left: 'center',
+        //   textStyle: {
+        //     'color': this.skinType === 0 ? '#000000' : '#ffffff',
+        //     'fontSize': 14
+        //   },
+        //   subtext: `${this.totalRealTrips}次 / ${this.totalPlanTrips}次  完成率：${this.totalPlanTrips > 0 ? (this.totalRealTrips / this.totalPlanTrips * 100).toFixed(2) : '-'}%`,
+        //   subtextStyle: {
+        //     'color': this.skinType === 0 ? '#000000' : '#ffffff',
+        //     'fontSize': 13
+        //   }
+        // },
         color: [ '#ff2bd0', '#fedd00' ],
         tooltip: {
           trigger: 'axis',
@@ -259,9 +292,10 @@ export default {
         },
         legend: {
           data: ['计划趟次', '实际趟次'],
-          bottom: 10,
+          top: 0,
+          right: 10,
           textStyle: {
-            color: '#fff'
+            color: this.skinType === 0 ? '#000000' : '#8995CB'
           }
         },
         calculable: true,
@@ -280,7 +314,7 @@ export default {
               //   return value.split('').join('\n');
               // },
               textStyle: {
-                color: '#fff',
+                color: this.skinType === 0 ? '#000000' : '#8995CB',
                 fontSize: '10',
                 borderRadius: '6'
               }
@@ -302,7 +336,7 @@ export default {
           },
           axisLabel: {
             textStyle: {
-              color: '#fff'
+              color: this.skinType === 0 ? '#000000' : '#8995CB'
             }
           }
         },
@@ -350,11 +384,12 @@ export default {
           text: '班次完成情况',
           left: 'center',
           textStyle: {
-            'color': '#fff'
+            'color': this.skinType === 0 ? '#000000' : '#ffffff',
+            'fontSize': 14
           },
           subtext: `${this.totalRealShift}次 / ${this.totalPlanShift}次  完成率：${this.totalPlanShift > 0 ? (this.totalRealShift / this.totalPlanShift * 100).toFixed(2) : '-'}%`,
           subtextStyle: {
-            'color': '#fff',
+            'color': this.skinType === 0 ? '#000000' : '#ffffff',
             'fontSize': 13
           }
         },
@@ -369,7 +404,7 @@ export default {
           data: ['计划班次', '实际班次'],
           bottom: 10,
           textStyle: {
-            color: '#fff'
+            color: this.skinType === 0 ? '#000000' : '#8995CB'
           }
         },
         calculable: true,
@@ -385,7 +420,7 @@ export default {
               inside: false,
               // interval: 0,
               textStyle: {
-                color: '#fff',
+                color: this.skinType === 0 ? '#000000' : '#8995CB',
                 fontSize: '10',
                 borderRadius: '6'
               }
@@ -407,7 +442,7 @@ export default {
           },
           axisLabel: {
             textStyle: {
-              color: '#fff'
+              color: this.skinType === 0 ? '#000000' : '#8995CB'
             }
           }
         },
@@ -474,11 +509,74 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-row-left-con {
+  min-width: 200px;
+}
+.el-row-li-white.el-row-li-item-title {
+  color: #000!important;
+}
+.el-row-li-white {
+  color: #000!important;
+}
+.el-row-li-item.el-row-li-item-title {
+  color: #ffffff;
+  font-size: 14px;
+  margin-left: 0;
+}
+.el-row-li-item.el-row-li-item-title span {
+  display: inline-block;
+  width: 4px;
+  height: 11px;
+  background-color: #EC6F00;
+  margin-right: 6px;
+}
+.el-row-li-item {
+  color: #ffffff;
+  line-height: 30px;
+  margin-left: 10px;
+}
+.el-row-li-white span:nth-child(2) {
+  color: #F17700!important;
+  font-size: 16px;
+}
+.el-row-li-item span:nth-child(2) {
+  color: #FFFC1E;
+  font-size: 16px;
+}
+.el-row-li-item:nth-child(4) span:nth-child(2) {
+  color: #7FFF0D!important;
+}
+.corner-1 {
+  position: absolute;
+  top: 0;
+  left: 0px;
+}
+.corner-2 {
+  position: absolute;
+  top: 0;
+  right: 0px;
+}
+.corner-3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.corner-4 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.cardBg-white {
+  background-color: #FFFFFF!important;
+  color: #000000!important;
+  box-shadow:0px 0px 15px 0px rgba(4,56,161,0.2);
+}
 .chart-complete-wrapper {
   width: 100%;
   padding: 10px 10px;
   box-sizing: border-box;
-  background-color: rgba(0,0,0, 0.65);
+  background-color: rgba(42,47,85,0.5);
   border-radius: 6px;
+  position: relative;
 }
 </style>

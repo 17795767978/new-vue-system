@@ -1,5 +1,5 @@
 <template>
-  <div class="data-wrapper" id="full-wrapper">
+  <div class="data-wrapper" id="full-wrapper" :class="skinType === 0 ? 'whitekBg' : 'blackBg'">
     <el-button type="success" @click="fullScreen" size="mini" style="position: absolute; right: 20px; top: 10px; z-index: 1003">
       <i class="el-icon-video-camera" style="font-size: 22px;"></i>
     </el-button>
@@ -10,19 +10,58 @@
      <el-row :gutter="20">
        <el-col :span="8">
         <div class="left-wrapper">
-          <div class="top-left-wrapper">
+          <div class="top-left-wrapper" :class="skinType === 0 ? 'cardBg-white' : ''">
+            <div class="corner-1" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-tl.png"/>
+            </div>
+            <div class="corner-2" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-tr.png"/>
+            </div>
+            <div class="corner-3" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-bl.png"/>
+            </div>
+            <div class="corner-4" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-br.png"/>
+            </div>
+            <div class="wrapper-title" :style="{ background:  skinType === 0 ? '#fff' : 'rgba(42,47,85,0.5)' }"><span></span><span :style="{color: skinType === 0 ? '#000' : '#fff', background:  skinType === 0 ? '#fff' : 'rgba(42,47,85,0.5)' }">实时满载率</span></div>
             <perChart></perChart>
           </div>
-          <div class="middle-left-wrapper">
+          <div class="middle-left-wrapper" :class="skinType === 0 ? 'cardBg-white' : ''">
+            <div class="corner-1" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-tl.png"/>
+            </div>
+            <div class="corner-2" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-tr.png"/>
+            </div>
+            <div class="corner-3" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-bl.png"/>
+            </div>
+            <div class="corner-4" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-br.png"/>
+            </div>
+            <div class="wrapper-title" :style="{ background:  skinType === 0 ? '#fff' : 'rgba(42,47,85,0.5)' }"><span></span><span :style="{color: skinType === 0 ? '#000' : '#fff' }">不良驾驶行为统计</span></div>
             <driveChart></driveChart>
           </div>
-          <div class="bottom-left-wrapper">
+          <div class="bottom-left-wrapper" :class="skinType === 0 ? 'cardBg-white' : ''">
+            <div class="corner-1" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-tl.png"/>
+            </div>
+            <div class="corner-2" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-tr.png"/>
+            </div>
+            <div class="corner-3" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-bl.png"/>
+            </div>
+            <div class="corner-4" v-show="skinType === 1">
+              <img src="../../assets/images/newScreen/card-br.png"/>
+            </div>
+            <div class="wrapper-title" :style="{ background:  skinType === 0 ? '#fff' : 'rgba(42,47,85,0.5)' }"><span></span><span :style="{color: skinType === 0 ? '#000' : '#fff', background:  skinType === 0 ? '#fff' : 'rgba(42,47,85,0.5)' }">司机不良驾驶行为实时报警</span></div>
             <div  v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" style="height: 100%">
-            <h1 style="text-align: center; color: #fff; margin-top:0;">司机不良驾驶行为实时报警</h1>
+            <!-- <h1 style="text-align: center; color: #fff; margin-top:0;font-size:14px;" :style="{color: skinType === 0 ? '#000' : '#fff' }">司机不良驾驶行为实时报警</h1> -->
             <div v-for="(arrData, index) in diffArrData" :key="index"  @click="getIndex(index)">
             <vueSeamless  v-if="Math.floor(codeNum / 500) ===  index"  class="scroll-wrapper" :class-option="allOptions" :data="arrData">
               <p class="list-font" v-for="(list, index) in arrData" :key="index">
-                <span>{{list[0]}}：<span style="color: #eadf00;">{{list[1]}}</span></span>
+                <span :style="{color: skinType === 0 ? '#000' : '#fff' }">{{list[0]}}：<span style="color: #FFB027;">{{list[1]}}</span></span>
                 <!-- <span v-if="list[1] === '打电话。'" style="color: #eadf00;">{{list[1]}}</span>
                 <span v-if="list[1] === '抽烟。'" style="color: #fa8a96;">{{list[1]}}</span>
                 <span v-if="list[1] === '分神驾驶。'" style="color: #e9a475;">{{list[1]}}</span>
@@ -38,8 +77,11 @@
         </div>
        </el-col>
        <el-col :span="16">
-         <div class="right-wrapper">
-           <mapChart></mapChart>
+         <div class="right-wrapper" :class="skinType === 1 ? 'panelBg-black' : ''">
+           <img src="../../assets/images/newScreen/mapCover.png"/>
+           <div style="width: 94%;height: 86%;position: absolute;top: 10%;left:3%;z-index:100;">
+             <mapChart></mapChart>
+           </div>
          </div>
        </el-col>
      </el-row>
@@ -60,6 +102,7 @@ export default {
   name: 'chartAnalysis',
   data () {
     return {
+      skinType: 0, // 皮肤 0 白色 1 黑色
       isFullScreen: false,
       config: '',
       loading: true,
@@ -112,11 +155,10 @@ export default {
   },
   mounted () {
     // this.fullScreen()
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
   },
   activated () {
     this.fullScreen()
-  },
-  watch: {
   },
   methods: {
     fullScreen () {
@@ -199,6 +241,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper-title {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  // width: 100%;
+  height: 20px;
+  z-index: 200;
+  background-color: #4ABDF4;
+}
+.wrapper-title span:nth-child(1) {
+   display: inline-block;
+  width: 4px;
+  height: 11px;
+  background-color: #4ABDF4;
+  margin-right: 6px;
+}
+.wrapper-title span:nth-child(2) {
+   color: #ffffff;
+   font-size: 14px;
+}
+.corner-1 {
+  position: absolute;
+  top: 0;
+  left: 0px;
+}
+.corner-2 {
+  position: absolute;
+  top: 0;
+  right: 0px;
+}
+.corner-3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.corner-4 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.blackBg {
+  background-color: #151A3A;
+}
+.whitekBg {
+  background-color: #F5F6FA;
+}
+.cardBg-white {
+  background-color: #FFFFFF!important;
+  color: #000000!important;
+  box-shadow: 0px 0px 15px 0px rgba(4,56,161,0.2);
+}
 .data-wrapper {
   position: fixed;
   left: 0;
@@ -208,13 +301,13 @@ export default {
   width: 100%;
   min-height: calc(100vh);
   overflow: auto;
-  background: url(../../assets/images/space.png);
+  // background: url(../../assets/images/space.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   z-index: 1002;
   padding: 5px 20px;
   box-sizing: border-box;
-  background-color: #00082d;
+  // background-color: #00082d;
   .content-wrapper {
     padding: 0;
     box-sizing: border-box;
@@ -228,14 +321,14 @@ export default {
       .top-left-wrapper {
         width: 100%;
         position: relative;
-        background-color: rgba(0,0,0, 0.65);
+        background-color: rgba(42,47,85,0.5);
         height: 31%;
         border-radius: 6px;
       }
       .middle-left-wrapper {
         width: 100%;
         position: relative;
-        background-color: rgba(0,0,0, 0.65);
+        background-color: rgba(42,47,85,0.5);
         height: 34%;
         border-radius: 6px;
         margin-top: 2%;
@@ -243,11 +336,11 @@ export default {
       .bottom-left-wrapper {
         width: 100%;
         position: relative;
-        background-color: rgba(0,0,0, 0.65);
+        background-color: rgba(42,47,85,0.5);
         height: 32%;
         margin-top: 2%;
         border-radius: 6px;
-        padding: 15px;
+        padding: 50px 0 15px 0;
         box-sizing: border-box;
         overflow: hidden;
         .scroll-wrapper {
@@ -267,11 +360,27 @@ export default {
     .right-wrapper {
       width: 100%;
       height: 660px;
-      background-color: rgba(0,0,0, 0.65);
+      // background-color: #2A2F55;
       border-radius: 6px;
       box-sizing: border-box;
       margin-top: 20px;
+      position: relative;
+      // background-image: url('../../assets/images/newScreen/mapCover.png');
+      // background-position: center;
+      // background-repeat: no-repeat;
+      // background-size: contain;
     }
   }
+}
+.right-wrapper img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 50;
+}
+.panelBg-black {
+  background-color: rgba(42,47,85,0.5) !important;
 }
 </style>

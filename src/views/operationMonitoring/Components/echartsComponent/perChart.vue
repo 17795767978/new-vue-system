@@ -21,6 +21,7 @@ export default {
   },
   data () {
     return {
+      skinType: 0,
       loading: true,
       busLoadNumber: 0,
       fullLoadRate: '',
@@ -40,6 +41,7 @@ export default {
     })
   },
   mounted () {
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
     // this.$refs.chart.style.height = this.height + 'px'
   },
   activated () {
@@ -71,11 +73,12 @@ export default {
       window.addEventListener('resize', () => { fullLoadRate.resize() })
       fullLoadRate.setOption({
         title: {
-          text: '实时满载率',
-          left: 'center',
-          textStyle: {
-            'color': '#fff'
-          }
+          // text: '实时满载率',
+          // left: 'center',
+          // textStyle: {
+          //   'color': this.skinType === 0 ? '#000000' : '#ffffff',
+          //   'fontSize': 14
+          // }
         },
         tooltip: {
           trigger: 'axis',
@@ -83,12 +86,13 @@ export default {
             type: 'shadow'
           }
         },
-        color: ['#0490b3', '#6e9724', '#b22679'],
+        color: ['#73E30F', '#FE7E00', '#17D5FF'],
         legend: {
           data: ['通过量', '定员数', '满载率'],
-          bottom: 10,
+          top: 10,
+          right: 10,
           textStyle: {
-            color: '#fff'
+            color: this.skinType === 0 ? '#000000' : '#8995CB'
           }
         },
         xAxis: [
@@ -111,7 +115,7 @@ export default {
               inside: false,
               // interval: 0,
               textStyle: {
-                color: '#fff',
+                color: this.skinType === 0 ? '#000000' : '#8995CB',
                 fontSize: '10',
                 borderRadius: '6'
               }
@@ -140,7 +144,7 @@ export default {
               inside: false,
               interval: 0,
               textStyle: {
-                color: '#fff',
+                color: this.skinType === 0 ? '#000000' : '#8995CB',
                 fontSize: '10',
                 borderRadius: '6'
               }
@@ -162,7 +166,7 @@ export default {
             },
             axisLabel: {
               formatter: '{value}%',
-              color: '#fff',
+              color: this.skinType === 0 ? '#000000' : '#8995CB',
               fontSize: '10',
               borderRadius: '6'
             }

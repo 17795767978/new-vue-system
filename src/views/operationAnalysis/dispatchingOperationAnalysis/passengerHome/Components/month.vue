@@ -21,7 +21,8 @@ export default {
       maxNum: 0,
       id: 'month',
       grid: {},
-      loading: true
+      loading: true,
+      skinType: null
     }
   },
   created () {
@@ -29,22 +30,34 @@ export default {
     this._getMonthData({
       orgId
     })
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
   },
   mounted () {
+  },
+  watch: {
+    '$store.state.views.activeNight': {
+      handler (newV) {
+        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+        this.skinType = +newV
+        this._getMonthData({
+          orgId
+        })
+      }
+    }
   },
   methods: {
     _getMonthData (params) {
       this.loading = true
       this.$api['passengerSimple.getMonthtrend'](params).then(res => {
         this.loading = false
-        this.title = {
-          text: '客流月趋势图',
-          left: 10,
-          top: 10,
-          textStyle: {
-            'color': '#000'
-          }
-        }
+        // this.title = {
+        //   text: '客流月趋势图',
+        //   left: 10,
+        //   top: 10,
+        //   textStyle: {
+        //     'color': '#000'
+        //   }
+        // }
         this.grid = {
           x: 50,
           y: 50,
@@ -59,10 +72,10 @@ export default {
           data: res.datas[0],
           itemStyle: {
             normal: {
-              color: '#229df7',
+              color: '#FAA61B',
               lineStyle: {
-                width: 2,
-                color: '#229df7'
+                width: 4,
+                color: '#FAA61B'
               }
             }
           }
@@ -74,7 +87,13 @@ export default {
           right: 10,
           top: 10,
           textStyle: {
-            color: '#000'
+            color: (() => {
+              if (this.skinType === 1) {
+                return '#fff'
+              } else {
+                return '#000'
+              }
+            })()
           }
         }
         this.xData = [
@@ -84,11 +103,20 @@ export default {
             axisPointer: {
               type: 'shadow'
             },
+            splitLine: {
+              show: false
+            },
             axisLabel: {
               inside: false,
               // interval: 0,
               textStyle: {
-                color: '#000',
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
                 fontSize: '10',
                 borderRadius: '6'
               }
@@ -103,11 +131,20 @@ export default {
             // axisLabel: {
             //     formatter: '{value} ml'
             // },
+            splitLine: {
+              show: false
+            },
             axisLabel: {
               inside: false,
               interval: 0,
               textStyle: {
-                color: '#000',
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
                 fontSize: '10',
                 borderRadius: '6'
               }

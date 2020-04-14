@@ -22,7 +22,8 @@ export default {
       id: 'vol',
       grid: {},
       loading: true,
-      tooltip: {}
+      tooltip: {},
+      skinType: null
     }
   },
   created () {
@@ -30,8 +31,20 @@ export default {
     this._fullRateAnalysisUp({
       orgId
     })
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
   },
   mounted () {
+  },
+  watch: {
+    '$store.state.views.activeNight': {
+      handler (newV) {
+        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+        this.skinType = +newV
+        this._fullRateAnalysisUp({
+          orgId
+        })
+      }
+    }
   },
   methods: {
     _fullRateAnalysisUp (params) {
@@ -44,14 +57,14 @@ export default {
         //   datas = [[], []]
         // }
         this.loading = false
-        this.title = {
-          text: '实时客流时间趋势分析',
-          left: 10,
-          top: 10,
-          textStyle: {
-            'color': '#000'
-          }
-        }
+        // this.title = {
+        //   text: '实时客流时间趋势分析',
+        //   left: 10,
+        //   top: 10,
+        //   textStyle: {
+        //     'color': '#000'
+        //   }
+        // }
         this.grid = {
           x: 50,
           y: 50,
@@ -71,10 +84,10 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
-              color: '#f00',
+              color: '#EB6877',
               lineStyle: {
-                width: 2,
-                color: '#f00'
+                width: 4,
+                color: '#EB6877'
               }
             }
           }
@@ -85,10 +98,10 @@ export default {
           smooth: true,
           itemStyle: {
             normal: {
-              color: '#00f',
+              color: '#00A0E9',
               lineStyle: {
-                width: 2,
-                color: '#00f'
+                width: 4,
+                color: '#00A0E9'
               }
             }
           }
@@ -100,7 +113,13 @@ export default {
           top: 10,
           right: 10,
           textStyle: {
-            color: '#000'
+            color: (() => {
+              if (this.skinType === 1) {
+                return '#fff'
+              } else {
+                return '#000'
+              }
+            })()
           }
         }
         this.xData = [
@@ -114,10 +133,19 @@ export default {
               inside: false,
               // interval: 0,
               textStyle: {
-                color: '#000',
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
                 fontSize: '10',
                 borderRadius: '6'
               }
+            },
+            splitLine: {
+              show: false
             }
           }
         ]
@@ -126,14 +154,20 @@ export default {
             min: 0,
             max: this.maxNum,
             interval: Math.ceil(this.maxNum / 6),
-            // axisLabel: {
-            //     formatter: '{value} ml'
-            // },
+            splitLine: {
+              show: false
+            },
             axisLabel: {
               inside: false,
               interval: 0,
               textStyle: {
-                color: '#000',
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
                 fontSize: '10',
                 borderRadius: '6'
               }

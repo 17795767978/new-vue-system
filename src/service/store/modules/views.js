@@ -21,6 +21,7 @@ const _initVisitedViews = (state) => {
 const views = {
   //
   state: {
+    activeNight: true, // 是否开启夜间风格
     visitedViews: [], // 已经点击访问过的View, 用于展示为tag-tabs
     cachedViews: [], // 哪些Views需要使用keep-alive进行缓存,默认不加noCache的都会缓存(根据业务需求)
     breadcrumb: [], // 面包屑,在路由时应根据父子关系存入当前的路由情况

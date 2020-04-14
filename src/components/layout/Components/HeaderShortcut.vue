@@ -18,6 +18,11 @@
         </li>
       <!-- </transition-group> -->
     </draggable>
+    <el-switch
+      v-model="$store.state.views.activeNight"
+      :active-text="$store.state.views.activeNight ? '关闭夜间风格' : '开启夜间风格'"
+     >
+    </el-switch>
   </div>
 </template>
 <script>

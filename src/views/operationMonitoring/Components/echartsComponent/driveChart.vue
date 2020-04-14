@@ -15,6 +15,7 @@ const TIME = 3 * 60 * 1000
 export default {
   data () {
     return {
+      activeNight: 0,
       loading: true,
       changeData: [],
       badDrivingBehavior: [],
@@ -32,6 +33,7 @@ export default {
     })
   },
   mounted () {
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
     // setTimeout(() => {
     //   this.drawLine();
     //   this.loading = false;
@@ -63,13 +65,14 @@ export default {
       let driveLine = this.$echarts.init(document.getElementById('drive-chart'))
       window.addEventListener('resize', () => { driveLine.resize() })
       driveLine.setOption({
-        title: {
-          text: '不良驾驶行为统计',
-          left: 'center',
-          textStyle: {
-            'color': '#fff'
-          }
-        },
+        // title: {
+        //   text: '不良驾驶行为统计',
+        //   left: 'center',
+        //   textStyle: {
+        //     'color': this.skinType === 0 ? '#000000' : '#ffffff',
+        //     'fontSize': 14
+        //   }
+        // },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
