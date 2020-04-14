@@ -35,8 +35,10 @@ import Search from '@/components/searchAlarm'
 import Table from './Components/table'
 import Settings from './Components/setting'
 import LinePassagerFlow from './Components/linePassagerFlow'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'flowComprehensiveQuery',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

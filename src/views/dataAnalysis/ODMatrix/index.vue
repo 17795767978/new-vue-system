@@ -23,8 +23,10 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'ODMatrix',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

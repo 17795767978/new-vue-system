@@ -33,8 +33,10 @@ import Search from '@/components/searchAlarm'
 import LineRepeatability from './Components/lineRepeatability'
 import LineRepeatabilityDown from './Components/lineRepeatabilityDown'
 import RepeatabilityTable from './Components/repeatabilityTable'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'repeatability',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

@@ -31,8 +31,10 @@ import Search from '@/components/searchAlarm'
 import Table from './Components/table'
 import Echarts from './Components/echart'
 import Immutable from 'immutable'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'lineOD',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

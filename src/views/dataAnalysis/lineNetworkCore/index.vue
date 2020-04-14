@@ -26,8 +26,10 @@ import Search from '@/components/searchAlarm'
 import CoreTable from './Components/coreTable'
 import LineGrade from './Components/lineGrade'
 import ProjectScore from './Components/projectScore'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'lineNetworkCore',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

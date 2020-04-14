@@ -24,8 +24,10 @@
 import Search from '@/components/searchAlarm'
 import TabTable from './Components/tabTable'
 import { mapGetters } from 'vuex'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'lineNetWorkDetail',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

@@ -39,8 +39,10 @@ import Search from '@/components/searchAlarm'
 import QueryTable from './Components/queryTable'
 import Settings from './Components/setting'
 import QueryEcharts from './Components/queryEcharts'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'comprehensiveQuery',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

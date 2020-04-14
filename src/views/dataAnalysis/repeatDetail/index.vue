@@ -27,9 +27,11 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
+import mixinsTime from '@/mixins/global/'
 import { mapGetters } from 'vuex'
 export default {
   name: 'repeatabilityDetail',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

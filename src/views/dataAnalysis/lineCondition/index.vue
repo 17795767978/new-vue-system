@@ -39,8 +39,10 @@ import TotalLineNum from './Components/totalLineNumChart'
 import TotalStationNum from './Components/totalStationChart'
 import LineLengthChart from './Components/lineLengthChart'
 import StationTable from './Components/stationTable'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'lineCondition',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

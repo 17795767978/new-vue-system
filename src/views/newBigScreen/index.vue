@@ -55,9 +55,11 @@ import perChart from '../operationMonitoring/Components/echartsComponent/perChar
 import mapChart from '../operationMonitoring/Components/echartsComponent/mapChart.vue'
 import driveChart from '../operationMonitoring/Components/echartsComponent/driveChart.vue'
 import vueSeamless from 'vue-seamless-scroll'
+import mixinsTime from '@/mixins/global/'
 const TIME = 3 * 60 * 1000
 export default {
   name: 'chartAnalysis',
+  mixins: [mixinsTime],
   data () {
     return {
       isFullScreen: false,

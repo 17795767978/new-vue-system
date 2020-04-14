@@ -64,6 +64,7 @@ import iconHomeBjfx from '../../assets/images/homeIcon/bjfx.png'
 import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
 import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
 import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
+import mixinsTime from '@/mixins/global/'
 const PER_ANA = [
   { name: '客流首页', icon: iconHomeYlyl, path: '/passenger-home', admin: false },
   { name: '客流实时统计', icon: iconHomeKlfx, path: '/realtime-passenger-flow', admin: false },
@@ -106,6 +107,7 @@ const LINE_NET = [
 // const LINE_NET = []
 export default {
   name: 'Homepage',
+  mixins: [mixinsTime],
   data () {
     return {
       operationAnalysis: [],

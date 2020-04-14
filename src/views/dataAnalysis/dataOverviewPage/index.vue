@@ -20,8 +20,10 @@ import LineNum from './Components/lineNumEcharts'
 import RepeatLine from './Components/repeatLine'
 import PassagerFlowLine from './Components/passagerFlowLine'
 import LineScoreDisplay from './Components/lineScoreDisplay'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'dataOverviewPage',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {}
