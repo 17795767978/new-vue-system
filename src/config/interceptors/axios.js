@@ -20,13 +20,13 @@ export function axiosRequestSucessFunc (config) {
   if (token) {
     config.headers.common['authorization'] = token
   }
-  if (config.data.orgId && config.data.orgId === '1') {
+  if (config.data && config.data.orgId && config.data.orgId === '1') {
     config.data.orgId = ''
   }
-  if (config.data.orgUuid && config.data.orgUuid === '1') {
+  if (config.data && config.data.orgUuid && config.data.orgUuid === '1') {
     config.data.orgUuid = ''
   }
-  config.data.personId = localStorage.getItem('id')
+  config.data && (config.data.personId = localStorage.getItem('id'))
   return config
 }
 

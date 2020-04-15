@@ -42,8 +42,10 @@
 
 <script>
 import Echarts from './Components/echarts'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'realtimePassengerFlow',
+  mixins: [mixinsTime],
   data () {
     return {
       passenger: ['k', 'o', 'b', 'e', 'd', 'r', 'g'], // vdom的key

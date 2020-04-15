@@ -8,9 +8,11 @@
 
 <script type="text/ecmascript-6">
 import tableWrapper from './Components/content'
+import mixinsTime from '@/mixins/global/'
 // import moment from 'moment';
 export default {
   name: 'alarmManagement',
+  mixins: [mixinsTime],
   data () {
     return {
     }

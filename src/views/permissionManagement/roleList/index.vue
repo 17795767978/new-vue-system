@@ -53,8 +53,13 @@
               <el-button
                 size="mini"
                 type="warning"
+                @click="handleLineAllow(scope.row)"
+              >线路权限</el-button>
+              <el-button
+                size="mini"
+                type="warning"
                 @click="handleDataAllot(scope.row)"
-              >数据权限</el-button>
+              >报警类型</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -179,13 +184,21 @@
         <el-button type="primary" @click="onSubmitUpdate">确 定</el-button>
       </span>
     </el-dialog>
+    <lineDialog :lineTreeDatas="lineTreeDatas" :rowData="rowData" @updateList="updateList"/>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import mixinsTime from '@/mixins/global/'
+import lineDialog from './Components/lineDialog'
+import { mapGetters } from 'vuex'
 export default {
-  name: 'Role',
+  name: 'roleList',
+  mixins: [mixinsTime],
+  components: {
+    lineDialog
+  },
   data () {
     return {
       type: '菜单',
@@ -246,13 +259,23 @@ export default {
       currentName: '',
       resourceList: [],
       disabledArr: [],
-      treeParentIds: []
+      treeParentIds: [],
+      lineTreeDatas: [],
+      rowData: {}
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
     this.getSysRoleList()
     this.getSourceList()
     this.getDataList()
+    setTimeout(() => {
+      this._getLineTree({
+        orgUuid: this.userId
+      })
+    }, 20)
   },
   watch: {
     dialogRoleVisible (newValue) {
@@ -263,6 +286,14 @@ export default {
     }
   },
   methods: {
+    _getLineTree (params) {
+      this.$api['wholeInformation.getLineTree'](params).then(res => {
+        this.lineTreeDatas = res
+      })
+    },
+    updateList () {
+      this.getSysRoleList()
+    },
     getSysRoleList () {
       this.$api['role.list']({
         enabled: '',
@@ -437,6 +468,10 @@ export default {
       } else {
         this.defaultTreeData = []
       }
+    },
+    handleLineAllow (row) {
+      this.$children[5].dialogTableVisible = true
+      this.rowData = row
     },
     getDataList () {
       this.$api['platformMenu.dataList']({

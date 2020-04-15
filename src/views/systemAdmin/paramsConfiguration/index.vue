@@ -68,11 +68,13 @@
 // import NavPremissonButton from '@/components/navButton/navPremissonButton'
 import ParamsConfSearch from './Components/search'
 import ParamsUpdate from './Components/paramsUpdate'
+import mixinsTime from '@/mixins/global/'
 // api
 // import { paramsListGet, paramsDelete } from '@/api/systemparams'
 export default {
   name: 'paramsConfiguration',
   components: { ParamsConfSearch, ParamsUpdate },
+  mixins: [mixinsTime],
   data () {
     return {
       comp: this,

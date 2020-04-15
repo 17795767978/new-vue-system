@@ -21,8 +21,10 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/Table'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'carSort',
+  mixins: [mixinsTime],
   data () {
     return {
       searchData: {},

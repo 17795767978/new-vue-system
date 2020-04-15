@@ -9,8 +9,10 @@
 import headerWrapper from './header/'
 import contentWrapper from './content/'
 // import moment from 'moment';
+import mixinsTime from '@/mixins/global/'
 export default {
-  name: '',
+  name: 'alarmAnalysis',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {}

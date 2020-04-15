@@ -90,6 +90,7 @@ export default {
       isHistory: '0',
       startTime: dateBefore,
       endTime: dateAfter,
+      busSelfCode: '',
       pageSize: this.pageSize,
       pageNumber: this.pageNumber
     })
@@ -106,6 +107,7 @@ export default {
           isHistory: newV.isHistory,
           startTime: moment(newV.startTime).format('YYYY-MM-DD HH:mm:ss'),
           endTime: moment(newV.endTime).format('YYYY-MM-DD HH:mm:ss'),
+          busSelfCode: newV.busSelfCode,
           pageSize: this.pageSize,
           pageNumber: this.pageNumber
         })
@@ -132,6 +134,7 @@ export default {
           lineId: '',
           busNumber: '',
           isHistory: '0',
+          busSelfCode: '',
           startTime: dateBefore,
           endTime: dateAfter,
           pageSize: this.pageSize,
@@ -145,6 +148,7 @@ export default {
           isHistory: this.selectData.isHistory,
           startTime: this.selectData.startTime,
           endTime: this.selectData.endTime,
+          busSelfCode: this.selectData.busSelfCode,
           pageSize: this.pageSize,
           pageNumber: this.pageNumber
         })

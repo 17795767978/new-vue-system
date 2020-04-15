@@ -16,10 +16,12 @@
 import headerNav from './Components/header'
 import Chart from './Components/chart'
 import introduceWrapper from '@/components/introduce/'
+import mixinsTime from '@/mixins/global/'
 // import contentWrapper from './Components/content';
 // import moment from 'moment'
 export default {
   name: 'sectionAnalysis',
+  mixins: [mixinsTime],
   data () {
     return {
       busLine: '1路',

@@ -19,8 +19,10 @@ import StreamNum from './Components/streamNum.vue'
 import chartsComplete from './Components/chartsComplete.vue'
 import chartsMain from './Components/chartsMain.vue'
 import bottomChart from './Components/bottomChart.vue'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'chartAnalysis',
+  mixins: [mixinsTime],
   data () {
     return {
       isFullScreen: false,

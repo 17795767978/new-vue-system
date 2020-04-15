@@ -8,8 +8,10 @@
 
 <script type="text/ecmascript-6">
 import tableWrapper from './Components/content'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'deviceParameter',
+  mixins: [mixinsTime],
   data () {
     return {
     }

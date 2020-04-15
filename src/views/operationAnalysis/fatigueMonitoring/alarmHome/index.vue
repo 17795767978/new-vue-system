@@ -4,10 +4,7 @@
       :isOrg='true'
       :isLine="true"
       :isBus="true"
-      :isDate="false"
-      :isTime="false"
-      :isTurn="false"
-      :isDownload="false"
+      :isBusSelfCode="true"
       :isDefault="true"
       :isEmpty="true"
       :isProcessingResult="true"
@@ -67,8 +64,10 @@ import Dialog from './Components/dialog'
 import { WSAPI } from '../../../../config/settings'
 import { mapGetters } from 'vuex'
 import alarmAudio from '@/assets/MP3/alarm.mp3'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'alarmHome',
+  mixins: [mixinsTime],
   data () {
     return {
       searchData: {},
@@ -187,6 +186,7 @@ export default {
         orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
         lineId: this.currentData.lineId,
         busNumber: this.currentData.busNumber,
+        busSelfCode: this.currentData.busSelfCode,
         warnTypes: type === 'charts' ? [data.data.warnType] : this.currentData.warnTypeId,
         driverNum: data.driverNum,
         driverName: data.driverName,
@@ -215,7 +215,6 @@ export default {
     this.closeWs()
     this.chartsObj = {}
     this.tableObj = {}
-    console.log(1231231313)
   }
 }
 </script>

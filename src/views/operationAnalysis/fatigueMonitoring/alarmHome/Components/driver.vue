@@ -39,6 +39,7 @@ export default {
       lineId: defaultData.lineId,
       busNumber: '',
       warnTypes: defaultData.warningArr,
+      busSelfCode: '',
       startTime: '',
       endTime: '',
       handleResults: []
@@ -59,6 +60,7 @@ export default {
           warnTypes: newV.warnTypeId.length === 0 ? defaultData.warningArr : newV.warnTypeId,
           startTime: '',
           endTime: '',
+          busSelfCode: newV.busSelfCode,
           handleResults: newV.checkList
         })
       }

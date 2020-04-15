@@ -22,8 +22,10 @@
 // import leftWrapper from './Components/leftWrapper'
 import rightWrapper from './Components/rightWrapper'
 import moment from 'moment'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'alarmCenter',
+  mixins: [mixinsTime],
   data () {
     return {
       selectCarData: {},

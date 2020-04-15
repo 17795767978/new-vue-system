@@ -16,8 +16,10 @@ import headerNav from './Components/header'
 import contentWrapper from './Components/content'
 import introduceWrapper from '@/components/introduce/'
 import moment from 'moment'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'rauntimeAnalysis',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

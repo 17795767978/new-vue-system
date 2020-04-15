@@ -27,8 +27,10 @@ import Search from '@/components/searchAlarm'
 import AlarmStatistics from './Components/alarmStatistics'
 import AlarmTimeSlot from './Components/alarmTimeslot'
 import AlarmTimestrend from './Components/alarmTimetrend'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'alarmType',
+  mixins: [mixinsTime],
   data () {
     return {
       searchData: {},

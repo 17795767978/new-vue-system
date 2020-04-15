@@ -176,8 +176,10 @@
 <script>
 import moment from 'moment'
 import { mapGetters } from 'vuex'
+import mixinsTime from '@/mixins/global/'
 export default {
-  name: 'Admin',
+  name: 'managementList',
+  mixins: [mixinsTime],
   data () {
     let validatePass = (rule, value, callback) => {
       if (value === '') {

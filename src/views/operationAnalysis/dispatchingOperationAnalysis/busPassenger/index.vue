@@ -6,6 +6,7 @@
       :isDefault="true"
       :isEmpty="true"
       :isBus="true"
+      :isBusSelfCode="true"
       :isDownload="true"
       :downLoadName="downLoadName"
       :select="{
@@ -43,8 +44,10 @@
 import moment from 'moment'
 import Search from '@/components/searchAlarm/'
 import Table from './Components/table.vue'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'busPassenger',
+  mixins: [mixinsTime],
   data () {
     return {
       pickerOptions: {

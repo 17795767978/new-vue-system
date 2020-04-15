@@ -43,8 +43,10 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'channelManagement',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {}, // 单一查询

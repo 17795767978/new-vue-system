@@ -27,8 +27,10 @@
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
 import Dialog from './Components/dialog'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'deviceSnapManagement',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

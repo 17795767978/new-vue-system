@@ -24,8 +24,10 @@
 import Search from '@/components/searchAlarm'
 // import Driver from './Components/driver'
 import Table from './Components/table'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'alarmDriver',
+  mixins: [mixinsTime],
   data () {
     return {
       searchData: {},

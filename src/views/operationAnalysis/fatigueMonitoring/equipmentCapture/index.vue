@@ -20,8 +20,10 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/table'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'equipmentCapture',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

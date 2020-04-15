@@ -86,8 +86,10 @@
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 import Modules from './Components/modules.vue'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'sourceList',
+  mixins: [mixinsTime],
   data () {
     return {
       form: {

@@ -75,8 +75,10 @@ import passengerHotmap from './Components/passengerHotmap.vue'
 import stationEcharts from './Components/stationEcharts.vue'
 import lineEchartsTop from './Components/lineEchartsTop.vue'
 import monthEcharts from './Components/month.vue'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'passengerHome',
+  mixins: [mixinsTime],
   data () {
     return {
       stations: [],

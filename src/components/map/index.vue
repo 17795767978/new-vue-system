@@ -339,6 +339,7 @@ export default {
           orgId,
           lineId: newV.lineId,
           busNumber: newV.busNumber,
+          busSelfCode: newV.busSelfCode,
           warnTypes: newV.warnTypeId.length === 0 ? dataForm.warningArr : newV.warnTypeId,
           handleResult: newV.checkList
         })
@@ -407,7 +408,6 @@ export default {
       })
     },
     _getVideoList (terid) {
-      console.log(terid)
       this.urlList = []
       return new Promise((resolve, reject) => {
         this.$jsonp(`${URL}live/port?key=${this.key}`).then(res => {

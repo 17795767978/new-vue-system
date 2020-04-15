@@ -71,6 +71,7 @@ export default {
       orgId: this.userId === '1' ? '' : this.userId,
       lineId: defaultData.lineId,
       busNumber: '',
+      busSelfCode: '',
       warnTypes: defaultData.warningArr,
       handleResults: []
     })
@@ -79,12 +80,13 @@ export default {
     searchData: {
       deep: true,
       handler (newV) {
-        const { orgId, lineId, busNumber, warnTypeId } = newV
+        const { orgId, lineId, busNumber, busSelfCode, warnTypeId } = newV
         let defaultData = this.$store.getters.formData
         this._getDriverTable({
           orgId: orgId === '1' ? '' : orgId,
           lineId,
-          busNumber: busNumber,
+          busNumber,
+          busSelfCode,
           warnTypes: warnTypeId.length === 0 ? defaultData.warningArr : warnTypeId,
           handleResults: newV.checkList
         })

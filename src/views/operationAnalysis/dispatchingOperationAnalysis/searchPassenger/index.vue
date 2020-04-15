@@ -20,8 +20,10 @@
 import headerNav from './Components/header'
 import contentWrapper from './Components/content'
 import moment from 'moment'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'searchPassenger',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

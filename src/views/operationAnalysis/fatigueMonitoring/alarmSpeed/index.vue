@@ -27,8 +27,10 @@ import Search from '@/components/searchAlarm'
 import SpeedStatistics from './Components/speedStatistics'
 import SpeedType from './Components/speedType'
 import SpeedNum from './Components/speedNum'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'alarmSpeed',
+  mixins: [mixinsTime],
   data () {
     return {
       searchData: {},

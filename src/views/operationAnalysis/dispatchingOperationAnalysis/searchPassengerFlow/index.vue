@@ -22,8 +22,10 @@
 <script type="text/ecmascript-6">
 import Search from '@/components/searchAlarm/'
 import Table from './Components/table'
+import mixinsTime from '@/mixins/global/'
 export default {
   name: 'searchPassengerFlow',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},

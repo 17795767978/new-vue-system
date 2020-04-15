@@ -61,6 +61,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="车辆自编号:" v-if="isBusSelfCode">
+        <el-input type="text" style="width: 12vw" v-model="formInline.busSelfCode" placeholder="车辆自编号"></el-input>
+      </el-form-item>
       <el-form-item label="司机工号:" v-if="isDriverNum">
         <el-input class="font-style" v-model="formInline.driverNum"></el-input>
       </el-form-item>
@@ -391,6 +394,9 @@ export default {
     },
     isProcessingResult: {
       type: Boolean
+    },
+    isBusSelfCode: {
+      type: Boolean
     }
   },
   data () {
@@ -442,7 +448,8 @@ export default {
         ip: '',
         modules: '',
         pages: '',
-        checkList: []
+        checkList: [],
+        busSelfCode: ''
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -571,6 +578,7 @@ export default {
           this.formInline.lineId = ''
           this.formInline.lineIds = []
           this.formInline.busNumber = ''
+          this.formInline.busSelfCode = ''
         }
         let orgId = newValue === '1' ? '' : newValue
         this.$api['permission.userSelectList']({
@@ -630,6 +638,7 @@ export default {
     'formInline.lineId': {
       handler (newValue) {
         this.formInline.busNumber = ''
+        this.formInline.busSelfCode = ''
         if (newValue !== '') {
           this.$api['wholeInformation.getCar']({
             lineId: newValue,
@@ -825,7 +834,8 @@ export default {
         ip: this.formInline.ip,
         modules: this.formInline.modules,
         pages: this.formInline.pages,
-        checkList
+        checkList,
+        busSelfCode: this.formInline.busSelfCode
       }
       this.$emit('configCheck', configData)
     },
@@ -860,7 +870,8 @@ export default {
         ip: '',
         modules: '',
         pages: '',
-        checkList: []
+        checkList: [],
+        busSelfCode: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -891,7 +902,8 @@ export default {
         ip: this.formInline.ip,
         modules: this.formInline.modules,
         pages: this.formInline.pages,
-        checkList: []
+        checkList: [],
+        busSelfCode: this.formInline.busSelfCode
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -965,7 +977,8 @@ export default {
         desc: this.formInline.desc,
         ip: this.formInline.ip,
         modules: this.formInline.modules,
-        pages: this.formInline.pages
+        pages: this.formInline.pages,
+        busSelfCode: this.formInline.busSelfCode
       }
       this.$emit('configCheckMul', configData)
     },
@@ -1013,7 +1026,8 @@ export default {
         deviceCode: this.formInline.deviceCode,
         selfCode: this.formInline.selfCode,
         handleResults: checkList,
-        warnTypeId: ['ADASSNAP', 'DMSTOSNAP']
+        warnTypeId: ['ADASSNAP', 'DMSTOSNAP'],
+        busSelfCode: this.formInline.busSelfCode
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

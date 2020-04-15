@@ -16,9 +16,11 @@
 import headerNav from './Components/header'
 import rateWrapper from './Components/rate'
 import tableWrapper from './Components/rateTable'
+import mixinsTime from '@/mixins/global/'
 // import moment from 'moment';
 export default {
   name: 'deviceStatus',
+  mixins: [mixinsTime],
   data () {
     return {
       selectData: {},
