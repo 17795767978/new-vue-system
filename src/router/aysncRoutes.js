@@ -584,6 +584,16 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/device-parameter']
         }
+      },
+      {
+        path: 'alarm-result',
+        component: _import_('systemAdmin/alarmResultManagement/index'),
+        name: 'alarmResult',
+        meta: {
+          title: '报警处理意见',
+          icon: 'nocturne icon-dash',
+          roles: ['/device-parameter']
+        }
       }
     ]
   },

@@ -85,14 +85,6 @@
           placeholder="请输入角色名称">
         </el-input>
         </el-row>
-        <!-- <el-row style="margin-top: 20px">
-        <span>角色排序：</span>
-        <el-input
-          style="width: 200px"
-          v-model.number="sort"
-          placeholder="请输入排序">
-        </el-input>
-        </el-row> -->
         <el-row style="margin-top: 20px">
         <span style="color: red">* </span>
         <span>角色描述：</span>
@@ -111,6 +103,21 @@
           placeholder="请选择">
           <el-option
             v-for="item in enableOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </el-row>
+        <el-row style="margin-top: 20px">
+        <span style="color: red">* </span>
+        <span>角色类型：</span>
+        <el-select
+          style="width: 200px"
+          v-model="roleType"
+          placeholder="请选择">
+          <el-option
+            v-for="item in roleTypeOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -179,6 +186,19 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="角色类型：" prop="roleType">
+          <el-select
+            style="width: 240px"
+            v-model="adminForm.roleType"
+            placeholder="请选择">
+            <el-option
+              v-for="item in roleTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmitUpdate">确 定</el-button>
@@ -210,11 +230,13 @@ export default {
       enabled: '1',
       describes: '',
       roleId: '',
+      roleType: '',
       adminForm: {
         roleId: '',
         roleName: '',
         describes: '',
-        enabled: ''
+        enabled: '',
+        roleType: ''
       },
       rules: {
         roleName: [
@@ -225,6 +247,9 @@ export default {
         ],
         enabled: [
           { required: true, message: '请选择状态', trigger: 'blur' }
+        ],
+        roleType: [
+          { required: true, message: '请选择角色类型', trigger: 'blur' }
         ]
       },
       enableOptions: [
@@ -236,6 +261,9 @@ export default {
           value: '0',
           label: '禁用'
         }
+      ],
+      roleTypeOptions: [
+        { value: '0', label: '普通角色' }, { value: '1', label: '审核角色' }
       ],
       // 菜单
       defaultProps: {
@@ -383,12 +411,13 @@ export default {
       // console.log(this.treeParentIds)
     },
     onRoleSubmit () {
-      if (this.roleName.length > 0 && this.describes !== '') {
+      if (this.roleName.length > 0 && this.describes !== '' && this.roleType !== '') {
         if (!this.rolesNameArr.some(item => item === this.roleName)) {
           this.$api['role.add']({
             roleName: this.roleName,
             enabled: this.enabled,
-            describes: this.describes
+            describes: this.describes,
+            roleType: this.roleType
           }).then(res => {
             this.getSysRoleList()
             this.adminForm.roleName = this.roleName
@@ -542,6 +571,7 @@ export default {
         this.adminForm.describes = res.describes
         this.adminForm.enabled = res.enabled
         this.currentName = res.roleName
+        this.adminForm.roleType = res.roleType
       })
       this.$nextTick(() => {
         this.$refs['adminForm'].resetFields()

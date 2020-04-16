@@ -337,8 +337,8 @@ export const tiredMonitoringApi = {
     {
       name: 'wsUpdate',
       method: 'POST',
-      path: '/zhfxpt/update',
-      mockPath: '/zhfxpt/update',
+      path: '/warns/warnHandle',
+      mockPath: '/warns/warnHandle',
       params: {
         orgId: '',
         lineId: '',
@@ -348,7 +348,20 @@ export const tiredMonitoringApi = {
         pageSize: ''
       },
       desc: '更新疲劳处理状态'
-    }, {
+    },
+    {
+      name: 'warnAudit',
+      method: 'POST',
+      path: '/warns/warnAudit',
+      mockPath: '/warns/warnAudit',
+      params: {
+        warnUuid: '',
+        auditStatus: '',
+        auditSuggestion: ''
+      },
+      desc: '更新审核内容'
+    },
+    {
       name: 'getTaskPageList',
       method: 'POST',
       path: '/api/temp/device/send/task/taskPage/get',
@@ -469,6 +482,59 @@ export const tiredMonitoringApi = {
         endTime: ''
       },
       desc: '设备抓拍-列表'
+    },
+    {
+      name: 'addAlarmResult',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/add',
+      mockPath: '/api/base/sys/alarm/handle/result/add',
+      params: {
+        hContext: '',
+        hStatus: ''
+      },
+      desc: '报警处理结果-新增'
+    },
+    {
+      name: 'updateAlarmResult',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/update',
+      mockPath: '/api/base/sys/alarm/handle/result/update',
+      params: {
+        uuid: '',
+        hContext: '',
+        hStatus: ''
+      },
+      desc: '报警处理结果-修改'
+    },
+    {
+      name: 'deleteAlarmResult',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/delete',
+      mockPath: '/api/base/sys/alarm/handle/result/delete',
+      params: {
+        uuid: ''
+      },
+      desc: '报警处理结果-删除'
+    },
+    {
+      name: 'getAlarmResult',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/get',
+      mockPath: '/api/base/sys/alarm/handle/result/get',
+      params: {
+        uuid: ''
+      },
+      desc: '报警处理结果-查询'
+    },
+    {
+      name: 'getByStatus',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/getByStatus',
+      mockPath: '/api/base/sys/alarm/handle/result/getByStatus',
+      params: {
+        hStatus: ''
+      },
+      desc: '报警处理结果-根据状态查询处理结果'
     }
   ]
 }

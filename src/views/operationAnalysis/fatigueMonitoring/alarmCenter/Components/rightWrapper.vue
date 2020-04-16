@@ -51,6 +51,16 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="审核状态">
+          <el-select v-model="formInline.auditStatus" multiple collapse-tags placeholder="请选择">
+            <el-option
+              v-for="item in auditOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="处理结果">
           <!-- <el-select v-model="formInline.checkType">
             <el-option
@@ -61,7 +71,7 @@
             ></el-option>
           </el-select> -->
           <el-checkbox-group v-model="formInline.checkType">
-            <el-checkbox label="未处理"></el-checkbox>
+            <el-checkbox label="未处理" :disabled="formInline.auditStatus.length === 1 ? formInline.auditStatus[0] === '1' : false"></el-checkbox>
             <el-checkbox label="已处理"></el-checkbox>
             <el-checkbox label="误报"></el-checkbox>
           </el-checkbox-group>
@@ -183,21 +193,37 @@
           prop="handleSuggestion"
           fixed="right"
           label="处理意见"
+          width="300"
         >
-        <template slot-scope="scope">
-          <el-tooltip class="item" effect="light" :content="scope.row.handleSuggestion" placement="top-start">
-            <span>{{scope.row.handleSuggestion && scope.row.handleSuggestion.length > 7 ? `${scope.row.handleSuggestion.substring(0, 6)}...` : scope.row.handleSuggestion}}</span>
-          </el-tooltip>
-        </template>
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="light" :content="scope.row.handleSuggestion" placement="top-start">
+              <span>{{scope.row.handleSuggestion && scope.row.handleSuggestion.length > 7 ? `${scope.row.handleSuggestion.substring(0, 6)}...` : scope.row.handleSuggestion}}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="handleSuggestion"
+          fixed="right"
+          label="审核意见"
+          width="300"
+        >
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="light" :content="scope.row.auditSuggestion" placement="top-start">
+              <span>{{scope.row.auditSuggestion && scope.row.auditSuggestion.length > 7 ? `${scope.row.auditSuggestion.substring(0, 6)}...` : scope.row.auditSuggestion}}</span>
+            </el-tooltip>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="180">
+          width="260">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
-            <el-button :disabled="scope.row.handleResult !== '0'" @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
+            <el-button :disabled="scope.row.overTime || scope.row.handleResult !== '0'" @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
+            <!-- isRoleType -->
+            <el-button v-if="isRoleType" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -240,6 +266,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="处理内容" prop="selectCheckContent">
+          <el-select v-model="ruleForm.selectCheckContent">
+            <el-option
+              v-for="item in checkcontentOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="处理意见" prop="suggestion">
           <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100"></el-input>
           <span>{{ruleForm.suggestion.length}}/100</span>
@@ -248,6 +284,42 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
         <el-button type="primary" @click="upDateCheck('ruleForm')">确认</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="审核操作"
+      :visible.sync="auditDialog"
+      width="30%"
+      center>
+      <el-form :model="auditRuleForm" :rules="auditRules" ref="auditRuleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="审核状态" prop="auditStatus">
+          <el-select v-model="auditRuleForm.auditStatus">
+            <el-option
+              v-for="item in checkOptions.slice(1)"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="审核内容" prop="selectCheckContent">
+          <el-select v-model="ruleForm.selectCheckContent">
+            <el-option
+              v-for="item in checkcontentOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="审核意见" prop="auditSuggestion">
+          <el-input type="textarea" v-model="auditRuleForm.auditSuggestion" maxlength="100"></el-input>
+          <span>{{auditRuleForm.auditSuggestion.length}}/100</span>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetAutidForm('auditRuleForm')">取 消</el-button>
+        <el-button type="primary" @click="upDateAudit('auditRuleForm')">确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -294,11 +366,18 @@ export default {
         warnLevel: '',
         warnTypeId: [],
         timeValue: [],
-        checkType: []
+        checkType: [],
+        auditStatus: []
       },
       ruleForm: {
         status: '',
-        suggestion: ''
+        suggestion: '',
+        selectCheckContent: '' // 选择处理的内容
+      },
+      auditRuleForm: {
+        auditStatus: '',
+        auditSuggestion: '',
+        selectAuditContent: '' // 选择审核的内容
       },
       rules: {
         status: [
@@ -306,6 +385,24 @@ export default {
         ],
         suggestion: [
           { validator: markSuggestion, trigger: 'blur' }
+        ],
+        selectCheckContent: [
+          {
+            required: true, message: '请选择处理内容', trigger: 'blur'
+          }
+        ]
+      },
+      auditRules: {
+        auditStatus: [
+          { required: true, message: '请选择处理状态', trigger: 'blur' }
+        ],
+        auditSuggestion: [
+          { validator: markSuggestion, trigger: 'blur' }
+        ],
+        selectAuditContent: [
+          {
+            required: true, message: '请选择处理内容', trigger: 'blur'
+          }
         ]
       },
       levelOptions: [
@@ -331,6 +428,16 @@ export default {
           label: '误报'
         }
       ],
+      auditOptions: [
+        {
+          value: '0',
+          label: '未审核'
+        },
+        {
+          value: '1',
+          label: '已审核'
+        }
+      ],
       warnOptions: [],
       tableData: [],
       total: 0,
@@ -341,10 +448,14 @@ export default {
       loading: true,
       downloadLoading: true,
       checkDialog: false,
+      auditDialog: false,
       checkMsg: {},
+      auditMsg: {},
       code: '加载中',
       comOptions: [],
-      lineOptions: []
+      lineOptions: [],
+      checkcontentOptions: [],
+      isRoleType: localStorage.getItem('userRoleType')
     }
   },
   computed: {
@@ -365,6 +476,9 @@ export default {
     this._alarmType({
       warnLevel: ''
     })
+    this._getCheckOptions({
+      hStatus: ''
+    })
     this._tableList({
       orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
       lineId: this.formInline.lineId, // 线路id
@@ -378,7 +492,8 @@ export default {
       endTime: this.formInline.timeValue[1] || timeEnd,
       pageSize: 10,
       pageNum: 1,
-      handleResults: ''
+      handleResults: '',
+      auditStatus: []
     })
   },
   mounted () {
@@ -422,16 +537,16 @@ export default {
             endTime: this.formInline.timeValue[1],
             pageSize: 10,
             pageNum: 1,
-            handleResults
+            handleResults,
+            auditStatus: this.formInline.auditStatus
           })
         }
       }
     },
-    'formInline.warnLevel' () {
-      // console.log(this.formInline.warnLevel);
-      // this._alarmType({
-      //   warnLevel: this.formInline.warnLevel
-      // })
+    'formInline.auditStatus': {
+      handler (newV) {
+        this.formInline.checkType = []
+      }
     },
     'formInline.orgId': {
       handler (newValue) {
@@ -493,13 +608,26 @@ export default {
     },
     'ruleForm.status': {
       handler (newV) {
+        this.ruleForm.selectCheckContent = ''
+        this.ruleForm.suggestion = ''
         if (newV === '1') {
-          this.ruleForm.suggestion = '属实'
+          this._getCheckOptions({
+            hStatus: '1'
+          })
         } else if (newV === '2') {
-          this.ruleForm.suggestion = '误报'
+          this._getCheckOptions({
+            hStatus: '2'
+          })
         } else {
-          this.ruleForm.suggestion = ''
+          this._getCheckOptions({
+            hStatus: ''
+          })
         }
+      }
+    },
+    'ruleForm.selectCheckContent': {
+      handler (newV) {
+        this.ruleForm.suggestion = newV
       }
     }
   },
@@ -514,6 +642,22 @@ export default {
             label: list.value,
             value: list.code
           }
+        })
+      })
+    },
+    _getCheckOptions (params) {
+      this.$api['tiredMonitoring.getByStatus'](params).then(res => {
+        let dataArr = res
+        this.checkcontentOptions = []
+        dataArr.forEach((list, index) => {
+          this.checkcontentOptions[index] = {
+            label: list.hContext.length > 13 ? `${list.hContext.substring(0, 13)}...` : list.hContext,
+            value: list.hContext
+          }
+        })
+        this.checkcontentOptions.push({
+          label: '其他',
+          value: ''
         })
       })
     },
@@ -578,7 +722,8 @@ export default {
         endTime: this.formInline.timeValue[1],
         pageSize: 10,
         pageNum: this.pageNum,
-        handleResults: this.getCheckType(type)
+        handleResults: this.getCheckType(type),
+        auditStatus: this.formInline.auditStatus
       })
     },
     handleClick (row) {
@@ -605,7 +750,17 @@ export default {
       this.checkDialog = true
       this.ruleForm = {
         status: '',
-        suggestion: ''
+        suggestion: '',
+        selectCheckContent: ''
+      }
+    },
+    handleAudit (row) {
+      this.auditMsg.warnUuid = row.warnUuid
+      this.auditDialog = true
+      this.auditRuleForm = {
+        auditStatus: '',
+        auditSuggestion: '',
+        selectAuditContent: '' // 选择审核的内容
       }
     },
     upDateCheck (formName) {
@@ -631,7 +786,43 @@ export default {
               startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
               endTime: this.formInline.timeValue[1],
               pageSize: 10,
-              pageNum: this.pageNum
+              pageNum: this.pageNum,
+              auditStatus: this.formInline.auditStatus
+            })
+          }).catch(err => {
+            this.$message.error(err.msg)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    upDateAudit (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$api['tiredMonitoring.warnAudit']({
+            warnUuid: this.auditMsg.warnUuid,
+            auditStatus: this.auditSuggestion.status,
+            auditSuggestion: this.auditSuggestion.suggestion
+          }).then(res => {
+            this.$message.success('已处理')
+            this.checkDialog = false
+            let defaultData = this.$store.getters.formData
+            this._tableList({
+              orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
+              lineId: this.formInline.lineId, // 线路id
+              busUuid: this.formInline.busUuid, // 车辆id
+              devCode: this.formInline.devCode, // 设备号
+              busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+              busSelfCode: this.formInline.busSelfCode, // 自编号
+              warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+              warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
+              startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+              endTime: this.formInline.timeValue[1],
+              pageSize: 10,
+              pageNum: this.pageNum,
+              auditStatus: this.formInline.auditStatus
             })
           }).catch(err => {
             this.$message.error(err.msg)
@@ -644,6 +835,10 @@ export default {
     },
     resetForm (formName) {
       this.checkDialog = false
+      this.$refs[formName].resetFields()
+    },
+    resetAutidForm (formName) {
+      this.auditDialog = false
       this.$refs[formName].resetFields()
     },
     onSubmit () {
@@ -670,7 +865,8 @@ export default {
         endTime: dateArr[1],
         pageSize: 10,
         pageNum: 1,
-        handleResults: this.getCheckType(handleResults)
+        handleResults: this.getCheckType(handleResults),
+        auditStatus: this.formInline.auditStatus
       })
     },
     onClear () {
@@ -686,7 +882,8 @@ export default {
         warnLevel: '',
         warnTypeId: [],
         timeValue: [moment(endTime).format('YYYY-MM-DD 00:00:00'), moment(dataNow).format('YYYY-MM-DD 23:59:59')],
-        checkType: []
+        checkType: [],
+        auditStatus: []
       }
       this.$emit('clear')
     },
@@ -740,7 +937,8 @@ export default {
         warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
-        handleResults: this.getCheckType(handleResults)
+        handleResults: this.getCheckType(handleResults),
+        auditStatus: this.formInline.auditStatus
       }).then(res => {
         // console.log(res)
         window.open(res.url)

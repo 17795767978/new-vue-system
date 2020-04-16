@@ -90,6 +90,7 @@ const user = {
         // resolve()
         api['user.login'](params).then(res => {
           localStorage.setItem('userName', res.userInfo.userAccount)
+          localStorage.setItem('userRoleType', res.userInfo.auditStatus)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
           localStorage.setItem('id', res.userInfo.userId)
           resolve()
@@ -118,6 +119,7 @@ const user = {
         // 清除用户的id 清除权限
         localStorage.removeItem('id')
         localStorage.removeItem('userName')
+        localStorage.removeItem('userRoleType')
         resolve()
       })
     },
