@@ -48,6 +48,7 @@ export default {
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
       warnTypes: [],
+      auditStatus: [],
       handleResults: []
     })
   },
@@ -67,6 +68,7 @@ export default {
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
           warnTypes: this.selectData.warnTypeId,
+          auditStatus: this.selectData.auditStatus,
           handleResults: this.selectData.checkList
         })
       }
@@ -81,6 +83,7 @@ export default {
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
           warnTypes: this.echartsData === '' ? [] : [this.echartsData],
+          auditStatus: this.selectData.auditStatus,
           handleResults: this.selectData.checkList
         })
       }

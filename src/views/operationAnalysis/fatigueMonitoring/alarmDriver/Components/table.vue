@@ -22,17 +22,19 @@
         :prop="item.plvalue"
         :width="getWidth(item, index)"
         :label="item.pldisplay">
-        <!-- <template slot-scope="scope">
-          <el-button v-if="item.plvalue === 'drivername'" type="primary" size="mini" @click="getrowData(scope.row)">{{scope.row.drivername}}</el-button>
-          <span v-else>{{scope.row[item.plvalue]}}</span>
-        </template> -->
+        <template slot-scope="scope">
+          <span v-if="['orgname', 'linename', 'busplatenumber', 'drivernum', 'drivername'].some(val => val == item.plvalue)" type="primary" size="mini">{{scope.row[item.plvalue]}}</span>
+          <el-link type="primary" v-else @click="getrowData(scope.row, item.plvalue)">{{scope.row[item.plvalue]}}</el-link>
+        </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+// item.plvalue === 'drivername'
 import { mapGetters } from 'vuex'
+// const NOT_CLICK = ['orgname', 'linename', 'busplatenumber', 'drivernum', 'drivername', 'warnTotalNum']
 export default {
   props: {
     searchData: {
@@ -62,6 +64,7 @@ export default {
       startTime: defaultForm.dateArray[0],
       endTime: defaultForm.dateArray[1],
       warnTypes: defaultForm.warningArr,
+      auditStatus: [],
       handleResult: []
     })
   },
@@ -100,10 +103,11 @@ export default {
         this._getTableData({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
-          startTime: newV.dateArray[0] === undefined ? '' : newV.dateArray[0],
-          endTime: newV.dateArray[1] === undefined ? '' : newV.dateArray[1],
+          startTime: newV.dateArray[0],
+          endTime: newV.dateArray[1],
           warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId,
-          handleResults: newV.checkList
+          handleResults: newV.checkList,
+          auditStatus: newV.auditStatus
         })
       }
     }
@@ -188,7 +192,6 @@ export default {
       } else {
         this.tableAllData = this.tableAllData.sort((prev, next) => prev[column.prop] - next[column.prop])
       }
-      console.log(this.tableAllData)
       this.tableAllData.forEach((item, index) => {
         item.id = index + 1
       })
@@ -201,7 +204,6 @@ export default {
         this.tableData = this.tableAllData
         this.bigTable()
       }
-      console.log(column)
     },
     getSort (index) {
       if (index > 3) {
@@ -214,8 +216,46 @@ export default {
         return 130
       }
     },
-    getrowData (row) {
-      this.$emit('driverChanged', row)
+    getrowData (row, plvalue) {
+      // this.$emit('driverChanged', row)
+      let defaultForm = this.formData
+      let startTime = `${Object.keys(this.searchData).length > 0 ? this.searchData.dateArray[0] ? this.searchData.dateArray[0] : this.searchData.dateArray[0] : defaultForm.dateArray[0]} 00:00:00`
+      let endTime = `${Object.keys(this.searchData).length > 0 ? this.searchData.dateArray[1] ? this.searchData.dateArray[1] : this.searchData.dateArray[1] : defaultForm.dateArray[1]} 23:59:59`
+      let checkType = []
+      // console.log(startTime, endTime)
+      // console.log(Object.keys(this.searchData).length > 0 ? this.searchData.checkList : [])
+      Object.keys(this.searchData).length > 0 ? this.searchData.checkList.forEach(item => {
+        if (item === '0') {
+          checkType.push('未处理')
+        } else if (item === '1') {
+          checkType.push('已处理')
+        } else {
+          checkType.push('误报')
+        }
+      }) : checkType = []
+      let params = {
+        orgId: row.orguuid,
+        lineId: row.lineuuid,
+        busPlateNumber: row.busnumber,
+        busUuid: '',
+        devCode: '',
+        busSelfCode: '',
+        warnLevel: '',
+        driverName: row.drivername,
+        warnTypeId: plvalue === 'warnTotalNum' ? '' : [plvalue],
+        pageSize: 10,
+        pageNum: 1,
+        auditStatus: Object.keys(this.searchData).length > 0 ? this.searchData.auditStatus : [],
+        checkType: Object.keys(this.searchData).length > 0 ? checkType : [],
+        timeValue: [startTime, endTime]
+        // startTime: ,
+        // endTime:
+      }
+      this.$router.push({
+        params,
+        name: 'alarmCenter'
+      })
+      console.log(row, plvalue)
     }
   }
 }

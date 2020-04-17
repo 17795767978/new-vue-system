@@ -38,6 +38,7 @@ export default {
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1],
+      auditStatus: [],
       handleResults: []
     })
   },
@@ -53,6 +54,7 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
+          auditStatus: newV.auditStatus,
           handleResults: newV.checkList
         })
       }

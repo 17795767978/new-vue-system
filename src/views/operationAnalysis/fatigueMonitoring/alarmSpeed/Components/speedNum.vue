@@ -40,6 +40,7 @@ export default {
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
+      auditStatus: [],
       handleResults: []
     })
   },
@@ -55,6 +56,7 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
+          auditStatus: newV.auditStatus,
           handleResults: newV.checkList
         })
       }

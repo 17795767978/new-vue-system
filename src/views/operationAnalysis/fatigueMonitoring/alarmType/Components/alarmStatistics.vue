@@ -40,6 +40,7 @@ export default {
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1],
       warnTypes: [],
+      auditStatus: [],
       handleResults: []
     })
   },
@@ -56,6 +57,7 @@ export default {
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
           warnTypes: [],
+          auditStatus: newV.auditStatus,
           handleResults: newV.checkList
         })
       }

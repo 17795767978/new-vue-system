@@ -4,6 +4,7 @@
       :isOrg='true'
       :isLine="true"
       :isDateTo="true"
+      :isAudit="true"
       :isProcessingResult="true"
       :isEmpty="true"
       @configCheck="getSearch"

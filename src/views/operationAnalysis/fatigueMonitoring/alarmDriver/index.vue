@@ -7,6 +7,7 @@
       :isEmpty="true"
       :isWarntype="true"
       :isDownload="true"
+      :isAudit="true"
       :isProcessingResult="true"
       :downLoadName="downLoadName"
       @configCheck="getSearch"

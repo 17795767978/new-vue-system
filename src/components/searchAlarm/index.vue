@@ -242,9 +242,19 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="审核状态"  v-if="isAudit">
+          <el-select v-model="formInline.auditStatus" multiple collapse-tags placeholder="请选择">
+            <el-option
+              v-for="item in auditOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       <el-form-item label="处理结果:" v-if="isProcessingResult" size="mini">
         <el-checkbox-group v-model="formInline.checkList">
-          <el-checkbox label="未处理"></el-checkbox>
+          <el-checkbox label="未处理" :disabled="formInline.auditStatus.length === 1 ? formInline.auditStatus[0] === '1' : false"></el-checkbox>
           <el-checkbox label="已处理"></el-checkbox>
           <el-checkbox label="误报"></el-checkbox>
         </el-checkbox-group>
@@ -397,6 +407,9 @@ export default {
     },
     isBusSelfCode: {
       type: Boolean
+    },
+    isAudit: {
+      type: Boolean
     }
   },
   data () {
@@ -449,7 +462,8 @@ export default {
         modules: '',
         pages: '',
         checkList: [],
-        busSelfCode: ''
+        busSelfCode: '',
+        auditStatus: []
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -475,6 +489,16 @@ export default {
         label: '登出',
         value: '2'
       }],
+      auditOptions: [
+        {
+          value: '0',
+          label: '未审核'
+        },
+        {
+          value: '1',
+          label: '已审核'
+        }
+      ],
       modulesOptions: [],
       pagesOptions: [],
       lineOptions: [],
@@ -494,15 +518,6 @@ export default {
     this.formInline.orgId = ''
     this.formInline.busNumber = ''
     this.formInline.lineId = ''
-    // this.$store.dispatch('getComList').then(res => {
-    //   this.comOptions = res
-    // })
-    // this.$store.dispatch('getLineList').then(res => {
-    //   this.lineOptions = res
-    // })
-    // this.$store.dispatch('getCarList').then(res => {
-    //   this.carOptions = res
-    // })
     if (!this.isDefault) {
       this.$store.dispatch('getComSecList').then(res => {
         this.comOptionsSec = res
@@ -735,6 +750,11 @@ export default {
           this.pickerOptionsDateTo = {}
         }
       }
+    },
+    'formInline.auditStatus': {
+      handler (newV) {
+        this.formInline.checkList = []
+      }
     }
   },
   updated () {
@@ -784,6 +804,7 @@ export default {
     onSubmit () {
       // 处理结果值
       let checkList = []
+      // 审核结果值
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
       if (this.formInline.dateArray.length === 2) {
@@ -835,7 +856,8 @@ export default {
         modules: this.formInline.modules,
         pages: this.formInline.pages,
         checkList,
-        busSelfCode: this.formInline.busSelfCode
+        busSelfCode: this.formInline.busSelfCode,
+        auditStatus: this.formInline.auditStatus
       }
       this.$emit('configCheck', configData)
     },
@@ -871,7 +893,8 @@ export default {
         modules: '',
         pages: '',
         checkList: [],
-        busSelfCode: ''
+        busSelfCode: '',
+        auditStatus: []
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -903,7 +926,8 @@ export default {
         modules: this.formInline.modules,
         pages: this.formInline.pages,
         checkList: [],
-        busSelfCode: this.formInline.busSelfCode
+        busSelfCode: this.formInline.busSelfCode,
+        auditStatus: this.formInline.auditStatus
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -978,7 +1002,8 @@ export default {
         ip: this.formInline.ip,
         modules: this.formInline.modules,
         pages: this.formInline.pages,
-        busSelfCode: this.formInline.busSelfCode
+        busSelfCode: this.formInline.busSelfCode,
+        auditStatus: this.formInline.auditStatus
       }
       this.$emit('configCheckMul', configData)
     },
@@ -1027,7 +1052,8 @@ export default {
         selfCode: this.formInline.selfCode,
         handleResults: checkList,
         warnTypeId: ['ADASSNAP', 'DMSTOSNAP'],
-        busSelfCode: this.formInline.busSelfCode
+        busSelfCode: this.formInline.busSelfCode,
+        auditStatus: this.formInline.auditStatus
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

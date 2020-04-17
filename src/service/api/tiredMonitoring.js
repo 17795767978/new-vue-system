@@ -535,6 +535,19 @@ export const tiredMonitoringApi = {
         hStatus: ''
       },
       desc: '报警处理结果-根据状态查询处理结果'
+    },
+    // /zhfxpt/getAlarmHandleAnalysis
+    {
+      name: 'getAlarmHandleAnalysis',
+      method: 'POST',
+      path: '/zhfxpt/getAlarmHandleAnalysis',
+      mockPath: '/zhfxpt/getAlarmHandleAnalysis',
+      params: {
+        userId: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '用户处理结果报表'
     }
   ]
 }

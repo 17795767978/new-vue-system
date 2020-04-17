@@ -18,24 +18,32 @@
       </el-table-column>
       <el-table-column
         align="center"
-        prop="hStatus"
-        label="处理类型">
+        prop="handleType"
+        label="操作类型">
         <template slot-scope="scope">
-          <span>{{scope.row.hStatus === '1' ? '已处理' : '误报'}}</span>
+          <span>{{scope.row.handleType === '1' ? '处理' : '审核'}}</span>
         </template>
       </el-table-column>
       <el-table-column
         align="center"
-        prop="hContext"
+        prop="handleStatus"
+        label="处理类型">
+        <template slot-scope="scope">
+          <span>{{scope.row.handleStatus === '1' ? '已处理' : '误报'}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="handleContext"
         label="处理内容" width="600">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="hIsvalid"
+        prop="handleIsvalid"
         label="内容状态">
         <template slot-scope="scope">
-          <el-button type="danger" plain v-if="scope.row.hIsvalid === '0'" size="small" @click="handleOpen(scope.row)">禁用</el-button>
-          <el-button type="success" plain v-if="scope.row.hIsvalid === '1'" size="small"  @click="handleBan(scope.row)">启用</el-button>
+          <el-button type="danger" plain v-if="scope.row.handleIsvalid === '0'" size="small" @click="handleOpen(scope.row)">禁用</el-button>
+          <el-button type="success" plain v-if="scope.row.handleIsvalid === '1'" size="small"  @click="handleBan(scope.row)">启用</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -116,9 +124,9 @@ export default {
     handleBan (row) {
       this.$api['tiredMonitoring.updateAlarmResult']({
         uuid: row.uuid,
-        hStatus: row.hStatus,
-        hContext: row.hContext,
-        hIsvalid: 0
+        handleStatus: row.handleStatus,
+        handleContext: row.handleContext,
+        handleIsvalid: 0
       }).then(res => {
         this._alarmManageTable({
           pageSize: 10,
@@ -129,9 +137,9 @@ export default {
     handleOpen (row) {
       this.$api['tiredMonitoring.updateAlarmResult']({
         uuid: row.uuid,
-        hStatus: row.hStatus,
-        hContext: row.hContext,
-        hIsvalid: 1
+        handleStatus: row.handleStatus,
+        handleContext: row.handleContext,
+        handleIsvalid: 1
       }).then(res => {
         this._alarmManageTable({
           pageSize: 10,

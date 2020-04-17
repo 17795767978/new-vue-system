@@ -4,6 +4,7 @@
       :isOrg='true'
       :isDataCurrent="true"
       :isDownload="true"
+      :isAudit="true"
       :isProcessingResult="true"
       :downLoadName="downLoadName"
       @configCheck="getSearch" />

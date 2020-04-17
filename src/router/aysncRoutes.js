@@ -386,6 +386,16 @@ export const aysncRoutesMap = [
             icon: 'nocturne icon-dash',
             roles: ['/equipment-capture']
           }
+        },
+        {
+          path: 'user-result',
+          component: _import_('operationAnalysis/fatigueMonitoring/userCheckResult/index'),
+          name: 'userCheckResult',
+          meta: {
+            title: '用户处理结果',
+            icon: 'nocturne icon-dash',
+            roles: ['/device-status']
+          }
         }
       ]
     }

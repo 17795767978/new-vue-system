@@ -39,6 +39,8 @@ export default {
   mounted () {
     // console.log(123);
   },
+  activated () {
+  },
   watch: {
     headerParams: {
       deep: true,

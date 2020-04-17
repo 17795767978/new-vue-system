@@ -263,6 +263,7 @@ export default {
       orgId: this.userId === '1' ? '' : this.userId,
       startTime,
       warnTypes: this.formData.warningArr,
+      auditStatus: [],
       handleResults: []
     })
   },
@@ -280,7 +281,8 @@ export default {
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           startTime: moment(newV.dataCurrent).format('YYYY-MM-DD'),
           warnTypes: this.formData.warningArr,
-          handleResults: newV.checkList
+          handleResults: newV.checkList,
+          auditStatus: newV.auditStatus
         })
       }
     }

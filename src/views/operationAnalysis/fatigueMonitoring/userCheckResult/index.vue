@@ -1,17 +1,10 @@
 <template>
-  <div class="monitoring-ledger">
+  <div class="user-result">
     <Search
-      :isOrg='true'
-      :isLine="true"
-      :isBus="true"
-      :isDriverNum="true"
-      :isDate="true"
-      :isEmpty="true"
-      :isWarntype="true"
-      :isDownload="true"
-      :isAudit="true"
-      :isProcessingResult="true"
+      :isUser="true"
+      :isDateTo="true"
       :downLoadName="downLoadName"
+      :isEmpty="true"
       @configCheck="getSearch" />
       <div class="table-style">
         <Table :selectData="selectData"/>
@@ -21,10 +14,10 @@
 
 <script>
 import Search from '@/components/searchAlarm'
-import Table from './Components/Table'
+import Table from './Components/table'
 import mixinsTime from '@/mixins/global/'
 export default {
-  name: 'monitoringLedger',
+  name: 'userCheckResult',
   mixins: [mixinsTime],
   data () {
     return {
@@ -45,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.monitoring-ledger {
+.user-result {
   .table-style {
     width: 100%;
     padding: 3vh 5vw;

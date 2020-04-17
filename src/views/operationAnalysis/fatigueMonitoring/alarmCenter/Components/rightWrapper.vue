@@ -31,6 +31,9 @@
         <el-form-item label="自编号">
           <el-input v-model="formInline.busSelfCode" placeholder="请输自编号" clearable></el-input>
         </el-form-item>
+        <el-form-item label="司机">
+          <el-input v-model="formInline.driverName" placeholder="请输司机名" clearable></el-input>
+        </el-form-item>
         <el-form-item label="报警级别">
           <el-select v-model="formInline.warnLevel" placeholder="请选择">
             <el-option
@@ -177,6 +180,23 @@
         </el-table-column>
         <el-table-column
           align="center"
+          prop="handleUser"
+          fixed="right"
+          label="处理人"
+          width="100"
+        >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="handleTime"
+          fixed="right"
+          label="处理时间"
+          :formatter="getHandleTime"
+          width="160"
+        >
+        </el-table-column>
+        <el-table-column
+          align="center"
           prop="warnTime"
           fixed="right"
           label="处理结果"
@@ -193,7 +213,7 @@
           prop="handleSuggestion"
           fixed="right"
           label="处理意见"
-          width="300"
+          width="120"
         >
           <template slot-scope="scope">
             <el-tooltip class="item" effect="light" :content="scope.row.handleSuggestion" placement="top-start">
@@ -203,10 +223,23 @@
         </el-table-column>
         <el-table-column
           align="center"
+          prop="auditStatus"
+          fixed="right"
+          label="审核结果"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <span v-if="scope.row.auditStatus === '0'"></span>
+            <span v-else-if="scope.row.auditStatus === '1'">已处理</span>
+            <span v-else>误报</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
           prop="handleSuggestion"
           fixed="right"
           label="审核意见"
-          width="300"
+          width="120"
         >
           <template slot-scope="scope">
             <el-tooltip class="item" effect="light" :content="scope.row.auditSuggestion" placement="top-start">
@@ -223,7 +256,7 @@
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
             <el-button :disabled="scope.row.overTime || scope.row.handleResult !== '0'" @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
             <!-- isRoleType -->
-            <el-button v-if="isRoleType" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
+            <el-button v-if="isRoleType && scope.row.handleResult !== '0'" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -302,10 +335,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="审核内容" prop="selectCheckContent">
-          <el-select v-model="ruleForm.selectCheckContent">
+        <el-form-item label="审核内容" prop="selectAuditContent">
+          <el-select v-model="auditRuleForm.selectAuditContent">
             <el-option
-              v-for="item in checkcontentOptions"
+              v-for="item in auditcontentOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -364,6 +397,7 @@ export default {
         busUuid: '',
         busSelfCode: '',
         warnLevel: '',
+        driverName: '',
         warnTypeId: [],
         timeValue: [],
         checkType: [],
@@ -455,6 +489,7 @@ export default {
       comOptions: [],
       lineOptions: [],
       checkcontentOptions: [],
+      auditcontentOptions: [],
       isRoleType: localStorage.getItem('userRoleType')
     }
   },
@@ -462,7 +497,6 @@ export default {
     ...mapGetters(['userId'])
   },
   created () {
-    let defaultData = this.$store.getters.formData
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
@@ -473,44 +507,62 @@ export default {
       this.lineOptions = this.$store.state.globel.lineData
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
+    this.formInline.orgId = this.userId
     this._alarmType({
       warnLevel: ''
     })
-    this._getCheckOptions({
-      hStatus: ''
-    })
-    this._tableList({
-      orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
-      lineId: this.formInline.lineId, // 线路id
-      busUuid: this.formInline.busUuid, // 车辆id
-      devCode: this.formInline.devCode, // 设备号
-      busPlateNumber: this.formInline.busPlateNumber, // 车牌号
-      busSelfCode: this.formInline.busSelfCode, // 自编号
-      warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-      warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
-      startTime: this.formInline.timeValue[0] || timeStart, // 时间格式   开始结束默认查近7天的
-      endTime: this.formInline.timeValue[1] || timeEnd,
-      pageSize: 10,
-      pageNum: 1,
-      handleResults: '',
-      auditStatus: []
-    })
   },
   mounted () {
-    let dataNow = new Date()
-    let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
-    let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
-    let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
+    let defaultData = this.$store.getters.formData
     setTimeout(() => {
-      this.formInline.timeValue = [timeStart, timeEnd]
-    }, 20)
-    // console.log(this.formInline);
-    // if (this.userId !== '1') {
-    //   this.disabled = true
-    // }
-    this.formInline.orgId = this.userId
+      if (Object.keys(this.$route.params).length > 0) {
+        this.formInline = this.$route.params
+      }
+      let type = this.formInline.checkType
+      this._tableList({
+        orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
+        lineId: this.formInline.lineId, // 线路id
+        busUuid: this.formInline.busUuid, // 车辆id
+        devCode: this.formInline.devCode, // 设备号
+        busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+        busSelfCode: this.formInline.busSelfCode, // 自编号
+        warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+        warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
+        startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+        endTime: this.formInline.timeValue[1],
+        pageSize: 10,
+        pageNum: 1,
+        driverName: this.formInline.driverName,
+        handleResults: this.getCheckType(type),
+        auditStatus: this.formInline.auditStatus
+      })
+    }, 200)
   },
-  activeted () {
+  activated () {
+    let defaultData = this.$store.getters.formData
+    setTimeout(() => {
+      if (Object.keys(this.$route.params).length > 0) {
+        this.formInline = this.$route.params
+      }
+      let type = this.formInline.checkType
+      this._tableList({
+        orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
+        lineId: this.formInline.lineId, // 线路id
+        busUuid: this.formInline.busUuid, // 车辆id
+        devCode: this.formInline.devCode, // 设备号
+        busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+        busSelfCode: this.formInline.busSelfCode, // 自编号
+        warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+        warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
+        startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+        endTime: this.formInline.timeValue[1],
+        driverName: this.formInline.driverName,
+        pageSize: 10,
+        pageNum: 1,
+        handleResults: this.getCheckType(type),
+        auditStatus: this.formInline.auditStatus
+      })
+    }, 200)
   },
   watch: {
     selectCarData: {
@@ -535,6 +587,7 @@ export default {
             warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
             startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
             endTime: this.formInline.timeValue[1],
+            driverName: this.formInline.driverName,
             pageSize: 10,
             pageNum: 1,
             handleResults,
@@ -543,15 +596,28 @@ export default {
         }
       }
     },
+    '$route.params': {
+      handler (newV) {
+        console.log(newV)
+      }
+    },
     'formInline.auditStatus': {
       handler (newV) {
-        this.formInline.checkType = []
+        // 判断是否路由传值
+        if (Object.keys(this.$route.params).length === 0) {
+          this.formInline.checkType = []
+        } else {
+          this.formInline.checkType = this.$route.params.checkType
+        }
       }
     },
     'formInline.orgId': {
       handler (newValue) {
-        this.formInline.lineId = ''
-        this.formInline.busNumber = ''
+        // 判断是否路由传值
+        if (Object.keys(this.$route.params).length === 0) {
+          this.formInline.lineId = ''
+          this.formInline.busNumber = ''
+        }
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
           lineId: '',
@@ -612,15 +678,51 @@ export default {
         this.ruleForm.suggestion = ''
         if (newV === '1') {
           this._getCheckOptions({
-            hStatus: '1'
+            handleStatus: '1',
+            handleType: '1',
+            handleIsvalid: '1'
           })
         } else if (newV === '2') {
           this._getCheckOptions({
-            hStatus: '2'
+            handleStatus: '2',
+            handleType: '1',
+            handleIsvalid: '1'
           })
         } else {
           this._getCheckOptions({
-            hStatus: ''
+            handleStatus: '',
+            handleType: '1',
+            handleIsvalid: '1'
+          })
+        }
+      }
+    },
+    'auditRuleForm.auditStatus': {
+      // auditRuleForm: {
+      //   auditStatus: '',
+      //   auditSuggestion: '',
+      //   selectAuditContent: '' // 选择审核的内容
+      // },
+      handler (newV) {
+        this.auditRuleForm.selectAuditContent = ''
+        this.auditRuleForm.auditSuggestion = ''
+        if (newV === '1') {
+          this._getCheckOptions({
+            handleStatus: '1',
+            handleType: '2',
+            handleIsvalid: '1'
+          })
+        } else if (newV === '2') {
+          this._getCheckOptions({
+            handleStatus: '2',
+            handleType: '2',
+            handleIsvalid: '1'
+          })
+        } else {
+          this._getCheckOptions({
+            handleStatus: '',
+            handleType: '2',
+            handleIsvalid: '1'
           })
         }
       }
@@ -628,6 +730,12 @@ export default {
     'ruleForm.selectCheckContent': {
       handler (newV) {
         this.ruleForm.suggestion = newV
+      }
+    },
+    'auditRuleForm.selectAuditContent': {
+      handler (newV) {
+        console.log(newV)
+        this.auditRuleForm.auditSuggestion = newV
       }
     }
   },
@@ -649,16 +757,30 @@ export default {
       this.$api['tiredMonitoring.getByStatus'](params).then(res => {
         let dataArr = res
         this.checkcontentOptions = []
-        dataArr.forEach((list, index) => {
-          this.checkcontentOptions[index] = {
-            label: list.hContext.length > 13 ? `${list.hContext.substring(0, 13)}...` : list.hContext,
-            value: list.hContext
-          }
-        })
-        this.checkcontentOptions.push({
-          label: '其他',
-          value: ''
-        })
+        this.auditcontentOptions = []
+        if (params.handleType === '1') {
+          dataArr.forEach((list, index) => {
+            this.checkcontentOptions[index] = {
+              label: list.handleContext.length > 13 ? `${list.handleContext.substring(0, 13)}...` : list.handleContext,
+              value: list.handleContext
+            }
+          })
+          this.checkcontentOptions.push({
+            label: '其他',
+            value: ''
+          })
+        } else {
+          dataArr.forEach((list, index) => {
+            this.auditcontentOptions[index] = {
+              label: list.handleContext.length > 13 ? `${list.handleContext.substring(0, 13)}...` : list.handleContext,
+              value: list.handleContext
+            }
+          })
+          this.auditcontentOptions.push({
+            label: '其他',
+            value: ''
+          })
+        }
       })
     },
     _tableList (params) {
@@ -671,6 +793,9 @@ export default {
         this.loading = false
         this.$message.error(err.message)
       })
+    },
+    getHandleTime (row) {
+      return row.handleTime && moment(row.handleTime).format('YYYY-MM-DD HH:mm:ss')
     },
     // 左侧点击是否显示右侧搜索内容，0 总公司 1 公司 2 线路 3 车牌号
     changeBusPlateNumber () {
@@ -722,6 +847,7 @@ export default {
         endTime: this.formInline.timeValue[1],
         pageSize: 10,
         pageNum: this.pageNum,
+        driverName: this.formInline.driverName,
         handleResults: this.getCheckType(type),
         auditStatus: this.formInline.auditStatus
       })
@@ -753,6 +879,11 @@ export default {
         suggestion: '',
         selectCheckContent: ''
       }
+      this._getCheckOptions({
+        handleStatus: '',
+        handleType: '1',
+        handleIsvalid: '1'
+      })
     },
     handleAudit (row) {
       this.auditMsg.warnUuid = row.warnUuid
@@ -762,6 +893,11 @@ export default {
         auditSuggestion: '',
         selectAuditContent: '' // 选择审核的内容
       }
+      this._getCheckOptions({
+        handleStatus: '',
+        handleType: '2',
+        handleIsvalid: '1'
+      })
     },
     upDateCheck (formName) {
       this.$refs[formName].validate((valid) => {
@@ -787,6 +923,7 @@ export default {
               endTime: this.formInline.timeValue[1],
               pageSize: 10,
               pageNum: this.pageNum,
+              driverName: this.formInline.driverName,
               auditStatus: this.formInline.auditStatus
             })
           }).catch(err => {
@@ -803,11 +940,11 @@ export default {
         if (valid) {
           this.$api['tiredMonitoring.warnAudit']({
             warnUuid: this.auditMsg.warnUuid,
-            auditStatus: this.auditSuggestion.status,
-            auditSuggestion: this.auditSuggestion.suggestion
+            auditStatus: this.auditRuleForm.auditStatus,
+            auditSuggestion: this.auditRuleForm.auditSuggestion
           }).then(res => {
             this.$message.success('已处理')
-            this.checkDialog = false
+            this.auditDialog = false
             let defaultData = this.$store.getters.formData
             this._tableList({
               orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
@@ -822,6 +959,7 @@ export default {
               endTime: this.formInline.timeValue[1],
               pageSize: 10,
               pageNum: this.pageNum,
+              driverName: this.formInline.driverName,
               auditStatus: this.formInline.auditStatus
             })
           }).catch(err => {
@@ -865,6 +1003,7 @@ export default {
         endTime: dateArr[1],
         pageSize: 10,
         pageNum: 1,
+        driverName: this.formInline.driverName,
         handleResults: this.getCheckType(handleResults),
         auditStatus: this.formInline.auditStatus
       })
@@ -937,6 +1076,7 @@ export default {
         warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
+        driverName: this.formInline.driverName,
         handleResults: this.getCheckType(handleResults),
         auditStatus: this.formInline.auditStatus
       }).then(res => {

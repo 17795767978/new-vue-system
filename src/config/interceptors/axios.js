@@ -17,6 +17,14 @@ export function axiosRequestSucessFunc (config) {
   // config.headers['Content-type'] = 'application/x-www-form-urlencoded'
   const token = store.getters.token
   // config.withCredentials = true
+  let auditStatus = config.data && config.data.auditStatus
+  if (auditStatus) {
+    if (auditStatus.some(item => item === '1')) {
+      config.data.auditStatus = [...auditStatus, '2']
+    } else {
+      config.data.auditStatus = auditStatus
+    }
+  }
   if (token) {
     config.headers.common['authorization'] = token
   }
@@ -26,6 +34,11 @@ export function axiosRequestSucessFunc (config) {
   if (config.data && config.data.orgUuid && config.data.orgUuid === '1') {
     config.data.orgUuid = ''
   }
+  // if (config.data && config.data.auditStatus && config.data.auditStatus.some(item => item === '1')) {
+  //   config.data.auditStatus = [...config.data.auditStatus, '2']
+  // } else {
+  //   config.data.auditStatus = [...config.data.auditStatus]
+  // }
   config.data && (config.data.personId = localStorage.getItem('id'))
   return config
 }
