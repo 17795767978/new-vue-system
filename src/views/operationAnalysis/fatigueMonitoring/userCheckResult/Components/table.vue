@@ -105,11 +105,12 @@ export default {
     'selectData': {
       deep: true,
       handler (newV) {
+        console.log(newV)
         this.pageNumber = 1
         this._getDrivingBehaviorDay({
           userId: newV.user,
-          startTime: newV.startTime,
-          endTime: newV.endTime
+          startTime: newV.dateArray[0],
+          endTime: newV.dateArray[1]
         })
       }
     }
@@ -131,8 +132,8 @@ export default {
       if (Object.keys(this.selectData).length > 0) {
         this._getDrivingBehaviorDay({
           userId: this.selectData.user,
-          startTime: this.selectData.startTime,
-          endTime: this.selectData.endTime,
+          startTime: this.selectData.dateArray[0],
+          endTime: this.selectData.dateArray[1],
           pageNumber: this.pageNumber,
           pageSize: this.pageSize
         })
