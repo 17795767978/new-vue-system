@@ -2,7 +2,7 @@
   <div class="alarm-content" v-loading="load">
     <el-row class="pic">
       <el-card shadow="hover" class="person-detail">
-        <personDetail :busDetails="busDetails" :overspeedDetails="overspeedDetails" :position="position"/>
+        <personDetail :busDetails="busDetails" :overspeedDetails="overspeedDetails" :position="position" @update="update"/>
       </el-card>
     </el-row>
     <el-row class="pic-middle" :gutter="12">
@@ -125,6 +125,9 @@ export default {
     // },
     getLocation (address) {
       this.position = address
+    },
+    update () {
+      this._warnInfoDetail(this.$route.query.id)
     }
   }
 }

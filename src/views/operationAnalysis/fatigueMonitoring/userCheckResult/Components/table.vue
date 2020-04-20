@@ -19,7 +19,6 @@
         prop="userName"
         align="center"
         label="用户名"
-        :formatter="getDate"
         >
       </el-table-column>
       <el-table-column
@@ -58,7 +57,7 @@
         label="误差占比">
       </el-table-column>
     </el-table>
-    <el-pagination
+    <!-- <el-pagination
       style="float: right; margin-top: 1vh"
       background
       :current-page="pageNumber"
@@ -66,7 +65,7 @@
       layout="total, prev, pager, next"
       :page-size="pageSize"
       :total="total">
-    </el-pagination>
+    </el-pagination> -->
   </div>
 </template>
 
@@ -97,7 +96,7 @@ export default {
     let startTime = moment(yestoday - 7 * 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
     let endTime = moment().format('YYYY-MM-DD')
     this._getDrivingBehaviorDay({
-      userId: '',
+      userId: localStorage.getItem('id'),
       startTime,
       endTime })
   },
@@ -105,10 +104,9 @@ export default {
     'selectData': {
       deep: true,
       handler (newV) {
-        console.log(newV)
         this.pageNumber = 1
         this._getDrivingBehaviorDay({
-          userId: newV.user,
+          userId: localStorage.getItem('id'),
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1]
         })
@@ -119,8 +117,13 @@ export default {
     _getDrivingBehaviorDay (params) {
       this.isLoading = true
       this.$api['tiredMonitoring.getAlarmHandleAnalysis'](params).then(res => {
+        this.tableData = []
         this.isLoading = false
-        this.tableData = res
+        res.forEach((item, index) => {
+          this.tableData[index] = item
+          this.tableData[index].untreatedRatio = (item.untreated / item.alarmSum).toFixed(2)
+          this.tableData[index].errorRatio = ((item.processedErro + item.falseAlarmErro) / item.processed).toFixed(2)
+        })
       })
     },
     // 时间格式化

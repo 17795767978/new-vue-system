@@ -6,6 +6,8 @@
       :isDefault="true"
       :isEmpty="true"
       :isBus="true"
+      :isDate="true"
+      :isRadio="true"
       :isBusSelfCode="true"
       :isDownload="true"
       :downLoadName="downLoadName"

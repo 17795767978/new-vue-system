@@ -8,6 +8,7 @@
       :ak='ak'
       :scroll-wheel-zoom="true"
       @ready="handler"
+      @click="getPoint"
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <bm-marker
@@ -73,8 +74,8 @@ export default {
       this.cityPosition = res
     })
     setTimeout(() => {
-      this.getPoint(this.currentPoint)
-    }, 1000)
+      this.initPoint(this.currentPoint)
+    }, 3000)
   },
   // updated () {
   // this.mapData = this.busDetails
@@ -86,7 +87,7 @@ export default {
   // },
   activated () {
     setTimeout(() => {
-      this.getPoint(this.currentPoint)
+      this.initPoint(this.currentPoint)
     }, 1000)
   },
   watch: {
@@ -130,10 +131,20 @@ export default {
         this.currentPoint = new BMap.Point(this.busDetails.lng, this.busDetails.lat)
       }
     },
-    getPoint (point) {
+    initPoint (point) {
       this.infoWindow.show = true
       if (!this.isErrorPosition) {
         this.geocoder.getLocation(point, res => {
+          this.address = res.address
+        })
+      } else {
+        this.address = ''
+      }
+    },
+    getPoint (e) {
+      this.infoWindow.show = true
+      if (!this.isErrorPosition) {
+        this.geocoder.getLocation(e.point, res => {
           this.address = res.address
         })
       } else {

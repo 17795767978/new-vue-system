@@ -18,7 +18,7 @@ export function axiosRequestSucessFunc (config) {
   const token = store.getters.token
   // config.withCredentials = true
   let auditStatus = config.data && config.data.auditStatus
-  if (auditStatus) {
+  if (auditStatus && auditStatus instanceof Array) {
     if (auditStatus.some(item => item === '1')) {
       config.data.auditStatus = [...auditStatus, '2']
     } else {

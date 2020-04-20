@@ -1,7 +1,6 @@
 <template>
   <div class="user-result">
     <Search
-      :isUser="true"
       :isDateTo="true"
       :downLoadName="downLoadName"
       :isEmpty="true"

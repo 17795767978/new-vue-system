@@ -544,6 +544,7 @@ export default {
       if (Object.keys(this.$route.params).length > 0) {
         this.formInline = this.$route.params
       }
+      this.pageNum = 1
       let type = this.formInline.checkType
       this._tableList({
         orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
