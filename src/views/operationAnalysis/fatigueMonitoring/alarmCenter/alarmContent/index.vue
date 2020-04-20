@@ -2,7 +2,7 @@
   <div class="alarm-content" v-loading="load">
     <el-row class="pic">
       <el-card shadow="hover" class="person-detail">
-        <personDetail :busDetails="busDetails" :overspeedDetails="overspeedDetails" :position="position"/>
+        <personDetail :busDetails="busDetails" :overspeedDetails="overspeedDetails" :position="position" @update="update"/>
       </el-card>
     </el-row>
     <el-row class="pic-middle" :gutter="12">
@@ -66,6 +66,7 @@ export default {
     speedEchart
   },
   created () {
+    sessionStorage.setItem('sessionQuery', this.$route.query.id)
     if (Object.keys(this.$route.query).length > 0) {
       this._warnInfoDetail(this.$route.query.id)
       if (this.$route.query.type !== 'normal') {
@@ -85,6 +86,7 @@ export default {
   },
   activated () {
     if (Object.keys(this.$route.query).length > 0) {
+      sessionStorage.setItem('sessionQuery', this.$route.query.id)
       this._warnInfoDetail(this.$route.query.id)
       if (this.$route.query.type === 'normal') {
         this.overspeedDetails = {}
@@ -93,6 +95,9 @@ export default {
         this.position = ''
       }
     }
+  },
+  beforeDestroy () {
+    sessionStorage.removeItem('sessionQuery')
   },
   watch: {},
   methods: {
@@ -125,6 +130,9 @@ export default {
     // },
     getLocation (address) {
       this.position = address
+    },
+    update () {
+      this._warnInfoDetail(JSON.parse(JSON.stringify(sessionStorage.getItem('sessionQuery'))))
     }
   }
 }

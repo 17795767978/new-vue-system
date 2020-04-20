@@ -1,6 +1,11 @@
+
 <template>
   <div class="person-detail-content">
-    <h3 class="demonstration">报警详情</h3>
+    <h3 class="demonstration">报警详情
+      <span style="display:inline-block; float: right; margin-right: 2vw;">
+        <el-button type="success" size="mini" @click="handleCheck" :disabled="overspeedDetails.handleResult !== '0' && busDetails.handleResult !== '0'">处理</el-button>
+      </span>
+    </h3>
     <el-row :gutter="24"  class="pic">
        <el-col :span="6">
         <i class="fa fa-credit-card"></i>
@@ -71,6 +76,32 @@
         <span>当前位置：{{position}}</span>
        </el-col>
     </el-row>
+    <el-dialog
+      title="处理操作"
+      :visible.sync="checkDialog"
+      width="30%"
+      center>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="处理状态" prop="status">
+          <el-select v-model="ruleForm.status">
+            <el-option
+              v-for="item in checkOptions.slice(1)"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="处理意见" prop="suggestion">
+          <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100"></el-input>
+          <span>{{ruleForm.suggestion.length}}/100</span>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button type="primary" @click="upDateCheck('ruleForm')">确认</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -90,7 +121,50 @@ export default {
     }
   },
   data () {
+    let markSuggestion = (rule, value, callback) => {
+      if (value === '') {
+        callback()
+      } else if (value.length && value.length > 150) {
+        return callback(new Error('输入最大100字'))
+      } else {
+        callback()
+      }
+    }
     return {
+      checkDialog: false,
+      auditDialog: false,
+      ruleForm: {
+        status: '',
+        suggestion: ''
+      },
+      checkcontentOptions: [],
+      checkOptions: [
+        {
+          value: '0',
+          label: '未处理'
+        },
+        {
+          value: '1',
+          label: '已处理'
+        },
+        {
+          value: '2',
+          label: '误报'
+        }
+      ],
+      rules: {
+        status: [
+          { required: true, message: '请选择处理状态', trigger: 'blur' }
+        ],
+        suggestion: [
+          { validator: markSuggestion, trigger: 'blur' }
+        ],
+        selectCheckContent: [
+          {
+            required: true, message: '请选择处理内容', trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   computed: {
@@ -108,11 +182,52 @@ export default {
     'overspeedDetails': {
       deep: true,
       handler (newV) {
-        console.log(newV)
+      }
+    },
+    'ruleForm.status': {
+      handler (newV) {
+        if (newV === '1') {
+          this.ruleForm.suggestion = '属实'
+        } else if (newV === '2') {
+          this.ruleForm.suggestion = '误报'
+        } else {
+          this.ruleForm.suggestion = ''
+        }
       }
     }
   },
   methods: {
+    handleCheck (row) {
+      this.checkDialog = true
+      this.ruleForm = {
+        status: '',
+        suggestion: ''
+      }
+    },
+    upDateCheck (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$api['tiredMonitoring.wsUpdate']({
+            warnUuid: this.busDetails.warnUuid || this.overspeedDetails.warnUuid,
+            handleResult: this.ruleForm.status,
+            handleSuggestion: this.ruleForm.suggestion
+          }).then(res => {
+            this.$message.success('已处理')
+            this.checkDialog = false
+            this.$emit('update')
+          }).catch(err => {
+            this.$message.error(err.msg)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm (formName) {
+      this.checkDialog = false
+      this.$refs[formName].resetFields()
+    }
   },
   components: {
   }
