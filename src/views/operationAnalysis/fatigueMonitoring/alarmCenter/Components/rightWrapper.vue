@@ -52,14 +52,6 @@
           </el-select>
         </el-form-item>
         <el-form-item label="处理结果">
-          <!-- <el-select v-model="formInline.checkType">
-            <el-option
-              v-for="item in checkOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select> -->
           <el-checkbox-group v-model="formInline.checkType">
             <el-checkbox label="未处理"></el-checkbox>
             <el-checkbox label="已处理"></el-checkbox>
@@ -183,12 +175,31 @@
           prop="handleSuggestion"
           fixed="right"
           label="处理意见"
+          width="200"
         >
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" :content="scope.row.handleSuggestion" placement="top-start">
             <span>{{scope.row.handleSuggestion && scope.row.handleSuggestion.length > 7 ? `${scope.row.handleSuggestion.substring(0, 6)}...` : scope.row.handleSuggestion}}</span>
           </el-tooltip>
         </template>
+        </el-table-column>
+        <el-table-column align="center"
+          prop="handleUser"
+          fixed="right"
+          width="150"
+          label="抄送人">
+          <template>
+            <el-input type="text" size="mini"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column align="center"
+          prop="handleTime"
+          fixed="right"
+          width="100"
+          label="抄送时间">
+          <template>
+
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -254,8 +265,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import { tableList, alarmType, downLoad } from 'server/interface'
-// import downloadExcel from 'vue-json-excel'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {

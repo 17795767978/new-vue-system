@@ -59,7 +59,8 @@ export default {
       map: {},
       cityPosition: {},
       text: '',
-      isErrorPosition: false
+      isErrorPosition: false,
+      currentPoint: {}
     }
   },
   components: {
@@ -72,6 +73,9 @@ export default {
     this.$api['wholeInformation.getCityCoordinatePoints']().then(res => {
       this.cityPosition = res
     })
+    setTimeout(() => {
+      this.initPoint(this.currentPoint)
+    }, 3000)
   },
   // updated () {
   // this.mapData = this.busDetails
@@ -81,6 +85,11 @@ export default {
   // this.position.lat = this.mapData.lat
   // this.zoom = 18
   // },
+  activated () {
+    setTimeout(() => {
+      this.initPoint(this.currentPoint)
+    }, 1000)
+  },
   watch: {
     busDetails: {
       deep: true,
@@ -119,6 +128,17 @@ export default {
           this.isErrorPosition = false
         }, 100)
         this.geocoder = new BMap.Geocoder()
+        this.currentPoint = new BMap.Point(this.busDetails.lng, this.busDetails.lat)
+      }
+    },
+    initPoint (point) {
+      this.infoWindow.show = true
+      if (!this.isErrorPosition) {
+        this.geocoder.getLocation(point, res => {
+          this.address = res.address
+        })
+      } else {
+        this.address = ''
       }
     },
     getPoint (e) {
