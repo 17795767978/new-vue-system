@@ -5,8 +5,8 @@
       v-show="!sidebarState.isHidden"
       :style="{background: systemThemeColor}">
         <div class="logo">
-          <div class="full" v-show="sidebarState.isOpen">运营监控</div>
-          <div class="short" v-show="!sidebarState.isOpen"></div>
+          <div class="full" style="font-size: 1vw" v-show="sidebarState.isOpen">大数据分析平台</div>
+          <div class="short" style="font-size: .3vw" v-show="!sidebarState.isOpen">大数据</div>
         </div>
         <el-menu mode="vertical" class="vertical-menu"
           :unique-opened="true"

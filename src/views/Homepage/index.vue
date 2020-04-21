@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container cont-container">
     <el-row>
-      <span class="main-title">公交运营综合分析系统</span>
+      <span class="main-title">公交大数据分析平台</span>
     </el-row>
     <el-row class="main-card" :gutter="50">
       <el-col style="margin-left: 50px;" :span="4" v-if="isScreen">
