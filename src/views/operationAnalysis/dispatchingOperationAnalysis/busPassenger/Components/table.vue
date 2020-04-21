@@ -100,6 +100,7 @@ export default {
       deep: true,
       handler (newV) {
         this.pageNumber = 1
+        console.log(newV)
         this._pageBusPersonTotalList({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,

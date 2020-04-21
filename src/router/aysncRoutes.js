@@ -392,7 +392,7 @@ export const aysncRoutesMap = [
           component: _import_('operationAnalysis/fatigueMonitoring/userCheckResult/index'),
           name: 'userCheckResult',
           meta: {
-            title: '用户处理结果',
+            title: '报警处理分析',
             icon: 'nocturne icon-dash',
             roles: ['/device-status']
           }

@@ -60,9 +60,19 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="处理内容" prop="selectSug">
+          <el-select v-model="ruleForm.selectSug">
+            <el-option
+              v-for="item in checkcontentOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="处理意见" prop="suggestion">
           <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100"></el-input>
-          <span>{{ruleForm.suggestion.length}}/100</span>
+          <span>{{ruleForm.suggestion && ruleForm.suggestion.length || 0}}/100</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -94,7 +104,7 @@ export default {
     let markSuggestion = (rule, value, callback) => {
       if (value === '') {
         callback()
-      } else if (value.length && value.length > 150) {
+      } else if (value && value.length && value.length > 150) {
         return callback(new Error('输入最大100字'))
       } else {
         callback()
@@ -112,9 +122,11 @@ export default {
       total: 0,
       checkDialog: false,
       closeRow: null,
+      checkcontentOptions: [],
       ruleForm: {
         status: '',
-        suggestion: ''
+        suggestion: '',
+        selectSug: '' // 选择处理的内容
       },
       checkMsg: {},
       rules: {
@@ -123,6 +135,11 @@ export default {
         ],
         suggestion: [
           { validator: markSuggestion, trigger: 'blur' }
+        ],
+        selectSug: [
+          {
+            required: true, message: '请选择处理内容', trigger: 'blur'
+          }
         ]
       },
       checkOptions: [
@@ -140,6 +157,13 @@ export default {
         }
       ]
     }
+  },
+  mounted () {
+    this._getCheckOptions({
+      handleStatus: '',
+      handleType: '1',
+      handleIsvalid: '1'
+    })
   },
   watch: {
     diaData: {
@@ -194,26 +218,88 @@ export default {
         this.$emit('close', this.selectAllData)
       }
     },
+    // 'ruleForm.status': {
+    //   handler (newV) {
+    //     if (newV === '1') {
+    //       this.ruleForm.suggestion = '属实'
+    //     } else if (newV === '2') {
+    //       this.ruleForm.suggestion = '误报'
+    //     } else {
+    //       this.ruleForm.suggestion = ''
+    //     }
+    //   }
+    // },
     'ruleForm.status': {
       handler (newV) {
+        this.ruleForm.selectSug = ''
+        this.ruleForm.suggestion = ''
         if (newV === '1') {
-          this.ruleForm.suggestion = '属实'
+          this._getCheckOptions({
+            handleStatus: '1',
+            handleType: '1',
+            handleIsvalid: '1'
+          })
         } else if (newV === '2') {
-          this.ruleForm.suggestion = '误报'
+          this._getCheckOptions({
+            handleStatus: '2',
+            handleType: '1',
+            handleIsvalid: '1'
+          })
         } else {
-          this.ruleForm.suggestion = ''
+          this._getCheckOptions({
+            handleStatus: '',
+            handleType: '1',
+            handleIsvalid: '1'
+          })
         }
+      }
+    },
+    'ruleForm.selectSug': {
+      handler (newV) {
+        console.log(newV)
+        this.ruleForm.suggestion = newV
       }
     }
   },
+  activated () {
+    if (this.isSee.dataType === 'table') {
+      this.$emit('updateTable', 'table')
+    } else if (this.isSee.dataType === 'charts') {
+      this.$emit('updateTable', 'charts')
+    } else if (this.isSee.dataType === 'ws') {
+      const warnId = this.$store.state.globel.wsDataStorage
+      this.selectAllData = this.wsData.filter(item => item.warnUuid !== warnId)
+      this.total = this.selectAllData.length
+      this.handleCurrentChange(this.pageNumber)
+    }
+  },
   methods: {
+    _getCheckOptions (params) {
+      this.$api['tiredMonitoring.getByStatus'](params).then(res => {
+        let dataArr = res
+        this.checkcontentOptions = []
+        if (params.handleType === '1') {
+          dataArr.forEach((list, index) => {
+            this.checkcontentOptions[index] = {
+              label: list.handleContext.length > 13 ? `${list.handleContext.substring(0, 13)}...` : list.handleContext,
+              value: list.handleContext
+            }
+          })
+          this.checkcontentOptions.push({
+            label: '其他',
+            value: ''
+          })
+        }
+      })
+    },
     goToDetail (data) {
       const type = data.warnType === 'OVERSPEED' ? 'overspeed' : 'normal'
       this.$router.push({
         path: '/fatigue-monitoring/alarm-content',
         query: {
           id: data.warnUuid,
-          type
+          type,
+          isWs: this.isSee.dataType
         }
       })
     },
@@ -230,7 +316,8 @@ export default {
       this.checkDialog = true
       this.ruleForm = {
         status: '',
-        suggestion: ''
+        suggestion: '',
+        selectSug: ''
       }
     },
     upDateCheck (formName) {

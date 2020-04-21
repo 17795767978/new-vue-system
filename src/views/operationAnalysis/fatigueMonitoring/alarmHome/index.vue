@@ -206,7 +206,7 @@ export default {
     updateTable (type) {
       if (type === 'charts') {
         this._getApi(this.chartsObj, type)
-      } else {
+      } else if (type === 'table') {
         this._getApi(this.tableObj, type)
       }
     }

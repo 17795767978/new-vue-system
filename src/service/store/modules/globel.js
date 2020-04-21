@@ -13,7 +13,8 @@ const globel = {
     lineDataSec: [],
     userList: [],
     modulesList: [],
-    pagesList: []
+    pagesList: [],
+    wsDataStorage: ''
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -42,6 +43,9 @@ const globel = {
     },
     PAGE_LIST: (state, list) => {
       state.pagesList = list
+    },
+    WS_DATA: (state, id) => {
+      state.wsDataStorage = id
     }
   },
   actions: {
@@ -227,6 +231,9 @@ const globel = {
         commit('MODULE_LIST', moduleList)
         commit('PAGE_LIST', pagelist)
       })
+    },
+    storageWebs ({ commit }, id) {
+      commit('WS_DATA', id)
     }
   }
 }

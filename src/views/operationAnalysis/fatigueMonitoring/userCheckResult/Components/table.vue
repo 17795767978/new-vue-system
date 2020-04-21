@@ -95,8 +95,10 @@ export default {
     let yestoday = new Date()
     let startTime = moment(yestoday - 7 * 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
     let endTime = moment().format('YYYY-MM-DD')
+    let dataForm = this.$store.getters.formData
     this._getDrivingBehaviorDay({
       userId: localStorage.getItem('id'),
+      warnTypes: dataForm.warningArr,
       startTime,
       endTime })
   },
@@ -104,11 +106,13 @@ export default {
     'selectData': {
       deep: true,
       handler (newV) {
+        let dataForm = this.$store.getters.formData
         this.pageNumber = 1
         this._getDrivingBehaviorDay({
           userId: localStorage.getItem('id'),
           startTime: newV.dateArray[0],
-          endTime: newV.dateArray[1]
+          endTime: newV.dateArray[1],
+          warnTypes: dataForm.warningArr
         })
       }
     }
@@ -121,8 +125,8 @@ export default {
         this.isLoading = false
         res.forEach((item, index) => {
           this.tableData[index] = item
-          this.tableData[index].untreatedRatio = (item.untreated / item.alarmSum).toFixed(2)
-          this.tableData[index].errorRatio = ((item.processedErro + item.falseAlarmErro) / item.processed).toFixed(2)
+          this.tableData[index].untreatedRatio = Number(item.alarmSum) ? (Number(item.untreated) / Number(item.alarmSum)).toFixed(2) : 0
+          this.tableData[index].errorRatio = Number(item.processed) ? ((Number(item.processedErro) + Number(item.falseAlarmErro)) / Number(item.processed)).toFixed(2) : 0
         })
       })
     },

@@ -181,7 +181,6 @@
         <el-table-column
           align="center"
           prop="handleUser"
-          fixed="right"
           label="处理人"
           width="100"
         >
@@ -189,7 +188,6 @@
         <el-table-column
           align="center"
           prop="handleTime"
-          fixed="right"
           label="处理时间"
           :formatter="getHandleTime"
           width="160"
@@ -198,7 +196,6 @@
         <el-table-column
           align="center"
           prop="warnTime"
-          fixed="right"
           label="处理结果"
           width="100"
         >
@@ -211,7 +208,6 @@
         <el-table-column
           align="center"
           prop="handleSuggestion"
-          fixed="right"
           label="处理意见"
           width="120"
         >
@@ -224,7 +220,6 @@
         <el-table-column
           align="center"
           prop="auditStatus"
-          fixed="right"
           label="审核结果"
           width="100"
         >
@@ -236,8 +231,7 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="handleSuggestion"
-          fixed="right"
+          prop="auditSuggestion"
           label="审核意见"
           width="120"
         >
@@ -256,7 +250,7 @@
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
             <el-button :disabled="scope.row.overTime || scope.row.handleResult !== '0'" @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
             <!-- isRoleType -->
-            <el-button v-if="isRoleType && scope.row.handleResult !== '0'" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
+            <el-button v-if="isRoleType && (new Date() - scope.row.warnTime > 24000 * 3600) || scope.row.handleResult !== '0'" @click="handleAudit(scope.row)" :type="scope.row.auditStatus === '0' ? 'warning' : 'info'" size="mini">审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -400,8 +394,8 @@ export default {
         driverName: '',
         warnTypeId: [],
         timeValue: [],
-        checkType: [],
-        auditStatus: []
+        checkType: ['已处理'],
+        auditStatus: ['0']
       },
       ruleForm: {
         status: '',
@@ -419,12 +413,12 @@ export default {
         ],
         suggestion: [
           { validator: markSuggestion, trigger: 'blur' }
-        ],
-        selectCheckContent: [
-          {
-            required: true, message: '请选择处理内容', trigger: 'blur'
-          }
         ]
+        // selectCheckContent: [
+        //   {
+        //     required: true, message: '请选择处理内容', trigger: 'blur'
+        //   }
+        // ]
       },
       auditRules: {
         auditStatus: [
@@ -432,12 +426,12 @@ export default {
         ],
         auditSuggestion: [
           { validator: markSuggestion, trigger: 'blur' }
-        ],
-        selectAuditContent: [
-          {
-            required: true, message: '请选择处理内容', trigger: 'blur'
-          }
         ]
+        // selectAuditContent: [
+        //   {
+        //     required: true, message: '请选择处理内容', trigger: 'blur'
+        //   }
+        // ]
       },
       levelOptions: [
         {
@@ -490,7 +484,8 @@ export default {
       lineOptions: [],
       checkcontentOptions: [],
       auditcontentOptions: [],
-      isRoleType: localStorage.getItem('userRoleType')
+      isRoleType: JSON.parse(localStorage.getItem('userRoleType')),
+      isOthersSug: false
     }
   },
   computed: {
@@ -699,14 +694,8 @@ export default {
       }
     },
     'auditRuleForm.auditStatus': {
-      // auditRuleForm: {
-      //   auditStatus: '',
-      //   auditSuggestion: '',
-      //   selectAuditContent: '' // 选择审核的内容
-      // },
       handler (newV) {
-        this.auditRuleForm.selectAuditContent = ''
-        this.auditRuleForm.auditSuggestion = ''
+        this.isOthersSug = true
         if (newV === '1') {
           this._getCheckOptions({
             handleStatus: '1',
@@ -735,8 +724,9 @@ export default {
     },
     'auditRuleForm.selectAuditContent': {
       handler (newV) {
-        console.log(newV)
-        this.auditRuleForm.auditSuggestion = newV
+        if (this.isOthersSug) {
+          this.auditRuleForm.auditSuggestion = newV
+        }
       }
     }
   },
@@ -887,18 +877,27 @@ export default {
       })
     },
     handleAudit (row) {
-      this.auditMsg.warnUuid = row.warnUuid
-      this.auditDialog = true
-      this.auditRuleForm = {
-        auditStatus: '',
-        auditSuggestion: '',
-        selectAuditContent: '' // 选择审核的内容
-      }
       this._getCheckOptions({
-        handleStatus: '',
+        handleStatus: row.auditStatus,
         handleType: '2',
         handleIsvalid: '1'
       })
+      this.auditMsg.warnUuid = row.warnUuid
+      this.auditDialog = true
+      setTimeout(() => {
+        const isOthers = this.auditcontentOptions.filter(item => row.auditSuggestion === item.value)
+        console.log(this.auditcontentOptions)
+        console.log(isOthers)
+        this.isOthersSug = +isOthers.length
+        console.log(this.isOthersSug)
+        if (row.auditStatus !== '0') {
+          this.auditRuleForm = {
+            auditStatus: row.auditStatus,
+            selectAuditContent: isOthers.length ? isOthers[0].value : '', // 选择审核的内容
+            auditSuggestion: row.auditSuggestion
+          }
+        }
+      }, 500)
     },
     upDateCheck (formName) {
       this.$refs[formName].validate((valid) => {
@@ -1022,8 +1021,8 @@ export default {
         warnLevel: '',
         warnTypeId: [],
         timeValue: [moment(endTime).format('YYYY-MM-DD 00:00:00'), moment(dataNow).format('YYYY-MM-DD 23:59:59')],
-        checkType: [],
-        auditStatus: []
+        checkType: ['已处理'],
+        auditStatus: ['0']
       }
       this.$emit('clear')
     },

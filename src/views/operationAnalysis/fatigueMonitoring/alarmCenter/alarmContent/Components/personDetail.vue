@@ -153,6 +153,7 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
+import { mapActions } from 'vuex'
 export default {
   name: 'alarmContent',
   props: {
@@ -191,7 +192,7 @@ export default {
       },
       auditcontentOptions: [],
       checkcontentOptions: [],
-      isRoleType: localStorage.getItem('userRoleType'),
+      isRoleType: JSON.parse(localStorage.getItem('userRoleType')),
       checkOptions: [
         {
           value: '0',
@@ -247,7 +248,6 @@ export default {
   },
   watch: {
     'overspeedDetails': {
-      deep: true,
       handler (newV) {
         console.log(newV)
       }
@@ -386,6 +386,11 @@ export default {
             this.$message.success('已处理')
             this.checkDialog = false
             this.$emit('update')
+            if (this.$route.query.isWs === 'ws') {
+              this.storageWebs(this.$route.query.id)
+            } else {
+              this.storageWebs('')
+            }
           }).catch(err => {
             this.$message.error(err.msg)
           })
@@ -422,7 +427,8 @@ export default {
     resetAutidForm (formName) {
       this.auditDialog = false
       this.$refs[formName].resetFields()
-    }
+    },
+    ...mapActions(['storageWebs'])
   },
   components: {
   }

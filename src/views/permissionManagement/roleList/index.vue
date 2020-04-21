@@ -23,6 +23,11 @@
             <span>{{scope.row.describes}}</span>
           </template>
         </el-table-column>
+        <el-table-column align="center" label="角色类型" width="100">
+          <template slot-scope="scope">
+            <span>{{scope.row.roleType === '0' ? '普通角色' : '审核角色'}}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="创建人" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.createUser}}</span>
@@ -33,6 +38,7 @@
             <span>{{scope.row.enabled === '1' ? '启用' : '禁用'}}</span>
           </template>
         </el-table-column>
+        <!-- roleType -->
         <el-table-column align="center" label="创建时间" width="220" :formatter="getCreateTime">
         </el-table-column>
         <el-table-column align="center" label="修改时间" width="220" :formatter="getUpdateTime">
