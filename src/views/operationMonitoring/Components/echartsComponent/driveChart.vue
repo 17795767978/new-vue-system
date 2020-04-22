@@ -77,7 +77,7 @@ export default {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
-        color: ['#03adb0', '#ff2bd0', '#ff840b', '#ff30a0', '#fedd00', '#00ffff'],
+        color: ['#ff2bd0', '#00ffff', '#ff840b', '#ff31a0', '#fedd00'],
         series: [
           // {
           //   name: '面积模式',

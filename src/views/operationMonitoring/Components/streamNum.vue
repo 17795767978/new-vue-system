@@ -42,7 +42,7 @@
             </div>
             <i class="el-icon-s-custom icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
             <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">实时载客（人）</h3>
-            <p class="font-style" style="color: #00ffff">{{totelPerson}}</p>
+            <p class="font-style" style="color: #F17700">{{totelPerson}}</p>
           </div>
         </el-card>
        </el-col>
@@ -147,7 +147,7 @@
               </div>
               <i class="el-icon-loading icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
               <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">待发车辆数</h3>
-              <p class="font-style" style="color: #21fffc">{{outgoingCarNum}}</p>
+              <p class="font-style" style="color: #F17700">{{outgoingCarNum}}</p>
           </div>
         </el-card>
        </el-col>

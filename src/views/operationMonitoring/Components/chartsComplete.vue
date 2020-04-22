@@ -17,9 +17,9 @@
         <div class="el-row-left-con">
           <ul>
             <li class="el-row-li-item el-row-li-item-title" :class="skinType === 0 ? 'el-row-li-white' : ''"><span></span>里程完成情况</li>
-            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>计划公里数：</span><span>{{totalPlanTrips}}km</span></li>
-            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>实际完成公里数：</span><span>{{totalRealTrips}}km</span></li>
-            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>完成率：</span><span>{{(totalRealTrips / totalPlanTrips).toFixed(2) * 100 || '--'}}%</span></li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>计划公里数：</span><span>{{totalPlanMileage}}km</span></li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>实际完成公里数：</span><span>{{totalRealMileage}}km</span></li>
+            <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>完成率：</span><span>{{(totalRealMileage / totalPlanMileage).toFixed(2) * 100 || '--'}}%</span></li>
           </ul>
         </div>
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '60%', height: '200px',margin: '0 auto'}"></div>
