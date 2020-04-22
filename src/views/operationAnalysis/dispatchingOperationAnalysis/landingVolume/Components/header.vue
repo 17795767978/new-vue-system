@@ -5,7 +5,7 @@
         <el-select
           @change="getLabel"
           ref="elSelectWrapperUp"
-          style="width:200px;"
+          style="width:300px;"
           multiple
           filterable
           collapse-tags

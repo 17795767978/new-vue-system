@@ -42,7 +42,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        prop="prfBusSelfCode"
+        prop="busSelfCode"
         width="150"
         label="车辆自编号">
       </el-table-column>

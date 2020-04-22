@@ -74,7 +74,8 @@ export default {
       pageNumber: 1,
       pageSize: 15,
       total: 0,
-      loading: false
+      loading: false,
+      allTableData: []
     }
   },
   computed: {
@@ -87,12 +88,10 @@ export default {
       orgId: this.userId === '1' ? '' : this.userId,
       lineId: '',
       busNumber: '',
-      isHistory: '0',
+      isHistory: '1',
       startTime: dateBefore,
       endTime: dateAfter,
-      busSelfCode: '',
-      pageSize: this.pageSize,
-      pageNumber: this.pageNumber
+      busSelfCode: ''
     })
   },
   watch: {
@@ -100,7 +99,6 @@ export default {
       deep: true,
       handler (newV) {
         this.pageNumber = 1
-        console.log(newV)
         this._pageBusPersonTotalList({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
@@ -108,9 +106,7 @@ export default {
           isHistory: newV.isHistory,
           startTime: moment(newV.startTime).format('YYYY-MM-DD HH:mm:ss'),
           endTime: moment(newV.endTime).format('YYYY-MM-DD HH:mm:ss'),
-          busSelfCode: newV.busSelfCode,
-          pageSize: this.pageSize,
-          pageNumber: this.pageNumber
+          busSelfCode: newV.busSelfCode
         })
       }
     }
@@ -121,39 +117,14 @@ export default {
       this.$api['passengerFlow.pageBusPersonTotalList'](params).then(res => {
         // console.log(res)
         this.loading = false
-        this.tableData = res.list
-        this.total = res.total
+        this.allTableData = res
+        this.tableData = res.slice(0, 15)
+        this.total = this.allTableData.length
       })
     },
     handleCurrentChange (val) {
       this.pageNumber = val
-      let dateBefore = moment().format('YYYY-MM-DD 00:00:00')
-      let dateAfter = moment().format('YYYY-MM-DD 23:59:59')
-      if (Object.keys(this.selectData).length === 0) {
-        this._pageBusPersonTotalList({
-          orgId: '',
-          lineId: '',
-          busNumber: '',
-          isHistory: '0',
-          busSelfCode: '',
-          startTime: dateBefore,
-          endTime: dateAfter,
-          pageSize: this.pageSize,
-          pageNumber: this.pageNumber
-        })
-      } else {
-        this._pageBusPersonTotalList({
-          orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
-          lineId: this.selectData.lineId,
-          busNumber: this.selectData.busNumber,
-          isHistory: this.selectData.isHistory,
-          startTime: this.selectData.startTime,
-          endTime: this.selectData.endTime,
-          busSelfCode: this.selectData.busSelfCode,
-          pageSize: this.pageSize,
-          pageNumber: this.pageNumber
-        })
-      }
+      this.tableData = this.allTableData.slice((val - 1) * this.pageSize, val * this.pageSize)
     }
   }
 }

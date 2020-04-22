@@ -130,7 +130,7 @@ export default {
     let date = moment().format('YYYY-MM-DD')
     this._getOnOffPersonCountlist({
       orgId: this.userId === '1' ? '' : this.userId,
-      lineIds: this.formData.lineIds,
+      lineIdRepeate: this.formData.lineIds,
       startDate: date,
       endDate: date
     }, '1')
@@ -151,7 +151,7 @@ export default {
         console.log(newV.radio)
         this._getOnOffPersonCountlist({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
-          lineIds: newV.lineIds,
+          lineIdRepeate: newV.lineIds,
           startDate: newV.dateArray[0],
           endDate: newV.dateArray[1]
         }, newV.radio)

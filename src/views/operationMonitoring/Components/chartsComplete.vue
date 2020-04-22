@@ -141,7 +141,7 @@ export default {
             'color': '#fff'
           },
           // subtext: `总计划里程：${this.totalPlanTrips}   总实际里程：${this.totalRealTrips}   总百分比：${(this.totalRealTrips / this.totalPlanTrips).toFixed(2) * 100}%`
-          subtext: `${this.totalRealMileage}km / ${this.totalPlanMileage}km  完成率：${this.totalPlanMileage > 0 ? (this.totalRealMileage / this.totalPlanMileage * 100).toFixed(2) : '-'}%`,
+          subtext: `${this.totalRealMileage}km `,
           subtextStyle: {
             'color': '#fff',
             'fontSize': 13
@@ -244,7 +244,7 @@ export default {
           textStyle: {
             'color': '#fff'
           },
-          subtext: `${this.totalRealTrips}次 / ${this.totalPlanTrips}次  完成率：${this.totalPlanTrips > 0 ? (this.totalRealTrips / this.totalPlanTrips * 100).toFixed(2) : '-'}%`,
+          subtext: `${this.totalRealTrips}次`,
           subtextStyle: {
             'color': '#fff',
             'fontSize': 13
@@ -352,7 +352,7 @@ export default {
           textStyle: {
             'color': '#fff'
           },
-          subtext: `${this.totalRealShift}次 / ${this.totalPlanShift}次  完成率：${this.totalPlanShift > 0 ? (this.totalRealShift / this.totalPlanShift * 100).toFixed(2) : '-'}%`,
+          subtext: `${this.totalRealShift}次`,
           subtextStyle: {
             'color': '#fff',
             'fontSize': 13

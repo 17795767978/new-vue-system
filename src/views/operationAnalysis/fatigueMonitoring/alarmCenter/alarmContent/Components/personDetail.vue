@@ -3,7 +3,7 @@
     <h3 class="demonstration">报警详情
       <span style="display:inline-block; float: right; margin-right: 2vw;">
         <el-button type="success" size="mini" @click="handleCheck" :disabled="busDetails.overTime || busDetails.handleResult !== '0'">处理</el-button>
-        <el-button type="warning" size="mini" @click="handleAudit" v-if="isRoleType && busDetails.handleResult !== '0'">审核</el-button>
+        <el-button :type="busDetails.auditStatus === '0' ? 'warning' : 'info'" size="mini" @click="handleAudit" v-if="isRoleType && busDetails.handleResult !== '0'">审核</el-button>
       </span>
     </h3>
     <el-row :gutter="24"  class="pic">
@@ -116,6 +116,7 @@
       title="审核操作"
       :visible.sync="auditDialog"
       width="30%"
+      :show-close="false"
       center>
       <el-form :model="auditRuleForm" :rules="auditRules" ref="auditRuleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="审核状态" prop="auditStatus">
@@ -180,6 +181,7 @@ export default {
     return {
       checkDialog: false,
       auditDialog: false,
+      isOthersSug: false,
       ruleForm: {
         status: '',
         suggestion: '',
@@ -278,14 +280,12 @@ export default {
       }
     },
     'auditRuleForm.auditStatus': {
-      // auditRuleForm: {
-      //   auditStatus: '',
-      //   auditSuggestion: '',
-      //   selectAuditContent: '' // 选择审核的内容
-      // },
       handler (newV) {
-        this.auditRuleForm.selectAuditContent = ''
-        this.auditRuleForm.auditSuggestion = ''
+        if (this.busDetails.auditStatus !== '0') {
+          this.auditRuleForm.selectAuditContent = this.busDetails.auditSuggestion
+          this.auditRuleForm.auditSuggestion = this.busDetails.auditSuggestion
+        } else {
+        }
         if (newV === '1') {
           this._getCheckOptions({
             handleStatus: '1',
@@ -314,7 +314,19 @@ export default {
     },
     'auditRuleForm.selectAuditContent': {
       handler (newV) {
-        this.auditRuleForm.auditSuggestion = newV
+        if (newV !== '') {
+          this.auditRuleForm.auditSuggestion = newV
+        }
+      }
+    },
+    auditDialog (newV) {
+      if (!newV) {
+        this.$refs['auditRuleForm'].resetFields()
+        // this.auditRuleForm = {
+        //   auditStatus: '',
+        //   auditSuggestion: '',
+        //   selectAuditContent: ''
+        // }
       }
     }
   },
@@ -349,7 +361,7 @@ export default {
         }
       })
     },
-    handleCheck (row) {
+    handleCheck () {
       this.checkDialog = true
       this.ruleForm = {
         status: '',
@@ -362,18 +374,29 @@ export default {
         handleIsvalid: '1'
       })
     },
-    handleAudit (row) {
+    handleAudit () {
       this.auditDialog = true
-      this.auditRuleForm = {
-        auditStatus: '',
-        auditSuggestion: '',
-        selectAuditContent: '' // 选择审核的内容
-      }
       this._getCheckOptions({
-        handleStatus: '',
+        handleStatus: this.busDetails.auditStatus === '0' ? '' : this.busDetails.auditStatus,
         handleType: '2',
         handleIsvalid: '1'
       })
+      setTimeout(() => {
+        if (this.busDetails.auditStatus !== '0') {
+          const selectData = this.auditcontentOptions.filter(item => item.value === this.busDetails.auditSuggestion)
+          this.auditRuleForm = {
+            auditStatus: this.busDetails.auditStatus,
+            selectAuditContent: selectData.length ? selectData[0].value : '', // 选择审核的内容
+            auditSuggestion: this.busDetails.auditSuggestion
+          }
+        } else {
+          this.auditRuleForm = {
+            auditStatus: '',
+            selectAuditContent: '', // 选择审核的内容
+            auditSuggestion: ''
+          }
+        }
+      }, 200)
     },
     upDateCheck (formName) {
       this.$refs[formName].validate((valid) => {
@@ -384,7 +407,7 @@ export default {
             handleSuggestion: this.ruleForm.suggestion
           }).then(res => {
             this.$message.success('已处理')
-            this.checkDialog = false
+            this.resetForm(formName)
             this.$emit('update')
             if (this.$route.query.isWs === 'ws') {
               this.storageWebs(this.$route.query.id)
@@ -408,8 +431,8 @@ export default {
             auditStatus: this.auditRuleForm.auditStatus,
             auditSuggestion: this.auditRuleForm.auditSuggestion
           }).then(res => {
-            this.$message.success('已处理')
-            this.auditDialog = false
+            this.$message.success('已审核')
+            this.resetAutidForm(formName)
             this.$emit('update')
           }).catch(err => {
             this.$message.error(err.msg)

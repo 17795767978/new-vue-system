@@ -3,14 +3,12 @@
     <Search
       :isOrg='true'
       :isLine="true"
-      :isDefault="true"
       :isEmpty="true"
       :isBus="true"
-      :isDate="true"
-      :isRadio="true"
-      :isBusSelfCode="true"
       :isDownload="true"
+      :isBusSelfCode="true"
       :downLoadName="downLoadName"
+      :selectData="selectData"
       :select="{
         date: [...timeArr],
         isHistory
@@ -30,8 +28,8 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item label="查询时间">
-      <el-radio v-model="isHistory" label="0">当天</el-radio>
-      <el-radio v-model="isHistory" label="1">历史</el-radio>
+      <el-radio v-model="isHistory" label="1">当天</el-radio>
+      <el-radio v-model="isHistory" label="0">历史</el-radio>
     </el-form-item>
     </Search>
     <div class="content">
@@ -46,10 +44,8 @@
 import moment from 'moment'
 import Search from '@/components/searchAlarm/'
 import Table from './Components/table.vue'
-import mixinsTime from '@/mixins/global/'
 export default {
   name: 'busPassenger',
-  mixins: [mixinsTime],
   data () {
     return {
       pickerOptions: {
@@ -59,7 +55,7 @@ export default {
         }
       },
       timeArr: [],
-      isHistory: '0',
+      isHistory: '1',
       selectData: {},
       downLoadName: 'passengerFlow.busTotalPersonExport'
     }
@@ -71,7 +67,7 @@ export default {
   },
   watch: {
     isHistory (newV) {
-      if (newV === '0') {
+      if (newV === '1') {
         let dateBefore = moment().format('YYYY-MM-DD 00:00:00')
         let dateAfter = moment().format('YYYY-MM-DD 23:59:59')
         this.timeArr = [dateBefore, dateAfter]

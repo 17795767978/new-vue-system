@@ -108,7 +108,7 @@ export default {
           // console.log(moment(time.getTime()).format('YYYY-MM-DD'))
           // console.log(moment(Date.now()).format('YYYY-MM-DD'))
           // console.log(time.getTime() > Date.now())
-          return time.getTime() < moment(date).valueOf()
+          return time.getTime() < moment(date).valueOf() || time.getTime() > new Date()
         }
       }
     }
@@ -146,7 +146,7 @@ export default {
           this.pickerOptions = {
             disabledDate (time) {
               let date = moment(new Date()).format('YYYY-MM-01')
-              return time.getTime() < moment(date).valueOf()
+              return time.getTime() < moment(date).valueOf() || time.getTime() > new Date()
             }
           }
         }

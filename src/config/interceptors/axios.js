@@ -13,11 +13,14 @@ import store from '@/plugins/store'
  * @returns
  */
 export function axiosRequestSucessFunc (config) {
-  // dosth before request
-  // config.headers['Content-type'] = 'application/x-www-form-urlencoded'
   const token = store.getters.token
-  // config.withCredentials = true
   let auditStatus = config.data && config.data.auditStatus
+  if (config.data && config.data.lineId !== undefined) {
+    config.data.lineUuids = permissionLine(config.data.lineId, 'lineId')
+  }
+  if (config.data && config.data.lineIdRepeate !== undefined) {
+    config.data.lineUuids = permissionLine(config.data.lineIdRepeate, 'lineIds')
+  }
   if (auditStatus && auditStatus instanceof Array) {
     if (auditStatus.some(item => item === '1')) {
       config.data.auditStatus = [...auditStatus, '2']
@@ -34,15 +37,27 @@ export function axiosRequestSucessFunc (config) {
   if (config.data && config.data.orgUuid && config.data.orgUuid === '1') {
     config.data.orgUuid = ''
   }
-  // if (config.data && config.data.auditStatus && config.data.auditStatus.some(item => item === '1')) {
-  //   config.data.auditStatus = [...config.data.auditStatus, '2']
-  // } else {
-  //   config.data.auditStatus = [...config.data.auditStatus]
-  // }
   config.data && (config.data.personId = localStorage.getItem('id'))
   return config
 }
 
+// 线路权限
+function permissionLine (line, type) {
+  const lineData = store.state.globel.lineData.map(item => item.value)
+  if (type === 'lineId') {
+    if (line === '') {
+      return lineData
+    } else if (line !== '') {
+      return [line]
+    }
+  } else if (type === 'lineIds') {
+    if (line.length === 0) {
+      return lineData
+    } else if (line.length > 0) {
+      return line
+    }
+  }
+}
 /**
  *
  *

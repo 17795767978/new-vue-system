@@ -32,7 +32,7 @@ export default {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._getLines({
       orgId,
-      lineUuids: []
+      lineIdRepeate: []
     })
   },
   mounted () {
@@ -43,7 +43,7 @@ export default {
       let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
       this._getLines({
         orgId,
-        lineUuids: newV
+        lineIdRepeate: newV
       })
     }
   },

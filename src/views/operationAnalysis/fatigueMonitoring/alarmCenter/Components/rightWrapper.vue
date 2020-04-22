@@ -133,6 +133,12 @@
         </el-table-column>
         <el-table-column
           align="center"
+          prop="driverName"
+          label="司机"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          align="center"
           prop="busPlateNumber"
           label="车牌号"
           width="120">
@@ -316,6 +322,7 @@
     <el-dialog
       title="审核操作"
       :visible.sync="auditDialog"
+      :show-close="false"
       width="30%"
       center>
       <el-form :model="auditRuleForm" :rules="auditRules" ref="auditRuleForm" label-width="100px" class="demo-ruleForm">
@@ -485,7 +492,8 @@ export default {
       checkcontentOptions: [],
       auditcontentOptions: [],
       isRoleType: JSON.parse(localStorage.getItem('userRoleType')),
-      isOthersSug: false
+      isOthersSug: false,
+      rowDatas: {}
     }
   },
   computed: {
@@ -695,7 +703,15 @@ export default {
     },
     'auditRuleForm.auditStatus': {
       handler (newV) {
-        this.isOthersSug = true
+        if (this.isOthersSug) {
+          console.log(1)
+          this.auditRuleForm.selectAuditContent = this.rowDatas && this.rowDatas.auditSuggestion
+          this.auditRuleForm.auditSuggestion = this.rowDatas && this.rowDatas.auditSuggestion
+        } else {
+          console.log(2)
+          // this.auditRuleForm.selectAuditContent = ''
+          // this.auditRuleForm.auditSuggestion = this.rowDatas && this.rowDatas.auditSuggestion
+        }
         if (newV === '1') {
           this._getCheckOptions({
             handleStatus: '1',
@@ -724,8 +740,17 @@ export default {
     },
     'auditRuleForm.selectAuditContent': {
       handler (newV) {
-        if (this.isOthersSug) {
+        if (newV !== '') {
           this.auditRuleForm.auditSuggestion = newV
+        }
+      }
+    },
+    auditDialog (newV) {
+      if (!newV) {
+        this.auditRuleForm = {
+          auditStatus: '',
+          auditSuggestion: '',
+          selectAuditContent: ''
         }
       }
     }
@@ -877,19 +902,17 @@ export default {
       })
     },
     handleAudit (row) {
+      this.rowDatas = row
+      this.auditDialog = true
       this._getCheckOptions({
         handleStatus: row.auditStatus,
         handleType: '2',
         handleIsvalid: '1'
       })
       this.auditMsg.warnUuid = row.warnUuid
-      this.auditDialog = true
       setTimeout(() => {
         const isOthers = this.auditcontentOptions.filter(item => row.auditSuggestion === item.value)
-        console.log(this.auditcontentOptions)
-        console.log(isOthers)
         this.isOthersSug = +isOthers.length
-        console.log(this.isOthersSug)
         if (row.auditStatus !== '0') {
           this.auditRuleForm = {
             auditStatus: row.auditStatus,
@@ -897,7 +920,7 @@ export default {
             auditSuggestion: row.auditSuggestion
           }
         }
-      }, 500)
+      }, 200)
     },
     upDateCheck (formName) {
       this.$refs[formName].validate((valid) => {
@@ -908,7 +931,7 @@ export default {
             handleSuggestion: this.ruleForm.suggestion
           }).then(res => {
             this.$message.success('已处理')
-            this.checkDialog = false
+            this.resetForm(formName)
             let defaultData = this.$store.getters.formData
             this._tableList({
               orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
@@ -943,8 +966,8 @@ export default {
             auditStatus: this.auditRuleForm.auditStatus,
             auditSuggestion: this.auditRuleForm.auditSuggestion
           }).then(res => {
-            this.$message.success('已处理')
-            this.auditDialog = false
+            this.$message.success('已审核')
+            this.resetAutidForm(formName)
             let defaultData = this.$store.getters.formData
             this._tableList({
               orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id

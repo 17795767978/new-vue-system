@@ -228,6 +228,7 @@
           }">
         </el-time-select>
       </el-form-item>
+      <slot></slot>
       <el-form-item v-if="isRadio" label="查询时间:">
         <el-radio v-model="formInline.radio" label="1">当天</el-radio>
         <el-radio v-model="formInline.radio" label="2">历史</el-radio>
@@ -410,6 +411,9 @@ export default {
     },
     isAudit: {
       type: Boolean
+    },
+    select: {
+      type: Object
     }
   },
   data () {
@@ -1029,6 +1033,10 @@ export default {
       } else {
         checkList = []
       }
+      if (this.select) {
+        this.formInline.dateArray = [moment(this.select.date[0]).format('YYYY-MM-DD HH:mm:ss'), moment(this.select.date[1]).format('YYYY-MM-DD HH:mm:ss')]
+      }
+      console.log(this.select)
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
         lineId: this.formInline.lineId,
@@ -1053,7 +1061,8 @@ export default {
         handleResults: checkList,
         warnTypeId: ['ADASSNAP', 'DMSTOSNAP'],
         busSelfCode: this.formInline.busSelfCode,
-        auditStatus: this.formInline.auditStatus
+        auditStatus: this.formInline.auditStatus,
+        isHistory: this.select ? this.select.isHistory : '1'
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

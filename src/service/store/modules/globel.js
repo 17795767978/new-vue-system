@@ -112,7 +112,7 @@ const globel = {
     },
     getStationList ({ commit }) {
       return new Promise((resolve, reject) => {
-        api['wholeInformation.getStation']().then(res => {
+        api['wholeInformation.getStation']({}).then(res => {
           commit('STATION_DATA', res)
           resolve(res)
         }).catch(error => {
