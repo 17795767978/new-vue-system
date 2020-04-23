@@ -32,6 +32,11 @@
         label="车辆">
       </el-table-column>
       <el-table-column
+        prop="busSelfCode"
+        align="center"
+        label="自编号">
+      </el-table-column>
+      <el-table-column
         prop="prfDevCode"
         align="center"
         label="设备号">

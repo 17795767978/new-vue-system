@@ -57,7 +57,8 @@ export default {
     _onLineRate (params) {
       if (params) {
         this.$api['tiredMonitoring.getDeviceStatus']({
-          orgId: params === '1' ? '' : params
+          orgId: params === '1' ? '' : params,
+          lineId: ''
         }).then(res => {
           this.deviceCount = res.deviceCount
           this.onlineDeviceCount = res.onlineDeviceCount
@@ -65,14 +66,16 @@ export default {
       } else {
         if (this.userId === '1') {
           this.$api['tiredMonitoring.getDeviceStatus']({
-            orgId: ''
+            orgId: '',
+            lineId: ''
           }).then(res => {
             this.deviceCount = res.deviceCount
             this.onlineDeviceCount = res.onlineDeviceCount
           })
         } else {
           this.$api['tiredMonitoring.getDeviceStatus']({
-            orgId: this.userId
+            orgId: this.userId,
+            lineId: ''
           }).then(res => {
             this.deviceCount = res.deviceCount
             this.onlineDeviceCount = res.onlineDeviceCount

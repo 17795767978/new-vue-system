@@ -10,6 +10,7 @@
         border
         fit
         highlight-current-row
+        height="75vh"
         style="width: 100%">
         <el-table-column align="center" label="序号" width="80" type="index">
         </el-table-column>

@@ -221,7 +221,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '单车客流统计',
             icon: 'nocturne icon-dash',
-            roles: ['/search-passenger']
+            roles: ['/bus-passenger']
           }
         }
       ]
@@ -264,7 +264,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '疲劳监测',
         icon: 'nocturne icon-dash',
-        roles: ['/alarm-center', '/alarm-content', '/device-status', '/alarm-analysis', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter', '/car-sort', '/monitoring-ledger', '/diary-table', '/device-parameter']
+        roles: ['/alarm-center', '/alarm-content', '/device-status', '/alarm-analysis', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter', '/car-sort', '/monitoring-ledger', '/diary-table', '/device-parameter', '/user-result']
       },
       children: [
         {
@@ -367,26 +367,26 @@ export const aysncRoutesMap = [
             roles: ['/device-status']
           }
         },
-        {
-          path: 'alarm-analysis',
-          component: _import_('operationAnalysis/fatigueMonitoring/alarmAnalysis/index'),
-          name: 'alarmAnalysis',
-          meta: {
-            title: '报警分析',
-            icon: 'nocturne icon-dash',
-            roles: ['/alarm-analysis']
-          }
-        },
-        {
-          path: 'equipment-capture',
-          component: _import_('operationAnalysis/fatigueMonitoring/equipmentCapture/index'),
-          name: 'equipmentCapture',
-          meta: {
-            title: '设备抓拍',
-            icon: 'nocturne icon-dash',
-            roles: ['/equipment-capture']
-          }
-        },
+        // {
+        //   path: 'alarm-analysis',
+        //   component: _import_('operationAnalysis/fatigueMonitoring/alarmAnalysis/index'),
+        //   name: 'alarmAnalysis',
+        //   meta: {
+        //     title: '报警分析',
+        //     icon: 'nocturne icon-dash',
+        //     roles: ['/alarm-analysis']
+        //   }
+        // },
+        // {
+        //   path: 'equipment-capture',
+        //   component: _import_('operationAnalysis/fatigueMonitoring/equipmentCapture/index'),
+        //   name: 'equipmentCapture',
+        //   meta: {
+        //     title: '设备抓拍',
+        //     icon: 'nocturne icon-dash',
+        //     roles: ['/equipment-capture']
+        //   }
+        // },
         {
           path: 'user-result',
           component: _import_('operationAnalysis/fatigueMonitoring/userCheckResult/index'),
@@ -394,7 +394,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '报警处理分析',
             icon: 'nocturne icon-dash',
-            roles: ['/device-status']
+            roles: ['/user-result']
           }
         }
       ]
@@ -553,48 +553,48 @@ export const aysncRoutesMap = [
           roles: ['/alarm-management']
         }
       },
-      {
-        path: 'device-snap-management',
-        component: _import_('systemAdmin/deviceSnapManagement/index'),
-        name: 'deviceSnapManagement',
-        meta: {
-          title: '设备抓拍配置',
-          icon: 'nocturne icon-dash',
-          roles: ['/device-snap-management']
-        }
-      },
-      {
-        path: 'params-configuration',
-        component: _import_('systemAdmin/paramsConfiguration/index'),
-        name: 'paramsConfiguration',
-        meta: {
-          title: '参数设置',
-          icon: 'nocturne icon-dash',
-          roles: ['/params-configuration']
-        }
-      },
-      {
-        path: 'device-parameter',
-        component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
-        name: 'deviceParameter',
-        meta: {
-          title: '设备参数下发',
-          icon: 'nocturne icon-dash',
-          roles: ['/device-parameter']
-        }
-      },
-      // parameterSetting
-      {
-        path: 'parameter-setting',
-        component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
-        name: 'parameterSetting',
-        hidden: true,
-        meta: {
-          title: '设备参数下发详情',
-          icon: 'nocturne icon-dash',
-          roles: ['/device-parameter']
-        }
-      },
+      // {
+      //   path: 'device-snap-management',
+      //   component: _import_('systemAdmin/deviceSnapManagement/index'),
+      //   name: 'deviceSnapManagement',
+      //   meta: {
+      //     title: '设备抓拍配置',
+      //     icon: 'nocturne icon-dash',
+      //     roles: ['/device-snap-management']
+      //   }
+      // },
+      // {
+      //   path: 'params-configuration',
+      //   component: _import_('systemAdmin/paramsConfiguration/index'),
+      //   name: 'paramsConfiguration',
+      //   meta: {
+      //     title: '参数设置',
+      //     icon: 'nocturne icon-dash',
+      //     roles: ['/params-configuration']
+      //   }
+      // },
+      // {
+      //   path: 'device-parameter',
+      //   component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
+      //   name: 'deviceParameter',
+      //   meta: {
+      //     title: '设备参数下发',
+      //     icon: 'nocturne icon-dash',
+      //     roles: ['/device-parameter']
+      //   }
+      // },
+      // // parameterSetting
+      // {
+      //   path: 'parameter-setting',
+      //   component: _import_('operationAnalysis/fatigueMonitoring/deviceParameter/index'),
+      //   name: 'parameterSetting',
+      //   hidden: true,
+      //   meta: {
+      //     title: '设备参数下发详情',
+      //     icon: 'nocturne icon-dash',
+      //     roles: ['/device-parameter']
+      //   }
+      // },
       {
         path: 'alarm-result',
         component: _import_('systemAdmin/alarmResultManagement/index'),
@@ -614,7 +614,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '权限管理',
       icon: 'nocturne icon-dash',
-      roles: ['/management-list', '/role-list']
+      roles: ['/management-list', '/role-list', '/source-list']
     },
     children: [
       {
@@ -636,17 +636,17 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/role-list']
         }
-      },
-      {
-        path: 'source-list',
-        component: _import_('permissionManagement/sourceList/index'),
-        name: 'sourceList',
-        meta: {
-          title: '资源列表',
-          icon: 'nocturne icon-dash',
-          roles: ['/role-list']
-        }
       }
+      // {
+      //   path: 'source-list',
+      //   component: _import_('permissionManagement/sourceList/index'),
+      //   name: 'sourceList',
+      //   meta: {
+      //     title: '资源列表',
+      //     icon: 'nocturne icon-dash',
+      //     roles: ['/source-list']
+      //   }
+      // }
     ]
   },
   {

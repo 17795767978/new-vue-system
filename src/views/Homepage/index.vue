@@ -67,29 +67,29 @@ import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
 import mixinsTime from '@/mixins/global/'
 const PER_ANA = [
   { name: '客流首页', icon: iconHomeYlyl, path: '/passenger-home', admin: false },
-  { name: '客流实时统计', icon: iconHomeKlfx, path: '/realtime-passenger-flow', admin: false },
+  // { name: '客流实时统计', icon: iconHomeKlfx, path: '/realtime-passenger-flow', admin: false },
   { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false },
   { name: '客流数据查询', icon: iconHomeMzl, path: '/search-passenger-flow', admin: false },
   { name: '客流数据明细查询', icon: iconHomeMzl, path: '/search-passenger', admin: false },
   { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis', admin: false },
   { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order', admin: false },
   { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate', admin: false },
-  { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume', admin: false },
+  { name: '站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume', admin: false },
   { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity', admin: false },
   { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false },
   { name: '单车客流统计', icon: iconHomeKlgf, path: '/bus-passenger', admin: false }
 ]
 const TIRED_CONTRAL = [
   { name: '安全运营首页', icon: iconHomeBjzx, path: '/alarm-home', admin: false },
-  { name: '司机排行分析', icon: iconHomeBjzt, path: '/alarm-drive', admin: false },
+  { name: '司机排行', icon: iconHomeBjzt, path: '/alarm-drive', admin: false },
+  { name: '车辆排行', icon: iconHomeBjzt, path: '/car-sort', admin: false },
   { name: '报警类型分析', icon: iconHomeBjfx, path: '/alarm-type', admin: false },
   { name: '报警速度分析', icon: iconHomeBjlx, path: '/alarm-speed', admin: false },
   { name: '驾驶行为监测', icon: iconHomeBjzx, path: '/alarm-center', admin: false },
   { name: '设备状态', icon: iconHomeBjzt, path: '/device-status', admin: false },
-  { name: '车辆排行', icon: iconHomeBjzt, path: '/car-sort', admin: false },
   { name: '监测台账', icon: iconHomeBjzt, path: '/monitoring-ledger', admin: false },
-  { name: '统计日报表', icon: iconHomeBjzt, path: '/diary-table', admin: false },
-  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false }
+  { name: '统计日报表', icon: iconHomeBjzt, path: '/diary-table', admin: false }
+  // { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false }
   // { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management', admin: false },
   // { name: '设备参数下发', icon: iconHomeBjlx, path: '/device-parameter', admin: false }
 ]

@@ -254,9 +254,9 @@
           width="260">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
-            <el-button :disabled="scope.row.overTime || scope.row.handleResult !== '0'" @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
+            <el-button :disabled="scope.row.overTime || scope.row.handleResult !== '0' || (new Date() - scope.row.warnTime > 24000 * 3600)" @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>
             <!-- isRoleType -->
-            <el-button v-if="isRoleType && (new Date() - scope.row.warnTime > 24000 * 3600) || scope.row.handleResult !== '0'" @click="handleAudit(scope.row)" :type="scope.row.auditStatus === '0' ? 'warning' : 'info'" size="mini">审核</el-button>
+            <el-button v-if="(isRoleType && (new Date() - scope.row.warnTime > 24000 * 3600)) || (isRoleType &&  scope.row.handleResult !== '0')" @click="handleAudit(scope.row)" :type="scope.row.auditStatus === '0' ? 'warning' : 'info'" size="mini">审核</el-button>
           </template>
         </el-table-column>
       </el-table>

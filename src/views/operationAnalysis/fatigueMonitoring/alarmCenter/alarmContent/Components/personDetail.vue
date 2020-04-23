@@ -2,8 +2,8 @@
   <div class="person-detail-content">
     <h3 class="demonstration">报警详情
       <span style="display:inline-block; float: right; margin-right: 2vw;">
-        <el-button type="success" size="mini" @click="handleCheck" :disabled="busDetails.overTime || busDetails.handleResult !== '0'">处理</el-button>
-        <el-button :type="busDetails.auditStatus === '0' ? 'warning' : 'info'" size="mini" @click="handleAudit" v-if="isRoleType && busDetails.handleResult !== '0'">审核</el-button>
+        <el-button type="success" size="mini" @click="handleCheck" :disabled="busDetails.overTime || busDetails.handleResult !== '0' || (new Date() - busDetails.warnTime > 24000 * 3600)">处理</el-button>
+        <el-button :type="busDetails.auditStatus === '0' ? 'warning' : 'info'" size="mini" @click="handleAudit" v-if="isRoleType && busDetails.handleResult !== '0' || (isRoleType && (new Date() - busDetails.warnTime > 24000 * 3600))">审核</el-button>
       </span>
     </h3>
     <el-row :gutter="24"  class="pic">
