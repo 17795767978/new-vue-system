@@ -230,9 +230,9 @@
           width="100"
         >
           <template slot-scope="scope">
-            <span v-if="scope.row.auditStatus === '0'"></span>
+            <span v-if="scope.row.auditStatus === '0' || scope.row.auditStatus"></span>
             <span v-else-if="scope.row.auditStatus === '1'">已处理</span>
-            <span v-else>误报</span>
+            <span v-else-if="scope.row.auditStatus === '2'">误报</span>
           </template>
         </el-table-column>
         <el-table-column
