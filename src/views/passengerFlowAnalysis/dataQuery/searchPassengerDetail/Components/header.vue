@@ -1,0 +1,422 @@
+<template>
+  <div class="header">
+    <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
+      <el-row>
+      <el-form-item label="选择机构">
+        <el-select class="font-style" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
+          <el-option
+            v-for="item in comOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择线路">
+        <el-select class="font-style" filterable v-model="formInline.lineId" placeholder="请选择">
+          <el-option
+            v-for="item in lineOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择车辆">
+        <el-select class="font-style" v-model="formInline.busNumber" filterable placeholder="请选择">
+          <el-option
+            v-for="item in carOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="方向">
+        <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
+          <el-option
+            v-for="item in turnOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="车辆自编号">
+        <el-input class="font-style" v-model="formInline.busSelfCode" placeholder="请输入"></el-input>
+      </el-form-item>
+      </el-row>
+      <el-form-item label="趟次">
+        <el-input  style="width: 7vw" min="0" v-model="formInline.startTrips" size="mini" type="number"></el-input>
+        -
+        <el-input style="width: 7vw" min="0" max="50" v-model="formInline.endTrips" size="mini" type="number"></el-input>
+      </el-form-item>
+      <el-form-item label="选择日期">
+         <el-date-picker
+          v-model="formInline.valueTime"
+          :picker-options="pickerOptionsDate"
+          :default-time="['00:00:00', '23:59:59']"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="查询时间">
+        <el-radio v-model="formInline.radio" label="1">当天</el-radio>
+        <el-radio v-model="formInline.radio" label="2">历史</el-radio>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="warning" @click="onclear">重置</el-button>
+        <el-button type="success" @click="onSave">导出</el-button>
+      </el-form-item>
+    </el-form>
+    <el-dialog
+      title="提示"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+       <p style="font-weight: bold">导出只支持最大下载量为65536条，如果超过65536条默认下载前65536条</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="getExcel" :loading="isLoading">确认</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+// import moment from 'moment';
+// import { lineList, comList } from 'server/interface';
+// import downloadExcel from 'vue-json-excel'
+import moment from 'moment'
+import { mapGetters } from 'vuex'
+
+export default {
+  props: {
+    excelData: {
+      type: Array
+    },
+    totle: {
+      type: Number
+    },
+    isClose: {
+      type: Boolean
+    }
+  },
+  data () {
+    return {
+      pickerOptionsDate: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+          const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+          return time.getTime() > endTime || time.getTime() < startTime
+        }
+      },
+      formInline: {
+        orgId: '',
+        lineId: '',
+        busNumber: '',
+        valueTime: [],
+        lineType: '',
+        startTime: '',
+        endTime: '',
+        radio: '1',
+        busSelfCode: '',
+        startTrips: '',
+        endTrips: ''
+      },
+      comOptions: [],
+      turnOptions: [{
+        value: '1',
+        label: '上行'
+      }, {
+        value: '2',
+        label: '下行'
+      }],
+      lineOptions: [],
+      carOptions: [],
+      centerDialogVisible: false,
+      laoding: true,
+      code: '加载中',
+      disabled: false,
+      isLoading: false
+    }
+  },
+  created () {
+    this.formInline.orgId = ''
+    this.formInline.busNumber = ''
+    this.formInline.lineId = ''
+    this.$store.dispatch('getComList').then(res => {
+      this.comOptions = res
+    })
+    this.$store.dispatch('getLineList').then(res => {
+      this.lineOptions = res
+    })
+    this.$store.dispatch('getCarList').then(res => {
+      this.carOptions = res
+    })
+    let dataNow = new Date()
+    let endTime = dataNow.getTime()
+    let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
+    let timeEnd = moment(endTime).format('YYYY-MM-DD 23:59:59')
+    setTimeout(() => {
+      this.formInline.valueTime = [timeStart, timeEnd]
+    }, 20)
+  },
+  computed: {
+    ...mapGetters(['userId'])
+  },
+  mounted () {
+    if (this.userId !== '1') {
+      this.disabled = true
+      this.formInline.orgId = this.userId
+    }
+  },
+  watch: {
+    'formInline.orgId': {
+      handler (newValue) {
+        this.formInline.lineId = ''
+        this.formInline.busNumber = ''
+        this.formInline.busSelfCode = ''
+        let orgId = newValue === '1' ? '' : newValue
+        this.$api['wholeInformation.getLine']({
+          lineId: '',
+          lineName: '',
+          orgId: orgId
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.lineName,
+              value: item.lineUuid
+            })
+          })
+          this.lineOptions = list
+        })
+        this.$api['wholeInformation.getCar']({
+          lineId: '',
+          lineName: '',
+          orgId: orgId
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              value: item.busPlateNumber,
+              label: item.busPlateNumber
+            })
+          })
+          this.carOptions = list
+        })
+      }
+    },
+    'formInline.lineId': {
+      handler (newValue) {
+        this.formInline.busNumber = ''
+        this.formInline.busSelfCode = ''
+        if (newValue !== '') {
+          this.$api['wholeInformation.getCar']({
+            lineId: newValue,
+            lineName: '',
+            orgId: ''
+          }).then(res => {
+            let list = []
+            res.forEach(item => {
+              list.push({
+                value: item.busPlateNumber,
+                label: item.busPlateNumber
+              })
+            })
+            this.carOptions = list
+          })
+        }
+      }
+    },
+    'formInline.radio': {
+      handler (newV) {
+        if (newV === '1') {
+          this.pickerOptions = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+              return time.getTime() > endTime || (time.getTime() < endTime - 3600 * 24 * 1000)
+            }
+          }
+          let timeStart = moment().format('YYYY-MM-DD 00:00:00')
+          let timeEnd = moment().format('YYYY-MM-DD 23:59:59')
+          this.formInline.valueTime = [timeStart, timeEnd]
+          this.pickerOptionsDate = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf()
+              const startTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              return time.getTime() > endTime || time.getTime() < startTime
+            }
+          }
+        } else {
+          this.pickerOptionsDate = {
+            disabledDate (time) {
+              const endTime = moment(moment().format('YYYY-MM-DD 00:00:00')).valueOf()
+              return time.getTime() >= endTime
+            }
+          }
+          this.formInline.valueTime = []
+          this.pickerOptions = {
+            disabledDate (time) {
+              return time.getTime() > moment(moment().format('YYYY-MM-DD 23:59:59')).valueOf() - 3600 * 24 * 1000
+            }
+          }
+        }
+      }
+    },
+    'formInline.startTrips': {
+      handler (newV) {
+        this.handleFieldZero(newV, 'startTrips')
+      }
+    },
+    'formInline.endTrips': {
+      handler (newV) {
+        this.handleFieldZero(newV, 'endTrips')
+      }
+    }
+  },
+  updated () {
+    // if (this.totle <= 10000 && this.totle > 0 && this.excelData.length === this.totle && !this.isClose) {
+    //   this.laoding = false
+    //   this.code = '下载'
+    // } else if (this.totle > 10000 && this.excelData.length === 10000 && !this.isClose) {
+    //   this.laoding = false
+    //   this.code = '下载'
+    // } else {
+    //   this.laoding = true
+    //   this.code = '加载中'
+    // }
+  },
+  methods: {
+    handleFieldZero (num, type) {
+      if (Number(num) < 0) {
+        this.formInline[type] = ''
+        this.$message.warning('值不能小于0')
+      }
+    },
+    // 验证结束大于开始
+    handleAbout (num, type, com) {
+      return new Promise((resolve, reject) => {
+        if (Number(num) < Number(this.formInline[com])) {
+          this.formInline[type] = ''
+          const err = '趟次结束值必须大于开始值'
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    },
+    onSubmit () {
+      // this.formInline.date = moment(this.formInline.date).format('YYYY-MM-DD');
+      if (this.formInline.valueTime.length > 0) {
+        // this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+        // this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+        // this.$emit('configCheck', this.formInline)
+        if (this.formInline.endTrips !== '') {
+          this.handleAbout(this.formInline.endTrips, 'endTrips', 'startTrips').then(() => {
+            this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+            this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+            this.$emit('configCheck', this.formInline)
+          }).catch(err => {
+            this.$message.warning(err)
+          })
+        } else {
+          this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+          this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+          this.$emit('configCheck', this.formInline)
+        }
+      } else {
+        this.$message.error('请选择日期时间段')
+      }
+    },
+    onclear () {
+      this.formInline = {
+        orgId: this.userId === '1' ? '' : this.userId,
+        lineId: '',
+        busNumber: '',
+        valueTime: [],
+        lineType: '',
+        startTime: '',
+        endTime: '',
+        radio: '2',
+        busSelfCode: '',
+        startTrips: '',
+        endTrips: ''
+      }
+      this.$store.dispatch('getLineList').then(res => {
+        this.lineOptions = res
+      })
+      this.$store.dispatch('getComList').then(res => {
+        this.comOptions = res
+      })
+      this.$api['wholeInformation.getCar']({
+        lineId: '',
+        lineName: '',
+        orgId: this.userId === '1' ? '' : this.userId
+      }).then(res => {
+        let list = []
+        res.forEach(item => {
+          list.push({
+            value: item.busPlateNumber,
+            label: item.busPlateNumber
+          })
+        })
+        this.carOptions = list
+      })
+    },
+    onSave () {
+      // this.$emit('isDownload')
+      this.centerDialogVisible = true
+    },
+    getExcel () {
+      this.isLoading = true
+      this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
+      this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
+      this.$api['downLoad.export']({
+        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
+        lineId: this.formInline.lineId,
+        lineType: this.formInline.lineType,
+        busNumber: this.formInline.busNumber,
+        startTime: this.formInline.startTime,
+        endTime: this.formInline.endTime,
+        isHistory: this.formInline.radio === '2',
+        busSelfCode: this.formInline.busSelfCode,
+        startTrips: this.formInline.startTrips,
+        endTrips: this.formInline.endTrips
+      }).then(res => {
+        // console.log(res)
+        window.open(res.url)
+        // window.location.href = res.url
+        this.isLoading = false
+        this.centerDialogVisible = false
+        this.$message.success('正在下载中。。。')
+      }).catch((err) => {
+        this.$message.error(err.message)
+      })
+    }
+  },
+  components: {
+    // downloadExcel
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.header {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  padding: 10px 20px 0 20px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+  .form-inline {
+    min-height: 38px;
+    .font-style {
+      width: 200px;
+    }
+  }
+}
+</style>

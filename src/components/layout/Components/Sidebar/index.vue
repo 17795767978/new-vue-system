@@ -18,7 +18,6 @@
           text-color="#bfcbd9">
             <template v-for="item in asyncRouter" >
               <template v-if="!item.hidden && item.children">
-                <!-- no children -->
                 <template v-if="item.children.length === 1 && !item.children[0].children" >
                   <el-menu-item :index="item.path + '/' + item.children[0].path" :key="item.path + '/' + item.children[0].path">
                       <i v-if="!sidebarState.isOpen" :class="item.children[0].meta.icon"></i>
@@ -26,7 +25,6 @@
                       <span slot="title">{{ item.children[0].meta.title }}</span>
                   </el-menu-item>
                 </template>
-                <!-- have children -->
                 <el-submenu v-else :index="item.name || item.path" :key="item.name">
                     <template slot="title" >
                       <i v-if="item.meta && item.meta.icon" :class="item.meta.icon"></i>

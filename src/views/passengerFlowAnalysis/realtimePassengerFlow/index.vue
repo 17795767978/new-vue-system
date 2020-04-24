@@ -174,12 +174,12 @@ export default {
 .passenger-flow-stat {
   width:100%;
   height: calc(100vh - 65px);
-  background-image: url('../../../../assets/images/pg-flow-bg.png');
+  background-image: url('../../../assets/images/pg-flow-bg.png');
   background-size: 100% 100%;
   .title {
     width: 100%;
     height: 8vh;
-    background-image: url('../../../../assets/images/pg-title.png');
+    background-image: url('../../../assets/images/pg-title.png');
     background-size: 100% 100%;
     position: relative;
     .content {
