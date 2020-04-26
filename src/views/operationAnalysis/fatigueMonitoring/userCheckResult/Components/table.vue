@@ -125,8 +125,8 @@ export default {
         this.isLoading = false
         res.forEach((item, index) => {
           this.tableData[index] = item
-          this.tableData[index].untreatedRatio = Number(item.alarmSum) ? `${(Number(item.untreated) / Number(item.alarmSum)).toFixed(2) * 100}%` : 0
-          this.tableData[index].errorRatio = Number(item.processed) ? `${((Number(item.processedErro) + Number(item.falseAlarmErro)) / Number(item.processed)).toFixed(2) * 100}%` : 0
+          this.tableData[index].untreatedRatio = Number(item.alarmSum) ? `${(Number(item.untreated) / Number(item.alarmSum) * 100).toFixed(2)}%` : 0
+          this.tableData[index].errorRatio = Number(item.processed) ? `${((Number(item.processedErro) + Number(item.falseAlarmErro)) / Number(item.processed) * 100).toFixed(2)}%` : 0
         })
       })
     },
