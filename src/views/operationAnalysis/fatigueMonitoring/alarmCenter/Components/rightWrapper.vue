@@ -160,12 +160,11 @@
         <el-table-column
           align="center"
           prop="warnTime"
-          fixed="right"
           label="处理结果"
           width="100"
         >
           <template slot-scope="scope">
-            <span v-if="scope.row.handleResult === '0'">未处理</span>
+            <span v-if="!scope.row.handleResult || scope.row.handleResult === '0'">未处理</span>
             <span v-else-if="scope.row.handleResult === '1'">已处理</span>
             <span v-else>误报</span>
           </template>
@@ -173,7 +172,6 @@
         <el-table-column
           align="center"
           prop="handleSuggestion"
-          fixed="right"
           label="处理意见"
           width="200"
         >
@@ -184,21 +182,24 @@
         </template>
         </el-table-column>
         <el-table-column align="center"
-          prop="handleUser"
-          fixed="right"
+          prop="cc"
           width="150"
           label="抄送人">
-          <template>
-            <el-input type="text" size="mini"></el-input>
+          <template slot-scope="scope">
+            <el-input type="text" size="mini" v-model="scope.row.cc" @blur="updateCc(scope.row)"></el-input>
           </template>
         </el-table-column>
         <el-table-column align="center"
-          prop="handleTime"
-          fixed="right"
-          width="100"
+          prop="ccTime"
+          width="300"
           label="抄送时间">
-          <template>
-
+          <template slot-scope="scope">
+            <el-date-picker
+              v-model="scope.row.ccTime"
+              type="datetime"
+              @blur="updateCc(scope.row)"
+              placeholder="选择日期时间">
+            </el-date-picker>
           </template>
         </el-table-column>
         <el-table-column
@@ -264,6 +265,7 @@
   </div>
 </template>
 
+// updateWarnCc
 <script type="text/ecmascript-6">
 import moment from 'moment'
 import { mapGetters } from 'vuex'
@@ -637,6 +639,31 @@ export default {
         status: '',
         suggestion: ''
       }
+    },
+    updateCc (row) {
+      const { warnUuid, cc, ccTime } = row
+      this.$api['tiredMonitoring.updateWarnCc']({
+        warnUuid,
+        cc: cc || '',
+        ccTime: ccTime ? moment(ccTime).format('YYYY-MM-DD HH:mm:ss') : ''
+      }).then(res => {
+        this.$message.success('操作成功')
+        let defaultData = this.$store.getters.formData
+        this._tableList({
+          orgId: this.formInline.orgId !== '1' ? this.formInline.orgId : '', // 组织机构id
+          lineId: this.formInline.lineId, // 线路id
+          busUuid: this.formInline.busUuid, // 车辆id
+          devCode: this.formInline.devCode, // 设备号
+          busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+          busSelfCode: this.formInline.busSelfCode, // 自编号
+          warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+          warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
+          startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+          endTime: this.formInline.timeValue[1],
+          pageSize: 10,
+          pageNum: this.pageNum
+        })
+      })
     },
     upDateCheck (formName) {
       this.$refs[formName].validate((valid) => {

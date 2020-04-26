@@ -469,6 +469,18 @@ export const tiredMonitoringApi = {
         endTime: ''
       },
       desc: '设备抓拍-列表'
+    },
+    {
+      name: 'updateWarnCc',
+      method: 'POST',
+      path: '/warns/warnCc',
+      mockPath: '/warns/warnCc',
+      params: {
+        cc: '',
+        warnUuid: '',
+        ccTime: ''
+      },
+      desc: '报警抄送'
     }
   ]
 }
