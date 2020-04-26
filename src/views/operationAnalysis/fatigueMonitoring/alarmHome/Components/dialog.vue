@@ -135,11 +135,6 @@ export default {
         ],
         suggestion: [
           { validator: markSuggestion, trigger: 'blur' }
-        ],
-        selectSug: [
-          {
-            required: true, message: '请选择处理内容', trigger: 'blur'
-          }
         ]
       },
       checkOptions: [

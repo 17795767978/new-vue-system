@@ -215,12 +215,12 @@ export default {
         ],
         suggestion: [
           { validator: markSuggestion, trigger: 'blur' }
-        ],
-        selectCheckContent: [
-          {
-            required: true, message: '请选择处理内容', trigger: 'blur'
-          }
         ]
+        // selectCheckContent: [
+        //   {
+        //     required: true, message: '请选择处理内容', trigger: 'blur'
+        //   }
+        // ]
       },
       auditRules: {
         auditStatus: [
@@ -228,12 +228,12 @@ export default {
         ],
         auditSuggestion: [
           { validator: markSuggestion, trigger: 'blur' }
-        ],
-        selectAuditContent: [
-          {
-            required: true, message: '请选择处理内容', trigger: 'blur'
-          }
         ]
+        // selectAuditContent: [
+        //   {
+        //     required: true, message: '请选择处理内容', trigger: 'blur'
+        //   }
+        // ]
       }
     }
   },
