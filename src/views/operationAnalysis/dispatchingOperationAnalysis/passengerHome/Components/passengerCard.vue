@@ -11,7 +11,7 @@
 // import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 import moment from 'moment'
-const TIME = 60 * 1000
+const TIME = 60 * 3000
 export default {
   props: {
     sendCardType: {

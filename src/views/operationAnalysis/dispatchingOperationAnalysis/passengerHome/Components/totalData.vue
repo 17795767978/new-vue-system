@@ -21,7 +21,7 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
-const TIME = 60 * 5000
+const TIME = 60 * 3000
 export default {
   name: 'passengerHome',
   data () {
@@ -43,7 +43,7 @@ export default {
   created () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this.timer = setInterval(() => {
-      this.date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+      this.date = moment().format('YYYY-MM-DD HH:mm:ss')
     }, 1000)
     this._passengeFlow({
       orgId
