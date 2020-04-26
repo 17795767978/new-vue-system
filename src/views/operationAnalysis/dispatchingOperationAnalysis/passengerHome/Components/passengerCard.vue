@@ -11,6 +11,7 @@
 // import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 import moment from 'moment'
+const TIME = 60 * 1000
 export default {
   props: {
     sendCardType: {
@@ -31,7 +32,8 @@ export default {
       grid: {},
       loading: true,
       tooltip: {},
-      totalNum: 0
+      totalNum: 0,
+      totalTime: null
     }
   },
   created () {
@@ -44,6 +46,10 @@ export default {
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
+  },
+  beforeDestroy () {
+    clearTimeout(this.totalTime)
+    this.totalTime = null
   },
   watch: {
     sendCardType: {
@@ -61,8 +67,9 @@ export default {
   methods: {
     _getLines (params) {
       this.loading = true
+      clearTimeout(this.totalTime)
+      this.totalTime = null
       this.$api['passengerFlow.ICCardTypeAnalysis'](params).then(res => {
-        console.log(res)
         if (res.length === 0) {
           this.$message.warning('IC卡类型统计暂无数据')
         } else {
@@ -104,6 +111,28 @@ export default {
           data: (() => {
             return res.map(item => item.name)
           })()
+        }
+        if (Object.keys(this.sendCardType).length === 0) {
+          this.totalTime = setTimeout(() => {
+            let orgUuid = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+            this._getLines({
+              orgUuid,
+              cardSelfCodes: [],
+              date: moment().format('YYYY-MM-DD')
+            })
+          }, TIME)
+        } else {
+          const isToday = moment(this.sendCardType.date).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
+          if (isToday) {
+            this.totalTime = setTimeout(() => {
+              let orgUuid = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+              this._getLines({
+                orgUuid,
+                cardSelfCodes: this.sendCardType.cardTypes,
+                date: moment().format('YYYY-MM-DD')
+              })
+            }, TIME)
+          }
         }
       })
     },
