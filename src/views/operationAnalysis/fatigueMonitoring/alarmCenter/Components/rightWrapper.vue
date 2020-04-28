@@ -225,14 +225,21 @@
         </el-table-column>
         <el-table-column
           align="center"
+          prop="auditUser"
+          label="审核人"
+          width="100"
+        >
+        </el-table-column>
+        <el-table-column
+          align="center"
           prop="auditStatus"
           label="审核结果"
           width="100"
         >
           <template slot-scope="scope">
             <span v-if="scope.row.auditStatus === '0' || scope.row.auditStatus"></span>
-            <span v-else-if="scope.row.auditStatus === '1'">已处理</span>
-            <span v-else-if="scope.row.auditStatus === '2'">误报</span>
+            <span v-if="scope.row.auditStatus === '1'">已处理</span>
+            <span v-if="scope.row.auditStatus === '2'">误报</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -348,7 +355,7 @@
         </el-form-item>
         <el-form-item label="审核意见" prop="auditSuggestion">
           <el-input type="textarea" v-model="auditRuleForm.auditSuggestion" maxlength="100"></el-input>
-          <span>{{auditRuleForm.auditSuggestion.length}}/100</span>
+          <span>{{auditRuleForm.auditSuggestion ? auditRuleForm.auditSuggestion.length : 0}}/100</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -401,8 +408,8 @@ export default {
         driverName: '',
         warnTypeId: [],
         timeValue: [],
-        checkType: ['已处理'],
-        auditStatus: ['0']
+        checkType: [],
+        auditStatus: []
       },
       ruleForm: {
         status: '',

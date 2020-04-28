@@ -9,7 +9,7 @@
           <el-input v-model="form.plDisplay" style="width: 300px;"></el-input>
         </el-form-item>
         <el-form-item label="报警类型排序" prop="plSort">
-          <el-input v-model="form.plSort" style="width: 300px;"></el-input>
+          <el-input v-model="form.plSort" type="number" style="width: 300px;"></el-input>
         </el-form-item>
         <el-form-item label="报警类型备注" prop="plRemark">
           <el-input v-model="form.plRemark" style="width: 300px;"></el-input>

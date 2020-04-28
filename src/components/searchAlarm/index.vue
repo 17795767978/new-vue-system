@@ -1012,7 +1012,6 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
-      console.log(this.select)
       let lineArr = []
       let checkList = []
       this.downLoadLoading = true
@@ -1036,7 +1035,6 @@ export default {
       if (this.select) {
         this.formInline.dateArray = [moment(this.select.date[0]).format('YYYY-MM-DD HH:mm:ss'), moment(this.select.date[1]).format('YYYY-MM-DD HH:mm:ss')]
       }
-      console.log(this.select)
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
         lineId: this.formInline.lineId,
@@ -1047,8 +1045,10 @@ export default {
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
-        startTime: this.isDateTo ? this.formInline.dateArray[0] : this.formInline.valueTime[0],
-        endTime: this.isDateTo ? this.formInline.dateArray[1] : this.formInline.valueTime[1],
+        startTime: this.isDateTo ? this.formInline.valueTime[0] : this.formInline.dateArray[0],
+        endTime: this.isDateTo ? this.formInline.valueTime[1] : this.formInline.dateArray[1],
+        // startTime: this.isDateTo ? this.formInline.dateArray[0] : this.formInline.valueTime[0],
+        // endTime: this.isDateTo ? this.formInline.dateArray[1] : this.formInline.valueTime[1],
         data: this.formDown,
         sStation: this.isStation ? this.formInline.startStation.value : '',
         eStation: this.isStation ? this.formInline.endStation.value : '',

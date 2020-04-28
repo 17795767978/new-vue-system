@@ -53,29 +53,33 @@
       <el-table-column
         prop="orgName"
         align="center"
-        label="公司">
+        label="所属公司">
       </el-table-column>
        <!-- v-if="selectData.lineIds && selectData.lineIds.length > 0" -->
-      <el-table-column
+      <!-- <el-table-column
         prop="lineName"
         align="center"
         v-if="selectData.lineIds && selectData.lineIds.length > 0"
-        label="线路">
+        label="线路"> -->
+        <el-table-column
+        prop="lineName"
+        align="center"
+        label="所属线路">
       </el-table-column>
       <el-table-column
         prop="uploadTime"
         align="center"
-        label="日期">
+        label="客流日期">
       </el-table-column>
       <el-table-column
         prop="onPersonCount"
         align="center"
-        label="上车人数">
+        label="总上车人数">
       </el-table-column>
       <el-table-column
         prop="offPersonCount"
         align="center"
-        label="下车人数">
+        label="总下车人数">
       </el-table-column>
     </el-table>
   </div>
@@ -306,7 +310,7 @@ export default {
         if (this.selectData.lineIds && this.selectData.lineIds.length > 0) {
           columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount']
         } else {
-          columns = ['id', 'orgName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount']
         }
 
         const sums = []
