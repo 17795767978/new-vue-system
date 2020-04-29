@@ -1035,7 +1035,7 @@ export default {
       if (this.select) {
         this.formInline.dateArray = [moment(this.select.date[0]).format('YYYY-MM-DD HH:mm:ss'), moment(this.select.date[1]).format('YYYY-MM-DD HH:mm:ss')]
       }
-      this.$api[`${this.downLoadName}`]({
+      let params = {
         company: this.formInline.lineOrgId,
         lineId: this.formInline.lineId,
         // 判断是否为单车查询页面的导出，后台spring不能区分lineID和lineId，默认取lineID，所以利用this.select做判断传值的问题
@@ -1045,8 +1045,8 @@ export default {
         startStation: this.isStation ? this.formInline.startStation : '',
         endStation: this.isStation ? this.formInline.endStation : '',
         pDate: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
-        startTime: this.isDateTo ? this.formInline.valueTime[0] : this.formInline.dateArray[0],
-        endTime: this.isDateTo ? this.formInline.valueTime[1] : this.formInline.dateArray[1],
+        // startTime: this.isDateTo ? this.formInline.valueTime[0] : this.formInline.dateArray[0],
+        // endTime: this.isDateTo ? this.formInline.valueTime[1] : this.formInline.dateArray[1],
         // startTime: this.isDateTo ? this.formInline.dateArray[0] : this.formInline.valueTime[0],
         // endTime: this.isDateTo ? this.formInline.dateArray[1] : this.formInline.valueTime[1],
         data: this.formDown,
@@ -1063,7 +1063,16 @@ export default {
         busSelfCode: this.formInline.busSelfCode,
         auditStatus: this.formInline.auditStatus,
         isHistory: this.select ? this.select.isHistory : '1'
-      }).then(res => {
+      }
+      if (this.isDate) {
+        params.startTime = this.formInline.valueTime[0]
+        params.endTime = this.formInline.valueTime[1]
+      }
+      if (this.isDateTo) {
+        params.startTime = this.formInline.dateArray[0]
+        params.endTime = this.formInline.dateArray[1]
+      }
+      this.$api[`${this.downLoadName}`](params).then(res => {
         this.downLoadLoading = false
         // console.log(res)
         window.open(res.url)
