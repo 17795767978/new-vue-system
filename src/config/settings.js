@@ -34,7 +34,7 @@ export const API_DEFAULT_CONFIG = {
   mockBaseUrl: 'http://192.168.10.142:8081',
   // mockBaseUrl: 'http://192.168.10.23:8081',
   // 10.233 8089
-  prodBaseUrl: 'http://192.168.10.142:8081', // 测试
+  prodBaseUrl: 'http://192.168.10.233:8090', // 测试
   // prodBaseUrl: 'http://117.34.118.30:8089', // 自测
   // prodBaseUrl: 'http://61.157.184.120:8088', // 宜宾
   // prodBaseUrl: 'http://117.34.118.30:7088', // 自测
