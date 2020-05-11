@@ -56,6 +56,7 @@
             <el-checkbox label="未处理"></el-checkbox>
             <el-checkbox label="已处理"></el-checkbox>
             <el-checkbox label="误报"></el-checkbox>
+            <el-checkbox label="其他"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="选择时间">
@@ -166,7 +167,8 @@
           <template slot-scope="scope">
             <span v-if="!scope.row.handleResult || scope.row.handleResult === '0'">未处理</span>
             <span v-else-if="scope.row.handleResult === '1'">已处理</span>
-            <span v-else>误报</span>
+            <span v-else-if="scope.row.handleResult === '2'">误报</span>
+            <span v-else-if="scope.row.handleResult === '3'">其他</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -340,6 +342,10 @@ export default {
         {
           value: '2',
           label: '误报'
+        },
+        {
+          value: '3',
+          label: '其他'
         }
       ],
       warnOptions: [],
@@ -816,8 +822,10 @@ export default {
             checkList.push('0')
           } else if (item === '已处理') {
             checkList.push('1')
-          } else {
+          } else if (item === '误报') {
             checkList.push('2')
+          } else {
+            checkList.push('3')
           }
         })
       } else {

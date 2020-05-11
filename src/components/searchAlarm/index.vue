@@ -244,6 +244,7 @@
           <el-checkbox label="未处理"></el-checkbox>
           <el-checkbox label="已处理"></el-checkbox>
           <el-checkbox label="误报"></el-checkbox>
+          <el-checkbox label="其他"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item>
@@ -788,8 +789,10 @@ export default {
             checkList.push('0')
           } else if (item === '已处理') {
             checkList.push('1')
-          } else {
+          } else if (item === '误报') {
             checkList.push('2')
+          } else {
+            checkList.push('3')
           }
         })
       } else {

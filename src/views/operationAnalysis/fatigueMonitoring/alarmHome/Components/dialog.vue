@@ -20,7 +20,8 @@
           <template slot-scope="scope">
           <span  v-if="scope.row.handleResult === '0'">未处理</span>
           <span  v-else-if="scope.row.handleResult === '1'">已处理</span>
-          <span v-else>误报</span>
+          <span v-else-if="scope.row.handleResult === '2'">误报</span>
+          <span v-else-if="scope.row.handleResult === '3'">其他</span>
           <!-- <template slot-scope="scope">
             <el-button v-if="scope.row.handleResult === '0'" type="danger" size="mini" @click="goToSucc(scope.row)">未处理</el-button>
             <el-button v-if="scope.row.handleResult === '1'" type="success" size="mini" plain>已处理</el-button>
@@ -137,6 +138,10 @@ export default {
         {
           value: '2',
           label: '误报'
+        },
+        {
+          value: '3',
+          label: '其他'
         }
       ]
     }
