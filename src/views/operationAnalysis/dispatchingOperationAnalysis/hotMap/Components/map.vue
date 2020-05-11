@@ -12,7 +12,7 @@
       v-loading="loading"
       element-loading-background="rgba(0, 0, 0, 0)"
     >
-      <bml-heatmap :data="hotdata" :max="2000" :radius="15">
+      <bml-heatmap :data="hotdata" :max="400" :radius="15">
       </bml-heatmap>
     </baidu-map>
  </div>
