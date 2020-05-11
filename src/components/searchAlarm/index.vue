@@ -333,6 +333,10 @@ export default {
     },
     select: {
       type: Object
+    },
+    // 方向是否可以清空
+    isTurnEmpty: {
+      type: Boolean
     }
   },
   data () {
@@ -726,7 +730,7 @@ export default {
         lineId: '',
         busNumber: '',
         valueTime: [],
-        lineType: '1',
+        lineType: this.isTurnEmpty ? '' : '1',
         startTime: '',
         endTime: '',
         startHour: '',

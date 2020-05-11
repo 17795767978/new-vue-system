@@ -145,27 +145,27 @@ export default {
           allCol: true,
           child: [
             [
-              { name: '客流首页', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsy.png'), bgColor: '#029CAE', path: '/passenger-home', colspan: 1 },
-              { name: '客流实时统计', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsstj.png'), bgColor: '#8EC500', path: '/realtime-passenger-flow', colspan: 1 },
-              { name: '客流高峰时刻分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klgfskfx.png'), bgColor: '#3388E4', path: '/timeTable-analysis', colspan: 1 },
-              { name: '车辆发车趟次时序图', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/clfctccxt.png'), bgColor: '#00A100', path: '/trip-order', colspan: 1 }
+              { name: '客流首页', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsy.png'), bgColor: '#009cad', path: '/passenger-home', colspan: 1 },
+              { name: '客流实时统计', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsstj.png'), bgColor: '#1f3856', path: '/realtime-passenger-flow', colspan: 1 },
+              { name: '客流高峰时刻分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klgfskfx.png'), bgColor: '#1f3856', path: '/timeTable-analysis', colspan: 1 },
+              { name: '车辆发车趟次时序图', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/clfctccxt.png'), bgColor: '#1f3856', path: '/trip-order', colspan: 1 }
             ], [
-              { name: '区间满载率查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/qjmzlcx.png'), bgColor: '#5839B1', path: '/full-load-rate', colspan: 1 },
-              { name: '线路站点登降量查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzddjlcx.png'), bgColor: '#A6029B', path: '/landing-volume', colspan: 1 },
-              { name: '客流运力运量分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klylylfx.png'), bgColor: '#F0840B', path: '/passenger-transport-capacity', colspan: 1 },
-              { name: '客流数据明细查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klylylfx.png'), bgColor: '#F0840B', path: '/search-passenger', colspan: 1 }
+              { name: '区间满载率查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/qjmzlcx.png'), bgColor: '#1f3856', path: '/full-load-rate', colspan: 1 },
+              { name: '线路站点登降量查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzddjlcx.png'), bgColor: '#1f3856', path: '/landing-volume', colspan: 1 },
+              { name: '客流运力运量分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klylylfx.png'), bgColor: '#1f3856', path: '/passenger-transport-capacity', colspan: 1 },
+              { name: '客流数据明细查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klylylfx.png'), bgColor: '#1f3856', path: '/search-passenger', colspan: 1 }
             ], [
-              { name: '线路客流高峰断面分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlklgfdmfx.png'), bgColor: '#0859C0', path: '/section-analysis', colspan: 1 },
-              { name: '客流数据查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsjcx.png'), bgColor: '#ED830A', path: '/search-passenger-flow', colspan: 1 },
-              { name: '线路站间运行时间分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzjyxsjfx.png'), bgColor: '#3388E4', path: '/runtime-analysis', colspan: 2 }
+              { name: '线路客流高峰断面分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlklgfdmfx.png'), bgColor: '#1f3856', path: '/section-analysis', colspan: 1 },
+              { name: '客流数据查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsjcx.png'), bgColor: '#1f3856', path: '/search-passenger-flow', colspan: 1 },
+              { name: '线路站间运行时间分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzjyxsjfx.png'), bgColor: '#1f3856', path: '/runtime-analysis', colspan: 2 }
             ], [
-              { name: '单车客流详情分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/dcklxqfx.png'), bgColor: '#8DC600', path: '/simple-passenger-flow', colspan: 2 },
-              { name: '单车客流统计', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/dckltj.png'), bgColor: '#E16033', path: '/bus-passenger', colspan: 2 }
+              { name: '单车客流详情分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/dcklxqfx.png'), bgColor: '#1f3856', path: '/simple-passenger-flow', colspan: 2 },
+              { name: '单车客流统计', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/dckltj.png'), bgColor: '#1f3856', path: '/bus-passenger', colspan: 2 }
             ], [
-              { name: '线路客流查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlklcx.png'), bgColor: '#EC8408', path: '/line-passenger-flow', colspan: 1 },
-              { name: '线路站点客流查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzdklcx.png'), bgColor: '#A6029D', path: '/comprehensive-query', colspan: 1 },
-              { name: '客流热力分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klrlfx.png'), bgColor: '#9EB527', path: '/hot-map', colspan: 1 },
-              { name: '线路OD', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlOD.png'), bgColor: '#00A500', path: '/line-od', colspan: 1 }
+              { name: '线路客流查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlklcx.png'), bgColor: '#1f3856', path: '/line-passenger-flow', colspan: 1 },
+              { name: '线路站点客流查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzdklcx.png'), bgColor: '#1f3856', path: '/comprehensive-query', colspan: 1 },
+              { name: '客流热力分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klrlfx.png'), bgColor: '#1f3856', path: '/hot-map', colspan: 1 },
+              { name: '线路OD', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlOD.png'), bgColor: '#1f3856', path: '/line-od', colspan: 1 }
             ]
           ]
         }, {
@@ -173,12 +173,13 @@ export default {
           allCol: true,
           child: [
             [
-              { name: '驾驶行为监测', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/jsxwjc.png'), bgColor: '#A200AC', path: '/alarm-center', colspan: 1 },
-              { name: '设备状态', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/cbzt.png'), bgColor: '#01A402', path: '/device-status', colspan: 1 },
-              { name: '报警分析', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjfx.png'), bgColor: '#ED8406', path: '/alarm-analysis', colspan: 1 },
-              { name: '数据质量排查', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/sjzlpc.png'), bgColor: '#8DC601', path: '/status-management', colspan: 1 }
+              { name: '安全运营首页', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjlxgl.png'), bgColor: '#009cad', path: '/alarm-home', colspan: 1 },
+              { name: '驾驶行为监测', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/jsxwjc.png'), bgColor: '#1f3856', path: '/alarm-center', colspan: 1 },
+              { name: '设备状态', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/cbzt.png'), bgColor: '#1f3856', path: '/device-status', colspan: 1 },
+              { name: '报警分析', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjfx.png'), bgColor: '#1f3856', path: '/alarm-analysis', colspan: 1 },
+              { name: '数据质量排查', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/sjzlpc.png'), bgColor: '#1f3856', path: '/status-management', colspan: 1 }
             ], [
-              { name: '报警类型管理', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjlxgl.png'), bgColor: '#D7532B', path: '/alarm-management', colspan: 2 }
+              { name: '报警类型管理', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjlxgl.png'), bgColor: '#1f3856', path: '/alarm-management', colspan: 2 }
             ]
 
           ]

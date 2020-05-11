@@ -169,15 +169,15 @@ export default {
                   'width': 0.1 * item.payNumbers,
                   'curveness': 0.9,
                   'color': (() => {
-                    if (item.payNumbers < 30) {
+                    if (item.payNumbers < 10) {
                       return COLOR_ARR[0]
-                    } else if (item.payNumbers < 60 && item.payNumbers >= 30) {
+                    } else if (item.payNumbers < 20 && item.payNumbers >= 10) {
                       return COLOR_ARR[1]
-                    } else if (item.payNumbers < 90 && item.payNumbers >= 60) {
+                    } else if (item.payNumbers < 30 && item.payNumbers >= 20) {
                       return COLOR_ARR[2]
-                    } else if (item.payNumbers < 120 && item.payNumbers >= 90) {
+                    } else if (item.payNumbers < 40 && item.payNumbers >= 30) {
                       return COLOR_ARR[3]
-                    } else if (item.payNumbers >= 120) {
+                    } else if (item.payNumbers >= 40) {
                       return COLOR_ARR[3]
                     }
                   })()

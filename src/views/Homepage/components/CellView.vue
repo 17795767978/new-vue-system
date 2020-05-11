@@ -95,8 +95,8 @@ export default {
        color: #000000;
     }
     .cellView-container table {
-        border-spacing: 6px;
-        margin-top: 6px;
+        border-spacing: 12px;
+        margin-top: 12px;
     }
     .cellView-container table tr td {
         width: 130px;

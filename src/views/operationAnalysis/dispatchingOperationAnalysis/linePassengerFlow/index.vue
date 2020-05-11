@@ -4,6 +4,7 @@
       :isOrg='true'
       :isLine="true"
       :isTurn="true"
+      isTurnEmpty
       :isDataCurrent="true"
       :isEmpty="true"
       :isDefaultEmpty="true"
