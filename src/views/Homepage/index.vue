@@ -176,10 +176,10 @@ export default {
               { name: '安全运营首页', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjlxgl.png'), bgColor: '#009cad', path: '/alarm-home', colspan: 1 },
               { name: '驾驶行为监测', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/jsxwjc.png'), bgColor: '#1f3856', path: '/alarm-center', colspan: 1 },
               { name: '设备状态', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/cbzt.png'), bgColor: '#1f3856', path: '/device-status', colspan: 1 },
-              { name: '报警分析', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjfx.png'), bgColor: '#1f3856', path: '/alarm-analysis', colspan: 1 },
-              { name: '数据质量排查', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/sjzlpc.png'), bgColor: '#1f3856', path: '/status-management', colspan: 1 }
+              { name: '报警分析', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjfx.png'), bgColor: '#1f3856', path: '/alarm-analysis', colspan: 1 }
             ], [
-              { name: '报警类型管理', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjlxgl.png'), bgColor: '#1f3856', path: '/alarm-management', colspan: 2 }
+              { name: '报警类型管理', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjlxgl.png'), bgColor: '#1f3856', path: '/alarm-management', colspan: 2 },
+              { name: '数据质量排查', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/sjzlpc.png'), bgColor: '#1f3856', path: '/status-management', colspan: 1 }
             ]
 
           ]

@@ -90,7 +90,7 @@ $sidebar-background-color: #304156;
   display: flex;
   flex-direction: column;
   flex: none;
-  overflow: hidden;
+  overflow: auto;
   .logo{
     padding:10px 0;
     color: #fff;

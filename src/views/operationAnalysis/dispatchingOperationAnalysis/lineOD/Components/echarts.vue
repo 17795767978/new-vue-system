@@ -166,7 +166,7 @@ export default {
               'target': item.downStaSequence + item.downStaName,
               'lineStyle': {
                 'normal': {
-                  'width': 0.1 * item.payNumbers,
+                  'width': 0.1 * item.payNumbers * 3,
                   'curveness': 0.9,
                   'color': (() => {
                     if (item.payNumbers < 10) {

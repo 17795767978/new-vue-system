@@ -46,6 +46,14 @@
         align="center"
         label="下车人数">
       </el-table-column>
+      <el-table-column
+        prop="pfrpassengerDif"
+        align="center"
+        label="上下车客流差值">
+        <template slot-scope="scope">
+          <span>{{scope.row.pfrpassengerDif}}%</span>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       style="float: right; margin-top: 20px;"
@@ -121,11 +129,26 @@ export default {
           this.$message.warning('暂无数据')
         }
         this.loading = false
-        this.tableAllData = res
-        this.tableData = res.slice(0, 15)
-        this.total = res.length
+
+        this.tableAllData = this.format(res)
+        this.tableData = this.tableAllData.slice(0, 15)
+        this.total = this.tableAllData.length
         this.pageNumber = 1
       })
+    },
+    format (data) {
+      let dataFormat = []
+      data.forEach(item => {
+        let pfrpassengerDifNum
+        if (item.getOnNumber > 0) {
+          pfrpassengerDifNum = Math.abs(`${((item.getOnNumber - item.getOffNumber) / item.getOnNumber * 100).toFixed(2)}`)
+          dataFormat.push(Object.assign({ pfrpassengerDif: pfrpassengerDifNum }, item))
+        } else {
+          dataFormat.push(Object.assign({ pfrpassengerDif: '0' }, item))
+        }
+      })
+      dataFormat = dataFormat.sort((prev, next) => next.pfrpassengerDif - prev.pfrpassengerDif)
+      return dataFormat
     },
     handleCurrentChange (val) {
       this.pageNumber = val
