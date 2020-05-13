@@ -150,6 +150,10 @@ export default {
         {
           value: '2',
           label: '误报'
+        },
+        {
+          value: '3',
+          label: '其他'
         }
       ],
       rules: {
@@ -190,7 +194,7 @@ export default {
           this.ruleForm.suggestion = '属实'
         } else if (newV === '2') {
           this.ruleForm.suggestion = '误报'
-        } else {
+        } else if (newV === '3') {
           this.ruleForm.suggestion = ''
         }
       }

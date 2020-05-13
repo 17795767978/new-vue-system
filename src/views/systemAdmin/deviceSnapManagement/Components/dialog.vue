@@ -26,7 +26,7 @@
         <el-form-item label="状态">
           <el-radio v-model="formData.isvalid" label="1">启用</el-radio>
           <el-radio v-model="formData.isvalid" label="0">禁用</el-radio>
-          <span style="margin-left: 5vw; color: red">提示：结束日期为空则无结束时间</span>
+          <!-- <span style="margin-left: 5vw; color: red">提示：结束日期为空则无结束时间</span> -->
         </el-form-item>
       </div>
       <div class="hight-info info" v-if="device.type !== '主动抓拍'">

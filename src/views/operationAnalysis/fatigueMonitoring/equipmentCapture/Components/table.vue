@@ -111,7 +111,7 @@ export default {
   created () {
     let today = new Date()
     let startTime = moment(today - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 00:00:00')
-    let endTime = moment(today - 24 * 60 * 60 * 1000).format('YYYY-MM-DD 23:59:59')
+    let endTime = moment().format('YYYY-MM-DD 23:59:59')
     this._getDevicePhotoList(
       {
         orgId: this.userId === '1' ? '' : this.userId,

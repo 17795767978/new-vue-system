@@ -87,7 +87,8 @@ const TIRED_CONTRAL = [
   { name: '车辆排行', icon: iconHomeBjzt, path: '/car-sort', admin: false },
   { name: '监测台账', icon: iconHomeBjzt, path: '/monitoring-ledger', admin: false },
   { name: '统计日报表', icon: iconHomeBjzt, path: '/diary-table', admin: false },
-  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false }
+  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false },
+  { name: '设备抓拍', icon: iconHomeBjfx, path: '/equipment-capture', admin: false }
   // { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management', admin: false },
   // { name: '设备参数下发', icon: iconHomeBjlx, path: '/device-parameter', admin: false }
 ]

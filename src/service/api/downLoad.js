@@ -144,6 +144,25 @@ export const downLoadApi = {
         warnDate: ''
       },
       desc: '统计日报表导出'
+    },
+    {
+      name: 'deviceExport',
+      method: 'POST',
+      path: '/warns/deviceExport',
+      mockPath: '/warns/deviceExport',
+      params: {
+        busPlateNumber: '',
+        busSelfCode: '',
+        busUuid: '',
+        devCode: '',
+        endTime: '',
+        lineId: '',
+        orgId: '',
+        startTime: '',
+        warnLevel: '',
+        warnTypeId: []
+      },
+      desc: '设备抓拍导出'
     }
   ]
 }

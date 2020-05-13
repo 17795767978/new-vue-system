@@ -584,7 +584,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '权限管理',
       icon: 'nocturne icon-dash',
-      roles: ['/management-list', '/role-list']
+      roles: ['/management-list', '/role-list', '/source-list']
     },
     children: [
       {
@@ -614,7 +614,7 @@ export const aysncRoutesMap = [
         meta: {
           title: '资源列表',
           icon: 'nocturne icon-dash',
-          roles: ['/role-list']
+          roles: ['/source-list']
         }
       }
     ]

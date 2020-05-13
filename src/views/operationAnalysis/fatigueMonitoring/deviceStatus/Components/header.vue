@@ -207,7 +207,8 @@ export default {
         lineId: this.formInline.lineUuid || '',
         busPlateNumber: this.formInline.car || '',
         busSelfCode: this.formInline.carSelf || '',
-        devOnlineStatus: this.formInline.devOnlineStatus || ''
+        devOnlineStatus: this.formInline.devOnlineStatus || '',
+        devCode: this.formInline.devCode
       }).then(res => {
         window.open(res.url)
         this.downLoadLoading = false

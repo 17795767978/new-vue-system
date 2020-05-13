@@ -25,7 +25,7 @@ export default {
   data () {
     return {
       selectData: {},
-      downLoadName: 'downLoad.warnExport'
+      downLoadName: 'downLoad.deviceExport'
     }
   },
   methods: {
