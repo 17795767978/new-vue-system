@@ -1,5 +1,15 @@
 <template>
   <div class="alarm-content" v-loading="load">
+    <el-row class="pic" v-if="busDetails.warnTimesArr && busDetails.warnTimesArr.length > 0 || overspeedDetails.warnTimesArr && overspeedDetails.warnTimesArr.length > 0">
+      <el-card shadow="hover" class="time-arr">
+        <el-row :gutter="24" class="pic">
+          <h3 class="demonstration">报警时间集合</h3>
+          <el-col :span="24 / busDetails.warnTimesArr.length" v-for="(item, index) in busDetails.warnTimesArr" :key="item">
+            <el-link :type="currentIndex === index ? 'primary' : 'info'" @click="handlerChange(item, busDetails.warnUuidsArr[index], index)">{{item}}</el-link>
+          </el-col>
+        </el-row>
+      </el-card>
+    </el-row>
     <el-row class="pic">
       <el-card shadow="hover" class="person-detail">
         <personDetail :busDetails="busDetails" :overspeedDetails="overspeedDetails" :position="position" @update="update"/>
@@ -23,7 +33,7 @@
       </el-col>
     </el-row>
     <el-row class="pic-bottom">
-      <el-card shadow="hover" class="map-detail" v-show="Object.keys(busDetails).length > 0">
+      <el-card shadow="hover" :class="busDetails.warnTimesArr && busDetails.warnTimesArr.length > 0 || overspeedDetails.warnTimesArr && overspeedDetails.warnTimesArr.length > 0 ? 'map-detail' : 'map-detail-second'" v-show="Object.keys(busDetails).length > 0">
         <mapDetail :busDetails="busDetails"/>
       </el-card>
       <el-card shadow="hover" class="speed-map-detail" v-show="Object.keys(overspeedDetails).length > 0">
@@ -51,7 +61,10 @@ export default {
       isClear: false,
       warnUuid: '',
       overspeedDetails: {},
-      position: ''
+      position: '',
+      warnTimesArr: [],
+      warnUuidsArr: [],
+      currentIndex: ''
     }
   },
   provide () {
@@ -104,13 +117,16 @@ export default {
     _warnInfoDetail (params) {
       this.load = true
       this.$api['tiredMonitoring.getWarnDetail']({
-        warnUuid: params
+        warnUuid: params,
+        warnTime: ''
       }).then(res => {
+        this.warnTimesArr = res.warnTimes ? res.warnTimes.split(',') : []
+        this.warnUuidsArr = res.warnUuids ? res.warnUuids.split(',') : []
         this.load = false
         if (this.$route.query.type === 'normal') {
-          this.busDetails = res
+          this.busDetails = Object.assign({ warnTimesArr: this.warnTimesArr, warnUuidsArr: this.warnUuidsArr }, res)
         } else {
-          this.overspeedDetails = res
+          this.overspeedDetails = Object.assign({ warnTimesArr: this.warnTimesArr, warnUuidsArr: this.warnUuidsArr }, res)
         }
       }).catch(err => {
         this.$message.error(err.message)
@@ -128,6 +144,24 @@ export default {
     //     this.$message.error(err.message)
     //   })
     // },
+    handlerChange (time, uuid, index) {
+      // console.log(time, uuid)
+      this.currentIndex = index
+      this.load = true
+      this.$api['tiredMonitoring.getWarnDetail']({
+        warnUuid: uuid,
+        warnTime: time
+      }).then(res => {
+        this.load = false
+        if (this.$route.query.type === 'normal') {
+          this.busDetails = Object.assign({ warnTimesArr: this.warnTimesArr, warnUuidsArr: this.warnUuidsArr }, res)
+        } else {
+          this.overspeedDetails = Object.assign({ warnTimesArr: this.warnTimesArr, warnUuidsArr: this.warnUuidsArr }, res)
+        }
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
+    },
     getLocation (address) {
       this.position = address
     },
@@ -154,14 +188,22 @@ export default {
   .pic-end {
     margin-bottom: 1vh;
   }
+  .time-arr {
+    min-height: 5vh;
+    .demonstration {
+      margin-top: 0;
+      padding-left: 12px;
+      box-sizing: border-box;
+    }
+  }
   .person-detail {
     height: 14vh;
   }
   .pic-detail {
-    height: 35vh;
+    height: 32vh;
   }
   .video-detail {
-    height: 35vh;
+    height: 32vh;
   }
   .speed-detail {
     height: 20vh;
@@ -173,6 +215,9 @@ export default {
     }
   }
   .map-detail {
+    height: 30vh;
+  }
+  .map-detail-second {
     height: 38vh;
   }
   .speed-map-detail {

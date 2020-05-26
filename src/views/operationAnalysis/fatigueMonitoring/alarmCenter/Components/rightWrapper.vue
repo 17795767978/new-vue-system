@@ -85,7 +85,7 @@
         :data="tableData"
         stripe
         border
-        height="580"
+        height="65vh"
         v-loading="loading"
         size="mini"
         style="width: 100%">
@@ -125,16 +125,11 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="devCode"
-          label="设备编号"
-          width="150">
-        </el-table-column>
-        <el-table-column
-          align="center"
           prop="warnTypeName"
           label="报警类型"
           width="150">
         </el-table-column>
+        <!-- warnNumber -->
         <el-table-column
           align="center"
           label="报警级别"
@@ -142,6 +137,12 @@
           <template slot-scope="scope">
             {{scope.row.warnLevel}}级
           </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="warnNumber"
+          label="报警次数"
+          width="100">
         </el-table-column>
         <el-table-column
           align="center"
@@ -156,6 +157,13 @@
           label="报警时间"
           :formatter="formatterTime"
           width="150"
+          >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="address"
+          label="报警位置"
+          width="300"
           >
         </el-table-column>
         <el-table-column
@@ -199,7 +207,7 @@
             <el-date-picker
               v-model="scope.row.ccTime"
               type="datetime"
-              @blur="updateCc(scope.row)"
+              @change="updateCc(scope.row)"
               placeholder="选择日期时间">
             </el-date-picker>
           </template>
@@ -368,7 +376,6 @@ export default {
     ...mapGetters(['userId'])
   },
   created () {
-    let defaultData = this.$store.getters.formData
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
@@ -382,30 +389,16 @@ export default {
     this._alarmType({
       warnLevel: ''
     })
-    this._tableList({
-      orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
-      lineId: this.formInline.lineId, // 线路id
-      busUuid: this.formInline.busUuid, // 车辆id
-      devCode: this.formInline.devCode, // 设备号
-      busPlateNumber: this.formInline.busPlateNumber, // 车牌号
-      busSelfCode: this.formInline.busSelfCode, // 自编号
-      warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-      warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
-      startTime: this.formInline.timeValue[0] || timeStart, // 时间格式   开始结束默认查近7天的
-      endTime: this.formInline.timeValue[1] || timeEnd,
-      pageSize: 10,
-      pageNum: 1,
-      handleResults: ''
-    })
   },
   mounted () {
+    // let defaultData = this.$store.getters.formData
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
-    }, 20)
+    }, 200)
     // console.log(this.formInline);
     // if (this.userId !== '1') {
     //   this.disabled = true
@@ -415,6 +408,9 @@ export default {
   activated () {
     let defaultData = this.$store.getters.formData
     setTimeout(() => {
+      if (Object.keys(this.$route.params).length > 0) {
+        this.formInline = this.$route.params
+      }
       this.pageNum = 1
       let type = this.formInline.checkType
       this._tableList({
@@ -465,16 +461,22 @@ export default {
         }
       }
     },
-    'formInline.warnLevel' () {
-      // console.log(this.formInline.warnLevel);
-      // this._alarmType({
-      //   warnLevel: this.formInline.warnLevel
-      // })
+    'formInline.auditStatus': {
+      handler (newV) {
+        // 判断是否路由传值
+        if (Object.keys(this.$route.params).length === 0) {
+          this.formInline.checkType = []
+        } else {
+          this.formInline.checkType = this.$route.params.checkType
+        }
+      }
     },
     'formInline.orgId': {
       handler (newValue) {
-        this.formInline.lineId = ''
-        this.formInline.busNumber = ''
+        if (Object.keys(this.$route.params).length === 0) {
+          this.formInline.lineId = ''
+          this.formInline.busNumber = ''
+        }
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
           lineId: '',
@@ -558,9 +560,16 @@ export default {
     _tableList (params) {
       this.loading = true
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
-        this.tableData = res.list
+        this.tableData = []
+        res.list.forEach(item => {
+          console.log(item)
+          this.getPointAddress(item).then(adr => {
+            item.address = adr
+            this.tableData.push(item)
+          })
+        })
         this.total = res.total
-        this.loading = false
+        setTimeout(() => { this.loading = false }, 500)
       }).catch(err => {
         this.loading = false
         this.$message.error(err.message)
@@ -651,7 +660,7 @@ export default {
       this.$api['tiredMonitoring.updateWarnCc']({
         warnUuid,
         cc: cc || '',
-        ccTime: ccTime ? moment(ccTime).format('YYYY-MM-DD HH:mm:ss') : ''
+        ccTime: ccTime || null
       }).then(res => {
         this.$message.success('操作成功')
         let defaultData = this.$store.getters.formData
@@ -755,39 +764,6 @@ export default {
     },
     onSave () {
       this.centerDialogVisible = true
-      // this.$api['tiredMonitoring.getWarnList']({
-      //   orgId: this.formInline.orgId, // 组织机构id
-      //   lineId: this.formInline.lineId, // 线路id
-      //   busUuid: this.formInline.busUuid, // 车辆id
-      //   devCode: this.formInline.devCode, // 设备号
-      //   busPlateNumber: this.formInline.busPlateNumber, // 车牌号
-      //   busSelfCode: this.formInline.busSelfCode, // 自编号
-      //   warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
-      //   warnTypeId: this.formInline.warnTypeId, // 报警类型
-      //   startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
-      //   endTime: this.formInline.timeValue[1],
-      //   pageSize: 10000,
-      //   pageNum: 1
-      // }).then(res => {
-      //   let excelArr = []
-      //   res.list.forEach((item, index) => {
-      //     item.warnTime = moment(item.warnTime).format('YYYY-MM-DD HH:mm:ss')
-      //     excelArr[index] = {
-      //       '所属公司': item.orgName,
-      //       '所属线路': item.lineName,
-      //       '车牌号': item.busPlateNumber,
-      //       '车辆自编号': item.busSelfCode,
-      //       '设备编号': item.devCode,
-      //       '报警级别(级)': item.warnLevel,
-      //       '报警类型': item.warnTypeName,
-      //       '报警速度': item.speed,
-      //       '报警时间': item.warnTime
-      //     }
-      //   })
-      //   this.json_data = excelArr
-      //   this.downloadLoading = false
-      //   this.code = '下载'
-      // })
     },
     getExcel () {
       let defaultData = this.$store.getters.formData
@@ -832,6 +808,18 @@ export default {
         checkList = []
       }
       return checkList
+    },
+    getPointAddress (item) {
+      // eslint-disable-next-line no-undef
+      let point = new BMap.Point(Number(item.lng), Number(item.lat))
+      // eslint-disable-next-line no-undef
+      let gc = new BMap.Geocoder()
+      return new Promise((resolve, reject) => {
+        gc.getLocation(point, function (rs) {
+          let addComp = rs.addressComponents
+          resolve(`${addComp.province}${addComp.city}${addComp.district}${addComp.street}${addComp.streetNumber}`)
+        })
+      })
     }
   }
 }

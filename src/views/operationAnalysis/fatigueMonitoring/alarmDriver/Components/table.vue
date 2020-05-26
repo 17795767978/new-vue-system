@@ -22,10 +22,10 @@
         :prop="item.plvalue"
         :width="getWidth(item, index)"
         :label="item.pldisplay">
-        <!-- <template slot-scope="scope">
-          <el-button v-if="item.plvalue === 'drivername'" type="primary" size="mini" @click="getrowData(scope.row)">{{scope.row.drivername}}</el-button>
-          <span v-else>{{scope.row[item.plvalue]}}</span>
-        </template> -->
+        <template slot-scope="scope">
+          <span v-if="['orgname', 'linename', 'busplatenumber', 'drivernum', 'drivername'].some(val => val == item.plvalue)" type="primary" size="mini">{{scope.row[item.plvalue]}}</span>
+          <el-link type="primary" v-else @click="getrowData(scope.row, item.plvalue)">{{scope.row[item.plvalue]}}</el-link>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -214,8 +214,48 @@ export default {
         return 130
       }
     },
-    getrowData (row) {
-      this.$emit('driverChanged', row)
+    // getrowData (row) {
+    //   this.$emit('driverChanged', row)
+    // },
+    getrowData (row, plvalue) {
+      // this.$emit('driverChanged', row)
+      let defaultForm = this.formData
+      let startTime = `${Object.keys(this.searchData).length > 0 ? this.searchData.dateArray[0] ? this.searchData.dateArray[0] : this.searchData.dateArray[0] : defaultForm.dateArray[0]} 00:00:00`
+      let endTime = `${Object.keys(this.searchData).length > 0 ? this.searchData.dateArray[1] ? this.searchData.dateArray[1] : this.searchData.dateArray[1] : defaultForm.dateArray[1]} 23:59:59`
+      let checkType = []
+      // console.log(startTime, endTime)
+      // console.log(Object.keys(this.searchData).length > 0 ? this.searchData.checkList : [])
+      Object.keys(this.searchData).length > 0 ? this.searchData.checkList.forEach(item => {
+        if (item === '0') {
+          checkType.push('未处理')
+        } else if (item === '1') {
+          checkType.push('已处理')
+        } else {
+          checkType.push('误报')
+        }
+      }) : checkType = []
+      let params = {
+        orgId: row.orguuid,
+        lineId: row.lineuuid,
+        busPlateNumber: row.busnumber,
+        busUuid: '',
+        devCode: '',
+        busSelfCode: '',
+        warnLevel: '',
+        driverName: row.drivername,
+        warnTypeId: plvalue === 'warnTotalNum' ? this.searchData.warnTypeId ? this.searchData.warnTypeId : [] : [plvalue],
+        pageSize: 10,
+        pageNum: 1,
+        auditStatus: Object.keys(this.searchData).length > 0 ? this.searchData.auditStatus : [],
+        checkType: Object.keys(this.searchData).length > 0 ? checkType : [],
+        timeValue: [startTime, endTime]
+        // startTime: ,
+        // endTime:
+      }
+      this.$router.push({
+        params,
+        name: 'alarmCenter'
+      })
     }
   }
 }
