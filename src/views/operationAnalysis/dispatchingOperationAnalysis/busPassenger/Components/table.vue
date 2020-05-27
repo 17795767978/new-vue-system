@@ -107,6 +107,7 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
+        console.log(newV)
         this.pageNumber = 1
         this._pageBusPersonTotalList({
           orgUuid: newV.orgId === '1' ? '' : newV.orgId,
