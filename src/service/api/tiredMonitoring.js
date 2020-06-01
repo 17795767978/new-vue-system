@@ -481,6 +481,18 @@ export const tiredMonitoringApi = {
         ccTime: ''
       },
       desc: '报警抄送'
+    },
+    {
+      name: 'Voiceprompt',
+      method: 'POST',
+      path: '/warns/Voiceprompt',
+      mockPath: '/warns/Voiceprompt',
+      params: {
+        devType: '',
+        busUuid: '',
+        content: ''
+      },
+      desc: '下发语音'
     }
   ]
 }

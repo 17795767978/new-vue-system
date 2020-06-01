@@ -402,7 +402,7 @@ export default {
       })
     },
     _getKey () {
-      this.$jsonp(`${URL}key?username=admin&password=1985916`).then(json => {
+      this.$jsonp(`${URL}key? =admin&password=1985916`).then(json => {
         this.key = json.data.key
       })
     },

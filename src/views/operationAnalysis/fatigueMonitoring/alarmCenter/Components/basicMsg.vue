@@ -1,0 +1,297 @@
+<template>
+  <div class="basic-msg">
+   <div class="left-top">
+     <p class="msg">
+       <span>所属公司: </span>
+       <span>{{warnDetails.orgName}}</span>
+     </p>
+     <p class="msg">
+       <span>所属线路: </span>
+       <span>{{warnDetails.lineName}}</span>
+     </p>
+     <p class="msg">
+       <span>司机: </span>
+       <span>{{warnDetails.driverName}}</span>
+     </p>
+     <p class="msg">
+       <span>车牌号: </span>
+       <span>{{warnDetails.busPlateNumber}}</span>
+     </p>
+     <p class="msg">
+       <span>车辆自编号: </span>
+       <span>{{warnDetails.busSelfCode}}</span>
+     </p>
+     <p class="msg">
+       <span>设备编号: </span>
+       <span>{{warnDetails.devCode}}</span>
+     </p>
+     <p class="msg">
+       <span>报警时间: </span>
+       <span>{{warnDetails.warnTime}}</span>
+     </p>
+     <p class="msg">
+       <span>报警级别: </span>
+       <span>{{warnDetails.warnLevel}}级</span>
+     </p>
+     <p class="msg">
+       <span>报警类型: </span>
+       <span>{{warnDetails.warnType}}</span>
+     </p>
+     <p class="msg">
+       <span>报警速度: </span>
+       <span>{{warnDetails.speed}}</span>
+     </p>
+     <!-- <p class="msg">
+       <span>当日报警总次数</span>
+       <span>{{warnDetails.warnNumber}}</span>
+     </p> -->
+     <p class="msg">
+       <span>该类型报警总次数: </span>
+       <span>{{warnDetails.warnNumber}}</span>
+     </p>
+   </div>
+   <div class="middle-top">
+    <h3 class="demonstration">报警图片<span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{warnDetails.warnPicList && warnDetails.warnPicList.length || 0}}张</span></h3>
+    <el-carousel v-if="warnDetails.warnPicList && warnDetails.warnPicList.length > 0" type="card" height="200px" trigger="click" :autoplay="false" style="margin-top: 5vh;">
+      <el-carousel-item v-for="(item, index) in warnDetails.warnPicList" :key="index">
+        <img :src="item.url" width="100%" height="100%" alt="图片加载失败" />
+      </el-carousel-item>
+    </el-carousel>
+    <img v-else src="../../../../../assets/images/noImgData.png" width="80%" height="60%" style="margin-left: 10%;margin-top: 10%;">
+   </div>
+   <div class="right-top">
+    <h3 class="demonstration">报警视频<span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{warnDetails.warnMediaList && warnDetails.warnMediaList.length || 0}}张</span></h3>
+    <el-carousel v-if="warnDetails.warnMediaList && warnDetails.warnMediaList.length > 0"
+      height="200px"
+      style="width: 80%; margin-left: 10%;margin-top: 5vh;"
+      indicator-position="none"
+      :autoplay="false"
+      trigger="click">
+      <el-carousel-item v-for="(item, index) in warnDetails.warnMediaList" :key="index" >
+        <video :src="item.url" width="100%" height="100%" controls></video>
+      </el-carousel-item>
+    </el-carousel>
+    <img v-else src="../../../../../assets/images/noVideoData.png" width="80%" height="60%" style="margin-left: 10%;margin-top: 10%;">
+   </div>
+   <div class="left-middle-bottom">
+     <MapDetail :busDetails="warnDetails"/>
+   </div>
+   <div class="right-bottom">
+     <h3 style="margin-top: .8vh;;margin-left:.8vw;">报警处理</h3>
+     <el-row :gutter="24" style="margin-top: .8vh;;margin-left:.8vw;">
+      <el-radio-group v-model="radio">
+        <el-radio :label="1">报警处理</el-radio>
+        <el-radio :label="2">IP电话提醒</el-radio>
+        <el-radio :label="3">语音提醒</el-radio>
+        <!-- <el-radio :label="4">发送给其他系统</el-radio> -->
+      </el-radio-group>
+      <div class="form" v-if="radio === 1">
+        <el-form :model="ruleFormCheck" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="处理状态" prop="status">
+            <el-select v-model="ruleFormCheck.status">
+              <el-option
+                v-for="item in checkOptions.slice(1)"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="处理意见" prop="suggestion">
+            <el-input type="textarea" v-model="ruleFormCheck.suggestion" maxlength="100"></el-input>
+            <span>{{ruleFormCheck.suggestion.length}}/100</span>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-else-if="radio === 2">
+        IP电话提醒
+      </div>
+      <div v-else-if="radio === 3" class="form">
+        <el-form :model="ruleFormWarn" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="提醒类型" prop="status">
+            <el-select v-model="ruleFormWarn.status">
+              <el-option
+                v-for="item in warnsOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="内容描述" prop="suggestion">
+            <el-input type="textarea" v-model="ruleFormWarn.suggestion" maxlength="100"></el-input>
+            <span>{{ruleFormWarn.suggestion.length}}/100</span>
+          </el-form-item>
+        </el-form>
+      </div>
+     </el-row>
+   </div>
+   <el-button type="primary" style="position: absolute; index: 999; right: 5vw; bottom: 0vh" size="mini" @click="handleCheck">确认</el-button>
+  </div>
+</template>
+
+<script>
+import MapDetail from './mapDetail'
+import moment from 'moment'
+export default {
+  props: {
+    warnDetails: {
+      type: Object
+    }
+  },
+  computed: {
+    timeFormat (time) {
+      return moment(time).format('YYYY-MM-DD HH:mm:ss')
+    }
+  },
+  data () {
+    let markSuggestion = (rule, value, callback) => {
+      if (value === '') {
+        callback()
+      } else if (value.length && value.length > 150) {
+        return callback(new Error('输入最大100字'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      rules: {
+        status: [
+          { required: true, message: '请选择处理状态', trigger: 'blur' }
+        ],
+        suggestion: [
+          { validator: markSuggestion, trigger: 'blur' }
+        ]
+      },
+      contents: {},
+      imgList: [],
+      videoList: [],
+      warnsTimes: [1, 2, 3],
+      radio: 1,
+      ruleFormCheck: {
+        status: '',
+        suggestion: ''
+      },
+      ruleFormWarn: {
+        status: '',
+        suggestion: ''
+      },
+      checkOptions: [
+        {
+          value: '0',
+          label: '未处理'
+        },
+        {
+          value: '1',
+          label: '已处理'
+        },
+        {
+          value: '2',
+          label: '误报'
+        },
+        {
+          value: '3',
+          label: '其他'
+        }
+      ],
+      warnsOptions: []
+    }
+  },
+  mounted () {
+    this._alarmType({
+      warnLevel: ''
+    })
+  },
+  watch: {
+    radio (newV) {
+    },
+    warnDetails: {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+      }
+    }
+  },
+  methods: {
+    _alarmType (params) {
+      this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
+        let dataArr = res
+        this.warnsOptions = []
+        dataArr.forEach((list, index) => {
+          this.warnsOptions.push({
+            label: list.value,
+            value: list.code
+          })
+        })
+      })
+    },
+    handleCheck () {
+      console.log('confirm')
+    }
+  },
+  components: {
+    MapDetail
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.basic-msg {
+  width: 100%;
+  height: 72vh;
+  display: flex;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  .left-bottom,
+  .left-top {
+    width: 20%;
+    height: 50%;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    box-sizing: border-box;
+    .msg {
+      margin-top: 0;
+      margin-bottom: 0.8vh;
+    }
+  }
+  .middle-bottom,
+  .middle-top {
+    width: 40%;
+    height: 50%;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    box-sizing: border-box;
+    padding: .5vh .5vw;
+    .demonstration {
+      margin: 0;
+    }
+  }
+  .left-middle-bottom {
+    width: 60%;
+    height: 50%;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    box-sizing: border-box;
+    padding: .5vh .5vw;
+    .demonstration {
+      margin: 0;
+    }
+  }
+  .right-bottom,
+  .right-top {
+    width: 39%;
+    height: 50%;
+    border-bottom: 1px solid #e5e5e5;
+    .demonstration {
+      margin: 0;
+    }
+    .form {
+      padding: 2vh .5vw;
+    }
+  }
+  .check {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+</style>

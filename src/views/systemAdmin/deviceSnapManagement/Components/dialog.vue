@@ -252,6 +252,7 @@ export default {
   methods: {
     _minieyeBusList (params) {
       this.$api['wholeInformation.minieyeBusList'](params).then(res => {
+        console.log(res)
         let formatterData = []
         res.forEach((item, index) => {
           formatterData.push({

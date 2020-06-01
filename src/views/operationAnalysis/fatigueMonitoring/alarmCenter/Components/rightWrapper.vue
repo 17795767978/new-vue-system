@@ -227,6 +227,7 @@
         <el-pagination
           style="float: right; margin-top: 20px;"
           background
+          :disabled="loading"
           @current-change="handleCurrentChange"
           :current-page.sync="pageNum"
           layout="prev, pager, next"
@@ -272,6 +273,7 @@
         <el-button type="primary" @click="upDateCheck('ruleForm')">确认</el-button>
       </span>
     </el-dialog>
+    <DialogDetail :sendTitle="sendTitle" :warnDetails="warnDetails"/>
   </div>
 </template>
 
@@ -279,6 +281,7 @@
 <script type="text/ecmascript-6">
 import moment from 'moment'
 import { mapGetters } from 'vuex'
+import DialogDetail from './dialogsDetail'
 export default {
   props: {
     selectCarData: {
@@ -287,6 +290,7 @@ export default {
   },
   components: {
     // downloadExcel
+    DialogDetail
   },
   data () {
     let markSuggestion = (rule, value, callback) => {
@@ -363,13 +367,15 @@ export default {
       pageSize: 10,
       json_data: [],
       centerDialogVisible: false,
-      loading: true,
+      loading: false,
       downloadLoading: true,
       checkDialog: false,
       checkMsg: {},
       code: '加载中',
       comOptions: [],
-      lineOptions: []
+      lineOptions: [],
+      sendTitle: '',
+      warnDetails: {}
     }
   },
   computed: {
@@ -391,13 +397,34 @@ export default {
     })
   },
   mounted () {
-    // let defaultData = this.$store.getters.formData
+    let defaultData = this.$store.getters.formData
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
     let timeEnd = moment(dataNow).format('YYYY-MM-DD 23:59:59')
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
+      if (Object.keys(this.$route.params).length > 0) {
+        this.formInline = this.$route.params
+      }
+      let type = this.formInline.checkType
+      this._tableList({
+        orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
+        lineId: this.formInline.lineId, // 线路id
+        busUuid: this.formInline.busUuid, // 车辆id
+        devCode: this.formInline.devCode, // 设备号
+        busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+        busSelfCode: this.formInline.busSelfCode, // 自编号
+        warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+        warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
+        startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+        endTime: this.formInline.timeValue[1],
+        pageSize: 10,
+        pageNum: 1,
+        driverName: this.formInline.driverName,
+        handleResults: this.getCheckType(type),
+        auditStatus: this.formInline.auditStatus
+      })
     }, 200)
     // console.log(this.formInline);
     // if (this.userId !== '1') {
@@ -559,17 +586,21 @@ export default {
     },
     _tableList (params) {
       this.loading = true
+      this.tableData = []
+      let tableBeforeData = []
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
-        this.tableData = []
-        res.list.forEach(item => {
-          console.log(item)
-          this.getPointAddress(item).then(adr => {
-            item.address = adr
-            this.tableData.push(item)
+        res.list.forEach((item, index) => {
+          this.getPointAddress(item, index).then((data) => {
+            item.address = data.adr
+            item.index = data.idx
+            tableBeforeData.push(item)
           })
         })
         this.total = res.total
-        setTimeout(() => { this.loading = false }, 500)
+        setTimeout(() => {
+          this.tableData = tableBeforeData.sort((prev, next) => prev.index - next.index)
+          this.loading = false
+        }, 500)
       }).catch(err => {
         this.loading = false
         this.$message.error(err.message)
@@ -629,23 +660,36 @@ export default {
       })
     },
     handleClick (row) {
-      if (row.warnType === 'OVERSPEED') {
-        this.$router.push({
-          name: 'alarmContent',
-          query: {
-            id: row.warnUuid,
-            type: 'overspeed'
-          }
-        })
-      } else {
-        this.$router.push({
-          name: 'alarmContent',
-          query: {
-            id: row.warnUuid,
-            type: 'normal'
-          }
-        })
-      }
+      this.sendTitle = `${row.warnTypeName} ${row.busPlateNumber}`
+      this.$api['tiredMonitoring.getWarnDetail']({
+        warnUuid: row.warnUuid,
+        warnTime: ''
+      }).then(res => {
+        res.devUuid = row.devUuid
+        res.devRefId = row.devRefId
+        res.busUuid = row.busUuid
+        this.warnDetails = res
+        this.$children[5].dialogVisible = true
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
+      // if (row.warnType === 'OVERSPEED') {
+      //   this.$router.push({
+      //     name: 'alarmContent',
+      //     query: {
+      //       id: row.warnUuid,
+      //       type: 'overspeed'
+      //     }
+      //   })
+      // } else {
+      //   this.$router.push({
+      //     name: 'alarmContent',
+      //     query: {
+      //       id: row.warnUuid,
+      //       type: 'normal'
+      //     }
+      //   })
+      // }
     },
     handleCheck (row) {
       this.checkMsg.warnUuid = row.warnUuid
@@ -809,7 +853,7 @@ export default {
       }
       return checkList
     },
-    getPointAddress (item) {
+    getPointAddress (item, index) {
       // eslint-disable-next-line no-undef
       let point = new BMap.Point(Number(item.lng), Number(item.lat))
       // eslint-disable-next-line no-undef
@@ -817,7 +861,7 @@ export default {
       return new Promise((resolve, reject) => {
         gc.getLocation(point, function (rs) {
           let addComp = rs.addressComponents
-          resolve(`${addComp.province}${addComp.city}${addComp.district}${addComp.street}${addComp.streetNumber}`)
+          resolve({ adr: `${addComp.province}${addComp.city}${addComp.district}${addComp.street}${addComp.streetNumber}`, idx: index })
         })
       })
     }
