@@ -57,7 +57,7 @@
         <img :src="item.url" width="100%" height="100%" alt="图片加载失败" />
       </el-carousel-item>
     </el-carousel>
-    <img v-else src="../../../../../assets/images/noImgData.png" width="80%" height="60%" style="margin-left: 10%;margin-top: 10%;">
+    <img v-else src="../../../../../assets/images/noImgData.png" width="80%" height="70%" style="margin-left: 10%;margin-top: 5%;">
    </div>
    <div class="right-top">
     <h3 class="demonstration">报警视频<span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{warnDetails.warnMediaList && warnDetails.warnMediaList.length || 0}}张</span></h3>
@@ -71,7 +71,7 @@
         <video :src="item.url" width="100%" height="100%" controls></video>
       </el-carousel-item>
     </el-carousel>
-    <img v-else src="../../../../../assets/images/noVideoData.png" width="80%" height="60%" style="margin-left: 10%;margin-top: 10%;">
+    <img v-else src="../../../../../assets/images/noVideoData.png" width="80%" height="70%" style="margin-left: 10%;margin-top: 5%;">
    </div>
    <div class="left-middle-bottom">
      <MapDetail :busDetails="warnDetails"/>
@@ -86,7 +86,7 @@
         <!-- <el-radio :label="4">发送给其他系统</el-radio> -->
       </el-radio-group>
       <div class="form" v-if="radio === 1">
-        <el-form :model="ruleFormCheck" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="ruleFormCheck" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="处理状态" prop="status">
             <el-select v-model="ruleFormCheck.status">
               <el-option
@@ -99,15 +99,15 @@
           </el-form-item>
           <el-form-item label="处理意见" prop="suggestion">
             <el-input type="textarea" v-model="ruleFormCheck.suggestion" maxlength="100"></el-input>
-            <span>{{ruleFormCheck.suggestion.length}}/100</span>
+            <span>{{ruleFormCheck.suggestion && ruleFormCheck.suggestion.length}}/100</span>
           </el-form-item>
         </el-form>
       </div>
-      <div v-else-if="radio === 2">
-        IP电话提醒
+      <div v-else-if="radio === 2" style="width: 100%; text-align: center; line-height: 25vh">
+        IP电话
       </div>
       <div v-else-if="radio === 3" class="form">
-        <el-form :model="ruleFormWarn" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="ruleFormWarn" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="提醒类型" prop="status">
             <el-select v-model="ruleFormWarn.status">
               <el-option
@@ -126,7 +126,7 @@
       </div>
      </el-row>
    </div>
-   <el-button type="primary" style="position: absolute; index: 999; right: 5vw; bottom: 0vh" size="mini" @click="handleCheck">确认</el-button>
+   <el-button type="primary" style="position: absolute; index: 999; right: 5vw; bottom: 0vh" size="mini" :loading="pendding" @click="handleCheck">确认</el-button>
   </div>
 </template>
 
@@ -194,7 +194,8 @@ export default {
           label: '其他'
         }
       ],
-      warnsOptions: []
+      warnsOptions: [],
+      pendding: false
     }
   },
   mounted () {
@@ -208,7 +209,8 @@ export default {
     warnDetails: {
       deep: true,
       handler (newV) {
-        console.log(newV)
+        this.ruleFormCheck.status = newV.handleResult === '0' ? '' : newV.handleResult
+        this.ruleFormCheck.suggestion = newV.handleSuggestion ? newV.handleSuggestion : ''
       }
     }
   },
@@ -225,8 +227,61 @@ export default {
         })
       })
     },
-    handleCheck () {
-      console.log('confirm')
+    handleCheck (evt) {
+      if (this.radio === 2) {
+        const param = {
+          loginname: 'admin',
+          pwd: '120223',
+          PlateNO: this.warnDetails.busPlateNumber,
+          locip: '192.168.10.51',
+          locport: '5555',
+          number: this.warnDetails.devRefId,
+          svrip: '61.157.184.120',
+          svrport: '5556'
+        }
+        const event = document.createEvent('CustomEvent')
+        event.initCustomEvent('myCustomEvent', true, false, param)
+        document.dispatchEvent(event)
+      } else if (this.radio === 1) {
+        if (this.ruleFormCheck.status !== '') {
+          this.pendding = true
+          this.$api['tiredMonitoring.wsUpdate']({
+            warnUuid: this.warnDetails.warnUuid,
+            handleResult: this.ruleFormCheck.status,
+            handleSuggestion: this.ruleFormCheck.suggestion
+          }).then(res => {
+            this.pendding = false
+            this.ruleFormCheck = { status: '', suggestion: '' }
+            this.$message.success('已处理')
+            this.$emit('upadate', true)
+          }).catch(() => {
+            this.$message.error('接口错误')
+            this.pendding = false
+          })
+        } else {
+          this.$emit('upadate', false)
+        }
+      } else {
+        if (this.ruleFormWarn.status !== '') {
+          this.pendding = true
+          this.$api['tiredMonitoring.Voiceprompt']({
+            devType: '1',
+            sendType: this.ruleFormWarn.status,
+            busUuid: this.warnDetails.busUuid,
+            content: this.ruleFormWarn.suggestion
+          }).then(res => {
+            this.pendding = false
+            this.ruleFormWarn = { status: '', suggestion: '' }
+            this.$message.success('下发消息成功')
+            this.$emit('upadate', true)
+          }).catch(() => {
+            this.$message.error('接口错误')
+            this.pendding = false
+          })
+        } else {
+          this.$emit('upadate', false)
+        }
+      }
     }
   },
   components: {

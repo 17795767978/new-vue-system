@@ -13,7 +13,8 @@ const globel = {
     lineDataSec: [],
     userList: [],
     modulesList: [],
-    pagesList: []
+    pagesList: [],
+    center: []
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -42,6 +43,9 @@ const globel = {
     },
     PAGE_LIST: (state, list) => {
       state.pagesList = list
+    },
+    GET_POINT: (state, center) => {
+      state.center = center
     }
   },
   actions: {
@@ -226,6 +230,12 @@ const globel = {
         })
         commit('MODULE_LIST', moduleList)
         commit('PAGE_LIST', pagelist)
+      })
+    },
+    getOps ({ commit }) {
+      api['wholeInformation.getCityCoordinatePoints']().then(res => {
+        let center = [res.lng, res.lat]
+        commit('GET_POINT', center)
       })
     }
   }

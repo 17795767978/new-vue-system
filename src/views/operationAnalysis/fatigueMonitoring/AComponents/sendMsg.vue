@@ -102,6 +102,13 @@ export default {
             content: this.ruleForm.desc
           }).then(res => {
             this.$message.success('下发消息成功')
+            this.ruleForm = {
+              dev: '',
+              msgType: '',
+              // msgContent: '',
+              desc: ''
+            }
+            this.resetForm('ruleForm')
           })
         } else {
           console.log('error submit!!')

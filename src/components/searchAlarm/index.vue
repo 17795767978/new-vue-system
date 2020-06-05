@@ -252,6 +252,7 @@
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
         <el-button type="success" @click="onSave" v-if="isDownload">导出</el-button>
         <el-button type="success" @click="getTableData" v-if="isMul">批量设置</el-button>
+        <el-button type="primary" @click="sendMsg" v-if="isSend">下发</el-button>
       </el-form-item>
     </el-form>
     <el-dialog
@@ -390,6 +391,9 @@ export default {
       type: Boolean
     },
     isProcessingResult: {
+      type: Boolean
+    },
+    isSend: {
       type: Boolean
     }
   },
@@ -970,6 +974,9 @@ export default {
         pages: this.formInline.pages
       }
       this.$emit('configCheckMul', configData)
+    },
+    sendMsg () {
+      this.$emit('sendMsg')
     },
     getExcel () {
       let lineArr = []

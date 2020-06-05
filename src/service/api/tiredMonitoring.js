@@ -493,6 +493,30 @@ export const tiredMonitoringApi = {
         content: ''
       },
       desc: '下发语音'
+    },
+    {
+      name: 'busPageList',
+      method: 'POST',
+      path: '/api/bus/pageList',
+      mockPath: '/api/bus/pageList',
+      params: {
+        lineId: '',
+        orgId: '',
+        content: ''
+      },
+      desc: '下发语音车辆list'
+    },
+    {
+      name: 'VoicepromptBatch',
+      method: 'POST',
+      path: '/warns/VoicepromptBatch',
+      mockPath: '/warns/VoicepromptBatch',
+      params: {
+        devType: '',
+        busUuids: '',
+        content: ''
+      },
+      desc: '语音批量下发'
     }
   ]
 }

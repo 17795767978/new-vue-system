@@ -407,7 +407,6 @@ export default {
       })
     },
     _getVideoList (terid) {
-      console.log(terid)
       this.urlList = []
       return new Promise((resolve, reject) => {
         this.$jsonp(`${URL}live/port?key=${this.key}`).then(res => {

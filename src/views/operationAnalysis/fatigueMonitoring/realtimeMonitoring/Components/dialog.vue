@@ -10,10 +10,10 @@
       <div  style="height: 80vh">
         <el-tabs v-model="activeName" @tab-click="handleClick" style="height: 80vh">
           <el-tab-pane label="报警信息" name="first">
-            <BasicMsg :warnDetails="warnDetails" :activeName="activeName" @upadate="upadate"/>
+            <BasicMsg :warnDetails="msgData" :activeName="activeName" :tableData="tableData"/>
           </el-tab-pane>
           <el-tab-pane label="设备抓拍" name="second">
-            <Capture :warnDetails="warnDetails" :activeName="activeName" ref="wrapperCap"/>
+            <Capture :warnDetails="warnDetails" :activeName="activeName"/>
           </el-tab-pane>
           <el-tab-pane label="监控视频" name="third">
             <SurveillanceVideo :warnDetails="warnDetails" :activeName="activeName"/>
@@ -39,6 +39,12 @@ export default {
     },
     warnDetails: {
       type: Object
+    },
+    tableData: {
+      type: Array
+    },
+    msgData: {
+      type: Object
     }
   },
   data () {
@@ -51,7 +57,6 @@ export default {
     dialogVisible (newV) {
       if (!newV) {
         this.activeName = 'first'
-        this.$refs.wrapperCap.imgList = []
       }
     }
   },
@@ -59,13 +64,7 @@ export default {
     handleClose (done) {
       done()
     },
-    handleClick () {},
-    upadate (data) {
-      if (data) {
-        this.$emit('updateList')
-      }
-      this.dialogVisible = false
-    }
+    handleClick () {}
   },
   components: {
     BasicMsg,

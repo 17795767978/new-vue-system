@@ -31,7 +31,9 @@ const getters = {
   // router路由的参数
   routerData: state => state.routerData.data,
   // 导出内容序列化
-  formDown: state => state.defaultSearch.formDown
+  formDown: state => state.defaultSearch.formDown,
+  // 城市经纬度
+  center: state => state.globel.center
 }
 
 export default getters

@@ -292,6 +292,15 @@ export const wholeInformationApi = {
         orgId: ''
       },
       desc: '页面操作频次统计'
+    },
+    {
+      name: 'getbusTree',
+      method: 'POST',
+      path: '/warns/orgLineBusTree/getbus',
+      mockPath: '/warns/orgLineBusTree/getbus',
+      params: {
+      },
+      desc: '页面操作频次统计'
     }
   ]
 }

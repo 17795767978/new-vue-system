@@ -348,6 +348,26 @@ export const aysncRoutesMap = [
           }
         },
         {
+          path: 'realtime-monitoring',
+          component: _import_('operationAnalysis/fatigueMonitoring/realtimeMonitoring/index'),
+          name: 'realtimeMonitoring',
+          meta: {
+            title: '车辆实时监控',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-center']
+          }
+        },
+        {
+          path: 'msg-safe-send',
+          component: _import_('operationAnalysis/fatigueMonitoring/msgSend/index'),
+          name: 'msgSend',
+          meta: {
+            title: '安全信息下发',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-center']
+          }
+        },
+        {
           path: 'device-status',
           component: _import_('operationAnalysis/fatigueMonitoring/deviceStatus/index'),
           name: 'deviceStatus',
