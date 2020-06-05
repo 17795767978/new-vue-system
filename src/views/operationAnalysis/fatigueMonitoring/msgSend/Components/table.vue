@@ -35,7 +35,7 @@
         align="center"
         label="自编号">
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="busCreateTime"
         align="center"
         :formatter="getTime"
@@ -45,11 +45,14 @@
         prop="name"
         align="center"
         label="下发内容">
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="name"
         align="center"
-        label="下发状态">
+        label="操作">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="getDetail(scope.row)"  size="mini">详情</el-button>
+        </template>
       </el-table-column>
       <!-- <el-table-column
         prop="address"
@@ -97,10 +100,18 @@
           <el-input type="textarea" :rows="5" v-model="ruleForm.desc"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">立即下发</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')" :loading="isLoading">立即下发</el-button>
           <el-button @click="resetForm('ruleForm')">取消</el-button>
         </el-form-item>
       </el-form>
+    </el-dialog>
+    <el-dialog title="下发消息详情" width="40%" :visible.sync="detailVisible">
+      <ul>
+        <li style="border-bottom: 1px solid #e5e5e5; padding: .5vh; box-sizing:border-box" v-for="(item, index) in detailMsg" :key="index">
+          <span style="margin-right: 5vw;">下发时间：{{item.time}}</span>
+          <span>下发内容： {{item.content}}</span>
+        </li>
+      </ul>
     </el-dialog>
   </div>
 </template>
@@ -125,6 +136,7 @@ export default {
       }
     }
     return {
+      isLoading: false,
       tableData: [],
       selectItems: [],
       pageSize: 15,
@@ -147,7 +159,9 @@ export default {
         dev: [{ required: true, message: '请选择下发设备', trigger: 'change' }],
         msgType: [{ required: true, message: '请选择提醒类型', trigger: 'change' }],
         desc: [{ validator: markSuggestion, trigger: 'change' }]
-      }
+      },
+      detailVisible: false,
+      detailMsg: []
     }
   },
   computed: {
@@ -204,14 +218,17 @@ export default {
       })
     },
     submitForm (formName) {
+      this.isLoading = true
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$api['tiredMonitoring.VoicepromptBatch']({
             devType: this.ruleForm.dev,
             sendType: this.ruleForm.msgType,
-            busUuid: this.warnDetails.busUuid,
+            busUuids: this.selectItems,
             content: this.ruleForm.desc
           }).then(res => {
+            this.isLoading = false
+            this.dialogFormVisible = false
             this.$message.success('下发消息成功')
             this.ruleForm = {
               dev: '',
@@ -220,6 +237,12 @@ export default {
               desc: ''
             }
             this.resetForm('ruleForm')
+            this._busPageList({
+              orgId: this.searchData.orgId,
+              lineId: this.searchData.lineId,
+              pageSize: 15,
+              pageNumber: this.pageNumber
+            })
           })
         } else {
           console.log('error submit!!')
@@ -228,6 +251,14 @@ export default {
       })
     },
     resetForm (formName) {
+      this.isLoading = false
+      this.dialogFormVisible = false
+      this.ruleForm = {
+        dev: '',
+        msgType: '',
+        // msgContent: '',
+        desc: ''
+      }
       this.$refs[formName].resetFields()
     },
     getTime (row) {
@@ -236,8 +267,7 @@ export default {
     handleSelectionChange (data) {
       let arr = []
       arr = data.map(item => item.busUuid)
-      this.selectItems = arr.splice('')
-      console.log(data)
+      this.selectItems = arr.join(',')
     },
     handleCurrentChange (val) {
       this.pageNumber = val
@@ -247,6 +277,13 @@ export default {
         pageSize: 15,
         pageNumber: this.pageNumber
       })
+    },
+    getDetail (row) {
+      this.detailMsg = row.voiceMap.map(item => ({
+        content: item.voiceprompt_content,
+        time: moment(item.send_time).format('YYYY-MM-DD HH:mm:ss')
+      }))
+      this.detailVisible = true
     }
   }
 }

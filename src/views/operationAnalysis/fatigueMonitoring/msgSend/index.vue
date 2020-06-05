@@ -27,7 +27,11 @@ export default {
       this.selectData = data
     },
     sendMsg () {
-      this.$children[1].dialogFormVisible = true
+      if (this.$children[1].selectItems.length > 0) {
+        this.$children[1].dialogFormVisible = true
+      } else {
+        this.$message.warning('请选择下发车辆')
+      }
     }
   },
   components: {
