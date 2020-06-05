@@ -11,6 +11,9 @@ export default {
   props: {
     sendLineIds: {
       type: Array
+    },
+    isBigScreen: {
+      type: Boolean
     }
   },
   data () {
@@ -69,11 +72,8 @@ export default {
           // type: 'line',
           data: res.datas[0],
           type: 'bar',
-          showBackground: true,
-          backgroundStyle: {
-            color: 'rgba(0, 0, 0, 0.8)'
-          },
-          barWidth: 13,
+          // showBackground: true,
+          barWidth: this.isBigScreen ? 5 : 13,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
             // emphasis: {
@@ -84,7 +84,7 @@ export default {
               // 柱形图圆角，初始化效果
               barBorderRadius: [0, 10, 10, 0],
               label: {
-                show: true, // 是否展示
+                show: !this.isBigScreen, // 是否展示
                 textStyle: {
                   fontWeight: 'bolder',
                   fontSize: 9,

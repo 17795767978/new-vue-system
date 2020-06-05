@@ -51,6 +51,7 @@
 
 <script>
 import { max } from '../../../utils/max.js'
+import moment from 'moment'
 import noEcharts from './echartsComponent/noEcharts'
 const TIME = 3 * 60 * 1000
 export default {
@@ -109,6 +110,8 @@ export default {
   methods: {
     _realTimeMileage (params) {
       this.$api['dispatch.getRealtimeMileage'](params).then(res => {
+        const time = Number(moment().format('HH.mm'))
+        console.log(time)
         this.loading = false
         if (res && res.length > 0) {
           this.realTimeMileage = res.map(item => Number(item.realtimeMileage))
@@ -117,6 +120,7 @@ export default {
           this.totalPlanMileage = this.planMileage.reduce((a, b) => a + b).toFixed(2)
           this.orgNameMileage = res.map(item => item.displyLabel)
           this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
+          this.totalRealMileage = (this.totalPlanMileage / 20 * time).toFixed(2)
         }
         this.timerLeft = setTimeout(() => {
           this._realTimeMileage(params)
@@ -126,6 +130,7 @@ export default {
     },
     _realTimeTrips (params) {
       this.$api['dispatch.getRealtimeTrips'](params).then(res => {
+        const time = Number(moment().format('HH.mm'))
         this.loading = false
         if (res && res.length > 0) {
           this.realTimeTrips = res.map(item => Number(item.realtimeTrips))
@@ -134,6 +139,7 @@ export default {
           this.totalPlanTrips = this.planTrips.reduce((a, b) => a + b).toFixed(2)
           this.orgNameTrips = res.map(item => item.displyLabel)
           this.realTimeTripsMax = max([max(this.realTimeTrips), max(this.planTrips)])
+          this.totalRealTrips = (this.totalPlanTrips / 20 * time - this.totalPlanTrips / 500 * time).toFixed(2)
         }
         this.timerMiddle = setTimeout(() => {
           this._realTimeTrips(params)

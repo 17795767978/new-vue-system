@@ -135,11 +135,20 @@ export default {
       endDate: date
     }, '1')
   },
+  activated () {
+    this.scrollHeight = 0
+    let eleArr = this.$refs.tableWrapper.$el
+    let vWrapper = eleArr.getElementsByClassName('v-wrapper')[0]
+    if (vWrapper) {
+      vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
+    }
+    this.tableData = this.tableAllData.slice(0, 20)
+  },
   watch: {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
+        console.log(newV.radio)
         this._getOnOffPersonCountlist({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineIds: newV.lineIds,
@@ -299,7 +308,6 @@ export default {
         } else {
           columns = ['id', 'orgName', 'uploadTime', 'onPersonCount', 'offPersonCount']
         }
-
         const sums = []
         columns.forEach((item, index) => {
           const values = param.map(list => Number(list[item]))
@@ -334,5 +342,4 @@ export default {
  /deep/ .el-table .success-row {
     background: #f0f9eb;
   }
-
 </style>

@@ -147,7 +147,7 @@ export default {
           // type: 'effectScatter',
           symbolSize: (val) => {
             if (this.valueNum < 50) {
-              return val[2] * 0.5
+              return val[2] * 3
             } else if (this.valueNum > 50 && this.valueNum < 100) {
               return val[2] * 0.4
             } else if (this.valueNum > 100 && this.valueNum < 150) {

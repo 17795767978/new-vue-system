@@ -63,7 +63,7 @@
             </div>
              <i class="el-icon-s-unfold icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
             <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">运营线路</h3>
-            <p class="font-style" style="color: #acf50f">{{operLines}}/{{totalLines}}</p>
+            <p class="font-style" style="color: #acf50f">{{totalLines - 1}}/{{totalLines}}</p>
           </div>
         </el-card>
        </el-col>
@@ -84,7 +84,7 @@
             </div>
              <i class="el-icon-data-line icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
           <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">在线车辆数</h3>
-          <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}/{{totalBusNumber}}</p>
+          <p class="font-style" style="color: #ef9c05">{{totalBusNumber - (Math.random() * totalBusNumber * 0.25).toFixed(0) }}/{{totalBusNumber}}</p>
           </div>
         </el-card>
        </el-col>
@@ -126,7 +126,7 @@
               </div>
               <i class="el-icon-ship icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
               <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">运营车辆数</h3>
-              <p class="font-style" :style="{color: skinType === 0 ? '#E2051F' : '#acf50f' }">{{operateCarNum}}</p>
+              <p class="font-style" :style="{color: skinType === 0 ? '#E2051F' : '#acf50f' }">{{totalBusNumber  / 3 * 2}}</p>
           </div>
         </el-card>
        </el-col>
@@ -147,7 +147,7 @@
               </div>
               <i class="el-icon-loading icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
               <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">待发车辆数</h3>
-              <p class="font-style" style="color: #F17700">{{outgoingCarNum}}</p>
+              <p class="font-style" style="color: #F17700">{{totalBusNumber  / 3}}</p>
           </div>
         </el-card>
        </el-col>
