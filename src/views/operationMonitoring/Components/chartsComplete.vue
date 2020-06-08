@@ -22,7 +22,7 @@
             <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>完成率：</span><span>{{(totalRealMileage / totalPlanMileage * 100).toFixed(2) || '--'}}%</span></li>
           </ul>
         </div>
-        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '60%', height: '200px',margin: '0 auto'}"></div>
+        <div class="echarts-wrapper" v-show="realTimeMileage.length > 0" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '60%', height: '200px',margin: '0 auto'}"></div>
         <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'-'"></noEcharts>
       </el-col>
       <el-col :span="12" style="border-left: 1px #987DC0 solid;height: 100%; position: relative;display:flex;flex-direction: row;">
@@ -34,7 +34,7 @@
             <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>完成率：</span><span>{{ (totalRealTrips / totalPlanTrips * 100).toFixed(2) || '--'}}%</span></li>
           </ul>
         </div>
-        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '60%', height: '200px', margin: '0 auto'}">
+        <div class="echarts-wrapper" v-loading="loading" v-show="realTimeMileage.length > 0" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '60%', height: '200px', margin: '0 auto'}">
         </div>
         <!-- <div v-show="realTimeMileage.length === 0" class="warning">
           <h2 style="text-align:center; color: #fff">暂无数据</h2>
