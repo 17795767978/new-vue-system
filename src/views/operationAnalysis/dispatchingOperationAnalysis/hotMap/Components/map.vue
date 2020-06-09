@@ -69,7 +69,7 @@ export default {
     },
     handler ({ BMap, map }) {
       this._getOps()
-      this.zoom = 13
+      this.zoom = 15
       this.loading = false
       map.setMapStyle(mapStyle)
     }
