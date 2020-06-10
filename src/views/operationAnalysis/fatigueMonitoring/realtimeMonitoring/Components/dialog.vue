@@ -13,7 +13,7 @@
             <BasicMsg :warnDetails="msgData" :activeName="activeName" :tableData="tableData"/>
           </el-tab-pane>
           <el-tab-pane label="设备抓拍" name="second">
-            <Capture :warnDetails="warnDetails" :activeName="activeName"/>
+            <Capture :warnDetails="warnDetails" :activeName="activeName" ref="wrapperCap"/>
           </el-tab-pane>
           <el-tab-pane label="监控视频" name="third">
             <SurveillanceVideo :warnDetails="warnDetails" :activeName="activeName"/>
@@ -57,6 +57,14 @@ export default {
     dialogVisible (newV) {
       if (!newV) {
         this.activeName = 'first'
+        this.$refs.wrapperCap.imgList = []
+        this.$refs.wrapperCap.imgListDis = []
+        clearInterval(this.$refs.wrapperCap.timer)
+        this.$refs.wrapperCap.timer = null
+        this.$refs.wrapperCap.status = ''
+        this.$refs.wrapperCap.timeNum = 0
+        this.$refs.wrapperCap.percent = 0
+        this.$refs.wrapperCap.date = ''
       }
     }
   },

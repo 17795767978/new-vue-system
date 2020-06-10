@@ -992,8 +992,10 @@ export default {
             checkList.push('0')
           } else if (item === '已处理') {
             checkList.push('1')
-          } else {
+          } else if (item === '误报') {
             checkList.push('2')
+          } else {
+            checkList.push('3')
           }
         })
       } else {
@@ -1019,7 +1021,10 @@ export default {
         warnDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
         deviceCode: this.formInline.deviceCode,
         selfCode: this.formInline.selfCode,
+        busSelfCode: this.formInline.selfCode,
+        devCode: this.formInline.deviceCode,
         handleResults: checkList,
+        busPlateNumber: this.formInline.busNumber,
         warnTypeId: ['ADASSNAP', 'DMSTOSNAP']
       }).then(res => {
         this.downLoadLoading = false

@@ -52,6 +52,13 @@ export default {
       if (!newV) {
         this.activeName = 'first'
         this.$refs.wrapperCap.imgList = []
+        this.$refs.wrapperCap.imgListDis = []
+        clearInterval(this.$refs.wrapperCap.timer)
+        this.$refs.wrapperCap.timer = null
+        this.$refs.wrapperCap.status = ''
+        this.$refs.wrapperCap.timeNum = 0
+        this.$refs.wrapperCap.percent = 0
+        this.$refs.wrapperCap.date = ''
       }
     }
   },

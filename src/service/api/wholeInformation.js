@@ -301,6 +301,15 @@ export const wholeInformationApi = {
       params: {
       },
       desc: '页面操作频次统计'
+    },
+    {
+      name: 'pigePicList',
+      method: 'POST',
+      path: '/warns/warnInfoDetail/pigePicList',
+      mockPath: '/warns/warnInfoDetail/pigePicList',
+      params: {
+      },
+      desc: '设备抓拍视频查询'
     }
   ]
 }

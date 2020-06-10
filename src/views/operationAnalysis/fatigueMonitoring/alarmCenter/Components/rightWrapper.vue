@@ -669,7 +669,9 @@ export default {
         res.devUuid = row.devUuid
         res.devRefId = row.devRefId
         res.busUuid = row.busUuid
-        this.warnDetails = res
+        const warnTimesArr = res.warnTimes ? res.warnTimes.split(',') : []
+        const warnUuidsArr = res.warnUuids ? res.warnUuids.split(',') : []
+        this.warnDetails = Object.assign({ warnTimesArr, warnUuidsArr }, res)
       }).catch(err => {
         this.$message.error(err.message)
       })

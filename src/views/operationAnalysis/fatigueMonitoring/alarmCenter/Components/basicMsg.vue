@@ -1,45 +1,56 @@
 <template>
+<div>
+  <el-row class="pic" v-if="busDetails.warnTimesArr && busDetails.warnTimesArr.length > 0">
+    <el-card shadow="hover" class="time-arr">
+      <el-row :gutter="24" class="pic">
+        <h3 class="demonstration">报警时间集合</h3>
+        <el-col :span="24 / busDetails.warnTimesArr.length" v-for="(item, index) in busDetails.warnTimesArr" :key="item">
+          <el-link :type="currentIndex === index ? 'primary' : 'info'" @click="handlerChange(item, busDetails.warnUuidsArr[index], index)">{{item}}</el-link>
+        </el-col>
+      </el-row>
+    </el-card>
+  </el-row>
   <div class="basic-msg">
    <div class="left-top">
      <p class="msg">
        <span>所属公司: </span>
-       <span>{{warnDetails.orgName}}</span>
+       <span>{{busDetails.orgName}}</span>
      </p>
      <p class="msg">
        <span>所属线路: </span>
-       <span>{{warnDetails.lineName}}</span>
+       <span>{{busDetails.lineName}}</span>
      </p>
      <p class="msg">
        <span>司机: </span>
-       <span>{{warnDetails.driverName}}</span>
+       <span>{{busDetails.driverName}}</span>
      </p>
      <p class="msg">
        <span>车牌号: </span>
-       <span>{{warnDetails.busPlateNumber}}</span>
+       <span>{{busDetails.busPlateNumber}}</span>
      </p>
      <p class="msg">
        <span>车辆自编号: </span>
-       <span>{{warnDetails.busSelfCode}}</span>
+       <span>{{busDetails.busSelfCode}}</span>
      </p>
      <p class="msg">
        <span>设备编号: </span>
-       <span>{{warnDetails.devCode}}</span>
+       <span>{{busDetails.devCode}}</span>
      </p>
      <p class="msg">
        <span>报警时间: </span>
-       <span>{{warnDetails.warnTime}}</span>
+       <span>{{timeFormat(busDetails.warnTime)}}</span>
      </p>
      <p class="msg">
        <span>报警级别: </span>
-       <span>{{warnDetails.warnLevel}}级</span>
+       <span>{{busDetails.warnLevel}}级</span>
      </p>
      <p class="msg">
        <span>报警类型: </span>
-       <span>{{warnDetails.warnType}}</span>
+       <span>{{busDetails.warnType}}</span>
      </p>
      <p class="msg">
        <span>报警速度: </span>
-       <span>{{warnDetails.speed}}</span>
+       <span>{{busDetails.speed}}</span>
      </p>
      <!-- <p class="msg">
        <span>当日报警总次数</span>
@@ -47,34 +58,34 @@
      </p> -->
      <p class="msg">
        <span>该类型报警总次数: </span>
-       <span>{{warnDetails.warnNumber}}</span>
+       <span>{{busDetails.warnNumber}}</span>
      </p>
    </div>
    <div class="middle-top">
-    <h3 class="demonstration">报警图片<span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{warnDetails.warnPicList && warnDetails.warnPicList.length || 0}}张</span></h3>
-    <el-carousel v-if="warnDetails.warnPicList && warnDetails.warnPicList.length > 0" type="card" height="200px" trigger="click" :autoplay="false" style="margin-top: 5vh;">
-      <el-carousel-item v-for="(item, index) in warnDetails.warnPicList" :key="index">
+    <h3 class="demonstration">报警图片<span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{busDetails.warnPicList && busDetails.warnPicList.length || 0}}张</span></h3>
+    <el-carousel v-if="busDetails.warnPicList && busDetails.warnPicList.length > 0" type="card" height="200px" trigger="click" :autoplay="false" style="margin-top: 5vh;">
+      <el-carousel-item v-for="(item, index) in busDetails.warnPicList" :key="index">
         <img :src="item.url" width="100%" height="100%" alt="图片加载失败" />
       </el-carousel-item>
     </el-carousel>
     <img v-else src="../../../../../assets/images/noImgData.png" width="80%" height="70%" style="margin-left: 10%;margin-top: 5%;">
    </div>
    <div class="right-top">
-    <h3 class="demonstration">报警视频<span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{warnDetails.warnMediaList && warnDetails.warnMediaList.length || 0}}张</span></h3>
-    <el-carousel v-if="warnDetails.warnMediaList && warnDetails.warnMediaList.length > 0"
+    <h3 class="demonstration">报警视频<span style="margin-left:20px; font-size: 16px; font-weight: 600">共{{busDetails.warnMediaList && busDetails.warnMediaList.length || 0}}张</span></h3>
+    <el-carousel v-if="busDetails.warnMediaList && busDetails.warnMediaList.length > 0"
       height="200px"
       style="width: 80%; margin-left: 10%;margin-top: 5vh;"
       indicator-position="none"
       :autoplay="false"
       trigger="click">
-      <el-carousel-item v-for="(item, index) in warnDetails.warnMediaList" :key="index" >
+      <el-carousel-item v-for="(item, index) in busDetails.warnMediaList" :key="index" >
         <video :src="item.url" width="100%" height="100%" controls></video>
       </el-carousel-item>
     </el-carousel>
     <img v-else src="../../../../../assets/images/noVideoData.png" width="80%" height="70%" style="margin-left: 10%;margin-top: 5%;">
    </div>
    <div class="left-middle-bottom">
-     <MapDetail :busDetails="warnDetails"/>
+     <MapDetail :busDetails="busDetails"/>
    </div>
    <div class="right-bottom">
      <h3 style="margin-top: .8vh;;margin-left:.8vw;">报警处理</h3>
@@ -104,7 +115,7 @@
         </el-form>
       </div>
       <div v-else-if="radio === 2" style="width: 100%; text-align: center; line-height: 25vh">
-        IP电话
+        <span>点击确认进行IP电话</span>
       </div>
       <div v-else-if="radio === 3" class="form">
         <el-form :model="ruleFormWarn" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -128,6 +139,7 @@
    </div>
    <el-button type="primary" style="position: absolute; index: 999; right: 5vw; bottom: 0vh" size="mini" :loading="pendding" @click="handleCheck">确认</el-button>
   </div>
+</div>
 </template>
 
 <script>
@@ -137,11 +149,6 @@ export default {
   props: {
     warnDetails: {
       type: Object
-    }
-  },
-  computed: {
-    timeFormat (time) {
-      return moment(time).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   data () {
@@ -195,10 +202,21 @@ export default {
         }
       ],
       warnsOptions: [],
-      pendding: false
+      pendding: false,
+      time: {},
+      busDetails: {},
+      currentIndex: 0
+    }
+  },
+  computed: {
+    timeFormat () {
+      return (time) => {
+        return moment(time).format('YYYY-MM-DD HH:mm:ss')
+      }
     }
   },
   mounted () {
+    this.time = moment
     this._alarmType({
       warnLevel: ''
     })
@@ -211,6 +229,7 @@ export default {
       handler (newV) {
         this.ruleFormCheck.status = newV.handleResult === '0' ? '' : newV.handleResult
         this.ruleFormCheck.suggestion = newV.handleSuggestion ? newV.handleSuggestion : ''
+        this.busDetails = newV
       }
     }
   },
@@ -282,6 +301,18 @@ export default {
           this.$emit('upadate', false)
         }
       }
+    },
+    handlerChange (time, uuid, index) {
+      // console.log(time, uuid)
+      this.currentIndex = index
+      this.$api['tiredMonitoring.getWarnDetail']({
+        warnUuid: uuid,
+        warnTime: time
+      }).then(res => {
+        this.busDetails = Object.assign({ warnTimesArr: this.warnDetails.warnTimesArr, warnUuidsArr: this.warnDetails.warnUuidsArr }, res)
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
     }
   },
   components: {
@@ -291,9 +322,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pic {
+  margin-bottom: .2vh;
+}
+.pic-middle {
+  margin-bottom: .2vh;
+}
+.pic-end {
+  margin-bottom: .2vh;
+}
+.time-arr {
+  min-height: 1vh;
+  .demonstration {
+    margin: 0;
+    padding-left: 12px;
+    box-sizing: border-box;
+  }
+}
 .basic-msg {
   width: 100%;
-  height: 72vh;
+  height: 65vh;
   display: flex;
   box-sizing: border-box;
   flex-wrap: wrap;

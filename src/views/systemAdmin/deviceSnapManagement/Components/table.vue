@@ -136,8 +136,8 @@ export default {
   },
   created () {
     let today = new Date()
-    let startDate = moment(today - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
-    let endDate = moment(today - 24 * 60 * 60 * 1000 * 7).format('YYYY-MM-DD')
+    let endDate = moment(today).format('YYYY-MM-DD')
+    let startDate = moment(today - 24 * 60 * 60 * 1000 * 7).format('YYYY-MM-DD')
     this._getDevicePhotoList(
       {
         orgId: this.userId === '1' ? '' : this.userId,
