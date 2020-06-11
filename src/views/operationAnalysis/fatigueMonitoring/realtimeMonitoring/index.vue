@@ -12,6 +12,7 @@ import moment from 'moment'
 import Map from './Components/map'
 import Drawer from './Components/drawer'
 import Dialog from './Components/dialog'
+import { mapGetters } from 'vuex'
 export default {
   name: 'realtimeMonitoring',
   data () {
@@ -29,6 +30,9 @@ export default {
       tableData: []
     }
   },
+  computed: {
+    ...mapGetters(['userId'])
+  },
   methods: {
     handlerToSee () {
       this.$children[1].drawer = true
@@ -45,7 +49,7 @@ export default {
       this.warnDetails.devCode = data.content.devCode
       this.warnDetails.busUuid = data.content.busPosition.busId
       this.$api['tiredMonitoring.getWarnList']({
-        orgId: '', // 组织机构id
+        orgId: this.userId, // 组织机构id
         lineId: '', // 线路id
         busUuid: data.content.busPosition.busId, // 车辆id
         devCode: '', // 设备号

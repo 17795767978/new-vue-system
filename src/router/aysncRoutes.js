@@ -254,7 +254,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '疲劳监测',
         icon: 'nocturne icon-dash',
-        roles: ['/alarm-center', '/alarm-content', '/device-status', '/alarm-analysis', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter', '/car-sort', '/monitoring-ledger', '/diary-table', '/device-parameter']
+        roles: ['/alarm-center', '/alarm-content', '/device-status', '/alarm-analysis', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter', '/car-sort', '/monitoring-ledger', '/diary-table', '/device-parameter', '/msg-safe-send', '/realtime-monitoring']
       },
       children: [
         {
@@ -354,7 +354,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '车辆实时监控',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-center']
+            roles: ['/realtime-monitoring']
           }
         },
         {
@@ -364,7 +364,7 @@ export const aysncRoutesMap = [
           meta: {
             title: '安全信息下发',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-center']
+            roles: ['/msg-safe-send']
           }
         },
         {

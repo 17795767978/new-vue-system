@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {},
   data () {
@@ -52,6 +53,9 @@ export default {
         label: 'name'
       }
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   mounted () {
     this._getbusTree({
@@ -83,7 +87,11 @@ export default {
       })
     },
     getComData (id, data) {
-      this.busTree[0].children = data.filter(item => item.pId === id)
+      if (this.userId === '1') {
+        this.busTree[0].children = data.filter(item => item.pId === id)
+      } else {
+        this.busTree[0].children = data.filter(item => item.pId === id && item.id === this.userId)
+      }
       // 线路处理
       this.getLineData(data)
     },

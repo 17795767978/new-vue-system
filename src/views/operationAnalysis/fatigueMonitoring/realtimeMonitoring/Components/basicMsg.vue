@@ -68,7 +68,7 @@
           <span></span>
         </el-col>
         <el-col :span="4" >
-          <span>当前位置: ---</span>
+          <span>当前位置: {{address}}</span>
           <span></span>
         </el-col>
       </el-row>
@@ -164,12 +164,37 @@ export default {
   data () {
     return {
       // tableData: []
-      loading: false
+      loading: false,
+      address: ''
+    }
+  },
+  computed: {
+    // getAddress () {
+    //   return this.getPointAddress()
+    // }
+  },
+  watch: {
+    warnDetails: {
+      deep: true,
+      immediate: true,
+      handler (newV) {
+        this.getPointAddress(newV)
+      }
     }
   },
   methods: {
     formatterTime (row) {
       return moment(row.warnTime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    getPointAddress (newV) {
+      // eslint-disable-next-line no-undef
+      let point = new BMap.Point(Number(newV.value[0]), Number(newV.value[1]))
+      // eslint-disable-next-line no-undef
+      let gc = new BMap.Geocoder()
+      gc.getLocation(point, (rs) => {
+        let addComp = rs.addressComponents
+        this.address = `${addComp.province}${addComp.city}${addComp.district}${addComp.street}${addComp.streetNumber}`
+      })
     }
   }
 }

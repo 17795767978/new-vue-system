@@ -48,7 +48,6 @@ export default {
     pointDatas: {
       deep: true,
       handler (newV) {
-        console.log(iconSec)
         const dataArr = newV.filter(item => item.levelsType === '3' && item.busPosition)
         this.stations = dataArr.map(item => ({
           name: item.name,
@@ -61,7 +60,6 @@ export default {
   },
   methods: {
     _getLineMap () {
-      console.log(this.stations)
       this.bmap = {
         center: this.center,
         zoom: 14,

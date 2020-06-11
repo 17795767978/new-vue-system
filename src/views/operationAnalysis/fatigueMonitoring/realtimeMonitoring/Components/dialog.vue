@@ -10,7 +10,7 @@
       <div  style="height: 80vh">
         <el-tabs v-model="activeName" @tab-click="handleClick" style="height: 80vh">
           <el-tab-pane label="报警信息" name="first">
-            <BasicMsg :warnDetails="msgData" :activeName="activeName" :tableData="tableData"/>
+            <BasicMsg :warnDetails="datas" :activeName="activeName" :tableData="tableData"/>
           </el-tab-pane>
           <el-tab-pane label="设备抓拍" name="second">
             <Capture :warnDetails="warnDetails" :activeName="activeName" ref="wrapperCap"/>
@@ -50,7 +50,8 @@ export default {
   data () {
     return {
       activeName: 'first',
-      dialogVisible: false
+      dialogVisible: false,
+      datas: {}
     }
   },
   watch: {
@@ -65,6 +66,12 @@ export default {
         this.$refs.wrapperCap.timeNum = 0
         this.$refs.wrapperCap.percent = 0
         this.$refs.wrapperCap.date = ''
+      }
+    },
+    msgData: {
+      deep: true,
+      handler (newV) {
+        this.datas = newV
       }
     }
   },

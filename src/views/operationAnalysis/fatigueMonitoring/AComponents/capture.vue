@@ -1,6 +1,6 @@
 <template>
   <div class="capture" v-loading="loading">
-    <el-button type="primary" style="margin-left: 5vw;" @click="getCapture">主动抓拍</el-button>
+    <el-button type="primary" style="margin-left: 5vw;" @click="getCapture" :disabled="isDisabled">主动抓拍</el-button>
     <div class="waiting" v-if="timer">
       <h2>设备正在抓拍，请稍等。。。</h2>
       <el-progress type="circle" :percentage="percent" :status="status"></el-progress>
@@ -13,7 +13,7 @@
         </div>
       </el-image>
     </div>
-    <div class="img-list" v-else-if="imgListDis.lenght > 0 && !timer">
+    <div class="img-list" v-else-if="imgListDis.length > 0 && !timer">
       <el-carousel type="card" style="width: 60%; margin: 10vh auto" :autoplay="false">
         <el-carousel-item v-for="item in imgListDis" :key="item.url">
           <img :src="item.url" alt="抓拍图片" width="100%" height="100%">
@@ -38,6 +38,7 @@ export default {
       imgListDis: [],
       loading: false,
       percent: 0,
+      isDisabled: false,
       status: 'exception',
       date: '',
       timer: null,
@@ -56,6 +57,7 @@ export default {
         this.status = 'success'
       }
       if (newV === 100) {
+        this.isDisabled = false
         clearInterval(this.timer)
         this.timer = null
         this.$api['wholeInformation.pigePicList']({
@@ -63,6 +65,11 @@ export default {
           warnTime: this.date
         }).then(res => {
           this.imgList = res
+          this.loading = true
+          setTimeout(() => {
+            this.loading = false
+            this.imgListDis = res
+          }, 500)
         })
       }
     }
@@ -74,6 +81,7 @@ export default {
       this.loading = true
       this.percent = 0
       this.timeNum = 0
+      this.isDisabled = true
       this.status = 'exception'
       this.date = moment().format('YYYY-MM-DD HH:mm:ss')
       this.$api['wholeInformation.manual']({
@@ -97,30 +105,28 @@ export default {
         devCode: this.warnDetails.devCode,
         warnTime: this.date === '' ? moment().format('YYYY-MM-DD HH:mm:ss') : this.date
       }).then(res => {
-        if (!res.lenght) {
+        if (!res.length) {
           this.imgList = []
-          if (this.date === '' && !this.imgList.length) {
+          if (this.date === '') {
             this.$message.warning('请先抓拍')
-          } else if (!this.imgList.length && this.date !== '') {
+          } else if (this.date !== '') {
             this.$message.warning('图片下载失败, 请稍后重试')
-          } else if (this.imgList.length) {
-            this.imgList = res
           }
+        } else {
+          this.imgList = res
+          this.loading = true
+          setTimeout(() => {
+            this.loading = false
+            this.imgListDis = res
+          }, 500)
         }
       })
-      if (this.imgList.length) {
-        this.loading = true
-        setTimeout(() => {
-          this.loading = false
-          this.imgListDis = this.imgList
-        }, 500)
-      }
     },
     timeInterval () {
       this.timeNum = 0
       this.timer = setInterval(() => {
         this.timeNum += 1
-        this.percent += 2
+        this.percent += 100 / 40
       }, 1000)
     },
     beforeDestroy () {
