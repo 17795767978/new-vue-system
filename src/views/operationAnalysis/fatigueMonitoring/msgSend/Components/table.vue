@@ -63,6 +63,7 @@
     <el-pagination
       style="float: right; margin-top: 20px;"
       background
+      :page-size="pageSize"
       @current-change="handleCurrentChange"
       :current-page.sync="pageNumber"
       layout="total, prev, pager, next"
