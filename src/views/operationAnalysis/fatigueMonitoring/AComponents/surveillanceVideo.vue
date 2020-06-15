@@ -72,7 +72,9 @@ export default {
     _getKey (res) {
       this.$jsonp(`${URL}key?username=admin&password=1985916`).then(json => {
         this.key = json.data.key === '' ? '' : json.data.key
-        this._getVideoList(this.warnDetails.devRefId)
+        if (this.warnDetails.devRefId) {
+          this._getVideoList(this.warnDetails.devRefId)
+        }
       })
     },
     _getVideoList (terid) {
@@ -81,12 +83,10 @@ export default {
         this.$jsonp(`${URL}live/port?key=${this.key}`).then(res => {
           for (let i = 1; i < 7; i++) {
             if (i < 4) {
-              console.log(terid)
               this.$jsonp(`${URL}live/video?key=${this.key}&terid=${terid}&chl=${i}&audio=1&st=0&port=${res.data[0].port}`).then(res => {
                 this.urlList.push(Object.assign({}, res.data, { ch: i, isAct: false }))
               })
             } else {
-              console.log(terid)
               this.$jsonp(`${URL}live/video?key=${this.key}&terid=${terid}&chl=${i}&audio=1&st=0&port=${res.data[1].port}`).then(res => {
                 this.urlList.push(Object.assign({}, res.data, { ch: i, isAct: false }))
               })

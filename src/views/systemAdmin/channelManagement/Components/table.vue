@@ -8,7 +8,7 @@
       :data="tableDataOwn"
       height="60vh"
       border
-      style="width: 100%">
+      :style="style">
       <el-table-column
         align="center"
         label="序号"
@@ -92,7 +92,10 @@ export default {
       pageNumber: 1,
       pageSize: 10,
       videoInfo: '',
-      oldRow: {}
+      oldRow: {},
+      style: {
+        width: '120%'
+      }
     }
   },
   computed: {
@@ -114,6 +117,9 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
+        this.style = {
+          width: '99.9%'
+        }
         this.pageNumber = 1
         this._getTableData({
           orgUuid: newV.orgId === '1' ? '' : newV.orgId,
@@ -187,6 +193,9 @@ export default {
         setTimeout(() => {
           this.isloading = false
         }, 1000)
+        this.style = {
+          width: '120%'
+        }
       })
     },
     // 下拉合上
@@ -259,6 +268,9 @@ export default {
     },
     handleCurrentChange (val) {
       console.log(val)
+      this.style = {
+        width: '99.9%'
+      }
       this.pageNumber = val
       if (this.tableData.length > 0) {
         this.tableDataOwn = this.tableData.slice((val - 1) * 10, val * 10)

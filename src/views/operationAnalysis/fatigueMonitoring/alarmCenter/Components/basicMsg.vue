@@ -46,7 +46,7 @@
      </p>
      <p class="msg">
        <span>报警类型: </span>
-       <span>{{busDetails.warnType}}</span>
+       <span>{{busDetails.warnTypeName}}</span>
      </p>
      <p class="msg">
        <span>报警速度: </span>
@@ -59,6 +59,10 @@
      <p class="msg">
        <span>该类型报警总次数: </span>
        <span>{{busDetails.warnNumber}}</span>
+     </p>
+     <p class="msg">
+       <span>该设备报警总次数: </span>
+       <span>{{busDetails.deviceWarnNumber}}</span>
      </p>
    </div>
    <div class="middle-top">
@@ -91,7 +95,7 @@
      <h3 style="margin-top: .8vh;;margin-left:.8vw;">报警处理</h3>
      <el-row :gutter="24" style="margin-top: .8vh;;margin-left:.8vw;">
       <el-radio-group v-model="radio">
-        <el-radio :label="1">报警处理</el-radio>
+        <el-radio :label="1" :disabled="busDetails.handleResult !== '0'">报警处理</el-radio>
         <el-radio :label="2">IP电话提醒</el-radio>
         <el-radio :label="3">语音提醒</el-radio>
         <!-- <el-radio :label="4">发送给其他系统</el-radio> -->
@@ -227,9 +231,24 @@ export default {
     warnDetails: {
       deep: true,
       handler (newV) {
+        if (newV.handleResult === '0') {
+          this.radio = 1
+        } else {
+          this.radio = 3
+        }
         this.ruleFormCheck.status = newV.handleResult === '0' ? '' : newV.handleResult
         this.ruleFormCheck.suggestion = newV.handleSuggestion ? newV.handleSuggestion : ''
         this.busDetails = newV
+      }
+    },
+    busDetails: {
+      deep: true,
+      handler (newV) {
+        if (newV.handleResult === '0') {
+          this.radio = 1
+        } else {
+          this.radio = 3
+        }
       }
     }
   },
@@ -292,7 +311,12 @@ export default {
             this.pendding = false
             this.ruleFormWarn = { status: '', suggestion: '' }
             this.$message.success('下发消息成功')
-            this.$emit('upadate', true)
+            if (this.busDetails.handleResult !== '0') {
+              this.$emit('upadate', true)
+            } else {
+              this.radio = 1
+              this.$message.warning('请选择处理状态')
+            }
           }).catch(() => {
             this.$message.error('接口错误')
             this.pendding = false
@@ -348,7 +372,7 @@ export default {
   .left-bottom,
   .left-top {
     width: 20%;
-    height: 50%;
+    height: 55%;
     border-right: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
     box-sizing: border-box;
@@ -360,7 +384,7 @@ export default {
   .middle-bottom,
   .middle-top {
     width: 40%;
-    height: 50%;
+    height: 55%;
     border-right: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
     box-sizing: border-box;
@@ -383,7 +407,7 @@ export default {
   .right-bottom,
   .right-top {
     width: 39%;
-    height: 50%;
+    height: 55%;
     border-bottom: 1px solid #e5e5e5;
     .demonstration {
       margin: 0;

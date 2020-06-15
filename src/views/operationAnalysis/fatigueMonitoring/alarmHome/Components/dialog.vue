@@ -71,11 +71,13 @@
         <el-button type="primary" @click="upDateCheck('ruleForm')">确认</el-button>
       </span>
     </el-dialog>
+    <DialogDetail :sendTitle="sendTitle" :warnDetails="warnDetails" @updateList="updateList"/>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import DialogDetail from '../../alarmCenter/Components/dialogsDetail'
 export default {
   props: {
     diaData: {
@@ -143,7 +145,9 @@ export default {
           value: '3',
           label: '其他'
         }
-      ]
+      ],
+      sendTitle: '',
+      warnDetails: {}
     }
   },
   watch: {
@@ -212,14 +216,30 @@ export default {
     }
   },
   methods: {
-    goToDetail (data) {
-      const type = data.warnType === 'OVERSPEED' ? 'overspeed' : 'normal'
-      this.$router.push({
-        path: '/fatigue-monitoring/alarm-content',
-        query: {
-          id: data.warnUuid,
-          type
-        }
+    goToDetail (row) {
+      // const type = data.warnType === 'OVERSPEED' ? 'overspeed' : 'normal'
+      // this.$router.push({
+      //   path: '/fatigue-monitoring/alarm-content',
+      //   query: {
+      //     id: data.warnUuid,
+      //     type
+      //   }
+      // })
+      this.sendTitle = `${row.warnTypeName} ${row.busPlateNumber}`
+      this.$children[2].dialogVisible = true
+      this.$api['tiredMonitoring.getWarnDetail']({
+        warnUuid: row.warnUuid,
+        warnTime: ''
+      }).then(res => {
+        console.log(res)
+        res.devUuid = row.devUuid
+        res.devRefId = row.devRefId
+        res.busUuid = row.busUuid
+        const warnTimesArr = res.warnTimes ? res.warnTimes.split(',') : []
+        const warnUuidsArr = res.warnUuids ? res.warnUuids.split(',') : []
+        this.warnDetails = Object.assign({ warnTimesArr, warnUuidsArr }, res)
+      }).catch(err => {
+        this.$message.error(err.message)
       })
     },
     goToSucc (row, index) {
@@ -287,7 +307,14 @@ export default {
       } else {
         this.selectData = this.selectAllData.slice((val - 1) * this.pageSize, val * this.pageSize)
       }
+    },
+    updateList (data) {
+      console.log(data)
+      console.log(123)
     }
+  },
+  components: {
+    DialogDetail
   }
 }
 </script>
