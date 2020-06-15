@@ -51,6 +51,14 @@
         align="center"
         label="下车人数">
       </el-table-column>
+      <el-table-column
+        prop="pfrpassengerDif"
+        align="center"
+        label="上下车客流差值">
+        <template slot-scope="scope">
+          <span>{{scope.row.pfrpassengerDif}}%</span>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       style="float: right; margin-top: 20px;"
@@ -122,10 +130,24 @@ export default {
       this.$api['passengerFlow.pageBusPersonTotalList'](params).then(res => {
         // console.log(res)
         this.loading = false
-        this.allTableData = res
-        this.tableData = res.slice(0, 15)
+        this.tableAllData = this.format(res)
+        this.tableData = this.tableAllData.slice(0, 15)
         this.total = this.allTableData.length
       })
+    },
+    format (data) {
+      let dataFormat = []
+      data.forEach(item => {
+        let pfrpassengerDifNum
+        if (item.pfrGetOnNumber > 0) {
+          pfrpassengerDifNum = Math.abs(`${((item.pfrGetOnNumber - item.pfrGetOffNumber) / item.pfrGetOnNumber * 100).toFixed(2)}`)
+          dataFormat.push(Object.assign({ pfrpassengerDif: pfrpassengerDifNum }, item))
+        } else {
+          dataFormat.push(Object.assign({ pfrpassengerDif: '0' }, item))
+        }
+      })
+      dataFormat = dataFormat.sort((prev, next) => next.pfrpassengerDif - prev.pfrpassengerDif)
+      return dataFormat
     },
     handleCurrentChange (val) {
       this.pageNumber = val
