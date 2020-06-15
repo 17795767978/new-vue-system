@@ -225,6 +225,7 @@
           }">
         </el-time-select>
       </el-form-item>
+      <slot></slot>
       <el-form-item v-if="isRadio" label="查询时间:">
         <el-radio v-model="formInline.radio" label="1">当天</el-radio>
         <el-radio v-model="formInline.radio" label="2">历史</el-radio>
