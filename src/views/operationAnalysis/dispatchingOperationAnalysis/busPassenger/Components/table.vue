@@ -88,7 +88,7 @@ export default {
       pageSize: 15,
       total: 0,
       loading: false,
-      allTableData: []
+      tableAllData: []
     }
   },
   computed: {
@@ -132,7 +132,7 @@ export default {
         this.loading = false
         this.tableAllData = this.format(res)
         this.tableData = this.tableAllData.slice(0, 15)
-        this.total = this.allTableData.length
+        this.total = this.tableAllData.length
       })
     },
     format (data) {
@@ -151,7 +151,7 @@ export default {
     },
     handleCurrentChange (val) {
       this.pageNumber = val
-      this.tableData = this.allTableData.slice((val - 1) * this.pageSize, val * this.pageSize)
+      this.tableData = this.tableAllData.slice((val - 1) * this.pageSize, val * this.pageSize)
     }
   }
 }

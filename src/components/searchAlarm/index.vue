@@ -1012,6 +1012,7 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
+      console.log(this.select)
       let lineArr = []
       let checkList = []
       this.downLoadLoading = true
@@ -1069,6 +1070,11 @@ export default {
         params.endTime = this.formInline.valueTime[1]
       }
       if (this.isDateTo) {
+        params.startTime = this.formInline.dateArray[0]
+        params.endTime = this.formInline.dateArray[1]
+      }
+      // 延安需求
+      if (this.select && Object.keys(this.select).length > 0) {
         params.startTime = this.formInline.dateArray[0]
         params.endTime = this.formInline.dateArray[1]
       }

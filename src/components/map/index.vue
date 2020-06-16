@@ -277,6 +277,8 @@ export default {
     'formInline.value': {
       handler (newV) {
         if (newV !== 'all') {
+          // lineGroupUuid 延安
+          // lineId 大同
           this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineId === newV)
         } else {
           this.markers = this.markersAll
