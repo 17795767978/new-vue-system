@@ -187,6 +187,15 @@ import moment from 'moment'
 export default {
   name: 'Role',
   data () {
+    const roleNameVali = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('角色不能为空'))
+      } else if (value.length >= 35) {
+        callback(new Error('角色不能过长'))
+      } else {
+        callback()
+      }
+    }
     return {
       type: '菜单',
       list: [],
@@ -205,7 +214,7 @@ export default {
       },
       rules: {
         roleName: [
-          { required: true, message: '请输入角色名称', trigger: 'blur' }
+          { validator: roleNameVali, trigger: 'blur' }
         ],
         describes: [
           { required: true, message: '请输入角色描述', trigger: 'blur' }
@@ -364,7 +373,7 @@ export default {
             this.$message.success('添加成功!')
             this.dialogVisible = false
           }).catch(() => {
-            this.$message.error('输入的内容不合法')
+            this.$message.error('输入的内容不合法,角色或描述字符过长')
           })
         } else {
           this.$message.error('角色名称已存在')
