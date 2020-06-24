@@ -2,9 +2,9 @@
 <template>
   <div class="person-detail-content">
     <h3 class="demonstration">报警详情
-      <span style="display:inline-block; float: right; margin-right: 2vw;">
+      <!-- <span style="display:inline-block; float: right; margin-right: 2vw;">
         <el-button type="success" size="mini" @click="handleCheck" :disabled="overspeedDetails.handleResult !== '0' && busDetails.handleResult !== '0'">处理</el-button>
-      </span>
+      </span> -->
     </h3>
     <el-row :gutter="24"  class="pic">
        <el-col :span="6">

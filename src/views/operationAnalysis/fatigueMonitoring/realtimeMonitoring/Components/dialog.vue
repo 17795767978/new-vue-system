@@ -60,6 +60,7 @@ export default {
         this.activeName = 'first'
         this.$refs.wrapperCap.imgList = []
         this.$refs.wrapperCap.imgListDis = []
+        this.$refs.wrapperCap.imgListDisSec = []
         clearInterval(this.$refs.wrapperCap.timer)
         this.$refs.wrapperCap.timer = null
         this.$refs.wrapperCap.status = ''

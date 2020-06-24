@@ -14,11 +14,24 @@
       </el-image>
     </div>
     <div class="img-list" v-else-if="imgListDis.length > 0 && !timer">
-      <el-carousel type="card" style="width: 60%; margin: 10vh auto" :autoplay="false">
-        <el-carousel-item v-for="item in imgListDis" :key="item.url">
-          <img :src="item.url" alt="抓拍图片" width="100%" height="100%">
-        </el-carousel-item>
-      </el-carousel>
+      <el-row :gutter="10" style="width: 100%;">
+        <el-col :span="12">
+          <h3 style="text-align: center">DMS抓拍图片</h3>
+          <el-carousel type="card" style="width: 100%; margin: 5vh auto" :autoplay="false">
+            <el-carousel-item v-for="item in imgListDis" :key="item.url">
+              <img :src="item.url" alt="DMSTOSNAP抓拍图片" width="100%" height="100%">
+            </el-carousel-item>
+          </el-carousel>
+        </el-col>
+        <el-col style="text-align: center" :span="12">
+          <h3>ADAS抓拍图片</h3>
+          <el-carousel type="card" style="width: 100%; margin: 5vh auto" :autoplay="false">
+            <el-carousel-item v-for="item in imgListDisSec" :key="item.url">
+              <img :src="item.url" alt="ADASSNAP抓拍图片" width="100%" height="100%">
+            </el-carousel-item>
+          </el-carousel>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -36,6 +49,7 @@ export default {
       radio: '',
       imgList: [],
       imgListDis: [],
+      imgListDisSec: [],
       loading: false,
       percent: 0,
       isDisabled: false,
@@ -56,7 +70,7 @@ export default {
       } else {
         this.status = 'success'
       }
-      if (newV === 100) {
+      if (newV >= 100) {
         this.isDisabled = false
         clearInterval(this.timer)
         this.timer = null
@@ -68,7 +82,9 @@ export default {
           this.loading = true
           setTimeout(() => {
             this.loading = false
-            this.imgListDis = res
+            this.imgListDis = res.filter(item => item.warnType === 'DMSTOSNAP')
+            this.imgListDisSec = res.filter(item => item.warnType === 'ADASSNAP')
+            console.log(this.imgListDisSec)
           }, 500)
         })
       }
@@ -96,6 +112,7 @@ export default {
         // console.log(res)
         this.imgList = []
         this.imgListDis = []
+        this.imgListDisSec = []
         this.$message.success('抓拍添加成功')
         this.timeInterval()
       })
@@ -117,7 +134,9 @@ export default {
           this.loading = true
           setTimeout(() => {
             this.loading = false
-            this.imgListDis = res
+            this.imgListDis = res.filter(item => item.warnType === 'DMSTOSNAP')
+            this.imgListDisSec = res.filter(item => item.warnType === 'ADASSNAP')
+            console.log(this.imgListDisSec)
           }, 500)
         }
       })
@@ -126,7 +145,7 @@ export default {
       this.timeNum = 0
       this.timer = setInterval(() => {
         this.timeNum += 1
-        this.percent += 100 / 40
+        this.percent += 100 / 60
       }, 1000)
     },
     beforeDestroy () {
