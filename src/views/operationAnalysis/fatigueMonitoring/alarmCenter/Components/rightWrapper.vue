@@ -693,6 +693,7 @@ export default {
       this.driverOptionsAll = []
       this.$api['tiredMonitoring.getDriverDt'](params).then(res => {
         const arr = res
+        console.log(res)
         arr.forEach(item => {
           this.driverOptionsAll.push({
             label: `${item.drvName} ${item.drvEmployeeId}`,
@@ -752,7 +753,8 @@ export default {
         setTimeout(() => {
           this.drvLoading = false
           this.selectDriverOptions = this.driverOptionsAll.filter(item => {
-            return item.label.toLowerCase()
+            const name = item.label.split(' ')[0]
+            return name.toLowerCase()
               .indexOf(query.toLowerCase()) > -1
           })
         }, 20)
@@ -872,7 +874,7 @@ export default {
       this.$api['tiredMonitoring.wsUpdate']({
         warnUuid,
         driverName: drvData[0],
-        driverNum: drvData[1]
+        driverIccard: drvData[1]
       }).then(res => {
         this.$message.success('操作成功')
         this.selectDriverOptions = []
