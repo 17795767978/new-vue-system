@@ -182,6 +182,8 @@ export default {
             })
           })
           this.lineOptions = list
+        }).catch(() => {
+          this.lineOptions = []
         })
         this.$api['wholeInformation.getCar']({
           lineId: '',

@@ -26,6 +26,9 @@ export function axiosRequestSucessFunc (config) {
   if (config.data && config.data.lineIdRepeate !== undefined) {
     config.data.lineUuids = permissionLine(config.data.lineIdRepeate, 'lineIds')
   }
+  if (config.data && config.data.lineUuid !== undefined) {
+    config.data.lineUuids = permissionLine(config.data.lineUuid, 'lineUuid')
+  }
   if (config.data && config.data.orgId && config.data.orgId === '1') {
     config.data.orgId = ''
   }
@@ -38,15 +41,16 @@ export function axiosRequestSucessFunc (config) {
 
 // 线路权限
 function permissionLine (line, type) {
-  if (type === 'lineId') {
+  const lineData = store.state.globel.lineData.map(item => item.value)
+  if (type === 'lineId' || type === 'lineUuid') {
     if (line === '') {
-      return []
+      return [...lineData]
     } else if (line !== '') {
       return [line]
     }
   } else if (type === 'lineIds') {
     if (line.length === 0) {
-      return []
+      return [...lineData]
     } else if (line.length > 0) {
       return line
     }

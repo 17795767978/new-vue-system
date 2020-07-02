@@ -120,6 +120,8 @@ export default {
             })
           })
           this.lineOptions = list
+        }).catch(() => {
+          this.lineOptions = []
         })
       }
     }

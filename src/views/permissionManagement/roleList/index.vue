@@ -10,6 +10,7 @@
         border
         fit
         highlight-current-row
+        height="75vh"
         style="width: 100%">
         <el-table-column align="center" label="序号" width="80" type="index">
         </el-table-column>
@@ -23,6 +24,11 @@
             <span>{{scope.row.describes}}</span>
           </template>
         </el-table-column>
+        <el-table-column align="center" label="角色类型" width="100">
+          <template slot-scope="scope">
+            <span>{{scope.row.roleType === '0' ? '普通角色' : '审核角色'}}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="创建人" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.createUser}}</span>
@@ -33,6 +39,7 @@
             <span>{{scope.row.enabled === '1' ? '启用' : '禁用'}}</span>
           </template>
         </el-table-column>
+        <!-- roleType -->
         <el-table-column align="center" label="创建时间" width="220" :formatter="getCreateTime">
         </el-table-column>
         <el-table-column align="center" label="修改时间" width="220" :formatter="getUpdateTime">
@@ -53,8 +60,13 @@
               <el-button
                 size="mini"
                 type="warning"
+                @click="handleLineAllow(scope.row)"
+              >线路权限</el-button>
+              <el-button
+                size="mini"
+                type="warning"
                 @click="handleDataAllot(scope.row)"
-              >数据权限</el-button>
+              >报警类型</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -80,14 +92,6 @@
           placeholder="请输入角色名称">
         </el-input>
         </el-row>
-        <!-- <el-row style="margin-top: 20px">
-        <span>角色排序：</span>
-        <el-input
-          style="width: 200px"
-          v-model.number="sort"
-          placeholder="请输入排序">
-        </el-input>
-        </el-row> -->
         <el-row style="margin-top: 20px">
         <span style="color: red">* </span>
         <span>角色描述：</span>
@@ -106,6 +110,21 @@
           placeholder="请选择">
           <el-option
             v-for="item in enableOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </el-row>
+        <el-row style="margin-top: 20px">
+        <span style="color: red">* </span>
+        <span>角色类型：</span>
+        <el-select
+          style="width: 200px"
+          v-model="roleType"
+          placeholder="请选择">
+          <el-option
+            v-for="item in roleTypeOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -174,28 +193,38 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="角色类型：" prop="roleType">
+          <el-select
+            style="width: 240px"
+            v-model="adminForm.roleType"
+            placeholder="请选择">
+            <el-option
+              v-for="item in roleTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmitUpdate">确 定</el-button>
       </span>
     </el-dialog>
+    <lineDialog :lineTreeDatas="lineTreeDatas" :rowData="rowData" @updateList="updateList"/>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import lineDialog from './Components/lineDialog'
+import { mapGetters } from 'vuex'
 export default {
-  name: 'Role',
+  name: 'roleList',
+  components: {
+    lineDialog
+  },
   data () {
-    const roleNameVali = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('角色不能为空'))
-      } else if (value.length >= 35) {
-        callback(new Error('角色不能过长'))
-      } else {
-        callback()
-      }
-    }
     return {
       type: '菜单',
       list: [],
@@ -206,21 +235,26 @@ export default {
       enabled: '1',
       describes: '',
       roleId: '',
+      roleType: '',
       adminForm: {
         roleId: '',
         roleName: '',
         describes: '',
-        enabled: ''
+        enabled: '',
+        roleType: ''
       },
       rules: {
         roleName: [
-          { validator: roleNameVali, trigger: 'blur' }
+          { required: true, message: '请输入角色名称', trigger: 'blur' }
         ],
         describes: [
           { required: true, message: '请输入角色描述', trigger: 'blur' }
         ],
         enabled: [
           { required: true, message: '请选择状态', trigger: 'blur' }
+        ],
+        roleType: [
+          { required: true, message: '请选择角色类型', trigger: 'blur' }
         ]
       },
       enableOptions: [
@@ -232,6 +266,9 @@ export default {
           value: '0',
           label: '禁用'
         }
+      ],
+      roleTypeOptions: [
+        { value: '0', label: '普通角色' }, { value: '1', label: '审核角色' }
       ],
       // 菜单
       defaultProps: {
@@ -255,13 +292,23 @@ export default {
       currentName: '',
       resourceList: [],
       disabledArr: [],
-      treeParentIds: []
+      treeParentIds: [],
+      lineTreeDatas: [],
+      rowData: {}
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
     this.getSysRoleList()
     this.getSourceList()
     this.getDataList()
+    setTimeout(() => {
+      this._getLineTree({
+        orgUuid: this.userId
+      })
+    }, 20)
   },
   watch: {
     dialogRoleVisible (newValue) {
@@ -272,6 +319,14 @@ export default {
     }
   },
   methods: {
+    _getLineTree (params) {
+      this.$api['wholeInformation.getLineTree'](params).then(res => {
+        this.lineTreeDatas = res
+      })
+    },
+    updateList () {
+      this.getSysRoleList()
+    },
     getSysRoleList () {
       this.$api['role.list']({
         enabled: '',
@@ -361,19 +416,20 @@ export default {
       // console.log(this.treeParentIds)
     },
     onRoleSubmit () {
-      if (this.roleName.length > 0 && this.describes !== '') {
+      if (this.roleName.length > 0 && this.describes !== '' && this.roleType !== '') {
         if (!this.rolesNameArr.some(item => item === this.roleName)) {
           this.$api['role.add']({
             roleName: this.roleName,
             enabled: this.enabled,
-            describes: this.describes
+            describes: this.describes,
+            roleType: this.roleType
           }).then(res => {
             this.getSysRoleList()
             this.adminForm.roleName = this.roleName
             this.$message.success('添加成功!')
             this.dialogVisible = false
           }).catch(() => {
-            this.$message.error('输入的内容不合法,角色或描述字符过长')
+            this.$message.error('输入的内容不合法')
           })
         } else {
           this.$message.error('角色名称已存在')
@@ -447,6 +503,10 @@ export default {
         this.defaultTreeData = []
       }
     },
+    handleLineAllow (row) {
+      this.$children[5].dialogTableVisible = true
+      this.rowData = row
+    },
     getDataList () {
       this.$api['platformMenu.dataList']({
         id: localStorage.getItem('id')
@@ -516,6 +576,7 @@ export default {
         this.adminForm.describes = res.describes
         this.adminForm.enabled = res.enabled
         this.currentName = res.roleName
+        this.adminForm.roleType = res.roleType
       })
       this.$nextTick(() => {
         this.$refs['adminForm'].resetFields()

@@ -240,10 +240,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="处理结果:" v-if="isProcessingResult" size="mini">
+      <el-form-item label="审核结果:" v-if="isProcessingResult" size="mini">
         <el-checkbox-group v-model="formInline.checkList">
-          <el-checkbox label="未处理"></el-checkbox>
-          <el-checkbox label="已处理"></el-checkbox>
+          <el-checkbox label="未审核"></el-checkbox>
+          <el-checkbox label="属实"></el-checkbox>
           <el-checkbox label="误报"></el-checkbox>
           <el-checkbox label="其他"></el-checkbox>
         </el-checkbox-group>
@@ -604,6 +604,8 @@ export default {
             })
           })
           this.lineOptions = list
+        }).catch(() => {
+          this.lineOptions = []
         })
         this.$api['wholeInformation.getCar']({
           lineId: '',
@@ -790,9 +792,9 @@ export default {
       }
       if (this.formInline.checkList.length > 0) {
         this.formInline.checkList.forEach(item => {
-          if (item === '未处理') {
+          if (item === '未审核') {
             checkList.push('0')
-          } else if (item === '已处理') {
+          } else if (item === '属实') {
             checkList.push('1')
           } else if (item === '误报') {
             checkList.push('2')
@@ -989,9 +991,9 @@ export default {
       }
       if (this.formInline.checkList.length > 0) {
         this.formInline.checkList.forEach(item => {
-          if (item === '未处理') {
+          if (item === '未审核') {
             checkList.push('0')
-          } else if (item === '已处理') {
+          } else if (item === '属实') {
             checkList.push('1')
           } else if (item === '误报') {
             checkList.push('2')

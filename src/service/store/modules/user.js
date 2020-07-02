@@ -2,6 +2,7 @@ import { getToken, setToken, removeToken } from '@/service/expands/auth'
 import api from '@/plugins/api'
 import store from '@/plugins/store'
 import moment from 'moment'
+import { Message } from 'element-ui'
 
 // import { constantRouterMap } from '@/router/staticRoutes'
 /**
@@ -91,6 +92,7 @@ const user = {
         api['user.login'](params).then(res => {
           localStorage.setItem('userName', res.userInfo.userAccount)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+          commit('SET_USERINFO', res.userInfo.userOrgUuid)
           localStorage.setItem('id', res.userInfo.userId)
           resolve()
         }).catch(err => {
@@ -186,6 +188,19 @@ const user = {
           }).catch(err => {
             reject(err)
           })
+        }).catch(err => {
+          Message.error(err.message)
+          // 重置用户相关信息
+          commit('REMOVE_TOKEN')
+          // 重置用户信息
+          commit('RESET_USERINFO')
+          // 重置浏览记录以及tab页面记录等,该mutation访问 store/views.js
+          commit('REMOVE_ALL_VISITED')
+          // 重置权限路由表, 该mutation 访问 store/asyncRouter.js
+          commit('RESET_ROUTERS')
+          localStorage.removeItem('id')
+          localStorage.removeItem('userName')
+          localStorage.removeItem('userRoleType')
         })
       })
     }

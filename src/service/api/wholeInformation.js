@@ -8,6 +8,37 @@ export const wholeInformationApi = {
       desc: '获取线路信息'
     },
     {
+      name: 'getLineTree',
+      method: 'POST',
+      path: '/api/base/user/getOrgLineAuths',
+      mockPath: '/api/base/user/getOrgLineAuths',
+      params: {
+        orgUuid: ''
+      },
+      desc: '获取线路树形结构'
+    },
+    {
+      name: 'getBusByLineIds',
+      method: 'POST',
+      path: '/api/bus/getBusByLineIds',
+      mockPath: '/api/bus/getBusByLineIds',
+      params: {
+        lineUuids: []
+      },
+      desc: '线路树形结构联动表格'
+    },
+    {
+      name: 'correlationLinePermissions',
+      method: 'POST',
+      path: '/api/base/role/correlationLinePermissions',
+      mockPath: '/api/base/role/correlationLinePermissions',
+      params: {
+        roleId: '',
+        resourceIds: []
+      },
+      desc: '增加线路权限'
+    },
+    {
       name: 'getLineSec',
       method: 'POST',
       path: '/api/net/data/busline/getLineListData',

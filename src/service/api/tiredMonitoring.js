@@ -517,6 +517,19 @@ export const tiredMonitoringApi = {
         content: ''
       },
       desc: '语音批量下发'
+    },
+    {
+      name: 'getDriverDt',
+      method: 'POST',
+      path: '/api/dw/dim/bus/driver/list',
+      mockPath: '/api/dw/dim/bus/driver/list',
+      params: {
+        orgId: '',
+        lineUuid: '',
+        drvName: '',
+        drvEmployeeId: ''
+      },
+      desc: '司机下拉框'
     }
   ]
 }

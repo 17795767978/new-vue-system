@@ -67,6 +67,7 @@ const globel = {
             commit('LINE_DATA', list)
             resolve(list)
           }).catch(error => {
+            commit('LINE_DATA', [])
             reject(error)
           })
         } else {
@@ -85,6 +86,7 @@ const globel = {
             commit('LINE_DATA', list)
             resolve(list)
           }).catch(error => {
+            commit('LINE_DATA', [])
             reject(error)
           })
         }

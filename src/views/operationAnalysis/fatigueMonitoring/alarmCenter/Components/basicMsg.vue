@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-row class="pic" v-if="busDetails.warnTimesArr && busDetails.warnTimesArr.length > 0">
+  <!-- <el-row class="pic" v-if="busDetails.warnTimesArr && busDetails.warnTimesArr.length > 0">
     <el-card shadow="hover" class="time-arr">
       <el-row :gutter="24" class="pic">
         <h3 class="demonstration">报警时间集合</h3>
@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
     </el-card>
-  </el-row>
+  </el-row> -->
   <div class="basic-msg">
    <div class="left-top">
      <p class="msg">
@@ -95,14 +95,15 @@
      <h3 style="margin-top: .8vh;;margin-left:.8vw;">报警处理</h3>
      <el-row :gutter="24" style="margin-top: .8vh;;margin-left:.8vw;">
       <el-radio-group v-model="radio">
-        <el-radio :label="1" :disabled="busDetails.handleResult !== '0'">报警处理</el-radio>
+        <el-radio :label="1" v-if="userId === '1'" :disabled="busDetails.auditStatus !== '0'">报警审核</el-radio>
+        <el-radio :label="4" v-else>报警处理</el-radio>
         <el-radio :label="2">IP电话提醒</el-radio>
         <el-radio :label="3">语音提醒</el-radio>
         <!-- <el-radio :label="4">发送给其他系统</el-radio> -->
       </el-radio-group>
-      <div class="form" v-if="radio === 1">
+      <div class="form" v-if="radio === 1 || radio === 4">
         <el-form :model="ruleFormCheck" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="处理状态" prop="status">
+          <el-form-item v-if="userId === '1'" label="审核状态" prop="status">
             <el-select v-model="ruleFormCheck.status">
               <el-option
                 v-for="item in checkOptions.slice(1)"
@@ -112,7 +113,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="处理意见" prop="suggestion">
+          <el-form-item :label="userId === '1' ? '审核意见' : '处理意见'" prop="suggestion">
             <el-input type="textarea" v-model="ruleFormCheck.suggestion" maxlength="100"></el-input>
             <span>{{ruleFormCheck.suggestion && ruleFormCheck.suggestion.length}}/100</span>
           </el-form-item>
@@ -149,6 +150,7 @@
 <script>
 import MapDetail from './mapDetail'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     warnDetails: {
@@ -168,7 +170,7 @@ export default {
     return {
       rules: {
         status: [
-          { required: true, message: '请选择处理状态', trigger: 'blur' }
+          { required: true, message: '请选择审核状态', trigger: 'blur' }
         ],
         suggestion: [
           { validator: markSuggestion, trigger: 'blur' }
@@ -190,11 +192,11 @@ export default {
       checkOptions: [
         {
           value: '0',
-          label: '未处理'
+          label: '未审核'
         },
         {
           value: '1',
-          label: '已处理'
+          label: '属实'
         },
         {
           value: '2',
@@ -213,6 +215,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['userId']),
     timeFormat () {
       return (time) => {
         return moment(time).format('YYYY-MM-DD HH:mm:ss')
@@ -231,26 +234,30 @@ export default {
     warnDetails: {
       deep: true,
       handler (newV) {
-        if (newV.handleResult === '0') {
-          this.radio = 1
-        } else {
-          this.radio = 3
-        }
-        this.ruleFormCheck.status = newV.handleResult === '0' ? '' : newV.handleResult
-        this.ruleFormCheck.suggestion = newV.handleSuggestion ? newV.handleSuggestion : ''
         this.busDetails = newV
-      }
-    },
-    busDetails: {
-      deep: true,
-      handler (newV) {
-        if (newV.handleResult === '0') {
+        if (newV.auditStatus === '0' && this.userId === '1') {
           this.radio = 1
-        } else {
+          this.ruleFormCheck.status = newV.auditStatus === '0' ? '' : newV.auditStatus
+          this.ruleFormCheck.suggestion = newV.auditSuggestion ? newV.auditSuggestion : ''
+        } else if (newV.auditStatus !== '0' && this.userId === '1') {
           this.radio = 3
+        } else if (this.userId !== '1') {
+          this.radio = 4
+          this.ruleFormCheck.status = ''
+          this.ruleFormCheck.suggestion = newV.handleSuggestion ? newV.handleSuggestion : ''
         }
       }
     }
+    // busDetails: {
+    //   deep: true,
+    //   handler (newV) {
+    //     if (newV.auditStatus === '0') {
+    //       this.radio = 1
+    //     } else {
+    //       this.radio = 3
+    //     }
+    //   }
+    // }
   },
   methods: {
     _alarmType (params) {
@@ -285,12 +292,13 @@ export default {
           this.pendding = true
           this.$api['tiredMonitoring.wsUpdate']({
             warnUuid: this.warnDetails.warnUuid,
-            handleResult: this.ruleFormCheck.status,
-            handleSuggestion: this.ruleFormCheck.suggestion
+            auditTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            auditStatus: this.ruleFormCheck.status,
+            auditSuggestion: this.ruleFormCheck.suggestion
           }).then(res => {
             this.pendding = false
             this.ruleFormCheck = { status: '', suggestion: '' }
-            this.$message.success('已处理')
+            this.$message.success('操作成功')
             this.$emit('upadate', true)
           }).catch(() => {
             this.$message.error('接口错误')
@@ -299,7 +307,7 @@ export default {
         } else {
           this.$emit('upadate', false)
         }
-      } else {
+      } else if (this.radio === 3) {
         if (this.ruleFormWarn.status !== '') {
           this.pendding = true
           this.$api['tiredMonitoring.Voiceprompt']({
@@ -311,11 +319,11 @@ export default {
             this.pendding = false
             this.ruleFormWarn = { status: '', suggestion: '' }
             this.$message.success('下发消息成功')
-            if (this.busDetails.handleResult !== '0') {
+            if (this.busDetails.auditStatus !== '0') {
               this.$emit('upadate', true)
             } else {
               this.radio = 1
-              this.$message.warning('请选择处理状态')
+              this.$message.warning('请选择审核状态')
             }
           }).catch(() => {
             this.$message.error('接口错误')
@@ -324,6 +332,19 @@ export default {
         } else {
           this.$emit('upadate', false)
         }
+      } else {
+        this.pendding = true
+        this.$api['tiredMonitoring.wsUpdate']({
+          warnUuid: this.warnDetails.warnUuid,
+          handleTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+          handleUser: localStorage.getItem('userName'),
+          handleSuggestion: this.ruleFormCheck.suggestion
+        }).then(res => {
+          this.pendding = false
+          this.ruleFormCheck = { status: '', suggestion: '' }
+          this.$message.success('操作成功')
+          this.$emit('upadate', true)
+        })
       }
     },
     handlerChange (time, uuid, index) {
