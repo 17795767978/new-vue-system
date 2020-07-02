@@ -15,12 +15,12 @@
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
       <!-- <bml-marker-clusterer :averageCenter="true" :maxZoom="seeZoom"> -->
+      <!-- @click="handleMarkerClick(marker)" -->
       <div v-if="isCarsDetail">
         <bm-marker
           v-for="marker in markers"
           :key="marker.busId"
           :position="{lng: marker.lng, lat: marker.lat}"
-          @click="handleMarkerClick(marker)"
           :title="`${marker.lineName}-${marker.busNumber}`"
           :icon="getIcon(marker)"
           class="arrow_box"

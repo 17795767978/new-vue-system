@@ -22,8 +22,8 @@
             <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>完成率：</span><span>{{(totalRealMileage / totalPlanMileage * 100).toFixed(2) || '--'}}%</span></li>
           </ul>
         </div>
-        <div class="echarts-wrapper" v-show="realTimeMileage.length > 0" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '60%', height: '200px',margin: '0 auto'}"></div>
-        <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'-'"></noEcharts>
+        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-left" :style="{width: '60%', height: '200px',margin: '0 auto'}"></div>
+        <!-- <noEcharts v-show="realTimeMileage.length === 0" :eChartsTitle="'-'"></noEcharts> -->
       </el-col>
       <el-col :span="12" style="border-left: 1px #987DC0 solid;height: 100%; position: relative;display:flex;flex-direction: row;">
         <div class="el-row-left-con" style="margin-left: 10px">
@@ -34,12 +34,12 @@
             <li class="el-row-li-item" :class="skinType === 0 ? 'el-row-li-white' : ''"><span>完成率：</span><span>{{ (totalRealTrips / totalPlanTrips * 100).toFixed(2) || '--'}}%</span></li>
           </ul>
         </div>
-        <div class="echarts-wrapper" v-loading="loading" v-show="realTimeMileage.length > 0" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '60%', height: '200px', margin: '0 auto'}">
+        <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-middle" :style="{width: '60%', height: '200px', margin: '0 auto'}">
         </div>
         <!-- <div v-show="realTimeMileage.length === 0" class="warning">
           <h2 style="text-align:center; color: #fff">暂无数据</h2>
         </div> -->
-        <noEcharts v-show="realTimeTrips.length === 0" :eChartsTitle="'-'"></noEcharts>
+        <!-- <noEcharts v-show="realTimeTrips.length === 0" :eChartsTitle="'-'"></noEcharts> -->
       </el-col>
       <!-- <el-col style="height: 100%" :span="8">
         <div class="echarts-wrapper" v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" id="echart-right" :style="{width: '95%', height: '200px', margin: '0 auto'}"></div>
@@ -51,8 +51,7 @@
 
 <script>
 import { max } from '../../../utils/max.js'
-import moment from 'moment'
-import noEcharts from './echartsComponent/noEcharts'
+// import noEcharts from './echartsComponent/noEcharts'
 const TIME = 3 * 60 * 1000
 export default {
   data () {
@@ -91,9 +90,9 @@ export default {
     this._realTimeTrips({
       orgId
     })
-    this._realTimeShift({
-      orgId
-    })
+    // this._realTimeShift({
+    //   orgId
+    // })
     this.$store.dispatch('getLineList').then(res => {
     })
   },
@@ -110,8 +109,6 @@ export default {
   methods: {
     _realTimeMileage (params) {
       this.$api['dispatch.getRealtimeMileage'](params).then(res => {
-        const time = Number(moment().format('HH.mm'))
-        console.log(time)
         this.loading = false
         if (res && res.length > 0) {
           this.realTimeMileage = res.map(item => Number(item.realtimeMileage))
@@ -120,7 +117,6 @@ export default {
           this.totalPlanMileage = this.planMileage.reduce((a, b) => a + b).toFixed(2)
           this.orgNameMileage = res.map(item => item.displyLabel)
           this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
-          this.totalRealMileage = (this.totalPlanMileage / 20 * time).toFixed(2)
         }
         this.timerLeft = setTimeout(() => {
           this._realTimeMileage(params)
@@ -130,7 +126,6 @@ export default {
     },
     _realTimeTrips (params) {
       this.$api['dispatch.getRealtimeTrips'](params).then(res => {
-        const time = Number(moment().format('HH.mm'))
         this.loading = false
         if (res && res.length > 0) {
           this.realTimeTrips = res.map(item => Number(item.realtimeTrips))
@@ -139,7 +134,6 @@ export default {
           this.totalPlanTrips = this.planTrips.reduce((a, b) => a + b).toFixed(2)
           this.orgNameTrips = res.map(item => item.displyLabel)
           this.realTimeTripsMax = max([max(this.realTimeTrips), max(this.planTrips)])
-          this.totalRealTrips = (this.totalPlanTrips / 20 * time - this.totalPlanTrips / 500 * time).toFixed(2)
         }
         this.timerMiddle = setTimeout(() => {
           this._realTimeTrips(params)
@@ -147,25 +141,25 @@ export default {
         this.drawLineMiddle()
       })
     },
-    _realTimeShift (params) {
-      this.$api['dispatch.getRealtimeClasses'](params).then(res => {
-        this.loading = false
-        if (res && res.length > 0) {
-          this.realTimeShift = res.map(item => Number(item.realtimeClasses))
-          // totalRealShift: 0,
-          // totalPlanShift: 0,
-          this.totalRealShift = this.realTimeShift.reduce((a, b) => a + b)
-          this.planClasses = res.map(item => Number(item.planClasses))
-          this.totalPlanShift = this.planClasses.reduce((a, b) => a + b)
-          this.orgNameShift = res.map(item => item.displyLabel)
-          this.realTimeShiftMax = max([max(this.realTimeShift), max(this.planClasses)])
-        }
-        this.timerRight = setTimeout(() => {
-          this._realTimeShift(params)
-        }, TIME)
-        this.drawLineRight()
-      })
-    },
+    // _realTimeShift (params) {
+    //   this.$api['dispatch.getRealtimeClasses'](params).then(res => {
+    //     this.loading = false
+    //     if (res && res.length > 0) {
+    //       this.realTimeShift = res.map(item => Number(item.realtimeClasses))
+    //       // totalRealShift: 0,
+    //       // totalPlanShift: 0,
+    //       this.totalRealShift = this.realTimeShift.reduce((a, b) => a + b)
+    //       this.planClasses = res.map(item => Number(item.planClasses))
+    //       this.totalPlanShift = this.planClasses.reduce((a, b) => a + b)
+    //       this.orgNameShift = res.map(item => item.displyLabel)
+    //       this.realTimeShiftMax = max([max(this.realTimeShift), max(this.planClasses)])
+    //     }
+    //     this.timerRight = setTimeout(() => {
+    //       this._realTimeShift(params)
+    //     }, TIME)
+    //     this.drawLineRight()
+    //   })
+    // },
     drawLineLeft () {
       let leftChart = this.$echarts.init(document.getElementById('echart-left'))
       window.addEventListener('resize', () => { leftChart.resize() })
@@ -501,7 +495,7 @@ export default {
     }
   },
   components: {
-    noEcharts
+    // noEcharts
   },
   destroyed () {
     clearTimeout(this.timerLeft)
