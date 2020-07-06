@@ -24,7 +24,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: [],
-      id: 'lineLength',
+      id: 'lineLengthCondition',
       grid: {},
       loading: true
     }

@@ -17,7 +17,7 @@ const GRID = {
   borderWidth: 1
 }
 export default {
-  name: 'passengerHome',
+  name: 'comprehensiveQuery',
   props: {
     selectData: {
       type: Object
@@ -33,7 +33,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: [],
-      id: 'lineLength',
+      id: 'comprehensiveQuery',
       grid: {},
       loading: true
     }
