@@ -150,6 +150,7 @@
               @change="updateCc(scope.row)"
               v-model="scope.row.driverName"
               filterable
+              clearable
               remote
               reserve-keyword
               placeholder="请输入关键词"
@@ -707,6 +708,11 @@ export default {
       this.tableData = []
       let tableBeforeData = []
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
+        res.list.forEach(item => {
+          if (item.driverName === '0 0') {
+            item.driverName = ''
+          }
+        })
         res.list.forEach((item, index) => {
           this.getPointAddress(item, index).then((data) => {
             item.address = data.adr
@@ -873,8 +879,8 @@ export default {
       const drvData = driverName.split(' ')
       this.$api['tiredMonitoring.wsUpdate']({
         warnUuid,
-        driverName: drvData[0],
-        driverIccard: drvData[1]
+        driverName: drvData.length > 1 ? drvData[0] : '0',
+        driverIccard: drvData.length > 1 ? drvData[1] : '0'
       }).then(res => {
         this.$message.success('操作成功')
         this.selectDriverOptions = []

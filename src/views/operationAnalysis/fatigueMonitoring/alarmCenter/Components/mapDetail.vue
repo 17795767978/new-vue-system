@@ -85,16 +85,19 @@ export default {
   // this.position.lat = this.mapData.lat
   // this.zoom = 18
   // },
-  activated () {
-    setTimeout(() => {
-      this.initPoint(this.currentPoint)
-    }, 1000)
-  },
+  // activated () {
+  //   setTimeout(() => {
+  //     this.initPoint(this.currentPoint)
+  //   }, 3000)
+  // },
   watch: {
     busDetails: {
       deep: true,
       immediate: true,
       handler (newValue) {
+        setTimeout(() => {
+          this.initPoint(this.currentPoint)
+        }, 1000)
         this.mapData = newValue
         // this.center.lng = this.mapData.lng
         // this.center.lat = this.mapData.lat
