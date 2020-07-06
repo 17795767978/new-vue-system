@@ -634,16 +634,17 @@ export default {
   },
   methods: {
     _getDevType () {
-      this.$api['wholeInformation.getDevType']().then(res => {
-        let list = []
-        res.forEach(item => {
-          list.push({
-            value: item.typeValue,
-            label: item.typeName
-          })
-        })
-        this.statusOptions = list
-      })
+      this.statusOptions = []
+      // this.$api['wholeInformation.getDevType']().then(res => {
+      //   let list = []
+      //   res.forEach(item => {
+      //     list.push({
+      //       value: item.typeValue,
+      //       label: item.typeName
+      //     })
+      //   })
+      //   this.statusOptions = list
+      // })
     },
     _stationList () {
       this.$api['wholeInformation.getAllBaseStationNamesListData']().then(res => {
@@ -657,17 +658,18 @@ export default {
       })
     },
     _alarmType (params) {
-      this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
-        let dataArr = res
-        this.warnOptions = []
-        this.formInline.warnTypeId = []
-        dataArr.forEach((list, index) => {
-          this.warnOptions[index] = {
-            label: list.value,
-            value: list.code
-          }
-        })
-      })
+      // this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
+      //   let dataArr = res
+      //   this.warnOptions = []
+      //   this.formInline.warnTypeId = []
+      //   dataArr.forEach((list, index) => {
+      //     this.warnOptions[index] = {
+      //       label: list.value,
+      //       value: list.code
+      //     }
+      //   })
+      // })
+      this.warnOptions = []
     },
     changed (data) {
       this.isLinkage = data

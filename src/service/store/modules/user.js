@@ -157,15 +157,15 @@ const user = {
               }
             })
           })
-          api['tiredMonitoring.getWarntypes']({
-            warnLevel: ''
-          }).then(res => {
-            form.warningArr = []
-            let dataArr = res
-            dataArr.forEach((list, index) => {
-              form.warningArr[index] = list.code
-            })
-          })
+          // api['tiredMonitoring.getWarntypes']({
+          //   warnLevel: ''
+          // }).then(res => {
+          //   form.warningArr = []
+          //   let dataArr = res
+          //   dataArr.forEach((list, index) => {
+          //     form.warningArr[index] = list.code
+          //   })
+          // })
           // store.dispatch('getComSecList').then(res => {
           //   if (res.length > 0) {
           //     form.lineOrgId = res[0].value

@@ -277,7 +277,7 @@ export default {
     'formInline.value': {
       handler (newV) {
         if (newV !== 'all') {
-          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineId === newV)
+          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
         } else {
           this.markers = this.markersAll
         }

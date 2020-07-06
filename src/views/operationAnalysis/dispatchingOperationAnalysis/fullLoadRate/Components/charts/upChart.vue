@@ -256,12 +256,13 @@ export default {
           {
             type: 'value',
             // name: '水量',
-            min: 0,
-            max: this.maxNum + this.maxNum / 5,
-            interval: Math.floor(this.maxNum / 5),
+            // min: 0,
+            // max: this.maxNum + this.maxNum / 5,
+            // interval: Math.floor(this.maxNum / 5),
             // axisLabel: {
             //     formatter: '{value} ml'
             // },
+            minInterval: 1,
             splitLine: {
               show: false
             },

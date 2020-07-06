@@ -164,6 +164,7 @@ export default {
       }
       if (this.dataSource.length > 0) {
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
+        console.log(this.maxNum)
         this.maxRate = max(this.fullRate)
       }
       setTimeout(() => {
@@ -236,10 +237,11 @@ export default {
         yAxis: [
           {
             type: 'value',
+            minInterval: 1,
             // name: '水量',
-            min: 0,
-            max: this.maxNum + this.maxNum / 5,
-            interval: Math.floor(this.maxNum / 5),
+            // min: 0,
+            // max: this.maxNum,
+            // interval: Math.floor(this.maxNum / 5),
             // axisLabel: {
             //     formatter: '{value} ml'
             // },

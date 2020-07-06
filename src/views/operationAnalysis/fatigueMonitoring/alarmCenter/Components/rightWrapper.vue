@@ -301,17 +301,18 @@ export default {
   },
   methods: {
     _alarmType (params) {
-      this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
-        let dataArr = res
-        this.warnOptions = []
-        this.formInline.warnTypeId = []
-        dataArr.forEach((list, index) => {
-          this.warnOptions[index] = {
-            label: list.value,
-            value: list.code
-          }
-        })
-      })
+      this.warnOptions = []
+      // this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
+      //   let dataArr = res
+      //   this.warnOptions = []
+      //   this.formInline.warnTypeId = []
+      //   dataArr.forEach((list, index) => {
+      //     this.warnOptions[index] = {
+      //       label: list.value,
+      //       value: list.code
+      //     }
+      //   })
+      // })
     },
     _tableList (params) {
       this.loading = true
