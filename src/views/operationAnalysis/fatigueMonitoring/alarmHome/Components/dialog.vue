@@ -18,8 +18,8 @@
         <el-table-column property="speed" label="报警车速（KM/H）" align="center"  width="150"></el-table-column>
         <el-table-column property="handleResult" width="100" label="处理状态" align="center">
           <template slot-scope="scope">
-          <span  v-if="scope.row.handleResult === '0'">未处理</span>
-          <span  v-else-if="scope.row.handleResult === '1'">已处理</span>
+          <span  v-if="scope.row.handleResult === '0'">未审核</span>
+          <span  v-else-if="scope.row.handleResult === '1'">属实</span>
           <span v-else-if="scope.row.handleResult === '2'">误报</span>
           <span v-else-if="scope.row.handleResult === '3'">其他</span>
           <!-- <template slot-scope="scope">
@@ -31,7 +31,8 @@
         <el-table-column property="name" label="查看详情" align="center">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="goToDetail(scope.row)">查看详情</el-button>
-            <el-button :disabled="scope.row.handleResult !== '0'" type="success" size="mini" @click="goToSucc(scope.row, scope.$index)">处理</el-button>
+            <el-button v-if="userId === '1'" :disabled="scope.row.auditStatus !== '0'" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
+            <el-button v-else size="mini" :type="scope.row.handleSuggestion ? 'info' : 'success'" @click="goToSucc(scope.row, scope.$index)">处理</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -51,7 +52,7 @@
       width="30%"
       center>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="处理状态" prop="status">
+        <el-form-item label="审核状态" prop="status">
           <el-select v-model="ruleForm.status">
             <el-option
               v-for="item in checkOptions.slice(1)"
@@ -61,7 +62,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="处理意见" prop="suggestion">
+        <el-form-item label="审核意见" prop="suggestion">
           <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100"></el-input>
           <span>{{ruleForm.suggestion.length}}/100</span>
         </el-form-item>
@@ -78,6 +79,7 @@
 <script>
 import moment from 'moment'
 import DialogDetail from '../../alarmCenter/Components/dialogsDetail'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     diaData: {
@@ -131,11 +133,11 @@ export default {
       checkOptions: [
         {
           value: '0',
-          label: '未处理'
+          label: '未审核'
         },
         {
           value: '1',
-          label: '已处理'
+          label: '属实'
         },
         {
           value: '2',
@@ -149,6 +151,9 @@ export default {
       sendTitle: '',
       warnDetails: {}
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   watch: {
     diaData: {
@@ -242,6 +247,15 @@ export default {
         this.$message.error(err.message)
       })
     },
+    handleAudit (row) {
+      this.checkMsg.warnUuid = row.warnUuid
+      this.checkDialog = true
+      this.isAudit = true
+      this.ruleForm = {
+        status: '',
+        suggestion: ''
+      }
+    },
     goToSucc (row, index) {
       // this.$api['tiredMonitoring.wsUpdate']({
       //   warnUuid: row.warnUuid,
@@ -266,7 +280,7 @@ export default {
             handleResult: this.ruleForm.status,
             handleSuggestion: this.ruleForm.suggestion
           }).then(res => {
-            this.$message.success('已处理')
+            this.$message.success('操作成功')
             this.checkDialog = false
             if (this.isSee.dataType === 'ws') {
               this.wsData.splice(this.closeRow, 1)
