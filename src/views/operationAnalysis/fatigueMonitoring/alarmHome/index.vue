@@ -10,7 +10,7 @@
       :isDownload="false"
       :isDefault="true"
       :isEmpty="true"
-      :isProcessingResult="true"
+      :isProcessingResult="isProcessingResult"
       :isWarntype="true"
       @configCheck="getSearch"
     />
@@ -87,7 +87,8 @@ export default {
       audioDom: '',
       time: 0,
       tableObj: {},
-      chartsObj: {}
+      chartsObj: {},
+      isProcessingResult: false
     }
   },
   components: {
@@ -105,6 +106,11 @@ export default {
     this.currentData = this.formData
     this.currentData.orgId = this.userId
     this.openWs()
+    if (this.userId === '1') {
+      this.isProcessingResult = true
+    } else {
+      this.isProcessingResult = false
+    }
   },
   watch: {
     'isSee.is': {
@@ -190,7 +196,7 @@ export default {
         warnTypes: type === 'charts' ? [data.data.warnType] : this.currentData.warnTypeId,
         driverNum: data.driverNum,
         driverName: data.driverName,
-        handleResults: this.currentData.checkList
+        auditStatus: this.userId === '1' ? this.currentData.checkList : ['1']
       }
       this.$api['tiredMonitoring.getBadDrivingBehaviorRankingDetail'](params).then(res => {
         if (type === 'table') {

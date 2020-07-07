@@ -72,7 +72,7 @@ export default {
       lineId: defaultData.lineId,
       busNumber: '',
       warnTypes: defaultData.warningArr,
-      handleResults: []
+      auditStatus: this.userId === '1' ? [] : ['1']
     })
   },
   watch: {
@@ -86,7 +86,7 @@ export default {
           lineId,
           busNumber: busNumber,
           warnTypes: warnTypeId.length === 0 ? defaultData.warningArr : warnTypeId,
-          handleResults: newV.checkList
+          auditStatus: this.userId === '1' ? newV.checkList : ['1']
         })
       }
     }

@@ -1,7 +1,7 @@
 <template>
   <div class="dialog">
     <el-dialog title="报警详情" :visible.sync="see" :fullscreen="true" :modal="false">
-      <el-table :data="selectData" border size="mini">
+      <el-table :data="selectData" border size="mini" height="80vh">
         <el-table-column type="index" label="序号" width="80" align="center">
           <template slot-scope="scope">
             <span> {{scope.$index + (pageNumber - 1) * pageSize + 1}} </span>
@@ -11,24 +11,100 @@
         <el-table-column property="lineName" label="所属线路" width="120" align="center"></el-table-column>
         <el-table-column property="busPlateNumber" label="车牌号" align="center" width="120"></el-table-column>
         <el-table-column property="driverNum" label="司机工号" width="150" align="center"></el-table-column>
-        <el-table-column property="driverName" label="司机" width="120" align="center"></el-table-column>
+        <el-table-column
+          align="center"
+          prop="driverName"
+          label="司机"
+          width="200">
+          <template slot-scope="scope">
+            <el-select
+              @change="updateCc(scope.row)"
+              v-model="scope.row.driverName"
+              filterable
+              clearable
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="drvLoading">
+                <el-option
+                  v-for="item in selectDriverOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.label">
+                </el-option>
+              </el-select>
+          </template>
+        </el-table-column>
         <el-table-column property="devCode" label="设备编号" width="150" align="center"></el-table-column>
         <el-table-column property="warnTypeName" label="报警类型" width="100" align="center"></el-table-column>
         <el-table-column property="warnTime" label="报警时间" :formatter="formatter"  width="300" align="center"></el-table-column>
         <el-table-column property="speed" label="报警车速（KM/H）" align="center"  width="150"></el-table-column>
-        <el-table-column property="handleResult" width="100" label="处理状态" align="center">
+        <el-table-column
+          align="center"
+          prop="auditUser"
+          label="审核人"
+          width="120"
+          >
+        </el-table-column>
+        <el-table-column property="handleResult" width="100" label="审核状态" align="center">
           <template slot-scope="scope">
-          <span  v-if="scope.row.handleResult === '0'">未审核</span>
-          <span  v-else-if="scope.row.handleResult === '1'">属实</span>
-          <span v-else-if="scope.row.handleResult === '2'">误报</span>
-          <span v-else-if="scope.row.handleResult === '3'">其他</span>
+          <span  v-if="scope.row.auditStatus === '0'">未审核</span>
+          <span  v-else-if="scope.row.auditStatus === '1'">属实</span>
+          <span v-else-if="scope.row.auditStatus === '2'">误报</span>
+          <span v-else-if="scope.row.auditStatus === '3'">其他</span>
           <!-- <template slot-scope="scope">
             <el-button v-if="scope.row.handleResult === '0'" type="danger" size="mini" @click="goToSucc(scope.row)">未处理</el-button>
             <el-button v-if="scope.row.handleResult === '1'" type="success" size="mini" plain>已处理</el-button>
           </template> -->
           </template>
         </el-table-column>
-        <el-table-column property="name" label="查看详情" align="center">
+        <el-table-column
+          align="center"
+          prop="auditSuggestion"
+          label="审核意见"
+          width="200"
+        >
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="light" :content="scope.row.auditSuggestion" placement="top-start">
+              <span>{{scope.row.auditSuggestion && scope.row.auditSuggestion.length > 7 ? `${scope.row.auditSuggestion.substring(0, 6)}...` : scope.row.auditSuggestion}}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="auditTime"
+          label="审核时间"
+          :formatter="formatterAuditTime"
+          width="150"
+          >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="handleUser"
+          label="处理人"
+          width="150"
+          >
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.handleUser" @blur="checkHandleUser(scope.row)" placeholder="请输入处理人"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="handleTime"
+          :formatter="formatterHandleTime"
+          label="处理时间"
+          width="150"
+          >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="handleSuggestion"
+          label="处理意见"
+          width="150"
+          >
+        </el-table-column>
+        <el-table-column property="name" label="查看详情" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="goToDetail(scope.row)">查看详情</el-button>
             <el-button v-if="userId === '1'" :disabled="scope.row.auditStatus !== '0'" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
@@ -52,7 +128,7 @@
       width="30%"
       center>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="审核状态" prop="status">
+        <el-form-item label="审核状态" prop="status" v-if="isAudit">
           <el-select v-model="ruleForm.status">
             <el-option
               v-for="item in checkOptions.slice(1)"
@@ -62,8 +138,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="审核意见" prop="suggestion">
-          <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100"></el-input>
+        <el-form-item :label="isAudit ? '审核意见' : '处理意见'" prop="suggestion">
+          <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100" :autosize="{ minRows: 3, maxRows: 5}"></el-input>
           <span>{{ruleForm.suggestion.length}}/100</span>
         </el-form-item>
       </el-form>
@@ -106,9 +182,12 @@ export default {
       }
     }
     return {
+      driverOptionsAll: [],
+      selectDriverOptions: [],
       selectAllData: [],
       selectData: [],
       see: false,
+      drvLoading: false,
       wsData: [],
       tableData: [],
       chartData: [],
@@ -117,6 +196,7 @@ export default {
       total: 0,
       checkDialog: false,
       closeRow: null,
+      isAudit: false,
       ruleForm: {
         status: '',
         suggestion: ''
@@ -154,6 +234,14 @@ export default {
   },
   computed: {
     ...mapGetters(['userId'])
+  },
+  created () {
+    this._getDriverDt({
+      orgId: this.userId,
+      lineUuid: '',
+      drvName: '',
+      drvEmployeeId: ''
+    })
   },
   watch: {
     diaData: {
@@ -221,6 +309,19 @@ export default {
     }
   },
   methods: {
+    _getDriverDt (params) {
+      this.driverOptionsAll = []
+      this.$api['tiredMonitoring.getDriverDt'](params).then(res => {
+        const arr = res
+        console.log(res)
+        arr.forEach(item => {
+          this.driverOptionsAll.push({
+            label: `${item.drvName} ${item.drvEmployeeId}`,
+            value: item.drvEmployeeId
+          })
+        })
+      })
+    },
     goToDetail (row) {
       // const type = data.warnType === 'OVERSPEED' ? 'overspeed' : 'normal'
       // this.$router.push({
@@ -267,18 +368,60 @@ export default {
       this.closeRow = index + (this.pageNumber - 1) * 15
       this.checkMsg.warnUuid = row.warnUuid
       this.checkDialog = true
+      this.isAudit = false
       this.ruleForm = {
         status: '',
         suggestion: ''
       }
     },
+    updateCc (row) {
+      const { warnUuid, driverName } = row
+      const drvData = driverName.split(' ')
+      this.$api['tiredMonitoring.wsUpdate']({
+        warnUuid,
+        driverName: drvData.length > 1 ? drvData[0] : '0',
+        driverIccard: drvData.length > 1 ? drvData[1] : '0'
+      }).then(res => {
+        this.$message.success('操作成功')
+        this.selectDriverOptions = []
+      })
+    },
+    remoteMethod (query) {
+      if (query !== '') {
+        this.drvLoading = true
+        setTimeout(() => {
+          this.drvLoading = false
+          this.selectDriverOptions = this.driverOptionsAll.filter(item => {
+            const name = item.label.split(' ')[0]
+            return name.toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          })
+        }, 20)
+      } else {
+        this.options = []
+      }
+    },
     upDateCheck (formName) {
+      let form = {}
+      if (this.isAudit) {
+        form = {
+          auditStatus: this.ruleForm.status,
+          auditSuggestion: this.ruleForm.suggestion,
+          auditTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+          auditUser: localStorage.getItem('userName')
+        }
+      } else {
+        form = {
+          handleSuggestion: this.ruleForm.suggestion,
+          handleTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+          handleUser: localStorage.getItem('userName')
+        }
+      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$api['tiredMonitoring.wsUpdate']({
             warnUuid: this.checkMsg.warnUuid,
-            handleResult: this.ruleForm.status,
-            handleSuggestion: this.ruleForm.suggestion
+            ...form
           }).then(res => {
             this.$message.success('操作成功')
             this.checkDialog = false
@@ -306,6 +449,29 @@ export default {
           return false
         }
       })
+    },
+    checkHandleUser (row) {
+      const { warnUuid, handleUser } = row
+      this.$api['tiredMonitoring.wsUpdate']({
+        warnUuid,
+        handleUser
+      }).then(res => {
+        this.$message.success('操作成功')
+      })
+    },
+    formatterAuditTime (row) {
+      if (row.auditTime) {
+        return moment(row.auditTime).format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        return ''
+      }
+    },
+    formatterHandleTime (row) {
+      if (row.handleTime) {
+        return moment(row.handleTime).format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        return ''
+      }
     },
     resetForm (formName) {
       this.checkDialog = false

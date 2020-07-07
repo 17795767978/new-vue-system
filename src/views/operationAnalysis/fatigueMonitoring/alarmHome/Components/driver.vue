@@ -41,7 +41,7 @@ export default {
       warnTypes: defaultData.warningArr,
       startTime: '',
       endTime: '',
-      handleResults: []
+      auditStatus: this.userId === '1' ? [] : ['1']
     })
   },
   mounted () {
@@ -59,7 +59,7 @@ export default {
           warnTypes: newV.warnTypeId.length === 0 ? defaultData.warningArr : newV.warnTypeId,
           startTime: '',
           endTime: '',
-          handleResults: newV.checkList
+          auditStatus: this.userId === '1' ? newV.checkList : ['1']
         })
       }
     }
