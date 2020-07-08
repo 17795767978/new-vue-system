@@ -64,7 +64,7 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear">重置</el-button>
-        <el-button type="success" @click="onDownload" :loading="downLoadLoading">导出</el-button>
+        <!-- <el-button type="success" @click="onDownload" :loading="downLoadLoading">导出</el-button> -->
       </el-form-item>
       </el-row>
     </el-form>

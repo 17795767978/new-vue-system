@@ -19,7 +19,7 @@ let baseUrl = ''
 if (ip.indexOf('192.168') !== -1) {
   baseUrl = 'http://192.168.200.26:1234'
 } else {
-  baseUrl = 'http://183.230.247.144:6065'
+  baseUrl = 'http://192.168.10.81:8081'
 }
 export const WSAPI = `ws://${baseUrl.substring(7, baseUrl.length)}/websocket/mesgshow/${id}`
 // export const WSAPI = `ws://192.168.10.33:8081/websocket/mesgshow/${id}`
