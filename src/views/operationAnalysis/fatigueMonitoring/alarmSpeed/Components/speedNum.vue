@@ -40,7 +40,7 @@ export default {
       lineId: this.selectData.lineId,
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
-      handleResults: []
+      auditStatus: this.userId === '1' ? [] : ['1']
     })
   },
   mounted () {
@@ -55,7 +55,7 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
-          handleResults: newV.checkList
+          auditStatus: this.userId === '1' ? newV.checkList : ['1']
         })
       }
     }

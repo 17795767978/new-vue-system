@@ -40,7 +40,7 @@ export default {
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1],
       warnTypes: [],
-      handleResults: []
+      auditStatus: this.userId === '1' ? [] : ['1']
     })
   },
   mounted () {
@@ -56,7 +56,7 @@ export default {
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
           warnTypes: [],
-          handleResults: newV.checkList
+          auditStatus: this.userId === '1' ? newV.checkList : ['1']
         })
       }
     }

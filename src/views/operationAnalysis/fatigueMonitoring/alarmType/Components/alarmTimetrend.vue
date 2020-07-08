@@ -48,7 +48,7 @@ export default {
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
       warnTypes: [],
-      handleResults: []
+      auditStatus: this.userId === '1' ? [] : ['1']
     })
   },
   mounted () {
@@ -67,7 +67,7 @@ export default {
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
           warnTypes: this.selectData.warnTypeId,
-          handleResults: this.selectData.checkList
+          auditStatus: this.userId === '1' ? this.selectData.checkList : ['1']
         })
       }
     },
@@ -81,7 +81,7 @@ export default {
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
           warnTypes: this.echartsData === '' ? [] : [this.echartsData],
-          handleResults: this.selectData.checkList
+          auditStatus: this.userId === '1' ? this.selectData.checkList : ['1']
         })
       }
     }

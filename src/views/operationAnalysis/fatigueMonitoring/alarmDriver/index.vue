@@ -7,7 +7,7 @@
       :isEmpty="true"
       :isWarntype="true"
       :isDownload="true"
-      :isProcessingResult="true"
+      :isProcessingResult="userId === '1'"
       :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
@@ -24,6 +24,7 @@
 import Search from '@/components/searchAlarm'
 // import Driver from './Components/driver'
 import Table from './Components/table'
+import { mapGetters } from 'vuex'
 export default {
   name: 'alarmDriver',
   data () {
@@ -37,6 +38,9 @@ export default {
     Search,
     Table
     // Driver
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   methods: {
     getSearch (item) {

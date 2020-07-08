@@ -4,7 +4,7 @@
       :isOrg='true'
       :isLine="true"
       :isDateTo="true"
-      :isProcessingResult="true"
+      :isProcessingResult="userId === '1'"
       :isEmpty="true"
       @configCheck="getSearch"
     />
@@ -27,6 +27,7 @@ import Search from '@/components/searchAlarm'
 import AlarmStatistics from './Components/alarmStatistics'
 import AlarmTimeSlot from './Components/alarmTimeslot'
 import AlarmTimestrend from './Components/alarmTimetrend'
+import { mapGetters } from 'vuex'
 export default {
   name: 'alarmType',
   data () {
@@ -40,6 +41,9 @@ export default {
     AlarmStatistics,
     AlarmTimeSlot,
     AlarmTimestrend
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   methods: {
     getSearch (item) {

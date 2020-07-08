@@ -38,7 +38,7 @@ export default {
       lineId: formData.lineId,
       startTime: formData.dateArray[0],
       endTime: formData.dateArray[1],
-      handleResults: []
+      auditStatus: this.userId === '1' ? [] : ['1']
     })
   },
   mounted () {
@@ -53,7 +53,7 @@ export default {
           lineId: newV.lineId,
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
-          handleResults: newV.checkList
+          auditStatus: this.userId === '1' ? newV.checkList : ['1']
         })
       }
     }

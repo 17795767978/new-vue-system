@@ -7,7 +7,7 @@
       :isEmpty="true"
       :isWarntype="true"
       :isDownload="true"
-      :isProcessingResult="true"
+      :isProcessingResult="userId === '1'"
       :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
@@ -21,6 +21,7 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/Table'
+import { mapGetters } from 'vuex'
 export default {
   name: 'carSort',
   data () {
@@ -32,6 +33,9 @@ export default {
   components: {
     Search,
     Table
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   methods: {
     getSearch (data) {

@@ -60,7 +60,7 @@ export default {
       startTime: defaultForm.dateArray[0],
       endTime: defaultForm.dateArray[1],
       warnTypes: defaultForm.warningArr,
-      handleResults: []
+      auditStatus: this.userId === '1' ? [] : ['1']
     })
   },
   mounted () {
@@ -101,7 +101,7 @@ export default {
           startTime: newV.dateArray[0] === undefined ? '' : newV.dateArray[0],
           endTime: newV.dateArray[1] === undefined ? '' : newV.dateArray[1],
           warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId,
-          handleResults: newV.checkList
+          auditStatus: this.userId === '1' ? newV.checkList : ['1']
         })
       }
     }
@@ -226,15 +226,22 @@ export default {
       let checkType = []
       // console.log(startTime, endTime)
       // console.log(Object.keys(this.searchData).length > 0 ? this.searchData.checkList : [])
-      Object.keys(this.searchData).length > 0 ? this.searchData.checkList.forEach(item => {
-        if (item === '0') {
-          checkType.push('未处理')
-        } else if (item === '1') {
-          checkType.push('已处理')
-        } else {
-          checkType.push('误报')
-        }
-      }) : checkType = []
+      if (this.userId === '1') {
+        Object.keys(this.searchData).length > 0 ? this.searchData.checkList.forEach(item => {
+          if (item === '0') {
+            checkType.push('未审核')
+          } else if (item === '1') {
+            checkType.push('属实')
+          } else if (item === '2') {
+            checkType.push('误报')
+          } else {
+            checkType.push('其他')
+          }
+        }) : checkType = []
+      } else {
+        checkType.push('属实')
+      }
+
       let params = {
         orgId: row.orguuid,
         lineId: row.lineuuid,

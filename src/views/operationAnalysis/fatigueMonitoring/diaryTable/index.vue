@@ -4,7 +4,7 @@
       :isOrg='true'
       :isDataCurrent="true"
       :isDownload="true"
-      :isProcessingResult="true"
+      :isProcessingResult="userId === '1'"
       :downLoadName="downLoadName"
       @configCheck="getSearch" />
       <div class="table-style">
@@ -16,6 +16,7 @@
 <script>
 import Search from '@/components/searchAlarm'
 import Table from './Components/Table'
+import { mapGetters } from 'vuex'
 export default {
   name: 'diaryTable',
   data () {
@@ -23,6 +24,9 @@ export default {
       selectData: {},
       downLoadName: 'downLoad.getAlarmUploadReportDayExcel'
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   methods: {
     getSearch (data) {

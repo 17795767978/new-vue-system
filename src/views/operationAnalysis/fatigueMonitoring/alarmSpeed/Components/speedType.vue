@@ -46,7 +46,7 @@ export default {
       startTime: this.selectData.dateArray[0],
       endTime: this.selectData.dateArray[1],
       warnLevel: '',
-      handleResults: []
+      auditStatus: this.userId === '1' ? [] : ['1']
     })
   },
   mounted () {
@@ -64,7 +64,7 @@ export default {
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
           warnLevel: this.echartsData,
-          handleResults: this.selectData.checkList
+          auditStatus: this.userId === '1' ? this.selectData.checkList : ['1']
         })
       }
     },
@@ -77,7 +77,7 @@ export default {
           startTime: this.selectData.dateArray[0],
           endTime: this.selectData.dateArray[1],
           warnLevel: this.echartsData,
-          handleResults: this.selectData.checkList
+          auditStatus: this.userId === '1' ? this.selectData.checkList : ['1']
         })
       }
     }

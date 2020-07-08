@@ -4,7 +4,7 @@
       :isOrg='true'
       :isLine="true"
       :isDateTo="true"
-      :isProcessingResult="true"
+      :isProcessingResult="userId === '1'"
       :isEmpty="true"
       @configCheck="getSearch"
     />
@@ -27,6 +27,7 @@ import Search from '@/components/searchAlarm'
 import SpeedStatistics from './Components/speedStatistics'
 import SpeedType from './Components/speedType'
 import SpeedNum from './Components/speedNum'
+import { mapGetters } from 'vuex'
 export default {
   name: 'alarmSpeed',
   data () {
@@ -40,6 +41,9 @@ export default {
     SpeedStatistics,
     SpeedType,
     SpeedNum
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   methods: {
     getSearch (item) {

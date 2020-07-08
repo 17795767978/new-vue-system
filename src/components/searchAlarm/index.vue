@@ -1026,7 +1026,8 @@ export default {
         selfCode: this.formInline.selfCode,
         busSelfCode: this.formInline.selfCode,
         devCode: this.formInline.deviceCode,
-        handleResults: checkList,
+        auditStatus: this.userId === '1' ? checkList : ['1'],
+        // handleResults: checkList,
         busPlateNumber: this.formInline.busNumber,
         warnTypeId: ['ADASSNAP', 'DMSTOSNAP']
       }).then(res => {

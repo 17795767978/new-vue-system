@@ -10,7 +10,7 @@
         <el-table-column property="orgName" label="所属公司" width="120" align="center"></el-table-column>
         <el-table-column property="lineName" label="所属线路" width="120" align="center"></el-table-column>
         <el-table-column property="busPlateNumber" label="车牌号" align="center" width="120"></el-table-column>
-        <el-table-column property="driverNum" label="司机工号" width="150" align="center"></el-table-column>
+        <!-- <el-table-column property="driverNum" label="司机工号" width="150" align="center"></el-table-column> -->
         <el-table-column
           align="center"
           prop="driverName"
