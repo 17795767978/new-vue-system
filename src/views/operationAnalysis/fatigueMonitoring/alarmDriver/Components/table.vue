@@ -249,6 +249,7 @@ export default {
         busSelfCode: '',
         warnLevel: '',
         driverName: row.drivername,
+        drvEmployeeId: row.drivernum,
         warnTypeId: plvalue === 'warnTotalNum' ? this.searchData.warnTypeId ? this.searchData.warnTypeId : [] : [plvalue],
         pageSize: 10,
         pageNum: 1,

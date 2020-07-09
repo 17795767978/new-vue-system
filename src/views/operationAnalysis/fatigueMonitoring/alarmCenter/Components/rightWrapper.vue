@@ -24,6 +24,7 @@
       </el-form-item>
       <el-form-item label="选择司机">
         <el-select
+        ref="selectDriver"
         v-model="formInline.drvEmployeeId"
         filterable
         remote
@@ -494,6 +495,7 @@ export default {
       this.formInline.timeValue = [timeStart, timeEnd]
       if (Object.keys(this.$route.params).length > 0) {
         this.formInline = this.$route.params
+        // this.$refs.selectDriver.remoteMethod(this.formInline.drvEmployeeId)
       }
       let type = this.formInline.checkType
       this._tableList({
@@ -526,6 +528,7 @@ export default {
     setTimeout(() => {
       if (Object.keys(this.$route.params).length > 0) {
         this.formInline = this.$route.params
+        // this.$refs.selectDriver.remoteMethod(this.formInline.drvEmployeeId)
       }
       this.pageNum = 1
       let type = this.formInline.checkType
@@ -595,6 +598,7 @@ export default {
         if (Object.keys(this.$route.params).length === 0) {
           this.formInline.lineId = ''
           this.formInline.busNumber = ''
+          this.formInline.drvEmployeeId = ''
         }
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
@@ -640,6 +644,7 @@ export default {
     'formInline.lineId': {
       handler (newValue) {
         this.formInline.busNumber = ''
+        this.formInline.drvEmployeeId = ''
         if (newValue !== '') {
           this.$api['wholeInformation.getCar']({
             lineId: newValue,
@@ -691,8 +696,9 @@ export default {
       })
     },
     _getDriverDt (params) {
-      this.driverOptionsAll = []
       this.$api['tiredMonitoring.getDriverDt'](params).then(res => {
+        this.driverOptionsAll = []
+        this.selectDriverOptions = []
         const arr = res
         console.log(res)
         arr.forEach(item => {
@@ -754,6 +760,7 @@ export default {
       })
     },
     remoteMethod (query) {
+      this.selectDriverOptions = []
       if (query !== '') {
         this.drvLoading = true
         setTimeout(() => {
@@ -765,7 +772,7 @@ export default {
           })
         }, 20)
       } else {
-        this.options = []
+        this.selectDriverOptions = []
       }
     },
     // 左侧点击是否显示右侧搜索内容，0 总公司 1 公司 2 线路 3 车牌号
@@ -957,6 +964,7 @@ export default {
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号
+        driverName: this.formInline.driverName,
         busPlateNumber: this.formInline.busPlateNumber, // 车牌号
         drvEmployeeId: this.formInline.drvEmployeeId,
         busSelfCode: this.formInline.busSelfCode, // 自编号
@@ -977,6 +985,8 @@ export default {
         lineId: '',
         devCode: '',
         busPlateNumber: '',
+        driverName: '',
+        drvEmployeeId: '',
         busUuid: '',
         busSelfCode: '',
         warnLevel: '',
