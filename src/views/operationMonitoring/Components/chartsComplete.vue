@@ -22,6 +22,7 @@
 </template>
 
 <script>
+// 延安有计划趟次 计划里程 计划班次 大同没有
 import { max } from '../../../utils/max.js'
 import noEcharts from './echartsComponent/noEcharts'
 const TIME = 3 * 60 * 1000
@@ -87,6 +88,7 @@ export default {
           this.totalPlanMileage = this.planMileage.reduce((a, b) => a + b).toFixed(2)
           this.orgNameMileage = res.map(item => item.displyLabel)
           this.realTimeMileageMax = max([max(this.realTimeMileage), max(this.planMileage)])
+          console.log()
         }
         this.timerLeft = setTimeout(() => {
           this._realTimeMileage(params)
@@ -155,7 +157,7 @@ export default {
           }
         },
         legend: {
-          data: ['实际里程'],
+          data: ['计划里程', '实际里程'],
           bottom: 10,
           textStyle: {
             color: '#fff'
@@ -202,6 +204,21 @@ export default {
         },
         series: [
           {
+            name: '计划里程',
+            type: 'bar',
+            barWidth: '15',
+            barGap: '-100%',
+            data: this.planMileage,
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 15
+              },
+              normal: {
+                barBorderRadius: 15
+              }
+            }
+          },
+          {
             name: '实际里程',
             type: 'bar',
             barWidth: '15',
@@ -243,7 +260,7 @@ export default {
           }
         },
         legend: {
-          data: ['实际趟次'],
+          data: ['计划趟次', '实际趟次'],
           bottom: 10,
           textStyle: {
             color: '#fff'
@@ -292,22 +309,22 @@ export default {
           }
         },
         series: [
-          // {
+          {
           //   // name: '当日计划总趟次',
-          //   name: '计划趟次',
-          //   type: 'bar',
-          //   barGap: '-100%',
-          //   barWidth: '15',
-          //   data: this.planTrips,
-          //   itemStyle: {
-          //     emphasis: {
-          //       barBorderRadius: 15
-          //     },
-          //     normal: {
-          //       barBorderRadius: 15
-          //     }
-          //   }
-          // },
+            name: '计划趟次',
+            type: 'bar',
+            barGap: '-100%',
+            barWidth: '15',
+            data: this.planTrips,
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 15
+              },
+              normal: {
+                barBorderRadius: 15
+              }
+            }
+          },
           {
             // name: '当日计划总趟次',
             name: '实际趟次',
@@ -351,7 +368,7 @@ export default {
           }
         },
         legend: {
-          data: ['实际班次'],
+          data: ['计划班次', '实际班次'],
           bottom: 10,
           textStyle: {
             color: '#fff'
@@ -397,21 +414,21 @@ export default {
           }
         },
         series: [
-          // {
-          //   name: '计划班次',
-          //   type: 'bar',
-          //   barGap: '-100%',
-          //   barWidth: '15',
-          //   data: this.planClasses,
-          //   itemStyle: {
-          //     emphasis: {
-          //       barBorderRadius: 15
-          //     },
-          //     normal: {
-          //       barBorderRadius: 15
-          //     }
-          //   }
-          // },
+          {
+            name: '计划班次',
+            type: 'bar',
+            barGap: '-100%',
+            barWidth: '15',
+            data: this.planClasses,
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 15
+              },
+              normal: {
+                barBorderRadius: 15
+              }
+            }
+          },
           {
             name: '实际班次',
             type: 'bar',
