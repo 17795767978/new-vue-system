@@ -17,7 +17,7 @@ let id = Math.random().toString(36).substr(3, 30)
 let ip = window.location.host
 let baseUrl = ''
 if (ip.indexOf('192.168') !== -1) {
-  baseUrl = 'http://192.168.200.26:1234'
+  baseUrl = 'http://192.168.10.81:8081'
 } else {
   baseUrl = 'http://192.168.10.81:8081'
 }

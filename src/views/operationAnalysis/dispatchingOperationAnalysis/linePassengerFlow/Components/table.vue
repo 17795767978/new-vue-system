@@ -23,7 +23,7 @@
       </el-table-column>
       <el-table-column
         prop="lineName"
-        label="线路号"
+        label="线路"
         align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handlerChangeEcharts(scope.row)">{{scope.row.lineName}}</el-button>
