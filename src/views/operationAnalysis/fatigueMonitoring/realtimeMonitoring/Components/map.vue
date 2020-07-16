@@ -3,7 +3,7 @@
     <lineEcharts :id="id" :data="lineData" :bmap="bmap" :isMap="true" :tooltip="tooltip" @getEchartsData="getEchartsData"></lineEcharts>
     <!-- 判断当前选中的车辆有无位置信息，无则提示暂未运营 弹窗 @author lishuaiwu 2020/7/16  -->
     <el-dialog
-      :visible.sync="dialogVisible"
+      :visible.sync="msgDialogVisible"
       :close-on-click-modal="false"
       width="390px"
       :before-close="handleClose">
@@ -54,7 +54,7 @@ export default {
       bmap: {},
       tooltip: {},
       stations: [],
-      dialogVisible: false,
+      msgDialogVisible: false,
       noPosBuses: [],
       nowPageIndex: 1
     }
@@ -111,13 +111,13 @@ export default {
     /* 当无坐标时，打开提示弹窗 @author lishuaiwu 2020/7/16 */
     _openMsgBox (noPosArr) {
       this.noPosBuses = noPosArr
-      this.dialogVisible = true
+      this.msgDialogVisible = true
     },
     /* next @author lishuaiwu 2020/7/16 */
     _nextCon (flag) {
       this.nowPageIndex > this.noPosBuses.length - 1 ? this.nowPageIndex = 1 : this.nowPageIndex += 1
       if (flag === true && this.nowPageIndex === 1) {
-        this.dialogVisible = false
+        this.msgDialogVisible = false
       }
     },
     /* last @author lishuaiwu 2020/7/16 */
