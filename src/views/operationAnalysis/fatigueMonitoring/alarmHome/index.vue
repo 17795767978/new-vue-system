@@ -149,7 +149,7 @@ export default {
         this.$refs.audioWrapper.pause()
         this.ws = new WebSocket(url)
         this.ws.onopen = () => {
-          console.log('===============推送开始=============')
+          console.log('===============安全运营报警推送开始=============')
           // Web Socket 已连接上，使用 send() 方法发送数据
           this.ws.send('发送数据')
         }
@@ -167,7 +167,7 @@ export default {
     },
     closeWs () {
       this.ws.close()
-      console.log('===============推送关闭=============')
+      console.log('===============安全运营报警推送关闭=============')
     },
     close (data) {
       data = data.filter(item => item.handleResult === '0')

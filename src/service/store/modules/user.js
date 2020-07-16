@@ -91,6 +91,7 @@ const user = {
         // resolve()
         api['user.login'](params).then(res => {
           localStorage.setItem('userName', res.userInfo.userAccount)
+          localStorage.setItem('userRealName', res.userInfo.userRealName)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
           commit('SET_USERINFO', res.userInfo.userOrgUuid)
           localStorage.setItem('id', res.userInfo.userId)
@@ -120,6 +121,9 @@ const user = {
         // 清除用户的id 清除权限
         localStorage.removeItem('id')
         localStorage.removeItem('userName')
+        localStorage.removeItem('userRoleType')
+        localStorage.removeItem('closeMsg')
+        localStorage.removeItem('userRealName')
         resolve()
       })
     },
@@ -171,6 +175,8 @@ const user = {
           store.dispatch('getOps')
           // 页面模块列表
           store.dispatch('getMudeluPageList')
+          // 车辆
+          store.dispatch('getCarList')
           commit('SET_FORM_DATA', form)
           api['platformMenu.list']({
             id: localStorage.getItem('id')
@@ -198,9 +204,6 @@ const user = {
           commit('REMOVE_ALL_VISITED')
           // 重置权限路由表, 该mutation 访问 store/asyncRouter.js
           commit('RESET_ROUTERS')
-          localStorage.removeItem('id')
-          localStorage.removeItem('userName')
-          localStorage.removeItem('userRoleType')
         })
       })
     }

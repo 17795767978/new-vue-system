@@ -24,6 +24,11 @@ import rightWrapper from './Components/rightWrapper'
 import moment from 'moment'
 export default {
   name: 'alarmCenter',
+  props: {
+    globelMsg: {
+      type: Object
+    }
+  },
   data () {
     return {
       selectCarData: {},
@@ -35,6 +40,7 @@ export default {
     rightWrapper
   },
   mounted () {
+    console.log(this.globelMsg)
     // console.log(123);
   },
   watch: {
@@ -43,6 +49,9 @@ export default {
       handler () {
         this.timeNow = moment(Date.now()).valueOf()
       }
+    },
+    globelMsg (newV) {
+      console.log(newV)
     }
   },
   methods: {

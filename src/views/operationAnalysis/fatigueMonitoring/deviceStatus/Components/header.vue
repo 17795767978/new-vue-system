@@ -37,6 +37,20 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="设备类型">
+        <el-select class="font-style"
+        filterable
+        remote
+        v-model="formInline.devModel"
+        placeholder="请选择">
+          <el-option
+            v-for="item in devModelOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       </el-row>
       <el-row>
       <el-form-item label="输入自编号">
@@ -57,9 +71,13 @@
       <el-form-item label="输入设备编号">
         <el-input v-model="formInline.devCode"></el-input>
       </el-form-item>
-      <el-form-item label="在线状态">
+      <el-form-item label="设备在线状态">
         <el-radio v-model="formInline.devOnlineStatus" label="1">在线</el-radio>
         <el-radio v-model="formInline.devOnlineStatus" label="0">离线</el-radio>
+      </el-form-item>
+      <el-form-item label="车辆在线状态" style="margin-left: 2vw;">
+        <el-radio v-model="formInline.busOnlineStatus" label="1">在线</el-radio>
+        <el-radio v-model="formInline.busOnlineStatus" label="0">离线</el-radio>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -74,6 +92,7 @@
 <script type="text/ecmascript-6">
 // import moment from 'moment';
 import { mapGetters } from 'vuex'
+import Bus from './bus.js'
 export default {
   data () {
     return {
@@ -83,10 +102,22 @@ export default {
         car: '',
         carSelf: '',
         devOnlineStatus: '',
+        busOnlineStatus: '',
         pageSize: 1,
         pageNumber: 15,
-        devCode: ''
+        devCode: '',
+        devModel: 'ADAS'
       },
+      devModelOptions: [
+        {
+          label: '客流',
+          value: '客流'
+        },
+        {
+          label: 'ADAS',
+          value: 'ADAS'
+        }
+      ],
       comOptions: [],
       lineOptions: [],
       carOptions: [],
@@ -119,6 +150,9 @@ export default {
       this.formInline.orgUuid = ''
       this.disabled = false
     }
+    Bus.$on('getOnlineDev', this.getOnlineDev)
+    Bus.$on('getOfflineDev', this.getOfflineDev)
+    Bus.$on('getAlllineDev', this.getAlllineDev)
   },
   watch: {
     'formInline.orgUuid': {
@@ -167,6 +201,15 @@ export default {
     remoteSelfMethod (query) {
       this.queryMethods(query, 'self')
     },
+    getOnlineDev () {
+      this.formInline.devOnlineStatus = '1'
+    },
+    getOfflineDev () {
+      this.formInline.devOnlineStatus = '0'
+    },
+    getAlllineDev () {
+      this.formInline.devOnlineStatus = ''
+    },
     queryMethods (query, type) {
       if (query !== '') {
         setTimeout(() => {
@@ -198,7 +241,9 @@ export default {
         pageSize: 1,
         pageNumber: 15,
         orgUuid: this.userId === '1' ? '' : this.userId,
-        devCode: ''
+        devCode: '',
+        busOnlineStatus: '',
+        devModel: 'ADAS'
       }
       this.$emit('selectConfig', this.formInline)
     },
@@ -210,7 +255,9 @@ export default {
         busPlateNumber: this.formInline.car || '',
         busSelfCode: this.formInline.carSelf || '',
         devOnlineStatus: this.formInline.devOnlineStatus || '',
-        devCode: this.formInline.devCode
+        devCode: this.formInline.devCode,
+        busState: this.formInline.busOnlineStatus,
+        devModel: this.formInline.devModel
       }).then(res => {
         window.open(res.url)
         this.downLoadLoading = false

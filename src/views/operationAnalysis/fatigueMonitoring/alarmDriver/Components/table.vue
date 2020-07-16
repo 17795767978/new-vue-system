@@ -260,7 +260,10 @@ export default {
         // endTime:
       }
       this.$router.push({
-        params,
+        params: {
+          type: 'sort',
+          ...params
+        },
         name: 'alarmCenter'
       })
     }

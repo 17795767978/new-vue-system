@@ -1,6 +1,7 @@
 <template>
   <div class="capture" v-loading="loading">
-    <el-button type="primary" style="margin-left: 5vw;" @click="getCapture" :disabled="isDisabled">主动抓拍</el-button>
+    <el-button type="primary" style="margin-left: 5vw;" @click="getCapture" :disabled="warnDetails.busState === '0' || isDisabled">主动抓拍</el-button>
+    <span style="font-size: .7vw; color: red; margin-left: 1vw;" v-show="warnDetails.busState === '0' ">*设备不在线，无法抓拍</span>
     <div class="waiting" v-if="timer">
       <h2>设备正在抓拍，请稍等。。。</h2>
       <el-progress type="circle" :percentage="percent" :status="status"></el-progress>
@@ -58,6 +59,9 @@ export default {
       timer: null,
       timeNum: 0
     }
+  },
+  mounted () {
+    console.log(this.warnDetails)
   },
   watch: {
     percent (newV) {
