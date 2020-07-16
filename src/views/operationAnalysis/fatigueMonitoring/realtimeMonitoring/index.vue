@@ -25,7 +25,8 @@ export default {
         devUuid: '',
         devCode: '',
         devRefId: '',
-        busUuid: ''
+        busUuid: '',
+        busState: ''
       },
       tableData: []
     }
@@ -49,7 +50,8 @@ export default {
       this.warnDetails.devCode = data.content.devCode
       this.warnDetails.busUuid = data.content.busPosition.busId
       /* @author lishuaiwu 2020/07/16 弹窗传值车辆状态 */
-      this.warnDetails.busStatus = data.content.busStatus
+      // this.warnDetails.busStatus = data.content.busStatus
+      this.warnDetails.busState = data.content.busState
       this.$api['tiredMonitoring.getWarnList']({
         orgId: this.userId, // 组织机构id
         lineId: '', // 线路id

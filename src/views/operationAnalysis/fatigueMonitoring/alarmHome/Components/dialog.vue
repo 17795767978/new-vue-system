@@ -106,7 +106,7 @@
         </el-table-column>
         <el-table-column property="name" label="查看详情" align="center" width="200">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="goToDetail(scope.row)">查看详情</el-button>
+            <el-button type="primary" size="mini" @click="goToDetail(scope.row, scope.$index)">查看详情</el-button>
             <el-button v-if="userId === '1'" :disabled="scope.row.auditStatus !== '0'" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
             <el-button v-else size="mini" :type="scope.row.handleSuggestion ? 'info' : 'success'" @click="goToSucc(scope.row, scope.$index)">处理</el-button>
           </template>
@@ -322,7 +322,7 @@ export default {
         })
       })
     },
-    goToDetail (row) {
+    goToDetail (row, index) {
       // const type = data.warnType === 'OVERSPEED' ? 'overspeed' : 'normal'
       // this.$router.push({
       //   path: '/fatigue-monitoring/alarm-content',
@@ -331,6 +331,7 @@ export default {
       //     type
       //   }
       // })
+      this.closeRow = index + (this.pageNumber - 1) * 15
       this.sendTitle = `${row.warnTypeName} ${row.busPlateNumber}`
       this.$children[2].dialogVisible = true
       this.$api['tiredMonitoring.getWarnDetail']({
@@ -408,13 +409,13 @@ export default {
           auditStatus: this.ruleForm.status,
           auditSuggestion: this.ruleForm.suggestion,
           auditTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-          auditUser: localStorage.getItem('userName')
+          auditUser: localStorage.getItem('userRealName')
         }
       } else {
         form = {
           handleSuggestion: this.ruleForm.suggestion,
           handleTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-          handleUser: localStorage.getItem('userName')
+          handleUser: localStorage.getItem('userRealName')
         }
       }
       this.$refs[formName].validate((valid) => {
@@ -441,6 +442,7 @@ export default {
               this.handleCurrentChange(this.pageNumber)
               this.$emit('updateTable', 'charts')
             }
+            this.$store.dispatch('updateMsg', true)
           }).catch(err => {
             this.$message.error(err.msg)
           })
@@ -489,8 +491,22 @@ export default {
       }
     },
     updateList (data) {
-      console.log(data)
-      console.log(123)
+      if (this.isSee.dataType === 'ws') {
+        this.wsData.splice(this.closeRow, 1)
+        this.selectAllData = this.wsData
+        this.total = this.selectAllData.length
+        this.handleCurrentChange(this.pageNumber)
+      } else if (this.isSee.dataType === 'table') {
+        this.selectAllData = this.tableData
+        this.total = this.selectAllData.length
+        this.handleCurrentChange(this.pageNumber)
+        this.$emit('updateTable', 'table')
+      } else if (this.isSee.dataType === 'charts') {
+        this.selectAllData = this.chartData
+        this.total = this.selectAllData.length
+        this.handleCurrentChange(this.pageNumber)
+        this.$emit('updateTable', 'charts')
+      }
     }
   },
   components: {

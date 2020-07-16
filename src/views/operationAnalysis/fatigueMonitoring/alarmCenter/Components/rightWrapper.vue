@@ -404,7 +404,8 @@ export default {
         warnTypeId: [],
         timeValue: [],
         checkType: [],
-        drvEmployeeId: ''
+        drvEmployeeId: '',
+        warnUuid: ''
       },
       ruleForm: {
         status: '',
@@ -494,7 +495,24 @@ export default {
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
       if (Object.keys(this.$route.params).length > 0) {
-        this.formInline = this.$route.params
+        if (this.$route.params.type === 'sort') {
+          this.formInline = this.$route.params
+        } else {
+          this.formInline = {
+            orgId: this.$route.params.orgUuid,
+            lineId: this.$route.params.lineUuid,
+            devCode: this.$route.params.devCode,
+            busPlateNumber: this.$route.params.busPlateNumber,
+            busUuid: '',
+            busSelfCode: '',
+            warnLevel: '',
+            warnTypeId: [this.$route.params.warnType],
+            timeValue: [moment(this.$route.params.warnTime).format('YYYY-MM-DD 00:00:00'), moment(this.$route.params.warnTime).format('YYYY-MM-DD 23:59:59')],
+            checkType: [],
+            drvEmployeeId: '',
+            warnUuid: this.$route.params.warnUuid
+          }
+        }
         // this.$refs.selectDriver.remoteMethod(this.formInline.drvEmployeeId)
       }
       let type = this.formInline.checkType
@@ -513,7 +531,8 @@ export default {
         pageSize: 10,
         pageNum: 1,
         driverName: this.formInline.driverName,
-        auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1']
+        auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1'],
+        warnUuid: this.formInline.warnUuid
         // auditStatus: this.formInline.auditStatus
       })
     }, 200)
@@ -527,7 +546,24 @@ export default {
     let defaultData = this.$store.getters.formData
     setTimeout(() => {
       if (Object.keys(this.$route.params).length > 0) {
-        this.formInline = this.$route.params
+        if (this.$route.params.type === 'sort') {
+          this.formInline = this.$route.params
+        } else {
+          this.formInline = {
+            orgId: this.$route.params.orgUuid,
+            lineId: this.$route.params.lineUuid,
+            devCode: this.$route.params.devCode,
+            busPlateNumber: this.$route.params.busPlateNumber,
+            busUuid: '',
+            busSelfCode: '',
+            warnLevel: '',
+            warnTypeId: [this.$route.params.warnType],
+            timeValue: [moment(this.$route.params.warnTime).format('YYYY-MM-DD 00:00:00'), moment(this.$route.params.warnTime).format('YYYY-MM-DD 23:59:59')],
+            checkType: [],
+            drvEmployeeId: '',
+            warnUuid: this.$route.params.warnUuid
+          }
+        }
         // this.$refs.selectDriver.remoteMethod(this.formInline.drvEmployeeId)
       }
       this.pageNum = 1
@@ -547,7 +583,8 @@ export default {
         driverName: this.formInline.driverName,
         pageSize: 10,
         pageNum: 1,
-        auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1']
+        auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1'],
+        warnUuid: this.formInline.warnUuid
       })
     }, 200)
   },
@@ -577,7 +614,8 @@ export default {
             endTime: this.formInline.timeValue[1],
             pageSize: 10,
             pageNum: 1,
-            auditStatus: this.userId === '1' ? auditStatus : ['1']
+            auditStatus: this.userId === '1' ? auditStatus : ['1'],
+            warnUuid: this.formInline.warnUuid
           })
         }
       }
@@ -678,6 +716,46 @@ export default {
         } else {
           this.ruleForm.suggestion = ''
         }
+      }
+    },
+    '$store.state.globel.options': {
+      deep: true,
+      handler (newV) {
+        console.log(newV)
+        this.formInline = {
+          orgId: newV.orgUuid,
+          lineId: newV.lineUuid,
+          devCode: newV.devCode,
+          busPlateNumber: newV.busPlateNumber,
+          busUuid: '',
+          busSelfCode: '',
+          warnLevel: '',
+          warnTypeId: [newV.warnType],
+          timeValue: [moment(newV.warnTime).format('YYYY-MM-DD 00:00:00'), moment(newV.warnTime).format('YYYY-MM-DD 23:59:59')],
+          checkType: [],
+          drvEmployeeId: '',
+          warnUuid: newV.warnUuid
+        }
+        let type = this.formInline.checkType
+        this._tableList({
+          orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
+          lineId: this.formInline.lineId, // 线路id
+          busUuid: this.formInline.busUuid, // 车辆id
+          devCode: this.formInline.devCode, // 设备号
+          busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+          drvEmployeeId: this.formInline.drvEmployeeId,
+          busSelfCode: this.formInline.busSelfCode, // 自编号
+          warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+          warnTypeId: this.formInline.warnTypeId, // 报警类型
+          startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+          endTime: this.formInline.timeValue[1],
+          pageSize: 10,
+          pageNum: 1,
+          driverName: this.formInline.driverName,
+          auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1'],
+          warnUuid: this.formInline.warnUuid
+          // auditStatus: this.formInline.auditStatus
+        })
       }
     }
   },
@@ -826,7 +904,8 @@ export default {
         endTime: this.formInline.timeValue[1],
         pageSize: 10,
         pageNum: this.pageNum,
-        auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1']
+        auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1'],
+        warnUuid: this.formInline.warnUuid
       })
     },
     handleClick (row) {
@@ -901,13 +980,13 @@ export default {
           auditStatus: this.ruleForm.status,
           auditSuggestion: this.ruleForm.suggestion,
           auditTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-          auditUser: localStorage.getItem('userName')
+          auditUser: localStorage.getItem('userRealName')
         }
       } else {
         form = {
           handleSuggestion: this.ruleForm.suggestion,
           handleTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-          handleUser: localStorage.getItem('userName')
+          handleUser: localStorage.getItem('userRealName')
         }
       }
       this.$refs[formName].validate((valid) => {
@@ -933,8 +1012,10 @@ export default {
               endTime: this.formInline.timeValue[1],
               pageSize: 10,
               pageNum: this.pageNum,
-              auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1']
+              auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1'],
+              warnUuid: this.formInline.warnUuid
             })
+            this.$store.dispatch('updateMsg', true)
           }).catch(err => {
             this.$message.error(err.msg)
           })
@@ -951,6 +1032,7 @@ export default {
     onSubmit () {
       let dateArr = []
       let defaultData = this.$store.getters.formData
+      this.formInline.warnUuid = ''
       this.formInline.timeValue.forEach(time => {
         dateArr.push(moment(time).format('YYYY-MM-DD HH:mm:ss'))
       })
@@ -974,7 +1056,8 @@ export default {
         endTime: dateArr[1],
         pageSize: 10,
         pageNum: 1,
-        auditStatus: this.userId === '1' ? this.getCheckType(auditStatus) : ['1']
+        auditStatus: this.userId === '1' ? this.getCheckType(auditStatus) : ['1'],
+        warnUuid: this.formInline.warnUuid
       })
     },
     onClear () {
@@ -1016,7 +1099,8 @@ export default {
         endTime: this.formInline.timeValue[1],
         pageSize: 10,
         pageNum: this.pageNum,
-        auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1']
+        auditStatus: this.userId === '1' ? this.getCheckType(type) : ['1'],
+        warnUuid: this.formInline.warnUuid
       })
     },
     getExcel () {
@@ -1034,7 +1118,8 @@ export default {
         warnTypeId: this.formInline.warnTypeId.length === 0 ? defaultData.warningArr : this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
         endTime: this.formInline.timeValue[1],
-        auditStatus: this.userId === '1' ? this.getCheckType(auditStatus) : ['1']
+        auditStatus: this.userId === '1' ? this.getCheckType(auditStatus) : ['1'],
+        warnUuid: this.formInline.warnUuid
       }).then(res => {
         // console.log(res)
         window.open(res.url)

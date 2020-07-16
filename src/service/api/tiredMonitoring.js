@@ -530,6 +530,15 @@ export const tiredMonitoringApi = {
         drvEmployeeId: ''
       },
       desc: '司机下拉框'
+    },
+    {
+      name: 'controlList',
+      method: 'POST',
+      path: '/safe/control/list',
+      mockPath: '/safe/control/list',
+      params: {
+      },
+      desc: '设备脱管报警'
     }
   ]
 }

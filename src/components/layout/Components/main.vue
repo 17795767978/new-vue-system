@@ -5,6 +5,7 @@
       <keep-alive :include="cachedViews">
         <router-view />
       </keep-alive>
+      <Notifity />
     </VuePerfectScrollbar>
   </main>
 </template>
@@ -12,6 +13,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import Notifity from '../../notifiy/'
 
 export default {
   name: 'Main',
@@ -25,8 +27,11 @@ export default {
   computed: {
     ...mapGetters(['cachedViews'])
   },
+  methods: {
+  },
   components: {
-    VuePerfectScrollbar
+    VuePerfectScrollbar,
+    Notifity
   }
 }
 </script>

@@ -264,7 +264,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '疲劳监测',
         icon: 'nocturne icon-dash',
-        roles: ['/alarm-center', '/alarm-content', '/device-status', '/alarm-analysis', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter', '/car-sort', '/monitoring-ledger', '/diary-table', '/device-parameter', '/msg-safe-send', '/realtime-monitoring']
+        roles: ['/alarm-center', '/alarm-content', '/device-status', '/alarm-analysis', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter', '/car-sort', '/monitoring-ledger', '/diary-table', '/device-parameter', '/msg-safe-send', '/realtime-monitoring', '/equipment-alarm']
       },
       children: [
         {
@@ -385,6 +385,16 @@ export const aysncRoutesMap = [
             title: '设备状态',
             icon: 'nocturne icon-dash',
             roles: ['/device-status']
+          }
+        },
+        {
+          path: 'equipment-alarm',
+          component: _import_('operationAnalysis/fatigueMonitoring/equipmentAlarm/index'),
+          name: 'equipmentAlarm',
+          meta: {
+            title: '设备脱管报警',
+            icon: 'nocturne icon-dash',
+            roles: ['/equipment-alarm']
           }
         },
         {

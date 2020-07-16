@@ -351,12 +351,14 @@ export default {
             warnUuid: this.warnDetails.warnUuid,
             auditTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             auditStatus: this.ruleFormCheck.status,
-            auditSuggestion: this.ruleFormCheck.suggestion
+            auditSuggestion: this.ruleFormCheck.suggestion,
+            auditUser: localStorage.getItem('userRealName')
           }).then(res => {
             this.pendding = false
             this.ruleFormCheck = { status: '', suggestion: '' }
             this.$message.success('操作成功')
             this.$emit('upadate', true)
+            this.$store.dispatch('updateMsg', true)
           }).catch(() => {
             this.$message.error('接口错误')
             this.pendding = false
@@ -394,7 +396,7 @@ export default {
         this.$api['tiredMonitoring.wsUpdate']({
           warnUuid: this.warnDetails.warnUuid,
           handleTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-          handleUser: localStorage.getItem('userName'),
+          handleUser: localStorage.getItem('userRealName'),
           handleSuggestion: this.ruleFormCheck.suggestion
         }).then(res => {
           this.pendding = false

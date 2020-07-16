@@ -131,6 +131,16 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="设备类型:" v-if="isDevType">
+        <el-select style="width: 200px" filterable v-model="formInline.devModel" placeholder="请选择">
+          <el-option
+            v-for="item in devModelOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="描述:" v-if="isDesc">
         <el-select class="font-style" filterable v-model="formInline.desc" placeholder="请选择">
           <el-option
@@ -396,6 +406,12 @@ export default {
     },
     isSend: {
       type: Boolean
+    },
+    isDevType: {
+      type: Boolean
+    },
+    rateParams: {
+      type: Object
     }
   },
   data () {
@@ -447,12 +463,23 @@ export default {
         ip: '',
         modules: '',
         pages: '',
-        checkList: []
+        checkList: [],
+        devModel: 'ADAS'
       },
       searchStationOptions: [],
       stationOptions: [],
       comOptions: [],
       comOptionsSec: [],
+      devModelOptions: [
+        {
+          value: '客流',
+          label: '客流'
+        },
+        {
+          value: 'ADAS',
+          label: 'ADAS'
+        }
+      ],
       turnOptions: [{
         value: '1',
         label: '上行'
@@ -636,7 +663,9 @@ export default {
     },
     'formInline.lineId': {
       handler (newValue) {
-        this.formInline.busNumber = ''
+        if (Object.keys(this.rateParams).length === 0) {
+          this.formInline.busNumber = ''
+        }
         if (newValue !== '') {
           this.$api['wholeInformation.getCar']({
             lineId: newValue,
@@ -731,6 +760,18 @@ export default {
           }
         } else {
           this.pickerOptionsDateTo = {}
+        }
+      }
+    },
+    rateParams (newV) {
+      if (Object.keys(newV).length > 0) {
+        if (this.rateParams && Object.keys(this.rateParams).length > 0) {
+          this.formInline.orgId = newV.orgUuid
+          this.formInline.lineId = newV.lineUuid
+          this.formInline.busNumber = newV.car
+          this.formInline.selfCode = newV.carSelf
+          this.formInline.devModel = newV.devModel
+          this.formInline.deviceCode = newV.devCode
         }
       }
     }
@@ -834,6 +875,7 @@ export default {
         ip: this.formInline.ip,
         modules: this.formInline.modules,
         pages: this.formInline.pages,
+        devModel: this.formInline.devModel,
         checkList
       }
       this.$emit('configCheck', configData)
@@ -869,7 +911,8 @@ export default {
         ip: '',
         modules: '',
         pages: '',
-        checkList: []
+        checkList: [],
+        devModel: 'ADAS'
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -900,7 +943,8 @@ export default {
         ip: this.formInline.ip,
         modules: this.formInline.modules,
         pages: this.formInline.pages,
-        checkList: []
+        checkList: [],
+        devModel: this.formInline.devModel
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -974,7 +1018,8 @@ export default {
         desc: this.formInline.desc,
         ip: this.formInline.ip,
         modules: this.formInline.modules,
-        pages: this.formInline.pages
+        pages: this.formInline.pages,
+        devModel: this.formInline.devModel
       }
       this.$emit('configCheckMul', configData)
     },
@@ -1029,7 +1074,8 @@ export default {
         auditStatus: this.userId === '1' ? checkList : ['1'],
         // handleResults: checkList,
         busPlateNumber: this.formInline.busNumber,
-        warnTypeId: ['ADASSNAP', 'DMSTOSNAP']
+        warnTypeId: ['ADASSNAP', 'DMSTOSNAP'],
+        devModel: this.formInline.devModel
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

@@ -14,7 +14,9 @@ const globel = {
     userList: [],
     modulesList: [],
     pagesList: [],
-    center: []
+    center: [],
+    options: {},
+    isUpdate: false
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -46,6 +48,12 @@ const globel = {
     },
     GET_POINT: (state, center) => {
       state.center = center
+    },
+    GET_MSG_OPTIONS: (state, options) => {
+      state.options = options
+    },
+    UPDATE_MSG: (state, isUpdate) => {
+      state.isUpdate = isUpdate
     }
   },
   actions: {
@@ -239,6 +247,12 @@ const globel = {
         let center = [res.lng, res.lat]
         commit('GET_POINT', center)
       })
+    },
+    getMsgOptions ({ commit }, options) {
+      commit('GET_MSG_OPTIONS', options)
+    },
+    updateMsg ({ commit }, isUpdate) {
+      commit('UPDATE_MSG', isUpdate)
     }
   }
 }

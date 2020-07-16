@@ -54,6 +54,12 @@
       </el-table-column>
       <el-table-column
         align="center"
+        prop="devModel"
+        width="100"
+        label="设备类型">
+      </el-table-column>
+      <el-table-column
+        align="center"
         prop="devIsvalid"
         width="100"
         label="启禁状态">
@@ -66,7 +72,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="离线时间"
+        label="离线时长"
         :formatter="formatterRate"
         >
       </el-table-column>
@@ -88,6 +94,7 @@
 <script type="text/ecmascript-6">
 import moment from 'moment'
 // import mapWrapper from './map'
+import Bus from './bus.js'
 import { mapGetters } from 'vuex'
 export default {
   props: {
@@ -99,7 +106,9 @@ export default {
           lineUuid: '',
           car: '',
           carSelf: '',
-          devOnlineStatus: ''
+          devOnlineStatus: '',
+          busOnlineStatus: '',
+          devModel: 'ADAS'
         }
       }
     },
@@ -142,8 +151,14 @@ export default {
       busPlateNumber: '',
       busSelfCode: '',
       devCode: '',
-      devOnlineStatus: ''
+      devOnlineStatus: '',
+      devModel: 'ADAS'
     })
+  },
+  mounted () {
+    Bus.$on('getOnlineDev', this.getOnlineDev)
+    Bus.$on('getOfflineDev', this.getOfflineDev)
+    Bus.$on('getAlllineDev', this.getAlllineDev)
   },
   watch: {
     // selectData: {
@@ -155,7 +170,6 @@ export default {
     isUpdate () {
       if (this.isUpdate) {
         this.outCurrentPage = 1
-        console.log(this.selectData.orgUuid)
         this._statusTable({
           orgId: this.selectData.orgUuid === '1' ? '' : this.selectData.orgUuid,
           lineId: this.selectData.lineUuid,
@@ -164,7 +178,9 @@ export default {
           busPlateNumber: this.selectData.car,
           busSelfCode: this.selectData.carSelf,
           devOnlineStatus: this.selectData.devOnlineStatus,
-          devCode: this.selectData.devCode
+          devCode: this.selectData.devCode,
+          busState: this.selectData.busOnlineStatus,
+          devModel: this.selectData.devModel
         })
       }
       this.$emit('isUpdateTo')
@@ -196,6 +212,93 @@ export default {
         return '-'
       }
     },
+    getOnlineDev () {
+      this.outCurrentPage = 1
+      if (!Object.keys(this.selectData).length) {
+        this._statusTable({
+          pageNumber: this.outCurrentPage,
+          pageSize: 10,
+          lineId: '',
+          orgId: this.userId === '1' ? '' : this.userId, // 组织机构
+          busPlateNumber: '',
+          busSelfCode: '',
+          devCode: '',
+          devOnlineStatus: '1',
+          devModel: 'ADAS'
+        })
+      } else {
+        this._statusTable({
+          orgId: this.selectData.orgUuid === '1' ? '' : this.selectData.orgUuid,
+          lineId: this.selectData.lineUuid,
+          pageNumber: this.outCurrentPage,
+          pageSize: 10,
+          busPlateNumber: this.selectData.car,
+          busSelfCode: this.selectData.carSelf,
+          devOnlineStatus: this.selectData.devOnlineStatus,
+          devCode: this.selectData.devCode,
+          busState: this.selectData.busOnlineStatus,
+          devModel: this.selectData.devModel
+        })
+      }
+    },
+    getOfflineDev () {
+      this.outCurrentPage = 1
+      if (!Object.keys(this.selectData).length) {
+        this._statusTable({
+          pageNumber: this.outCurrentPage,
+          pageSize: 10,
+          lineId: '',
+          orgId: this.userId === '1' ? '' : this.userId, // 组织机构
+          busPlateNumber: '',
+          busSelfCode: '',
+          devCode: '',
+          devOnlineStatus: '0',
+          devModel: 'ADAS'
+        })
+      } else {
+        this._statusTable({
+          orgId: this.selectData.orgUuid === '1' ? '' : this.selectData.orgUuid,
+          lineId: this.selectData.lineUuid,
+          pageNumber: this.outCurrentPage,
+          pageSize: 10,
+          busPlateNumber: this.selectData.car,
+          busSelfCode: this.selectData.carSelf,
+          devOnlineStatus: this.selectData.devOnlineStatus,
+          devCode: this.selectData.devCode,
+          busState: this.selectData.busOnlineStatus,
+          devModel: this.selectData.devModel
+        })
+      }
+    },
+    getAlllineDev () {
+      this.outCurrentPage = 1
+      if (!Object.keys(this.selectData).length) {
+        this._statusTable({
+          pageNumber: this.outCurrentPage,
+          pageSize: 10,
+          lineId: '',
+          orgId: this.userId === '1' ? '' : this.userId, // 组织机构
+          busPlateNumber: '',
+          busSelfCode: '',
+          devCode: '',
+          devOnlineStatus: '',
+          devModel: 'ADAS'
+        })
+      } else {
+        this._statusTable({
+          orgId: this.selectData.orgUuid === '1' ? '' : this.selectData.orgUuid,
+          lineId: this.selectData.lineUuid,
+          pageNumber: this.outCurrentPage,
+          pageSize: 10,
+          busPlateNumber: this.selectData.car,
+          busSelfCode: this.selectData.carSelf,
+          devOnlineStatus: this.selectData.devOnlineStatus,
+          devCode: this.selectData.devCode,
+          busState: this.selectData.busOnlineStatus,
+          devModel: this.selectData.devModel
+        })
+      }
+    },
     handleClick (row) {
       this.dialogTableVisible = true
       this.loading = true
@@ -218,7 +321,6 @@ export default {
     // 外层table
     handleCurrentChange (val) {
       this.outCurrentPage = val
-      console.log(this.selectData)
       this._statusTable({
         orgId: this.selectData.orgUuid || '',
         lineId: this.selectData.lineUuid || '',
@@ -226,7 +328,9 @@ export default {
         pageSize: 10,
         busPlateNumber: this.selectData.car || '',
         busSelfCode: this.selectData.carSelf || '',
-        devOnlineStatus: this.selectData.devOnlineStatus || ''
+        devOnlineStatus: this.selectData.devOnlineStatus || '',
+        busState: this.selectData.busOnlineStatus,
+        devModel: this.selectData.devModel
       })
     },
     // 内层table
