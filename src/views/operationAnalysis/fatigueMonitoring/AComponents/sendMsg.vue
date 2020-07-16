@@ -31,7 +31,8 @@
         <el-input type="textarea" :rows="5" v-model="ruleForm.desc"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">立即下发</el-button>
+        <!-- @author lishuaiwu 2020/07/16 车辆状态值为0时，禁用下发菜单 -->
+        <el-button :disabled="warnDetails.busStatus === '0'" type="primary" @click="submitForm('ruleForm')">立即下发</el-button>
         <el-button @click="resetForm('ruleForm')">取消</el-button>
       </el-form-item>
     </el-form>

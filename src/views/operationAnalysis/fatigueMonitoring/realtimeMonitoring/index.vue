@@ -48,6 +48,8 @@ export default {
       this.warnDetails.devRefId = data.content.devRefId
       this.warnDetails.devCode = data.content.devCode
       this.warnDetails.busUuid = data.content.busPosition.busId
+      /* @author lishuaiwu 2020/07/16 弹窗传值车辆状态 */
+      this.warnDetails.busStatus = data.content.busStatus
       this.$api['tiredMonitoring.getWarnList']({
         orgId: this.userId, // 组织机构id
         lineId: '', // 线路id
