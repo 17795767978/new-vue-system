@@ -21,6 +21,38 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <!-- @author lishuaiwu 2020/07/17 -->
+      <el-form-item label="选择车牌号:" v-if="isLine">
+        <el-select
+          v-model="formInline.carList"
+          filterable
+          placeholder="请选择"
+          multiple
+          collapse-tags>
+          <el-option
+            v-for="item in carList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- @author lishuaiwu 2020/07/17 -->
+      <el-form-item label="选择车辆自编号:" v-if="isLine">
+        <el-select
+          v-model="formInline.carNo"
+          filterable
+          placeholder="请选择"
+          multiple
+          collapse-tags>
+          <el-option
+            v-for="item in carNo"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="选择线路:" v-if="islineIdRepeat">
         <el-select style="width: 200px" filterable v-model="formInline.lineIds" multiple collapse-tags placeholder="请选择">
           <el-option
@@ -464,7 +496,9 @@ export default {
         modules: '',
         pages: '',
         checkList: [],
-        devModel: 'ADAS'
+        devModel: 'ADAS',
+        carList: [],
+        carNo: []
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -504,6 +538,8 @@ export default {
       pagesOptions: [],
       lineOptions: [],
       lineOptionsSec: [],
+      carList: [], // 车牌号字典 @author lishuaiwu 2020/07/17
+      carNo: [], // 车牌自编号 @author lishuaiwu 2020/07/17
       carOptions: [],
       warnOptions: [],
       centerDialogVisible: false,
@@ -535,6 +571,21 @@ export default {
       this.$store.dispatch('getLineSecList').then(res => {
         this.lineOptionsSec = res
       })
+      // 获取车牌号字典接口 @author lishuaiwu 2020/07/17
+      this.$store.dispatch('getCarList').then(res => {
+        this.carList = res
+      })
+      // 获取车辆自编号字典接口 @author lishuaiwu 2020/07/17
+      // todo: 假数据 自编号字典
+      this.carNo = [
+        {
+          label: '2262',
+          value: '2262'
+        }, {
+          label: '2241',
+          value: '2241'
+        }
+      ]
     }
     this._alarmType({
       warnLevel: ''
@@ -876,7 +927,9 @@ export default {
         modules: this.formInline.modules,
         pages: this.formInline.pages,
         devModel: this.formInline.devModel,
-        checkList
+        checkList,
+        carList: this.formInline.carList,
+        carNo: this.formInline.carNo
       }
       this.$emit('configCheck', configData)
     },

@@ -7,6 +7,8 @@
       size="mini"
       tooltip-effect="dark"
       style="width: 100%"
+      @select="handleSelect"
+      @select-all="handleSelectAll"
       @selection-change="handleSelectionChange">
       <el-table-column
         align="center"
@@ -162,7 +164,9 @@ export default {
         desc: [{ validator: markSuggestion, trigger: 'change' }]
       },
       detailVisible: false,
-      detailMsg: []
+      detailMsg: [],
+      isCheckAll: false, // 是否全选状态
+      removeChecks: [] // 被取消选中的数据
     }
   },
   computed: {
@@ -173,6 +177,8 @@ export default {
     this._busPageList({
       orgId: this.searchData.orgId,
       lineId: this.searchData.lineId,
+      carList: this.searchData.carList,
+      carNo: this.searchData.carNo,
       pageSize: 15,
       pageNumber: 1
     })
@@ -190,6 +196,8 @@ export default {
         this._busPageList({
           orgId: newV.orgId,
           lineId: newV.lineId,
+          carList: newV.carList,
+          carNo: newV.carNo,
           pageSize: 15,
           pageNumber: 1
         })
@@ -204,6 +212,32 @@ export default {
         }
         this.total = res.total
         this.tableData = res.list
+        // @author lishuaiwu 2020/07/17 如果是多选时，默认多选
+        this.$nextTick(() => {
+          if (this.isCheckAll) {
+            // this.$refs.multipleTable.toggleAllSelection()
+            // @author lishuaiwu 2020/07/17 对于没有被勾选的，取消勾选
+            // this.removeChecks.forEach(item => {
+            //   try {
+            //     this.$refs.multipleTable.toggleRowSelection(item, false)
+            //   } catch (error) {
+
+            //   }
+            // })
+            this.tableData.forEach(row => {
+              let flag = true
+              this.removeChecks.forEach(item => {
+                if (row.busUuid === item.busUuid) {
+                  flag = false
+                }
+              })
+
+              if (flag) {
+                this.$refs.multipleTable.toggleRowSelection(row, true)
+              }
+            })
+          }
+        })
       })
     },
     _alarmType (params) {
@@ -241,6 +275,8 @@ export default {
             this._busPageList({
               orgId: this.searchData.orgId,
               lineId: this.searchData.lineId,
+              carList: this.searchData.carList,
+              carNo: this.searchData.carNo,
               pageSize: 15,
               pageNumber: this.pageNumber
             })
@@ -265,7 +301,7 @@ export default {
     getTime (row) {
       return moment(row.busCreateTime).format('YYYY-MM-DD HH:mm:ss')
     },
-    handleSelectionChange (data) {
+    handleSelectionChange (data, data2) {
       let arr = []
       arr = data.map(item => item.busUuid)
       this.selectItems = arr.join(',')
@@ -275,6 +311,8 @@ export default {
       this._busPageList({
         orgId: this.searchData.orgId,
         lineId: this.searchData.lineId,
+        carList: this.searchData.carList,
+        carNo: this.searchData.carNo,
         pageSize: 15,
         pageNumber: this.pageNumber
       })
@@ -285,6 +323,34 @@ export default {
         time: moment(item.send_time).format('YYYY-MM-DD HH:mm:ss')
       }))
       this.detailVisible = true
+    },
+    /* 当用户出发多选时 @author lishuaiwu 2020/07/17 */
+    handleSelectAll (evt) {
+      if (evt.length > 0) {
+        this.isCheckAll = true
+      } else {
+        this.isCheckAll = false
+      }
+      this.removeChecks = []
+    },
+    /* 获取没有被选中的行数据 @author lishuaiwu 2020/07/17 */
+    handleSelect (evt, evt2) {
+      let flag = false
+      evt.forEach(item => {
+        if (item.busUuid === evt2.busUuid) {
+          flag = true
+          return false
+        }
+      })
+      if (!flag && this.isCheckAll) {
+        this.removeChecks.push(evt2)
+      } else {
+        this.removeChecks.forEach((item, index) => {
+          if (item.busUuid === evt2.busUuid) {
+            this.removeChecks.splice(index, 1)
+          }
+        })
+      }
     }
   }
 }
