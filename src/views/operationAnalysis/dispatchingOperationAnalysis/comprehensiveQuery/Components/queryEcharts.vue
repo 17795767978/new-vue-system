@@ -132,14 +132,14 @@ export default {
         this.grid = GRID
         this.lineData = [
           {
-            name: '登量（人次）',
+            name: '上车人数（人次）',
             type: 'bar',
             data: res.datas[0],
             barWidth: 15,
             smooth: true
           },
           {
-            name: '降量（人次）',
+            name: '下车人数（人次）',
             type: 'bar',
             data: res.datas[1],
             barWidth: 15,
@@ -150,7 +150,7 @@ export default {
         this.dataLength = 2
         this.legend = [
           {
-            data: ['登量（人次）'],
+            data: ['上车人数（人次）'],
             right: 150,
             top: 10,
             textStyle: {
@@ -158,7 +158,7 @@ export default {
             }
           },
           {
-            data: ['降量（人次）'],
+            data: ['下车人数（人次）'],
             right: 10,
             top: 10,
             textStyle: {
@@ -224,14 +224,14 @@ export default {
         this.grid = GRID
         this.lineData = [
           {
-            name: '登量',
+            name: '上车人数（人次）',
             type: 'bar',
             data: res.datas[0],
             barWidth: 15,
             smooth: true
           },
           {
-            name: '降量',
+            name: '下车人数（人次）',
             type: 'bar',
             data: res.datas[1],
             barWidth: 15,
@@ -242,7 +242,7 @@ export default {
         this.dataLength = 2
         this.legend = [
           {
-            data: ['登量'],
+            data: ['上车人数（人次）'],
             right: 100,
             top: 10,
             textStyle: {
@@ -250,7 +250,7 @@ export default {
             }
           },
           {
-            data: ['降量'],
+            data: ['下车人数（人次）'],
             right: 10,
             top: 10,
             textStyle: {

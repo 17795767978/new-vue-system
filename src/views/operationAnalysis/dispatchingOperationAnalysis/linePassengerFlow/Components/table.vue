@@ -40,7 +40,7 @@
       <el-table-column
         prop="upPayNumber"
         align="center"
-        label="上车客流（人次）">
+        label="上车人数（人次）">
       </el-table-column>
     </el-table>
     <el-pagination

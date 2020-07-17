@@ -66,7 +66,7 @@ export default {
         this.loading = false
       }, 1000)
       this.title = {
-        text: this.ids === 'line' ? `线路登降量TOP10` : `站点登降量TOP10`,
+        text: this.ids === 'line' ? `线路上车客流前10` : `站点上车客流前10`,
         left: 'center',
         top: 10,
         textStyle: {
@@ -83,7 +83,7 @@ export default {
       }
       this.lineData = [
         {
-          name: '刷卡人次(登量)',
+          name: '上车人数（人次）',
           type: 'bar',
           data: result.datas,
           barWidth: 20,
@@ -97,7 +97,7 @@ export default {
       this.dataLength = 2
       this.legend = [
         {
-          data: ['刷卡人次(登量)'],
+          data: ['上车人数（人次）'],
           right: 10,
           top: 10,
           textStyle: {

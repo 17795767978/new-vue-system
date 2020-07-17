@@ -118,7 +118,7 @@ export default {
         }
         this.lineData = [
           {
-            name: '刷卡总量',
+            name: '上车人数（人次）',
             type: 'line',
             data: res.datas,
             barWidth: 20
@@ -127,7 +127,7 @@ export default {
         this.dataLength = 2
         this.legend = [
           {
-            data: ['刷卡总量'],
+            data: ['上车人数（人次）'],
             right: 100,
             top: 10,
             textStyle: {
