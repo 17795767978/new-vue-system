@@ -256,6 +256,37 @@ export default {
       this.isLoading = true
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if (this.isCheckAll) { // 如果是全部下发 @author lishuaiwu 2020/07/20
+            let filterBusUuids = []
+            filterBusUuids = this.removeChecks.map(item => item.busUuid)
+            this.$api['tiredMonitoring.AllVoicepromptBatch']({
+              devType: this.ruleForm.dev,
+              sendType: this.ruleForm.msgType,
+              filterBusUuids: filterBusUuids.join(','),
+              content: this.ruleForm.desc
+            }).then(res => {
+              this.isLoading = false
+              this.dialogFormVisible = false
+              this.$message.success('下发消息成功')
+              this.ruleForm = {
+                dev: '',
+                msgType: '',
+                // msgContent: '',
+                desc: ''
+              }
+              this.resetForm('ruleForm')
+              this._busPageList({
+                orgId: this.searchData.orgId,
+                lineId: this.searchData.lineId,
+                carList: this.searchData.carList,
+                carNo: this.searchData.carNo,
+                pageSize: 15,
+                pageNumber: this.pageNumber
+              })
+            })
+            return
+          }
+          // 如果是一般的批量下发
           this.$api['tiredMonitoring.VoicepromptBatch']({
             devType: this.ruleForm.dev,
             sendType: this.ruleForm.msgType,

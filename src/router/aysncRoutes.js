@@ -574,6 +574,16 @@ export const aysncRoutesMap = [
         }
       },
       {
+        path: 'msgsend-tempmaintain ',
+        component: _import_('systemAdmin/msgSendTemMaintain/index'),
+        name: 'msgTempMaintain',
+        meta: {
+          title: '下发消息模板维护',
+          icon: 'nocturne icon-dash',
+          roles: ['/msg-safe-send']
+        }
+      },
+      {
         path: 'device-snap-management',
         component: _import_('systemAdmin/deviceSnapManagement/index'),
         name: 'deviceSnapManagement',

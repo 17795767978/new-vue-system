@@ -9,6 +9,7 @@ const globel = {
     stationData: [],
     comData: [],
     carData: [],
+    carNoData: [],
     comDataSec: [],
     lineDataSec: [],
     userList: [],
@@ -36,6 +37,9 @@ const globel = {
     },
     CAR_DATA: (state, carData) => {
       state.carData = carData
+    },
+    CAR_NO_DATA: (state, carData) => {
+      state.carNoData = carData
     },
     USER_LIST: (state, list) => {
       state.userList = list
@@ -208,6 +212,27 @@ const globel = {
             reject(error)
           })
         }
+      })
+    },
+    getCarNoList ({ commit }) {
+      return new Promise((resolve, reject) => {
+        api['wholeInformation.getCarNo']({
+          orgId: '',
+          orgName: '',
+          lineId: ''
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.busSelfCode,
+              value: item.busSelfCode
+            })
+          })
+          commit('CAR_NO_DATA', list)
+          resolve(list)
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
     getUserList ({ commit }) {

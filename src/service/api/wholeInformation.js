@@ -79,6 +79,17 @@ export const wholeInformationApi = {
       desc: '获取车辆信息'
     },
     {
+      name: 'getCarNo',
+      method: 'POST',
+      path: '/api/bus/carNo',
+      mockPath: '/api/bus/carNo',
+      params: {
+        orgId: '',
+        lineId: ''
+      },
+      desc: '获取车辆自编号'
+    },
+    {
       name: 'getCityCoordinatePoints',
       method: 'POST',
       path: '/api/base/common/getCityCoordinatePoints',

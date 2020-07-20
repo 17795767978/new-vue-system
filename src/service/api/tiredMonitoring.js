@@ -519,6 +519,18 @@ export const tiredMonitoringApi = {
       desc: '语音批量下发'
     },
     {
+      name: 'AllVoicepromptBatch',
+      method: 'POST',
+      path: '/warns/AllVoicepromptBatch',
+      mockPath: '/warns/AllVoicepromptBatch',
+      params: {
+        devType: '',
+        filterBusUuids: '',
+        content: ''
+      },
+      desc: '语音全部下发'
+    },
+    {
       name: 'getDriverDt',
       method: 'POST',
       path: '/api/dw/dim/bus/driver/list',

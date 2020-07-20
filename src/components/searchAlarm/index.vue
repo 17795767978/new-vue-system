@@ -586,6 +586,9 @@ export default {
           value: '2241'
         }
       ]
+      this.$store.dispatch('getCarNoList').then(res => {
+        this.carNo = res
+      })
     }
     this._alarmType({
       warnLevel: ''
