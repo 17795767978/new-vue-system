@@ -62,39 +62,162 @@ export default {
     return {
       showLoading: false,
       currentPage: 1,
-      total: 2,
-      tableData: [{
-        voicetempUuid: '12312434',
-        voicetempMessageContent: '请保持车速，不要超速行驶！'
-      }, {
-        voicetempUuid: '34454545',
-        voicetempMessageContent: '车辆已经超速，请司机立刻调整车速！'
-      }]
+      pageSize: 5,
+      total: 0,
+      params: {
+        voicetempTypeUuid: ''
+      },
+      tableData: []
     }
   },
   methods: {
     handleCurrentChange (val) {
       this.currentPage = val
+      this.updateTable(this.params.voicetempTypeUuid)
     },
     handleDelete (index, row) {
-      console.log(index, row)
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const voicetempUuid = row.voicetempUuid
+        this.$api['msgsend.delVoicetempMessageById']({
+          voicetempUuid: voicetempUuid
+        }).then(res => {
+          const success = res.success
+          const resCode = res.code
+          if (resCode === '200' && success === 'true') {
+            this.$message({
+              type: 'success',
+              message: '移除成功！'
+            })
+            // 刷新列表
+            this.resetTable()
+          } else {
+            this.$message({
+              type: 'error',
+              message: `移除失败:${res.msg}`
+            })
+          }
+        }).catch(error => {
+          this.$message({
+            type: 'error',
+            message: `移除失败:${JSON.stringify(error)}`
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     handleEdit (index, row) {
       this.$prompt('请编辑内容', this.insideParams.name, {
-        inputValue: row.value,
+        inputValue: row.voicetempMessageContent,
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
-        this.$message({
-          type: 'success',
-          message: '你调整后的值为: ' + value
-        })
+        if (value === '') {
+          this.$message({
+            type: 'error',
+            message: '提交内容不可为空！'
+          })
+          return false
+        }
+        if (row.voicetempMessageContent === value) {
+          this.$message({
+            type: 'error',
+            message: '暂无修改，提交无效！'
+          })
+        } else {
+          this.$api['msgsend.editVoicetempMessage']({
+            voicetempUuid: row.voicetempUuid,
+            voicetempMessageContent: value
+          }).then(res => {
+            const success = res.success
+            const resCode = res.code
+            if (resCode === '200' && success === 'true') {
+              this.$message({
+                type: 'success',
+                message: '编辑成功'
+              })
+              // 刷新列表
+              this.updateTable(this.insideParams.voicetempTypeUuid)
+            } else {
+              this.$message({
+                type: 'error',
+                message: `编辑失败:${res.msg}，请联系管理员！`
+              })
+            }
+          }).catch(error => {
+            this.$message({
+              type: 'error',
+              message: `编辑失败:${JSON.stringify(error)}，请联系管理员！`
+            })
+          })
+        }
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '取消输入'
         })
       })
+    },
+    /* 重置列表 */
+    resetTable () {
+      this.params.voicetempTypeUuid = ''
+      this.currentPage = 1
+      this.updateTable()
+    },
+    /* 更新列表数据 */
+    updateTable (
+      voicetempTypeUuid = ''
+    ) {
+      const params = {
+        voicetempTypeUuid: voicetempTypeUuid,
+        pageSize: this.pageSize,
+        pageNum: this.currentPage
+      }
+      this.$api['msgsend.getVmContentsByVtUuid'](params).then(res => {
+        this.setTableData(res)
+      }).catch(error => {
+        console.info(error)
+      })
+      // todo: 模拟数据，在生产环境需注释========================================================
+      const res = {
+        code: '200',
+        msg: '成功',
+        success: 'true',
+        message: '成功',
+        data: {
+          list: [{
+            voicetempUuid: '12312434',
+            voicetempMessageContent: this.insideParams.voicetempContent + '信息提醒内容1111111'
+          }, {
+            voicetempUuid: '34454545',
+            voicetempMessageContent: this.insideParams.voicetempContent + '信息提醒内容2222222'
+          }],
+          total: 2
+        }
+      }
+      this.setTableData(res)
+      // ========================================================================================
+    },
+    setTableData (res) {
+      const len = res.data.list.length
+      const success = res.success
+      const resCode = res.code
+      if (resCode === '200' && success === 'true' && len > 0) {
+        this.tableData = res.data.list
+        this.total = res.data.total
+      }
+    }
+  },
+  mounted () {
+    if (this.insideParams.voicetempTypeUuid !== undefined) {
+      this.updateTable(this.insideParams.voicetempTypeUuid)
     }
   }
 }

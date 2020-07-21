@@ -5,11 +5,14 @@
     </el-row>
     <el-form :inline="true" size="mini" class="form-inline">
       <el-form-item label="类型名称">
-        <el-input class="font-style" filterable></el-input>
+        <el-input v-model="params.voicetempContent" class="font-style" filterable></el-input>
+      </el-form-item>
+      <el-form-item label="类型编码">
+        <el-input v-model="params.voicetempTypeCode" class="font-style" filterable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">查询</el-button>
-        <el-button type="warning">重置</el-button>
+        <el-button type="primary" @click="search">查询</el-button>
+        <el-button type="warning" @click="resetSearch">重置</el-button>
       </el-form-item>
       <div class="tableWrapper">
         <el-table
@@ -52,6 +55,7 @@
                 type="primary"
                 size="mini">修改</el-button>
               <el-button
+                @click="handleDel(scope.row)"
                 size="mini"
                 type="danger">删除</el-button>
             </template>
@@ -97,6 +101,7 @@ export default {
     resetTable () {
       this.params.voicetempTypeCode = ''
       this.params.voicetempContent = ''
+      this.currentPage = 1
       this.updateTable()
     },
     /* 更新列表数据 */
@@ -113,9 +118,12 @@ export default {
       this.$api['msgsend.getVoicetempTypeData'](params).then(res => {
         this.setTableData(res)
       }).catch(error => {
-        console.info(error)
+        this.$message({
+          type: 'error',
+          message: `数据加载失败:${JSON.stringify(error)}`
+        })
       })
-      // todo: 模拟数据，在生产环境需注释
+      // todo: 模拟数据，在生产环境需注释==========
       const res = {
         code: '200',
         msg: '成功',
@@ -149,13 +157,20 @@ export default {
         }
       }
       this.setTableData(res)
+      // ===========================================
     },
     setTableData (res) {
       const len = res.data.list.length
+      const success = res.success
       const resCode = res.code
-      if (resCode === '200' && len > 0) {
+      if (resCode === '200' && success === 'true' && len > 0) {
         this.tableData = res.data.list
         this.total = res.data.total
+      } else {
+        this.$message({
+          type: 'error',
+          message: '数据请求异常，请稍后重试！'
+        })
       }
     },
     expandChange (a, b) {
@@ -165,8 +180,53 @@ export default {
       this.dialogVisible = true
       this.dialogConfig = row
     },
+    handleDel (row) {
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const voicetempTypeUuid = row.voicetempTypeUuid
+        this.$api['msgsend.delNewVoicetempTypeById']({
+          voicetempTypeUuid: voicetempTypeUuid
+        }).then(res => {
+          const success = res.success
+          const resCode = res.code
+          if (resCode === '200' && success === 'true') {
+            this.$message({
+              type: 'success',
+              message: '移除成功！'
+            })
+            // 刷新列表
+            this.resetTable()
+          } else {
+            this.$message({
+              type: 'error',
+              message: `移除失败:${res.msg}`
+            })
+          }
+        }).catch(error => {
+          this.$message({
+            type: 'error',
+            message: `移除失败:${JSON.stringify(error)}`
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
     closeDialog () {
       this.dialogVisible = false
+    },
+    resetSearch () {
+      this.resetTable()
+    },
+    search () {
+      this.currentPage = 1
+      this.updateTable(this.params.voicetempTypeCode, this.params.voicetempContent)
     }
   },
   mounted () {
