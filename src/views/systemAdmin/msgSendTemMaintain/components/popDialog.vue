@@ -6,11 +6,18 @@
       :close-on-click-modal="false"
       @close="close"
       width="30%">
-      <div style="margin-bottom: 2vh;width: 280px;">
+      <div style="margin-bottom: 2vh;">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="60px">
-          <el-form-item label="名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="名称" prop="name">
+                <el-input v-model="ruleForm.name" size="small"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-button style="margin-top: 4px;" type="primary" size="small">确认修改</el-button>
+            </el-col>
+          </el-row>
         </el-form>
       </div>
       <el-card class="box-card" shadow="never">

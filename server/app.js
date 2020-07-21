@@ -21,17 +21,10 @@ app.all('*', function (req, res, next) {
 app.use(express.json())
 
 // user login
-app.post('/user/login', function (req, res) {
+app.post('/api/base/login/login', function (req, res) {
   const { userAccount, userPassword } = req.body
   if (userAccount && userPassword) {
-    res.json({
-      'head': {
-        'success': 'true'
-      },
-      'data': {
-        'token': 'A7D8SKLJZ87D-S8S8AS78DF6S787AS8D7FJCZ685C8DAA-ASD876XIZ'
-      }
-    })
+    res.json({ 'head': { 'code': '200', 'msg': '成功', 'success': 'true' }, 'code': '200', 'data': { 'userInfo': { 'auditStatus': false, 'createTime': 1559183929958, 'createUser': null, 'describes': null, 'enabled': '1', 'lineUuids': null, 'orgId': null, 'orgName': null, 'roleIds': [], 'roleName': null, 'roles': [], 'updateTime': 1559183929958, 'updateUser': 'xpguo', 'userAccount': 'admin', 'userGender': '1', 'userId': '1', 'userMobile': null, 'userOrgUuid': '1', 'userPassword': 'e10adc3949ba59abbe56e057f20f883e', 'userRealName': '系统管理员', 'userTelephone': null }, 'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaXNzIjoiemh4IiwidXNlck5hbWUiOiJhZG1pbiIsImV4cCI6MTU5Nzg5MDMxNywidXNlcklkIjoiMSIsImlhdCI6MTU5NTI5ODMxNywianRpIjoiMjM4NDg3ODEzODQ1NDAzMDlmM2MifQ.RotGBI6X3zYeBYqJB5UAdWGi90gSbuhRnC2slUFzXhI' }, 'message': '成功' })
   }
 })
 

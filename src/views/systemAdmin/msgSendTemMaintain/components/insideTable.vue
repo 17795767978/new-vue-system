@@ -2,6 +2,10 @@
   <div>
     <el-table
       :data="tableData"
+      v-loading="showLoading"
+      element-loading-text="提醒内容列表加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
       border
       style="width: 100%">
       <el-table-column
@@ -14,7 +18,7 @@
       <el-table-column
         label="提醒内容">
         <template slot-scope="scope">
-          {{scope.row.value}}
+          {{scope.row.voicetempMessageContent}}
         </template>
       </el-table-column>
       <el-table-column width="150" label="操作" align="center">
@@ -35,6 +39,8 @@
         :current-page="currentPage"
         @current-change="handleCurrentChange"
         layout="prev, pager, next"
+        :page-size="5"
+        :small="true"
         :total="total">
       </el-pagination>
       <span class="demonstration">共{{total}}条</span>
@@ -45,22 +51,31 @@
 export default {
   name: 'insideTable',
   props: {
-    insideParams: Object
+    insideParams: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
   data () {
     return {
+      showLoading: false,
       currentPage: 1,
       total: 2,
       tableData: [{
-        id: '12312434',
-        value: '请保持车速，不要超速行驶！'
+        voicetempUuid: '12312434',
+        voicetempMessageContent: '请保持车速，不要超速行驶！'
       }, {
-        id: '34454545',
-        value: '车辆已经超速，请司机立刻调整车速！'
+        voicetempUuid: '34454545',
+        voicetempMessageContent: '车辆已经超速，请司机立刻调整车速！'
       }]
     }
   },
   methods: {
+    handleCurrentChange (val) {
+      this.currentPage = val
+    },
     handleDelete (index, row) {
       console.log(index, row)
     },
@@ -87,7 +102,7 @@ export default {
 <style scoped>
 .demonstration {
   float: right;
-  margin-top: 20px;
+  margin-top: 14px;
   line-height: 36px;
   font-size: 14px;
 }
