@@ -175,6 +175,7 @@ export default {
     updateTable (
       voicetempTypeUuid = ''
     ) {
+      this.showLoading = true
       const params = {
         voicetempTypeUuid: voicetempTypeUuid,
         pageSize: this.pageSize,
@@ -182,8 +183,13 @@ export default {
       }
       this.$api['msgsend.getVmContentsByVtUuid'](params).then(res => {
         this.setTableData(res)
+        this.showLoading = false
       }).catch(error => {
-        console.info(error)
+        this.$message({
+          type: 'error',
+          message: `数据加载失败:${JSON.stringify(error)}`
+        })
+        this.showLoading = false
       })
       // todo: 模拟数据，在生产环境需注释========================================================
       const res = {
@@ -212,6 +218,11 @@ export default {
       if (resCode === '200' && success === 'true' && len > 0) {
         this.tableData = res.data.list
         this.total = res.data.total
+      } else {
+        this.$message({
+          type: 'error',
+          message: `数据加载失败！`
+        })
       }
     }
   },
