@@ -126,6 +126,8 @@ export default {
       this.$prompt('请编辑内容', '新增提醒内容', {
         inputValue: '',
         inputType: 'textarea',
+        inputPattern: /^.{1,100}$/,
+        inputErrorMessage: '不得超过100个字符！',
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
