@@ -12,10 +12,11 @@
         label="序号"
         width="60">
         <template slot-scope="scope">
-          {{scope.$index + (parseInt(currentPage) - 1) * 10 + 1}}
+          {{scope.$index + (parseInt(currentPage) - 1) * 5 + 1}}
         </template>
       </el-table-column>
       <el-table-column
+        :show-overflow-tooltip="true"
         label="提醒内容">
         <template slot-scope="scope">
           {{scope.row.voicetempMessageContent}}
@@ -56,6 +57,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    initLoad: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -135,6 +140,7 @@ export default {
             voicetempUuid: row.voicetempUuid,
             voicetempMessageContent: value
           }).then(res => {
+            this.$emit('initParList')
             this.$message({
               type: 'success',
               message: '编辑成功'
@@ -209,7 +215,7 @@ export default {
     }
   },
   mounted () {
-    if (this.insideParams.voicetempTypeUuid !== undefined) {
+    if (this.insideParams.voicetempTypeUuid !== undefined && this.initLoad === true) {
       this.updateTable(this.insideParams.voicetempTypeUuid)
     }
   }

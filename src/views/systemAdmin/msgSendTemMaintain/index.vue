@@ -4,11 +4,11 @@
       <el-button type="success" @click="handleEdit(null)">新增提醒类型</el-button>
     </el-row>
     <el-form :inline="true" size="mini" class="form-inline">
-      <el-form-item label="类型名称">
-        <el-input v-model="params.voicetempContent" class="font-style" filterable></el-input>
-      </el-form-item>
       <el-form-item label="类型编码">
         <el-input v-model="params.voicetempTypeCode" class="font-style" filterable></el-input>
+      </el-form-item>
+      <el-form-item label="类型名称">
+        <el-input v-model="params.voicetempContent" class="font-style" filterable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="search">查询</el-button>
@@ -24,7 +24,7 @@
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
                 <!-- props.row -->
-                <inside-table :insideParams="props.row"></inside-table>
+                <inside-table @initParList="initParList" :insideParams="props.row"></inside-table>
               </el-form>
             </template>
           </el-table-column>
@@ -79,6 +79,7 @@
       :dialogVisible="dialogVisible"
       :config="dialogConfig"
       @close="closeDialog"
+      @initParList="initParList"
     ></pop-dialog>
   </div>
 </template>
@@ -92,6 +93,11 @@ export default {
     PopDialog
   },
   methods: {
+    /* 当内容更新时，刷新最外层父列表 */
+    initParList () {
+      debugger
+      this.updateTable(this.params.voicetempTypeCode, this.params.voicetempContent)
+    },
     /* 分页查询 */
     handleCurrentChange (val) {
       this.currentPage = val

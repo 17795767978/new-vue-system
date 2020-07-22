@@ -33,7 +33,7 @@
           <el-button @click="addContent" style="float: right; padding: 3px 0" type="text" icon="el-icon-circle-plus-outline">新增</el-button>
         </div>
         <div style="min-height: 100px;">
-          <inside-table ref="insideTable" v-if="restTable" :insideParams="insideTableConf"></inside-table>
+          <inside-table :initLoad="initLoad" ref="insideTable" v-if="restTable" :insideParams="insideTableConf"></inside-table>
         </div>
       </el-card>
     </el-dialog>
@@ -71,9 +71,11 @@ export default {
           this.insideTableConf = this.config
           this.ruleForm.voicetempContent = this.config.voicetempContent
           this.ruleForm.voicetempTypeCode = this.config.voicetempTypeCode
+          this.initLoad = true
         } else {
           this.ruleForm.voicetempContent = ''
           this.ruleForm.voicetempTypeCode = ''
+          this.initLoad = false
           // 新建一个提醒类型
           this.addNewVoicetempType()
         }
@@ -103,21 +105,37 @@ export default {
       // ================================================
     },
     close () {
-      this.clearTip()
-      this.$emit('close')
       // 如果是新增数据，在没有保存时，关闭后移除此数据
       if (this.config === null && !this.isSave) {
         this.$api['msgsend.delNewVoicetempTypeById']({
           voicetempTypeUuid: this.insideTableConf.voicetempTypeUuid
         })
       }
+      this.isSave = false
+      this.clearTip()
+      this.$emit('close')
     },
     addContent () {
+      if (this.config === null && this.isSave === false) {
+        this.$message({
+          type: 'error',
+          message: '您还没有添加消息类型！'
+        })
+        return false
+      }
       this.$prompt('请编辑内容', '新增提醒内容', {
         inputValue: '',
+        inputType: 'textarea',
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
+        if (value.length > 100) {
+          this.$message({
+            type: 'error',
+            message: '提交的内容不得多于100个字符！'
+          })
+          return false
+        }
         if (value === '') {
           this.$message({
             type: 'error',
@@ -128,6 +146,7 @@ export default {
             voicetempTypeUuid: this.insideTableConf.voicetempTypeUuid,
             voicetempMessageContent: value
           }).then(res => {
+            this.$emit('initParList')
             this.$message({
               type: 'success',
               message: '新增成功！'
@@ -188,6 +207,7 @@ export default {
   },
   data () {
     return {
+      initLoad: true,
       isSave: false,
       insideTableConf: {},
       restTable: true,
@@ -224,5 +244,7 @@ export default {
   }
   .msgSendDialogCard .el-dialog__body {
     padding: 10px!important;
+    height: 580px!important;
+    overflow: auto!important;
   }
 </style>
