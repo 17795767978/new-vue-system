@@ -73,7 +73,7 @@ export default {
   methods: {
     handleCurrentChange (val) {
       this.currentPage = val
-      this.updateTable(this.params.voicetempTypeUuid)
+      this.updateTable(this.insideParams.voicetempTypeUuid)
     },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -106,6 +106,7 @@ export default {
     },
     handleEdit (index, row) {
       this.$prompt('请编辑内容', this.insideParams.name, {
+        inputType: 'textarea',
         inputValue: row.voicetempMessageContent,
         confirmButtonText: '确定',
         cancelButtonText: '取消'
@@ -114,6 +115,13 @@ export default {
           this.$message({
             type: 'error',
             message: '提交内容不可为空！'
+          })
+          return false
+        }
+        if (value.length > 100) {
+          this.$message({
+            type: 'error',
+            message: '提交的内容不得多于100个字符！'
           })
           return false
         }
