@@ -117,11 +117,6 @@ export default {
       }
       this.$api['msgsend.getVoicetempTypeData'](params).then(res => {
         this.setTableData(res)
-      }).catch(error => {
-        this.$message({
-          type: 'error',
-          message: `数据加载失败:${JSON.stringify(error)}`
-        })
       })
       // todo: 模拟数据，在生产环境需注释==========
       // const res = {
@@ -160,16 +155,15 @@ export default {
       // ===========================================
     },
     setTableData (res) {
-      const len = res.data.list.length
-      const success = res.success
-      const resCode = res.code
-      if (resCode === '200' && success === 'true' && len > 0) {
-        this.tableData = res.data.list
-        this.total = res.data.total
+      const len = res.list.length
+      if (len > 0) {
+        this.tableData = res.list
+        this.total = res.total
       } else {
+        this.tableData = []
         this.$message({
-          type: 'error',
-          message: '数据请求异常，请稍后重试！'
+          type: 'warning',
+          message: '暂无数据！'
         })
       }
     },
@@ -190,21 +184,12 @@ export default {
         this.$api['msgsend.delNewVoicetempTypeById']({
           voicetempTypeUuid: voicetempTypeUuid
         }).then(res => {
-          const success = res.success
-          const resCode = res.code
-          if (resCode === '200' && success === 'true') {
-            this.$message({
-              type: 'success',
-              message: '移除成功！'
-            })
-            // 刷新列表
-            this.resetTable()
-          } else {
-            this.$message({
-              type: 'error',
-              message: `移除失败:${res.msg}`
-            })
-          }
+          this.$message({
+            type: 'success',
+            message: '移除成功！'
+          })
+          // 刷新列表
+          this.resetTable()
         }).catch(error => {
           this.$message({
             type: 'error',

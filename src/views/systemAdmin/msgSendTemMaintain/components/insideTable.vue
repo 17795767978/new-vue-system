@@ -85,21 +85,12 @@ export default {
         this.$api['msgsend.delVoicetempMessageById']({
           voicetempUuid: voicetempUuid
         }).then(res => {
-          const success = res.success
-          const resCode = res.code
-          if (resCode === '200' && success === 'true') {
-            this.$message({
-              type: 'success',
-              message: '移除成功！'
-            })
-            // 刷新列表
-            this.resetTable()
-          } else {
-            this.$message({
-              type: 'error',
-              message: `移除失败:${res.msg}`
-            })
-          }
+          this.$message({
+            type: 'success',
+            message: '移除成功！'
+          })
+          // 刷新列表
+          this.resetTable()
         }).catch(error => {
           this.$message({
             type: 'error',
@@ -136,21 +127,12 @@ export default {
             voicetempUuid: row.voicetempUuid,
             voicetempMessageContent: value
           }).then(res => {
-            const success = res.success
-            const resCode = res.code
-            if (resCode === '200' && success === 'true') {
-              this.$message({
-                type: 'success',
-                message: '编辑成功'
-              })
-              // 刷新列表
-              this.updateTable(this.insideParams.voicetempTypeUuid)
-            } else {
-              this.$message({
-                type: 'error',
-                message: `编辑失败:${res.msg}，请联系管理员！`
-              })
-            }
+            this.$message({
+              type: 'success',
+              message: '编辑成功'
+            })
+            // 刷新列表
+            this.updateTable(this.insideParams.voicetempTypeUuid)
           }).catch(error => {
             this.$message({
               type: 'error',
@@ -184,12 +166,6 @@ export default {
       this.$api['msgsend.getVmContentsByVtUuid'](params).then(res => {
         this.setTableData(res)
         this.showLoading = false
-      }).catch(error => {
-        this.$message({
-          type: 'error',
-          message: `数据加载失败:${JSON.stringify(error)}`
-        })
-        this.showLoading = false
       })
       // todo: 模拟数据，在生产环境需注释========================================================
       // const res = {
@@ -212,16 +188,14 @@ export default {
       // ========================================================================================
     },
     setTableData (res) {
-      const len = res.data.list.length
-      const success = res.success
-      const resCode = res.code
-      if (resCode === '200' && success === 'true' && len > 0) {
-        this.tableData = res.data.list
-        this.total = res.data.total
+      const len = res.list.length
+      if (len > 0) {
+        this.tableData = res.list
+        this.total = res.total
       } else {
         this.$message({
-          type: 'error',
-          message: `数据加载失败！`
+          type: 'warning',
+          message: `暂无数据！`
         })
       }
     }

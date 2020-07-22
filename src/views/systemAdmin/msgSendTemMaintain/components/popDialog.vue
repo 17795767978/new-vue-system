@@ -85,30 +85,21 @@ export default {
     /* 新建一个提醒类型 */
     addNewVoicetempType () {
       this.$api['msgsend.addNewVoicetempTypeData']().then(res => {
-        const resCode = res.code
-        const success = res.success
-        if (resCode === '200' && success === 'true') {
-          this.$set(this.insideTableConf, 'voicetempTypeUuid', res.data.voicetempTypeUuid)
-          this.reDrawTable()
-        } else {
-          this.$message({
-            type: 'error',
-            message: '提醒类型初始化失败，请关闭重试！'
-          })
-        }
+        this.$set(this.insideTableConf, 'voicetempTypeUuid', res.voicetempTypeUuid)
+        this.reDrawTable()
       })
       // TODO: 测试数据 生产环境需注释==================
-      const res = {
-        code: '200',
-        msg: '成功',
-        success: 'true',
-        message: '成功',
-        data: {
-          voicetempTypeUuid: '88888888'
-        }
-      }
-      this.$set(this.insideTableConf, 'voicetempTypeUuid', res.data.voicetempTypeUuid)
-      this.reDrawTable()
+      // const res = {
+      //   code: '200',
+      //   msg: '成功',
+      //   success: 'true',
+      //   message: '成功',
+      //   data: {
+      //     voicetempTypeUuid: '88888888'
+      //   }
+      // }
+      // this.$set(this.insideTableConf, 'voicetempTypeUuid', res.data.voicetempTypeUuid)
+      // this.reDrawTable()
       // ================================================
     },
     close () {
@@ -137,26 +128,12 @@ export default {
             voicetempTypeUuid: this.insideTableConf.voicetempTypeUuid,
             voicetempMessageContent: value
           }).then(res => {
-            const success = res.success
-            const resCode = res.code
-            if (resCode === '200' && success === 'true') {
-              this.$message({
-                type: 'success',
-                message: '新增成功！'
-              })
-              // 刷新列表
-              this.$refs.insideTable.resetTable()
-            } else {
-              this.$message({
-                type: 'error',
-                message: `新增失败:${res.msg}，请联系管理员！`
-              })
-            }
-          }).catch(error => {
             this.$message({
-              type: 'error',
-              message: `新增失败:${JSON.stringify(error)}，请联系管理员！`
+              type: 'success',
+              message: '新增成功！'
             })
+            // 刷新列表
+            this.$refs.insideTable.updateTable(this.insideTableConf.voicetempTypeUuid)
           })
         }
       }).catch(() => {
@@ -182,21 +159,12 @@ export default {
             voicetempContent: this.ruleForm.voicetempContent,
             voicetempTypeCode: this.ruleForm.voicetempTypeCode
           }).then(res => {
-            const success = res.success
-            const resCode = res.code
-            if (resCode === '200' && success === 'true') {
-              this.$message({
-                type: 'success',
-                message: '保存成功！'
-              })
-              this.isSave = true
-            } else {
-              this.$message({
-                type: 'error',
-                message: `保存失败:${res.msg}，请联系管理员！`
-              })
-            }
-            this.clearTip()
+            this.$message({
+              type: 'success',
+              message: '保存成功！'
+            })
+            this.isSave = true
+            this.$parent.resetTable()
           }).catch(error => {
             this.$message({
               type: 'error',
