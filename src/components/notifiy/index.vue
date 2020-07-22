@@ -126,14 +126,14 @@ export default {
     },
     handleClear () {
       // 关闭推送 下次登录才会重新开始
-      localStorage.setItem('closeMsg', true)
+      sessionStorage.setItem('closeMsg', true)
       this.drawer = false
       this.closeWs()
     },
     openWs () {
-      if (!localStorage.getItem('closeMsg')) {
+      if (!sessionStorage.getItem('closeMsg')) {
         if ('WebSocket' in window) {
-          let url = `${WS_API_GLOBLE}/${localStorage.getItem('id')}`
+          let url = `${WS_API_GLOBLE}/${sessionStorage.getItem('id')}`
           this.wsGlobel = new WebSocket(url)
           this.wsGlobel.onopen = () => {
             console.log('===============全局报警推送开始=============')

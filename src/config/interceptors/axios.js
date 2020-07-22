@@ -35,7 +35,7 @@ export function axiosRequestSucessFunc (config) {
   if (config.data && config.data.orgUuid && config.data.orgUuid === '1') {
     config.data.orgUuid = ''
   }
-  config.data && (config.data.personId = localStorage.getItem('id'))
+  config.data && (config.data.personId = sessionStorage.getItem('id'))
   return config
 }
 

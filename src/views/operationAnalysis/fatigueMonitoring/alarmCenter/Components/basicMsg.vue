@@ -352,7 +352,7 @@ export default {
             auditTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             auditStatus: this.ruleFormCheck.status,
             auditSuggestion: this.ruleFormCheck.suggestion,
-            auditUser: localStorage.getItem('userRealName')
+            auditUser: sessionStorage.getItem('userRealName')
           }).then(res => {
             this.pendding = false
             this.ruleFormCheck = { status: '', suggestion: '' }
@@ -396,7 +396,7 @@ export default {
         this.$api['tiredMonitoring.wsUpdate']({
           warnUuid: this.warnDetails.warnUuid,
           handleTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-          handleUser: localStorage.getItem('userRealName'),
+          handleUser: sessionStorage.getItem('userRealName'),
           handleSuggestion: this.ruleFormCheck.suggestion
         }).then(res => {
           this.pendding = false

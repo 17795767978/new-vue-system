@@ -51,7 +51,7 @@ const user = {
     },
     SET_USERINFO (state, data) {
       state.userId = data
-      state.userName = localStorage.getItem('userName')
+      state.userName = sessionStorage.getItem('userName')
     },
     RESET_USERINFO (state, data) {
       state.userId = ''
@@ -90,11 +90,11 @@ const user = {
         // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
         // resolve()
         api['user.login'](params).then(res => {
-          localStorage.setItem('userName', res.userInfo.userAccount)
-          localStorage.setItem('userRealName', res.userInfo.userRealName)
+          sessionStorage.setItem('userName', res.userInfo.userAccount)
+          sessionStorage.setItem('userRealName', res.userInfo.userRealName)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
           commit('SET_USERINFO', res.userInfo.userOrgUuid)
-          localStorage.setItem('id', res.userInfo.userId)
+          sessionStorage.setItem('id', res.userInfo.userId)
           resolve()
         }).catch(err => {
           reject(err)
@@ -119,11 +119,11 @@ const user = {
         // 重置权限路由表, 该mutation 访问 store/asyncRouter.js
         commit('RESET_ROUTERS')
         // 清除用户的id 清除权限
-        localStorage.removeItem('id')
-        localStorage.removeItem('userName')
-        localStorage.removeItem('userRoleType')
-        localStorage.removeItem('closeMsg')
-        localStorage.removeItem('userRealName')
+        sessionStorage.removeItem('id')
+        sessionStorage.removeItem('userName')
+        sessionStorage.removeItem('userRoleType')
+        sessionStorage.removeItem('closeMsg')
+        sessionStorage.removeItem('userRealName')
         resolve()
       })
     },
@@ -179,7 +179,7 @@ const user = {
           store.dispatch('getCarList')
           commit('SET_FORM_DATA', form)
           api['platformMenu.list']({
-            id: localStorage.getItem('id')
+            id: sessionStorage.getItem('id')
           }).then(res => {
             const data = res
             if (data.resourceTree && data.resourceTree.length > 0) {

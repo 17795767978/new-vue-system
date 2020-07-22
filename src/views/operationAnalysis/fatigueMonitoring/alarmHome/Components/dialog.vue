@@ -409,13 +409,13 @@ export default {
           auditStatus: this.ruleForm.status,
           auditSuggestion: this.ruleForm.suggestion,
           auditTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-          auditUser: localStorage.getItem('userRealName')
+          auditUser: sessionStorage.getItem('userRealName')
         }
       } else {
         form = {
           handleSuggestion: this.ruleForm.suggestion,
           handleTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-          handleUser: localStorage.getItem('userRealName')
+          handleUser: sessionStorage.getItem('userRealName')
         }
       }
       this.$refs[formName].validate((valid) => {
