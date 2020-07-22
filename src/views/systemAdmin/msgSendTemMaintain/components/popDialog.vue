@@ -183,7 +183,7 @@ export default {
               message: '保存成功！'
             })
             this.isSave = true
-            this.$parent.resetTable()
+            this.$parent.updateTable()
           }).catch(error => {
             this.$message({
               type: 'error',

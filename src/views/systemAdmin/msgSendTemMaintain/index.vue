@@ -95,8 +95,7 @@ export default {
   methods: {
     /* 当内容更新时，刷新最外层父列表 */
     initParList () {
-      debugger
-      this.updateTable(this.params.voicetempTypeCode, this.params.voicetempContent)
+      this.updateTable()
     },
     /* 分页查询 */
     handleCurrentChange (val) {
