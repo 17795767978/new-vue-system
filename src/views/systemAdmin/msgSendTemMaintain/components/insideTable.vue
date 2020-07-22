@@ -192,23 +192,23 @@ export default {
         this.showLoading = false
       })
       // todo: 模拟数据，在生产环境需注释========================================================
-      const res = {
-        code: '200',
-        msg: '成功',
-        success: 'true',
-        message: '成功',
-        data: {
-          list: [{
-            voicetempUuid: '12312434',
-            voicetempMessageContent: this.insideParams.voicetempContent + '信息提醒内容1111111'
-          }, {
-            voicetempUuid: '34454545',
-            voicetempMessageContent: this.insideParams.voicetempContent + '信息提醒内容2222222'
-          }],
-          total: 2
-        }
-      }
-      this.setTableData(res)
+      // const res = {
+      //   code: '200',
+      //   msg: '成功',
+      //   success: 'true',
+      //   message: '成功',
+      //   data: {
+      //     list: [{
+      //       voicetempUuid: '12312434',
+      //       voicetempMessageContent: this.insideParams.voicetempContent + '信息提醒内容1111111'
+      //     }, {
+      //       voicetempUuid: '34454545',
+      //       voicetempMessageContent: this.insideParams.voicetempContent + '信息提醒内容2222222'
+      //     }],
+      //     total: 2
+      //   }
+      // }
+      // this.setTableData(res)
       // ========================================================================================
     },
     setTableData (res) {

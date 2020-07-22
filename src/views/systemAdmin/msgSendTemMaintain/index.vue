@@ -124,39 +124,39 @@ export default {
         })
       })
       // todo: 模拟数据，在生产环境需注释==========
-      const res = {
-        code: '200',
-        msg: '成功',
-        success: 'true',
-        message: '成功',
-        data: {
-          list: [
-            {
-              voicetempTypeUuid: '12987122',
-              voicetempTypeCode: 'CSJB123',
-              voicetempContent: '超速报警'
-            }, {
-              voicetempTypeUuid: '12987123',
-              voicetempTypeCode: 'SXTZD123',
-              voicetempContent: '摄像头遮挡'
-            }, {
-              voicetempTypeUuid: '15616155',
-              voicetempTypeCode: 'DHQ123',
-              voicetempContent: '打哈欠'
-            }, {
-              voicetempTypeUuid: '15164464',
-              voicetempTypeCode: 'BY123',
-              voicetempContent: '闭眼'
-            }, {
-              voicetempTypeUuid: '54512121',
-              voicetempTypeCode: 'CJGJYJ123',
-              voicetempContent: '车距过近预警'
-            }
-          ],
-          total: 5
-        }
-      }
-      this.setTableData(res)
+      // const res = {
+      //   code: '200',
+      //   msg: '成功',
+      //   success: 'true',
+      //   message: '成功',
+      //   data: {
+      //     list: [
+      //       {
+      //         voicetempTypeUuid: '12987122',
+      //         voicetempTypeCode: 'CSJB123',
+      //         voicetempContent: '超速报警'
+      //       }, {
+      //         voicetempTypeUuid: '12987123',
+      //         voicetempTypeCode: 'SXTZD123',
+      //         voicetempContent: '摄像头遮挡'
+      //       }, {
+      //         voicetempTypeUuid: '15616155',
+      //         voicetempTypeCode: 'DHQ123',
+      //         voicetempContent: '打哈欠'
+      //       }, {
+      //         voicetempTypeUuid: '15164464',
+      //         voicetempTypeCode: 'BY123',
+      //         voicetempContent: '闭眼'
+      //       }, {
+      //         voicetempTypeUuid: '54512121',
+      //         voicetempTypeCode: 'CJGJYJ123',
+      //         voicetempContent: '车距过近预警'
+      //       }
+      //     ],
+      //     total: 5
+      //   }
+      // }
+      // this.setTableData(res)
       // ===========================================
     },
     setTableData (res) {
