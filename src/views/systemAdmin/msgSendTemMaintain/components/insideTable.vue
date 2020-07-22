@@ -95,7 +95,7 @@ export default {
             message: '移除成功！'
           })
           // 刷新列表
-          this.resetTable()
+          this.updateTable(this.insideParams.voicetempTypeUuid)
         }).catch(error => {
           this.$message({
             type: 'error',
@@ -113,6 +113,8 @@ export default {
       this.$prompt('请编辑内容', this.insideParams.name, {
         inputType: 'textarea',
         inputValue: row.voicetempMessageContent,
+        inputPattern: /^.{1,100}$/,
+        inputErrorMessage: '不得超过100个字符！',
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
