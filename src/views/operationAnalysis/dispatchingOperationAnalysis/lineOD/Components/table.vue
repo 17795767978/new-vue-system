@@ -58,7 +58,7 @@
         prop="payNumbers"
         align="center"
         width="150"
-        label="刷卡量（人次）">
+        label="客流量（人次）">
       </el-table-column>
       <el-table-column
         prop="uploadDate"

@@ -17,9 +17,9 @@ let id = Math.random().toString(36).substr(3, 30)
 let ip = window.location.host
 let baseUrl = ''
 if (ip.indexOf('192.168') !== -1) {
-  baseUrl = 'http://192.168.10.81:8081'
+  baseUrl = 'http://183.230.247.144:6065'
 } else {
-  baseUrl = 'http://192.168.10.81:8081'
+  baseUrl = 'http://183.230.247.144:6065'
 }
 export const WSAPI = `ws://${baseUrl.substring(7, baseUrl.length)}/websocket/mesgshow/${id}`
 // export const WSAPI = `ws://192.168.10.33:8081/websocket/mesgshow/${id}`
@@ -29,8 +29,8 @@ export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://117.34.118.30:8088',
   // mockBaseUrl: 'http://61.157.184.120:8088',
   // mockBaseUrl: 'http://192.168.10.23:8081',
-  mockBaseUrl: 'http://192.168.10.81:8081',
-  // mockBaseUrl: 'http://183.230.247.144:6065', // 荣昌
+  // mockBaseUrl: 'http://192.168.10.81:8081',
+  mockBaseUrl: 'http://183.230.247.144:6065', // 荣昌
   // 192.168.10.33:8081
   // mockBaseUrl: 'http://192.168.10.33:8082',
   // 10.233 8089
