@@ -17,6 +17,16 @@ export const UserApi = {
       desc: '用户登录'
     },
     {
+      name: 'upslogin',
+      method: 'POST',
+      path: '/api/base/login/upslogin',
+      mockPath: '/api/base/login/upslogin',
+      params: {
+        REDIRECT_TOKEN: ''
+      },
+      desc: '门户跳转用户登录'
+    },
+    {
       name: 'logout',
       method: 'POST',
       path: '/api/base/login/logout',

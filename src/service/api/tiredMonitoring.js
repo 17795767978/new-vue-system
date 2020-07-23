@@ -497,8 +497,8 @@ export const tiredMonitoringApi = {
     {
       name: 'busPageList',
       method: 'POST',
-      path: '/api/bus/pageList',
-      mockPath: '/api/bus/pageList',
+      path: '/api/bus/safelist',
+      mockPath: '/api/bus/safelist',
       params: {
         lineId: '',
         orgId: '',

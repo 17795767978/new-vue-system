@@ -114,7 +114,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="userId === '1' ? '审核意见' : '处理意见'" prop="suggestion">
-            <el-input type="textarea" v-model="ruleFormCheck.suggestion" maxlength="100"></el-input>
+            <el-input type="textarea" v-model="ruleFormCheck.suggestion" maxlength="100" size="mini"></el-input>
             <span>{{ruleFormCheck.suggestion && ruleFormCheck.suggestion.length}}/100</span>
           </el-form-item>
         </el-form>
@@ -133,9 +133,20 @@
                 :value="item.value"
               ></el-option>
             </el-select>
+            <el-button type="primary" style="margin-left: 5vw;" size="mini" v-if="isSafeSend" @click="gotoDetail">下发消息维护</el-button>
+          </el-form-item>
+          <el-form-item label="提醒内容" prop="msgContent">
+            <el-select v-model="ruleFormWarn.msgContent">
+              <el-option
+                v-for="item in msgOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="内容描述" prop="suggestion">
-            <el-input type="textarea" v-model="ruleFormWarn.suggestion" maxlength="100"></el-input>
+            <el-input type="textarea" v-model="ruleFormWarn.suggestion" maxlength="100" size="mini"></el-input>
             <span>{{ruleFormWarn.suggestion.length}}/100</span>
           </el-form-item>
         </el-form>
@@ -189,6 +200,7 @@ export default {
       },
       ruleFormWarn: {
         status: '',
+        msgContent: '',
         suggestion: ''
       },
       checkOptions: [
@@ -210,7 +222,9 @@ export default {
         }
       ],
       warnsOptions: [],
+      msgOptions: [],
       pendding: false,
+      isSafeSend: false,
       time: {},
       busDetails: {},
       currentIndex: 0
@@ -231,12 +245,19 @@ export default {
       })
     }, 1000)
     this.time = moment
-    this._alarmType({
-      warnLevel: ''
-    })
+    this._alarmType({})
+    this._contentType({})
+    this.isMsgOperation()
   },
   watch: {
     radio (newV) {
+      if (newV !== 3) {
+        this.ruleFormWarn = {
+          status: '',
+          msgContent: '',
+          suggestion: ''
+        }
+      }
     },
     warnDetails: {
       deep: true,
@@ -254,6 +275,21 @@ export default {
           this.ruleFormCheck.suggestion = newV.handleSuggestion ? newV.handleSuggestion : ''
         }
       }
+    },
+    'ruleFormWarn.status': {
+      handler (newV) {
+        this.ruleFormWarn.msgContent = ''
+        this.ruleFormWarn.suggestion = ''
+        this._contentType({
+          voicetempTypeUuid: newV
+        })
+      }
+    },
+    'ruleFormWarn.msgContent': {
+      handler (newV) {
+        const selectData = this.msgOptions.filter(item => item.value === newV)
+        this.ruleFormWarn.suggestion = selectData.length ? selectData[0].label : ''
+      }
     }
     // busDetails: {
     //   deep: true,
@@ -267,6 +303,17 @@ export default {
     // }
   },
   methods: {
+    // 判断是否有语音下发页面
+    isMsgOperation () {
+      const roles = this.$store.getters.roles
+      const selectRoles = roles.filter(item => item.path === '/channel-management')[0]
+      const isHasCurrent = selectRoles.children.some(item => item.path === '/msgsend-tempmaintain')
+      if (isHasCurrent) {
+        this.isSafeSend = true
+      } else {
+        this.isSafeSend = false
+      }
+    },
     // ip
     getIP (callback) {
       let recode = {}
@@ -318,13 +365,25 @@ export default {
       }, 1000)
     },
     _alarmType (params) {
-      this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
+      this.$api['msgsend.getVoicetempTypeData'](params).then(res => {
         let dataArr = res
         this.warnsOptions = []
         dataArr.forEach((list, index) => {
           this.warnsOptions.push({
-            label: list.value,
-            value: list.code
+            label: list.voicetempContent,
+            value: list.voicetempTypeUuid
+          })
+        })
+      })
+    },
+    _contentType (params) {
+      this.$api['msgsend.getVmContentsByVtUuid'](params).then(res => {
+        let dataArr = res
+        this.msgOptions = []
+        dataArr.forEach((list, index) => {
+          this.msgOptions.push({
+            label: list.voicetempMessageContent,
+            value: list.voicetempUuid
           })
         })
       })
@@ -376,7 +435,7 @@ export default {
             content: this.ruleFormWarn.suggestion
           }).then(res => {
             this.pendding = false
-            this.ruleFormWarn = { status: '', suggestion: '' }
+            this.ruleFormWarn = { status: '', suggestion: '', msgContent: '' }
             this.$message.success('下发消息成功')
             if (this.busDetails.auditStatus !== '0') {
               this.$emit('upadate', true)
@@ -417,6 +476,13 @@ export default {
       }).catch(err => {
         this.$message.error(err.message)
       })
+    },
+    gotoDetail () {
+      // this.dialogFormVisible = false
+      this.$emit('closeFath')
+      this.$router.push({
+        name: 'msgTempMaintain'
+      })
     }
   },
   components: {
@@ -445,7 +511,7 @@ export default {
 }
 .basic-msg {
   width: 100%;
-  height: 65vh;
+  height: 72vh;
   display: flex;
   box-sizing: border-box;
   flex-wrap: wrap;

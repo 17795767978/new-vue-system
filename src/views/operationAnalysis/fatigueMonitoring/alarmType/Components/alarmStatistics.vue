@@ -76,7 +76,7 @@ export default {
           left: 'center'
         }
         this.lineData = [{
-          name: '各报警类型统计',
+          name: '报警次数',
           type: 'bar',
           radius: ['100%', '60%'],
           data: series,
@@ -117,8 +117,13 @@ export default {
         }
         // this.maxNum = max(res.datas[0])
         this.dataLength = 2
+        // this.tooltip = {
+        //   formatter: (params) => {
+        //     return `报警次数：${params.value}`
+        //   }
+        // }
         this.legend = {
-          data: ['客流人次'],
+          data: ['报警次数'],
           top: 10,
           right: 10,
           textStyle: {

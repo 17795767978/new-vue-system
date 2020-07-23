@@ -10,7 +10,7 @@
       <div  style="height: 80vh">
         <el-tabs v-model="activeName" @tab-click="handleClick" style="height: 80vh">
           <el-tab-pane label="报警信息" name="first">
-            <BasicMsg :warnDetails="warnDetails" :activeName="activeName" @upadate="upadate"/>
+            <BasicMsg :warnDetails="warnDetails" :activeName="activeName" @upadate="upadate" @closeFath="closeFath"/>
           </el-tab-pane>
           <el-tab-pane label="设备抓拍" name="second">
             <Capture :warnDetails="warnDetails" :activeName="activeName" ref="wrapperCap"/>
@@ -72,6 +72,9 @@ export default {
       if (data) {
         this.$emit('updateList')
       }
+      this.dialogVisible = false
+    },
+    closeFath () {
       this.dialogVisible = false
     }
   },

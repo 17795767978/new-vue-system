@@ -89,16 +89,30 @@ const user = {
       return new Promise((resolve, reject) => {
         // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
         // resolve()
-        api['user.login'](params).then(res => {
-          sessionStorage.setItem('userName', res.userInfo.userAccount)
-          sessionStorage.setItem('userRealName', res.userInfo.userRealName)
-          commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
-          commit('SET_USERINFO', res.userInfo.userOrgUuid)
-          sessionStorage.setItem('id', res.userInfo.userId)
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
+        console.log(params.type)
+        if (params.type === 'auto') {
+          api['user.upslogin'](params).then((res) => {
+            sessionStorage.setItem('userName', res.userInfo.userAccount)
+            sessionStorage.setItem('userRealName', res.userInfo.userRealName)
+            commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+            commit('SET_USERINFO', res.userInfo.userOrgUuid)
+            sessionStorage.setItem('id', res.userInfo.userId)
+            resolve()
+          }).catch(err => {
+            reject(err)
+          })
+        } else {
+          api['user.login'](params).then(res => {
+            sessionStorage.setItem('userName', res.userInfo.userAccount)
+            sessionStorage.setItem('userRealName', res.userInfo.userRealName)
+            commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+            commit('SET_USERINFO', res.userInfo.userOrgUuid)
+            sessionStorage.setItem('id', res.userInfo.userId)
+            resolve()
+          }).catch(err => {
+            reject(err)
+          })
+        }
       })
     },
     /**

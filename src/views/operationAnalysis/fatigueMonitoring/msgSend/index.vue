@@ -45,10 +45,10 @@ export default {
     this.hourTime = this.time.getHours()
     this.minuteTime = this.time.getMinutes()
     this.secondTime = this.time.getSeconds()
-    this.$refs.hourWrapper.style.transform = `rotate(${360 * (this.hourTime > 12 ? (this.hourTime - 12) / 12 + (this.minuteTime / 60 + this.secondTime / 3600) / 12 : this.hourTime / 12 + (this.minuteTime / 60 + this.secondTime / 60 / 60) / 12)}deg)`
-    this.$refs.minuteWrapper.style.transform = `rotate(${(360 * (this.minuteTime / 60 + this.secondTime / 60 / 60))}deg)`
-    this.$refs.secondWrapper.style.transform = `rotate(${360 * (this.secondTime / 60)}deg)`
-    this.calculateTime()
+    // this.$refs.hourWrapper.style.transform = `rotate(${360 * (this.hourTime > 12 ? (this.hourTime - 12) / 12 + (this.minuteTime / 60 + this.secondTime / 3600) / 12 : this.hourTime / 12 + (this.minuteTime / 60 + this.secondTime / 60 / 60) / 12)}deg)`
+    // this.$refs.minuteWrapper.style.transform = `rotate(${(360 * (this.minuteTime / 60 + this.secondTime / 60 / 60))}deg)`
+    // this.$refs.secondWrapper.style.transform = `rotate(${360 * (this.secondTime / 60)}deg)`
+    // this.calculateTime()
   },
   watch: {
     hourTime (newV) {
@@ -70,9 +70,9 @@ export default {
       this.hourTime = newV.getHours()
       this.minuteTime = newV.getMinutes()
       this.secondTime = newV.getSeconds()
-      this.$refs.hourWrapper.style.transform = `rotate(${360 * (this.hourTime > 12 ? (this.hourTime - 12) / 12 + (this.minuteTime / 60 + this.secondTime / 3600) / 12 : this.hourTime / 12 + (this.minuteTime / 60 + this.secondTime / 60 / 60) / 12)}deg)`
-      this.$refs.minuteWrapper.style.transform = `rotate(${(360 * (this.minuteTime / 60 + this.secondTime / 60 / 60))}deg)`
-      this.$refs.secondWrapper.style.transform = `rotate(${360 * (this.secondTime / 60)}deg)`
+      // this.$refs.hourWrapper.style.transform = `rotate(${360 * (this.hourTime > 12 ? (this.hourTime - 12) / 12 + (this.minuteTime / 60 + this.secondTime / 3600) / 12 : this.hourTime / 12 + (this.minuteTime / 60 + this.secondTime / 60 / 60) / 12)}deg)`
+      // this.$refs.minuteWrapper.style.transform = `rotate(${(360 * (this.minuteTime / 60 + this.secondTime / 60 / 60))}deg)`
+      // this.$refs.secondWrapper.style.transform = `rotate(${360 * (this.secondTime / 60)}deg)`
     }
   },
   methods: {

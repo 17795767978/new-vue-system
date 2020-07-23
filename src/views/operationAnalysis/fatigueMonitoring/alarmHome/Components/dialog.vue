@@ -313,7 +313,6 @@ export default {
       this.driverOptionsAll = []
       this.$api['tiredMonitoring.getDriverDt'](params).then(res => {
         const arr = res
-        console.log(res)
         arr.forEach(item => {
           this.driverOptionsAll.push({
             label: `${item.drvName} ${item.drvEmployeeId}`,
@@ -338,7 +337,6 @@ export default {
         warnUuid: row.warnUuid,
         warnTime: ''
       }).then(res => {
-        console.log(res)
         res.devUuid = row.devUuid
         res.devRefId = row.devRefId
         res.busUuid = row.busUuid

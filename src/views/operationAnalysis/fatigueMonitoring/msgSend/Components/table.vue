@@ -71,7 +71,7 @@
       layout="total, prev, pager, next"
       :total="total">
     </el-pagination>
-    <el-dialog title="下发消息" :visible.sync="dialogFormVisible">
+    <el-dialog title="下发消息" :visible.sync="dialogFormVisible" :show-close="false">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="下发设备" prop="dev">
           <el-select v-model="ruleForm.dev" placeholder="请选择下发设备">
@@ -82,11 +82,22 @@
               :value="item.value"
             ></el-option>
           </el-select>
+          <el-button type="primary" style="margin-left: 5vw;" v-if="isSafeSend" @click="gotoDetail">下发消息维护</el-button>
         </el-form-item>
         <el-form-item label="提醒类型" prop="msgType">
           <el-select v-model="ruleForm.msgType" placeholder="请选择提醒类型">
             <el-option
               v-for="item in warnsOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="提醒内容" prop="msgType">
+          <el-select v-model="ruleForm.msgContent" placeholder="请选择提醒内容">
+            <el-option
+              v-for="item in msgOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -140,6 +151,7 @@ export default {
     }
     return {
       isLoading: false,
+      isSafeSend: false,
       tableData: [],
       selectItems: [],
       pageSize: 15,
@@ -148,6 +160,7 @@ export default {
       total: 0,
       dialogFormVisible: false,
       warnsOptions: [],
+      msgOptions: [],
       devOptions: [{
         label: '调度主机',
         value: '1'
@@ -155,13 +168,14 @@ export default {
       ruleForm: {
         dev: '',
         msgType: '',
-        // msgContent: '',
+        msgContent: '',
         desc: ''
       },
       rules: {
         dev: [{ required: true, message: '请选择下发设备', trigger: 'change' }],
         msgType: [{ required: true, message: '请选择提醒类型', trigger: 'change' }],
-        desc: [{ validator: markSuggestion, trigger: 'change' }]
+        desc: [{ validator: markSuggestion, trigger: 'blur' }],
+        msgContent: [{ required: true, message: '请选择提醒内容', trigger: 'change' }]
       },
       detailVisible: false,
       detailMsg: [],
@@ -182,9 +196,9 @@ export default {
       pageSize: 15,
       pageNumber: 1
     })
-    this._alarmType({
-      warnLevel: ''
-    })
+    this._alarmType({})
+    this._contentType({})
+    this.isMsgOperation()
   },
   watch: {
     selectData: {
@@ -202,9 +216,36 @@ export default {
           pageNumber: 1
         })
       }
+    },
+    'ruleForm.msgType': {
+      handler (newV) {
+        this.ruleForm.msgContent = ''
+        this.ruleForm.desc = ''
+        this._contentType({
+          voicetempTypeUuid: newV
+        })
+      }
+    },
+    'ruleForm.msgContent': {
+      handler (newV) {
+        const selectData = this.msgOptions.filter(item => item.value === newV)
+        console.log(selectData)
+        this.ruleForm.desc = selectData.length ? selectData[0].label : ''
+      }
     }
   },
   methods: {
+    // 判断是否有语音下发页面
+    isMsgOperation () {
+      const roles = this.$store.getters.roles
+      const selectRoles = roles.filter(item => item.path === '/channel-management')[0]
+      const isHasCurrent = selectRoles.children.some(item => item.path === '/msgsend-tempmaintain')
+      if (isHasCurrent) {
+        this.isSafeSend = true
+      } else {
+        this.isSafeSend = false
+      }
+    },
     _busPageList (params) {
       this.$api['tiredMonitoring.busPageList'](params).then(res => {
         if (res.total === 0) {
@@ -241,21 +282,33 @@ export default {
       })
     },
     _alarmType (params) {
-      this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
+      this.$api['msgsend.getVoicetempTypeData'](params).then(res => {
         let dataArr = res
         this.warnsOptions = []
         dataArr.forEach((list, index) => {
           this.warnsOptions.push({
-            label: list.value,
-            value: list.code
+            label: list.voicetempContent,
+            value: list.voicetempTypeUuid
+          })
+        })
+      })
+    },
+    _contentType (params) {
+      this.$api['msgsend.getVmContentsByVtUuid'](params).then(res => {
+        let dataArr = res
+        this.msgOptions = []
+        dataArr.forEach((list, index) => {
+          this.msgOptions.push({
+            label: list.voicetempMessageContent,
+            value: list.voicetempUuid
           })
         })
       })
     },
     submitForm (formName) {
-      this.isLoading = true
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.isLoading = true
           if (this.isCheckAll) { // 如果是全部下发 @author lishuaiwu 2020/07/20
             let filterBusUuids = []
             filterBusUuids = this.removeChecks.map(item => item.busUuid)
@@ -271,7 +324,7 @@ export default {
               this.ruleForm = {
                 dev: '',
                 msgType: '',
-                // msgContent: '',
+                msgContent: '',
                 desc: ''
               }
               this.resetForm('ruleForm')
@@ -299,7 +352,7 @@ export default {
             this.ruleForm = {
               dev: '',
               msgType: '',
-              // msgContent: '',
+              msgContent: '',
               desc: ''
             }
             this.resetForm('ruleForm')
@@ -324,7 +377,7 @@ export default {
       this.ruleForm = {
         dev: '',
         msgType: '',
-        // msgContent: '',
+        msgContent: '',
         desc: ''
       }
       this.$refs[formName].resetFields()
@@ -382,6 +435,12 @@ export default {
           }
         })
       }
+    },
+    gotoDetail () {
+      this.dialogFormVisible = false
+      this.$router.push({
+        name: 'msgTempMaintain'
+      })
     }
   }
 }

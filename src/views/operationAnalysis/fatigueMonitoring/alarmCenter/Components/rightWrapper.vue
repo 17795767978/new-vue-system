@@ -778,7 +778,6 @@ export default {
         this.driverOptionsAll = []
         this.selectDriverOptions = []
         const arr = res
-        console.log(res)
         arr.forEach(item => {
           this.driverOptionsAll.push({
             label: `${item.drvName} ${item.drvEmployeeId}`,

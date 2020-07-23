@@ -550,7 +550,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '系统管理',
       icon: 'nocturne icon-dash',
-      roles: ['/channel-management', '/params-configuration', '/device-snap-management', '/alarm-management']
+      roles: ['/channel-management', '/params-configuration', '/device-snap-management', '/alarm-management', '/msgsend-tempmaintain']
     },
     children: [
       {
@@ -574,13 +574,13 @@ export const aysncRoutesMap = [
         }
       },
       {
-        path: 'msgsend-tempmaintain ',
+        path: 'msgsend-tempmaintain',
         component: _import_('systemAdmin/msgSendTemMaintain/index'),
         name: 'msgTempMaintain',
         meta: {
           title: '下发消息模板维护',
           icon: 'nocturne icon-dash',
-          roles: ['/msg-safe-send']
+          roles: ['/msgsend-tempmaintain']
         }
       },
       {
