@@ -10,11 +10,22 @@
             :value="item.value"
           ></el-option>
         </el-select>
+        <el-button type="primary" style="margin-left: 5vw;" v-if="isSafeSend" @click="gotoDetail">下发消息维护</el-button>
       </el-form-item>
       <el-form-item label="提醒类型" prop="msgType">
         <el-select v-model="ruleForm.msgType" placeholder="请选择提醒类型">
           <el-option
             v-for="item in warnsOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="提醒内容" prop="msgContent">
+        <el-select v-model="ruleForm.msgContent" placeholder="请选择提醒内容">
+          <el-option
+            v-for="item in msgOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -32,7 +43,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">立即下发</el-button>
-        <el-button @click="resetForm('ruleForm')">取消</el-button>
+        <el-button @click="resetForm('ruleForm')">清空</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -57,6 +68,8 @@ export default {
     }
     return {
       warnsOptions: [],
+      msgOptions: [],
+      isSafeSend: false,
       devOptions: [{
         label: '调度主机',
         value: '1'
@@ -64,30 +77,80 @@ export default {
       ruleForm: {
         dev: '',
         msgType: '',
-        // msgContent: '',
+        msgContent: '',
         desc: ''
       },
       rules: {
         dev: [{ required: true, message: '请选择下发设备', trigger: 'change' }],
         msgType: [{ required: true, message: '请选择提醒类型', trigger: 'change' }],
-        desc: [{ validator: markSuggestion, trigger: 'change' }]
+        desc: [{ validator: markSuggestion, trigger: 'change' }],
+        msgContent: [{ required: true, message: '请选择提醒内容', trigger: 'change' }]
       }
     }
   },
   mounted () {
     this._alarmType({
-      warnLevel: ''
+      pageNum: 1,
+      pageSize: 100000
     })
+    this._contentType({
+      pageNum: 1,
+      pageSize: 100000,
+      voicetempTypeUuid: ''
+    })
+    this.isMsgOperation()
+  },
+  watch: {
+    'ruleForm.msgType': {
+      handler (newV) {
+        this.ruleForm.msgContent = ''
+        this.ruleForm.desc = ''
+        this._contentType({
+          voicetempTypeUuid: newV,
+          pageNum: 1,
+          pageSize: 100000
+        })
+      }
+    },
+    'ruleForm.msgContent': {
+      handler (newV) {
+        const selectData = this.msgOptions.filter(item => item.value === newV)
+        this.ruleForm.desc = selectData.length ? selectData[0].label : ''
+      }
+    }
   },
   methods: {
+    // 判断是否有语音下发页面
+    isMsgOperation () {
+      const roles = this.$store.getters.roles
+      const selectRoles = roles.filter(item => item.path === '/channel-management')[0]
+      const isHasCurrent = selectRoles.children.some(item => item.path === '/msgsend-tempmaintain')
+      if (isHasCurrent) {
+        this.isSafeSend = true
+      } else {
+        this.isSafeSend = false
+      }
+    },
     _alarmType (params) {
-      this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
-        let dataArr = res
+      this.$api['msgsend.getVoicetempTypeData'](params).then(res => {
+        let dataArr = res.list
         this.warnsOptions = []
         dataArr.forEach((list, index) => {
           this.warnsOptions.push({
-            label: list.value,
-            value: list.code
+            label: list.voicetempContent,
+            value: list.voicetempTypeUuid
+          })
+        })
+      })
+    },
+    _contentType (params) {
+      this.$api['msgsend.getVmContentsByVtUuid'](params).then(res => {
+        let dataArr = res.list
+        this.msgOptions = []
+        dataArr.forEach((list, index) => {
+          this.msgOptions.push({
+            label: list.voicetempMessageContent,
+            value: list.voicetempUuid
           })
         })
       })
@@ -105,7 +168,7 @@ export default {
             this.ruleForm = {
               dev: '',
               msgType: '',
-              // msgContent: '',
+              msgContent: '',
               desc: ''
             }
             this.resetForm('ruleForm')
@@ -118,6 +181,12 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+    },
+    gotoDetail () {
+      this.$emit('closeFath')
+      this.$router.push({
+        name: 'msgTempMaintain'
+      })
     }
   }
 }

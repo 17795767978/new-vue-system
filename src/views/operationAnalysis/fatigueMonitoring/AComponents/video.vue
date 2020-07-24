@@ -8,7 +8,7 @@
 import Flv from 'flv.js'
 export default {
   props: {
-    item: Object,
+    item: [Object, Number],
     dialogTableVisible: Boolean
   },
   data () {
@@ -19,7 +19,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.item)
     if (this.item.warnType && this.item.warnType.length > 0) {
       if (!this.item.warnMediaList) {
         this.$message.error(`${this.item.warnTypeName}暂无视频`)

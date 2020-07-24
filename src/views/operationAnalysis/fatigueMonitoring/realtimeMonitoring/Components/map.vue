@@ -195,6 +195,7 @@ export default {
         }
       ]
     },
+    handleClose () {},
     getEchartsData (data) {
       this.$emit('getContent', data.data)
     }

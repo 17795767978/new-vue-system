@@ -38,7 +38,7 @@
           <span></span>
         </el-col>
         <el-col :span="4">
-          <span>时间：{{warnDetails.content.busPosition.posUploadTime}}</span>
+          <span>时间：{{getTimeFormat}}</span>
           <span></span>
         </el-col>
         <el-col :span="4">
@@ -169,6 +169,9 @@ export default {
     }
   },
   computed: {
+    getTimeFormat () {
+      return moment((this.warnDetails.content.busPosition.posUploadTime)).format('YYYY-MM-DD HH:mm:ss')
+    }
     // getAddress () {
     //   return this.getPointAddress()
     // }

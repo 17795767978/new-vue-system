@@ -94,7 +94,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="提醒内容" prop="msgType">
+        <el-form-item label="提醒内容" prop="msgContent">
           <el-select v-model="ruleForm.msgContent" placeholder="请选择提醒内容">
             <el-option
               v-for="item in msgOptions"
@@ -111,7 +111,8 @@
           </el-select>
         </el-form-item> -->
         <el-form-item label="内容描述" prop="desc">
-          <el-input type="textarea" :rows="5" v-model="ruleForm.desc"></el-input>
+          <el-input type="textarea" :rows="5" v-model="ruleForm.desc" maxlength="100"></el-input>
+          <p class="text-limit">{{ruleForm.desc.length}} / 100</p>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')" :loading="isLoading">立即下发</el-button>
@@ -122,8 +123,8 @@
     <el-dialog title="下发消息详情" width="40%" :visible.sync="detailVisible">
       <ul>
         <li style="border-bottom: 1px solid #e5e5e5; padding: .5vh; box-sizing:border-box" v-for="(item, index) in detailMsg" :key="index">
-          <span style="margin-right: 5vw;">下发时间：{{item.time}}</span>
-          <span>下发内容： {{item.content}}</span>
+          <p style="margin: .3vh 1vw;">下发时间：{{item.time}}</p>
+          <p style="margin: .3vh 1vw;">下发内容： {{item.content}}</p>
         </li>
       </ul>
     </el-dialog>
@@ -196,8 +197,15 @@ export default {
       pageSize: 15,
       pageNumber: 1
     })
-    this._alarmType({})
-    this._contentType({})
+    this._alarmType({
+      pageNum: 1,
+      pageSize: 100000
+    })
+    this._contentType({
+      voicetempTypeUuid: '',
+      pageNum: 1,
+      pageSize: 100000
+    })
     this.isMsgOperation()
   },
   watch: {
@@ -222,7 +230,9 @@ export default {
         this.ruleForm.msgContent = ''
         this.ruleForm.desc = ''
         this._contentType({
-          voicetempTypeUuid: newV
+          voicetempTypeUuid: newV,
+          pageNum: 1,
+          pageSize: 100000
         })
       }
     },
@@ -283,7 +293,7 @@ export default {
     },
     _alarmType (params) {
       this.$api['msgsend.getVoicetempTypeData'](params).then(res => {
-        let dataArr = res
+        let dataArr = res.list
         this.warnsOptions = []
         dataArr.forEach((list, index) => {
           this.warnsOptions.push({
@@ -295,7 +305,7 @@ export default {
     },
     _contentType (params) {
       this.$api['msgsend.getVmContentsByVtUuid'](params).then(res => {
-        let dataArr = res
+        let dataArr = res.list
         this.msgOptions = []
         dataArr.forEach((list, index) => {
           this.msgOptions.push({
@@ -446,6 +456,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.text-limit {
+  margin: 0
+}
 </style>

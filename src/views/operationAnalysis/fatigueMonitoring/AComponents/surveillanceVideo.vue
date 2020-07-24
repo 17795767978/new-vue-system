@@ -21,6 +21,9 @@ export default {
     },
     activeName: {
       type: String
+    },
+    dialogVisible: {
+      type: Boolean
     }
   },
   components: {
@@ -60,6 +63,18 @@ export default {
           { ch: '通道6', isAct: false, index: 5 }
         ]
       }
+    },
+    dialogVisible (newV) {
+      if (!newV) {
+        this.channal = [
+          { ch: '通道1', isAct: false, index: 0 },
+          { ch: '通道2', isAct: false, index: 1 },
+          { ch: '通道3', isAct: false, index: 2 },
+          { ch: '通道4', isAct: false, index: 3 },
+          { ch: '通道5', isAct: false, index: 4 },
+          { ch: '通道6', isAct: false, index: 5 }
+        ]
+      }
     }
   },
   methods: {
@@ -72,6 +87,7 @@ export default {
     _getKey (res) {
       this.$jsonp(`${URL}key?username=admin&password=1985916`).then(json => {
         this.key = json.data.key === '' ? '' : json.data.key
+        console.log(this.warnDetails.devRefId)
         if (this.warnDetails.devRefId) {
           this._getVideoList(this.warnDetails.devRefId)
         }

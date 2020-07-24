@@ -59,24 +59,24 @@ export default {
 <style lang="scss" scoped>
 .content {
   width: 100%;
-  height: 84vh;
+  height: 76vh;
   padding: 2vh 2vw;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   .statistics {
-    width: 35%;
+    width: 40%;
     border-right: 1px solid #EBEEF5;
-    height: 42vh;
+    height: 38vh;
     box-sizing: border-box;
   }
   .time-slot {
-    width: 65%;
-    height: 42vh;
+    width: 60%;
+    height: 38vh;
   }
   .time-trend {
     width: 100%;
-    height: 40vh;
+    height: 38vh;
     border-top: 1px solid #EBEEF5;
   }
 }

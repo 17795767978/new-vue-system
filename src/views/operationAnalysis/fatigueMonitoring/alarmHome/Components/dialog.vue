@@ -337,9 +337,7 @@ export default {
         warnUuid: row.warnUuid,
         warnTime: ''
       }).then(res => {
-        res.devUuid = row.devUuid
-        res.devRefId = row.devRefId
-        res.busUuid = row.busUuid
+        console.log(res)
         const warnTimesArr = res.warnTimes ? res.warnTimes.split(',') : []
         const warnUuidsArr = res.warnUuids ? res.warnUuids.split(',') : []
         this.warnDetails = Object.assign({ warnTimesArr, warnUuidsArr }, res)

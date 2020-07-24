@@ -16,10 +16,10 @@
             <Capture :warnDetails="warnDetails" :activeName="activeName" ref="wrapperCap"/>
           </el-tab-pane>
           <el-tab-pane label="监控视频" name="third">
-            <SurveillanceVideo :warnDetails="warnDetails" :activeName="activeName"/>
+            <SurveillanceVideo :warnDetails="warnDetails" :activeName="activeName" :dialogVisible="dialogVisible"/>
           </el-tab-pane>
           <el-tab-pane label="下发消息" name="fourth">
-            <SendMsg :warnDetails="warnDetails"/>
+            <SendMsg :warnDetails="warnDetails" @closeFath="closeFath" ref="wrapperMsg"/>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -60,6 +60,13 @@ export default {
         this.$refs.wrapperCap.timeNum = 0
         this.$refs.wrapperCap.percent = 0
         this.$refs.wrapperCap.date = ''
+        this.$refs.wrapperMsg.ruleForm = {
+          dev: '',
+          msgType: '',
+          msgContent: '',
+          desc: ''
+        }
+        this.$refs.wrapperMsg.resetForm('ruleForm')
       }
     }
   },

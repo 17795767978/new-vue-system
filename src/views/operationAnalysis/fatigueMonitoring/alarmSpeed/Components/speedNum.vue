@@ -66,7 +66,7 @@ export default {
       this.$api['tiredMonitoring.getFatAlarmSpeedStatistic'](params).then(res => {
         this.loading = false
         this.title = {
-          text: '报警速度报警类型',
+          text: '报警速度分析',
           left: 'center'
         }
         this.lineData = [{

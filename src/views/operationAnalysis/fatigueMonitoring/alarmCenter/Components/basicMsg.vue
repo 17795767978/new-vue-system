@@ -38,7 +38,7 @@
      </p>
      <p class="msg">
        <span>报警时间: </span>
-       <span>{{timeFormat(busDetails.warnTime)}}</span>
+       <span>{{timeFormat}}</span>
      </p>
      <p class="msg">
        <span>报警级别: </span>
@@ -233,9 +233,7 @@ export default {
   computed: {
     ...mapGetters(['userId']),
     timeFormat () {
-      return (time) => {
-        return moment(time).format('YYYY-MM-DD HH:mm:ss')
-      }
+      return moment(this.busDetails.warnTime).format('YYYY-MM-DD HH:mm:ss')
     }
   },
   mounted () {
@@ -245,8 +243,15 @@ export default {
       })
     }, 1000)
     this.time = moment
-    this._alarmType({})
-    this._contentType({})
+    this._alarmType({
+      pageNum: 1,
+      pageSize: 100000
+    })
+    this._contentType({
+      voicetempTypeUuid: '',
+      pageNum: 1,
+      pageSize: 100000
+    })
     this.isMsgOperation()
   },
   watch: {
@@ -281,7 +286,9 @@ export default {
         this.ruleFormWarn.msgContent = ''
         this.ruleFormWarn.suggestion = ''
         this._contentType({
-          voicetempTypeUuid: newV
+          voicetempTypeUuid: newV,
+          pageNum: 1,
+          pageSize: 100000
         })
       }
     },
@@ -366,7 +373,7 @@ export default {
     },
     _alarmType (params) {
       this.$api['msgsend.getVoicetempTypeData'](params).then(res => {
-        let dataArr = res
+        let dataArr = res.list
         this.warnsOptions = []
         dataArr.forEach((list, index) => {
           this.warnsOptions.push({
@@ -378,7 +385,7 @@ export default {
     },
     _contentType (params) {
       this.$api['msgsend.getVmContentsByVtUuid'](params).then(res => {
-        let dataArr = res
+        let dataArr = res.list
         this.msgOptions = []
         dataArr.forEach((list, index) => {
           this.msgOptions.push({

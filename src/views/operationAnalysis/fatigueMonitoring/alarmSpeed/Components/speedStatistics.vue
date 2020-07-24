@@ -80,7 +80,7 @@ export default {
         this.lineData = [{
           name: '各报警速度占比统计',
           type: 'pie',
-          radius: ['50%', '70%'],
+          radius: ['45%', '65%'],
           center: ['50%', '50%'],
           label: {
             formatter: '{b}: {@2012} ({d}%)'

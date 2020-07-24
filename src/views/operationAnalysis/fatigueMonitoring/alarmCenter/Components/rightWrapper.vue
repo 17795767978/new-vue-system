@@ -914,6 +914,7 @@ export default {
         warnUuid: row.warnUuid,
         warnTime: ''
       }).then(res => {
+        console.log(res)
         res.devUuid = row.devUuid
         res.devRefId = row.devRefId
         res.busUuid = row.busUuid
