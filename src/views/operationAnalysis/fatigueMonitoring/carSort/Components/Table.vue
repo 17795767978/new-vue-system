@@ -22,7 +22,7 @@
         :width="getWidth(item, index)"
         :label="item.pldisplay">
         <template slot-scope="scope">
-          <span v-if="['orgname', 'linename', 'busnumber'].some(val => val == item.plvalue)" type="primary" size="mini">{{scope.row[item.plvalue]}}</span>
+          <span v-if="['orgname', 'linename', 'busnumber', 'busselfcode'].some(val => val == item.plvalue)" type="primary" size="mini">{{scope.row[item.plvalue]}}</span>
           <el-link type="primary" v-else @click="getrowData(scope.row, item.plvalue)">{{scope.row[item.plvalue]}}</el-link>
         </template>
       </el-table-column>

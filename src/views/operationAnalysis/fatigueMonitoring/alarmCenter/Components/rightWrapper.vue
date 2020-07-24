@@ -554,7 +554,6 @@ export default {
       if (Object.keys(this.$route.params).length > 0) {
         this.formInline = this.$route.params
       }
-      this.pageNum = 1
       let type = this.formInline.checkType
       this._tableList({
         orgId: this.userId === '1' ? '' : this.userId, // 组织机构id
@@ -569,7 +568,7 @@ export default {
         endTime: this.formInline.timeValue[1],
         driverName: this.formInline.driverName,
         pageSize: 10,
-        pageNum: 1,
+        pageNum: this.pageNum,
         handleResults: this.getCheckType(type),
         auditStatus: this.formInline.auditStatus
       })

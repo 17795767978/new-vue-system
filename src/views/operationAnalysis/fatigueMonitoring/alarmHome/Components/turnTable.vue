@@ -26,6 +26,12 @@
         width="120">
       </el-table-column>
       <el-table-column
+        prop="busSelfCode"
+        label="车辆自编号"
+        align="center"
+        width="120">
+      </el-table-column>
+      <el-table-column
         prop="driverNum"
         label="工号"
         align="center"
