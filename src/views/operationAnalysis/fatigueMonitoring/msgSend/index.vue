@@ -3,6 +3,8 @@
     <Search
       isOrg
       isLine
+      isBus
+      isBusSelfCodeSelect
       isSend
       @sendMsg="sendMsg"
       @configCheck="getSearch" />

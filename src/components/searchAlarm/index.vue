@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <!-- @author lishuaiwu 2020/07/17 -->
-      <el-form-item label="选择车牌号:" v-if="isLine">
+      <!-- <el-form-item label="选择车牌号:" v-if="isLine">
         <el-select
           v-model="formInline.carList"
           filterable
@@ -36,23 +36,8 @@
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <!-- @author lishuaiwu 2020/07/17 -->
-      <el-form-item label="选择车辆自编号:" v-if="isLine">
-        <el-select
-          v-model="formInline.carNo"
-          filterable
-          placeholder="请选择"
-          multiple
-          collapse-tags>
-          <el-option
-            v-for="item in carNo"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="选择线路:" v-if="islineIdRepeat">
         <el-select style="width: 200px" filterable v-model="formInline.lineIds" multiple collapse-tags placeholder="请选择">
           <el-option
@@ -87,6 +72,21 @@
         <el-select class="font-style" style="width: 200px" v-model="formInline.busNumber" :multiple="isBusMul" :collapse-tags="isBusMul" filterable placeholder="请选择">
           <el-option
             v-for="item in carOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择车辆自编号:" v-if="isBusSelfCodeSelect">
+        <el-select
+          v-model="formInline.carNo"
+          filterable
+          placeholder="请选择"
+          multiple
+          collapse-tags>
+          <el-option
+            v-for="item in carNo"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -350,6 +350,9 @@ export default {
       type: Boolean
     },
     isBus: {
+      type: Boolean
+    },
+    isBusSelfCodeSelect: {
       type: Boolean
     },
     isBusMul: {
