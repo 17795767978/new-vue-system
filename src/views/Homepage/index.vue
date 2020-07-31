@@ -81,7 +81,6 @@ export default {
       }
       filterRoles(roles)
       this.rolesTem = roleData
-      console.log(roleData)
     },
 
     /**
@@ -89,7 +88,7 @@ export default {
      */
     checkRoles () {
       this.menuResults.forEach(item => {
-        item.child.forEach(cdItem => {
+        item.child && item.child.forEach(cdItem => {
           const pathStr = cdItem.path
           let hasRole = this.rolesTem.some(role => pathStr === role)
           cdItem.hasRole = hasRole

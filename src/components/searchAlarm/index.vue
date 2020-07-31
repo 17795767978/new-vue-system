@@ -878,7 +878,12 @@ export default {
         dateTime: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
         lineType: this.formInline.lineType,
         date: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
-        uploadDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD')
+        uploadDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
+        pfrOrgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
+        pfrLineUuid: this.formInline.lineId,
+        pfrBusNumber: this.formInline.busNumber,
+        prfDevCode: this.formInline.statusNumber,
+        pfrUploadTime: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : ''
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

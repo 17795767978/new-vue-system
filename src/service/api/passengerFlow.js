@@ -265,6 +265,34 @@ export const passengerFlowApi = {
         uploadDate: ''
       },
       desc: '线路OD列表'
+    },
+    // /api/passenger/flowresult/log/pageList
+    {
+      name: 'getLogQuery',
+      method: 'POST',
+      path: '/api/passenger/flowresult/log/pageList',
+      mockPath: '/api/passenger/flowresult/log/pageList',
+      params: {
+      },
+      desc: '客流数据排查'
+    },
+    {
+      name: 'getBusKlStatisticalExportLog',
+      method: 'POST',
+      path: '/api/passenger/flowresult/log/getBusKlStatisticalExportLog',
+      mockPath: '/api/passenger/flowresult/log/getBusKlStatisticalExportLog',
+      params: {
+      },
+      desc: '客流数据排查导出'
+    },
+    {
+      name: 'getBusKlStatisticalDetail',
+      method: 'POST',
+      path: '/api/passenger/flowresult/log/detail',
+      mockPath: '/api/passenger/flowresult/log/detail',
+      params: {
+      },
+      desc: '客流数据排查导出'
     }
   ]
 }
