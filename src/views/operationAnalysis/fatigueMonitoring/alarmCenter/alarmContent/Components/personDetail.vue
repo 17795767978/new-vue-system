@@ -60,7 +60,7 @@
         <span>{{busDetails.speed}}KM/H</span>
        </el-col>
     </el-row>
-    <el-row :gutter="24" v-if="overspeedDetails !== {}">
+    <el-row :gutter="24" v-if="overspeedDetails !== {}" class="pic">
       <el-col :span="6" v-if="Object.keys(overspeedDetails).length > 0">
         <i class="fa fa-clock-o"></i>
         <span>持续时间：</span>
@@ -74,6 +74,38 @@
        <el-col :span="6" v-if="position !== ''">
         <i class="fa fa-flash"></i>
         <span>当前位置：{{position}}</span>
+       </el-col>
+    </el-row>
+    <el-row :gutter="24" class="pic">
+      <el-col :span="6">
+        <i class="fa fa-clock-o"></i>
+        <span>处理人：</span>
+        <span>{{busDetails.handleUser}}</span>
+       </el-col>
+       <el-col :span="6">
+        <i class="fa fa-flash"></i>
+        <span>处理时间：</span>
+        <span>{{formatHandleTime}}</span>
+       </el-col>
+       <el-col :span="12">
+        <i class="fa fa-flash"></i>
+        <span>处理意见：{{busDetails.handleSuggestion}}</span>
+       </el-col>
+    </el-row>
+    <el-row :gutter="24" class="pic">
+      <el-col :span="6">
+        <i class="fa fa-clock-o"></i>
+        <span>审核人：</span>
+        <span>{{busDetails.auditUser}}</span>
+       </el-col>
+       <el-col :span="6">
+        <i class="fa fa-flash"></i>
+        <span>审核时间：</span>
+        <span>{{formatAuditTime}}</span>
+       </el-col>
+       <el-col :span="12">
+        <i class="fa fa-flash"></i>
+        <span>审核意见：{{busDetails.auditSuggestion}}</span>
        </el-col>
     </el-row>
     <el-dialog
@@ -246,6 +278,20 @@ export default {
     },
     timeFormatEnd () {
       return moment(this.overspeedDetails.warnEndTime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    formatHandleTime () {
+      if (this.busDetails.handleTime) {
+        return moment().format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        return ''
+      }
+    },
+    formatAuditTime () {
+      if (this.busDetails.auditTime) {
+        return moment().format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        return ''
+      }
     }
   },
   watch: {

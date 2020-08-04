@@ -121,15 +121,13 @@
         <el-table-column
           prop="orgName"
           align="center"
-          width="100"
           label="所属公司"
           >
         </el-table-column>
         <el-table-column
           align="center"
           prop="lineName"
-          label="所属线路"
-          width="100">
+          label="所属线路">
         </el-table-column>
         <el-table-column
           align="center"
@@ -143,7 +141,8 @@
           label="车牌号"
           width="120">
         </el-table-column>
-        <el-table-column
+        <!-- 延安把部分列放在了详情里 -->
+        <!-- <el-table-column
           align="center"
           prop="busSelfCode"
           label="车辆自编号"
@@ -154,6 +153,13 @@
           prop="devCode"
           label="设备编号"
           width="150">
+        </el-table-column> -->
+        <el-table-column
+          align="center"
+          prop="warnTime"
+          label="报警时间"
+          :formatter="formatterTime"
+          >
         </el-table-column>
         <el-table-column
           align="center"
@@ -176,15 +182,8 @@
           width="120"
           >
         </el-table-column>
-        <el-table-column
-          align="center"
-          prop="warnTime"
-          label="报警时间"
-          :formatter="formatterTime"
-          width="150"
-          >
-        </el-table-column>
-        <el-table-column
+        <!-- 延安把部分列放在了详情里 -->
+        <!-- <el-table-column
           align="center"
           prop="handleUser"
           label="处理人"
@@ -198,12 +197,11 @@
           :formatter="getHandleTime"
           width="160"
         >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           align="center"
           prop="warnTime"
           label="处理结果"
-          width="100"
         >
           <template slot-scope="scope">
             <span v-if="scope.row.handleResult === '0'">未处理</span>
@@ -211,7 +209,8 @@
             <span v-else>误报</span>
           </template>
         </el-table-column>
-        <el-table-column
+        <!-- 延安把部分列放在了详情里 -->
+        <!-- <el-table-column
           align="center"
           prop="handleSuggestion"
           label="处理意见"
@@ -222,19 +221,18 @@
               <span>{{scope.row.handleSuggestion && scope.row.handleSuggestion.length > 7 ? `${scope.row.handleSuggestion.substring(0, 6)}...` : scope.row.handleSuggestion}}</span>
             </el-tooltip>
           </template>
-        </el-table-column>
-        <el-table-column
+        </el-table-column> -->
+        <!-- <el-table-column
           align="center"
           prop="auditUser"
           label="审核人"
           width="100"
         >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           align="center"
           prop="auditStatus"
           label="审核结果"
-          width="100"
         >
           <template slot-scope="scope">
             <span v-if="scope.row.auditStatus === '0' || scope.row.auditStatus"></span>
@@ -242,7 +240,8 @@
             <span v-if="scope.row.auditStatus === '2'">误报</span>
           </template>
         </el-table-column>
-        <el-table-column
+        <!-- 延安把部分列放在了详情里 -->
+        <!-- <el-table-column
           align="center"
           prop="auditSuggestion"
           label="审核意见"
@@ -253,12 +252,11 @@
               <span>{{scope.row.auditSuggestion && scope.row.auditSuggestion.length > 7 ? `${scope.row.auditSuggestion.substring(0, 6)}...` : scope.row.auditSuggestion}}</span>
             </el-tooltip>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           align="center"
           fixed="right"
-          label="操作"
-          width="260">
+          label="操作">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
             <el-button :disabled="scope.row.overTime || scope.row.handleResult !== '0' || (new Date() - scope.row.warnTime > 24000 * 3600)" @click="handleCheck(scope.row)" type="success" size="mini">处理</el-button>

@@ -9,7 +9,6 @@
       </el-col>
       <el-col :span="21">
         <el-carousel v-if="videoList && videoList.length > 0"
-          height="270px"
           style="width: 80%; margin-left: 5%"
           indicator-position="none"
           :autoplay="false"
@@ -55,12 +54,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.alarm-content {
-  width: 100%;
-  padding: 5px 10px;
-  box-sizing: border-box;
-  .demonstration {
-    margin-top: 0px;
-  }
-}
+// .alarm-content {
+//   width: 100%;
+//   padding: 5px 10px;
+//   box-sizing: border-box;
+//   .demonstration {
+//     margin-top: 0px;
+//   }
+// }
 </style>

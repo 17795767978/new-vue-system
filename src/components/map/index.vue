@@ -162,8 +162,8 @@ import videoWrapper from './video'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 const TIME = 3 * 60 * 1000
-const URL = 'http://121.30.214.187:12056/api/v1/basic/' // 大同
-// const URL = 'http://113.200.35.114:12056/api/v1/basic/' // 延安
+// const URL = 'http://121.30.214.187:12056/api/v1/basic/' // 大同
+const URL = 'http://113.200.35.114:12056/api/v1/basic/' // 延安
 export default {
   props: {
     isHotMap: {
@@ -279,7 +279,7 @@ export default {
         if (newV !== 'all') {
           // lineGroupUuid 延安
           // lineId 大同
-          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineId === newV)
+          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
         } else {
           this.markers = this.markersAll
         }
@@ -407,7 +407,7 @@ export default {
     _getKey () {
       // ddzx8885899A 延安的密码
       // 1985916 大同的密码
-      this.$jsonp(`${URL}key?username=admin&password=1985916`).then(json => {
+      this.$jsonp(`${URL}key?username=admin&password=ddzx8885899A`).then(json => {
         this.key = json.data.key
       })
     },

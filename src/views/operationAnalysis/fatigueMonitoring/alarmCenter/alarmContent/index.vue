@@ -155,13 +155,15 @@ export default {
     margin-bottom: 1vh;
   }
   .person-detail {
-    height: 14vh;
+    padding: .5vh .5vw;
+    box-sizing: border-box;
+    height: 17vh;
   }
   .pic-detail {
-    height: 35vh;
+    height: 33vh;
   }
   .video-detail {
-    height: 35vh;
+    height: 33vh;
   }
   .speed-detail {
     height: 20vh;

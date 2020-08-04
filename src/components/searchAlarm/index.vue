@@ -167,10 +167,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="输入设备编号:" v-if="isDeviceCode">
+      <el-form-item label="设备编号:" v-if="isDeviceCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.deviceCode" placeholder="设备编号"></el-input>
       </el-form-item>
-      <el-form-item label="输入自编号:" v-if="isSelfCode">
+      <el-form-item label="自编号:" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
       <el-form-item label="选择日期:" v-if="isDataCurrent">
