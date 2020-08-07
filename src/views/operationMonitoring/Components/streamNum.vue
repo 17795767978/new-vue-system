@@ -83,7 +83,7 @@
               <img src="../../../assets/images/newScreen/card-br.png"/>
             </div>
              <i class="el-icon-data-line icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
-          <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">在线车辆数</h3>
+          <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">运营车辆数</h3>
           <p class="font-style" style="color: #ef9c05">{{onLineCarNum}}/{{totalBusNumber}}</p>
           </div>
         </el-card>
@@ -125,7 +125,7 @@
                 <img src="../../../assets/images/newScreen/card-br.png"/>
               </div>
               <i class="el-icon-ship icon" :style="{color: skinType === 0 ? '#000' : '#fff' }"></i>
-              <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">运营车辆数</h3>
+              <h3 class="title-style" :style="{color: skinType === 0 ? '#000' : '#fff' }">工作车数</h3>
               <p class="font-style" :style="{color: skinType === 0 ? '#E2051F' : '#acf50f' }">{{operateCarNum}}</p>
           </div>
         </el-card>

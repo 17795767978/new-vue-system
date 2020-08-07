@@ -86,12 +86,25 @@ export default {
     /**
      * 为每一个菜单数据赋值 是否拥有权限
      */
+    // checkRoles () {
+    //   this.menuResults.forEach(item => {
+    //     item.child && item.child.forEach(cdItem => {
+    //       console.log(cdItem)
+    //       const pathStr = cdItem.path
+    //       let hasRole = this.rolesTem.some(role => pathStr === role)
+    //       cdItem.hasRole = hasRole
+    //     })
+    //   })
+    // },
     checkRoles () {
       this.menuResults.forEach(item => {
         item.child && item.child.forEach(cdItem => {
-          const pathStr = cdItem.path
-          let hasRole = this.rolesTem.some(role => pathStr === role)
-          cdItem.hasRole = hasRole
+          cdItem.forEach(val => {
+            if (Object.prototype.toString.call(val) === '[object Object]') {
+              let hasRole = this.rolesTem.some(role => val.path === role)
+              val.hasRole = hasRole
+            }
+          })
         })
       })
     },
