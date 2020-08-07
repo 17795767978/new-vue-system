@@ -9,6 +9,7 @@
       element-loading-text="拼命加载中"
       border
       stripe
+      height="68vh"
       size="small"
       style="width: 100%">
       <el-table-column

@@ -173,6 +173,16 @@
       <el-form-item label="自编号:" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
+      <el-form-item label="差值标准:" v-if="isDiff">
+        <el-select style="width: 200px" filterable v-model="formInline.diffStandard" placeholder="请选择">
+          <el-option
+            v-for="item in diffStandardOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="选择日期:" v-if="isDataCurrent">
         <el-date-picker
           :picker-options="pickerOptionsDataCurrent"
@@ -204,6 +214,22 @@
           end-placeholder="结束日期">
       </el-date-picker>
     </el-form-item>
+    <!-- 日期选择器 单车周报 -->
+      <el-form-item label="选择日期:" v-if="isDateWeek">
+        <el-date-picker
+          v-model="formInline.startDate"
+          :picker-options="pickerOptionsStartDate"
+          type="date"
+          placeholder="选择开始日期">
+        </el-date-picker>
+        -
+        <el-date-picker
+          v-model="formInline.endDate"
+          :picker-options="pickerOptionsEndDate"
+          type="date"
+          placeholder="选择结束日期">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item label="时间:" v-if="isTime">
         <el-time-select
           placeholder="起始时间"
@@ -414,6 +440,16 @@ export default {
     },
     select: {
       type: Object
+    },
+    isDiff: {
+      type: Boolean
+    },
+    // 周报的时间限制用
+    isDateToLimit: {
+      type: Boolean
+    },
+    isDateWeek: {
+      type: Boolean
     }
   },
   data () {
@@ -434,6 +470,19 @@ export default {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
           return time.getTime() > endTime
+        }
+      },
+      pickerOptionsStartDate: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() >= endTime
+        }
+      },
+      pickerOptionsEndDate: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          const startTime = moment(new Date() - 9 * 24000 * 3600).valueOf()
+          return time.getTime() >= endTime || time.getTime() < startTime
         }
       },
       formInline: {
@@ -467,7 +516,10 @@ export default {
         pages: '',
         checkList: [],
         busSelfCode: '',
-        auditStatus: []
+        auditStatus: [],
+        diffStandard: '15',
+        startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
+        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD')
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -502,6 +554,16 @@ export default {
           value: '1',
           label: '已审核'
         }
+      ],
+      diffStandardOptions: [
+        { label: '0%', value: '0' }, { label: '5%', value: '5' },
+        { label: '10%', value: '10' },
+        { label: '15%', value: '15' }, { label: '20%', value: '20' },
+        { label: '25%', value: '25' }, { label: '30%', value: '30' },
+        { label: '35%', value: '35' }, { label: '40%', value: '40' },
+        { label: '45%', value: '45' }, { label: '50%', value: '50' },
+        { label: '55%', value: '55' }, { label: '60%', value: '60' },
+        { label: '65%', value: '65' }, { label: '70%', value: '70' }
       ],
       modulesOptions: [],
       pagesOptions: [],
@@ -759,6 +821,33 @@ export default {
       handler (newV) {
         this.formInline.checkList = []
       }
+    },
+    'formInline.startDate': {
+      handler (newV) {
+        const date = moment(newV).valueOf()
+        const dateYestoday = moment(moment().format('YYYY-MM-DD')).valueOf()
+        const dayDec = (dateYestoday - date) / (24 * 3600 * 1000)
+        if (!this.isClearTo) {
+          this.formInline.endDate = ''
+        }
+        if (dayDec > 10) {
+          const endTime = date + 10 * 24 * 3600 * 1000
+          this.pickerOptionsEndDate = {
+            disabledDate (time) {
+              // const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+              return time.getTime() >= endTime || time.getTime() < date
+            }
+          }
+        } else {
+          this.pickerOptionsEndDate = {
+            disabledDate (time) {
+              // const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+              return time.getTime() >= dateYestoday || time.getTime() < date
+            }
+          }
+        }
+        // if (date === moment().format()) {}
+      }
     }
   },
   updated () {
@@ -861,11 +950,18 @@ export default {
         pages: this.formInline.pages,
         checkList,
         busSelfCode: this.formInline.busSelfCode,
-        auditStatus: this.formInline.auditStatus
+        auditStatus: this.formInline.auditStatus,
+        diffStandard: this.formInline.diffStandard,
+        startDate: this.formInline.startDate,
+        endDate: this.formInline.endDate
       }
       this.$emit('configCheck', configData)
     },
     onclear () {
+      this.isClearTo = true
+      setTimeout(() => {
+        this.isClearTo = false
+      }, 20)
       let date = moment().format('YYYY-MM-DD')
       this.formInline = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -898,7 +994,10 @@ export default {
         pages: '',
         checkList: [],
         busSelfCode: '',
-        auditStatus: []
+        auditStatus: [],
+        diffStandard: '15',
+        startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
+        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD')
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -931,7 +1030,10 @@ export default {
         pages: this.formInline.pages,
         checkList: [],
         busSelfCode: this.formInline.busSelfCode,
-        auditStatus: this.formInline.auditStatus
+        auditStatus: this.formInline.auditStatus,
+        diffStandard: this.formInline.diffStandard,
+        startDate: this.formInline.startDate,
+        endDate: this.formInline.endDate
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -1007,12 +1109,14 @@ export default {
         modules: this.formInline.modules,
         pages: this.formInline.pages,
         busSelfCode: this.formInline.busSelfCode,
-        auditStatus: this.formInline.auditStatus
+        auditStatus: this.formInline.auditStatus,
+        diffStandard: this.formInline.diffStandard,
+        startDate: this.formInline.startDate,
+        endDate: this.formInline.endDate
       }
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
-      console.log(this.select)
       let lineArr = []
       let checkList = []
       this.downLoadLoading = true
@@ -1058,12 +1162,16 @@ export default {
         driverNum: this.formInline.driverNum,
         warnDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
         deviceCode: this.formInline.deviceCode,
+        devCode: this.formInline.deviceCode,
         selfCode: this.formInline.selfCode,
         handleResults: checkList,
         warnTypeId: ['ADASSNAP', 'DMSTOSNAP'],
         busSelfCode: this.formInline.busSelfCode,
         auditStatus: this.formInline.auditStatus,
-        isHistory: this.select ? this.select.isHistory : '1'
+        isHistory: this.select ? this.select.isHistory : '1',
+        cale: this.formInline.diffStandard,
+        startDate: moment(this.formInline.startDate).format('YYYY-MM-DD'),
+        endDate: moment(this.formInline.endDate).format('YYYY-MM-DD')
       }
       if (this.isDate) {
         params.startTime = this.formInline.valueTime[0]
@@ -1072,6 +1180,8 @@ export default {
       if (this.isDateTo) {
         params.startTime = this.formInline.dateArray[0]
         params.endTime = this.formInline.dateArray[1]
+        params.startDate = this.formInline.dateArray[0]
+        params.endDate = this.formInline.dateArray[1]
       }
       // 延安需求
       if (this.select && Object.keys(this.select).length > 0) {

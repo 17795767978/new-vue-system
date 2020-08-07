@@ -64,7 +64,7 @@
       </el-form-item>
       <el-form-item label="查询时间">
         <el-radio v-model="formInline.radio" label="1">当天</el-radio>
-        <el-radio v-model="formInline.radio" label="2">历史</el-radio>
+        <el-radio v-model="formInline.radio" label="0">历史</el-radio>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -383,7 +383,7 @@ export default {
         busNumber: this.formInline.busNumber,
         startTime: this.formInline.startTime,
         endTime: this.formInline.endTime,
-        isHistory: this.formInline.radio === '2',
+        isHistory: this.formInline.radio,
         busSelfCode: this.formInline.busSelfCode,
         startTrips: this.formInline.startTrips,
         endTrips: this.formInline.endTrips

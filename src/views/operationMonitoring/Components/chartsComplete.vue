@@ -142,7 +142,7 @@ export default {
           textStyle: {
             'color': '#fff'
           },
-          subtext: `总计划里程：${this.totalPlanTrips}   总实际里程：${this.totalRealTrips}   总百分比：${(this.totalRealTrips / this.totalPlanTrips).toFixed(2) * 100}%`,
+          subtext: `总计划里程：${this.totalPlanMileage}   总实际里程：${this.totalRealMileage}   总百分比：${((this.totalRealMileage / this.totalPlanMileage) * 100).toFixed(2)}%`,
           // subtext: `总里程：${this.totalRealMileage}km `,
           subtextStyle: {
             'color': '#fff',
@@ -157,8 +157,8 @@ export default {
           }
         },
         legend: {
-          // data: ['计划里程', '实际里程'],
-          data: ['实际里程'],
+          data: ['计划里程', '实际里程'],
+          // data: ['实际里程'],
           bottom: 10,
           textStyle: {
             color: '#fff'
@@ -247,7 +247,8 @@ export default {
           textStyle: {
             'color': '#fff'
           },
-          subtext: `总趟次${this.totalRealTrips}次`,
+          // subtext: `总趟次${this.totalRealTrips}次`,
+          subtext: `总计划趟次：${this.totalPlanTrips}   总实际趟次：${this.totalRealTrips}   总百分比：${((this.totalRealTrips / this.totalPlanTrips) * 100).toFixed(2)}%`,
           subtextStyle: {
             'color': '#fff',
             'fontSize': 13
@@ -261,8 +262,8 @@ export default {
           }
         },
         legend: {
-          // data: ['计划趟次', '实际趟次'],
-          data: ['实际趟次'],
+          data: ['计划趟次', '实际趟次'],
+          // data: ['实际趟次'],
           bottom: 10,
           textStyle: {
             color: '#fff'
@@ -356,7 +357,8 @@ export default {
           textStyle: {
             'color': '#fff'
           },
-          subtext: `总班次：${this.totalRealShift}次`,
+          // subtext: `总班次：${this.totalRealShift}次`,
+          subtext: `总计划班次：${this.totalPlanShift}   总实际班次：${this.totalRealShift}   总百分比：${((this.totalRealShift / this.totalPlanShift) * 100).toFixed(2)}%`,
           subtextStyle: {
             'color': '#fff',
             'fontSize': 13
@@ -370,8 +372,8 @@ export default {
           }
         },
         legend: {
-          // data: ['计划班次', '实际班次'],
-          data: ['实际班次'],
+          data: ['计划班次', '实际班次'],
+          // data: ['实际班次'],
           bottom: 10,
           textStyle: {
             color: '#fff'

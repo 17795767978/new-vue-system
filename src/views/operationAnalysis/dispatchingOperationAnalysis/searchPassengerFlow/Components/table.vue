@@ -43,7 +43,7 @@
       show-summary
       height="75vh"
       v-loading="loading"
-      style="width: 100%">
+      :style="style">
       <el-table-column
         prop="id"
         label="序号"
@@ -113,7 +113,10 @@ export default {
       scrollHeight: 0,
       loading: true,
       totalTableAllData: [],
-      indexArr: []
+      indexArr: [],
+      style: {
+        width: '100%'
+      }
     }
   },
   mounted () {
@@ -152,7 +155,6 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV.radio)
         this._getOnOffPersonCountlist({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineIdRepeate: newV.lineIds,
@@ -170,9 +172,11 @@ export default {
   },
   methods: {
     _getOnOffPersonCountlist (params, type) {
+      this.style.width = '99.9%'
       this.loading = true
       if (type === '1') {
         this.$api['passengerFlow.getTodayOnOffPersonCountlist'](params).then(res => {
+          this.style.width = '100%'
           this.totalTableAllData = res
           this.tableAllData = this.getOrgTotleNum(JSON.parse(JSON.stringify(res)))
           this.$store.dispatch('getDownloadData', this.tableAllData)
@@ -325,7 +329,11 @@ export default {
                 return prev
               }
             }, 0)
-            sums[index] += ' 人次'
+            if (item === 'lineName') {
+              sums[index] = '——'
+            } else {
+              sums[index] += ' 人次'
+            }
           } else {
             sums[index] = '——'
           }

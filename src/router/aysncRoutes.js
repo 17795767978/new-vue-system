@@ -101,7 +101,7 @@ export const aysncRoutesMap = [
         title: '调度运营分析',
         icon: 'nocturne icon-dash',
         path: 'runtime-analysis',
-        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/search-passenger', '/search-passenger-flow', '/bus-passenger']
+        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/search-passenger', '/search-passenger-flow', '/bus-passenger', '/bus-passenger-week']
       },
       children: [
         {
@@ -222,6 +222,16 @@ export const aysncRoutesMap = [
             title: '单车客流统计',
             icon: 'nocturne icon-dash',
             roles: ['/bus-passenger']
+          }
+        },
+        {
+          path: 'bus-passenger-week',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/busPassengerWeek/index'),
+          name: 'busPassengerWeek',
+          meta: {
+            title: '单车客流周统计',
+            icon: 'nocturne icon-dash',
+            roles: ['/bus-passenger-week']
           }
         }
       ]

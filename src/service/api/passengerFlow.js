@@ -159,6 +159,24 @@ export const passengerFlowApi = {
         orgId: ''
       },
       desc: '单车客流查询-导出'
+    },
+    {
+      name: 'pageBusPersonTotalWeekList',
+      method: 'POST',
+      path: '/api/passenger/flow/result/pageBusPersonTotalWeekList',
+      mockPath: '/api/passenger/flow/result/pageBusPersonTotalWeekList',
+      params: {
+      },
+      desc: '单车客流周报查询'
+    },
+    {
+      name: 'getBusPersonTotalWeekListExport',
+      method: 'POST',
+      path: '/api/passenger/flow/result/getBusPersonTotalWeekListExport',
+      mockPath: '/api/passenger/flow/result/getBusPersonTotalWeekListExport',
+      params: {
+      },
+      desc: '单车客流周报查询-导出'
     }
   ]
 }
