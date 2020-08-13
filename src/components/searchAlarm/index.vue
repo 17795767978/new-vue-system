@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <!-- @author lishuaiwu 2020/07/17 -->
-      <!-- <el-form-item label="选择车牌号:" v-if="isLine">
+      <el-form-item label="选择车牌号:" v-if="isBusRepeat">
         <el-select
           v-model="formInline.carList"
           filterable
@@ -36,7 +36,7 @@
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
       <!-- @author lishuaiwu 2020/07/17 -->
       <el-form-item label="选择线路:" v-if="islineIdRepeat">
         <el-select style="width: 200px" filterable v-model="formInline.lineIds" multiple collapse-tags placeholder="请选择">
@@ -206,10 +206,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="输入设备编号:" v-if="isDeviceCode">
+      <el-form-item label="设备编号:" v-if="isDeviceCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.deviceCode" placeholder="设备编号"></el-input>
       </el-form-item>
-      <el-form-item label="输入自编号:" v-if="isSelfCode">
+      <el-form-item label="自编号:" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
       <el-form-item label="选择日期:" v-if="isDataCurrent">
@@ -350,6 +350,9 @@ export default {
       type: Boolean
     },
     isBus: {
+      type: Boolean
+    },
+    isBusRepeat: {
       type: Boolean
     },
     isBusSelfCodeSelect: {
@@ -720,10 +723,13 @@ export default {
     },
     'formInline.lineId': {
       handler (newValue) {
-        if (Object.keys(this.rateParams).length === 0) {
+        if (this.rateParams && Object.keys(this.rateParams).length === 0) {
           this.formInline.busNumber = ''
+          this.formInline.carList = []
         }
         if (newValue !== '') {
+          this.formInline.busNumber = ''
+          this.formInline.carList = []
           this.$api['wholeInformation.getCar']({
             lineId: newValue,
             lineName: '',
@@ -737,6 +743,7 @@ export default {
               })
             })
             this.carOptions = list
+            this.carList = list
           })
         }
       }

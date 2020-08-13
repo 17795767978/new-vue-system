@@ -239,7 +239,6 @@ export default {
     'ruleForm.msgContent': {
       handler (newV) {
         const selectData = this.msgOptions.filter(item => item.value === newV)
-        console.log(selectData)
         this.ruleForm.desc = selectData.length ? selectData[0].label : ''
       }
     }

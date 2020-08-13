@@ -5,8 +5,8 @@
     </h2>
     <el-table
       ref="tableWrapper"
+      size="mini"
       :data="tableDataOwn"
-      height="60vh"
       border
       :style="style">
       <el-table-column
@@ -60,7 +60,7 @@
       background
       :current-page.sync="pageNumber"
       @current-change="handleCurrentChange"
-      layout="prev, pager, next"
+      layout="total, prev, pager, next"
       :page-size="pageSize"
       :total="total">
     </el-pagination>

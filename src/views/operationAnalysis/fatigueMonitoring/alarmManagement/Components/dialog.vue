@@ -45,6 +45,14 @@ export default {
     }
   },
   data () {
+    let sortValidate = (rule, value, callback) => {
+      // console.log(value)
+      if (Number(value) > 1000) {
+        callback(new Error('排序最大数为1000'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         plValue: '',
@@ -66,7 +74,7 @@ export default {
           { type: 'string', required: true, message: '请选择报警状态', trigger: 'change' }
         ],
         plSort: [
-          { required: true, message: '请填写排序数字', trigger: 'change' }
+          { validator: sortValidate, required: true, trigger: 'change' }
         ],
         plDisplay: [
           { required: true, message: '请填写报警名称', trigger: 'change' }

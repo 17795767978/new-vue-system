@@ -15,13 +15,24 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="24">
-          <el-form-item label="参数编码" prop="paramName">
-            <el-input v-bind:disabled="disableSpCode" v-model="paramsForm.paramName" />
+          <el-form-item label="报警类型" prop="paramName">
+             <el-select
+              v-model="paramsForm.paramName"
+              filterable
+              placeholder="请选择"
+              collapse-tags>
+              <el-option
+                v-for="item in warnOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="参数值" prop="paramValue">
-            <el-input v-model="paramsForm.paramValue" />
+          <el-form-item label="速度" prop="paramValue">
+            <el-input v-model="paramsForm.paramValue" style="width: 220px"/>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -33,7 +44,7 @@
         </el-col>
         <el-col>
           <el-form-item label="备注" prop="remark">
-            <el-input v-model="paramsForm.remark" />
+            <el-input v-model="paramsForm.remark" style="width: 220px"/>
           </el-form-item>
         </el-col>
         <!-- <el-col :span="24">
@@ -79,6 +90,7 @@ export default {
       disableSpCode: '',
       isVisible: false,
       paramsForm: Object.assign({}, initParamsForm),
+      warnOptions: [],
       formRules: {
         paramName: [
           { required: true, message: '请输入参数编码', trigger: 'blur' },
@@ -106,6 +118,9 @@ export default {
       required: true
     }
   },
+  created () {
+    this._getWarnType()
+  },
   watch: {
     show (isShow) {
       if (isShow) {
@@ -122,6 +137,11 @@ export default {
     }
   },
   methods: {
+    _getWarnType () {
+      this.$api['tiredMonitoring.getWarntypes']().then(res => {
+        this.warnOptions = res.map(item => ({ label: item.value, value: item.code }))
+      })
+    },
     save () {
       this.$refs.paramsForm.validate(isValid => {
         if (isValid) {

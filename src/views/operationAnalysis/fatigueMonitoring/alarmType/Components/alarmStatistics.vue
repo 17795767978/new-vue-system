@@ -109,7 +109,7 @@ export default {
           }
         }]
         this.grid = {
-          x: 50,
+          x: 120,
           y: 50,
           x2: 30,
           y2: 30,

@@ -72,13 +72,13 @@ export default {
   display: flex;
   flex-wrap: wrap;
   .statistics {
-    width: 35%;
+    width: 40%;
     border-right: 1px solid #EBEEF5;
     height: 42vh;
     box-sizing: border-box;
   }
   .time-slot {
-    width: 65%;
+    width: 60%;
     height: 42vh;
   }
   .time-trend {

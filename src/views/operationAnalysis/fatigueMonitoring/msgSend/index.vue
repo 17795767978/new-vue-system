@@ -3,7 +3,7 @@
     <Search
       isOrg
       isLine
-      isBus
+      isBusRepeat
       isBusSelfCodeSelect
       isSend
       @sendMsg="sendMsg"
@@ -84,6 +84,7 @@ export default {
       }, 1000)
     },
     getSearch (data) {
+      console.log(data)
       this.selectData = data
     },
     sendMsg () {

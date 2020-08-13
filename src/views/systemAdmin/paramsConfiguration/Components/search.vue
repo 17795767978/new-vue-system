@@ -1,7 +1,7 @@
 <template>
 <div class="header">
   <el-form :model="searchForm" ref="searchForm"  label-width="80px" :inline="true">
-    <el-form-item label="参数编码"  prop="paramName">
+    <el-form-item label="报警类型"  prop="paramName">
       <el-input v-model="searchForm.paramName" style="width: 200px;" size="mini"></el-input>
     </el-form-item>
     <el-form-item>

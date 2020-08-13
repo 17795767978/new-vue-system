@@ -598,7 +598,7 @@ export const aysncRoutesMap = [
         component: _import_('systemAdmin/paramsConfiguration/index'),
         name: 'paramsConfiguration',
         meta: {
-          title: '参数设置',
+          title: '报警等级速度设置',
           icon: 'nocturne icon-dash',
           roles: ['/params-configuration']
         }

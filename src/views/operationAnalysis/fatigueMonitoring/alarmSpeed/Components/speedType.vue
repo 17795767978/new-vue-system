@@ -30,7 +30,7 @@ export default {
       id: 'speedType',
       grid: {},
       loading: true,
-      echartsData: '',
+      echartsData: '0(KM/H)以上',
       selectData: {}
     }
   },
@@ -91,7 +91,7 @@ export default {
           this.loading = false
         }, 1000)
         this.title = {
-          text: `报警速度${this.echartsData}报警类型`,
+          text: `报警速度${this.echartsData}报警类型分析`,
           left: 'center'
         }
         this.lineData = [{

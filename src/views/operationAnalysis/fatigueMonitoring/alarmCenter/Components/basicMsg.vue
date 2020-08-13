@@ -115,7 +115,7 @@
           </el-form-item>
           <el-form-item :label="userId === '1' ? '审核意见' : '处理意见'" prop="suggestion">
             <el-input type="textarea" v-model="ruleFormCheck.suggestion" maxlength="100" size="mini"></el-input>
-            <span>{{ruleFormCheck.suggestion && ruleFormCheck.suggestion.length}}/100</span>
+            <span>{{ruleFormCheck.suggestion && ruleFormCheck.suggestion.length || 0}}/100</span>
           </el-form-item>
         </el-form>
       </div>
@@ -147,7 +147,7 @@
           </el-form-item>
           <el-form-item label="内容描述" prop="suggestion">
             <el-input type="textarea" v-model="ruleFormWarn.suggestion" maxlength="100" size="mini"></el-input>
-            <span>{{ruleFormWarn.suggestion.length}}/100</span>
+            <span>{{ruleFormWarn.suggestion.length ? ruleFormWarn.suggestion.length : 0}}/100</span>
           </el-form-item>
         </el-form>
       </div>
