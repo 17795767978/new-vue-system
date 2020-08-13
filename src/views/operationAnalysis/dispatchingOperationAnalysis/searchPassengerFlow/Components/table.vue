@@ -77,6 +77,16 @@
         align="center"
         label="下车人数">
       </el-table-column>
+      <el-table-column
+        prop="totalBusNum"
+        align="center"
+        label="车辆数">
+      </el-table-column>
+      <el-table-column
+        prop="totalTripTime"
+        align="center"
+        label="趟次">
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -148,7 +158,6 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV.radio)
         this._getOnOffPersonCountlist({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineIds: newV.lineIds,
@@ -215,6 +224,7 @@ export default {
     },
     // 计算每个分公司的上下车人数总和
     getOrgTotleNum (res) {
+      console.log(res)
       this.indexArr = []
       let allTable = []
       if (res.length === 0) {
@@ -227,6 +237,10 @@ export default {
         let arrOrg = res.filter(item => item.orgName === key)
         let getOnArr = arrOrg.map(item => Number(item.onPersonCount))
         let getOffArr = arrOrg.map(item => Number(item.offPersonCount))
+        let getTotalBusNum = arrOrg.map(item => Number(item.totalBusNum))
+        let getTotalTripTime = arrOrg.map(item => Number(item.totalTripTime))
+        console.log(getTotalBusNum)
+        console.log(getTotalTripTime)
         index += arrOrg.length
         this.indexArr.push(index)
         let currentData = {
@@ -235,7 +249,9 @@ export default {
           lineName: '——',
           uploadTime: '——',
           onPersonCount: JSON.stringify(getOnArr.reduce((prev, next) => prev + next)),
-          offPersonCount: JSON.stringify(getOffArr.reduce((prev, next) => prev + next))
+          offPersonCount: JSON.stringify(getOffArr.reduce((prev, next) => prev + next)),
+          totalBusNum: JSON.stringify(getTotalBusNum.reduce((prev, next) => prev + next)),
+          totalTripTime: JSON.stringify(getTotalTripTime.reduce((prev, next) => prev + next))
         }
         this.getTable(allTable, this.indexArr, currentData, res)
       }
@@ -304,9 +320,9 @@ export default {
       return () => {
         let columns = []
         if (this.selectData.lineIds && this.selectData.lineIds.length > 0) {
-          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount', 'totalBusNum', 'totalTripTime']
         } else {
-          columns = ['id', 'orgName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+          columns = ['id', 'orgName', 'uploadTime', 'onPersonCount', 'offPersonCount', 'totalBusNum', 'totalTripTime']
         }
         const sums = []
         columns.forEach((item, index) => {

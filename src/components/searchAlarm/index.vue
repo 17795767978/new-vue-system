@@ -24,7 +24,7 @@
       <el-form-item label="选择线路" v-if="islineIdRepeat">
         <el-select style="width: 200px" filterable v-model="formInline.lineIds" multiple collapse-tags placeholder="请选择">
           <el-option
-            v-for="item in lineOptions"
+            v-for="item in lineOptionsAddAll"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -386,6 +386,7 @@ export default {
       }],
       statusOptions: [],
       lineOptions: [],
+      lineOptionsAddAll: [],
       lineOptionsSec: [],
       carOptions: [],
       warnOptions: [],
@@ -407,6 +408,7 @@ export default {
     })
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
+      this.lineOptionsAddAll = [...res, { label: '全选', value: 'all' }]
     })
     this.$store.dispatch('getCarList').then(res => {
       this.carOptions = res
@@ -510,6 +512,7 @@ export default {
             })
           })
           this.lineOptions = list
+          this.lineOptionsAddAll = [...list, { label: '全选', value: 'all' }]
         })
         this.$api['wholeInformation.getCar']({
           lineId: '',
@@ -559,6 +562,13 @@ export default {
         }
       }
     },
+    'formInline.lineIds': {
+      handler (newValue) {
+        if (newValue.indexOf('all') > -1) {
+          this.formInline.lineIds = this.lineOptions.map(item => item.value)
+        }
+      }
+    },
     'formInline.startStation': {
       handler (newV) {
         if (newV !== '') {
@@ -581,11 +591,13 @@ export default {
           if (this.userId === '1') {
             this.$store.dispatch('getLineList').then(res => {
               this.lineOptions = res
+              this.lineOptionsAddAll = [...res, { label: '全选', value: 'all' }]
               this.formInline.lineId = this.lineOptions[0].value
             })
           } else {
             this.$store.dispatch('getLineList', this.userId).then(res => {
               this.lineOptions = res
+              this.lineOptionsAddAll = [...res, { label: '全选', value: 'all' }]
               this.formInline.lineId = this.lineOptions[0].value
             })
           }
@@ -602,7 +614,6 @@ export default {
     'formInline.radio': {
       handler (newV) {
         if (newV === '1') {
-          console.log(this.formInline.dataCurrent)
           this.formInline.valueTime = [moment().format('YYYY-MM-DD 00:00:00'), moment().format('YYYY-MM-DD 23:59:59')]
           this.formInline.dataCurrent = moment().format('YYYY-MM-DD')
           this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
@@ -782,6 +793,7 @@ export default {
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
+        this.lineOptionsAddAll = [...res, { label: '全选', value: 'all' }]
       })
       this.$store.dispatch('getComList').then(res => {
         this.comOptions = res
@@ -851,12 +863,9 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
-      console.log(this.formInline)
-      console.log(this.select)
       let lineArr = []
       this.downLoadLoading = true
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
-        console.log(this.formInline.lineLineId)
         lineArr = this.formInline.lineLineId.split('+')
       }
       this.$api[`${this.downLoadName}`]({
