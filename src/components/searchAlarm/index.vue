@@ -1035,6 +1035,7 @@ export default {
         startDate: this.formInline.startDate,
         endDate: this.formInline.endDate
       }
+      this.$emit('handlerClear')
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
@@ -1140,6 +1141,7 @@ export default {
       if (this.select) {
         this.formInline.dateArray = [moment(this.select.date[0]).format('YYYY-MM-DD HH:mm:ss'), moment(this.select.date[1]).format('YYYY-MM-DD HH:mm:ss')]
       }
+      console.log(this.select)
       let params = {
         company: this.formInline.lineOrgId,
         lineId: this.formInline.lineId,
@@ -1171,7 +1173,11 @@ export default {
         isHistory: this.select ? this.select.isHistory : '1',
         cale: this.formInline.diffStandard,
         startDate: moment(this.formInline.startDate).format('YYYY-MM-DD'),
-        endDate: moment(this.formInline.endDate).format('YYYY-MM-DD')
+        endDate: moment(this.formInline.endDate).format('YYYY-MM-DD'),
+        pfrGetOnNumberStart: this.select.getOnNumMin === null ? this.select.getOnNumMin : Number(this.select.getOnNumMin),
+        pfrGetOnNumberEnd: this.select.getOnNumMax === null ? this.select.getOnNumMax : Number(this.select.getOnNumMax),
+        pfrGetOffNumberStart: this.select.getOffNumMin === null ? this.select.getOffNumMin : Number(this.select.getOffNumMin),
+        pfrGetOffNumberEnd: this.select.getOffNumMax === null ? this.select.getOffNumMax : Number(this.select.getOffNumMax)
       }
       if (this.isDate) {
         params.startTime = this.formInline.valueTime[0]

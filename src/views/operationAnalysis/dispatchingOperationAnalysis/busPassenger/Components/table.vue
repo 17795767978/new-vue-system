@@ -104,7 +104,11 @@ export default {
       isHistory: '1',
       startTime: dateBefore,
       endTime: dateAfter,
-      busSelfCode: ''
+      busSelfCode: '',
+      pfrGetOnNumberStart: null,
+      pfrGetOnNumberEnd: null,
+      pfrGetOffNumberStart: null,
+      pfrGetOffNumberEnd: null
     })
   },
   watch: {
@@ -119,7 +123,11 @@ export default {
           isHistory: newV.isHistory,
           startTime: moment(newV.startTime).format('YYYY-MM-DD HH:mm:ss'),
           endTime: moment(newV.endTime).format('YYYY-MM-DD HH:mm:ss'),
-          busSelfCode: newV.busSelfCode
+          busSelfCode: newV.busSelfCode,
+          pfrGetOnNumberStart: newV.getOnNumMin === null ? newV.getOnNumMin : Number(newV.getOnNumMin),
+          pfrGetOnNumberEnd: newV.getOnNumMax === null ? newV.getOnNumMax : Number(newV.getOnNumMax),
+          pfrGetOffNumberStart: newV.getOffNumMin === null ? newV.getOffNumMin : Number(newV.getOffNumMin),
+          pfrGetOffNumberEnd: newV.getOffNumMax === null ? newV.getOffNumMax : Number(newV.getOffNumMax)
         })
       }
     }

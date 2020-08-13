@@ -11,11 +11,16 @@
       :selectData="selectData"
       :select="{
         date: [...timeArr],
-        isHistory
+        isHistory,
+        getOnNumMin,
+        getOnNumMax,
+        getOffNumMin,
+        getOffNumMax
       }"
+      @handlerClear="handlerClear"
       @configCheck="getSearch"
     >
-    <el-form-item label="选择日期">
+    <el-form-item label="选择日期:">
       <el-date-picker
         :picker-options="pickerOptions"
         :default-time="['00:00:00', '23:59:59']"
@@ -26,6 +31,16 @@
         start-placeholder="开始日期"
         end-placeholder="结束日期">
       </el-date-picker>
+    </el-form-item>
+    <el-form-item label="上车人数:">
+      <el-input v-model="getOnNumMin" placeholder="请输入" style="width: 150px"></el-input>
+      -
+      <el-input v-model="getOnNumMax" placeholder="请输入" style="width: 150px"></el-input>
+    </el-form-item>
+    <el-form-item label="下车人数:">
+      <el-input v-model="getOffNumMin" placeholder="请输入" style="width: 150px"></el-input>
+      -
+      <el-input v-model="getOffNumMax" placeholder="请输入" style="width: 150px"></el-input>
     </el-form-item>
     <el-form-item label="查询时间">
       <el-radio v-model="isHistory" label="1">当天</el-radio>
@@ -56,6 +71,10 @@ export default {
       },
       timeArr: [],
       isHistory: '1',
+      getOnNumMin: null,
+      getOnNumMax: null,
+      getOffNumMin: null,
+      getOffNumMax: null,
       selectData: {},
       downLoadName: 'passengerFlow.busTotalPersonExport'
     }
@@ -85,12 +104,45 @@ export default {
         }
         this.timeArr = []
       }
+    },
+    getOnNumMin (newV) {
+      if (newV) {
+        const isClear = Number(newV) > Number(this.getOnNumMax)
+        if (isClear) {
+          this.getOnNumMax = null
+        }
+      }
+    },
+    getOffNumMin (newV) {
+      if (newV) {
+        const isClear = Number(newV) > Number(this.getOffNumMax)
+        if (isClear) {
+          this.getOffNumMax = null
+        }
+      }
     }
   },
   methods: {
+    handlerClear () {
+      this.getOnNumMin = null
+      this.getOnNumMax = null
+      this.getOffNumMin = null
+      this.getOffNumMax = null
+    },
     getSearch (data) {
       if (this.timeArr.length > 0) {
-        this.selectData = { ...data, isHistory: this.isHistory, startTime: this.timeArr[0], endTime: this.timeArr[1] }
+        if (this.getOnNumMin && this.getOnNumMax && (Number(this.getOnNumMin) > Number(this.getOnNumMax))) {
+          this.$message.warning('上车人数范围输入错误')
+          this.getOnNumMax = null
+          return
+        }
+        if (this.getOffNumMin && this.getOffNumMax && (Number(this.getOffNumMin) > Number(this.getOffNumMax))) {
+          this.$message.warning('下车人数范围输入错误')
+          this.getOffNumMax = null
+          return
+        }
+        this.selectData = { ...data, isHistory: this.isHistory, startTime: this.timeArr[0], endTime: this.timeArr[1], getOnNumMin: this.getOnNumMin, getOnNumMax: this.getOnNumMax, getOffNumMin: this.getOffNumMin, getOffNumMax: this.getOffNumMax }
+        console.log(this.selectData)
       } else {
         this.$message.error('请选择时间段')
       }
