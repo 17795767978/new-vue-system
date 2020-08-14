@@ -86,7 +86,7 @@
           width="150"
           >
           <template slot-scope="scope">
-            <el-input v-model="scope.row.handleUser" @blur="checkHandleUser(scope.row)" placeholder="请输入处理人"></el-input>
+            <el-input v-model="scope.row.handleUser" :disabled="scope.row.handleResult === '0'" @blur="checkHandleUser(scope.row)" placeholder="请输入处理人"></el-input>
           </template>
         </el-table-column>
         <el-table-column

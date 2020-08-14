@@ -1,5 +1,5 @@
 <template>
-  <div class="table">
+  <div class="table" v-loading="isLoadingTo">
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -7,8 +7,8 @@
       size="mini"
       tooltip-effect="dark"
       style="width: 100%"
-      @select="handleSelect"
-      @select-all="handleSelectAll"
+      @select="onTableSelect"
+      @select-all="selectAll"
       @selection-change="handleSelectionChange">
       <el-table-column
         align="center"
@@ -151,9 +151,11 @@ export default {
       }
     }
     return {
+      isLoadingTo: false,
       isLoading: false,
       isSafeSend: false,
       tableData: [],
+      tableDataAll: '',
       selectItems: [],
       pageSize: 15,
       pageNumber: 1,
@@ -181,6 +183,7 @@ export default {
       detailVisible: false,
       detailMsg: [],
       isCheckAll: false, // 是否全选状态
+      isSelectAll: false, // 是否全选
       removeChecks: [] // 被取消选中的数据
     }
   },
@@ -194,7 +197,7 @@ export default {
       lineId: this.searchData.lineId,
       carList: this.searchData.carList,
       carNo: this.searchData.carNo,
-      pageSize: 15,
+      pageSize: 100000,
       pageNumber: 1
     })
     this._alarmType({
@@ -220,8 +223,22 @@ export default {
           lineId: newV.lineId,
           carList: newV.carList,
           carNo: newV.carNo,
-          pageSize: 15,
+          pageSize: 100000,
           pageNumber: 1
+        })
+      }
+    },
+    isSelectAll (newV) {
+      if (newV) {
+        this.tableDataAll.forEach(item => {
+          item.isSelect = true
+        })
+        let arrSelect = this.tableDataAll.filter(item => item.isSelect === true)
+        let arrBusUuid = arrSelect.map(item => item.busUuid)
+        this.selectItems = arrBusUuid.join(',')
+      } else {
+        this.tableDataAll.forEach(item => {
+          item.isSelect = false
         })
       }
     },
@@ -256,38 +273,18 @@ export default {
       }
     },
     _busPageList (params) {
+      this.isLoadingTo = true
       this.$api['tiredMonitoring.busPageList'](params).then(res => {
+        this.isLoadingTo = false
         if (res.total === 0) {
           this.$message.warning('暂无数据')
         }
         this.total = res.total
-        this.tableData = res.list
-        // @author lishuaiwu 2020/07/17 如果是多选时，默认多选
-        this.$nextTick(() => {
-          if (this.isCheckAll) {
-            // this.$refs.multipleTable.toggleAllSelection()
-            // @author lishuaiwu 2020/07/17 对于没有被勾选的，取消勾选
-            // this.removeChecks.forEach(item => {
-            //   try {
-            //     this.$refs.multipleTable.toggleRowSelection(item, false)
-            //   } catch (error) {
-
-            //   }
-            // })
-            this.tableData.forEach(row => {
-              let flag = true
-              this.removeChecks.forEach(item => {
-                if (row.busUuid === item.busUuid) {
-                  flag = false
-                }
-              })
-
-              if (flag) {
-                this.$refs.multipleTable.toggleRowSelection(row, true)
-              }
-            })
-          }
+        this.tableDataAll = res.list
+        this.tableDataAll.forEach(item => {
+          item.isSelect = false
         })
+        this.tableData = this.tableDataAll.slice((this.pageNumber - 1) * 15, this.pageNumber * 15)
       })
     },
     _alarmType (params) {
@@ -318,37 +315,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.isLoading = true
-          if (this.isCheckAll) { // 如果是全部下发 @author lishuaiwu 2020/07/20
-            let filterBusUuids = []
-            filterBusUuids = this.removeChecks.map(item => item.busUuid)
-            this.$api['tiredMonitoring.AllVoicepromptBatch']({
-              devType: this.ruleForm.dev,
-              sendType: this.ruleForm.msgType,
-              filterBusUuids: filterBusUuids.join(','),
-              content: this.ruleForm.desc
-            }).then(res => {
-              this.isLoading = false
-              this.dialogFormVisible = false
-              this.$message.success('下发消息成功')
-              this.ruleForm = {
-                dev: '',
-                msgType: '',
-                msgContent: '',
-                desc: ''
-              }
-              this.resetForm('ruleForm')
-              this._busPageList({
-                orgId: this.searchData.orgId,
-                lineId: this.searchData.lineId,
-                carList: this.searchData.carList,
-                carNo: this.searchData.carNo,
-                pageSize: 15,
-                pageNumber: this.pageNumber
-              })
-            })
-            return
-          }
-          // 如果是一般的批量下发
           this.$api['tiredMonitoring.VoicepromptBatch']({
             devType: this.ruleForm.dev,
             sendType: this.ruleForm.msgType,
@@ -394,21 +360,33 @@ export default {
     getTime (row) {
       return moment(row.busCreateTime).format('YYYY-MM-DD HH:mm:ss')
     },
-    handleSelectionChange (data, data2) {
-      let arr = []
-      arr = data.map(item => item.busUuid)
-      this.selectItems = arr.join(',')
+    onTableSelect (rows, row) {
+      row.isSelect = !row.isSelect
+    },
+    selectAll (data) {
+      if (data.length > 0) {
+        this.isSelectAll = true
+      } else {
+        this.isSelectAll = false
+      }
+    },
+    handleSelectionChange () {
+      console.log(this.tableDataAll)
+      let arrSelect = this.tableDataAll.filter(item => item.isSelect === true)
+      let arrBusUuid = arrSelect.map(item => item.busUuid)
+      this.selectItems = arrBusUuid.join(',')
+      console.log(arrSelect)
     },
     handleCurrentChange (val) {
       this.pageNumber = val
-      this._busPageList({
-        orgId: this.searchData.orgId,
-        lineId: this.searchData.lineId,
-        carList: this.searchData.carList,
-        carNo: this.searchData.carNo,
-        pageSize: 15,
-        pageNumber: this.pageNumber
-      })
+      this.tableData = this.tableDataAll.slice((val - 1) * 15, val * 15)
+      setTimeout(() => {
+        this.tableData.forEach((item, index) => {
+          if (item.isSelect) {
+            this.$refs.multipleTable.toggleRowSelection(this.tableData[index])
+          }
+        })
+      }, 20)
     },
     getDetail (row) {
       this.detailMsg = row.voiceMap.map(item => ({
@@ -416,34 +394,6 @@ export default {
         time: moment(item.send_time).format('YYYY-MM-DD HH:mm:ss')
       }))
       this.detailVisible = true
-    },
-    /* 当用户出发多选时 @author lishuaiwu 2020/07/17 */
-    handleSelectAll (evt) {
-      if (evt.length > 0) {
-        this.isCheckAll = true
-      } else {
-        this.isCheckAll = false
-      }
-      this.removeChecks = []
-    },
-    /* 获取没有被选中的行数据 @author lishuaiwu 2020/07/17 */
-    handleSelect (evt, evt2) {
-      let flag = false
-      evt.forEach(item => {
-        if (item.busUuid === evt2.busUuid) {
-          flag = true
-          return false
-        }
-      })
-      if (!flag && this.isCheckAll) {
-        this.removeChecks.push(evt2)
-      } else {
-        this.removeChecks.forEach((item, index) => {
-          if (item.busUuid === evt2.busUuid) {
-            this.removeChecks.splice(index, 1)
-          }
-        })
-      }
     },
     gotoDetail () {
       this.dialogFormVisible = false

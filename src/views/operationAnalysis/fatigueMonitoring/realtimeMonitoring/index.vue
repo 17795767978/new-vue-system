@@ -42,6 +42,7 @@ export default {
       this.pointDatas = data
     },
     getContent (data) {
+      this.tableData = []
       let defaultData = this.$store.getters.formData
       this.msgData = data
       this.warnDetails.pigePicList = data.content.pigePicList

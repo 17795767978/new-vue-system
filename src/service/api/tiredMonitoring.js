@@ -527,8 +527,8 @@ export const tiredMonitoringApi = {
     {
       name: 'VoicepromptBatch',
       method: 'POST',
-      path: '/warns/VoicepromptBatch',
-      mockPath: '/warns/VoicepromptBatch',
+      path: '/warns/voicepromptBatch',
+      mockPath: '/warns/voicepromptBatch',
       params: {
         devType: '',
         busUuids: '',
@@ -569,6 +569,16 @@ export const tiredMonitoringApi = {
       params: {
       },
       desc: '设备脱管报警'
+    },
+    {
+      name: 'voiceDetail',
+      method: 'POST',
+      path: '/warns/detail',
+      mockPath: '/warns/detail',
+      params: {
+        busUuid: ''
+      },
+      desc: '语音详情'
     }
   ]
 }

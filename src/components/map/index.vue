@@ -407,22 +407,26 @@ export default {
       })
     },
     _getVideoList (terid) {
+      let beforeSort = []
       this.urlList = []
       return new Promise((resolve, reject) => {
         this.$jsonp(`${URL}live/port?key=${this.key}`).then(res => {
           for (let i = 1; i < 7; i++) {
             if (i < 4) {
               this.$jsonp(`${URL}live/video?key=${this.key}&terid=${terid}&chl=${i}&audio=1&st=0&port=${res.data[0].port}`).then(res => {
-                this.urlList.push(Object.assign({}, res.data, { ch: i, isAct: false }))
+                beforeSort.push(Object.assign({}, res.data, { ch: i, isAct: false }))
               })
             } else {
               this.$jsonp(`${URL}live/video?key=${this.key}&terid=${terid}&chl=${i}&audio=1&st=0&port=${res.data[1].port}`).then(res => {
-                this.urlList.push(Object.assign({}, res.data, { ch: i, isAct: false }))
+                beforeSort.push(Object.assign({}, res.data, { ch: i, isAct: false }))
               })
             }
           }
           setTimeout(() => {
+            console.log('before', beforeSort)
+            this.urlList = beforeSort.sort((prev, next) => prev.ch - next.ch)
             resolve(this.urlList)
+            console.log(this.urlList)
           }, 1000)
         })
       })
@@ -501,6 +505,7 @@ export default {
         if (this.isFlv) {
           this._getKey()
           this._getVideoList(this.carDetailData.devRefId).then(res => {
+            // console.log(this.urlList)
           })
         }
         if (this.carDetailData.warnInfos.length > 0) {
