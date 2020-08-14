@@ -209,7 +209,7 @@ export default {
       },
       rules: {
         userAccount: [
-          { validator: validatePass, trigger: 'blur' }
+          { validator: validatePass, required: true, trigger: 'blur' }
         ],
         userPassword: [
           { required: true, message: '请输入密码', trigger: 'blur' }

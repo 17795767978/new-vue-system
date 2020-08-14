@@ -327,8 +327,6 @@ export default {
       let RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection
       // 如果不存在则使用一个iframe绕过
       if (!RTCPeerConnection) {
-        // 因为这里用到了iframe，所以在调用这个方法的script上必须有一个iframe标签
-        // <iframe id="iframe" sandbox="allow-same-origin" style="display:none;"></iframe>
         // eslint-disable-next-line no-undef
         let win = iframe.contentWindow
         RTCPeerConnection = win.RTCPeerConnection || win.mozRTCPeerConnection || win.webkitRTCPeerConnection
@@ -397,19 +395,25 @@ export default {
     },
     handleCheck (evt) {
       if (this.radio === 2) {
-        const param = {
-          loginname: 'admin',
-          pwd: '120223',
-          PlateNO: this.warnDetails.busPlateNumber,
-          locip: this.ip,
-          locport: '5555',
-          number: this.warnDetails.devRefId,
-          svrip: '61.157.184.120',
-          svrport: '5556'
-        }
-        const event = document.createEvent('CustomEvent')
-        event.initCustomEvent('myCustomEvent', true, false, param)
-        document.dispatchEvent(event)
+        this.$api['tiredMonitoring.getBuslsOnLine']({ busPlateNumber: this.busDetails.busPlateNumber }).then(res => {
+          if (res.busState === '0') {
+            this.$message.warning('车辆不在线，不能IP通话')
+            return
+          }
+          const param = {
+            loginname: 'admin',
+            pwd: '120223',
+            PlateNO: this.warnDetails.busPlateNumber,
+            locip: this.ip,
+            locport: '5555',
+            number: this.warnDetails.devRefId,
+            svrip: '61.157.184.120',
+            svrport: '5556'
+          }
+          const event = document.createEvent('CustomEvent')
+          event.initCustomEvent('myCustomEvent', true, false, param)
+          document.dispatchEvent(event)
+        })
       } else if (this.radio === 1) {
         if (this.ruleFormCheck.status !== '') {
           this.pendding = true
@@ -433,30 +437,36 @@ export default {
           this.$emit('upadate', false)
         }
       } else if (this.radio === 3) {
-        if (this.ruleFormWarn.status !== '') {
-          this.pendding = true
-          this.$api['tiredMonitoring.Voiceprompt']({
-            devType: '1',
-            sendType: this.ruleFormWarn.status,
-            busUuid: this.warnDetails.busUuid,
-            content: this.ruleFormWarn.suggestion
-          }).then(res => {
-            this.pendding = false
-            this.ruleFormWarn = { status: '', suggestion: '', msgContent: '' }
-            this.$message.success('下发消息成功')
-            if (this.busDetails.auditStatus !== '0') {
-              this.$emit('upadate', true)
-            } else {
-              this.radio = 1
-              this.$message.warning('请选择审核状态')
-            }
-          }).catch(() => {
-            this.$message.error('接口错误')
-            this.pendding = false
-          })
-        } else {
-          this.$emit('upadate', false)
-        }
+        this.$api['tiredMonitoring.getBuslsOnLine']({ busPlateNumber: this.busDetails.busPlateNumber }).then(res => {
+          if (res.busState === '0') {
+            this.$message.warning('车辆不在线，不能IP通话')
+            return
+          }
+          if (this.ruleFormWarn.status !== '') {
+            this.pendding = true
+            this.$api['tiredMonitoring.Voiceprompt']({
+              devType: '1',
+              sendType: this.ruleFormWarn.status,
+              busUuid: this.warnDetails.busUuid,
+              content: this.ruleFormWarn.suggestion
+            }).then(res => {
+              this.pendding = false
+              this.ruleFormWarn = { status: '', suggestion: '', msgContent: '' }
+              this.$message.success('下发消息成功')
+              if (this.busDetails.auditStatus !== '0') {
+                this.$emit('upadate', true)
+              } else {
+                this.radio = 1
+                this.$message.warning('请选择审核状态')
+              }
+            }).catch(() => {
+              this.$message.error('接口错误')
+              this.pendding = false
+            })
+          } else {
+            this.$emit('upadate', false)
+          }
+        })
       } else {
         this.pendding = true
         this.$api['tiredMonitoring.wsUpdate']({

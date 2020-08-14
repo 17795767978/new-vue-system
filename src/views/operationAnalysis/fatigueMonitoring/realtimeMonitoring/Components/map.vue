@@ -75,6 +75,13 @@ export default {
       this._getLineMap()
     }, 2000)
   },
+  activated () {
+    this.loading = true
+    setTimeout(() => {
+      this.loading = false
+      this._getLineMap()
+    }, 1000)
+  },
   watch: {
     pointDatas: {
       deep: true,

@@ -978,7 +978,9 @@ export default {
         modules: '',
         pages: '',
         checkList: [],
-        devModel: 'ADAS'
+        devModel: 'ADAS',
+        carList: [],
+        carNo: []
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -1010,7 +1012,9 @@ export default {
         modules: this.formInline.modules,
         pages: this.formInline.pages,
         checkList: [],
-        devModel: this.formInline.devModel
+        devModel: this.formInline.devModel,
+        carList: this.formInline.carList,
+        carNo: this.formInline.carNo
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {

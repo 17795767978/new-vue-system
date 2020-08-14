@@ -60,6 +60,8 @@ export default {
         this.$refs.wrapperCap.timeNum = 0
         this.$refs.wrapperCap.percent = 0
         this.$refs.wrapperCap.date = ''
+        this.$refs.wrapperCap.loading = false
+        this.$refs.wrapperCap.isDisabled = false
         this.$refs.wrapperMsg.ruleForm = {
           dev: '',
           msgType: '',

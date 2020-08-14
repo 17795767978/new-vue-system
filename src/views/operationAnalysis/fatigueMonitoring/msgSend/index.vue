@@ -6,6 +6,7 @@
       isBusRepeat
       isBusSelfCodeSelect
       isSend
+      isEmpty
       @sendMsg="sendMsg"
       @configCheck="getSearch" />
       <div class="table-style">

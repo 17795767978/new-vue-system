@@ -1,7 +1,7 @@
 <template>
   <div class="capture" v-loading="loading">
-    <el-button type="primary" style="margin-left: 5vw;" @click="getCapture" :disabled="warnDetails.busState === '0' || isDisabled">主动抓拍</el-button>
-    <span style="font-size: .7vw; color: red; margin-left: 1vw;" v-show="warnDetails.busState === '0' ">*设备不在线，无法抓拍</span>
+    <el-button type="primary" style="margin-left: 5vw;" @click="getCapture" :disabled="isDisabled">主动抓拍</el-button>
+    <!-- <span style="font-size: .7vw; color: red; margin-left: 1vw;" v-show="warnDetails.busState === '0' ">*设备不在线，无法抓拍</span> -->
     <div class="waiting" v-if="timer">
       <h2>设备正在抓拍，请稍等。。。</h2>
       <el-progress type="circle" :percentage="percent" :status="status"></el-progress>
@@ -61,7 +61,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.warnDetails)
   },
   watch: {
     percent (newV) {
@@ -88,7 +87,6 @@ export default {
             this.loading = false
             this.imgListDis = res.filter(item => item.warnType === 'DMSTOSNAP')
             this.imgListDisSec = res.filter(item => item.warnType === 'ADASSNAP')
-            console.log(this.imgListDisSec)
           }, 500)
         })
       }
@@ -119,6 +117,10 @@ export default {
         this.imgListDisSec = []
         this.$message.success('抓拍添加成功')
         this.timeInterval()
+      }).catch(err => {
+        this.loading = false
+        this.isDisabled = false
+        this.$message.error(err.message)
       })
     },
     getImgList () {
@@ -140,7 +142,6 @@ export default {
             this.loading = false
             this.imgListDis = res.filter(item => item.warnType === 'DMSTOSNAP')
             this.imgListDisSec = res.filter(item => item.warnType === 'ADASSNAP')
-            console.log(this.imgListDisSec)
           }, 500)
         }
       })
@@ -153,6 +154,7 @@ export default {
       }, 1000)
     },
     beforeDestroy () {
+      this.loading = false
       this.imgList = []
       this.imgListDis = []
     }

@@ -32,7 +32,7 @@ export const aysncRoutesMap = [
     path: '/newBigScreen',
     component: Layout,
     meta: {
-      title: '监控分析大屏',
+      title: '实时综合运营监控',
       icon: 'nocturne icon-dash',
       roles: ['/chart-analysis/all']
     },
@@ -40,7 +40,7 @@ export const aysncRoutesMap = [
       path: 'newBigScreen-analysis',
       component: _import_('newBigScreen/index'),
       meta: {
-        title: '监控分析大屏',
+        title: '实时综合运营监控',
         icon: 'nocturne icon-dash',
         roles: ['/chart-analysis/all']
       }
@@ -98,7 +98,7 @@ export const aysncRoutesMap = [
       name: 'dispatchingOperationAnalysis',
       component: _import_('operationAnalysis/dispatchingOperationAnalysis/index'),
       meta: {
-        title: '调度运营分析',
+        title: '客流分析',
         icon: 'nocturne icon-dash',
         path: 'runtime-analysis',
         roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/bus-passenger']
@@ -262,7 +262,7 @@ export const aysncRoutesMap = [
       component: _import_('operationAnalysis/fatigueMonitoring/index'),
       name: 'fatigueMonitoring',
       meta: {
-        title: '疲劳监测',
+        title: '安全运营监控',
         icon: 'nocturne icon-dash',
         roles: ['/alarm-center', '/alarm-content', '/device-status', '/alarm-analysis', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter', '/car-sort', '/monitoring-ledger', '/diary-table', '/device-parameter', '/msg-safe-send', '/realtime-monitoring', '/equipment-alarm']
       },
@@ -426,7 +426,7 @@ export const aysncRoutesMap = [
     component: Layout,
     name: 'dataAnalysis',
     meta: {
-      title: '数据分析',
+      title: '线网评价',
       icon: 'nocturne icon-dash',
       roles: ['/data-overview-page', '/line-condition', 'repeatability-index', 'repeatability-detail', 'comprehensive-query', 'line-network-core', 'line-netWork-core-Detail', 'flow-comprehensive-query', 'line-od']
     },

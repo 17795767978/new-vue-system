@@ -483,6 +483,24 @@ export const tiredMonitoringApi = {
       desc: '报警抄送'
     },
     {
+      name: 'getBuslsOnLine',
+      method: 'POST',
+      path: '/warns/warnInfoDetail/getBusIsOnLine',
+      mockPath: '/warns/warnInfoDetail/getBusIsOnLine',
+      params: {
+      },
+      desc: '车辆在线'
+    },
+    {
+      name: 'getDevIsOnLine',
+      method: 'POST',
+      path: '/takePhoto/manual/getDevIsOnLine',
+      mockPath: '/takePhoto/manual/getDevIsOnLine',
+      params: {
+      },
+      desc: '设备在线'
+    },
+    {
       name: 'Voiceprompt',
       method: 'POST',
       path: '/warns/Voiceprompt',
