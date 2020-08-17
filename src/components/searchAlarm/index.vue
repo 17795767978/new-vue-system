@@ -1174,10 +1174,10 @@ export default {
         cale: this.formInline.diffStandard,
         startDate: moment(this.formInline.startDate).format('YYYY-MM-DD'),
         endDate: moment(this.formInline.endDate).format('YYYY-MM-DD'),
-        pfrGetOnNumberStart: this.select.getOnNumMin === null ? this.select.getOnNumMin : Number(this.select.getOnNumMin),
-        pfrGetOnNumberEnd: this.select.getOnNumMax === null ? this.select.getOnNumMax : Number(this.select.getOnNumMax),
-        pfrGetOffNumberStart: this.select.getOffNumMin === null ? this.select.getOffNumMin : Number(this.select.getOffNumMin),
-        pfrGetOffNumberEnd: this.select.getOffNumMax === null ? this.select.getOffNumMax : Number(this.select.getOffNumMax)
+        pfrGetOnNumberStart: this.select ? Number(this.select.getOnNumMin) : null,
+        pfrGetOnNumberEnd: this.select ? Number(this.select.getOnNumMax) : null,
+        pfrGetOffNumberStart: this.select ? Number(this.select.getOffNumMin) : null,
+        pfrGetOffNumberEnd: this.select ? Number(this.select.getOffNumMax) : null
       }
       if (this.isDate) {
         params.startTime = this.formInline.valueTime[0]
