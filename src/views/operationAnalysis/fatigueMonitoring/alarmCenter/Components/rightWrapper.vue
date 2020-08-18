@@ -302,7 +302,7 @@
           width="180">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="primary" size="mini">详情</el-button>
-            <el-button v-if="userId === '1'" :disabled="scope.row.auditStatus !== '0'" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
+            <el-button v-if="userId === '1'" :disabled="recheckType === '0' && scope.row.auditStatus !== '0'" @click="handleAudit(scope.row)" type="warning" size="mini">审核</el-button>
             <el-button v-else @click="handleCheck(scope.row)" :type="scope.row.handleSuggestion ? 'info' : 'success'" size="mini">处理</el-button>
           </template>
         </el-table-column>
@@ -465,13 +465,15 @@ export default {
       sendTitle: '',
       warnDetails: {},
       drvLoading: false,
-      isAudit: false
+      isAudit: false,
+      recheckType: sessionStorage.getItem('recheckType')
     }
   },
   computed: {
     ...mapGetters(['userId'])
   },
   created () {
+    console.log(sessionStorage.getItem('recheckType'))
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 3600 * 24 * 1 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')

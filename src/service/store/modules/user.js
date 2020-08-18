@@ -89,11 +89,11 @@ const user = {
       return new Promise((resolve, reject) => {
         // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
         // resolve()
-        console.log(params.type)
         if (params.type === 'auto') {
           api['user.upslogin'](params).then((res) => {
             sessionStorage.setItem('userName', res.userInfo.userAccount)
             sessionStorage.setItem('userRealName', res.userInfo.userRealName)
+            sessionStorage.setItem('recheckType', res.userInfo.recheckType)
             commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
             commit('SET_USERINFO', res.userInfo.userOrgUuid)
             sessionStorage.setItem('id', res.userInfo.userId)
@@ -105,6 +105,7 @@ const user = {
           api['user.login'](params).then(res => {
             sessionStorage.setItem('userName', res.userInfo.userAccount)
             sessionStorage.setItem('userRealName', res.userInfo.userRealName)
+            sessionStorage.setItem('recheckType', res.userInfo.recheckType)
             commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
             commit('SET_USERINFO', res.userInfo.userOrgUuid)
             sessionStorage.setItem('id', res.userInfo.userId)
@@ -138,6 +139,7 @@ const user = {
         sessionStorage.removeItem('userRoleType')
         sessionStorage.removeItem('closeMsg')
         sessionStorage.removeItem('userRealName')
+        sessionStorage.removeItem('recheckType')
         resolve()
       })
     },

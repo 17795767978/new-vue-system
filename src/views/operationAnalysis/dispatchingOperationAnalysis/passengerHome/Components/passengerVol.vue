@@ -65,7 +65,7 @@ export default {
           }
         }
         this.lineData = [{
-          name: '实时',
+          name: '实时客流人次',
           type: 'line',
           data: res.datas[0],
           smooth: true,
@@ -79,7 +79,7 @@ export default {
             }
           }
         }, {
-          name: '昨日',
+          name: '昨日客流人次',
           type: 'line',
           data: res.datas[1],
           smooth: true,
@@ -96,7 +96,7 @@ export default {
         this.maxNum = max([max(res.datas[0]), max(res.datas[1])])
         this.dataLength = 2
         this.legend = {
-          data: ['实时', '昨日'],
+          data: ['实时客流人次', '昨日客流人次'],
           top: 10,
           right: 10,
           textStyle: {
