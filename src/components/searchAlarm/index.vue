@@ -1099,6 +1099,7 @@ export default {
     getExcel () {
       let lineArr = []
       let checkList = []
+      let isHistory = ''
       this.downLoadLoading = true
       let defaultForm = this.formData
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
@@ -1118,6 +1119,16 @@ export default {
         })
       } else {
         checkList = []
+      }
+      console.log(this.select)
+      if (this.select) {
+        isHistory = this.select.isHistory
+      } else {
+        if (this.formInline.radio === '2') {
+          isHistory = '0'
+        } else {
+          isHistory = '1'
+        }
       }
       this.$api[`${this.downLoadName}`]({
         company: this.formInline.lineOrgId,
@@ -1143,6 +1154,7 @@ export default {
         devCode: this.formInline.deviceCode,
         auditStatus: this.userId === '1' ? checkList : ['1'],
         // handleResults: checkList,
+        isHistory: isHistory,
         busPlateNumber: this.formInline.busNumber,
         warnTypeId: ['ADASSNAP', 'DMSTOSNAP'],
         devModel: this.formInline.devModel

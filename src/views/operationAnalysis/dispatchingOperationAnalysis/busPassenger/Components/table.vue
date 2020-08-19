@@ -55,9 +55,9 @@
         prop="pfrpassengerDif"
         align="center"
         label="上下车客流差值">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <span>{{scope.row.pfrpassengerDif}}%</span>
-        </template>
+        </template> -->
       </el-table-column>
     </el-table>
     <el-pagination
@@ -88,7 +88,7 @@ export default {
       pageSize: 15,
       total: 0,
       loading: false,
-      allTableData: []
+      tableAllData: []
     }
   },
   computed: {
@@ -128,31 +128,31 @@ export default {
     _pageBusPersonTotalList (params) {
       this.loading = true
       this.$api['passengerFlow.pageBusPersonTotalList'](params).then(res => {
-        // console.log(res)
+        console.log(res)
         this.loading = false
-        this.tableAllData = this.format(res)
-        this.tableData = res.slice(0, 15)
-        this.total = this.allTableData.length
+        this.tableAllData = res
+        this.tableData = this.tableAllData.slice(0, 15)
+        this.total = this.tableAllData.length
         this.pageNumber = 1
       })
     },
-    format (data) {
-      let dataFormat = []
-      data.forEach(item => {
-        let pfrpassengerDifNum
-        if (item.getOnNumber > 0) {
-          pfrpassengerDifNum = Math.abs(`${((item.getOnNumber - item.getOffNumber) / item.getOnNumber * 100).toFixed(2)}`)
-          dataFormat.push(Object.assign({ pfrpassengerDif: pfrpassengerDifNum }, item))
-        } else {
-          dataFormat.push(Object.assign({ pfrpassengerDif: '0' }, item))
-        }
-      })
-      dataFormat = dataFormat.sort((prev, next) => next.pfrpassengerDif - prev.pfrpassengerDif)
-      return dataFormat
-    },
+    // format (data) {
+    //   let dataFormat = []
+    //   data.forEach(item => {
+    //     let pfrpassengerDifNum
+    //     if (item.getOnNumber > 0) {
+    //       pfrpassengerDifNum = Math.abs(`${((item.getOnNumber - item.getOffNumber) / item.getOnNumber * 100).toFixed(2)}`)
+    //       dataFormat.push(Object.assign({ pfrpassengerDif: pfrpassengerDifNum }, item))
+    //     } else {
+    //       dataFormat.push(Object.assign({ pfrpassengerDif: '0' }, item))
+    //     }
+    //   })
+    //   dataFormat = dataFormat.sort((prev, next) => next.pfrpassengerDif - prev.pfrpassengerDif)
+    //   return dataFormat
+    // },
     handleCurrentChange (val) {
       this.pageNumber = val
-      this.tableData = this.allTableData.slice((val - 1) * this.pageSize, val * this.pageSize)
+      this.tableData = this.tableAllData.slice((val - 1) * this.pageSize, val * this.pageSize)
     }
   }
 }

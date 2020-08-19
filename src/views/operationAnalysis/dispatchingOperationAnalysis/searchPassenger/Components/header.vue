@@ -304,6 +304,8 @@ export default {
       this.centerDialogVisible = true
     },
     getExcel () {
+      let isHistory = ''
+      isHistory = this.formInline.radio === '2' ? '0' : '1'
       this.isLoading = true
       this.formInline.startTime = moment(this.formInline.valueTime[0]).format('YYYY-MM-DD HH:mm:ss')
       this.formInline.endTime = moment(this.formInline.valueTime[1]).format('YYYY-MM-DD HH:mm:ss')
@@ -314,7 +316,7 @@ export default {
         busNumber: this.formInline.busNumber,
         startTime: this.formInline.startTime,
         endTime: this.formInline.endTime,
-        isHistory: this.formInline.radio === '2'
+        isHistory
       }).then(res => {
         // console.log(res)
         window.open(res.url)

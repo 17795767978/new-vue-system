@@ -29,7 +29,7 @@
           </template>
         </el-table-column>
         <!-- <el-table-column prop="paramName" label="参数名称"></el-table-column> -->
-        <el-table-column align="center" prop="paramName" label="参数编码"></el-table-column>
+        <el-table-column align="center" prop="warnType" label="参数编码"></el-table-column>
         <el-table-column align="center" prop="paramValue" label="参数值"></el-table-column>
         <el-table-column align="center" prop="paramIsvalid" label="启/禁用">
         <template slot-scope="scope" >

@@ -49,6 +49,10 @@ export default {
       // console.log(value)
       if (Number(value) > 1000) {
         callback(new Error('排序最大数为1000'))
+      } else if (Number(value) < 0) {
+        callback(new Error('排序最小数为0'))
+      } else if (isNaN(Number(value))) {
+        callback(new Error('请输入数字'))
       } else {
         callback()
       }
