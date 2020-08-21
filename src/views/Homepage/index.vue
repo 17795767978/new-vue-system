@@ -81,7 +81,6 @@ export default {
       }
       filterRoles(roles)
       this.rolesTem = roleData
-      console.log(roleData)
     },
 
     /**

@@ -441,6 +441,16 @@ export const aysncRoutesMap = [
           icon: 'nocturne icon-dash',
           roles: ['/channel-management']
         }
+      },
+      {
+        path: 'passenger-flow-algorithm-configuration',
+        component: _import_('systemAdmin/passengerFlowAlgorithm/index'),
+        name: 'passengerFlowAlgorithm',
+        meta: {
+          title: '客流算法配置',
+          icon: 'nocturne icon-dash',
+          roles: ['/channel-management']
+        }
       }
     ]
   },
