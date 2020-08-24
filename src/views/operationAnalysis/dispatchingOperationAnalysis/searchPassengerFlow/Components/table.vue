@@ -43,7 +43,7 @@
       show-summary
       height="75vh"
       v-loading="loading"
-      style="width: 100%">
+      :style="style">
       <el-table-column
         prop="id"
         label="序号"
@@ -119,7 +119,10 @@ export default {
       scrollHeight: 0,
       loading: true,
       totalTableAllData: [],
-      indexArr: []
+      indexArr: [],
+      style: {
+        width: '100%'
+      }
     }
   },
   mounted () {
@@ -176,8 +179,10 @@ export default {
   methods: {
     _getOnOffPersonCountlist (params, type) {
       this.loading = true
+      this.style.width = '99.9%'
       if (type === '1') {
         this.$api['passengerFlow.getTodayOnOffPersonCountlist'](params).then(res => {
+          this.style.width = '100%'
           this.totalTableAllData = res
           this.tableAllData = this.getOrgTotleNum(JSON.parse(JSON.stringify(res)))
           this.$store.dispatch('getDownloadData', this.tableAllData)
@@ -200,6 +205,7 @@ export default {
         })
       } else {
         this.$api['passengerFlow.getOnOffPersonCountlist'](params).then(res => {
+          this.style.width = '100%'
           this.totalTableAllData = res
           this.tableAllData = this.getOrgTotleNum(JSON.parse(JSON.stringify(res)))
           this.$store.dispatch('getDownloadData', this.tableAllData)
@@ -239,8 +245,6 @@ export default {
         let getOffArr = arrOrg.map(item => Number(item.offPersonCount))
         let getTotalBusNum = arrOrg.map(item => Number(item.totalBusNum))
         let getTotalTripTime = arrOrg.map(item => Number(item.totalTripTime))
-        console.log(getTotalBusNum)
-        console.log(getTotalTripTime)
         index += arrOrg.length
         this.indexArr.push(index)
         let currentData = {
@@ -336,7 +340,14 @@ export default {
                 return prev
               }
             }, 0)
-            sums[index] += ' 人次'
+            if (item.indexOf('Person') > -1) {
+              sums[index] += ' 人次'
+            } else if (item.indexOf('totalTripTime') > -1) {
+              sums[index] += ' 趟'
+            } else if (item.indexOf('totalBusNum') > -1) {
+              sums[index] += ' 辆'
+            }
+            console.log(item)
           } else {
             sums[index] = '——'
           }
