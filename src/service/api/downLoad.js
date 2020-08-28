@@ -145,6 +145,34 @@ export const downLoadApi = {
         uploadDate: ''
       },
       desc: '线路od_导出'
+    },
+    {
+      name: 'getBadDrivingDriverRankingExport',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingDriverRankingExport',
+      mockPath: '/zhfxpt/getBadDrivingDriverRankingExport',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: ''
+      },
+      desc: '不良驾驶行为分析报警司机排行导出'
+    },
+    {
+      name: 'getBadDrivingBusRankingExport',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingBusRankingExport',
+      mockPath: '/zhfxpt/getBadDrivingBusRankingExport',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: ''
+      },
+      desc: '不良驾驶行为分析报警车辆排行导出'
     }
   ]
 }

@@ -21,6 +21,21 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <!-- <el-form-item label="选择车牌号:" v-if="isBusRepeat">
+        <el-select
+          v-model="formInline.carList"
+          filterable
+          placeholder="请选择"
+          multiple
+          collapse-tags>
+          <el-option
+            v-for="item in carList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item> -->
       <el-form-item label="选择线路" v-if="islineIdRepeat">
         <el-select style="width: 200px" filterable v-model="formInline.lineIds" multiple collapse-tags placeholder="请选择">
           <el-option
@@ -55,6 +70,21 @@
         <el-select class="font-style" style="width: 200px" v-model="formInline.busNumber" :multiple="isBusMul" :collapse-tags="isBusMul" filterable placeholder="请选择">
           <el-option
             v-for="item in carOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择车辆自编号:" v-if="isBusSelfCodeSelect">
+        <el-select
+          v-model="formInline.carNo"
+          filterable
+          placeholder="请选择"
+          multiple
+          collapse-tags>
+          <el-option
+            v-for="item in carNo"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -211,6 +241,7 @@
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
         <el-button type="success" @click="onSave" v-if="isDownload">导出</el-button>
         <el-button type="success" @click="getTableData" v-if="isMul">批量设置</el-button>
+        <el-button type="primary" @click="sendMsg" v-if="isSend">下发</el-button>
       </el-form-item>
     </el-form>
     <el-dialog
@@ -268,6 +299,9 @@ export default {
       type: Boolean
     },
     isBusMul: {
+      type: Boolean
+    },
+    isBusSelfCodeSelect: {
       type: Boolean
     },
     isTurn: {
@@ -337,6 +371,9 @@ export default {
     // 方向是否可以清空
     isTurnEmpty: {
       type: Boolean
+    },
+    isSend: {
+      type: Boolean
     }
   },
   data () {
@@ -371,12 +408,14 @@ export default {
         statusNumber: '',
         selfNumber: '',
         statusType: '2',
-        onLine: ''
+        onLine: '',
+        carNo: []
       },
       searchStationOptions: [],
       stationOptions: [],
       comOptions: [],
       comOptionsSec: [],
+      carNo: [], // 车牌自编号 @author lishuaiwu 2020/07/17
       turnOptions: [{
         value: '1',
         label: '上行'
@@ -419,6 +458,9 @@ export default {
       //   this.lineOptionsSec = res
       // })
     }
+    this.$store.dispatch('getCarNoList').then(res => {
+      this.carNo = res
+    })
     this._alarmType({
       warnLevel: ''
     })
@@ -433,7 +475,7 @@ export default {
     this._getDevType()
   },
   computed: {
-    ...mapGetters(['userId', 'formDown'])
+    ...mapGetters(['userId', 'formDown', 'formData'])
   },
   mounted () {
     let defaultForm = this.$store.getters.formData
@@ -719,7 +761,8 @@ export default {
         statusNumber: this.formInline.statusNumber,
         selfNumber: this.formInline.selfNumber,
         statusType: this.formInline.statusType,
-        onLine: this.formInline.onLine
+        onLine: this.formInline.onLine,
+        carNo: this.formInline.carNo
       }
       this.$emit('configCheck', configData)
     },
@@ -749,7 +792,8 @@ export default {
         statusNumber: '',
         selfNumber: '',
         onLine: '',
-        statusType: '2'
+        statusType: '2',
+        carNo: []
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -775,7 +819,8 @@ export default {
         statusNumber: this.formInline.statusNumber,
         selfNumber: this.formInline.selfNumber,
         statusType: this.formInline.statusType,
-        onLine: this.formInline.onLine
+        onLine: this.formInline.onLine,
+        carNo: this.formInline.carNo
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -848,9 +893,12 @@ export default {
       }
       this.$emit('configCheckMul', configData)
     },
+    sendMsg () {
+      this.$emit('sendMsg')
+    },
     getExcel () {
+      let defaultForm = this.formData
       console.log(this.formInline)
-      console.log(this.select)
       let lineArr = []
       this.downLoadLoading = true
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
@@ -876,7 +924,9 @@ export default {
         dateTime: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
         lineType: this.formInline.lineType,
         date: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
-        uploadDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD')
+        uploadDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
+        // isHistory: ,
+        warnTypes: this.formInline.warnTypeId.length > 0 ? this.formInline.warnTypeId : defaultForm.warningArr
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

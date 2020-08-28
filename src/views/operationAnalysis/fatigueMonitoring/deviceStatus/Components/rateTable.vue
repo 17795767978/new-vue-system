@@ -1,10 +1,10 @@
 <template>
   <div class="table-wrapper">
-    <h4 style="margin-top: 10px;">
+    <!-- <h4 style="margin-top: 10px;">
       <i class="fa fa-fort-awesome"></i>
       <span style="font-size: 16px;">设备状态</span>
       <span v-show="outsideTime" style="margin-left: 20px">更新时间：{{outsideTime}}</span>
-    </h4>
+    </h4> -->
     <el-table
       :data="tableData"
       size="mini"
@@ -22,33 +22,54 @@
       </el-table-column>
       <el-table-column
         align="center"
+        prop="devCode"
+        label="设备编号">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="orgName"
+        label="所属公司">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="lineName"
+        width="80"
         label="所属线路">
-        <template slot-scope="scope">
-          <el-button style="width: 150px;" type="primary" size="mini" plain @click="handleClick(scope.row)">{{scope.row.lineName}}</el-button>
-        </template>
       </el-table-column>
       <el-table-column
         align="center"
-        prop="onlineDeviceCount"
-        label="在线设备数">
+        prop="busSelfCode"
+        label="车辆自编号">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="deviceCount"
-        label="已安装设备数">
+        prop="busPlateNumber"
+        label="车牌号">
       </el-table-column>
       <el-table-column
         align="center"
-        label="在线率(%)"
+        prop="devOnlineStatus"
+        width="100"
+        label="在线状态">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="devIsvalid"
+        width="100"
+        label="启禁状态">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="devOnlineTime"
+        :formatter="formatterTime"
+        label="更新时间">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="离线时间"
         :formatter="formatterRate"
         >
       </el-table-column>
-      <!-- <el-table-column
-        align="center"
-        label="更新时间"
-        :formatter="formatterTime"
-        >
-      </el-table-column> -->
     </el-table>
     <div class="block">
       <el-pagination
@@ -61,62 +82,26 @@
       </el-pagination>
       <span class="demonstration" style="float: right; margin-top: 20px; line-height: 36px;">共{{total}}条</span>
     </div>
-    <!-- 弹出框 -->
-    <el-dialog :title="lineName" width="80%" :visible.sync="dialogTableVisible">
-      <el-table size="mini" :data="lineTableData" border height="600px" style="margin-bottom: 40px;" v-loading="loading">
-        <el-table-column type="index" align="center" label="序号" width="60">
-          <template slot-scope="scope">
-            <span> {{scope.$index + (inCurrentPage - 1) * 10 + 1}} </span>
-          </template>
-        </el-table-column>
-        <!-- <el-table-column property="date" label="设备编号"></el-table-column> -->
-        <el-table-column align="center" property="deviceCode" label="设备号"></el-table-column>
-        <el-table-column align="center" property="lineName" label="线路"></el-table-column>
-        <el-table-column align="center" property="busPlateNum" label="车辆"></el-table-column>
-        <el-table-column align="center" label="当前位置">
-          <template slot-scope="scope">
-            <el-popover
-              ref="elPopover"
-              placement="left"
-              trigger="click"
-              >
-              <template>
-                <mapWrapper v-if="isReload" :rowData="rowData" :isReload="isReload"/>
-                <el-button type="success" icon="el-icon-location-outline" slot="reference" circle @click="getRow(scope.row)"></el-button>
-              </template>
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="在线状态">
-          <template slot-scope="scope">
-            {{scope.row.onlineStatus === '1' ? '在线' : '离线'}}
-          </template>
-        </el-table-column>
-        <el-table-column align="center" property="address" :formatter="formatterTimeInside" label="更新时间"></el-table-column>
-      </el-table>
-      <div class="block">
-        <el-pagination
-          style="float: right; margin-top: -20px;"
-          background
-          :current-page="inCurrentPage"
-          @current-change="handleCurrentChangeLine"
-          layout="prev, pager, next"
-          :total="lineTotal">
-        </el-pagination>
-        <span class="demonstration" style="float: right; margin-top: -20px;line-height: 36px;">共{{lineTotal}}条</span>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import moment from 'moment'
-import mapWrapper from './map'
+// import mapWrapper from './map'
 import { mapGetters } from 'vuex'
 export default {
   props: {
     selectData: {
-      type: Object
+      type: Object,
+      default: () => {
+        return {
+          orgUuid: '',
+          lineUuid: '',
+          car: '',
+          carSelf: '',
+          devOnlineStatus: ''
+        }
+      }
     },
     isUpdate: {
       type: Boolean
@@ -143,17 +128,21 @@ export default {
     }
   },
   components: {
-    mapWrapper
+    // mapWrapper
   },
   computed: {
     ...mapGetters(['userId'])
   },
   created () {
     this._statusTable({
-      pageNum: this.outCurrentPage,
+      pageNumber: this.outCurrentPage,
       pageSize: 10,
-      lineUuid: [], // 线路id，可多选
-      orgUuid: this.userId // 组织机构
+      lineId: '',
+      orgId: this.userId === '1' ? '' : this.userId, // 组织机构
+      busPlateNumber: '',
+      busSelfCode: '',
+      devCode: '',
+      devOnlineStatus: ''
     })
   },
   watch: {
@@ -166,7 +155,17 @@ export default {
     isUpdate () {
       if (this.isUpdate) {
         this.outCurrentPage = 1
-        this._statusTable({ ...this.selectData, pageNum: this.outCurrentPage, pageSize: 10 })
+        console.log(this.selectData.orgUuid)
+        this._statusTable({
+          orgId: this.selectData.orgUuid === '1' ? '' : this.selectData.orgUuid,
+          lineId: this.selectData.lineUuid,
+          pageNumber: this.outCurrentPage,
+          pageSize: 10,
+          busPlateNumber: this.selectData.car,
+          busSelfCode: this.selectData.carSelf,
+          devOnlineStatus: this.selectData.devOnlineStatus,
+          devCode: this.selectData.devCode
+        })
       }
       this.$emit('isUpdateTo')
     }
@@ -184,12 +183,15 @@ export default {
       })
     },
     formatterRate (row) {
-      let num = (row.onlineDeviceCount / row.deviceCount) * 100
-      return JSON.stringify(num).substring(0, 5)
+      if (row.offlineTimeLabel) {
+        return row.offlineTimeLabel
+      } else {
+        return '-'
+      }
     },
-    formatterTimeInside (row) {
-      if (row.updateTime) {
-        return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
+    formatterTime (row) {
+      if (row.devOnlineTime) {
+        return moment(row.devOnlineTime).format('YYYY-MM-DD HH:mm:ss')
       } else {
         return '-'
       }
@@ -217,10 +219,13 @@ export default {
     handleCurrentChange (val) {
       this.outCurrentPage = val
       this._statusTable({
-        pageNum: this.outCurrentPage,
+        orgId: this.selectData.orgUuid || '',
+        lineId: this.selectData.lineUuid || '',
+        pageNumber: this.outCurrentPage,
         pageSize: 10,
-        lineUuid: [], // 线路id，可多选
-        orgUuid: '' // 组织机构
+        busPlateNumber: this.selectData.car || '',
+        busSelfCode: this.selectData.carSelf || '',
+        devOnlineStatus: this.selectData.devOnlineStatus || ''
       })
     },
     // 内层table

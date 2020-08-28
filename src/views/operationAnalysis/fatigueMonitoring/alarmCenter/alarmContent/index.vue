@@ -2,7 +2,7 @@
   <div class="alarm-content">
     <el-row class="pic">
       <el-card shadow="hover" class="person-detail">
-        <personDetail :busDetails="busDetails" />
+        <personDetail :busDetails="busDetails" @update="update"/>
       </el-card>
     </el-row>
     <el-row class="pic" :gutter="12">
@@ -50,6 +50,11 @@ export default {
   created () {
     // this.$route.query.id = JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
     this._warnInfoDetail(this.$route.query.id)
+    if (!this.$route.query.id) {
+      this.$router.replace({
+        name: 'alarmCenter'
+      })
+    }
   },
   activated () {
     // this.$route.query.id = JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
@@ -63,6 +68,9 @@ export default {
       }).then(res => {
         this.busDetails = res
       })
+    },
+    update () {
+      this._warnInfoDetail(this.$route.query.id)
     }
   }
 }

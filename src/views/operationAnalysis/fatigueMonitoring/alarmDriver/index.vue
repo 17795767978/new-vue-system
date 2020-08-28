@@ -6,33 +6,40 @@
       :isDateTo="true"
       :isEmpty="true"
       :isWarntype="true"
+      :isDownload="true"
+      :isAudit="true"
+      :isProcessingResult="true"
+      :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
     <div class="table">
       <Table :searchData="searchData" @driverChanged="driverChanged"/>
     </div>
-    <div class="driver">
+    <!-- <div class="driver">
       <Driver :searchData="searchData" :driverData="driverData"/>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Search from '@/components/searchAlarm'
-import Driver from './Components/driver'
+// import Driver from './Components/driver'
 import Table from './Components/table'
+// import mixinsTime from '@/mixins/global/'
 export default {
   name: 'alarmDriver',
+  // mixins: [mixinsTime],
   data () {
     return {
       searchData: {},
-      driverData: {}
+      driverData: {},
+      downLoadName: 'downLoad.getBadDrivingDriverRankingExport'
     }
   },
   components: {
     Search,
-    Table,
-    Driver
+    Table
+    // Driver
   },
   methods: {
     getSearch (item) {
@@ -52,9 +59,9 @@ export default {
 .table {
   width: 100%;
   padding: 0px 1vw 1vh;
-  height: 100%;
+  height: 75vh;
   box-sizing: border-box;
-  border-bottom: 1px solid #EBEEF5;
+  // border-bottom: 1px solid #EBEEF5;
 }
 .driver {
   width: 100%;

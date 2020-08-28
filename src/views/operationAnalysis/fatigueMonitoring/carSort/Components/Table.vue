@@ -1,13 +1,12 @@
 <template>
   <div v-loading="isloading">
-    <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">不良驾驶行为分析报警司机排行</h2>
+    <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">不良驾驶行为分析报警车辆排行</h2>
     <el-table
       ref="tableWrapper"
       :data="tableData"
-      height="70vh"
+      height="65vh"
       border
-      @sort-change="changeTableSort"
-      style="width: 100%">
+      @sort-change="changeTableSort">
       <el-table-column
         align="center"
         prop="id"
@@ -23,9 +22,9 @@
         :width="getWidth(item, index)"
         :label="item.pldisplay">
         <template slot-scope="scope">
+          <!-- <span v-if="['orgname', 'linename', 'busnumber', 'busselfcode'].some(val => val == item.plvalue)" type="primary" size="mini">{{scope.row[item.plvalue]}}</span>
+          <el-link type="primary" v-else @click="getrowData(scope.row, item.plvalue)">{{scope.row[item.plvalue]}}</el-link> -->
           <span>{{scope.row[item.plvalue]}}</span>
-          <!-- <span v-if="['orgname', 'linename', 'busplatenumber', 'busselfcode', 'drivernum', 'drivername'].some(val => val == item.plvalue)" type="primary" size="mini">{{scope.row[item.plvalue]}}</span> -->
-          <!-- <el-link type="primary" v-else @click="getrowData(scope.row, item.plvalue)">{{scope.row[item.plvalue]}}</el-link> -->
         </template>
       </el-table-column>
     </el-table>
@@ -33,9 +32,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-// item.plvalue === 'drivername'
 import { mapGetters } from 'vuex'
-// const NOT_CLICK = ['orgname', 'linename', 'busplatenumber', 'drivernum', 'drivername', 'warnTotalNum']
 export default {
   props: {
     searchData: {
@@ -50,8 +47,7 @@ export default {
       plain: true,
       tableLength: 0,
       scrollHeight: 0,
-      isloading: true,
-      numHeight: 0
+      isloading: true
     }
   },
   computed: {
@@ -65,8 +61,8 @@ export default {
       startTime: defaultForm.dateArray[0],
       endTime: defaultForm.dateArray[1],
       warnTypes: defaultForm.warningArr,
-      auditStatus: [],
-      handleResult: []
+      handleResults: [],
+      auditStatus: []
     })
   },
   mounted () {
@@ -116,7 +112,7 @@ export default {
   methods: {
     _getTableData (params) {
       this.isloading = true
-      this.$api['tiredMonitoring.getBadDrivingDriverRanking'](params).then(res => {
+      this.$api['tiredMonitoring.getCarAlarmList'](params).then(res => {
         setTimeout(() => {
           this.isloading = false
         }, 100)
@@ -141,12 +137,6 @@ export default {
       })
     },
     bigTable () {
-      // console.log(this.columnArr.length > 15)
-      if (this.columnArr.length > 15) {
-        this.numHeight = 71
-      } else {
-        this.numHeight = 48
-      }
       let eleArr = this.$refs.tableWrapper.$el
       let vDom = eleArr.getElementsByClassName('v-dom')[0]
       let vWrapper = vDom.getElementsByClassName('v-wrapper')[0]
@@ -155,7 +145,7 @@ export default {
       this.scrollHeight = 0
       let tableHeight = table.clientHeight
       if (this.tableLength >= 20) {
-        vDom.style.height = this.numHeight * this.tableLength + 'px'
+        vDom.style.height = 53 * this.tableLength + 'px'
         table.addEventListener('scroll', this.getScroll(table, vDom, vWrapper, tableHeight), true)
       } else {
         table.removeEventListener('scroll', this.getScroll(table, vDom, vWrapper, tableHeight), true)
@@ -164,18 +154,17 @@ export default {
     getScroll (table, vDom, vWrapper, tableHeight) {
       return () => {
         if (this.tableLength >= 20) {
-          if (table.scrollTop < this.numHeight * this.tableLength) {
+          if (table.scrollTop < 53 * this.tableLength) {
             this.scrollHeight = table.scrollTop
           } else {
-            this.scrollHeight = this.numHeight * this.tableLength
+            this.scrollHeight = 53 * this.tableLength
           }
-          let domNum = this.scrollHeight / this.numHeight
-          if (this.scrollHeight > this.numHeight * this.tableLength - tableHeight) {
+          let domNum = Math.floor(this.scrollHeight / 53)
+          if (this.scrollHeight >= 53 * this.tableLength - tableHeight) {
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
             domNum = Math.floor(domNum)
-            this.tableData = this.tableAllData.slice(this.tableLength - 16, this.tableLength)
+            this.tableData = this.tableAllData.slice(this.tableLength - 15, this.tableLength + 1)
           } else {
-            // console.log(this.scrollHeight)
             vWrapper.style.transform = `translateY(${this.scrollHeight}px)`
             domNum = Math.floor(domNum)
             this.tableData = this.tableAllData.slice(domNum, domNum + 15)
@@ -218,7 +207,19 @@ export default {
       }
     },
     getrowData (row, plvalue) {
-      // this.$emit('driverChanged', row)
+      // formInline: {
+      //   orgId: '',
+      //   lineId: '',
+      //   devCode: '',
+      //   busPlateNumber: '',
+      //   busUuid: '',
+      //   busSelfCode: '',
+      //   warnLevel: '',
+      //   warnTypeId: [],
+      //   timeValue: [],
+      //   checkType: [],
+      //   auditStatus: []
+      // },
       let defaultForm = this.formData
       let startTime = `${Object.keys(this.searchData).length > 0 ? this.searchData.dateArray[0] ? this.searchData.dateArray[0] : this.searchData.dateArray[0] : defaultForm.dateArray[0]} 00:00:00`
       let endTime = `${Object.keys(this.searchData).length > 0 ? this.searchData.dateArray[1] ? this.searchData.dateArray[1] : this.searchData.dateArray[1] : defaultForm.dateArray[1]} 23:59:59`
@@ -242,7 +243,7 @@ export default {
         devCode: '',
         busSelfCode: '',
         warnLevel: '',
-        driverName: row.drivername,
+        driverName: '',
         warnTypeId: plvalue === 'warnTotalNum' ? this.searchData.warnTypeId ? this.searchData.warnTypeId : [] : [plvalue],
         pageSize: 10,
         pageNum: 1,

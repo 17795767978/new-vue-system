@@ -10,20 +10,26 @@
         border
         fit
         highlight-current-row
+        height="75vh"
         style="width: 100%">
         <el-table-column align="center" label="序号" width="80" type="index">
         </el-table-column>
-        <el-table-column align="center" label="角色名称" width="200">
+        <el-table-column align="center" label="角色名称" width="180">
           <template slot-scope="scope">
             <span>{{scope.row.roleName}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="角色描述" width="200">
+        <el-table-column align="center" label="角色描述" width="180">
           <template slot-scope="scope">
             <span>{{scope.row.describes}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="创建人" width="120">
+        <el-table-column align="center" label="角色类型" width="100">
+          <template slot-scope="scope">
+            <span>{{scope.row.roleType === '0' ? '普通角色' : '审核角色'}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="创建人" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.createUser}}</span>
           </template>
@@ -33,9 +39,10 @@
             <span>{{scope.row.enabled === '1' ? '启用' : '禁用'}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="创建时间" :formatter="getCreateTime">
+        <!-- roleType -->
+        <el-table-column align="center" label="创建时间" width="220" :formatter="getCreateTime">
         </el-table-column>
-        <el-table-column align="center" label="修改时间" :formatter="getUpdateTime">
+        <el-table-column align="center" label="修改时间" width="220" :formatter="getUpdateTime">
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
@@ -49,7 +56,17 @@
                 size="mini"
                 type="warning"
                 @click="handleAllot(scope.row)"
-              >分配权限</el-button>
+              >菜单权限</el-button>
+              <el-button
+                size="mini"
+                type="warning"
+                @click="handleLineAllow(scope.row)"
+              >线路权限</el-button>
+              <el-button
+                size="mini"
+                type="warning"
+                @click="handleDataAllot(scope.row)"
+              >报警类型</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -75,14 +92,6 @@
           placeholder="请输入角色名称">
         </el-input>
         </el-row>
-        <!-- <el-row style="margin-top: 20px">
-        <span>角色排序：</span>
-        <el-input
-          style="width: 200px"
-          v-model.number="sort"
-          placeholder="请输入排序">
-        </el-input>
-        </el-row> -->
         <el-row style="margin-top: 20px">
         <span style="color: red">* </span>
         <span>角色描述：</span>
@@ -107,24 +116,40 @@
           </el-option>
         </el-select>
         </el-row>
+        <el-row style="margin-top: 20px">
+        <span style="color: red">* </span>
+        <span>角色类型：</span>
+        <el-select
+          style="width: 200px"
+          v-model="roleType"
+          placeholder="请选择">
+          <el-option
+            v-for="item in roleTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </el-row>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onRoleSubmit">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
-      title="分配权限"
+      :title="`${type}分配权限`"
       :visible.sync="dialogRoleVisible"
       width="300px">
       <div>
         <el-tree
-          :data="treeData"
+          v-if="dialogRoleVisible"
+          :data="type === '菜单' ? treeData : treeList"
           ref="tree"
           show-checkbox
-          node-key="resourceId"
-          :default-checked-keys="defaultTreeData"
+          :node-key="type === '菜单' ? 'resourceId' : 'id'"
+          :default-checked-keys="type === '菜单' ? defaultTreeData : defaultData"
           @check-change="checkChange"
-          :props="defaultProps">
+          :props="type === '菜单' ? defaultProps : dataProps">
         </el-tree>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -168,20 +193,42 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="角色类型：" prop="roleType">
+          <el-select
+            style="width: 240px"
+            v-model="adminForm.roleType"
+            placeholder="请选择">
+            <el-option
+              v-for="item in roleTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmitUpdate">确 定</el-button>
       </span>
     </el-dialog>
+    <lineDialog :lineTreeDatas="lineTreeDatas" :rowData="rowData" @updateList="updateList"/>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+// import mixinsTime from '@/mixins/global/'
+import lineDialog from './Components/lineDialog'
+import { mapGetters } from 'vuex'
 export default {
-  name: 'Role',
+  name: 'roleList',
+  // mixins: [mixinsTime],
+  components: {
+    lineDialog
+  },
   data () {
     return {
+      type: '菜单',
       list: [],
       dialogVisible: false,
       dialogRoleVisible: false,
@@ -190,11 +237,13 @@ export default {
       enabled: '1',
       describes: '',
       roleId: '',
+      roleType: '',
       adminForm: {
         roleId: '',
         roleName: '',
         describes: '',
-        enabled: ''
+        enabled: '',
+        roleType: ''
       },
       rules: {
         roleName: [
@@ -205,6 +254,9 @@ export default {
         ],
         enabled: [
           { required: true, message: '请选择状态', trigger: 'blur' }
+        ],
+        roleType: [
+          { required: true, message: '请选择角色类型', trigger: 'blur' }
         ]
       },
       enableOptions: [
@@ -217,12 +269,23 @@ export default {
           label: '禁用'
         }
       ],
+      roleTypeOptions: [
+        { value: '0', label: '普通角色' }, { value: '1', label: '审核角色' }
+      ],
+      // 菜单
       defaultProps: {
         children: 'children',
         label: 'name'
       },
-      treeData: [],
-      defaultTreeData: [],
+      // 数据
+      dataProps: {
+        children: 'children',
+        label: 'title'
+      },
+      treeData: [], // 菜单
+      treeList: [], // 数据
+      defaultTreeData: [], // 菜单
+      defaultData: [], // 数据
       total: '',
       currentPage: 1,
       rolesIndexArr: [],
@@ -231,12 +294,23 @@ export default {
       currentName: '',
       resourceList: [],
       disabledArr: [],
-      treeParentIds: []
+      treeParentIds: [],
+      lineTreeDatas: [],
+      rowData: {}
     }
+  },
+  computed: {
+    ...mapGetters(['userId'])
   },
   created () {
     this.getSysRoleList()
     this.getSourceList()
+    this.getDataList()
+    setTimeout(() => {
+      this._getLineTree({
+        orgUuid: this.userId
+      })
+    }, 20)
   },
   watch: {
     dialogRoleVisible (newValue) {
@@ -247,6 +321,14 @@ export default {
     }
   },
   methods: {
+    _getLineTree (params) {
+      this.$api['wholeInformation.getLineTree'](params).then(res => {
+        this.lineTreeDatas = res
+      })
+    },
+    updateList () {
+      this.getSysRoleList()
+    },
     getSysRoleList () {
       this.$api['role.list']({
         enabled: '',
@@ -260,7 +342,9 @@ export default {
       })
     },
     getSourceList () {
-      this.$api['platformMenu.list']().then(res => {
+      this.$api['platformMenu.list']({
+        id: localStorage.getItem('id')
+      }).then(res => {
         // this.treeData = res.resourceTree
         this.treeParentIds = []
         let initList = []
@@ -334,12 +418,13 @@ export default {
       // console.log(this.treeParentIds)
     },
     onRoleSubmit () {
-      if (this.roleName.length > 0 && this.describes !== '') {
+      if (this.roleName.length > 0 && this.describes !== '' && this.roleType !== '') {
         if (!this.rolesNameArr.some(item => item === this.roleName)) {
           this.$api['role.add']({
             roleName: this.roleName,
             enabled: this.enabled,
-            describes: this.describes
+            describes: this.describes,
+            roleType: this.roleType
           }).then(res => {
             this.getSysRoleList()
             this.adminForm.roleName = this.roleName
@@ -380,24 +465,16 @@ export default {
       })
     },
     handleAllot (row) {
+      this.type = '菜单'
       let arr = JSON.parse(JSON.stringify(row.resources))
       this.dialogRoleVisible = true
       this.roleId = row.roleId
-      // arr = arr.filter(item => item.resourceId !== '1' &&
-      //   item.resourceId !== '2' &&
-      //   item.resourceId !== '11' &&
-      //   item.resourceId !== '14' &&
-      //   item.resourceId !== '20' &&
-      //   item.resourceId !== '23'
-      // )
-      console.log('-------', this.treeParentIds)
       arr = arr.sort((prev, next) => Number(prev.resourceId) - Number(next.resourceId))
       this.treeParentIds.forEach(id => {
         if (arr.some(item => item.resourceId === id)) {
           arr = arr.filter(deleteItem => deleteItem.resourceId !== id)
         }
       })
-      console.log(arr)
       if (arr && arr.length > 0) {
         // 初始化 进入树形结构时的选中id
         let currentIndex = ''
@@ -428,20 +505,68 @@ export default {
         this.defaultTreeData = []
       }
     },
-    onAllotubmit () {
-      let allresourceIds = []
-      allresourceIds = this.$refs.tree.getHalfCheckedNodes().map(item => item.resourceId)
-      allresourceIds = [...allresourceIds, ...this.$refs.tree.getCheckedKeys()]
-      const resourceIds = allresourceIds
-      this.$api['resource.updateRole']({
-        resourceIds,
-        roleId: this.roleId
+    handleLineAllow (row) {
+      this.$children[5].dialogTableVisible = true
+      this.rowData = row
+    },
+    getDataList () {
+      this.$api['platformMenu.dataList']({
+        id: localStorage.getItem('id')
       }).then(res => {
-        this.dialogRoleVisible = false
-        this.$message.success('分配成功！')
-        this.defaultTreeData = []
-        this.getSysRoleList()
+        this.treeList = res.resourceTree
       })
+    },
+    // 数据权限
+    handleDataAllot (row) {
+      this.defaultData = []
+      this.type = '数据'
+      this.dialogRoleVisible = true
+      this.roleId = row.roleId
+      let arr = JSON.parse(JSON.stringify(row.dataAuths))
+      arr = arr.map(item => Number(item.dataResourceId))
+      arr = arr.sort((prev, next) => prev - next)
+      let allParents = [] // 找到所有的父级
+      this.treeList.forEach(item => {
+        if (item.children.length > 0) {
+          allParents.push(item.id)
+        }
+      })
+      arr = arr.map(item => String(item))
+      arr.forEach(item => {
+        if (!allParents.some(i => i === item)) {
+          this.defaultData.push(item)
+        }
+      })
+      console.log(this.defaultData)
+    },
+    onAllotubmit () {
+      if (this.type === '菜单') {
+        let allresourceIds = []
+        allresourceIds = this.$refs.tree.getHalfCheckedNodes().map(item => item.resourceId)
+        allresourceIds = [...allresourceIds, ...this.$refs.tree.getCheckedKeys()]
+        const resourceIds = allresourceIds
+        this.$api['resource.updateRole']({
+          resourceIds,
+          roleId: this.roleId
+        }).then(res => {
+          this.dialogRoleVisible = false
+          this.$message.success('分配成功！')
+          this.defaultTreeData = []
+          this.getSysRoleList()
+        })
+      } else {
+        let resourceIds = []
+        resourceIds = [...this.$refs.tree.getHalfCheckedNodes().map(item => item.id), ...this.$refs.tree.getCheckedNodes().map(item => item.id)]
+        this.$api['platformMenu.correlationDataPermissions']({
+          resourceIds,
+          roleId: this.roleId
+        }).then(res => {
+          this.dialogRoleVisible = false
+          this.$message.success('分配成功！')
+          this.defaultTreeData = []
+          this.getSysRoleList()
+        })
+      }
     },
     handleCheck (id) {
       this.updateWrapper = true
@@ -453,6 +578,7 @@ export default {
         this.adminForm.describes = res.describes
         this.adminForm.enabled = res.enabled
         this.currentName = res.roleName
+        this.adminForm.roleType = res.roleType
       })
       this.$nextTick(() => {
         this.$refs['adminForm'].resetFields()
@@ -490,35 +616,41 @@ export default {
     getUpdateTime (row) {
       return moment(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
     },
+    // 菜单权限
     checkChange (arr, obj, ccc) {
-      let checkArr = arr.resourceId
-      if ((checkArr === '24' && this.$refs.tree.getCheckedKeys().some(item => item === checkArr)) ||
+      if (this.type === '数据') {
+        return false
+      } else {
+        let checkArr = arr.resourceId
+        if ((checkArr === '24' && this.$refs.tree.getCheckedKeys().some(item => item === checkArr)) ||
         (checkArr === '25' && this.$refs.tree.getCheckedKeys().some(item => item === checkArr)) ||
         (checkArr === '26' && this.$refs.tree.getCheckedKeys().some(item => item === checkArr))) {
-        this.treeData.forEach(item => {
-          if (item.name === '运营监控') {
-            item.children.forEach(child => {
-              if (child.resourceId !== checkArr) {
-                child.disabled = true
-              } else {
-                child.disabled = false
-              }
-            })
-          }
-        })
-      } else if ((checkArr === '24' && this.$refs.tree.getCheckedKeys().some(item => item !== checkArr)) ||
+          this.treeData.forEach(item => {
+            if (item.name === '运营监控') {
+              item.children.forEach(child => {
+                if (child.resourceId !== checkArr) {
+                  child.disabled = true
+                } else {
+                  child.disabled = false
+                }
+              })
+            }
+          })
+        } else if ((checkArr === '24' && this.$refs.tree.getCheckedKeys().some(item => item !== checkArr)) ||
         (checkArr === '25' && this.$refs.tree.getCheckedKeys().some(item => item !== checkArr)) ||
         (checkArr === '26' && this.$refs.tree.getCheckedKeys().some(item => item !== checkArr)) ||
         this.$refs.tree.getCheckedKeys().length === 0) {
-        this.treeData.forEach(item => {
-          if (item.name === '运营监控') {
-            item.children.forEach(child => {
-              child.disabled = false
-            })
-          }
-        })
+          this.treeData.forEach(item => {
+            if (item.name === '运营监控') {
+              item.children.forEach(child => {
+                child.disabled = false
+              })
+            }
+          })
+        }
       }
     }
+    // 数据权限
   }
 }
 </script>

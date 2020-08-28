@@ -56,13 +56,9 @@ export const tiredMonitoringApi = {
     {
       name: 'getLineDeviceStatusPage',
       method: 'POST',
-      path: '/deviceStatus/lineDeviceStatusPage/get',
-      mockPath: '/deviceStatus/lineDeviceStatusPage/get',
+      path: '/deviceStatus/list',
+      mockPath: '/deviceStatus/list',
       params: {
-        pageNum: '',
-        pageSize: '',
-        lineUuid: [],
-        orgId: ''
       },
       desc: '设备状态-线路设备状态列表'
     },
@@ -266,6 +262,20 @@ export const tiredMonitoringApi = {
       desc: '各报警速度占比统计'
     },
     {
+      name: 'getCarAlarmList',
+      method: 'POST',
+      path: '/zhfxpt/getBadDrivingBusRanking',
+      mockPath: '/zhfxpt/getBadDrivingBusRanking',
+      params: {
+        orgId: '',
+        lineId: '',
+        startTime: '',
+        endTime: '',
+        warnTypes: []
+      },
+      desc: '车辆排行'
+    },
+    {
       name: 'getFatigueDrivingWarnTimeAnalysis',
       method: 'POST',
       path: '/zhfxpt/getFatigueDrivingWarnTimeAnalysis',
@@ -366,6 +376,137 @@ export const tiredMonitoringApi = {
         dayOrhistory: ''
       },
       desc: '设备管理列表'
+    },
+    {
+      name: 'addAlarmResult',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/add',
+      mockPath: '/api/base/sys/alarm/handle/result/add',
+      params: {
+        hContext: '',
+        hStatus: ''
+      },
+      desc: '报警处理结果-新增'
+    },
+    {
+      name: 'updateAlarmResult',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/update',
+      mockPath: '/api/base/sys/alarm/handle/result/update',
+      params: {
+        uuid: '',
+        hContext: '',
+        hStatus: ''
+      },
+      desc: '报警处理结果-修改'
+    },
+    {
+      name: 'deleteAlarmResult',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/delete',
+      mockPath: '/api/base/sys/alarm/handle/result/delete',
+      params: {
+        uuid: ''
+      },
+      desc: '报警处理结果-删除'
+    },
+    {
+      name: 'getAlarmResult',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/get',
+      mockPath: '/api/base/sys/alarm/handle/result/get',
+      params: {
+        uuid: ''
+      },
+      desc: '报警处理结果-查询'
+    },
+    {
+      name: 'getByStatus',
+      method: 'POST',
+      path: '/api/base/sys/alarm/handle/result/getByStatus',
+      mockPath: '/api/base/sys/alarm/handle/result/getByStatus',
+      params: {
+        hStatus: ''
+      },
+      desc: '报警处理结果-根据状态查询处理结果'
+    },
+    // /zhfxpt/getAlarmHandleAnalysis
+    {
+      name: 'getAlarmHandleAnalysis',
+      method: 'POST',
+      path: '/zhfxpt/getAlarmHandleAnalysis',
+      mockPath: '/zhfxpt/getAlarmHandleAnalysis',
+      params: {
+        userId: '',
+        startTime: '',
+        endTime: ''
+      },
+      desc: '用户处理结果报表'
+    },
+    {
+      name: 'busPageList',
+      method: 'POST',
+      path: '/api/bus/safelist',
+      mockPath: '/api/bus/safelist',
+      params: {
+        lineId: '',
+        orgId: '',
+        content: ''
+      },
+      desc: '下发语音车辆list'
+    },
+    {
+      name: 'VoicepromptBatch',
+      method: 'POST',
+      path: '/warns/voicepromptBatch',
+      mockPath: '/warns/voicepromptBatch',
+      params: {
+        devType: '',
+        busUuids: '',
+        content: ''
+      },
+      desc: '语音批量下发'
+    },
+    {
+      name: 'AllVoicepromptBatch',
+      method: 'POST',
+      path: '/warns/AllVoicepromptBatch',
+      mockPath: '/warns/AllVoicepromptBatch',
+      params: {
+        devType: '',
+        filterBusUuids: '',
+        content: ''
+      },
+      desc: '语音全部下发'
+    },
+    {
+      name: 'getBuslsOnLine',
+      method: 'POST',
+      path: '/warns/warnInfoDetail/getBusIsOnLine',
+      mockPath: '/warns/warnInfoDetail/getBusIsOnLine',
+      params: {
+      },
+      desc: '车辆在线'
+    },
+    {
+      name: 'Voiceprompt',
+      method: 'POST',
+      path: '/warns/Voiceprompt',
+      mockPath: '/warns/Voiceprompt',
+      params: {
+        devType: '',
+        busUuid: '',
+        content: ''
+      },
+      desc: '下发语音'
+    },
+    {
+      name: 'export',
+      method: 'POST',
+      path: '/deviceStatus/export',
+      mockPath: '/deviceStatus/export',
+      params: {},
+      desc: '设备状态excel'
     }
   ]
 }

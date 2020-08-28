@@ -9,22 +9,29 @@
         </el-table-column>
         <el-table-column property="orgName" label="所属公司" width="120" align="center"></el-table-column>
         <el-table-column property="lineName" label="所属线路" width="120" align="center"></el-table-column>
-        <el-table-column property="busPlateNumber" label="车牌号" align="center"></el-table-column>
+        <el-table-column property="busPlateNumber" label="车牌号" align="center" width="120"></el-table-column>
+        <el-table-column property="busSelfCode" label="车辆自编号" align="center" width="120"></el-table-column>
         <el-table-column property="driverNum" label="司机工号" width="150" align="center"></el-table-column>
         <el-table-column property="driverName" label="司机" width="120" align="center"></el-table-column>
-        <el-table-column property="devCode" label="设备编号" width="100" align="center"></el-table-column>
+        <el-table-column property="devCode" label="设备编号" width="150" align="center"></el-table-column>
         <el-table-column property="warnTypeName" label="报警类型" width="100" align="center"></el-table-column>
-        <el-table-column property="warnTime" label="报警时间" :formatter="formatter"  width="200" align="center"></el-table-column>
-        <el-table-column property="speed" label="报警车速（KM/H）" align="center"></el-table-column>
-        <el-table-column property="name" label="查看详情" align="center">
+        <el-table-column property="warnTime" label="报警时间" :formatter="formatter"  width="300" align="center"></el-table-column>
+        <el-table-column property="speed" label="报警车速（KM/H）" align="center"  width="150"></el-table-column>
+        <el-table-column property="handleResult" width="100" label="处理状态" align="center">
           <template slot-scope="scope">
-            <el-link type="primary" @click="goToDetail(scope.row)">查看详情</el-link>
-          </template>
-        </el-table-column>
-        <el-table-column property="address" label="操作" align="center">
-          <template slot-scope="scope">
+          <span  v-if="scope.row.handleResult === '0'">未处理</span>
+          <span  v-else-if="scope.row.handleResult === '1'">已处理</span>
+          <span v-else>误报</span>
+          <!-- <template slot-scope="scope">
             <el-button v-if="scope.row.handleResult === '0'" type="danger" size="mini" @click="goToSucc(scope.row)">未处理</el-button>
             <el-button v-if="scope.row.handleResult === '1'" type="success" size="mini" plain>已处理</el-button>
+          </template> -->
+          </template>
+        </el-table-column>
+        <el-table-column property="name" label="查看详情" align="center">
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" @click="goToDetail(scope.row)">查看详情</el-button>
+            <el-button :disabled="scope.row.handleResult !== '0'" type="success" size="mini" @click="goToSucc(scope.row, scope.$index)">处理</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -37,6 +44,42 @@
         :page-size="pageSize"
         :total="total">
       </el-pagination>
+    </el-dialog>
+    <el-dialog
+      title="处理操作"
+      :visible.sync="checkDialog"
+      width="30%"
+      center>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="处理状态" prop="status">
+          <el-select v-model="ruleForm.status">
+            <el-option
+              v-for="item in checkOptions.slice(1)"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="处理内容" prop="selectSug">
+          <el-select v-model="ruleForm.selectSug">
+            <el-option
+              v-for="item in checkcontentOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="处理意见" prop="suggestion">
+          <el-input type="textarea" v-model="ruleForm.suggestion" maxlength="100"></el-input>
+          <span>{{ruleForm.suggestion && ruleForm.suggestion.length || 0}}/100</span>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button type="primary" @click="upDateCheck('ruleForm')">确认</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -59,6 +102,15 @@ export default {
     }
   },
   data () {
+    let markSuggestion = (rule, value, callback) => {
+      if (value === '') {
+        callback()
+      } else if (value && value.length && value.length > 150) {
+        return callback(new Error('输入最大100字'))
+      } else {
+        callback()
+      }
+    }
     return {
       selectAllData: [],
       selectData: [],
@@ -68,14 +120,51 @@ export default {
       chartData: [],
       pageNumber: 1,
       pageSize: 15,
-      total: 0
+      total: 0,
+      checkDialog: false,
+      closeRow: null,
+      checkcontentOptions: [],
+      ruleForm: {
+        status: '',
+        suggestion: '',
+        selectSug: '' // 选择处理的内容
+      },
+      checkMsg: {},
+      rules: {
+        status: [
+          { required: true, message: '请选择处理状态', trigger: 'blur' }
+        ],
+        suggestion: [
+          { validator: markSuggestion, trigger: 'blur' }
+        ]
+      },
+      checkOptions: [
+        {
+          value: '0',
+          label: '未处理'
+        },
+        {
+          value: '1',
+          label: '已处理'
+        },
+        {
+          value: '2',
+          label: '误报'
+        }
+      ]
     }
+  },
+  mounted () {
+    this._getCheckOptions({
+      handleStatus: '',
+      handleType: '1',
+      handleIsvalid: '1'
+    })
   },
   watch: {
     diaData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         this.wsData = newV
       }
     },
@@ -83,12 +172,18 @@ export default {
       deep: true,
       handler (newV) {
         this.tableData = newV
+        this.selectAllData = this.tableData
+        this.total = this.selectAllData.length
+        this.handleCurrentChange(this.pageNumber)
       }
     },
     echartsData: {
       deep: true,
       handler (newV) {
         this.chartData = newV
+        this.selectAllData = this.chartData
+        this.total = this.selectAllData.length
+        this.handleCurrentChange(this.pageNumber)
       }
     },
     isSee: {
@@ -118,27 +213,147 @@ export default {
       if (!newV) {
         this.$emit('close', this.selectAllData)
       }
+    },
+    // 'ruleForm.status': {
+    //   handler (newV) {
+    //     if (newV === '1') {
+    //       this.ruleForm.suggestion = '属实'
+    //     } else if (newV === '2') {
+    //       this.ruleForm.suggestion = '误报'
+    //     } else {
+    //       this.ruleForm.suggestion = ''
+    //     }
+    //   }
+    // },
+    'ruleForm.status': {
+      handler (newV) {
+        this.ruleForm.selectSug = ''
+        this.ruleForm.suggestion = ''
+        if (newV === '1') {
+          this._getCheckOptions({
+            handleStatus: '1',
+            handleType: '1',
+            handleIsvalid: '1'
+          })
+        } else if (newV === '2') {
+          this._getCheckOptions({
+            handleStatus: '2',
+            handleType: '1',
+            handleIsvalid: '1'
+          })
+        } else {
+          this._getCheckOptions({
+            handleStatus: '',
+            handleType: '1',
+            handleIsvalid: '1'
+          })
+        }
+      }
+    },
+    'ruleForm.selectSug': {
+      handler (newV) {
+        console.log(newV)
+        this.ruleForm.suggestion = newV
+      }
+    }
+  },
+  activated () {
+    if (this.isSee.dataType === 'table') {
+      this.$emit('updateTable', 'table')
+    } else if (this.isSee.dataType === 'charts') {
+      this.$emit('updateTable', 'charts')
+    } else if (this.isSee.dataType === 'ws') {
+      const warnId = this.$store.state.globel.wsDataStorage
+      this.selectAllData = this.wsData.filter(item => item.warnUuid !== warnId)
+      this.total = this.selectAllData.length
+      this.handleCurrentChange(this.pageNumber)
     }
   },
   methods: {
-    goToDetail (data) {
-      console.log(data.warnUuid)
-      this.$router.push({
-        path: '/fatigue-monitoring/alarm-content',
-        query: {
-          id: data.warnUuid
+    _getCheckOptions (params) {
+      this.$api['tiredMonitoring.getByStatus'](params).then(res => {
+        let dataArr = res
+        this.checkcontentOptions = []
+        if (params.handleType === '1') {
+          dataArr.forEach((list, index) => {
+            this.checkcontentOptions[index] = {
+              label: list.handleContext.length > 13 ? `${list.handleContext.substring(0, 13)}...` : list.handleContext,
+              value: list.handleContext
+            }
+          })
+          this.checkcontentOptions.push({
+            label: '其他',
+            value: ''
+          })
         }
       })
     },
-    goToSucc (row) {
-      this.$api['tiredMonitoring.wsUpdate']({
-        warnUuid: row.warnUuid,
-        handleResult: '1'
-      }).then(res => {
-        this.$message.success('已处理')
-        row.handleResult = '1'
+    goToDetail (data) {
+      const type = data.warnType === 'OVERSPEED' ? 'overspeed' : 'normal'
+      this.$router.push({
+        path: '/fatigue-monitoring/alarm-content',
+        query: {
+          id: data.warnUuid,
+          type,
+          isWs: this.isSee.dataType
+        }
       })
-      console.log(row)
+    },
+    goToSucc (row, index) {
+      // this.$api['tiredMonitoring.wsUpdate']({
+      //   warnUuid: row.warnUuid,
+      //   handleResult: '1'
+      // }).then(res => {
+      //   this.$message.success('已处理')
+      //   row.handleResult = '1'
+      // })
+      this.closeRow = index + (this.pageNumber - 1) * 15
+      this.checkMsg.warnUuid = row.warnUuid
+      this.checkDialog = true
+      this.ruleForm = {
+        status: '',
+        suggestion: '',
+        selectSug: ''
+      }
+    },
+    upDateCheck (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$api['tiredMonitoring.wsUpdate']({
+            warnUuid: this.checkMsg.warnUuid,
+            handleResult: this.ruleForm.status,
+            handleSuggestion: this.ruleForm.suggestion
+          }).then(res => {
+            this.$message.success('已处理')
+            this.checkDialog = false
+            if (this.isSee.dataType === 'ws') {
+              this.wsData.splice(this.closeRow, 1)
+              this.selectAllData = this.wsData
+              this.total = this.selectAllData.length
+              this.handleCurrentChange(this.pageNumber)
+            } else if (this.isSee.dataType === 'table') {
+              this.selectAllData = this.tableData
+              this.total = this.selectAllData.length
+              this.handleCurrentChange(this.pageNumber)
+              this.$emit('updateTable', 'table')
+            } else if (this.isSee.dataType === 'charts') {
+              this.selectAllData = this.chartData
+              this.total = this.selectAllData.length
+              this.handleCurrentChange(this.pageNumber)
+              this.$emit('updateTable', 'charts')
+            }
+          }).catch(err => {
+            this.$message.error(err.msg)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm (formName) {
+      this.checkDialog = false
+      this.$refs[formName].resetFields()
     },
     formatter (row) {
       return moment(row.warnTime).format('YYYY-MM-DD HH:mm:ss')
@@ -150,8 +365,6 @@ export default {
       } else {
         this.selectData = this.selectAllData.slice((val - 1) * this.pageSize, val * this.pageSize)
       }
-
-      console.log(val)
     }
   }
 }

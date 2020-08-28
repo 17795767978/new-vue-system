@@ -314,7 +314,7 @@ export const aysncRoutesMap = [
       meta: {
         title: '疲劳监测',
         icon: 'nocturne icon-dash',
-        roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/status-management']
+        roles: ['/alarm-center', '/alarm-content', '/device-status', 'alarm-analysis', 'alarm-management', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/status-management', '/msg-safe-send']
       },
       children: [
         {
@@ -332,9 +332,19 @@ export const aysncRoutesMap = [
           component: _import_('operationAnalysis/fatigueMonitoring/alarmDriver/index'),
           name: 'alarmDriver',
           meta: {
-            title: '司机排行分析',
+            title: '司机排行',
             icon: 'nocturne icon-dash',
-            roles: ['/alarm-drive']
+            roles: ['/alarm-home']
+          }
+        },
+        {
+          path: 'car-sort',
+          component: _import_('operationAnalysis/fatigueMonitoring/carSort/index'),
+          name: 'carSort',
+          meta: {
+            title: '车辆排行',
+            icon: 'nocturne icon-dash',
+            roles: ['/alarm-home']
           }
         },
         {
@@ -417,6 +427,16 @@ export const aysncRoutesMap = [
             icon: 'nocturne icon-dash',
             roles: ['/status-management']
           }
+        },
+        {
+          path: 'msg-safe-send',
+          component: _import_('operationAnalysis/fatigueMonitoring/msgSend/index'),
+          name: 'msgSend',
+          meta: {
+            title: '安全信息下发',
+            icon: 'nocturne icon-dash',
+            roles: ['/msg-safe-send']
+          }
         }
       ]
     }
@@ -450,6 +470,16 @@ export const aysncRoutesMap = [
           title: '客流算法配置',
           icon: 'nocturne icon-dash',
           roles: ['/channel-management']
+        }
+      },
+      {
+        path: 'alarm-result',
+        component: _import_('systemAdmin/alarmResultManagement/index'),
+        name: 'alarmResult',
+        meta: {
+          title: '报警处理意见',
+          icon: 'nocturne icon-dash',
+          roles: ['/device-parameter']
         }
       }
     ]
@@ -574,6 +604,41 @@ export const aysncRoutesMap = [
       //     roles: ['/chart-analysis/all']
       //   }
       // }
+    ]
+  },
+  {
+    path: '/device-management',
+    component: Layout,
+    name: 'deviceManagement',
+    meta: {
+      title: '设备管理',
+      icon: 'nocturne icon-dash',
+      // roles: ['/vehicleAndDevice', '/device']
+      roles: ['/vehicle-device', '/device']
+    },
+    children: [
+      {
+        path: 'vehicle-device',
+        component: _import_('deviceManagement/vehicleAndDevice/index'),
+        name: 'vehicleAndDevice',
+        meta: {
+          title: '车辆与设备绑定',
+          icon: 'nocturne icon-dash',
+          // roles: ['/vehicle-device']
+          roles: ['/vehicle-device']
+        }
+      },
+      {
+        path: 'device',
+        component: _import_('deviceManagement/device/index'),
+        name: 'deviceMan',
+        meta: {
+          title: '设备管理',
+          icon: 'nocturne icon-dash',
+          // roles: ['/device']
+          roles: ['/device']
+        }
+      }
     ]
   },
   {

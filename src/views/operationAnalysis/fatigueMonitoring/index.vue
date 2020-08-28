@@ -18,7 +18,12 @@ export default {
   computed: {
     ...mapGetters(['cachedViews'])
   },
-  mounted () {}
+  beforeMount () {
+    this.$store.dispatch('addCachedView', 'fatigueMonitoring')
+  },
+  beforeDestroy () {
+    this.$store.dispatch('removeCachedView', 'fatigueMonitoring')
+  }
 }
 </script>
 

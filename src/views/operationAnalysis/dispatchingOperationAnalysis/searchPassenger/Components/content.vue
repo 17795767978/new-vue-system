@@ -203,8 +203,8 @@ export default {
       this.isDisabled = true
       if (type === '1') {
         this.$api['passengerFlow.todayList'](params).then(res => {
-          this.tableData = res.list
-          this.total = res.total
+          this.tableData = res.pageInfo.list
+          this.total = res.pageInfo.total
           this.$message.success('数据已更新')
           this.loading = false
           this.isDisabled = false
@@ -215,8 +215,8 @@ export default {
         })
       } else {
         this.$api['passengerFlow.list'](params).then(res => {
-          this.tableData = res.list
-          this.total = res.total
+          this.tableData = res.pageInfo.list
+          this.total = res.pageInfo.total
           this.$message.success('数据已更新')
           this.loading = false
           this.isDisabled = false

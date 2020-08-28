@@ -2,6 +2,7 @@ import { getToken, setToken, removeToken } from '@/service/expands/auth'
 import api from '@/plugins/api'
 import store from '@/plugins/store'
 import moment from 'moment'
+import { Message } from 'element-ui'
 
 // import { constantRouterMap } from '@/router/staticRoutes'
 /**
@@ -90,6 +91,7 @@ const user = {
         // resolve()
         api['user.login'](params).then(res => {
           localStorage.setItem('userName', res.userInfo.userAccount)
+          localStorage.setItem('userRoleType', res.userInfo.auditStatus)
           commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
           localStorage.setItem('id', res.userInfo.userId)
           resolve()
@@ -118,6 +120,7 @@ const user = {
         // 清除用户的id 清除权限
         localStorage.removeItem('id')
         localStorage.removeItem('userName')
+        localStorage.removeItem('userRoleType')
         resolve()
       })
     },
@@ -145,6 +148,9 @@ const user = {
         store.dispatch('getLineList').then(res => {
           if (res.length > 0) {
             form.lineId = ''
+          } else {
+            Message.warning('用户没有线路权限！')
+            return
           }
           commit('SET_LINEID', res.length > 0 && res[0].value)
           store.dispatch('getComList').then(res => {

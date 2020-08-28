@@ -12,7 +12,7 @@
           show-summary
           class="inside-table"
           @expand-change="rowData"
-          style="width: 100%;"
+          :style="style"
           height="650"
           >
           <el-table-column type="expand" width="60" fixed>
@@ -115,7 +115,7 @@
           show-summary
           @expand-change="rowData"
           class="inside-table"
-          style="width: 100%"
+          :style="style"
           height="650"
           >
           <el-table-column type="expand" width="60" fixed>
@@ -234,7 +234,10 @@ export default {
       expands: [],
       tableData1: [],
       getUpSummaries: [],
-      upTotle: ''
+      upTotle: '',
+      style: {
+        width: '100%'
+      }
     }
   },
   components: {
@@ -256,6 +259,7 @@ export default {
   },
   methods: {
     getTableData (bool) {
+      this.style.width = '99.9%'
       let tableDataAll = []
       let dateArr = []
       let stationArr = []
@@ -330,6 +334,9 @@ export default {
           itm.tableData = this.rowTableData(itm.tableData, false)
         }
       })
+      setTimeout(() => {
+        this.style.width = '100%'
+      }, 20)
       return tableDataAll
     },
     rowTableData (data, isBool) {

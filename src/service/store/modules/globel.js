@@ -10,7 +10,8 @@ const globel = {
     comData: [],
     carData: [],
     comDataSec: [],
-    lineDataSec: []
+    lineDataSec: [],
+    carNoData: []
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -29,7 +30,10 @@ const globel = {
       state.comDataSec = comData
     },
     CAR_DATA: (state, carData) => {
-      state.comData = carData
+      state.carData = carData
+    },
+    CAR_NO_DATA: (state, carData) => {
+      state.carNoData = carData
     }
   },
   actions: {
@@ -182,6 +186,27 @@ const globel = {
             reject(error)
           })
         }
+      })
+    },
+    getCarNoList ({ commit }) {
+      return new Promise((resolve, reject) => {
+        api['wholeInformation.getCarNo']({
+          orgId: '',
+          orgName: '',
+          lineId: ''
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.busSelfCode,
+              value: item.busSelfCode
+            })
+          })
+          commit('CAR_NO_DATA', list)
+          resolve(list)
+        }).catch(error => {
+          reject(error)
+        })
       })
     }
   }

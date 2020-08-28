@@ -1,6 +1,7 @@
 <template>
   <div class="header">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
+      <el-row>
       <el-form-item label="选择机构">
         <el-select class="font-style" v-model="formInline.orgUuid" :disabled="disabled" placeholder="请选择">
           <el-option
@@ -12,10 +13,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择线路">
-        <el-select class="font-style"
-          filterable
-          multiple
-          collapse-tags v-model="formInline.lineUuid" placeholder="请选择">
+        <el-select class="font-style" filterable v-model="formInline.lineUuid" placeholder="请选择">
           <el-option
             v-for="item in lineOptions"
             :key="item.value"
@@ -24,10 +22,51 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="选择车辆">
+        <el-select class="font-style"
+        filterable
+        remote
+        v-model="formInline.car"
+        :remote-method="remoteCarMethod"
+        placeholder="请选择">
+          <el-option
+            v-for="item in carSearchOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      </el-row>
+      <el-row>
+      <el-form-item label="输入自编号">
+        <el-select class="font-style"
+        filterable
+        remote
+        v-model="formInline.carSelf"
+        :remote-method="remoteSelfMethod"
+        placeholder="请选择">
+          <el-option
+            v-for="item in selfSearchOpt"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="输入设备编号">
+        <el-input v-model="formInline.devCode"></el-input>
+      </el-form-item>
+      <el-form-item label="在线状态">
+        <el-radio v-model="formInline.devOnlineStatus" label="1">在线</el-radio>
+        <el-radio v-model="formInline.devOnlineStatus" label="0">离线</el-radio>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear">重置</el-button>
+        <el-button type="success" @click="onDownload" :loading="downLoadLoading">导出</el-button>
       </el-form-item>
+      </el-row>
     </el-form>
   </div>
 </template>
@@ -39,12 +78,23 @@ export default {
   data () {
     return {
       formInline: {
-        lineUuid: [],
-        orgUuid: ''
+        lineUuid: '',
+        orgUuid: '',
+        car: '',
+        carSelf: '',
+        devOnlineStatus: '',
+        pageSize: 1,
+        pageNumber: 15,
+        devCode: ''
       },
       comOptions: [],
       lineOptions: [],
-      disabled: false
+      carOptions: [],
+      carSearchOptions: [],
+      selfOpt: [],
+      selfSearchOpt: [],
+      disabled: false,
+      downLoadLoading: false
     }
   },
   computed: {
@@ -59,6 +109,9 @@ export default {
     this.$store.dispatch('getComList').then(res => {
       this.comOptions = res
     })
+    this._getCarList({
+      orgId: this.userId === '1' ? '' : this.userId
+    })
     if (this.userId !== '1') {
       this.formInline.orgUuid = this.userId
       this.disabled = true
@@ -70,7 +123,7 @@ export default {
   watch: {
     'formInline.orgUuid': {
       handler (newValue) {
-        this.formInline.lineUuid = []
+        this.formInline.lineUuid = ''
         let orgId = newValue === '1' ? '' : newValue
         this.$api['wholeInformation.getLine']({
           lineId: '',
@@ -90,15 +143,78 @@ export default {
     }
   },
   methods: {
+    // 获取车辆信息
+    _getCarList (params) {
+      this.$api['wholeInformation.getCar'](params).then(res => {
+        res.forEach(item => {
+          this.carOptions.push({
+            label: item.busPlateNumber,
+            value: item.busPlateNumber
+          })
+          this.selfOpt.push({
+            label: item.busSelfCode,
+            value: item.busSelfCode
+          })
+        })
+      })
+    },
+    // 远程搜索车的方法
+    remoteCarMethod (query) {
+      this.queryMethods(query, 'car')
+    },
+    remoteSelfMethod (query) {
+      this.queryMethods(query, 'self')
+    },
+    queryMethods (query, type) {
+      if (query !== '') {
+        setTimeout(() => {
+          if (type === 'car') {
+            this.carSearchOptions = this.carOptions.filter(item => {
+              return item.label.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1
+            })
+          } else {
+            this.selfSearchOpt = this.selfOpt.filter(item => {
+              return item.label.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1
+            })
+          }
+        }, 200)
+      } else {
+        this.options = []
+      }
+    },
     onSubmit () {
       this.$emit('selectConfig', this.formInline)
     },
     onclear () {
       this.formInline = {
-        lineUuid: [],
-        orgUuid: this.userId === '1' ? '' : this.userId
+        lineUuid: '',
+        car: '',
+        carSelf: '',
+        devOnlineStatus: '',
+        pageSize: 1,
+        pageNumber: 15,
+        orgUuid: this.userId === '1' ? '' : this.userId,
+        devCode: ''
       }
       this.$emit('selectConfig', this.formInline)
+    },
+    onDownload () {
+      this.downLoadLoading = true
+      this.$api['tiredMonitoring.export']({
+        orgId: this.formInline.orgUuid || '',
+        lineId: this.formInline.lineUuid || '',
+        busPlateNumber: this.formInline.car || '',
+        busSelfCode: this.formInline.carSelf || '',
+        devOnlineStatus: this.formInline.devOnlineStatus || ''
+      }).then(res => {
+        window.open(res.url)
+        this.downLoadLoading = false
+      }).catch(err => {
+        this.$message.error(err.message)
+        this.downLoadLoading = false
+      })
     }
   },
   components: {
@@ -114,7 +230,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0 1px 10px rgba(0,0,0, 0.5);
   .form-inline {
-   height: 38px;
+   height: 70px;
    .font-style {
      width: 200px;
    }
