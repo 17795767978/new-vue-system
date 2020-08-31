@@ -175,9 +175,9 @@ export default {
     this.getRoles({
       busNumber: '',
       busSelfCode: '',
-      devClass: '',
+      devClass: '2',
       devCode: '',
-      devOnlineStatus: '1',
+      devOnlineStatus: '',
       pageNumber: this.pagination.pageNumber,
       pageSize: this.pagination.pageSize
     })
@@ -205,13 +205,14 @@ export default {
       //   devCode: '',
       //   devOnlineStatus: ''
       // }
+      console.log(this.selectData)
       this.getRoles(
         {
           busNumber: this.selectData.busNumber,
-          busSelfCode: this.selectData.busSelfCode,
-          devClass: this.selectData.devClass,
-          devCode: this.selectData.deviceCode,
-          devOnlineStatus: this.selectData.isOnline,
+          busSelfCode: this.selectData.selfNumber,
+          devClass: this.selectData.statusType,
+          devCode: this.selectData.statusNumber,
+          devOnlineStatus: this.selectData.onLine,
           pageNumber: this.pagination.pageNumber,
           pageSize: this.pagination.pageSize
         }
@@ -233,10 +234,10 @@ export default {
       this.getRoles(
         {
           busNumber: this.selectData.busNumber,
-          busSelfCode: this.selectData.busSelfCode,
-          devClass: this.selectData.devClass,
-          devCode: this.selectData.deviceCode,
-          devOnlineStatus: this.selectData.isOnline,
+          busSelfCode: this.selectData.selfNumber,
+          devClass: this.selectData.statusType,
+          devCode: this.selectData.statusNumber,
+          devOnlineStatus: this.selectData.onLine,
           pageNumber: 1,
           pageSize: this.pagination.pageSize
         }
@@ -348,10 +349,10 @@ export default {
       this.getRoles(
         {
           busNumber: this.selectData.busNumber,
-          busSelfCode: this.selectData.busSelfCode,
-          devClass: this.selectData.devClass,
-          devCode: this.selectData.deviceCode,
-          devOnlineStatus: this.selectData.isOnline,
+          busSelfCode: this.selectData.selfNumber,
+          devClass: this.selectData.statusType,
+          devCode: this.selectData.statusNumber,
+          devOnlineStatus: this.selectData.onLine,
           pageNumber: this.pagination.pageNumber,
           pageSize: this.pagination.pageSize
         }

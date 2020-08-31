@@ -8,7 +8,7 @@
       :data="tableDataOwn"
       height="60vh"
       border
-      style="width: 100%">
+      :style="style">
       <el-table-column
         align="center"
         label="序号"
@@ -101,7 +101,10 @@ export default {
       pageNumber: 1,
       pageSize: 10,
       videoInfo: '',
-      oldRow: {}
+      oldRow: {},
+      style: {
+        width: '100%'
+      }
     }
   },
   computed: {
@@ -176,6 +179,7 @@ export default {
       })
     },
     _getTableData (params) {
+      this.style.width = '99.9%'
       this.columnArr = ['busPlateNumber']
       this.tableDataOwn = []
       this.videoInfo.forEach((item, index) => {
@@ -183,6 +187,7 @@ export default {
       })
       this.isloading = true
       this.$api['wholeInformation.videoList'](params).then(res => {
+        this.style.width = '100%'
         this.total = res.total
         res.list.forEach(item => {
           this.tableDataOwn.push({

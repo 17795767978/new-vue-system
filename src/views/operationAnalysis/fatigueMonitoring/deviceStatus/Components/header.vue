@@ -22,8 +22,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="选择车辆">
-        <el-select class="font-style"
+      <el-form-item label="输入车辆">
+        <!-- <el-select class="font-style"
         filterable
         remote
         v-model="formInline.car"
@@ -35,12 +35,13 @@
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select>
+        </el-select> -->
+        <el-input v-model="formInline.car"></el-input>
       </el-form-item>
       </el-row>
       <el-row>
       <el-form-item label="输入自编号">
-        <el-select class="font-style"
+        <!-- <el-select class="font-style"
         filterable
         remote
         v-model="formInline.carSelf"
@@ -52,7 +53,8 @@
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select>
+        </el-select> -->
+        <el-input v-model="formInline.carSelf"></el-input>
       </el-form-item>
       <el-form-item label="输入设备编号">
         <el-input v-model="formInline.devCode"></el-input>

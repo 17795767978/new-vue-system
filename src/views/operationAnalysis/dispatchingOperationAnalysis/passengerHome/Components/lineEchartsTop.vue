@@ -69,10 +69,10 @@ export default {
           // type: 'line',
           data: res.datas[0],
           type: 'bar',
-          showBackground: true,
-          backgroundStyle: {
-            color: 'rgba(0, 0, 0, 0.8)'
-          },
+          // showBackground: true,
+          // backgroundStyle: {
+          //   color: 'rgba(0, 0, 0, 0.8)'
+          // },
           barWidth: 13,
           itemStyle: {
             // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多

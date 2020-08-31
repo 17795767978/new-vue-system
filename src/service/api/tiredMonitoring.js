@@ -507,6 +507,18 @@ export const tiredMonitoringApi = {
       mockPath: '/deviceStatus/export',
       params: {},
       desc: '设备状态excel'
+    },
+    {
+      name: 'warnAudit',
+      method: 'POST',
+      path: '/warns/warnAudit',
+      mockPath: '/warns/warnAudit',
+      params: {
+        warnUuid: '',
+        auditStatus: '',
+        auditSuggestion: ''
+      },
+      desc: '更新审核内容'
     }
   ]
 }
