@@ -226,7 +226,7 @@ export default {
       },
       auditcontentOptions: [],
       checkcontentOptions: [],
-      isRoleType: JSON.parse(localStorage.getItem('userRoleType')),
+      isRoleType: JSON.parse(sessionStorage.getItem('userRoleType')),
       checkOptions: [
         {
           value: '0',

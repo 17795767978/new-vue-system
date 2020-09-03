@@ -219,7 +219,7 @@ export default {
               this.$message.success('添加成功！')
               this.$emit('updateList')
               this.$api['platformMenu.list']({
-                id: localStorage.getItem('id')
+                id: sessionStorage.getItem('id')
               }).then(res => {
                 this.SET_ROLES(res.resourceTree)
               })

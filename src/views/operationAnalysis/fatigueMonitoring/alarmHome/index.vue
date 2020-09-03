@@ -138,7 +138,7 @@ export default {
     },
     openWs () {
       if ('WebSocket' in window) {
-        let url = `${WSAPI}/${localStorage.getItem('id')}`
+        let url = `${WSAPI}/${sessionStorage.getItem('id')}`
         this.$refs.audioWrapper.pause()
         this.ws = new WebSocket(url)
         this.ws.onopen = () => {

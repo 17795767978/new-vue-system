@@ -69,6 +69,20 @@ export default {
     }
   },
   mounted () {
+    const isToken = this.$route.query.REDIRECT_TOKEN
+    if (isToken) {
+      this.$store
+        .dispatch('userLogin', { REDIRECT_TOKEN: isToken, type: 'auto' })
+        .then(() => {
+          this.$router.push('/homepage/home')
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
+        .finally(() => {
+          this.isLoginning = false
+        })
+    }
     // startAnimation('loginAni')
   },
   methods: {
@@ -77,12 +91,11 @@ export default {
         if (valid) {
           this.isLoginning = true
           this.$store
-            .dispatch('userLogin', { ...this.loginForm })
+            .dispatch('userLogin', { ...this.loginForm, type: 'notAuto' })
             .then(() => {
               this.$router.push('/homepage/home')
             })
             .catch((err) => {
-              console.log(err)
               this.$message.error(err.message)
             })
             .finally(() => {

@@ -51,7 +51,7 @@ const user = {
     },
     SET_USERINFO (state, data) {
       state.userId = data
-      state.userName = localStorage.getItem('userName')
+      state.userName = sessionStorage.getItem('userName')
     },
     RESET_USERINFO (state, data) {
       state.userId = ''
@@ -86,18 +86,43 @@ const user = {
      * @returns
      */
     userLogin ({ commit, state }, params) {
+      // return new Promise((resolve, reject) => {
+      //   // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
+      //   // resolve()
+      //   api['user.login'](params).then(res => {
+      //     localStorage.setItem('userName', res.userInfo.userAccount)
+      //     localStorage.setItem('userRoleType', res.userInfo.auditStatus)
+      //     commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+      //     localStorage.setItem('id', res.userInfo.userId)
+      //     resolve()
+      //   }).catch(err => {
+      //     reject(err)
+      //   })
+      // })
       return new Promise((resolve, reject) => {
         // commit('SET_TOKEN', 'asdasdasdcascasdasdasdasdasdasdasdasdasdasdgvsdfgsdfsadfasfdas')
         // resolve()
-        api['user.login'](params).then(res => {
-          localStorage.setItem('userName', res.userInfo.userAccount)
-          localStorage.setItem('userRoleType', res.userInfo.auditStatus)
-          commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
-          localStorage.setItem('id', res.userInfo.userId)
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
+        if (params.type === 'auto') {
+          api['user.upslogin'](params).then((res) => {
+            sessionStorage.setItem('userName', res.userInfo.userAccount)
+            sessionStorage.setItem('userRoleType', res.userInfo.auditStatus)
+            commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+            sessionStorage.setItem('id', res.userInfo.userId)
+            resolve()
+          }).catch(err => {
+            reject(err)
+          })
+        } else {
+          api['user.login'](params).then(res => {
+            sessionStorage.setItem('userName', res.userInfo.userAccount)
+            sessionStorage.setItem('userRoleType', res.userInfo.auditStatus)
+            commit('SET_TOKEN', { token: res.token, userInfo: res.userInfo })
+            sessionStorage.setItem('id', res.userInfo.userId)
+            resolve()
+          }).catch(err => {
+            reject(err)
+          })
+        }
       })
     },
     /**
@@ -118,9 +143,9 @@ const user = {
         // 重置权限路由表, 该mutation 访问 store/asyncRouter.js
         commit('RESET_ROUTERS')
         // 清除用户的id 清除权限
-        localStorage.removeItem('id')
-        localStorage.removeItem('userName')
-        localStorage.removeItem('userRoleType')
+        sessionStorage.removeItem('id')
+        sessionStorage.removeItem('userName')
+        sessionStorage.removeItem('userRoleType')
         resolve()
       })
     },
@@ -172,7 +197,7 @@ const user = {
           store.dispatch('getMudeluPageList')
           commit('SET_FORM_DATA', form)
           api['platformMenu.list']({
-            id: localStorage.getItem('id')
+            id: sessionStorage.getItem('id')
           }).then(res => {
             const data = res
             if (data.resourceTree && data.resourceTree.length > 0) {
@@ -197,9 +222,9 @@ const user = {
           commit('REMOVE_ALL_VISITED')
           // 重置权限路由表, 该mutation 访问 store/asyncRouter.js
           commit('RESET_ROUTERS')
-          localStorage.removeItem('id')
-          localStorage.removeItem('userName')
-          localStorage.removeItem('userRoleType')
+          sessionStorage.removeItem('id')
+          sessionStorage.removeItem('userName')
+          sessionStorage.removeItem('userRoleType')
         })
       })
     }

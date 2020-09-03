@@ -20,7 +20,7 @@ const globalMixin = {
     this.endTime = moment().valueOf()
     this.durations = this.endTime - this.startTime
     this._getDurations({
-      userId: localStorage.getItem('id'),
+      userId: sessionStorage.getItem('id'),
       accessPageName: name,
       accessDuration: this.durations
     })
@@ -30,7 +30,7 @@ const globalMixin = {
     this.endTime = moment().valueOf()
     this.durations = this.endTime - this.startTime
     this._getDurations({
-      userId: localStorage.getItem('id'),
+      userId: sessionStorage.getItem('id'),
       accessPageName: name,
       accessDuration: this.durations
     })

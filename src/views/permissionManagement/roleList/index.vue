@@ -343,7 +343,7 @@ export default {
     },
     getSourceList () {
       this.$api['platformMenu.list']({
-        id: localStorage.getItem('id')
+        id: sessionStorage.getItem('id')
       }).then(res => {
         // this.treeData = res.resourceTree
         this.treeParentIds = []
@@ -511,7 +511,7 @@ export default {
     },
     getDataList () {
       this.$api['platformMenu.dataList']({
-        id: localStorage.getItem('id')
+        id: sessionStorage.getItem('id')
       }).then(res => {
         this.treeList = res.resourceTree
       })

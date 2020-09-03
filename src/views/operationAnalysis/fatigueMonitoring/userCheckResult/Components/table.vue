@@ -97,7 +97,7 @@ export default {
     let endTime = moment().format('YYYY-MM-DD')
     let dataForm = this.$store.getters.formData
     this._getDrivingBehaviorDay({
-      userId: localStorage.getItem('id'),
+      userId: sessionStorage.getItem('id'),
       warnTypes: dataForm.warningArr,
       startTime,
       endTime })
@@ -109,7 +109,7 @@ export default {
         let dataForm = this.$store.getters.formData
         this.pageNumber = 1
         this._getDrivingBehaviorDay({
-          userId: localStorage.getItem('id'),
+          userId: sessionStorage.getItem('id'),
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
           warnTypes: dataForm.warningArr
