@@ -86,8 +86,8 @@ export default {
         lineId: '',
         dateTime: '',
         type: '1',
-        startHour: '07:00',
-        endHour: '09:00',
+        startHour: '06:00',
+        endHour: '08:00',
         endHourFormatter: '',
         busPlateNumbers: [],
         radio: '0'

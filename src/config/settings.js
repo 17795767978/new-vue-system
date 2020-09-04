@@ -24,11 +24,11 @@ let id = Math.random().toString(36).substr(3, 30)
 export const WSAPI = `ws://113.200.35.114:9088/websocket/mesgshow/${id}`
 export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://192.168.10.145:8082',
-  mockBaseUrl: 'http://113.200.35.114:9088',
+  // mockBaseUrl: 'http://113.200.35.114:9088',
   // mockBaseUrl: 'http://117.34.118.30:8089',
   // mockBaseUrl: 'http://121.30.214.189:9088',
   // mockBaseUrl: 'http://192.168.10.142:8081',
-  // mockBaseUrl: 'http://192.168.10.98:8081',
+  mockBaseUrl: 'http://192.168.10.81:8081',
   // mockBaseUrl: 'http://111.62.52.35:8089', // 邢台
   // 192.168.10.33:8081
   // mockBaseUrl: 'http://192.168.10.145:8081',

@@ -50,8 +50,8 @@ export default {
       lineId: this.initLineId,
       dateTime: date,
       type: '1',
-      startHour: '07',
-      endHour: '08',
+      startHour: '06',
+      endHour: '07',
       busPlateNumbers: [],
       isHistory: '0'
     })

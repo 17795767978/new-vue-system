@@ -58,7 +58,7 @@ export default {
       if (params) {
         this.$api['tiredMonitoring.getDeviceStatus']({
           orgId: params === '1' ? '' : params,
-          lineId: ''
+          lineId: this.selectData.lineUuid
         }).then(res => {
           this.deviceCount = res.deviceCount
           this.onlineDeviceCount = res.onlineDeviceCount
@@ -67,7 +67,7 @@ export default {
         if (this.userId === '1') {
           this.$api['tiredMonitoring.getDeviceStatus']({
             orgId: '',
-            lineId: ''
+            lineId: this.selectData.lineUuid
           }).then(res => {
             this.deviceCount = res.deviceCount
             this.onlineDeviceCount = res.onlineDeviceCount
@@ -75,7 +75,7 @@ export default {
         } else {
           this.$api['tiredMonitoring.getDeviceStatus']({
             orgId: this.userId,
-            lineId: ''
+            lineId: this.selectData.lineUuid
           }).then(res => {
             this.deviceCount = res.deviceCount
             this.onlineDeviceCount = res.onlineDeviceCount
