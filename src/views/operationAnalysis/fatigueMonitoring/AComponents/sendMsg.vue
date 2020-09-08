@@ -124,7 +124,7 @@ export default {
     isMsgOperation () {
       const roles = this.$store.getters.roles
       const selectRoles = roles.filter(item => item.path === '/channel-management')[0]
-      const isHasCurrent = selectRoles.children.some(item => item.path === '/msgsend-tempmaintain')
+      const isHasCurrent = selectRoles.children.some(item => item.path === 'msgsend-tempmaintain')
       if (isHasCurrent) {
         this.isSafeSend = true
       } else {
