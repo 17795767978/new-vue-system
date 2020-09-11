@@ -117,7 +117,7 @@ export default {
           {
             name: '计划里程',
             type: 'bar',
-            barWidth: '25',
+            barWidth: '20',
             barGap: '-100%',
             data: this.planMileage,
             itemStyle: {
@@ -132,7 +132,7 @@ export default {
           {
             name: '实际里程',
             type: 'bar',
-            barWidth: '25',
+            barWidth: '20',
             barGap: '-100%',
             data: this.realTimeMileage,
             itemStyle: {

@@ -123,7 +123,7 @@ export default {
             name: '计划趟次',
             type: 'bar',
             barGap: '-100%',
-            barWidth: '25',
+            barWidth: '20',
             data: this.planTrips,
             itemStyle: {
               emphasis: {
@@ -139,7 +139,7 @@ export default {
             name: '实际趟次',
             type: 'bar',
             barGap: '-100%',
-            barWidth: '25',
+            barWidth: '20',
             data: this.realTimeTrips,
             itemStyle: {
               emphasis: {

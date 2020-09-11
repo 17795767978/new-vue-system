@@ -237,7 +237,7 @@ export default {
     // this._getOps()
   },
   mounted () {
-    this._getInitMap()
+    // this._getInitMap()
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
       this.lineOptions.push({
@@ -384,6 +384,10 @@ export default {
         this.formInline.value = 'all'
         this.loading = false
         this.disabled = false
+        if (res.length) {
+          this.center.lat = res[0].lat
+          this.center.lng = res[0].lng
+        }
         if (!this.searchData) {
           this.timerRate = setTimeout(() => {
             this._positionRating(params)
@@ -434,103 +438,25 @@ export default {
     _getVideo (item) {
     },
     handler ({ BMap, map }) {
+      const defaultData = this.$store.getters.formData
+      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
       this.zoom = 14
-      // this.center = this.center
       this._getOps()
+      setTimeout(() => {
+        this._positionRating({
+          orgId,
+          lineId: '',
+          busNumber: '',
+          warnTypes: defaultData.warningArr,
+          handleResult: []
+        })
+      }, 20)
       this.isLoading = false
       map.setMapStyle(mapStyleSec)
-      // this.$refs.baiduMapWrapper.$el.children[0].style.borderRadius = '6px'
     },
     handleMarkerClick (marker) {
-      // this.$emit('handlerMarker', marker)
       Bus.$emit('handlerMarker', marker)
-      // this.charData.forEach(item => {
-      //   item.isAct = false
-      // })
-      // this.warnData = []
-      // this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
-      // this.isLoading = true
-      // const { busId,
-      //   busNumber,
-      //   drvName,
-      //   drvIccard,
-      //   samplingTime,
-      //   busSelfcode,
-      //   warnSpeed,
-      //   orgName,
-      //   lineName,
-      //   lineType,
-      //   positionSpeed,
-      //   currenttrip,
-      //   warnDeviceCode,
-      //   busVideoOrder } = marker
-      // this.$api['homeTired.getVideoMsg']({
-      //   busId,
-      //   busNumber,
-      //   samplingTime,
-      //   busSelfcode,
-      //   warnSpeed,
-      //   orgName,
-      //   lineName,
-      //   lineType,
-      //   drvName,
-      //   drvIccard,
-      //   positionSpeed,
-      //   currenttrip,
-      //   warnDeviceCode,
-      //   busVideoOrder
-      // }).then(res => {
-      //   this.carDetailData = res
-      //   this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
-      //   this.carDetailData.tripPercent = Number(this.carDetailData.tripPercent)
-      //   if (this.carDetailData.busVideoOrder && this.carDetailData.busVideoOrder.length > 0) {
-      //     this.charData = []
-      //     this.carDetailData.busVideoOrder.forEach((item, index) => {
-      //       if (index < 6) {
-      //         this.charData.push({
-      //           ch: item,
-      //           isAct: false,
-      //           index: index
-      //         })
-      //       }
-      //     })
-      //   } else {
-      //     this.charData = [
-      //       { ch: '通道1', isAct: false, index: 0 },
-      //       { ch: '通道2', isAct: false, index: 1 },
-      //       { ch: '通道3', isAct: false, index: 2 },
-      //       { ch: '通道4', isAct: false, index: 3 },
-      //       { ch: '通道5', isAct: false, index: 4 },
-      //       { ch: '通道6', isAct: false, index: 5 }
-      //     ]
-      //   }
-      //   if (this.isFlv) {
-      //     this._getKey()
-      //     this._getVideoList(this.carDetailData.devRefId).then(res => {
-      //     })
-      //   }
-      //   if (this.carDetailData.warnInfos.length > 0) {
-      //     this.carDetailData.warnInfos = this.carDetailData.warnInfos.slice(0, 2)
-      //     this.carDetailData.warnInfos.slice(0, 2).forEach((item, index) => {
-      //       this.warnData.push({
-      //         index,
-      //         isAct: false,
-      //         warnTypeName: item.warnTypeName + (index + 1)
-      //       })
-      //     })
-      //   }
-      //   this.dialogTableVisible = true
-      // }).catch((e) => {
-      //   this.$message.error(e.message)
-      // })
     },
-    // getWarnInfo (warnInfos) {
-    //   warnInfos.forEach((item, index) => {
-    //     item.warnTypeName = item.warnTypeName + (index + 1)
-    //     item.isAct = false
-    //     item.index = index
-    //   })
-    // },
     getCharItem (item) {
       this.charData[item.index].isAct = !this.charData[item.index].isAct
     },
