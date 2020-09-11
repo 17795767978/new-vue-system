@@ -122,6 +122,7 @@ export default {
       warnTypes: defaultForm.warningArr,
       handleResults: [],
       auditStatus: [],
+      busSelfCode: '',
       pageNumber: 1,
       pageSize: 15 })
   },
@@ -142,6 +143,7 @@ export default {
           warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId,
           handleResults: newV.checkList,
           auditStatus: newV.auditStatus,
+          busSelfCode: newV.busSelfCode,
           pageNumber: 1,
           pageSize: 15
         })
@@ -181,7 +183,8 @@ export default {
           pageNumber: this.pageNumber,
           pageSize: this.pageSize,
           handleResults: this.selectData.checkList,
-          auditStatus: this.selectData.auditStatus
+          auditStatus: this.selectData.auditStatus,
+          busSelfCode: this.selectData.busSelfCode
         })
       } else {
         let yestoday = new Date()
@@ -197,6 +200,7 @@ export default {
           driverNum: '',
           handleResults: [],
           auditStatus: [],
+          busSelfCode: '',
           warnTypes: defaultForm.warningArr,
           pageNumber: this.pageNumber,
           pageSize: 15 })

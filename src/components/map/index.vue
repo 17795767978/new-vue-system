@@ -385,11 +385,11 @@ export default {
         this.formInline.value = 'all'
         this.loading = false
         this.disabled = false
-        if (!this.searchData) {
-          this.timerRate = setTimeout(() => {
-            this._positionRating(params)
-          }, TIME)
-        }
+        // if (!this.searchData) {
+        this.timerRate = setTimeout(() => {
+          this._positionRating(params)
+        }, TIME)
+        // }
       })
     },
     _hotDataLine (params) {

@@ -4,6 +4,7 @@
       :isOrg='true'
       :isLine="true"
       :isDateTo="true"
+      :isBusSelfCode="true"
       :isEmpty="true"
       :isWarntype="true"
       :isDownload="true"

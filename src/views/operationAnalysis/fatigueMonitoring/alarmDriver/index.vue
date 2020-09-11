@@ -5,6 +5,7 @@
       :isLine="true"
       :isDateTo="true"
       :isEmpty="true"
+      :isBusSelfCode="true"
       :isWarntype="true"
       :isDownload="true"
       :isAudit="true"

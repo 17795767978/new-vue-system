@@ -65,7 +65,8 @@ export default {
       endTime: defaultForm.dateArray[1],
       warnTypes: defaultForm.warningArr,
       auditStatus: [],
-      handleResult: []
+      handleResult: [],
+      busSelfCode: ''
     })
   },
   mounted () {
@@ -107,7 +108,8 @@ export default {
           endTime: newV.dateArray[1],
           warnTypes: newV.warnTypeId.length === 0 ? defaultForm.warningArr : newV.warnTypeId,
           handleResults: newV.checkList,
-          auditStatus: newV.auditStatus
+          auditStatus: newV.auditStatus,
+          busSelfCode: newV.busSelfCode
         })
       }
     }

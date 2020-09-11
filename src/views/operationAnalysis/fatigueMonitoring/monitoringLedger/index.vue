@@ -4,6 +4,7 @@
       :isOrg='true'
       :isLine="true"
       :isBus="true"
+      :isBusSelfCode="true"
       :isDriverNum="true"
       :isDate="true"
       :isEmpty="true"
