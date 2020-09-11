@@ -1,6 +1,6 @@
 <template>
   <div v-loading="isloading">
-    <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">不良驾驶行为分析报警司机排行</h2>
+    <h2 style="width: 100%; height: 2vh; text-align: center;line-height: 2vh">司机不良驾驶行为报警排行分析</h2>
     <el-table
       ref="tableWrapper"
       :data="tableData"

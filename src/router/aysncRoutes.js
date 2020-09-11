@@ -272,7 +272,7 @@ export const aysncRoutesMap = [
       component: _import_('operationAnalysis/fatigueMonitoring/index'),
       name: 'fatigueMonitoring',
       meta: {
-        title: '疲劳监测',
+        title: '驾驶行为分析',
         icon: 'nocturne icon-dash',
         roles: ['/alarm-center', '/alarm-content', '/device-status', '/alarm-analysis', '/alarm-home', '/alarm-drive', '/alarm-type', '/alarm-speed', '/device-parameter', '/car-sort', '/monitoring-ledger', '/diary-table', '/device-parameter', '/user-result']
       },
@@ -292,7 +292,7 @@ export const aysncRoutesMap = [
           component: _import_('operationAnalysis/fatigueMonitoring/alarmDriver/index'),
           name: 'alarmDriver',
           meta: {
-            title: '司机排行',
+            title: '司机排行分析',
             icon: 'nocturne icon-dash',
             roles: ['/alarm-drive']
           }
