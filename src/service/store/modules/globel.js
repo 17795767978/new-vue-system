@@ -17,7 +17,8 @@ const globel = {
     pagesList: [],
     center: [],
     options: {},
-    isUpdate: false
+    isUpdate: false,
+    warnTypeList: []
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
@@ -58,6 +59,9 @@ const globel = {
     },
     UPDATE_MSG: (state, isUpdate) => {
       state.isUpdate = isUpdate
+    },
+    GET_WARN_LIST: (state, warns) => {
+      state.warnTypeList = warns
     }
   },
   actions: {
@@ -245,6 +249,19 @@ const globel = {
           })
         })
         commit('USER_LIST', list)
+      })
+    },
+    getWarnTypeList ({ commit }) {
+      api['tiredMonitoring.getWarntypes']({ warnLevel: '' }).then(res => {
+        let dataArr = res
+        let list = []
+        dataArr.forEach(item => {
+          list.push({
+            label: item.value,
+            value: item.code
+          })
+        })
+        commit('GET_WARN_LIST', list)
       })
     },
     getMudeluPageList ({ commit }) {

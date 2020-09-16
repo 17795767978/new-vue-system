@@ -29,8 +29,8 @@
           </template>
         </el-table-column>
         <!-- <el-table-column prop="paramName" label="参数名称"></el-table-column> -->
-        <el-table-column align="center" prop="warnType" label="参数编码"></el-table-column>
-        <el-table-column align="center" prop="paramValue" label="参数值"></el-table-column>
+        <el-table-column align="center" prop="warnType" label="报警类型"></el-table-column>
+        <el-table-column align="center" prop="paramValue" label="速度（KM/H）"></el-table-column>
         <el-table-column align="center" prop="paramIsvalid" label="启/禁用">
         <template slot-scope="scope" >
           <el-tag v-if="scope.row.paramIsvalid === '1'" type="success" @click="handleType('paramIsvalidStatus')">启用</el-tag>
@@ -40,7 +40,7 @@
         <el-table-column align="center" prop="remark" label="备注"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click.stop="handleEdit(scope.$index, scope.row)">修改</el-button>
+            <el-button size="mini" type="primary" @click.stop="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini"  type="danger" @click.stop="handleDel(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -68,11 +68,13 @@
 // import NavPremissonButton from '@/components/navButton/navPremissonButton'
 import ParamsConfSearch from './Components/search'
 import ParamsUpdate from './Components/paramsUpdate'
+// import mixinsTime from '@/mixins/global/'
 // api
 // import { paramsListGet, paramsDelete } from '@/api/systemparams'
 export default {
   name: 'paramsConfiguration',
   components: { ParamsConfSearch, ParamsUpdate },
+  // mixins: [mixinsTime],
   data () {
     return {
       comp: this,

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     width="600px"
-    :title="(isCreate ? '新增' : '编辑') + '参数'"
+    :title="isCreate ? '新增' : '编辑'"
     :visible.sync="isVisible"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
@@ -17,6 +17,7 @@
         <el-col :span="24">
           <el-form-item label="报警类型" prop="paramName">
              <el-select
+              :disabled="!isCreate"
               v-model="paramsForm.paramName"
               filterable
               placeholder="请选择"
@@ -86,6 +87,13 @@ export default {
         callback()
       }
     }
+    let paramValueTo = (rule, value, callback) => {
+      if (!Number(value)) {
+        return callback(new Error('请输入纯数字'))
+      } else {
+        callback()
+      }
+    }
     return {
       disableSpCode: '',
       isVisible: false,
@@ -93,10 +101,10 @@ export default {
       warnOptions: [],
       formRules: {
         paramName: [
-          { required: true, message: '请输入参数编码', trigger: 'blur' },
+          { required: true, message: '请选择报警类型', trigger: 'blur' },
           { required: true, message: '50位以内任意字符', trigger: 'blur' }
         ],
-        paramValue: [{ required: true, message: '请输入参数值', trigger: 'blur' }],
+        paramValue: [{ validator: paramValueTo, required: true, trigger: 'blur' }],
         remark: [{ validator: remarkTo, trigger: 'blur' }]
       },
       paramIsvalids: [
@@ -134,19 +142,22 @@ export default {
       }
       //
       this.isVisible = isShow
+    },
+    '$store.state.globel.warnTypeList': {
+      handler (newV) {
+        this.warnOptions = newV
+      }
     }
   },
   methods: {
     _getWarnType () {
-      this.$api['tiredMonitoring.getWarntypes']().then(res => {
-        this.warnOptions = res.map(item => ({ label: item.value, value: item.code }))
-      })
+      this.warnOptions = this.$store.state.globel.warnTypeList
     },
     save () {
       this.$refs.paramsForm.validate(isValid => {
         if (isValid) {
           const params = Object.assign({}, this.paramsForm)
-          console.log(params)
+          delete params.warnType
           const submitType = this.isCreate ? 'paramsCreate' : 'paramsUpdate'
           const submitText = this.isCreate ? '新增' : '编辑'
           this.$api[`wholeInformation.${submitType}`](params).then(res => {

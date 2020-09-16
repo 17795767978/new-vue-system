@@ -187,6 +187,8 @@ const user = {
           })
           // 用户列表
           store.dispatch('getUserList')
+          // 报警类型
+          store.dispatch('getWarnTypeList')
           // 经纬度
           store.dispatch('getOps')
           // 页面模块列表

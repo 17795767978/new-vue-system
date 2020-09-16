@@ -2,7 +2,19 @@
 <div class="header">
   <el-form :model="searchForm" ref="searchForm"  label-width="80px" :inline="true">
     <el-form-item label="报警类型"  prop="paramName">
-      <el-input v-model="searchForm.paramName" style="width: 200px;" size="mini"></el-input>
+      <el-select
+        size="mini"
+        v-model="searchForm.paramName"
+        filterable
+        placeholder="请选择"
+        collapse-tags>
+        <el-option
+          v-for="item in warnOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click.native="search" size="mini">查询</el-button>
@@ -18,13 +30,25 @@ export default {
     return {
       searchForm: {
         paramName: ''
-      }
+      },
+      warnOptions: []
     }
   },
   mounted () {
     this.search()
+    this._initWarn()
+  },
+  watch: {
+    '$store.state.globel.warnTypeList': {
+      handler (newV) {
+        this.warnOptions = newV
+      }
+    }
   },
   methods: {
+    _initWarn () {
+      this.warnOptions = this.$store.state.globel.warnTypeList
+    },
     // 检索
     search: function () {
       this.$emit('search', Object.assign({}, this.searchForm))
