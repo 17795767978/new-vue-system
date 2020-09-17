@@ -3,7 +3,7 @@
     <!-- <canvas id="loginAni"></canvas> -->
     <div class="img-wrapper animate-bounce-up"></div>
     <div class="login-wrapper">
-      <h3 class="title">公交运营综合分析系统</h3>
+      <h3 class="title">综合运营管理</h3>
       <div class="login-block">
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" size="medium">
           <el-form-item prop="userAccount">
@@ -157,8 +157,11 @@ export default {
       font-size: 32px;
       color: #2385d0;
       position: absolute;
-      left: 61%;
+      left: 62%;
       top: 35%;
+      text-align: center;
+      width: 400px;
+      margin-bottom: 0;
     }
     .login-block {
       position: absolute;
@@ -168,7 +171,7 @@ export default {
       top: 60%;
       width: 400px;
       height: 270px;
-      padding: 50px 0 40px 0;
+      padding: 20px 0 40px 0;
       margin: -150px 0 0 -150px;
       border-radius: 25px;
       box-sizing: border-box;

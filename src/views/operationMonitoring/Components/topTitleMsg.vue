@@ -32,7 +32,7 @@ export default {
   data () {
     return {
       dataNow: '',
-      title: '公交运营综合分析系统',
+      title: '综合运营管理',
       timer: null,
       temperature: '',
       weather: ''

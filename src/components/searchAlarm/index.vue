@@ -1145,6 +1145,7 @@ export default {
       let params = {
         company: this.formInline.lineOrgId,
         lineId: this.formInline.lineId,
+        lineUuid: this.formInline.lineId,
         // 判断是否为单车查询页面的导出，后台spring不能区分lineID和lineId，默认取lineID，所以利用this.select做判断传值的问题
         lineID: this.select ? this.formInline.lineId : lineArr[0],
         orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId,

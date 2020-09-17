@@ -144,6 +144,24 @@ export const downLoadApi = {
         warnDate: ''
       },
       desc: '统计日报表导出'
+    },
+    {
+      name: 'posExport',
+      method: 'POST',
+      path: '/posrecord/recordExport',
+      mockPath: '/posrecord/recordExport',
+      params: {
+      },
+      desc: '卡机明细表导出'
+    },
+    {
+      name: 'busKLExport',
+      method: 'POST',
+      path: '/posrecord/busKLExport',
+      mockPath: '/posrecord/busKLExport',
+      params: {
+      },
+      desc: '单车客流核算表导出'
     }
   ]
 }

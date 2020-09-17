@@ -18,6 +18,9 @@ export function axiosRequestSucessFunc (config) {
   if (config.data && config.data.lineId !== undefined) {
     config.data.lineUuids = permissionLine(config.data.lineId, 'lineId')
   }
+  if (config.data && config.data.lineUuid !== undefined) {
+    config.data.lineUuids = permissionLine(config.data.lineUuid, 'lineId')
+  }
   if (config.data && config.data.lineIdRepeate !== undefined) {
     config.data.lineUuids = permissionLine(config.data.lineIdRepeate, 'lineIds')
   }

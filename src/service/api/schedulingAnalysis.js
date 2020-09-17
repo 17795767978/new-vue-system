@@ -124,6 +124,24 @@ export const schedulingAnalysisApi = {
         dateTime: ''
       },
       desc: '线路站间运行时间分析'
+    },
+    {
+      name: 'getPosRecordPage',
+      method: 'POST',
+      path: '/posrecord/recordPage/get',
+      mockPath: '/posrecord/recordPage/get',
+      params: {
+      },
+      desc: '卡机交易明细表'
+    },
+    {
+      name: 'getBusKLPage',
+      method: 'POST',
+      path: '/posrecord/busKLPage/get',
+      mockPath: '/posrecord/busKLPage/get',
+      params: {
+      },
+      desc: '单车客流核算表'
     }
   ]
 }

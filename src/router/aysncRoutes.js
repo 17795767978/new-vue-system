@@ -101,7 +101,7 @@ export const aysncRoutesMap = [
         title: '调度运营分析',
         icon: 'nocturne icon-dash',
         path: 'runtime-analysis',
-        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/search-passenger', '/search-passenger-flow', '/bus-passenger', '/bus-passenger-week']
+        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/search-passenger', '/search-passenger-flow', '/bus-passenger', '/bus-passenger-week', '/transaction-form', '/single-passenger-accounting']
       },
       children: [
         {
@@ -232,6 +232,26 @@ export const aysncRoutesMap = [
             title: '单车客流周统计',
             icon: 'nocturne icon-dash',
             roles: ['/bus-passenger-week']
+          }
+        },
+        {
+          path: 'transaction-form',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/transactionForm/index'),
+          name: 'transactionForm',
+          meta: {
+            title: '卡机交易明细',
+            icon: 'nocturne icon-dash',
+            roles: ['/transaction-form']
+          }
+        },
+        {
+          path: 'single-passenger-accounting',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/singlePassengerAccounting/index'),
+          name: 'singlePassengerAccounting',
+          meta: {
+            title: '单车客流核算',
+            icon: 'nocturne icon-dash',
+            roles: ['/single-passenger-accounting']
           }
         }
       ]
