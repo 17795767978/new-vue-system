@@ -385,7 +385,7 @@ export default {
         background-size: 100% 100%;
       }
       .center {
-        width: 23%;
+        width: 30%;
         text-align: center;
         line-height: 2vh;
         font-weight: bold;
@@ -393,7 +393,7 @@ export default {
         font-size: .8vw;
       }
       .right {
-        width: 65%;
+        width: 60%;
         .line {
           margin-top: .95vh;
           width: 100%;
@@ -435,7 +435,7 @@ export default {
         background-size: 100% 100%;
       }
       .center {
-        width: 23%;
+        width: 30%;
         text-align: center;
         line-height: 2vh;
         font-weight: bold;
@@ -443,7 +443,7 @@ export default {
         font-size: .8vw;
       }
       .right {
-        width: 65%;
+        width: 60%;
         .line {
           margin-top: .95vh;
           width: 100%;
@@ -586,7 +586,7 @@ export default {
         background-size: 100% 100%;
       }
       .center {
-        width: 50%;
+        width: 56%;
         text-align: center;
         line-height: 2vh;
         font-weight: bold;
@@ -594,7 +594,7 @@ export default {
         font-size: .8vw;
       }
       .right {
-        width: 42%;
+        width: 35%;
         .line {
           margin-top: .95vh;
           width: 100%;

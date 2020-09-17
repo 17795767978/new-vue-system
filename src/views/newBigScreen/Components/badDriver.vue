@@ -8,7 +8,7 @@
 
 <script>
 const TIME = 3 * 60 * 1000
-const COLOR = ['#1479f6', '#11e692', '#00c0fe', '#fc3c57', '#17f4f7', '#00ff72']
+const COLOR = ['#00ff72', '#1479f6', '#fc3c57', '#11e692', '#00c0fe', '#17f4f7']
 export default {
   data () {
     return {
@@ -38,11 +38,12 @@ export default {
       this.loading = true
       this.$api['homeTired.getStatisticDatasByWarnTypeAnalysis'](params).then(res => {
         this.loading = false
-        this.changeData = res
+        this.changeData = res.sort((prev, next) => next.warnNumber - prev.warnNumber)
         this.dataList = this.changeData.map(item => ({
           name: item.warnLabel,
           value: item.warnNumber
         }))
+        console.log(this.dataList)
         this.drawLine()
         this.timer = setTimeout(() => {
           this._getAlarmLevelRatioAnalysis(params)
