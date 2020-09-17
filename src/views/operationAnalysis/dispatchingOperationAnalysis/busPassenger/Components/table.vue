@@ -151,7 +151,7 @@ export default {
           pfrpassengerDifNum = Math.abs(`${((item.pfrGetOnNumber - item.pfrGetOffNumber) / item.pfrGetOnNumber * 100).toFixed(2)}`)
           dataFormat.push(Object.assign({ pfrpassengerDif: pfrpassengerDifNum }, item))
         } else {
-          dataFormat.push(Object.assign({ pfrpassengerDif: '0' }, item))
+          dataFormat.push(Object.assign({ pfrpassengerDif: '--' }, item))
         }
       })
       dataFormat = dataFormat.sort((prev, next) => next.pfrpassengerDif - prev.pfrpassengerDif)
