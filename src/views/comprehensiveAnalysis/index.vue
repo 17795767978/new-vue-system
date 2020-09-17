@@ -4,7 +4,7 @@
       <div class="top-title">
         <el-row :gutter="20">
           <el-col :offset="7" :span="10">
-            <div class="title-wrapper">公交集团运营监控</div>
+            <div class="title-wrapper">综合运营管理</div>
           </el-col>
           <el-col :span="7">
             <weather></weather>

@@ -227,7 +227,7 @@ export default {
   justify-content: space-between;
 }
 .passenger-total-all {
-  width: 14%;
+  width: 15%;
   height: 7vh;
   display: flex;
   // 0c3172
@@ -300,7 +300,7 @@ export default {
         color: #11e692
       }
       &.color-rate {
-        color: #fc3c57
+        color: #1694ff
       }
       &.color-waiting {
         color: #17f4f7

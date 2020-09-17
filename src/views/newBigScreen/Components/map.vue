@@ -25,6 +25,29 @@
           >
         </bm-marker>
       </div>
+      <!-- <bm-polyline v-for="item in lineData" :key="item.name"></bm-polyline> -->
+      <bm-polyline
+        v-for="(item, index) in lineData"
+        :key="item.lineUuid"
+        :path="item.stations"
+        :stroke-color="colors[index]"
+        :stroke-opacity="0.7"
+        :stroke-weight="3"
+        :editing="false"
+        @mouseover="getDetail($event, item)"
+        @mouseout="clearDetail"
+        @lineupdate="updatePolylinePath">
+      </bm-polyline>
+      <!-- <bm-marker v-if="isSee" :position="{lng: details.stations[0].lng, lat: details.stations[0].lng}">
+          <bm-label :content="details.lineName" :labelStyle="{color: '#e5e5e5', fontSize : '24px'}" :offset="{width: -35, height: 30}"/>
+        </bm-marker> -->
+      <bm-overlay
+        pane="labelPane"
+        v-if="isSee"
+        :class="{sample: true}"
+        @draw="draw">
+        <div>{{`${details.lineName} ${details.lineType === '1' ? '上行' : '下行'}`}}</div>
+      </bm-overlay>
       <!-- </bml-marker-clusterer> -->
       <bml-heatmap :data="hotdata" :max="max" :radius="20" v-if="isHotMap">
       </bml-heatmap>
@@ -152,15 +175,15 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { BaiduMap, BmMarker, BmlHeatmap, BmControl } from 'vue-baidu-map'
+import { BaiduMap, BmMarker, BmlHeatmap, BmControl, BmPolyline, BmOverlay } from 'vue-baidu-map'
 import { mapStyleSec } from '../utils/mapStyleSec'
 import iconCarRed from '../../../assets/images/alarm-bus.png'
 import iconCarGreen from '../../../assets/images/normal-bus.png'
 import videoWrapper from '@/components/map/video'
 import Bus from './bus.js'
 import { mapGetters } from 'vuex'
-// import moment from 'moment'
-const TIME = 3 * 60 * 1000
+// const COLOR = ['#f00', '#f0f', '#0ff', '#00f', '#0f0', '#ff0']
+const TIME = 6 * 1000
 // const URL = 'http://121.30.214.187:12056/api/v1/basic/' // 大同
 const URL = 'http://117.34.118.30:12056/api/v1/basic/'
 export default {
@@ -190,7 +213,7 @@ export default {
   data () {
     return {
       formInline: {
-        value: ''
+        value: 'all'
       },
       isLoading: true,
       center: { lng: 0, lat: 0 },
@@ -220,14 +243,24 @@ export default {
       monitorData: [],
       carDetailData: {},
       key: '',
-      urlList: []
+      urlList: [],
+      lineDataAll: [],
+      lineData: [],
+      colors: ['#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c'],
+      isSee: false,
+      details: {},
+      currenPoint: {}
     }
   },
   components: {
     BaiduMap,
     BmlHeatmap,
     BmMarker,
+    BmPolyline,
+    // BmLabel,
+    BmOverlay,
     // BmlMarkerClusterer,
+    // BmInfoWindow,
     BmControl,
     videoWrapper
   },
@@ -238,12 +271,16 @@ export default {
   },
   mounted () {
     // this._getInitMap()
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
       this.lineOptions.push({
         label: '全部线路',
         value: 'all'
       })
+    })
+    this._getLineNetInfos({
+      orgId
     })
     setTimeout(function () {
       let t = performance.timing
@@ -279,8 +316,10 @@ export default {
           // lineGroupUuid 延安
           // lineId 大同
           this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
+          this.lineData = Object.prototype.toString.call(this.lineDataAll ) === '[object Array]' && this.lineDataAll.filter(item => item.lineUuid === newV)
         } else {
           this.markers = this.markersAll
+          this.lineData = this.lineDataAll
         }
       }
     },
@@ -378,13 +417,25 @@ export default {
     },
     _positionRating (params) {
       this.loading = true
+      const pointIds = this.markers.map(item => item.lineGroupUuid)
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
         this.markersAll = res
-        this.markers = this.markersAll
-        this.formInline.value = 'all'
+        this.markers = []
+        if (this.formInline.value === 'all') {
+          this.markers = this.markersAll
+        } else {
+          this.markersAll.forEach(item => {
+            if (pointIds.includes(item.lineGroupUuid)) {
+              this.markers.push(item)
+            }
+          })
+          console.log(pointIds)
+          console.log(this.markers)
+        }
+        // this.formInline.value = 'all'
         this.loading = false
         this.disabled = false
-        if (res.length) {
+        if (res.length && !this.timerRate) {
           this.center.lat = res[0].lat
           this.center.lng = res[0].lng
         }
@@ -395,6 +446,53 @@ export default {
         }
       })
     },
+    _getLineNetInfos (params) {
+      this.$api['homeMap.getLineNetInfos'](params).then(res => {
+        // this.lineData = res
+        this.lineData = []
+        this.lineDataAll = []
+        for (let item in res) {
+          this.lineDataAll.push({
+            lineName: res[item][0].lineName,
+            lineUuid: res[item][0].lineUuid,
+            lineType: res[item][0].lineType,
+            stations: res[item]
+          })
+        }
+        this.lineData = this.lineDataAll
+      })
+    },
+    getLine (item) {
+      console.log(item)
+    },
+    getDetail (event, item) {
+      // console.log(point)
+      // console.log(item)
+      // console.log(e)
+      // console.log(item)
+      // console.log(e)
+      this.currenPoint = event.point
+      this.details = item
+      // // console.log(item)
+      // console.log(target)
+      // console.log(point)
+      // console.log(pixel)
+      // this.details = data
+      // return (item) => {
+      //   console.log(item)
+      // }
+      this.isSee = true
+    },
+    clearDetail () {
+      this.isSee = false
+      // this.details = {}
+    },
+    draw ({el, BMap, map}) {
+      const pixel = map.pointToOverlayPixel(new BMap.Point(this.currenPoint.lng, this.currenPoint.lat))
+      el.style.left = pixel.x - 60 + 'px'
+      el.style.top = pixel.y - 20 + 'px'
+    },
+    updatePolylinePath () {},
     _hotDataLine (params) {
       this.loading = true
       this.hotdata = []
@@ -486,6 +584,22 @@ export default {
   height: 100%;
   border-radius: 6px;
   position: relative;
+  .sample {
+    width: 120px;
+    height: 3vh;
+    line-height: 3vh;
+    background: rgba(0,0,0,0.5);
+    overflow: hidden;
+    box-shadow: 0 0 5px #000;
+    color: #fff;
+    text-align: center;
+    padding: .5vw;
+    position: absolute;
+  }
+  .sample.active {
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+  }
   .form-inline {
     /deep/ .el-input__inner {
       background-color: rgb(14, 33, 57);
