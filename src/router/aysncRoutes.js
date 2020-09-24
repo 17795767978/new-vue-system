@@ -101,7 +101,7 @@ export const aysncRoutesMap = [
         title: '调度运营分析',
         icon: 'nocturne icon-dash',
         path: 'runtime-analysis',
-        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/search-passenger', '/search-passenger-flow', '/bus-passenger', '/bus-passenger-week', '/transaction-form', '/single-passenger-accounting']
+        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/search-passenger', '/search-passenger-flow', '/bus-passenger', '/bus-passenger-week', '/transaction-form', '/single-passenger-accounting', '/history-playback', '/charging-analysis', 'energy-consumption-analysis']
       },
       children: [
         {
@@ -252,6 +252,37 @@ export const aysncRoutesMap = [
             title: '单车客流核算',
             icon: 'nocturne icon-dash',
             roles: ['/single-passenger-accounting']
+          }
+        },
+        {
+          path: 'history-playback',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/historyPlayback/index'),
+          name: 'historyPlayback',
+          meta: {
+            title: '历史回放',
+            icon: 'nocturne icon-dash',
+            roles: ['/history-playback']
+          }
+        },
+        {
+          path: 'charging-analysis',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/chargingAnalysis/index'),
+          name: 'chargingAnalysis',
+          meta: {
+            title: '充电分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/charging-analysis']
+          }
+        },
+        //
+        {
+          path: 'energy-consumption-analysis',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/energyConsumptionAnalysis/index'),
+          name: 'energyConsumptionAnalysis',
+          meta: {
+            title: '能耗分析',
+            icon: 'nocturne icon-dash',
+            roles: ['/energy-consumption-analysis']
           }
         }
       ]

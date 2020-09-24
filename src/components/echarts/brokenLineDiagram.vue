@@ -52,6 +52,12 @@ export default {
     },
     polar: {
       type: Object
+    },
+    dataZoom: {
+      type: Array,
+      default: () => {
+        return []
+      }
     }
   },
   data () {
@@ -68,7 +74,8 @@ export default {
       tooltipData: {},
       gridData: {},
       radarData: [],
-      bmapData: {}
+      bmapData: {},
+      dataZoomData: []
     }
   },
   components: {
@@ -180,6 +187,7 @@ export default {
           radiusAxis: Object.keys(this.angleAxisData).length > 0 ? {} : null,
           polar: this.polar,
           legend: this.legendData,
+          dataZoom: this.dataZoom.length ? this.dataZoom : [],
           xAxis: this.xData,
           yAxis: this.yData,
           radar: this.radar,

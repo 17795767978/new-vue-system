@@ -142,6 +142,24 @@ export const schedulingAnalysisApi = {
       params: {
       },
       desc: '单车客流核算表'
+    },
+    {
+      name: 'getEnergyData',
+      method: 'POST',
+      path: '/can/energy/data/getEnergyData',
+      mockPath: '/can/energy/data/getEnergyData',
+      params: {
+      },
+      desc: '能耗分析'
+    },
+    {
+      name: 'getChargeData',
+      method: 'POST',
+      path: '/can/charge/data/getChargeData',
+      mockPath: '/can/charge/data/getChargeData',
+      params: {
+      },
+      desc: '充电分析'
     }
   ]
 }

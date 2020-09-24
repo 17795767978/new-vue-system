@@ -68,7 +68,7 @@
     <div class="bad-driver-complete">
       <div class="title">
         <div class="left"></div>
-        <div class="center">不良驾驶行为统计</div>
+        <div class="center">驾驶状态异常统计</div>
         <div class="right">
           <div class="line"></div>
         </div>
@@ -81,12 +81,12 @@
     <div class="bad-driver-alarm-complete">
       <div class="title">
         <div class="left"></div>
-        <div class="center">司机不良驾驶行为实时报警</div>
+        <div class="center">司机驾驶异常行为实时报警</div>
         <div class="right">
           <div class="line"></div>
         </div>
       </div>
-      <div style="width: 100%; height: 85%; padding: 0.7vh 0.3vw 0 0.3vw; box-sizing:border-box;">
+      <div style="width: 100%; height: 90%; padding: .8vh 0.3vw .5vh 0.7vw; box-sizing:border-box;">
         <BadDriverReal></BadDriverReal>
       </div>
     </div>
@@ -122,7 +122,8 @@ export default {
       onlineBus: 100,
       marker: {},
       onLineCarNum: null,
-      totalBusNumber: null
+      totalBusNumber: null,
+      timerOnlineCar: null
     }
   },
   created () {
@@ -189,6 +190,9 @@ export default {
         document.webkitCancelFullScreen()
       }
     }
+  },
+  destroyed () {
+    clearTimeout(this.timerOnlineCar)
   },
   components: {
     PassengerIndex,

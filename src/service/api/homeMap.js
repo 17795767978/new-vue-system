@@ -29,6 +29,15 @@ export const homeMapApi = {
         orgId: ''
       },
       desc: '线路规划点'
+    },
+    {
+      name: 'getParkingList',
+      method: 'POST',
+      path: '/api/parking/getParkingList',
+      mockPath: '/api/parking/getParkingList',
+      params: {
+      },
+      desc: '场站规划点'
     }
   ]
 }

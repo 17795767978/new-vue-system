@@ -214,6 +214,16 @@
           end-placeholder="结束日期">
       </el-date-picker>
     </el-form-item>
+    <el-form-item label="选择日期:" v-if="isDateQuick">
+        <el-date-picker
+          :picker-options="pickerOptionsDateQuick"
+          v-model="formInline.dateQuick"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+      </el-date-picker>
+    </el-form-item>
     <!-- 日期选择器 单车周报 -->
       <el-form-item label="选择日期:" v-if="isDateWeek">
         <el-date-picker
@@ -313,6 +323,9 @@
         </downloadExcel> -->
       </span>
     </el-dialog>
+    <!-- <transition name="slide-fade">
+      <div :style="styles" v-if="isShow">12313123</div>
+    </transition> -->
   </div>
 </template>
 
@@ -444,6 +457,9 @@ export default {
     isDiff: {
       type: Boolean
     },
+    isDateQuick: {
+      type: Boolean
+    },
     // 周报的时间限制用
     isDateToLimit: {
       type: Boolean
@@ -459,6 +475,44 @@ export default {
           const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
           return time.getTime() > endTime
         }
+      },
+      pickerOptionsDateQuick: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() > endTime
+        },
+        shortcuts: [{
+          text: '昨天',
+          onClick (picker) {
+            // const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
+            picker.$emit('pick', [start, start])
+          }
+        }, {
+          text: '今天',
+          onClick (picker) {
+            // const end = new Date()
+            const start = new Date()
+            picker.$emit('pick', [start, start])
+          }
+        }, {
+          text: '最近七天',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }]
       },
       pickerOptionsDate: {
         disabledDate (time) {
@@ -505,6 +559,7 @@ export default {
         startStation: {},
         endStation: {},
         dateArray: [],
+        dateQuick: [],
         radio: '1',
         driverNum: '',
         deviceCode: '',
@@ -577,7 +632,18 @@ export default {
       disabled: false,
       isLinkage: false,
       downLoadStr: '',
-      downLoadLoading: false
+      downLoadLoading: false,
+      styles: {
+        width: '50px',
+        height: '100px',
+        border: '1px solid #000',
+        position: 'absolute',
+        zIndex: '1000',
+        left: '50%',
+        top: '50%',
+        backgroundColor: '#f00'
+      },
+      isShow: false
     }
   },
   created () {
@@ -625,8 +691,10 @@ export default {
     if (this.formInline.radio === '1' && this.isRadio) {
       let date = new Date()
       this.formInline.dateArray = [date, date]
+      this.formInline.dateQuick = [date, date]
     } else {
       this.formInline.dateArray = defaultForm.dateArray
+      this.formInline.dateQuick = defaultForm.dateArray
     }
     this.formInline.lineOrgId = defaultForm.lineOrgId
     this.formInline.lineLineId = defaultForm.lineLineId
@@ -894,7 +962,10 @@ export default {
         this.options = []
       }
     },
-    onSubmit () {
+    onSubmit (e) {
+      // this.styles.left = e.clientX - 220 + 'px'
+      // this.styles.top = e.clientY - 66 + 'px'
+      // this.isShow = !this.isShow
       // 处理结果值
       let checkList = []
       // 审核结果值
@@ -953,7 +1024,8 @@ export default {
         auditStatus: this.formInline.auditStatus,
         diffStandard: this.formInline.diffStandard,
         startDate: this.formInline.startDate,
-        endDate: this.formInline.endDate
+        endDate: this.formInline.endDate,
+        dateQuick: this.formInline.dateQuick
       }
       this.$emit('configCheck', configData)
     },
@@ -997,7 +1069,8 @@ export default {
         auditStatus: [],
         diffStandard: '15',
         startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
-        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD')
+        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD'),
+        dateQuick: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -1033,7 +1106,8 @@ export default {
         auditStatus: this.formInline.auditStatus,
         diffStandard: this.formInline.diffStandard,
         startDate: this.formInline.startDate,
-        endDate: this.formInline.endDate
+        endDate: this.formInline.endDate,
+        dateQuick: this.formInline.dateQuick
       }
       this.$emit('handlerClear')
       this.$emit('configCheck', configData)
@@ -1226,6 +1300,17 @@ export default {
     .font-style {
       width: 130px;
     }
+  }
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
   }
 }
 </style>

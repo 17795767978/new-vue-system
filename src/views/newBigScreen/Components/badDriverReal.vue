@@ -2,18 +2,18 @@
   <div class="bottom-left-wrapper">
     <div  v-loading="loading" element-loading-background="rgba(255, 255, 255, 0)" style="height: 100%">
       <!-- <div v-for="(arrData, index) in diffArrData" :key="index"  @click="getIndex(index)"> -->
-        <vueSeamless  class="scroll-wrapper" :class-option="allOptions" :data="alermData">
+        <!-- <vueSeamless  class="scroll-wrapper" :class-option="allOptions" :data="alermData"> -->
           <p class="list-font" v-for="(list, index) in alermData" :key="index">
             <span>{{list[0]}}：<span style="color: #eadf00;">{{list[1]}}</span></span>
           </p>
-        </vueSeamless>
+        <!-- </vueSeamless> -->
       <!-- </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import vueSeamless from 'vue-seamless-scroll'
+// import vueSeamless from 'vue-seamless-scroll'
 const TIME = 3 * 60 * 1000
 export default {
   data () {
@@ -35,7 +35,7 @@ export default {
     }
   },
   components: {
-    vueSeamless
+    // vueSeamless
   },
   created () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
@@ -104,7 +104,7 @@ export default {
     color: #fff;
     font-size: 12px;
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 1.3vh;
   }
 }
 </style>

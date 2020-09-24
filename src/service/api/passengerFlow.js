@@ -177,6 +177,15 @@ export const passengerFlowApi = {
       params: {
       },
       desc: '单车客流周报查询-导出'
+    },
+    {
+      name: 'getHistoryCanData',
+      method: 'POST',
+      path: '/can/data/getHistoryCanData',
+      mockPath: '/can/data/getHistoryCanData',
+      params: {
+      },
+      desc: '历史回放'
     }
   ]
 }

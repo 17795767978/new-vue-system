@@ -14,6 +14,7 @@
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
       <!-- <bml-marker-clusterer :averageCenter="true" :maxZoom="seeZoom"> -->
       <div v-if="isCarsDetail">
+        <!-- 车 -->
         <bm-marker
           v-for="marker in markers"
           :key="marker.busId"
@@ -23,9 +24,11 @@
           :icon="getIcon(marker)"
           class="arrow_box"
           >
+            <bm-label :content="marker.busNumber" @click="handleMarkerClick(marker)" :labelStyle="{padding: '0px 0px', color: 'white', fontSize : '12px', backgroundColor: 'rgba(0,0,0,1)', border: 'hidden'}" :offset="{width: 10, height: 16}"/>
         </bm-marker>
       </div>
       <!-- <bm-polyline v-for="item in lineData" :key="item.name"></bm-polyline> -->
+      <!-- 线路 -->
       <bm-polyline
         v-for="(item, index) in lineData"
         :key="item.lineUuid"
@@ -34,13 +37,39 @@
         :stroke-opacity="0.7"
         :stroke-weight="3"
         :editing="false"
-        @mouseover="getDetail($event, item)"
-        @mouseout="clearDetail"
         @lineupdate="updatePolylinePath">
       </bm-polyline>
+      <!-- 站点 -->
+      <bm-marker
+        v-for="marker in stationsDatas"
+        :key="marker.busId"
+        :position="{lng: marker.lng, lat: marker.lat}"
+        :title="`${marker.lineName}-${marker.staName}站`"
+        :icon="getIconStation"
+        class="arrow_box"
+        :top="true"
+        :zIndex="1000"
+        >
+        <bm-label :content="''" @click="handleStationClick(marker)" :labelStyle="{padding: '3px 3px', backgroundColor: 'rgba(0,0,0,1)', border:`1.5px solid ${marker.color}`, borderRadius: '50%'}" :offset="{width: -5, height: -5}"/>
+        <bm-label :content="`${marker.staName}`" v-if="marker.isSee" :labelStyle="{padding: '0px 0px', color: 'white', fontSize : '12px', backgroundColor: 'rgba(0,0,0,1)', border: 'hidden'}" :offset="{width: -3, height: 10}"/>
+      </bm-marker>
       <!-- <bm-marker v-if="isSee" :position="{lng: details.stations[0].lng, lat: details.stations[0].lng}">
           <bm-label :content="details.lineName" :labelStyle="{color: '#e5e5e5', fontSize : '24px'}" :offset="{width: -35, height: 30}"/>
         </bm-marker> -->
+        <!-- 场站 -->
+        <!-- parkData -->
+        <div v-for="(item, index) in parkData" :key="index + 111">
+        <bm-polygon :path="item" :strokeColor="'white'" :strokeStyle="'dashed'" :stroke-weight="1" fillColor="#02fbf4" :fillOpacity="0.1">
+        </bm-polygon>
+        </div>
+      <div v-for="(item, index) in parkData" :key="index" class="park-park">
+      <bm-marker
+        :position="{lng:item && item[Math.floor(item.length / 2)].lng, lat:item && item[Math.floor(item.length / 2)].lat}"
+        :icon="getIconPark"
+        >
+        <bm-label :content="item[0].name" :labelStyle="{padding: '1px 1px', color: 'black', fontSize : '12px',fontWeight: 'bold', backgroundColor: '#02fbf4', border: 'hidden'}" :offset="{width: -15, height: -22}"/>
+      </bm-marker>
+      </div>
       <bm-overlay
         pane="labelPane"
         v-if="isSee"
@@ -175,10 +204,11 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { BaiduMap, BmMarker, BmlHeatmap, BmControl, BmPolyline, BmOverlay } from 'vue-baidu-map'
+import { BaiduMap, BmMarker, BmlHeatmap, BmControl, BmPolyline, BmOverlay, BmLabel, BmPolygon } from 'vue-baidu-map'
 import { mapStyleSec } from '../utils/mapStyleSec'
 import iconCarRed from '../../../assets/images/alarm-bus.png'
 import iconCarGreen from '../../../assets/images/normal-bus.png'
+import park from '../../../assets/images/park.png'
 import videoWrapper from '@/components/map/video'
 import Bus from './bus.js'
 import { mapGetters } from 'vuex'
@@ -249,7 +279,10 @@ export default {
       colors: ['#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c'],
       isSee: false,
       details: {},
-      currenPoint: {}
+      currenPoint: {},
+      stationsDatas: [],
+      stationsDatasAll: [],
+      parkData: []
     }
   },
   components: {
@@ -257,8 +290,9 @@ export default {
     BmlHeatmap,
     BmMarker,
     BmPolyline,
-    // BmLabel,
+    BmLabel,
     BmOverlay,
+    BmPolygon,
     // BmlMarkerClusterer,
     // BmInfoWindow,
     BmControl,
@@ -282,6 +316,7 @@ export default {
     this._getLineNetInfos({
       orgId
     })
+    this._getParkingList()
     setTimeout(function () {
       let t = performance.timing
       console.log('DNS查询耗时 ：' + (t.domainLookupEnd - t.domainLookupStart).toFixed(0))
@@ -307,6 +342,12 @@ export default {
         }
       }
     },
+    getIconStation () {
+      return { url: `${iconCarGreen}`, size: { width: 0, height: 0 } }
+    },
+    getIconPark () {
+      return { url: `${park}`, size: { width: 18, height: 23, transform: 'scale(0.2)' } }
+    },
     ...mapGetters(['formData'])
   },
   watch: {
@@ -316,7 +357,8 @@ export default {
           // lineGroupUuid 延安
           // lineId 大同
           this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
-          this.lineData = Object.prototype.toString.call(this.lineDataAll ) === '[object Array]' && this.lineDataAll.filter(item => item.lineUuid === newV)
+          this.lineData = Object.prototype.toString.call(this.lineDataAll) === '[object Array]' && this.lineDataAll.filter(item => item.lineUuid === newV)
+          this.stationsDatas = Object.prototype.toString.call(this.stationsDatasAll) === '[object Array]' && this.stationsDatasAll.filter(item => item.lineUuid === newV)
         } else {
           this.markers = this.markersAll
           this.lineData = this.lineDataAll
@@ -387,6 +429,11 @@ export default {
     }
   },
   methods: {
+    initMap () {
+      this.stationsDatasAll.forEach((item) => {
+        item.isSee = false
+      })
+    },
     _getInitMap () {
       const defaultData = this.$store.getters.formData
       let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
@@ -429,8 +476,6 @@ export default {
               this.markers.push(item)
             }
           })
-          console.log(pointIds)
-          console.log(this.markers)
         }
         // this.formInline.value = 'all'
         this.loading = false
@@ -446,7 +491,20 @@ export default {
         }
       })
     },
+    _getParkingList () {
+      this.$api['homeMap.getParkingList']().then(res => {
+        this.parkData = []
+        res.forEach((item, index) => {
+          this.parkData[index] = []
+          item.points.forEach(val => {
+            this.parkData[index].push({ lng: val[0], lat: val[1], name: item.parkingName })
+          })
+        })
+      })
+    },
     _getLineNetInfos (params) {
+      this.stationsDatas = []
+      this.stationsDatasAll = []
       this.$api['homeMap.getLineNetInfos'](params).then(res => {
         // this.lineData = res
         this.lineData = []
@@ -459,12 +517,33 @@ export default {
             stations: res[item]
           })
         }
+        // console.log(this.lineDataAll)
+        this.lineDataAll.forEach((item, index) => {
+          item.stations.forEach(val => {
+            if (val.mlStaUuid !== '-1') {
+              this.stationsDatasAll.push({ ...val, isSee: false, color: this.colors[index] })
+            }
+          })
+        })
+        this.stationsDatas = this.stationsDatasAll
         this.lineData = this.lineDataAll
       })
     },
     getLine (item) {
       console.log(item)
     },
+    // ggg () {
+    //   // console.log(123)
+    //   console.log(this.stationsDatasAll)
+    //   const isClose = this.stationsDatasAll.some(item => item.isSee)
+    //   console.log(isClose)
+    //   if (!isClose) {
+    //     return
+    //   }
+    //   this.stationsDatasAll.forEach(item => {
+    //     item.isSee = false
+    //   })
+    // },
     getDetail (event, item) {
       // console.log(point)
       // console.log(item)
@@ -487,7 +566,7 @@ export default {
       this.isSee = false
       // this.details = {}
     },
-    draw ({el, BMap, map}) {
+    draw ({ el, BMap, map }) {
       const pixel = map.pointToOverlayPixel(new BMap.Point(this.currenPoint.lng, this.currenPoint.lat))
       el.style.left = pixel.x - 60 + 'px'
       el.style.top = pixel.y - 20 + 'px'
@@ -554,6 +633,15 @@ export default {
     },
     handleMarkerClick (marker) {
       Bus.$emit('handlerMarker', marker)
+    },
+    handleStationClick (marker) {
+      this.stationsDatasAll.forEach((item) => {
+        if (item.staUuid === marker.staUuid) {
+          item.isSee = true
+        } else {
+          item.isSee = false
+        }
+      })
     },
     getCharItem (item) {
       this.charData[item.index].isAct = !this.charData[item.index].isAct
