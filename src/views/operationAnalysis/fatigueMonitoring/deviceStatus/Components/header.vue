@@ -39,7 +39,7 @@
       </el-form-item>
       </el-row>
       <el-row>
-      <el-form-item label="输入自编号">
+      <el-form-item label="车辆自编号">
         <el-select class="font-style"
         filterable
         remote
@@ -54,7 +54,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="输入设备编号">
+      <el-form-item label="设备编号">
         <el-input v-model="formInline.devCode"></el-input>
       </el-form-item>
       <el-form-item label="在线状态">
