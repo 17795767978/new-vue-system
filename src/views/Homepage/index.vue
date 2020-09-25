@@ -77,7 +77,9 @@ const PER_ANA = [
   { name: '站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume', admin: false },
   { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity', admin: false },
   { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false },
-  { name: '单车客流统计', icon: iconHomeKlgf, path: '/bus-passenger', admin: false }
+  { name: '单车客流统计', icon: iconHomeKlgf, path: '/bus-passenger', admin: false },
+  { name: '卡机交易明细', icon: iconHomeKlgf, path: '/transaction-form', admin: false },
+  { name: '单车交易核算', icon: iconHomeKlgf, path: '/single-passenger-accounting', admin: false }
 ]
 const TIRED_CONTRAL = [
   { name: '安全运营首页', icon: iconHomeBjzx, path: '/alarm-home', admin: false },

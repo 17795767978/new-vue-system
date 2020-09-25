@@ -1,9 +1,10 @@
 <template>
 <div>
   <el-table
-    style="width: 95%; margin-left: 2.5%; margin-top: 5vh;"
+    style="width: 95%; margin-left: 2.5%; margin-top: 3vh;"
     ref="tableWrapper"
     :data="tableData"
+    size="mini"
     border>
     <el-table-column
       align="center"
@@ -15,6 +16,7 @@
       align="center"
       prop="devCode"
       label="设备编号"
+      width="260"
       >
     </el-table-column>
     <el-table-column
@@ -22,7 +24,7 @@
       align="center"
       prop="fee"
       label="交易金额(元)"
-      width="150"
+      width="120"
       >
     </el-table-column>
     <el-table-column
@@ -30,6 +32,7 @@
       align="center"
       prop="cardNumber"
       label="交易卡号"
+      width="250"
       >
     </el-table-column>
     <el-table-column
@@ -45,12 +48,14 @@
       align="center"
       prop="staName"
       label="站点名称"
+      width="180"
       >
     </el-table-column>
     <el-table-column
       align="center"
       prop="orgName"
       label="机构"
+      width="120"
       >
     </el-table-column>
     <el-table-column
@@ -64,12 +69,42 @@
       align="center"
       prop="busPlateNumber"
       label="车辆车牌号"
+      width="120"
       >
     </el-table-column>
     <el-table-column
       align="center"
       prop="customerId"
       label="乘客编号"
+      width="120"
+      >
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="payTime"
+      label="刷卡时间"
+      :formatter="getCardTime"
+      width="200"
+      >
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="orderId"
+      label="本地订单号"
+      width="300"
+      >
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="serialNumber"
+      label="聚合支付流水号"
+      width="300"
+      >
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="attach"
+      label="交易附加信息"
       width="120"
       >
     </el-table-column>
@@ -99,7 +134,7 @@ export default {
     return {
       tableData: [],
       pageNum: 1,
-      pageSize: 12,
+      pageSize: 17,
       total: 0
     }
   },
@@ -173,6 +208,9 @@ export default {
           pageSize: this.pageSize
         })
       }
+    },
+    getCardTime (row) {
+      return moment(row.payTime).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }
