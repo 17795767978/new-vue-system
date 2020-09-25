@@ -1,6 +1,7 @@
 <template>
  <div>
    <video ref="video" src="" style="width: 100%;height: 100%;" controls autoplay v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.8)"></video>
+   <!-- <div id="output"></div> -->
  </div>
 </template>
 
@@ -19,7 +20,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.item)
     if (this.item.warnType && this.item.warnType.length > 0) {
       if (!this.item.warnMediaList) {
         this.$message.error(`${this.item.warnTypeName}暂无视频`)
@@ -85,6 +85,7 @@ export default {
         this.player.on('metadata_arrived', () => {
           this.isLoading = false
           this.player.play()
+          // this.getCerames()
         })
 
         this.player.on('error', () => {
@@ -100,11 +101,41 @@ export default {
           // this.$parent.$emit('monitorShowError', this.monitorData);
         })
       }
+    },
+    // 截取视频存为地图
+    getCerames () {
+      let that = this;
+      (function () {
+        let video, output
+        let scale = 0.8
+        let initialize = function () {
+          output = document.getElementById('output')
+          video = that.$refs.video
+          video.addEventListener('loadeddata', captureImage)
+        }
+
+        let captureImage = function () {
+          let canvas = document.createElement('canvas')
+          canvas.width = video.videoWidth * scale
+          canvas.height = video.videoHeight * scale
+          canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height)
+
+          let img = document.createElement('img')
+          img.src = canvas.toDataURL('image/png')
+          output.appendChild(img)
+        }
+
+        initialize()
+      })()
     }
   }
 }
 </script>
 
 <style>
-
+#output {
+  width: 270px;
+  height: 151px;
+  background-color: black;
+}
 </style>

@@ -249,7 +249,7 @@ export const aysncRoutesMap = [
           component: _import_('operationAnalysis/dispatchingOperationAnalysis/singlePassengerAccounting/index'),
           name: 'singlePassengerAccounting',
           meta: {
-            title: '单车客流核算',
+            title: '单车交易核算',
             icon: 'nocturne icon-dash',
             roles: ['/single-passenger-accounting']
           }
@@ -591,7 +591,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '系统管理',
       icon: 'nocturne icon-dash',
-      roles: ['/channel-management', '/params-configuration', '/device-snap-management', '/alarm-management']
+      roles: ['/channel-management', '/params-configuration', '/device-snap-management', '/alarm-management', '/passenger-flow-algorithm-configuration']
     },
     children: [
       {
@@ -612,6 +612,16 @@ export const aysncRoutesMap = [
           title: '报警类型管理',
           icon: 'nocturne icon-dash',
           roles: ['/alarm-management']
+        }
+      },
+      {
+        path: 'passenger-flow-algorithm-configuration',
+        component: _import_('systemAdmin/passengerFlowAlgorithm/index'),
+        name: 'passengerFlowAlgorithm',
+        meta: {
+          title: '客流算法配置',
+          icon: 'nocturne icon-dash',
+          roles: ['/passenger-flow-algorithm-configuration']
         }
       },
       // {

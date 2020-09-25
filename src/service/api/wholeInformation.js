@@ -335,6 +335,30 @@ export const wholeInformationApi = {
         accessDuration: ''
       },
       desc: '获取用户访问行为日志（页面停留时间）'
+    },
+    {
+      name: 'getPassengerFlowAlgList',
+      method: 'POST',
+      path: '/api/kl/config/item/getAll',
+      mockPath: '/api/kl/config/item/getAll',
+      params: {},
+      desc: '客流算法配置列表'
+    },
+    {
+      name: 'updatePassengerFlowAlg',
+      method: 'POST',
+      path: '/api/kl/config/item/update',
+      mockPath: '/api/kl/config/item/update',
+      params: {},
+      desc: '客流算法配置更新'
+    },
+    {
+      name: 'setRelationLine',
+      method: 'POST',
+      path: '/api/kl/config/item/setRelationLine',
+      mockPath: '/api/kl/config/item/setRelationLine',
+      params: {},
+      desc: '客流算法配置设置线路'
     }
   ]
 }
