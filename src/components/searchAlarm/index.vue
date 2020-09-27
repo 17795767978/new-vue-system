@@ -719,6 +719,20 @@ export default {
         this.formInline.lineType = this.queryData.arrow
       }
     }, 500)
+    if (Object.keys(this.$route.params).length > 0 && this.$route.name === 'transactionForm') {
+      const { busNumber, dateArray, lineId, orgId } = this.$route.params
+      this.formInline.orgId = orgId
+      // 防止联动产生的问题
+      setTimeout(() => {
+        this.formInline.lineId = lineId
+      }, 100)
+      setTimeout(() => {
+        this.formInline.busNumber = busNumber
+      }, 200)
+      this.formInline.startTime = dateArray[0]
+      this.formInline.endTime = dateArray[1]
+      this.formInline.valueTime = dateArray
+    }
   },
   watch: {
     'formInline.orgId': {

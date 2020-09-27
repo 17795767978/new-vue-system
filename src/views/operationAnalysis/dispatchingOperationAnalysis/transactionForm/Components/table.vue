@@ -14,7 +14,7 @@
     </el-table-column>
     <el-table-column
       align="center"
-      prop="devCode"
+      prop="devUuid"
       label="设备编号"
       width="260"
       >
@@ -150,6 +150,19 @@ export default {
       busPlateNumber: '',
       startTime,
       endTime,
+      pageNum: 1,
+      pageSize: this.pageSize
+    })
+  },
+  activated () {
+    this.pageNum = 1
+    const { busNumber, dateArray, lineId, orgId } = this.$route.params
+    this._getPosRecordPage({
+      orgUuid: orgId,
+      lineUuid: lineId,
+      busPlateNumber: busNumber,
+      startTime: dateArray[0],
+      endTime: dateArray[1],
       pageNum: 1,
       pageSize: this.pageSize
     })

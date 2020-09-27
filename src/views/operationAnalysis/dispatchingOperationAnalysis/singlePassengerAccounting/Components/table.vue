@@ -30,17 +30,20 @@
       label="车辆"
       >
     </el-table-column>
-    <el-table-column
+    <!-- <el-table-column
       align="center"
       prop="passFlowNums"
       label="客流数"
       >
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
       align="center"
       prop="fee"
       label="交易金额（元）"
       >
+      <template slot-scope="scope">
+        <el-link @click="handlerToPage(scope.row)" type="primary">{{scope.row.fee}}</el-link>
+      </template>
     </el-table-column>
   </el-table>
 </div>
@@ -98,6 +101,21 @@ export default {
         this.tableData = res
       }).catch((err) => {
         this.$message.error(err.message)
+      })
+    },
+    handlerToPage (row) {
+      // console.log(row)
+      let startTime = moment(new Date() - 24 * 3600 * 1000).format('YYYY-MM-DD 00:00:00')
+      let endTime = moment().format('YYYY-MM-DD 23:59:59')
+      const config = {
+        busNumber: row.busPlateNumber,
+        orgId: row.orgUuid,
+        lineId: row.lineUuid,
+        dateArray: Object.keys(this.selectData).length > 0 ? [this.selectData.startTime, this.selectData.endTime] : [startTime, endTime]
+      }
+      this.$router.push({
+        name: 'transactionForm',
+        params: config
       })
     }
   }
