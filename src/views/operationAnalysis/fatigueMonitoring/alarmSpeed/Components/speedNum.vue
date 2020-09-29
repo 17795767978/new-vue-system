@@ -5,6 +5,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Bus from './bus'
 import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 import { mapGetters } from 'vuex'
@@ -46,11 +47,13 @@ export default {
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
+    Bus.$on('handlerChange', this.handlerChange)
   },
   watch: {
     searchData: {
       deep: true,
       handler (newV) {
+        this.selectData = newV
         this._getFatAlarmSpeedStatistic({
           orgId: newV.orgId === '1' ? '' : newV.orgId,
           lineId: newV.lineId,
@@ -68,7 +71,7 @@ export default {
       this.$api['tiredMonitoring.getFatAlarmSpeedStatistic'](params).then(res => {
         this.loading = false
         this.title = {
-          text: '报警速度报警类型',
+          text: `报警速度(${Bus.speed}) 报警类型(${Bus.name})`,
           left: 'center'
         }
         this.lineData = [{
@@ -161,6 +164,18 @@ export default {
       }).catch(err => {
         this.loading = false
         this.$message.error(err.message)
+      })
+    },
+    handlerChange () {
+      this._getFatAlarmSpeedStatistic({
+        orgId: this.selectData.orgId === '1' ? '' : this.selectData.orgId,
+        lineId: this.selectData.lineId,
+        startTime: this.selectData.dateArray[0],
+        endTime: this.selectData.dateArray[1],
+        auditStatus: this.selectData.auditStatus,
+        handleResults: this.selectData.checkList,
+        warnTypes: Bus.value === '所有' || Bus.value === '' ? Bus.warnTypesAll.map(item => item.code) : [Bus.value],
+        warnLevel: Bus.speed === '所有' ? '' : Bus.speed
       })
     }
   },

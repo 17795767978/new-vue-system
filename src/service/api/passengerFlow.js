@@ -177,6 +177,15 @@ export const passengerFlowApi = {
       params: {
       },
       desc: '单车客流周报查询-导出'
+    },
+    {
+      name: 'getStationOnOffListDatas',
+      method: 'POST',
+      path: '/zhfxpt/analysis/getStationOnOffListDatas',
+      mockPath: '/zhfxpt/analysis/getStationOnOffListDatas',
+      params: {
+      },
+      desc: '登降量详情'
     }
   ]
 }

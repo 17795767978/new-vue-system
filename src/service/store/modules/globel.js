@@ -216,17 +216,21 @@ const globel = {
       api['wholeInformation.getModelAndPageInfoByUserId']().then(res => {
         let moduleList = []
         let pagelist = []
-        res.models.forEach(item => {
-          moduleList.push({
-            value: item,
-            label: item
-          })
-        })
-        res.pages.forEach(item => {
-          pagelist.push({
-            value: item,
-            label: item
-          })
+        res.forEach(item => {
+          if (item.resourceType === '1') {
+            moduleList.push({
+              value: item.resourceTitle,
+              label: item.resourceTitle,
+              id: item.resourceId
+            })
+          } else if (item.resourceType === '3') {
+            pagelist.push({
+              value: item.resourceTitle,
+              label: item.resourceTitle,
+              id: item.resourceId,
+              parentId: item.resourceParentId
+            })
+          }
         })
         commit('MODULE_LIST', moduleList)
         commit('PAGE_LIST', pagelist)

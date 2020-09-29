@@ -173,7 +173,7 @@
       <el-form-item label="自编号:" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
-      <el-form-item label="差值标准:" v-if="isDiff">
+      <el-form-item label="准确率:" v-if="isDiff">
         <el-select style="width: 200px" filterable v-model="formInline.diffStandard" placeholder="请选择">
           <el-option
             v-for="item in diffStandardOptions"
@@ -517,7 +517,7 @@ export default {
         checkList: [],
         busSelfCode: '',
         auditStatus: [],
-        diffStandard: '15',
+        diffStandard: '85',
         startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
         endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD')
       },
@@ -556,14 +556,10 @@ export default {
         }
       ],
       diffStandardOptions: [
-        { label: '0%', value: '0' }, { label: '5%', value: '5' },
-        { label: '10%', value: '10' },
-        { label: '15%', value: '15' }, { label: '20%', value: '20' },
-        { label: '25%', value: '25' }, { label: '30%', value: '30' },
-        { label: '35%', value: '35' }, { label: '40%', value: '40' },
-        { label: '45%', value: '45' }, { label: '50%', value: '50' },
-        { label: '55%', value: '55' }, { label: '60%', value: '60' },
-        { label: '65%', value: '65' }, { label: '70%', value: '70' }
+        { label: '100%', value: '100' }, { label: '95%', value: '95' },
+        { label: '90%', value: '90' },
+        { label: '85%', value: '85' }, { label: '80%', value: '80' },
+        { label: '75%', value: '75' }, { label: '70%', value: '70' }, { label: '65%', value: '65' }, { label: '60%', value: '60' }, { label: '55%', value: '55' }, { label: '50%', value: '50' }, { label: '45%', value: '45' }, { label: '40%', value: '40' }, { label: '35%', value: '35' }, { label: '30%', value: '30' }
       ],
       modulesOptions: [],
       pagesOptions: [],
@@ -848,6 +844,18 @@ export default {
         }
         // if (date === moment().format()) {}
       }
+    },
+    'formInline.modules': {
+      handler (newV) {
+        // console.log(newV)
+        this.formInline.pages = ''
+        if (newV === '') {
+          this.pagesOptions = this.$store.state.globel.pagesList
+          return
+        }
+        let id = this.$store.state.globel.modulesList.filter(item => item.value === newV)[0].id
+        this.pagesOptions = this.$store.state.globel.pagesList.filter(item => item.parentId === id)
+      }
     }
   },
   updated () {
@@ -995,7 +1003,7 @@ export default {
         checkList: [],
         busSelfCode: '',
         auditStatus: [],
-        diffStandard: '15',
+        diffStandard: '85',
         startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
         endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD')
       }

@@ -1,10 +1,11 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading" >
-    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" @getEchartsData="getEchartsData"></lineEcharts>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import Bus from './bus'
 import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 import { mapGetters } from 'vuex'
@@ -182,6 +183,10 @@ export default {
         this.loading = false
         this.$message.error(err.message)
       })
+    },
+    getEchartsData (data) {
+      Bus.findWarnType(data.name)
+      Bus.$emit('handlerChange')
     }
   },
   components: {

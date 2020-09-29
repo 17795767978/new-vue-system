@@ -48,7 +48,7 @@ export default {
       pageNumber: 1,
       pageSize: 15,
       isLoading: false,
-      caleLimit: '15',
+      caleLimit: '85',
       active: {
         width: '100%',
         height: '100%',
@@ -82,7 +82,7 @@ export default {
       lineId: '',
       busNumber: '',
       devCode: '',
-      cale: '15',
+      cale: '85',
       startDate,
       endDate
     })

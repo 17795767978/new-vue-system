@@ -81,6 +81,12 @@
         align="center"
         label="总下车人数">
       </el-table-column>
+      <el-table-column
+        prop="ccuracy"
+        align="center"
+        label="准确率">
+        <template slot-scope="scope">{{scope.row.ccuracy}}%</template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -243,7 +249,9 @@ export default {
           lineName: '——',
           uploadTime: '——',
           onPersonCount: JSON.stringify(getOnArr.reduce((prev, next) => prev + next)),
-          offPersonCount: JSON.stringify(getOffArr.reduce((prev, next) => prev + next))
+          offPersonCount: JSON.stringify(getOffArr.reduce((prev, next) => prev + next)),
+          // 1-abs(上车人数-下车人数)/上车人数
+          ccuracy: (100 - Math.abs(JSON.stringify(getOnArr.reduce((prev, next) => prev + next)) - JSON.stringify(getOffArr.reduce((prev, next) => prev + next))) / JSON.stringify(getOnArr.reduce((prev, next) => prev + next))).toFixed(2)
         }
         this.getTable(allTable, this.indexArr, currentData, res)
       }
@@ -312,27 +320,37 @@ export default {
       return () => {
         let columns = []
         if (this.selectData.lineIds && this.selectData.lineIds.length > 0) {
-          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount', 'ccuracy']
         } else {
-          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount']
+          columns = ['id', 'orgName', 'lineName', 'uploadTime', 'onPersonCount', 'offPersonCount', 'ccuracy']
         }
 
         const sums = []
         columns.forEach((item, index) => {
           const values = param.map(list => Number(list[item]))
           if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            }, 0)
+            if (item !== 'ccuracy') {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr)
+                if (!isNaN(value)) {
+                  return prev + curr
+                } else {
+                  return prev
+                }
+              }, 0)
+            } else {
+              let sumOn = sums[4].substring(0, sums[4].length - 3)
+              let sumsOff = sums[5].substring(0, sums[5].length - 3)
+              sums[index] = (100 - Math.abs((sumOn - sumsOff) / sumOn)).toFixed(2)
+            }
             if (item === 'lineName') {
               sums[index] = '——'
             } else {
-              sums[index] += ' 人次'
+              if (item !== 'ccuracy') {
+                sums[index] += ' 人次'
+              } else {
+                sums[index] += ' %'
+              }
             }
           } else {
             sums[index] = '——'
@@ -340,9 +358,6 @@ export default {
           if (index === 0) {
             sums[index] = '总计'
           }
-          // if (index === 2) {
-          //   sums[index] = '——'
-          // }
         })
         return sums
       }

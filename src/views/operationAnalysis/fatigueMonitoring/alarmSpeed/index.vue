@@ -24,6 +24,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Bus from './Components/bus'
 import Search from '@/components/searchAlarm'
 import SpeedStatistics from './Components/speedStatistics'
 import SpeedType from './Components/speedType'
@@ -44,8 +45,15 @@ export default {
     SpeedType,
     SpeedNum
   },
+  created () {
+    Bus.getAllWarnType()
+  },
+  beforeDestroy () {
+    Bus.$off('handlerChange')
+  },
   methods: {
     getSearch (item) {
+      console.log(Bus)
       this.searchData = item
     },
     echartsSelected (data) {

@@ -5,6 +5,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Bus from './bus'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 import { mapGetters } from 'vuex'
 export default {
@@ -65,7 +66,6 @@ export default {
       this.loading = true
       this.$api['tiredMonitoring.getAlarmLevelRatioAnalysis'](params).then(res => {
         this.loading = false
-        console.log(res)
         let data = []
         let dataArrValue = res.xAxisNames
         let dataArrNumber = res.datas[0]
@@ -98,7 +98,9 @@ export default {
       })
     },
     getEchartsData (data) {
+      Bus.speed = data.name
       this.$emit('echartsSelected', data)
+      Bus.$emit('handlerChange')
     }
   },
   components: {
