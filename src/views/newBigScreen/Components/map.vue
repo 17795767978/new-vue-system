@@ -14,6 +14,7 @@
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
       <!-- <bml-marker-clusterer :averageCenter="true" :maxZoom="seeZoom"> -->
       <div v-if="isCarsDetail">
+        <!-- 车 -->
         <bm-marker
           v-for="marker in markers"
           :key="marker.busId"
@@ -23,15 +24,65 @@
           :icon="getIcon(marker)"
           class="arrow_box"
           >
+            <bm-label :content="marker.busNumber" @click="handleMarkerClick(marker)" :labelStyle="{padding: '0px 0px', color: 'white', fontSize : '12px', backgroundColor: 'rgba(0,0,0,1)', border: 'hidden'}" :offset="{width: 10, height: 16}"/>
         </bm-marker>
       </div>
+      <!-- <bm-polyline v-for="item in lineData" :key="item.name"></bm-polyline> -->
+      <!-- 线路 -->
+      <bm-polyline
+        v-for="(item, index) in lineData"
+        :key="item.lineUuid"
+        :path="item.stations"
+        :stroke-color="colors[index]"
+        :stroke-opacity="0.7"
+        :stroke-weight="3"
+        :editing="false">
+      </bm-polyline>
+      <!-- 站点 -->
+      <bm-marker
+        v-for="marker in stationsDatas"
+        :key="marker.busId"
+        :position="{lng: marker.lng, lat: marker.lat}"
+        :title="`${marker.lineName}-${marker.staName}站`"
+        :icon="getIconStation"
+        class="arrow_box"
+        :top="true"
+        :zIndex="1000"
+        >
+        <bm-label :content="''" @click="handleStationClick(marker)" :labelStyle="{padding: '3px 3px', backgroundColor: 'rgba(0,0,0,1)', border:`1.5px solid ${marker.color}`, borderRadius: '50%'}" :offset="{width: -5, height: -5}"/>
+        <bm-label :content="`${marker.staName}`" v-if="marker.isSee" :labelStyle="{padding: '0px 0px', color: 'white', fontSize : '12px', backgroundColor: 'rgba(0,0,0,1)', border: 'hidden'}" :offset="{width: -3, height: 10}"/>
+      </bm-marker>
+      <!-- <bm-marker v-if="isSee" :position="{lng: details.stations[0].lng, lat: details.stations[0].lng}">
+          <bm-label :content="details.lineName" :labelStyle="{color: '#e5e5e5', fontSize : '24px'}" :offset="{width: -35, height: 30}"/>
+        </bm-marker> -->
+        <!-- 场站 -->
+        <!-- parkData -->
+        <div v-for="(item, index) in parkData" :key="index + 111">
+        <bm-polygon :path="item" :strokeColor="'white'" :strokeStyle="'dashed'" :stroke-weight="1" fillColor="#02fbf4" :fillOpacity="0.1">
+        </bm-polygon>
+        </div>
+      <!-- <div v-for="(item, index) in parkData" :key="index" class="park-park">
+      <bm-marker
+        :position="{lng:item && item[Math.floor(item.length / 2)].lng, lat:item && item[Math.floor(item.length / 2)].lat}"
+        :icon="getIconPark"
+        >
+        <bm-label :content="item[0].name" :labelStyle="{padding: '1px 1px', color: 'black', fontSize : '12px',fontWeight: 'bold', backgroundColor: '#02fbf4', border: 'hidden'}" :offset="{width: -15, height: -22}"/>
+      </bm-marker>
+      </div> -->
+      <bm-overlay
+        pane="labelPane"
+        v-if="isSee"
+        :class="{sample: true}"
+        @draw="draw">
+        <div>{{`${details.lineName} ${details.lineType === '1' ? '上行' : '下行'}`}}</div>
+      </bm-overlay>
       <!-- </bml-marker-clusterer> -->
       <bml-heatmap :data="hotdata" :max="max" :radius="20" v-if="isHotMap">
       </bml-heatmap>
       <bm-control style="margin-left: 28vw; margin-top: 16vh;" v-show="isHidden" v-if="isSearchLine">
         <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
           <el-form-item>
-            <el-select style="width: 130px; background-color: #0e2139" size="mini" v-model="formInline.value" placeholder="线路" filterable :disabled="disabled">
+            <el-select style="width: 130px; background-color: #0e2139" size="mini" v-model="formInline.value" placeholder="线路" filterable>
               <el-option
                 v-for="item in lineOptions"
                 :key="item.value"
@@ -152,15 +203,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { BaiduMap, BmMarker, BmlHeatmap, BmControl } from 'vue-baidu-map'
+import { BaiduMap, BmMarker, BmlHeatmap, BmControl, BmPolyline, BmOverlay, BmLabel, BmPolygon } from 'vue-baidu-map'
 import { mapStyleSec } from '../utils/mapStyleSec'
 import iconCarRed from '../../../assets/images/alarm-bus.png'
 import iconCarGreen from '../../../assets/images/normal-bus.png'
+// import park from '../../../assets/images/park.png'
 import videoWrapper from '@/components/map/video'
 import Bus from './bus.js'
 import { mapGetters } from 'vuex'
-// import moment from 'moment'
-const TIME = 3 * 60 * 1000
+// const COLOR = ['#f00', '#f0f', '#0ff', '#00f', '#0f0', '#ff0']
+const TIME = 10 * 1000
 // const URL = 'http://121.30.214.187:12056/api/v1/basic/' // 大同
 const URL = 'http://117.34.118.30:12056/api/v1/basic/'
 export default {
@@ -190,7 +242,7 @@ export default {
   data () {
     return {
       formInline: {
-        value: ''
+        value: 'all'
       },
       isLoading: true,
       center: { lng: 0, lat: 0 },
@@ -220,14 +272,28 @@ export default {
       monitorData: [],
       carDetailData: {},
       key: '',
-      urlList: []
+      urlList: [],
+      lineDataAll: [],
+      lineData: [],
+      colors: ['#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c', '#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692  ', '#07999c'],
+      isSee: false,
+      details: {},
+      currenPoint: {},
+      stationsDatas: [],
+      stationsDatasAll: [],
+      parkData: []
     }
   },
   components: {
     BaiduMap,
     BmlHeatmap,
     BmMarker,
+    BmPolyline,
+    BmLabel,
+    BmOverlay,
+    BmPolygon,
     // BmlMarkerClusterer,
+    // BmInfoWindow,
     BmControl,
     videoWrapper
   },
@@ -238,13 +304,7 @@ export default {
   },
   mounted () {
     // this._getInitMap()
-    this.$store.dispatch('getLineList').then(res => {
-      this.lineOptions = res
-      this.lineOptions.push({
-        label: '全部线路',
-        value: 'all'
-      })
-    })
+    // this._getParkingList()
     setTimeout(function () {
       let t = performance.timing
       console.log('DNS查询耗时 ：' + (t.domainLookupEnd - t.domainLookupStart).toFixed(0))
@@ -253,7 +313,6 @@ export default {
       console.log('解析dom树耗时 ：' + (t.domComplete - t.domInteractive).toFixed(0))
       console.log('白屏时间 ：' + (t.responseStart - t.navigationStart).toFixed(0))
       console.log('渲染时间：' + (t.domComplete - t.domLoading))
-
       // eslint-disable-next-line no-cond-assign
       if (t = performance.memory) {
         console.log('js内存使用占比 ：' + (t.usedJSHeapSize / t.totalJSHeapSize * 100).toFixed(2) + '%')
@@ -270,44 +329,36 @@ export default {
         }
       }
     },
+    getIconStation () {
+      return { url: `${iconCarGreen}`, size: { width: 0, height: 0 } }
+    },
+    // getIconPark () {
+    //   return { url: `${park}`, size: { width: 18, height: 23, transform: 'scale(0.2)' } }
+    // },
     ...mapGetters(['formData'])
   },
   watch: {
     'formInline.value': {
       handler (newV) {
+        console.log(newV)
         if (newV !== 'all') {
-          // lineGroupUuid 延安
-          // lineId 大同
-          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
+          let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+          let dataForm = this.$store.getters.formData
+          this._getLineNetInfos({
+            orgId,
+            lineId: newV
+          })
+          this._positionRating({
+            orgId,
+            lineId: newV,
+            busNumber: '',
+            warnTypes: dataForm.warningArr,
+            handleResult: []
+          })
         } else {
           this.markers = this.markersAll
+          this.lineData = this.lineDataAll
         }
-      }
-    },
-    currentIndexMap (newV) {
-      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-      if (newV === 1) {
-        clearTimeout(this.timerHot)
-        this.timerHot = null
-        this._positionRating({
-          orgId
-        })
-        this.hotdata = []
-        this.isHidden = true
-      } else if (newV === 0) {
-        this.markersAll = []
-        this.markers = []
-        clearTimeout(this.timerRate)
-        this.timerRate = null
-        this._hotDataLine({
-          orgId
-        })
-        this.isHidden = false
-      } else if (newV === 2) {
-        this.markersAll = []
-        this.markers = []
-        this.hotdata = []
-        this.isHidden = true
       }
     },
     dialogTableVisible (newV) {
@@ -348,27 +399,10 @@ export default {
     }
   },
   methods: {
-    _getInitMap () {
-      const defaultData = this.$store.getters.formData
-      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
-      if (this.isSelect) {
-        this._hotDataLine({
-          orgId
-        })
-      } else if (this.isHotMap) {
-        this._hotDataLine({
-          orgId
-        })
-      } else if (this.isCarsDetail) {
-        this._positionRating({
-          orgId,
-          lineId: '',
-          busNumber: '',
-          warnTypes: defaultData.warningArr,
-          handleResult: []
-        })
-      } else if (this.isLineMap) {
-      }
+    initMap () {
+      this.stationsDatasAll.forEach((item) => {
+        item.isSee = false
+      })
     },
     _getOps () {
       this.$api['wholeInformation.getCityCoordinatePoints']().then(res => {
@@ -377,17 +411,14 @@ export default {
       })
     },
     _positionRating (params) {
+      this.timerRate && clearTimeout(this.timerRate)
+      this.timerRate = null
       this.loading = true
       this.$api['homeMap.getBusPositionAndFullLoadRate'](params).then(res => {
         this.markersAll = res
         this.markers = this.markersAll
-        this.formInline.value = 'all'
         this.loading = false
         this.disabled = false
-        // if (res.length) {
-        //   this.center.lat = res[0].lat
-        //   this.center.lng = res[0].lng
-        // }
         if (!this.searchData) {
           this.timerRate = setTimeout(() => {
             this._positionRating(params)
@@ -395,17 +426,45 @@ export default {
         }
       })
     },
-    _hotDataLine (params) {
-      this.loading = true
-      this.hotdata = []
-      this.$api['homeMap.getBusHeatmapDatas'](params).then(res => {
-        this.hotdata = res
-        this.max = 100
-        this.loading = false
-        this.timerHot = setTimeout(() => {
-          this._hotDataLine(params)
-        }, TIME)
+    _getLineNetInfos (params) {
+      this.stationsDatas = []
+      this.stationsDatasAll = []
+      this.$api['homeMap.getLineNetInfos'](params).then(res => {
+        // this.lineData = res
+        this.lineData = []
+        this.lineDataAll = []
+        for (let item in res) {
+          this.lineDataAll.push({
+            lineName: res[item][0].lineName,
+            lineUuid: res[item][0].lineUuid,
+            lineType: res[item][0].lineType,
+            stations: res[item]
+          })
+        }
+        // console.log(this.lineDataAll)
+        this.lineDataAll.forEach((item, index) => {
+          item.stations.forEach(val => {
+            if (val.mlStaUuid !== '-1') {
+              this.stationsDatasAll.push({ ...val, isSee: false, color: this.colors[index] })
+            }
+          })
+        })
+        this.stationsDatas = this.stationsDatasAll
+        this.lineData = this.lineDataAll
       })
+    },
+    getDetail (event, item) {
+      this.currenPoint = event.point
+      this.details = item
+      this.isSee = true
+    },
+    clearDetail () {
+      this.isSee = false
+    },
+    draw ({ el, BMap, map }) {
+      const pixel = map.pointToOverlayPixel(new BMap.Point(this.currenPoint.lng, this.currenPoint.lat))
+      el.style.left = pixel.x - 60 + 'px'
+      el.style.top = pixel.y - 20 + 'px'
     },
     _getKey () {
       // ddzx8885899A 延安的密码
@@ -435,27 +494,32 @@ export default {
         })
       })
     },
-    _getVideo (item) {
-    },
     handler ({ BMap, map }) {
-      const defaultData = this.$store.getters.formData
       let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
       this.zoom = 14
       this._getOps()
-      setTimeout(() => {
-        this._positionRating({
+      this.$store.dispatch('getLineList').then(res => {
+        this.lineOptions = res
+        this.formInline.value = this.lineOptions[0].value
+        this._getLineNetInfos({
           orgId,
-          lineId: '',
-          busNumber: '',
-          warnTypes: defaultData.warningArr,
-          handleResult: []
+          lineId: this.lineOptions[0].value
         })
-      }, 20)
+      })
       this.isLoading = false
       map.setMapStyle(mapStyleSec)
     },
     handleMarkerClick (marker) {
       Bus.$emit('handlerMarker', marker)
+    },
+    handleStationClick (marker) {
+      this.stationsDatasAll.forEach((item) => {
+        if (item.staUuid === marker.staUuid) {
+          item.isSee = true
+        } else {
+          item.isSee = false
+        }
+      })
     },
     getCharItem (item) {
       this.charData[item.index].isAct = !this.charData[item.index].isAct
@@ -486,6 +550,22 @@ export default {
   height: 100%;
   border-radius: 6px;
   position: relative;
+  .sample {
+    width: 120px;
+    height: 3vh;
+    line-height: 3vh;
+    background: rgba(0,0,0,0.5);
+    overflow: hidden;
+    box-shadow: 0 0 5px #000;
+    color: #fff;
+    text-align: center;
+    padding: .5vw;
+    position: absolute;
+  }
+  .sample.active {
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+  }
   .form-inline {
     /deep/ .el-input__inner {
       background-color: rgb(14, 33, 57);
