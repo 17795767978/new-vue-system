@@ -119,7 +119,8 @@ export default {
           orgUuid: this.userId === '1' ? '' : this.userId,
           lineUuid: this.lineId === '' ? this.formData.lineId : this.lineId,
           lineType: this.formData.lineType,
-          uploadDate: moment(time).format('YYYY-MM-DD')
+          sTime: moment(time).format('YYYY-MM-DD'),
+          eTime: moment(time).format('YYYY-MM-DD')
         })
       }, 500)
     })
@@ -128,12 +129,13 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        let date = moment(newV.dataCurrent).format('YYYY-MM-DD')
+        console.log(newV)
         this._getPfLineOdCountListData({
           orgUuid: newV.orgId,
           lineUuid: newV.lineId,
           lineType: newV.lineType,
-          uploadDate: date
+          sTime: moment(newV.dateArrayOD[0]).format('YYYY-MM-DD'),
+          eTime: moment(newV.dateArrayOD[1]).format('YYYY-MM-DD')
         })
       }
     }

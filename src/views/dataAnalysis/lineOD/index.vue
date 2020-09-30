@@ -4,7 +4,7 @@
       :isOrg='true'
       :isLine="true"
       :isTurn="true"
-      :isDataCurrent="true"
+      :isDateToOD="true"
       :isEmpty="true"
       :isDownload="activeName === 'second'"
       :isDefault="true"

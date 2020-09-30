@@ -149,6 +149,16 @@
           end-placeholder="结束日期">
       </el-date-picker>
     </el-form-item>
+    <el-form-item label="选择日期" v-if="isDateToOD">
+        <el-date-picker
+          v-model="formInline.dateArrayOD"
+          :picker-options="pickerOptionsDateToOD"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+      </el-date-picker>
+    </el-form-item>
       <el-form-item label="时间" v-if="isTime">
         <el-time-select
           placeholder="起始时间"
@@ -308,6 +318,9 @@ export default {
       default: () => {
         return {}
       }
+    },
+    isDateToOD: {
+      type: Boolean
     }
   },
   data () {
@@ -331,6 +344,12 @@ export default {
           return time.getTime() > endTime || time.getTime() < startTime
         }
       },
+      pickerOptionsDateToOD: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf() - 3600 * 1000 * 24 * 2
+          return time.getTime() > endTime
+        }
+      },
       formInline: {
         orgId: '',
         lineOrgId: '',
@@ -351,7 +370,8 @@ export default {
         startStation: {},
         endStation: {},
         dateArray: [],
-        radio: '1'
+        radio: '1',
+        dateArrayOD: []
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -451,6 +471,7 @@ export default {
     this.formInline.lineIds = defaultForm.lineIds
     // this.formInline.lineType = defaultForm.lineType
     this.formInline.dataCurrent = defaultForm.dateYes - 24 * 3600 * 1000
+    this.formInline.dateArrayOD = [moment().valueOf() - 3600 * 1000 * 24 * 2, moment().valueOf() - 3600 * 1000 * 24 * 2]
     this.formInline.startHour = defaultForm.startHour
     this.formInline.endHour = defaultForm.endHour
     this.formInline.month = month
@@ -676,13 +697,15 @@ export default {
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        dateArrayOD: this.formInline.dateArrayOD
       }
       this.$emit('configCheck', configData)
     },
     onclear () {
       let date = moment().format('YYYY-MM-DD')
       let month = moment().subtract(30, 'days').format('YYYY-MM')
+      let dateBefore = moment(moment().format('YYYY-MM-DD')).valueOf() - 3600 * 1000 * 24 * 2
       this.formInline = {
         orgId: this.userId === '1' ? '' : this.userId,
         lineId: '',
@@ -703,7 +726,8 @@ export default {
         warnTypeId: [],
         dateArray: [date, date],
         lineIds: [],
-        radio: '1'
+        radio: '1',
+        dateArrayOD: [dateBefore, dateBefore]
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -725,7 +749,8 @@ export default {
         dateArray: this.formInline.dateArray,
         dataCurrent: moment().subtract(2, 'days').format('YYYY-MM-DD'),
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        dateArrayOD: this.formInline.dateArrayOD
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -793,7 +818,8 @@ export default {
         warnTypeId: this.formInline.warnTypeId,
         dateArray: this.formInline.dateArray,
         lineIds: this.formInline.lineIds,
-        radio: this.formInline.radio
+        radio: this.formInline.radio,
+        dateArrayOD: this.formInline.dateArrayOD
       }
       this.$emit('configCheckMul', configData)
     },
@@ -821,8 +847,8 @@ export default {
         data: this.formDown,
         date: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
         dateType: Object.keys(this.selectData).length > 0 ? this.selectData.isHistory : this.formInline.radio,
-        sTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.startTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 00:00:00'),
-        eTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.endTime).format('YYYY-MM-DD HH:mm:ss') : moment().format('YYYY-MM-DD 23:59:59'),
+        sTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.startTime).format('YYYY-MM-DD HH:mm:ss') : moment(this.formInline.dateArrayOD[0]).format('YYYY-MM-DD'),
+        eTime: Object.keys(this.selectData).length > 0 ? moment(this.selectData.endTime).format('YYYY-MM-DD HH:mm:ss') : moment(this.formInline.dateArrayOD[1]).format('YYYY-MM-DD'),
         busPlateNumber: this.formInline.busNumber,
         startDate: moment(this.formInline.dateArray[0]).format('YYYY-MM-DD'),
         endDate: moment(this.formInline.dateArray[1]).format('YYYY-MM-DD'),
