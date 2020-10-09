@@ -39,6 +39,7 @@ export const API_DEFAULT_CONFIG = {
   // prodBaseUrl: 'http://61.157.184.120:8088', // 宜宾
   // prodBaseUrl: 'http://117.34.118.30:7088', // 自测
   prodBaseUrl: 'http://121.30.214.189:9088', // 大同
+  uploadUrl: 'http://121.30.214.189:9088',
   isMocked: process.env.NODE_ENV !== 'production',
   isDebug: true,
   sep: '.'
