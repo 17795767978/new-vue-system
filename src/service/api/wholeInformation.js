@@ -352,6 +352,151 @@ export const wholeInformationApi = {
       params: {
       },
       desc: '设备抓拍视频查询'
+    },
+    {
+      name: 'busToDevGet',
+      method: 'POST',
+      path: '/api/bus/getDeviceInfos',
+      mockPath: '/api/bus/getDeviceInfos',
+      params: {
+      },
+      desc: '车辆管理---查询挂接设备'
+    },
+    {
+      name: 'deleteBus',
+      method: 'POST',
+      path: '/buses/delete',
+      mockPath: '/buses/delete',
+      params: {
+      },
+      desc: '车辆管理---删除'
+    },
+    {
+      name: 'isvalidBus',
+      method: 'POST',
+      path: '/buses/isvalid/update',
+      mockPath: '/buses/isvalid/update',
+      params: {
+      },
+      desc: '车辆管理---启用/禁用'
+    },
+    {
+      name: 'deviceClassList',
+      method: 'POST',
+      path: '/api/sys/datadict/list',
+      mockPath: '/api/sys/datadict/list',
+      params: {
+      },
+      desc: '设备类型列表'
+    },
+    {
+      name: 'deviceList',
+      method: 'POST',
+      path: '/api/device/nobindDevices',
+      mockPath: '/api/device/nobindDevices',
+      params: {
+      },
+      desc: '获取可用设备下拉列表'
+    },
+    {
+      name: 'createBus',
+      method: 'POST',
+      path: '/buses/create',
+      mockPath: '/buses/create',
+      params: {
+      },
+      desc: '车辆---新增'
+    },
+    {
+      name: 'busDeviceClassList',
+      method: 'POST',
+      path: '/api/sys/datadict/getDatadicts',
+      mockPath: '/api/sys/datadict/getDatadicts',
+      params: {
+      },
+      desc: 'bus设备类型列表'
+    },
+    // /api/bus/device/binding
+    {
+      name: 'updateBus',
+      method: 'POST',
+      path: '/api/bus/device/binding',
+      mockPath: '/api/bus/device/binding',
+      params: {
+      },
+      desc: '车辆编辑'
+    },
+    {
+      name: 'downloadFile',
+      method: 'POST',
+      path: '/excel/template/download',
+      mockPath: '/excel/template/download',
+      params: {
+      },
+      desc: 'Excel导入---导入---模板下载'
+    },
+    {
+      name: 'checkImportLog',
+      method: 'POST',
+      path: '/excel/log/logpage/get',
+      mockPath: '/excel/log/logpage/get',
+      params: {
+      },
+      desc: 'Excel导入日志查看'
+    },
+    {
+      name: 'uploadFileSave',
+      method: 'POST',
+      path: '/excel/create',
+      mockPath: '/excel/create',
+      params: {
+      },
+      desc: 'Excel导入---导入---保存'
+    },
+    {
+      name: 'devicepageSearch',
+      method: 'POST',
+      path: '/api/device/list',
+      mockPath: '/api/device/list',
+      params: {
+      },
+      desc: '设备管理---列表信息查询'
+    },
+    {
+      name: 'deleteDevice',
+      method: 'POST',
+      path: '/api/device/delete',
+      mockPath: '/api/device/delete',
+      params: {
+      },
+      desc: '设备管理---删除'
+    },
+    {
+      name: 'isvalidDevice',
+      method: 'POST',
+      path: '/api/device/update',
+      mockPath: '/api/device/update',
+      params: {
+      },
+      desc: '设备管理---设备启用禁用'
+    },
+    {
+      name: 'createDevice',
+      method: 'POST',
+      path: '/api/device/add',
+      mockPath: '/api/device/add',
+      params: {
+      },
+      desc: '设备管理---新增'
+    },
+    {
+      name: 'updateDevice',
+      method: 'POST',
+      path: '/api/device/update',
+      mockPath: '/api/device/update',
+      params: {
+      },
+      desc: '设备管理---编辑'
     }
   ]
 }

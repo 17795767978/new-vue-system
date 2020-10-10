@@ -212,6 +212,20 @@
       <el-form-item label="自编号:" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
+      <el-form-item label="设备类型:" v-if="isDevClass">
+        <el-select style="width: 220px" v-model="formInline.devClass">
+          <el-option
+            v-for="item in deviceOptions"
+            :key="item.code"
+            :label="item.value"
+            :value="item.code">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item v-if="isOnline" label="在线状态:">
+        <el-radio v-model="formInline.onlineStatus" label="1">在线</el-radio>
+          <el-radio v-model="formInline.onlineStatus" label="0">离线</el-radio>
+      </el-form-item>
       <el-form-item label="选择日期:" v-if="isDataCurrent">
         <el-date-picker
           :picker-options="pickerOptionsDataCurrent"
@@ -450,6 +464,12 @@ export default {
     },
     rateParams: {
       type: Object
+    },
+    isOnline: {
+      type: Boolean
+    },
+    isDevClass: {
+      type: Boolean
     }
   },
   data () {
@@ -504,12 +524,15 @@ export default {
         checkList: [],
         devModel: 'ADAS',
         carList: [],
-        carNo: []
+        carNo: [],
+        onlineStatus: '1',
+        devClass: ''
       },
       searchStationOptions: [],
       stationOptions: [],
       comOptions: [],
       comOptionsSec: [],
+      deviceOptions: [],
       devModelOptions: [
         {
           value: '客流',
@@ -599,6 +622,7 @@ export default {
     this._alarmType({
       warnLevel: ''
     })
+    this._getDeviceClass()
     let dataNow = new Date()
     let endTime = dataNow.getTime() - 24 * 3600 * 1000
     let timeStart = moment(endTime).format('YYYY-MM-DD 00:00:00')
@@ -843,6 +867,22 @@ export default {
   updated () {
   },
   methods: {
+    _getDeviceClass () {
+      this.$api['wholeInformation.deviceClassList']({
+        pageSize: '',
+        pageNumber: '',
+        isValid: '1'
+      }).then(res => {
+        let devices = []
+        res.forEach(item => {
+          devices.push({
+            value: item.display,
+            code: item.typeValue
+          })
+        })
+        this.deviceOptions = devices
+      })
+    },
     _stationList () {
       this.$api['wholeInformation.getAllBaseStationNamesListData']().then(res => {
         let arr = res
@@ -942,7 +982,9 @@ export default {
         devModel: this.formInline.devModel,
         checkList,
         carList: this.formInline.carList,
-        carNo: this.formInline.carNo
+        carNo: this.formInline.carNo,
+        onlineStatus: this.formInline.onlineStatus,
+        devClass: this.formInline.devClass
       }
       this.$emit('configCheck', configData)
     },
@@ -980,7 +1022,9 @@ export default {
         checkList: [],
         devModel: 'ADAS',
         carList: [],
-        carNo: []
+        carNo: [],
+        onlineStatus: '1',
+        devClass: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -1014,7 +1058,9 @@ export default {
         checkList: [],
         devModel: this.formInline.devModel,
         carList: this.formInline.carList,
-        carNo: this.formInline.carNo
+        carNo: this.formInline.carNo,
+        onlineStatus: this.formInline.onlineStatus,
+        devClass: this.formInline.devClass
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -1089,7 +1135,8 @@ export default {
         ip: this.formInline.ip,
         modules: this.formInline.modules,
         pages: this.formInline.pages,
-        devModel: this.formInline.devModel
+        devModel: this.formInline.devModel,
+        onlineStatus: this.formInline.onlineStatus
       }
       this.$emit('configCheckMul', configData)
     },
