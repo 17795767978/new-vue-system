@@ -75,7 +75,7 @@
           </el-col>
           <el-col :span="10">
             <el-form-item label="设备编号" prop="busDevUuids">
-              <el-select clearable v-model="item.busDevUuids"  filterable placeholder="请选择" @visible-change="getBusDevUuidList($event, item.busDevUuids)" @change="handlerChange(item.busDevUuids, item.devClass)">
+              <el-select clearable v-model="item.busDevUuids"  filterable placeholder="请选择" @visible-change="getBusDevUuidList($event, item.busDevUuids)" @change="handlerChange(item.busDevUuids, item.devClass, index)" @clear="handlerClear(item)">
                 <el-option
                   v-for="devUuids in afterAllDevOptions[item.devClass].options"
                   :disabled="devUuids.disabled"
@@ -236,14 +236,14 @@ export default {
               devUuid: element.devUuid,
               devClass: element.devClass
             })
-            this.busForm.deviceArr.push({ devClass: element.devClass, busDevUuids: element.devUuid })
+            this.busForm.deviceArr.push({ devClass: element.devClass, busDevUuids: element.devUuid, index: element.devUuid })
           })
         } else {
-          this.busForm.deviceArr.push({ devClass: this.devices[0].code, busDevUuids: '' })
+          this.busForm.deviceArr.push({ devClass: this.devices[0].code, busDevUuids: '', index: '' })
         }
       })
     },
-    handlerChange (value, devClass) {
+    handlerChange (value, devClass, index) {
       this.afterAllDevOptions[devClass].options.forEach(item => {
         if (item.devUuid === this.beforeCurrentData) {
           item.disabled = false
@@ -251,6 +251,18 @@ export default {
           item.disabled = true
         }
       })
+      if (value !== '') {
+        this.busForm.deviceArr[index].index = value
+      }
+    },
+    handlerClear (col) {
+      for (let item in this.afterAllDevOptions) {
+        this.afterAllDevOptions[item].options.forEach(item => {
+          if (item.devUuid === col.index) {
+            item.disabled = false
+          }
+        })
+      }
     },
     getDevUuidList (data, index) {
       const isDataTo = index < this.mountDevice.length ? this.mountDevice[index].devClass === data : false
