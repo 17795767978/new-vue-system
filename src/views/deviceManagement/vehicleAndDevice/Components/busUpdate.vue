@@ -75,9 +75,10 @@
           </el-col>
           <el-col :span="10">
             <el-form-item label="设备编号" prop="busDevUuids">
-              <el-select clearable v-model="item.busDevUuids"  filterable placeholder="请选择" @focus="getBusDevUuidList(item.devClass ,index)">
+              <el-select clearable v-model="item.busDevUuids"  filterable placeholder="请选择" @visible-change="getBusDevUuidList($event, item.busDevUuids)" @change="handlerChange(item.busDevUuids, item.devClass)">
                 <el-option
-                  v-for="devUuids in devicesNum"
+                  v-for="devUuids in afterAllDevOptions[item.devClass].options"
+                  :disabled="devUuids.disabled"
                   :key="devUuids.devUuid"
                   :label="devUuids.devCode"
                   :value="devUuids.devUuid">
@@ -106,7 +107,6 @@
 // import { updateBus, busToDevGet } from '@/api/management'
 // 校验车牌号
 // import ruleVehicleNumber from '@/utils/extendValidate/extendValidate'
-
 export default {
   name: 'BusUpdate',
   data () {
@@ -123,6 +123,9 @@ export default {
       addbus: [],
       devUuid: '',
       isVisible: false,
+      beforeCurrentData: '',
+      beforeAllDevOptions: [],
+      afterAllDevOptions: {},
       busForm: {
         busOrgUuid: '',
         busLineUuid: '',
@@ -155,45 +158,35 @@ export default {
   },
   watch: {
     show (isShow) {
-      this.getBus()
-      this.addbus = []
-      this.busForm = {
-        busUuid: this.roleData.busUuid,
-        busOrgUuid: this.roleData.busOrgUuid,
-        busLineUuid: this.roleData.busLineUuid,
-        busPlateNumber: this.roleData.busPlateNumber,
-        busSelfCode: this.roleData.busSelfCode,
-        busIsvalid: this.roleData.busIsvalid,
-        busDevUuids: this.roleData.busDevUuid,
-        deviceArr: []
-      }
-      this.$api['wholeInformation.busToDevGet']({ busUuid: this.roleData.busUuid }).then(res => {
-        this.mountDevice = res
-        if (this.mountDevice.length > 0) {
-          this.mountDevice.forEach(element => {
-            this.busForm.deviceArr.push({ devClass: element.devClass, busDevUuids: element.devUuid })
-            this.$api['wholeInformation.deviceList']({ devClass: element.devClass, devUuid: element.devUuid }).then(res => {
-              console.log(res)
-              this.devicesNum = res
-            })
-            this.addbus.push({ devClass: element.devClass, busDevUuids: element.devUuid })
-          })
-        } else {
-          this.busForm.deviceArr.push({ devClass: '', busDevUuids: '' })
+      if (isShow) {
+        this.getBus()
+        this._getCurrentOptions()
+        this.addbus = []
+        this.busForm = {
+          busUuid: this.roleData.busUuid,
+          busOrgUuid: this.roleData.busOrgUuid,
+          busLineUuid: this.roleData.busLineUuid,
+          busPlateNumber: this.roleData.busPlateNumber,
+          busSelfCode: this.roleData.busSelfCode,
+          busIsvalid: this.roleData.busIsvalid,
+          busDevUuids: this.roleData.busDevUuid,
+          deviceArr: []
         }
-      })
+      }
       this.isVisible = isShow
       const params = { lineOrgUuid: this.busForm.busOrgUuid, lineIsvalid: '1', lineDropFlag: 0 }
-      this.$api['wholeInformation.getLine'](params).then(res => {
-        this.lines = res
-      })
+      this._getLine(params)
     }
   },
   mounted () {
     this.lineOrgs = this.$store.state.globel.comData
-    this.getBus()
   },
   methods: {
+    _getLine (params) {
+      this.$api['wholeInformation.getLine'](params).then(res => {
+        this.lines = res
+      })
+    },
     getBus () {
       this.devices = []
       this.$api['wholeInformation.busDeviceClassList']({
@@ -201,8 +194,6 @@ export default {
         pageNumber: '',
         isvalid: '1'
       }).then(res => {
-      // res.list = res.list.for
-
         res.forEach(item => {
           this.devices.push({
             value: item.display,
@@ -211,59 +202,73 @@ export default {
         })
       })
     },
-    getDevUuidList (data, index) {
-      this.addbusDev = this.busForm.deviceArr[index].busDevUuids
-      for (var i = 0; i < this.addbus.length; i++) {
-        if (this.addbusDev === this.addbus[i].busDevUuids) {
-          this.addbusDevUuids = this.addbus[i]
-        }
-      }
-      this.busForm.deviceArr[index].busDevUuids = ''
+    _getCurrentOptions () {
+      this.$api['wholeInformation.deviceList']({ devClass: '' }).then(res => {
+        this.beforeAllDevOptions = res
+        setTimeout(() => {
+          this.getAllDevOptions()
+        }, 20)
+      })
     },
-    getBusDevUuidList (data, index) {
-      console.log(data)
-      console.log(this.addbusDevUuids.devClas)
-      this.busDev = this.busForm.deviceArr[index].busDevUuids
-      for (var i = 0; i < this.addbus.length; i++) {
-        if (this.busDev === this.addbus[i].busDevUuids) {
-          this.addbusDevUuids = this.addbus[i]
-        }
-      }
-      if (data) {
-        this.$api['wholeInformation.deviceList']({ devClass: data, devUuid: this.addbusDevUuids.busDevUuids }).then(res => {
-          console.log(res)
-          if (res.length < 1) {
-            this.$message({
-              message: `暂无可用设备!`,
-              type: 'warning'
+    getAllDevOptions () {
+      // allDevOptions
+      this.afterAllDevOptions = {}
+      this.devices.forEach((dev, index) => {
+        let currentDev = this.beforeAllDevOptions.filter(item => item.devClass === dev.code)
+        this.afterAllDevOptions[dev.code] = { code: dev.code, options: [] }
+        currentDev.forEach(item => {
+          this.afterAllDevOptions[dev.code].options.push({
+            disabled: false,
+            devCode: item.devCode,
+            devUuid: item.devUuid,
+            devClass: item.devClass
+          })
+        })
+      })
+      this.$api['wholeInformation.busToDevGet']({ busUuid: this.roleData.busUuid }).then(res => {
+        this.mountDevice = res
+        if (this.mountDevice.length > 0) {
+          this.mountDevice.forEach(element => {
+            this.afterAllDevOptions[element.devClass].options.push({
+              disabled: true,
+              devCode: element.devCode,
+              devUuid: element.devUuid,
+              devClass: element.devClass
             })
-            this.devicesNum = res
-          } else {
-            for (var i = 0; i < this.busForm.deviceArr.length; i++) {
-              for (var j = 0; j < res.length; j++) {
-                if (res[j].devUuid === this.busForm.deviceArr[i].busDevUuids) {
-                  res.splice(j, 1)
-                  this.devicesNum = res
-                } else {
-                  this.devicesNum = res
-                }
-              }
-            }
-          }
-        })
+            this.busForm.deviceArr.push({ devClass: element.devClass, busDevUuids: element.devUuid })
+          })
+        } else {
+          this.busForm.deviceArr.push({ devClass: this.devices[0].code, busDevUuids: '' })
+        }
+      })
+    },
+    handlerChange (value, devClass) {
+      this.afterAllDevOptions[devClass].options.forEach(item => {
+        if (item.devUuid === this.beforeCurrentData) {
+          item.disabled = false
+        } else if (item.devUuid === value) {
+          item.disabled = true
+        }
+      })
+    },
+    getDevUuidList (data, index) {
+      const isDataTo = index < this.mountDevice.length ? this.mountDevice[index].devClass === data : false
+      if (isDataTo) {
+        this.busForm.deviceArr[index].busDevUuids = this.mountDevice[index].devUuid
       } else {
-        this.$api['wholeInformation.deviceList']({ devClass: data, devUuid: '' }).then(res => {
-          for (var i = 0; i < this.busForm.deviceArr.length; i++) {
-            for (var j = 0; j < res.length; j++) {
-              if (res[j].devUuid === this.busForm.deviceArr[i].busDevUuids) {
-                res.splice(j, 1)
-                this.devicesNum = res
-              } else {
-                this.devicesNum = res
-              }
+        for (let item in this.afterAllDevOptions) {
+          this.afterAllDevOptions[item].options.forEach(item => {
+            if (item.devUuid === this.busForm.deviceArr[index].busDevUuids) {
+              item.disabled = false
             }
-          }
-        })
+          })
+        }
+        this.busForm.deviceArr[index].busDevUuids = ''
+      }
+    },
+    getBusDevUuidList (bo, data) {
+      if (bo) {
+        this.beforeCurrentData = data
       }
     },
     convertSearchParams () {
@@ -272,7 +277,6 @@ export default {
       } else {
         const devArr = []
         this.busForm.deviceArr.forEach(element => {
-          console.log(element)
           if (element.busDevUuids !== '') {
             devArr.push({
               devUuid: element.busDevUuids,
@@ -297,7 +301,6 @@ export default {
       this.$refs.busForm.validate(isValid => {
         if (isValid) {
           const params = Object.assign({}, this.convertSearchParams())
-          console.log(params)
           this.$api['wholeInformation.updateBus'](params).then(res => {
             this.$message({
               message: `编辑路线成功!`,
@@ -325,13 +328,20 @@ export default {
     },
     add () {
       let obj = {
-        devClass: '',
+        devClass: this.devices[0].code,
         busDevUuids: ''
       }
-      this.devicesNum = []
       this.busForm.deviceArr.push(obj)
     },
     deleteDev (index) {
+      // console.log(this.busForm.deviceArr[index].busDevUuids)
+      for (let item in this.afterAllDevOptions) {
+        this.afterAllDevOptions[item].options.forEach(item => {
+          if (item.devUuid === this.busForm.deviceArr[index].busDevUuids) {
+            item.disabled = false
+          }
+        })
+      }
       this.busForm.deviceArr.splice(index, 1)
     }
   }
