@@ -170,6 +170,16 @@
       <el-form-item label="设备编号:" v-if="isDeviceCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.deviceCode" placeholder="设备编号"></el-input>
       </el-form-item>
+      <el-form-item label="设备类型:" v-if="isDevType">
+        <el-select style="width: 200px" filterable v-model="formInline.devModel" placeholder="请选择">
+          <el-option
+            v-for="item in devModelOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="自编号:" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
@@ -270,15 +280,19 @@
         </el-select>
       </el-form-item>
       <el-form-item label="审核状态"  v-if="isAudit">
-          <el-select v-model="formInline.auditStatus" multiple collapse-tags placeholder="请选择">
-            <el-option
-              v-for="item in auditOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <el-select v-model="formInline.auditStatus" multiple collapse-tags placeholder="请选择">
+          <el-option
+            v-for="item in auditOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item v-if="isOnline" label="在线状态:">
+        <el-radio v-model="formInline.onlineStatus" label="1">在线</el-radio>
+          <el-radio v-model="formInline.onlineStatus" label="0">离线</el-radio>
+      </el-form-item>
       <el-form-item label="处理结果:" v-if="isProcessingResult" size="mini">
         <el-checkbox-group v-model="formInline.checkList">
           <el-checkbox label="未处理" :disabled="formInline.auditStatus.length === 1 ? formInline.auditStatus[0] === '1' : false"></el-checkbox>
@@ -450,6 +464,12 @@ export default {
     },
     isDateWeek: {
       type: Boolean
+    },
+    isDevType: {
+      type: Boolean
+    },
+    isOnline: {
+      type: Boolean
     }
   },
   data () {
@@ -519,7 +539,9 @@ export default {
         auditStatus: [],
         diffStandard: '85',
         startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
-        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD')
+        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD'),
+        devModel: '',
+        onlineStatus: '1'
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -536,6 +558,16 @@ export default {
         {
           label: 'admin',
           value: '1'
+        }
+      ],
+      devModelOptions: [
+        {
+          value: '10',
+          label: '客流'
+        },
+        {
+          value: '1',
+          label: 'ADAS'
         }
       ],
       descOptions: [{
@@ -961,7 +993,9 @@ export default {
         auditStatus: this.formInline.auditStatus,
         diffStandard: this.formInline.diffStandard,
         startDate: this.formInline.startDate,
-        endDate: this.formInline.endDate
+        endDate: this.formInline.endDate,
+        devModel: this.formInline.devModel,
+        onlineStatus: this.formInline.onlineStatus
       }
       this.$emit('configCheck', configData)
     },
@@ -1005,7 +1039,9 @@ export default {
         auditStatus: [],
         diffStandard: '85',
         startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
-        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD')
+        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD'),
+        devModel: '',
+        onlineStatus: '1'
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -1041,7 +1077,9 @@ export default {
         auditStatus: this.formInline.auditStatus,
         diffStandard: this.formInline.diffStandard,
         startDate: this.formInline.startDate,
-        endDate: this.formInline.endDate
+        endDate: this.formInline.endDate,
+        devModel: this.formInline.devModel,
+        onlineStatus: this.formInline.onlineStatus
       }
       this.$emit('handlerClear')
       this.$emit('configCheck', configData)
@@ -1121,7 +1159,8 @@ export default {
         auditStatus: this.formInline.auditStatus,
         diffStandard: this.formInline.diffStandard,
         startDate: this.formInline.startDate,
-        endDate: this.formInline.endDate
+        endDate: this.formInline.endDate,
+        devModel: this.formInline.devModel
       }
       this.$emit('configCheckMul', configData)
     },
