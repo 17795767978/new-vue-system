@@ -29,8 +29,8 @@ export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://117.34.118.30:8088',
   // mockBaseUrl: 'http://61.157.184.120:8088',
   // mockBaseUrl: 'http://192.168.10.145:8082',
-  // mockBaseUrl: 'http://192.168.10.81:8081',
-  mockBaseUrl: 'http://183.230.247.144:6065', // 荣昌
+  mockBaseUrl: 'http://192.168.10.81:8081',
+  // mockBaseUrl: 'http://183.230.247.144:6065', // 荣昌
   // 192.168.10.33:8081
   // mockBaseUrl: 'http://192.168.10.33:8082',
   // 10.233 8089
@@ -38,6 +38,7 @@ export const API_DEFAULT_CONFIG = {
   // prodBaseUrl: 'http://117.34.118.30:8089', // 自测
   // prodBaseUrl: 'http://61.157.184.120:8088', // 宜宾
   prodBaseUrl: baseUrl, // 邢台
+  uploadUrl: 'http://183.230.247.144:6065',
   isMocked: process.env.NODE_ENV !== 'production',
   isDebug: true,
   sep: '.'

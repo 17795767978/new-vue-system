@@ -61,6 +61,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="车辆自编号" v-if="isSelfNum">
+        <el-input class="font-style" v-model="formInline.selfNumber"></el-input>
+      </el-form-item>
       <el-form-item label="方向" v-if="isTurn">
         <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
           <el-option
@@ -71,6 +74,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="设备号" v-if="isStatusNum">
+        <el-input class="font-style" v-model="formInline.statusNumber"></el-input>
+      </el-form-item>
       <el-form-item label="设备类型" v-if="isStatusType">
         <el-select class="font-style" v-model="formInline.statusType" placeholder="请选择">
           <el-option
@@ -80,12 +86,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="输入设备号" v-if="isStatusNum">
-        <el-input class="font-style" v-model="formInline.statusNumber"></el-input>
-      </el-form-item>
-      <el-form-item label="输入自编号" v-if="isSelfNum">
-        <el-input class="font-style" v-model="formInline.selfNumber"></el-input>
       </el-form-item>
       <el-form-item label="月份" v-if="isMonth">
         <el-date-picker
@@ -370,7 +370,7 @@ export default {
         radio: '1',
         statusNumber: '',
         selfNumber: '',
-        statusType: '2',
+        statusType: '',
         onLine: ''
       },
       searchStationOptions: [],
@@ -384,7 +384,14 @@ export default {
         value: '2',
         label: '下行'
       }],
-      statusOptions: [],
+      statusOptions: [{
+        value: '10',
+        label: '客流'
+      },
+      {
+        value: '1',
+        label: 'ADAS'
+      }],
       lineOptions: [],
       lineOptionsAddAll: [],
       lineOptionsSec: [],
@@ -645,7 +652,7 @@ export default {
   },
   methods: {
     _getDevType () {
-      this.statusOptions = []
+      // this.statusOptions = []
       // this.$api['wholeInformation.getDevType']().then(res => {
       //   let list = []
       //   res.forEach(item => {
@@ -762,7 +769,7 @@ export default {
         statusNumber: '',
         selfNumber: '',
         onLine: '',
-        statusType: '2'
+        statusType: ''
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
