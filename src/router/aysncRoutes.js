@@ -529,9 +529,9 @@ export const aysncRoutesMap = [
     name: 'deviceManagement',
     meta: {
       title: '设备管理',
-      icon: 'nocturne icon-dash',
+      icon: 'nocturne icon-dash'
       // roles: ['/vehicleAndDevice', '/device']
-      roles: ['/line-od', '/device']
+      // roles: ['/line-od', '/device']
     },
     children: [
       {
@@ -540,9 +540,9 @@ export const aysncRoutesMap = [
         name: 'vehicleAndDevice',
         meta: {
           title: '车辆与设备绑定',
-          icon: 'nocturne icon-dash',
+          icon: 'nocturne icon-dash'
           // roles: ['/vehicle-device']
-          roles: ['/line-od']
+          // roles: ['/line-od']
         }
       },
       {
@@ -551,9 +551,9 @@ export const aysncRoutesMap = [
         name: 'deviceMan',
         meta: {
           title: '设备管理',
-          icon: 'nocturne icon-dash',
+          icon: 'nocturne icon-dash'
           // roles: ['/device']
-          roles: ['/line-od']
+          // roles: ['/line-od']
         }
       }
     ]
