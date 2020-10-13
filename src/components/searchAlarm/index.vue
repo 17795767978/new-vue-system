@@ -170,6 +170,20 @@
       <el-form-item label="设备编号:" v-if="isDeviceCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.deviceCode" placeholder="设备编号"></el-input>
       </el-form-item>
+      <el-form-item label="设备类型:" v-if="isDevClass">
+        <el-select style="width: 200px" filterable v-model="formInline.devModel" placeholder="请选择">
+          <el-option
+            v-for="item in devModelOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item v-if="isOnline" label="在线状态:">
+        <el-radio v-model="formInline.isOnline" label="1">在线</el-radio>
+        <el-radio v-model="formInline.isOnline" label="0">离线</el-radio>
+      </el-form-item>
       <el-form-item label="自编号:" v-if="isSelfCode">
         <el-input type="text" style="width: 12vw" v-model="formInline.selfCode" placeholder="自编号"></el-input>
       </el-form-item>
@@ -309,7 +323,7 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-       <p>导出只支持最大下载量为65536条，如果超过65536条默认下载前65536条</p>
+       <p style="text-align:center">*********************请确认*********************</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="getExcel"  :loading="downLoadLoading">确认</el-button>
@@ -466,6 +480,15 @@ export default {
     },
     isDateWeek: {
       type: Boolean
+    },
+    isDevClass: {
+      type: Boolean
+    },
+    isOnline: {
+      type: Boolean
+    },
+    sortParams: {
+      type: String
     }
   },
   data () {
@@ -574,7 +597,9 @@ export default {
         auditStatus: [],
         diffStandard: '15',
         startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
-        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD')
+        endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD'),
+        devModel: '',
+        isOnline: '1'
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -608,6 +633,16 @@ export default {
         {
           value: '1',
           label: '已审核'
+        }
+      ],
+      devModelOptions: [
+        {
+          value: '10',
+          label: '客流'
+        },
+        {
+          value: '1',
+          label: 'ADAS'
         }
       ],
       diffStandardOptions: [
@@ -1039,7 +1074,9 @@ export default {
         diffStandard: this.formInline.diffStandard,
         startDate: this.formInline.startDate,
         endDate: this.formInline.endDate,
-        dateQuick: this.formInline.dateQuick
+        dateQuick: this.formInline.dateQuick,
+        devModel: this.formInline.devModel,
+        isOnline: this.formInline.isOnline
       }
       this.$emit('configCheck', configData)
     },
@@ -1084,7 +1121,9 @@ export default {
         diffStandard: '15',
         startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
         endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD'),
-        dateQuick: ''
+        dateQuick: '',
+        devModel: '',
+        isOnline: '1'
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -1121,7 +1160,9 @@ export default {
         diffStandard: this.formInline.diffStandard,
         startDate: this.formInline.startDate,
         endDate: this.formInline.endDate,
-        dateQuick: this.formInline.dateQuick
+        dateQuick: this.formInline.dateQuick,
+        devModel: this.formInline.devModel,
+        isOnline: this.formInline.isOnline
       }
       this.$emit('handlerClear')
       this.$emit('configCheck', configData)
@@ -1201,7 +1242,9 @@ export default {
         auditStatus: this.formInline.auditStatus,
         diffStandard: this.formInline.diffStandard,
         startDate: this.formInline.startDate,
-        endDate: this.formInline.endDate
+        endDate: this.formInline.endDate,
+        devModel: this.formInline.devModel,
+        isOnline: this.formInline.isOnline
       }
       this.$emit('configCheckMul', configData)
     },
@@ -1229,7 +1272,6 @@ export default {
       if (this.select) {
         this.formInline.dateArray = [moment(this.select.date[0]).format('YYYY-MM-DD HH:mm:ss'), moment(this.select.date[1]).format('YYYY-MM-DD HH:mm:ss')]
       }
-      console.log(this.select)
       let params = {
         company: this.formInline.lineOrgId,
         lineId: this.formInline.lineId,
@@ -1266,7 +1308,8 @@ export default {
         pfrGetOnNumberStart: this.select && this.select.getOnNumMin ? Number(this.select.getOnNumMin) : null,
         pfrGetOnNumberEnd: this.select && this.select.getOnNumMax ? Number(this.select.getOnNumMax) : null,
         pfrGetOffNumberStart: this.select && this.select.getOffNumMin ? Number(this.select.getOffNumMin) : null,
-        pfrGetOffNumberEnd: this.select && this.select.getOffNumMax ? Number(this.select.getOffNumMax) : null
+        pfrGetOffNumberEnd: this.select && this.select.getOffNumMax ? Number(this.select.getOffNumMax) : null,
+        order: this.sortParams
       }
       if (this.isDate) {
         params.startTime = this.formInline.valueTime[0]

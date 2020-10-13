@@ -5,26 +5,23 @@
     ref="tableWrapper"
     :data="tableData"
     size="mini"
+    @sort-change="handlerSortChange"
     border>
     <el-table-column
       align="center"
       type="index"
       label="序号"
       width="80">
+      <template slot-scope="scope">
+        <span> {{scope.$index + (pageNum - 1) * pageSize + 1}} </span>
+      </template>
     </el-table-column>
     <el-table-column
       align="center"
       prop="devUuid"
       label="设备编号"
       width="260"
-      >
-    </el-table-column>
-    <el-table-column
       sortable
-      align="center"
-      prop="fee"
-      label="交易金额(元)"
-      width="120"
       >
     </el-table-column>
     <el-table-column
@@ -42,6 +39,22 @@
       :formatter="getTime"
       label="上车时间"
       width="200"
+      >
+    </el-table-column>
+    <el-table-column
+      sortable
+      align="center"
+      prop="payTime"
+      label="刷卡时间"
+      :formatter="getCardTime"
+      width="200"
+      >
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="fee"
+      label="交易金额(元)"
+      width="120"
       >
     </el-table-column>
     <el-table-column
@@ -77,14 +90,6 @@
       prop="customerId"
       label="乘客编号"
       width="120"
-      >
-    </el-table-column>
-    <el-table-column
-      align="center"
-      prop="payTime"
-      label="刷卡时间"
-      :formatter="getCardTime"
-      width="200"
       >
     </el-table-column>
     <el-table-column
@@ -135,7 +140,8 @@ export default {
       tableData: [],
       pageNum: 1,
       pageSize: 17,
-      total: 0
+      total: 0,
+      order: ''
     }
   },
   computed: {
@@ -151,21 +157,26 @@ export default {
       startTime,
       endTime,
       pageNum: 1,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
+      order: this.order
     })
   },
   activated () {
-    this.pageNum = 1
-    const { busNumber, dateArray, lineId, orgId } = this.$route.params
-    this._getPosRecordPage({
-      orgUuid: orgId,
-      lineUuid: lineId,
-      busPlateNumber: busNumber,
-      startTime: dateArray[0],
-      endTime: dateArray[1],
-      pageNum: 1,
-      pageSize: this.pageSize
-    })
+    if (Object.keys(this.$route.params).length) {
+      this.pageNum = 1
+      this.order = ''
+      const { busNumber, dateArray, lineId, orgId } = this.$route.params
+      this._getPosRecordPage({
+        orgUuid: orgId,
+        lineUuid: lineId,
+        busNumber: busNumber,
+        startTime: dateArray[0],
+        endTime: dateArray[1],
+        pageNum: 1,
+        pageSize: this.pageSize,
+        order: ''
+      })
+    }
   },
   watch: {
     selectData: {
@@ -175,11 +186,12 @@ export default {
         this._getPosRecordPage({
           orgUuid: newV.orgId,
           lineUuid: newV.lineId,
-          busPlateNumber: newV.busNumber,
+          busNumber: newV.busNumber,
           startTime: newV.startTime,
           endTime: newV.endTime,
           pageNum: 1,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          order: this.order
         })
       }
     }
@@ -204,23 +216,55 @@ export default {
         this._getPosRecordPage({
           orgUuid: this.selectData.orgId,
           lineUuid: this.selectData.lineId,
-          busPlateNumber: this.selectData.busNumber,
+          busNumber: this.selectData.busNumber,
           startTime: this.selectData.startTime,
           endTime: this.selectData.endTime,
           pageNum: this.pageNum,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          order: this.order
         })
       } else {
         this._getPosRecordPage({
           orgUuid: this.userId,
           lineUuid: '',
-          busPlateNumber: '',
+          busNumber: '',
           startTime,
           endTime,
           pageNum: this.pageNum,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          order: this.order
         })
       }
+    },
+    handlerSortChange (data) {
+      this.order = data.order === 'ascending' ? data.prop : `${data.prop} ${data.order.substring(0, 4)}`
+      // console.log(this.order)
+      let startTime = moment(new Date() - 24 * 3600 * 1000).format('YYYY-MM-DD 00:00:00')
+      let endTime = moment().format('YYYY-MM-DD 23:59:59')
+      if (Object.keys(this.selectData).length > 0) {
+        this._getPosRecordPage({
+          orgUuid: this.selectData.orgId,
+          lineUuid: this.selectData.lineId,
+          busNumber: this.selectData.busNumber,
+          startTime: this.selectData.startTime,
+          endTime: this.selectData.endTime,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          order: this.order
+        })
+      } else {
+        this._getPosRecordPage({
+          orgUuid: this.userId,
+          lineUuid: '',
+          busNumber: '',
+          startTime,
+          endTime,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          order: this.order
+        })
+      }
+      this.$emit('sortParam', this.order)
     },
     getCardTime (row) {
       return moment(row.payTime).format('YYYY-MM-DD HH:mm:ss')

@@ -585,6 +585,41 @@ export const aysncRoutesMap = [
     ]
   },
   {
+    path: '/device-management',
+    component: Layout,
+    name: 'deviceManagement',
+    meta: {
+      title: '设备管理',
+      icon: 'nocturne icon-dash',
+      roles: ['/vehicleAndDevice', '/device', '/alarm-home']
+      // roles: ['/line-od', '/device']
+    },
+    children: [
+      {
+        path: 'vehicle-device',
+        component: _import_('deviceManagement/vehicleAndDevice/index'),
+        name: 'vehicleAndDevice',
+        meta: {
+          title: '车辆与设备绑定',
+          icon: 'nocturne icon-dash',
+          // roles: ['/vehicle-device']
+          roles: ['/alarm-home']
+        }
+      },
+      {
+        path: 'device',
+        component: _import_('deviceManagement/device/index'),
+        name: 'deviceMan',
+        meta: {
+          title: '设备管理',
+          icon: 'nocturne icon-dash',
+          // roles: ['/device']
+          roles: ['/alarm-home']
+        }
+      }
+    ]
+  },
+  {
     path: '/system-admin',
     component: Layout,
     name: 'systemAdmin',

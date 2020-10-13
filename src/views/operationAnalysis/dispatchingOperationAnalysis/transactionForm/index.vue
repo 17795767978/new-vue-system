@@ -7,10 +7,11 @@
       isDate
       isEmpty
       isDownload
+      :sortParams="sortParams"
       :downLoadName="downLoadName"
       @configCheck="getSearch"
     />
-    <Table :selectData="selectData"/>
+    <Table :selectData="selectData" @sortParam="getSortParam"/>
   </div>
 </template>
 
@@ -22,12 +23,16 @@ export default {
   data () {
     return {
       downLoadName: 'downLoad.posExport',
-      selectData: {}
+      selectData: {},
+      sortParams: ''
     }
   },
   methods: {
     getSearch (data) {
       this.selectData = data
+    },
+    getSortParam (data) {
+      this.sortParams = data
     }
   },
   components: {
