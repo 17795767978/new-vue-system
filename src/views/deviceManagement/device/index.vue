@@ -279,7 +279,7 @@ export default {
           type: 'success'
         })
         this.queryList()
-      }).catch(() => {})
+      }).catch((err) => { this.$message.warning(err.message) })
     },
     // 批量删除
     batchRemove () {
