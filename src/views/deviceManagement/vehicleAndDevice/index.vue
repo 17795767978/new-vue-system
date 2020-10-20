@@ -233,7 +233,7 @@ export default {
     // 获取列表
     getRoles (params) {
       this.isListLoading = true
-      this.$api['wholeInformation.getCar'](params).then(res => {
+      this.$api['wholeInformation.getCarTo'](params).then(res => {
         this.tableAllData = res
         this.tableData = res.slice(0, 10)
         this.pagination.total = res.length
