@@ -43,7 +43,6 @@ export default {
           name: item.warnLabel,
           value: item.warnNumber
         }))
-        console.log(this.dataList)
         this.drawLine()
         this.timer = setTimeout(() => {
           this._getAlarmLevelRatioAnalysis(params)

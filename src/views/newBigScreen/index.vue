@@ -18,7 +18,7 @@
     <div class="bottom-banner"></div>
     <!-- 客流数据 -->
     <div class="passenger-index">
-      <passenger-index></passenger-index>
+      <passenger-index :operationBusNumber="operationBusNumber" :offOperationBusNumber="offOperationBusNumber"></passenger-index>
     </div>
     <!-- online -->
     <div class="online-bus">
@@ -123,7 +123,9 @@ export default {
       marker: {},
       onLineCarNum: null,
       totalBusNumber: null,
-      timerOnlineCar: null
+      timerOnlineCar: null,
+      operationBusNumber: null,
+      offOperationBusNumber: null
     }
   },
   created () {
@@ -147,19 +149,23 @@ export default {
       this.marker = point
     },
     _onLineCarNum (params) {
-      this.$api['dispatch.getOnlineCarNumber'](params).then(res => {
+      this.$api['dispatch.getOperationalTarget'](params).then(res => {
+        this.onLineCarNum = res.online
+        this.totalBusNumber = res.totalBus
+        this.operationBusNumber = res.inOper
+        this.offOperationBusNumber = res.nonOper
         // let dataArr = res.data.data;
         // let numArr = dataArr.map(item => item.onlineBusNumber);
         // numArr.forEach(item => {
         //   let num = parseInt(item);
         //   this.onLineCarNum += num;
         // });
-        if (res) {
-          this.onLineCarNum = res.onlineBusNumber
-          this.totalBusNumber = res.totalBusNumber
-        } else {
-          this.onLineCarNum = '--'
-        }
+        // if (res) {
+        //   this.onLineCarNum = res.onlineBusNumber
+        //   this.totalBusNumber = res.totalBusNumber
+        // } else {
+        //   this.onLineCarNum = '--'
+        // }
         this.timerOnlineCar = setTimeout(() => {
           this._onLineCarNum(params)
         }, TIME)

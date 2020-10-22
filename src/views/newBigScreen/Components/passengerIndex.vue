@@ -22,13 +22,6 @@
       </div>
     </div>
     <div class="passenger-total-all">
-      <div class="avatar avatar-bus"></div>
-      <div class="content">
-        <div class="title">运营车辆数</div>
-        <div class="num color-bus">{{operateCarNum}}</div>
-      </div>
-    </div>
-    <div class="passenger-total-all">
       <div class="avatar avatar-rate"></div>
       <div class="content">
         <div class="title">实时满载率</div>
@@ -36,18 +29,35 @@
       </div>
     </div>
     <div class="passenger-total-all">
+      <div class="avatar avatar-bus"></div>
+      <div class="content">
+        <div class="title">运营车辆数</div>
+        <div class="num color-bus">{{operationBusNumber}}</div>
+      </div>
+    </div>
+    <div class="passenger-total-all">
       <div class="avatar avatar-waiting"></div>
       <div class="content">
-        <div class="title">待发车辆数</div>
-        <div class="num color-waiting">{{outgoingCarNum}}</div>
+        <div class="title">非运营车辆数</div>
+        <div class="num color-waiting">{{offOperationBusNumber}}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-const TIME = 0.5 * 60 * 1000
+const TIME = 30 * 1000
 export default {
+  props: {
+    operationBusNumber: {
+      type: String,
+      default: ''
+    },
+    offOperationBusNumber: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
       passengeFlowNum: '',
@@ -88,12 +98,12 @@ export default {
     this._realTimeFullRate({
       orgId
     })
-    this._operateCarNum({
-      orgId
-    })
-    this._outgoingCarNum({
-      orgId
-    })
+    // this._operateCarNum({
+    //   orgId
+    // })
+    // this._outgoingCarNum({
+    //   orgId
+    // })
   },
   mounted () {
     setTimeout(() => {
@@ -168,37 +178,37 @@ export default {
       this.$api['passengerFlow.getRealTimeFullLoadRate'](params).then(res => {
         // console.log(res)
       })
-    },
-    _operateCarNum (params) {
-      this.$api['dispatch.getOnCarNumber'](params).then(res => {
-        // let dataArr = res.data.data;
-        // let numArr = dataArr.map(item => item.operateBusNumber);
-        // numArr.forEach(item => {
-        //   let num = parseInt(item);
-        //   this.operateCarNum += num;
-        // });
-        if (res && res.operateBusNumber) {
-          this.operateCarNum = res.operateBusNumber
-        } else {
-          this.operateCarNum = '--'
-        }
-        this.timerGetOnCar = setTimeout(() => {
-          this._operateCarNum()
-        }, TIME)
-      })
-    },
-    _outgoingCarNum (params) {
-      this.$api['dispatch.getOffCarNumber'](params).then(res => {
-        if (res && res.nooperateBusNumber) {
-          this.outgoingCarNum = res.nooperateBusNumber
-        } else {
-          this.outgoingCarNum = '--'
-        }
-        this.timerGetOffCar = setTimeout(() => {
-          this._outgoingCarNum()
-        }, TIME)
-      })
     }
+    // _operateCarNum (params) {
+    //   this.$api['dispatch.getOnCarNumber'](params).then(res => {
+    //     // let dataArr = res.data.data;
+    //     // let numArr = dataArr.map(item => item.operateBusNumber);
+    //     // numArr.forEach(item => {
+    //     //   let num = parseInt(item);
+    //     //   this.operateCarNum += num;
+    //     // });
+    //     if (res && res.operateBusNumber) {
+    //       this.operateCarNum = res.operateBusNumber
+    //     } else {
+    //       this.operateCarNum = '--'
+    //     }
+    //     this.timerGetOnCar = setTimeout(() => {
+    //       this._operateCarNum()
+    //     }, TIME)
+    //   })
+    // },
+    // _outgoingCarNum (params) {
+    //   this.$api['dispatch.getOffCarNumber'](params).then(res => {
+    //     if (res && res.nooperateBusNumber) {
+    //       this.outgoingCarNum = res.nooperateBusNumber
+    //     } else {
+    //       this.outgoingCarNum = '--'
+    //     }
+    //     this.timerGetOffCar = setTimeout(() => {
+    //       this._outgoingCarNum()
+    //     }, TIME)
+    //   })
+    // }
   },
   components: {
   },
@@ -207,14 +217,14 @@ export default {
     clearTimeout(this.timerFullRate)
     clearTimeout(this.timerLine)
     clearTimeout(this.timerOnlineCar)
-    clearTimeout(this.timerGetOnCar)
-    clearTimeout(this.timerGetOffCar)
+    // clearTimeout(this.timerGetOnCar)
+    // clearTimeout(this.timerGetOffCar)
     this.timerTotalPassage = null
     this.timerFullRate = null
     this.timerLine = null
     this.timerOnlineCar = null
-    this.timerGetOnCar = null
-    this.timerGetOffCar = null
+    // this.timerGetOnCar = null
+    // this.timerGetOffCar = null
   }
 }
 </script>

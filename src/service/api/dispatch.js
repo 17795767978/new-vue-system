@@ -75,6 +75,16 @@ export const dispatchApi = {
         dateTime: ''
       },
       desc: '车辆到站时刻信息(获取前一天数据)(运营线路比)'
+    },
+    {
+      name: 'getOperationalTarget',
+      method: 'POST',
+      path: '/zhfxpt/getOperationalTarget',
+      mockPath: '/zhfxpt/getOperationalTarget',
+      params: {
+        orgId: ''
+      },
+      desc: '车辆运营指标'
     }
   ]
 }

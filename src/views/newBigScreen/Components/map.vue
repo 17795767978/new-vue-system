@@ -213,7 +213,7 @@ import videoWrapper from '@/components/map/video'
 import Bus from './bus.js'
 import { mapGetters } from 'vuex'
 // const COLOR = ['#f00', '#f0f', '#0ff', '#00f', '#0f0', '#ff0']
-const TIME = 6 * 1000
+const TIME = 3 * 1000
 // const URL = 'http://121.30.214.187:12056/api/v1/basic/' // 大同
 const URL = 'http://117.34.118.30:12056/api/v1/basic/'
 export default {
