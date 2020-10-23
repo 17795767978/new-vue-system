@@ -16,7 +16,7 @@
       <div v-if="isCarsDetail">
         <!-- 车 -->
         <bm-marker
-          v-for="marker in markers"
+          v-for="marker in positionsData"
           :key="marker.busId"
           :position="{lng: marker.lng, lat: marker.lat}"
           @click="handleMarkerClick(marker)"
@@ -212,6 +212,8 @@ import park from '../../../assets/images/park.png'
 import videoWrapper from '@/components/map/video'
 import Bus from './bus.js'
 import { mapGetters } from 'vuex'
+import Subscribe from '../utils/ws.js'
+// import Socket from 'sockjs-client'
 // const COLOR = ['#f00', '#f0f', '#0ff', '#00f', '#0f0', '#ff0']
 const TIME = 3 * 1000
 // const URL = 'http://121.30.214.187:12056/api/v1/basic/' // 大同
@@ -282,7 +284,9 @@ export default {
       currenPoint: {},
       stationsDatas: [],
       stationsDatasAll: [],
-      parkData: []
+      parkData: [],
+      ws: null,
+      positionsData: []
     }
   },
   components: {
@@ -302,6 +306,8 @@ export default {
   },
   created () {
     // this._getOps()
+    // this._getTestWs()
+    this.initSubscribe()
   },
   mounted () {
     // this._getInitMap()
@@ -356,12 +362,18 @@ export default {
         if (newV !== 'all') {
           // lineGroupUuid 延安
           // lineId 大同
-          this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
+          // this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
           this.lineData = Object.prototype.toString.call(this.lineDataAll) === '[object Array]' && this.lineDataAll.filter(item => item.lineUuid === newV)
           this.stationsDatas = Object.prototype.toString.call(this.stationsDatasAll) === '[object Array]' && this.stationsDatasAll.filter(item => item.lineUuid === newV)
+          // this.ws.wsDisconnect()
+          // this.positionsData = []
+          // this.ws.subscribeWsConnect(`/topic/pos.base.${newV}*`)
+          // this.positionsData = this.ws.assembleDatas
+          this.reconnectWs(`/topic/pos.base.${newV}.*`)
         } else {
-          this.markers = this.markersAll
+          // this.markers = this.markersAll
           this.lineData = this.lineDataAll
+          this.reconnectWs(`/topic/pos.base.*.*`)
         }
       }
     },
@@ -429,6 +441,22 @@ export default {
     }
   },
   methods: {
+    // 订阅
+    initSubscribe () {
+      this.ws = new Subscribe()
+      this.ws.createWsConnect()
+      this.ws.subscribeWsConnect('/topic/pos.base.*.*')
+      this.positionsData = this.ws.assembleDatas
+    },
+    // 重连订阅
+    reconnectWs (url) {
+      this.ws.wsDisconnect()
+      this.positionsData = []
+      this.ws = new Subscribe()
+      this.ws.createWsConnect()
+      this.ws.subscribeWsConnect(url)
+      this.positionsData = this.ws.assembleDatas
+    },
     initMap () {
       this.stationsDatasAll.forEach((item) => {
         item.isSee = false
@@ -660,8 +688,10 @@ export default {
   destroyed () {
     clearTimeout(this.timerRate)
     clearTimeout(this.timerHot)
+    this.ws.closeWsConnect()
     this.timerRate = null
     this.timerHot = null
+    this.ws = null
   }
 }
 </script>

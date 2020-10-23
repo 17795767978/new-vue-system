@@ -22,13 +22,21 @@ let id = Math.random().toString(36).substr(3, 30)
 //   baseUrl = 'http://172.16.100.160:8081'
 // }
 export const WSAPI = `ws://117.34.118.30:8288/websocket/mesgshow/${id}`
+export const WSPOSITION = {
+  url: 'ws:117.34.118.30:15675/ws',
+  name: '车辆位置订阅',
+  config: {
+    login: 'admin',
+    passcode: 'mF8XwHR6'
+  }
+}
 export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://192.168.10.145:8082',
   // mockBaseUrl: 'http://113.200.35.114:9088',
   // mockBaseUrl: 'http://117.34.118.30:8089',
   // mockBaseUrl: 'http://121.30.214.189:9088',
-  mockBaseUrl: 'http://192.168.10.81:8081',
-  // mockBaseUrl: 'http://117.34.118.30:8288',
+  // mockBaseUrl: 'http://192.168.10.81:8081',
+  mockBaseUrl: 'http://117.34.118.30:8288',
   // mockBaseUrl: 'http://117.34.118.30:8288', // 邢台
   // 192.168.10.33:8081
   // mockBaseUrl: 'http://192.168.10.145:8081',
