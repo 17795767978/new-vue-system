@@ -135,6 +135,11 @@ export default {
         // },
         xAxis: {
           type: 'category',
+          name: '时间',
+          nameLocation: 'start',
+          nameTextStyle: {
+            padding: [0, 15, -25, 0] // 四个数字分别为上右下左与原位置距离
+          },
           // axisLine: {
           //   show: false
           // },
@@ -149,6 +154,7 @@ export default {
         },
         yAxis: {
           type: 'value',
+          name: '客流',
           max: this.echartsDataMax + 100,
           min: 0,
           splitLine: {

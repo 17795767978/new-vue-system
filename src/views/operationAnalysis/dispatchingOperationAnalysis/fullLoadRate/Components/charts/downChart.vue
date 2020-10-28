@@ -55,7 +55,7 @@ export default {
     let dataNow = new Date()
     let dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
     window.addEventListener('resize', () => {
-      this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
+      this.$refs.downChartWrapper.style.width = window.innerWidth - 250 + 'px'
     })
     this._fullRateAnalysisDown({
       lineId: this.initLineId,
@@ -66,7 +66,7 @@ export default {
     })
   },
   mounted () {
-    this.$refs.downChartWrapper.style.width = window.innerWidth - 220 + 'px'
+    this.$refs.downChartWrapper.style.width = window.innerWidth - 250 + 'px'
     // let listenResize = elementResizeDetector()
     // listenResize.listenTo(this.$refs.topWrapper, (el) => {
     //   this.$echarts.init(document.getElementById('down-chart-wrapper')).resize()
@@ -183,6 +183,15 @@ export default {
         //     'color': '#000'
         //   }
         // },
+        toolbox: {
+          right: '50px',
+          itemSize: '20',
+          feature: {
+            saveAsImage: {
+              name: '线路区间满载率查询（下行）'
+            }// 图片下载功能
+          }
+        },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -200,7 +209,7 @@ export default {
         legend: {
           data: this.tabType,
           selectedMode: false,
-          bottom: 10,
+          top: 5,
           textStyle: {
             color: '#000'
           }
@@ -208,6 +217,11 @@ export default {
         xAxis: [
           {
             type: 'category',
+            name: '站点',
+            nameLocation: 'start',
+            nameTextStyle: {
+              padding: [0, -10, -30, 0] // 四个数字分别为上右下左与原位置距离
+            },
             data: timeInterval,
             axisPointer: {
               type: 'shadow'
@@ -223,8 +237,9 @@ export default {
             },
             axisLabel: {
               inside: false,
+              rotate: 40,
+              interval: 0,
               showMaxLabel: true,
-              interval: 2,
               textStyle: {
                 color: '#000',
                 fontSize: '10',
@@ -237,6 +252,7 @@ export default {
           {
             type: 'value',
             // name: '水量',
+            name: '客流数',
             min: 0,
             max: this.maxNum + this.maxNum / 5,
             interval: Math.floor(this.maxNum / 5),
@@ -258,6 +274,7 @@ export default {
           },
           {
             type: 'value',
+            name: '满载率',
             min: 0,
             max: this.maxRate,
             interval: 20,

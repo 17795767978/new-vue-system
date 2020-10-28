@@ -27,7 +27,7 @@
           placeholder="起始时间"
           v-model="formInline.startTime"
           :picker-options="{
-            start: '06:00',
+            start: '00:00',
             step: '01:00',
             end: '23:00'
           }">
@@ -38,7 +38,7 @@
           class="font-style"
           v-model="formInline.endTime"
           :picker-options="{
-            start: '06:00',
+            start: '00:00',
             step: '01:00',
             end: '23:00',
             minTime: formInline.startTime

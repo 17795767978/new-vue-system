@@ -363,13 +363,10 @@ export default {
           // lineGroupUuid 延安
           // lineId 大同
           // this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
-          this.lineData = Object.prototype.toString.call(this.lineDataAll) === '[object Array]' && this.lineDataAll.filter(item => item.lineUuid === newV)
-          this.stationsDatas = Object.prototype.toString.call(this.stationsDatasAll) === '[object Array]' && this.stationsDatasAll.filter(item => item.lineUuid === newV)
-          // this.ws.wsDisconnect()
-          // this.positionsData = []
-          // this.ws.subscribeWsConnect(`/topic/pos.base.${newV}*`)
-          // this.positionsData = this.ws.assembleDatas
-          this.reconnectWs(`/topic/pos.base.${newV}.*`)
+          const lineChildId = this.lineOptions.filter(item => item.value === newV)[0].parentId
+          this.lineData = Object.prototype.toString.call(this.lineDataAll) === '[object Array]' && this.lineDataAll.filter(item => item.lineUuid === lineChildId)
+          this.stationsDatas = Object.prototype.toString.call(this.stationsDatasAll) === '[object Array]' && this.stationsDatasAll.filter(item => item.lineUuid === lineChildId)
+          this.reconnectWs(`/topic/pos.base.${lineChildId}.*`)
         } else {
           // this.markers = this.markersAll
           this.lineData = this.lineDataAll
@@ -537,6 +534,7 @@ export default {
         // this.lineData = res
         this.lineData = []
         this.lineDataAll = []
+        console.log(res)
         for (let item in res) {
           this.lineDataAll.push({
             lineName: res[item][0].lineName,

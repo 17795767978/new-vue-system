@@ -61,7 +61,7 @@ export default {
     const dataNow = new Date()
     const dataBefore = moment(new Date(dataNow.getTime() - 24 * 60 * 60 * 1000)).format('YYYY-MM-DD')
     window.addEventListener('resize', () => {
-      this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
+      this.$refs.upChartWrapper.style.width = window.innerWidth - 250 + 'px'
     })
     this._fullRateAnalysisUp({
       lineId: this.initLineId,
@@ -72,7 +72,7 @@ export default {
     })
   },
   mounted () {
-    this.$refs.upChartWrapper.style.width = window.innerWidth - 220 + 'px'
+    this.$refs.upChartWrapper.style.width = window.innerWidth - 250 + 'px'
     // let listenResize = elementResizeDetector()
     // listenResize.listenTo(this.$refs.topWrapper, (el) => {
     //   this.$echarts.init(document.getElementById('up-chart-wrapper')).resize()
@@ -179,7 +179,6 @@ export default {
       if (this.dataSource.length > 0) {
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
         this.maxRate = max(this.fullRate)
-        console.log(this.maxRate)
       }
       setTimeout(() => {
         this.drawLine()
@@ -199,6 +198,15 @@ export default {
         //     'color': '#000'
         //   }
         // },
+        toolbox: {
+          right: '50px',
+          itemSize: '20',
+          feature: {
+            saveAsImage: {
+              name: '线路区间满载率查询（上行）'
+            }// 图片下载功能
+          }
+        },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -216,7 +224,7 @@ export default {
         color: ['#249cf9', '#fdb628', '#67e0e3', '#eb6f49'],
         legend: {
           data: this.tabType,
-          bottom: 10,
+          top: 5,
           selectedMode: false,
           textStyle: {
             color: '#000'
@@ -224,6 +232,11 @@ export default {
         },
         xAxis: [
           {
+            name: '站点',
+            nameLocation: 'start',
+            nameTextStyle: {
+              padding: [0, -10, -30, 0] // 四个数字分别为上右下左与原位置距离
+            },
             type: 'category',
             data: timeInterval,
             axisPointer: {
@@ -239,8 +252,9 @@ export default {
               show: true
             },
             axisLabel: {
+              rotate: 40,
               inside: false,
-              interval: 2,
+              interval: 0,
               showMaxLabel: true,
               textStyle: {
                 color: '#000',
@@ -255,7 +269,7 @@ export default {
         yAxis: [
           {
             type: 'value',
-            // name: '水量',
+            name: '客流数',
             min: 0,
             max: this.maxNum + this.maxNum / 5,
             interval: Math.floor(this.maxNum / 5),
@@ -276,6 +290,7 @@ export default {
             }
           },
           {
+            name: '满载率',
             type: 'value',
             min: 0,
             max: this.maxRate,

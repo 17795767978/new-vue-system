@@ -26,7 +26,7 @@ export default {
       this.$refs.wrapper.style.right = 0
     })
     this.$refs.wrapper.addEventListener('mouseleave', () => {
-      this.$refs.wrapper.style.right = '-16vw'
+      this.$refs.wrapper.style.right = '-16.9vw'
     })
   }
 }

@@ -79,7 +79,8 @@ const globel = {
             res.forEach(item => {
               list.push({
                 label: item.lineName,
-                value: item.lineUuid
+                value: item.lineUuid,
+                parentId: item.parLineUuid
               })
             })
             commit('LINE_DATA', list)

@@ -2,6 +2,11 @@ import Socket from 'sockjs-client'
 import Stomp from 'stompjs'
 import { Message } from 'element-ui'
 import { WSPOSITION } from '../../../config/settings'
+// const x_PI = 3.14159265358979324 * 3000.0 / 180.0
+// const PI = 3.1415926535897932384626
+// const a = 6378245.0
+// const ee = 0.00669342162296594323
+
 class Subscribe {
   constructor () {
     // 连接名
@@ -58,12 +63,12 @@ class Subscribe {
   }
   // 订阅ws连接
   subscribeWsConnect (adr) {
-    console.log(1231312312313123213213)
     this.stomp.connect({ ...this.config }, (frame) => {
       Message.success(this.name + '连接成功')
       this.isConnnect = true
       this.stomp.subscribe(adr, (res) => {
         const data = JSON.parse(res.body)
+        positionTransform(data)
         this.simpleData = data
         this.dataToAssemble()
       })
@@ -116,4 +121,14 @@ function wsChecking (url) {
   return isWs || Message.warning('请检查链接是否为ws链接')
 }
 
+// 火星坐标转百度
+function positionTransform (data) {
+  const X_PI = 3.14159265358979324 * 3000.0 / 180.0
+  const z = Math.sqrt(data.lng * data.lng + data.lat * data.lat) + 0.00002 * Math.sin(data.lat * X_PI)
+  const theta = Math.atan2(data.lat, data.lng) + 0.000003 * Math.cos(data.lng * X_PI)
+  const bdLng = z * Math.cos(theta) + 0.0065
+  const bdLat = z * Math.sin(theta) + 0.006
+  data.lng = bdLng
+  data.lat = bdLat
+}
 export default Subscribe
