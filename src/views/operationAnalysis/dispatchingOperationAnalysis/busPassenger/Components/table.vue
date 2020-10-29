@@ -52,11 +52,11 @@
         label="下车人数">
       </el-table-column>
       <el-table-column
-        prop="pfrpassengerDif"
+        prop="difference"
         align="center"
-        label="上下车客流差值">
+        label="准确率">
         <template slot-scope="scope">
-          <span>{{scope.row.pfrpassengerDif}}%</span>
+          <span>{{scope.row.difference}}%</span>
         </template>
       </el-table-column>
     </el-table>
@@ -138,7 +138,8 @@ export default {
       this.$api['passengerFlow.pageBusPersonTotalList'](params).then(res => {
         // console.log(res)
         this.loading = false
-        this.tableAllData = this.format(res)
+        // this.tableAllData = this.format(res)
+        this.tableAllData = res
         this.tableData = this.tableAllData.slice(0, 15)
         this.total = this.tableAllData.length
       })

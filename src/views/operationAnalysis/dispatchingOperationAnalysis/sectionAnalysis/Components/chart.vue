@@ -17,7 +17,7 @@
 import elementResizeDetector from 'element-resize-detector'
 import moment from 'moment'
 import { setTimeout } from 'timers'
-import { max } from '../../../../../utils/max'
+// import { max } from '../../../../../utils/max'
 import { mapGetters } from 'vuex'
 export default {
   name: 'sectionAnalysis',
@@ -98,7 +98,8 @@ export default {
       data = data.map(function (item) {
         return [item[1], item[0], item[2]]
       })
-      this.valueNum = max(data.map(item => item[2]))
+      this.valueNum = 300
+      console.log(this.valueNum)
       let options = {
         tooltip: {
           position: 'top',
@@ -145,26 +146,29 @@ export default {
           // name: 'Punch Card',
           type: 'scatter',
           // type: 'effectScatter',
+          // maxValue: "4484"
+          // minValue: "0"
           symbolSize: (val) => {
+            // console.log(val)
             if (this.valueNum < 50) {
-              return val[2] * 0.5
+              return val[2] * 0.7
             } else if (this.valueNum > 50 && this.valueNum < 100) {
-              return val[2] * 0.4
+              return val[2] * 0.6
             } else if (this.valueNum > 100 && this.valueNum < 150) {
-              return val[2] * 0.3
+              return val[2] * 0.5
             } else if (this.valueNum > 150 && this.valueNum < 200) {
+              return val[2] * 0.4
+            } else if (this.valueNum > 200 && this.valueNum < 300) {
+              return val[2] * 0.3
+            } else if (this.valueNum > 300 && this.valueNum < 400) {
               return val[2] * 0.2
-            } else if (this.valueNum > 200 && this.valueNum < 1000) {
-              return val[2] * 0.05
-            } else if (this.valueNum > 100 && this.valueNum < 5000) {
-              return val[2] * 0.015
             } else {
-              return val[2] * 0.005
+              return val[2] * 0.1
             }
           },
           data: data,
           animationDelay: function (idx) {
-            return idx * 5
+            return idx * 1
           },
           itemStyle: {
             normal: {

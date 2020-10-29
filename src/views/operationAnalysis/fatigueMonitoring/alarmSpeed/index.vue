@@ -53,7 +53,9 @@ export default {
   },
   methods: {
     getSearch (item) {
-      console.log(Bus)
+      Bus.speed = '所有'
+      Bus.value = ''
+      Bus.name = '所有'
       this.searchData = item
     },
     echartsSelected (data) {

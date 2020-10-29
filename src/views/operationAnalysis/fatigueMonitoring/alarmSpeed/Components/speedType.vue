@@ -58,6 +58,7 @@ export default {
     searchData: {
       deep: true,
       handler (newV) {
+        console.log(12312312313)
         this.selectData = newV
         this.echartsData = ''
         this._getAlarmTypeRatioAnalysis({

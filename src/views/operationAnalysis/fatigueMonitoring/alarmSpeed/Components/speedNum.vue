@@ -60,7 +60,9 @@ export default {
           startTime: newV.dateArray[0],
           endTime: newV.dateArray[1],
           auditStatus: newV.auditStatus,
-          handleResults: newV.checkList
+          handleResults: newV.checkList,
+          warnTypes: Bus.value === '所有' || Bus.value === '' ? Bus.warnTypesAll.map(item => item.code) : [Bus.value],
+          warnLevel: Bus.speed === '所有' ? '' : Bus.speed
         })
       }
     }

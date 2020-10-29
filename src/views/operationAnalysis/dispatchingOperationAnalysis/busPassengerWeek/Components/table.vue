@@ -8,9 +8,9 @@
     style="width: 100%">
     <el-table-column v-for="item in columnData" :key="item.pldisplay" align="center" :label="item.pldisplay" :prop="typeof item.plvalue === 'string' ? item.plvalue : ''" width="200">
       <div v-if="typeof item.plvalue !== 'string'">
-        <el-table-column label="客流差" :prop="getDiff(item.plvalue)" align="center" width="120">
+        <el-table-column label="准确率" :prop="getDiff(item.plvalue)" align="center" width="120">
           <template slot-scope="scope">
-            <div :style="scope.row[getDiff(item.plvalue)] > caleLimit ? active : ''">{{scope.row[getDiff(item.plvalue)]}}%</div>
+            <div :style="scope.row[getDiff(item.plvalue)] < caleLimit ? active : ''">{{scope.row[getDiff(item.plvalue)]}}%</div>
           </template>
         </el-table-column>
         <el-table-column label="上车人数" :prop="getUp(item.plvalue)" align="center" width="120"></el-table-column>

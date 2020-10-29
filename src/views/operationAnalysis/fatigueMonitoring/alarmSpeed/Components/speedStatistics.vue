@@ -99,6 +99,8 @@ export default {
     },
     getEchartsData (data) {
       Bus.speed = data.name
+      Bus.name = '所有'
+      Bus.value = ''
       this.$emit('echartsSelected', data)
       Bus.$emit('handlerChange')
     }
