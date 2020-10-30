@@ -456,6 +456,29 @@ export const aysncRoutesMap = [
             title: '报警处理分析',
             icon: 'nocturne icon-dash',
             roles: ['/user-result']
+            // roles: ['/device-status']
+          }
+        },
+        {
+          path: 'charge-detail',
+          component: _import_('operationAnalysis/fatigueMonitoring/chargeDetail/index'),
+          name: 'chargeDetail',
+          meta: {
+            title: '充电详情',
+            icon: 'nocturne icon-dash',
+            roles: ['/charge-detail']
+            // roles: ['/device-status']
+          }
+        },
+        {
+          path: 'bus-realtime-monitor',
+          component: _import_('operationAnalysis/fatigueMonitoring/busRealtimeMonitor/index'),
+          name: 'busRealtimeMonitor',
+          meta: {
+            title: '车辆实时监控',
+            icon: 'nocturne icon-dash',
+            // roles: ['/device-status']
+            roles: ['/bus-realtime-monitor']
           }
         }
       ]

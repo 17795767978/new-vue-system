@@ -548,6 +548,42 @@ export const tiredMonitoringApi = {
         endTime: ''
       },
       desc: '用户处理结果报表'
+    },
+    {
+      name: 'chargeList',
+      method: 'POST',
+      path: '/can/charge/pageList',
+      mockPath: '/can/charge/pageList',
+      params: {
+      },
+      desc: '充电详情列表'
+    },
+    {
+      name: 'chargeExport',
+      method: 'POST',
+      path: '/can/charge/export',
+      mockPath: '/can/charge/export',
+      params: {
+      },
+      desc: '充电详情导出'
+    },
+    {
+      name: 'carSpeedEcharts',
+      method: 'POST',
+      path: '/api/can/carspeed',
+      mockPath: '/api/can/carspeed',
+      params: {
+      },
+      desc: '车速历史趋势'
+    },
+    {
+      name: 'socEcharts',
+      method: 'POST',
+      path: '/api/can/soc',
+      mockPath: '/api/can//soc',
+      params: {
+      },
+      desc: 'SOC历史趋势'
     }
   ]
 }

@@ -190,7 +190,7 @@ const globel = {
             res.forEach(item => {
               list.push({
                 label: item.busPlateNumber,
-                value: item.busUuid
+                value: item.busPlateNumber
               })
             })
             commit('CAR_DATA', list)

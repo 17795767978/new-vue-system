@@ -193,6 +193,8 @@ const user = {
           })
           // 用户列表
           store.dispatch('getUserList')
+          // 车辆列表
+          store.dispatch('getCarList')
           // 页面模块列表
           store.dispatch('getMudeluPageList')
           commit('SET_FORM_DATA', form)

@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header" :style="isDefaultCss ? {boxShadow: 'none !important'} : {}">
     <el-form :inline="true" size="mini" :model="formInline" class="form-inline">
       <el-form-item label="选择机构:" v-if="isOrg">
         <el-select class="font-style" @visible-change="changed" v-model="formInline.orgId" :disabled="disabled" placeholder="请选择" filterable>
@@ -206,6 +206,22 @@
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="开始日期:" v-if="isOnlyOneDay">
+        <el-date-picker
+          v-model="formInline.onlyStartTime"
+          :picker-options="pickerOptionsOnlyStartTime"
+          type="datetime"
+          placeholder="选择日期时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束日期:" v-if="isOnlyOneDay">
+        <el-date-picker
+          v-model="formInline.onlyEndTime"
+          :picker-options="pickerOptionsOnlyEndTime"
+          type="datetime"
+          placeholder="选择日期时间">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item label="选择日期:" v-if="isDate">
          <el-date-picker
           :picker-options="pickerOptionsDate"
@@ -408,6 +424,18 @@ export default {
     isDefault: {
       type: Boolean
     },
+    isDefaultBus: {
+      type: Boolean,
+      default: false
+    },
+    isOnlyOneDay: {
+      type: Boolean,
+      default: false
+    },
+    isDefaultCss: {
+      type: Boolean,
+      default: false
+    },
     queryData: {
       type: Object
     },
@@ -493,6 +521,18 @@ export default {
   },
   data () {
     return {
+      pickerOptionsOnlyStartTime: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() > endTime
+        }
+      },
+      pickerOptionsOnlyEndTime: {
+        disabledDate (time) {
+          const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
+          return time.getTime() !== endTime
+        }
+      },
       pickerOptionsDateTo: {
         disabledDate (time) {
           const endTime = moment(moment().format('YYYY-MM-DD')).valueOf()
@@ -598,6 +638,8 @@ export default {
         diffStandard: '15',
         startDate: moment(new Date() - 8 * 24000 * 3600).format('YYYY-MM-DD'),
         endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD'),
+        onlyStartTime: moment().format('YYYY-MM-DD 00:00:00'),
+        onlyEndTime: moment().format('YYYY-MM-DD 23:59:59'),
         devModel: '',
         isOnline: '1'
       },
@@ -744,6 +786,9 @@ export default {
       this.formInline.lineOrgId = this.queryData.company
       this.formInline.lineLineId = this.queryData.lineUuid + '+' + this.queryData.lineNumber
       this.formInline.lineType = this.queryData.arrow
+    }
+    if (this.isDefaultBus) {
+      this.formInline.busNumber = globelData.carData[0].value
     }
   },
   activated () {
@@ -965,7 +1010,20 @@ export default {
         }
         // if (date === moment().format()) {}
       }
+    },
+    'formInline.onlyStartTime': {
+      handler (newV) {
+        this.formInline.onlyEndTime = ''
+        this.pickerOptionsOnlyEndTime = {
+          disabledDate (time) {
+            const endTime = moment(newV).valueOf()
+            return time.getTime() !== endTime
+          }
+        }
+        this.formInline.onlyEndTime = moment(newV).format('YYYY-MM-DD 23:59:59')
+      }
     }
+    // isOnlyOneDay () {}
   },
   updated () {
   },
@@ -1076,7 +1134,9 @@ export default {
         endDate: this.formInline.endDate,
         dateQuick: this.formInline.dateQuick,
         devModel: this.formInline.devModel,
-        isOnline: this.formInline.isOnline
+        isOnline: this.formInline.isOnline,
+        onlyStartTime: this.formInline.onlyStartTime,
+        onlyEndTime: this.formInline.onlyEndTime
       }
       this.$emit('configCheck', configData)
     },
@@ -1123,7 +1183,9 @@ export default {
         endDate: moment(new Date() - 1 * 24000 * 3600).format('YYYY-MM-DD'),
         dateQuick: '',
         devModel: '',
-        isOnline: '1'
+        isOnline: '1',
+        onlyStartTime: moment().format('YYYY-MM-DD 00:00:00'),
+        onlyEndTime: moment().format('YYYY-MM-DD 23:59:59')
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -1162,7 +1224,9 @@ export default {
         endDate: this.formInline.endDate,
         dateQuick: this.formInline.dateQuick,
         devModel: this.formInline.devModel,
-        isOnline: this.formInline.isOnline
+        isOnline: this.formInline.isOnline,
+        onlyStartTime: this.formInline.onlyStartTime,
+        onlyEndTime: this.formInline.onlyEndTime
       }
       this.$emit('handlerClear')
       this.$emit('configCheck', configData)
@@ -1244,7 +1308,9 @@ export default {
         startDate: this.formInline.startDate,
         endDate: this.formInline.endDate,
         devModel: this.formInline.devModel,
-        isOnline: this.formInline.isOnline
+        isOnline: this.formInline.isOnline,
+        onlyStartTime: this.formInline.onlyStartTime,
+        onlyEndTime: this.formInline.onlyEndTime
       }
       this.$emit('configCheckMul', configData)
     },
