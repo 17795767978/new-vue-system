@@ -1,6 +1,6 @@
 <template>
   <div class="passenger-vol" ref="wrapper" v-loading="loading" >
-    <lineEcharts :id="type" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+    <lineEcharts :id="type" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" :dataZoom="dataZoom"></lineEcharts>
   </div>
 </template>
 
@@ -29,6 +29,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: 0,
+      dataZoom: [],
       grid: {},
       loading: true
     }
@@ -53,7 +54,6 @@ export default {
     selectData: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         this._getFatAlarmSpeedStatistic({
           busNumber: newV.busNumber,
           startTime: moment(newV.onlyStartTime).format('YYYY-MM-DD HH:mm:ss'),
@@ -130,6 +130,11 @@ export default {
         y2: 30,
         borderWidth: 1
       }
+      this.dataZoom = [{
+        startValue: ''
+      }, {
+        type: 'inside'
+      }]
       // this.maxNum = max(res.datas[0])
       this.dataLength = 2
       this.legend = {

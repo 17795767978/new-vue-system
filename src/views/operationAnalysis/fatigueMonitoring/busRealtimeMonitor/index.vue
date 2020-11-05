@@ -21,29 +21,29 @@
           <el-col :span="6" class="col">
             <i class="el-icon-coordinate" style="font-size: 1vw;"></i>
             <span style="font-size: .8vw; margin-left: .5vw;">电机1:</span>
-            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">{{busInfo.motor1Speed}}R转速</span>
+            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">状态-{{busInfo.electricalMachinery1State}} {{busInfo.motor1Speed}} r转速</span>
           </el-col>
           <el-col :span="6" class="col">
             <i class="el-icon-coordinate" style="font-size: 1vw;"></i>
             <span style="font-size: .8vw; margin-left: .5vw;">电机2:</span>
-            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">{{busInfo.motor2Speed}}R转速</span>
+            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">状态-{{busInfo.electricalMachinery2State}} {{busInfo.motor2Speed}} r转速</span>
           </el-col>
         </el-row>
         <el-row :gutter="24">
           <el-col :span="6" class="col">
             <i class="el-icon-s-ticket" style="font-size: 1vw;"></i>
             <span style="font-size: .8vw; margin-left: .5vw;">SOC:</span>
-            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">{{busInfo.soc}}</span>
+            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">{{busInfo.soc}}%</span>
           </el-col>
           <el-col :span="6" class="col">
             <i class="el-icon-wind-power" style="font-size: 1vw;"></i>
             <span style="font-size: .8vw; margin-left: .5vw;">车速:</span>
-            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">{{busInfo.carSpeed}} KM/H</span>
+            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">{{busInfo.carSpeed}} km/h</span>
           </el-col>
           <el-col :span="6" class="col">
             <i class="el-icon-help" style="font-size: 1vw;"></i>
             <span style="font-size: .8vw; margin-left: .5vw;">轮胎状况:</span>
-            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">(状态)-{{busInfo.tireStatus}}   (压力)-{{busInfo.tirePressure}}  (温度)-{{busInfo.tireTemperature}}</span>
+            <span style="font-size: .8vw; margin-left: .5vw; font-weight: bold;color: #409eff">状态-{{busInfo.tireStatus}}   压力-{{busInfo.tirePressure}}kpa  温度-{{busInfo.tireTemperature}}度</span>
           </el-col>
           <el-col :span="6" class="col">
             <i class="el-icon-warning-outline" style="font-size: 1vw;"></i>

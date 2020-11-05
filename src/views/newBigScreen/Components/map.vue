@@ -42,7 +42,7 @@
       <!-- 站点 -->
       <bm-marker
         v-for="marker in stationsDatas"
-        :key="marker.busId"
+        :key="marker.staUuid"
         :position="{lng: marker.lng, lat: marker.lat}"
         :title="`${marker.lineName}-${marker.staName}站`"
         :icon="getIconStation"
@@ -50,7 +50,7 @@
         :top="true"
         :zIndex="1000"
         >
-        <bm-label :content="''" @click="handleStationClick(marker)" :labelStyle="{padding: '3px 3px', backgroundColor: 'rgba(0,0,0,1)', border:`1.5px solid ${marker.color}`, borderRadius: '50%'}" :offset="{width: -5, height: -5}"/>
+        <bm-label :content="''" @click="handleStationClick(marker, stationsDatas)" :labelStyle="{padding: '3px 3px', backgroundColor: 'rgba(0,0,0,1)', border:`1.5px solid ${marker.color}`, borderRadius: '50%'}" :offset="{width: -5, height: -5}"/>
         <bm-label :content="`${marker.staName}`" v-if="marker.isSee" :labelStyle="{padding: '0px 0px', color: 'white', fontSize : '12px', backgroundColor: 'rgba(0,0,0,1)', border: 'hidden'}" :offset="{width: -3, height: 10}"/>
       </bm-marker>
       <!-- <bm-marker v-if="isSee" :position="{lng: details.stations[0].lng, lat: details.stations[0].lng}">
@@ -370,6 +370,7 @@ export default {
         } else {
           // this.markers = this.markersAll
           this.lineData = this.lineDataAll
+          this.stationsDatas = this.stationsDatasAll
           this.reconnectWs(`/topic/pos.base.*.*`)
         }
       }
@@ -547,7 +548,13 @@ export default {
         this.lineDataAll.forEach((item, index) => {
           item.stations.forEach(val => {
             if (val.mlStaUuid !== '-1') {
-              this.stationsDatasAll.push({ ...val, isSee: false, color: this.colors[index] })
+              // 判断是否线路不同站点重复的情况
+              if (!this.stationsDatasAll.some(key => key.staUuid === val.staUuid)) {
+                this.stationsDatasAll.push({ ...val, isSee: false, color: this.colors[index] })
+              } else {
+                val.staUuid = val.staUuid + Math.random().toString(36).substr(3, 30)
+                this.stationsDatasAll.push({ ...val, isSee: false, color: this.colors[index] })
+              }
             }
           })
         })
@@ -558,34 +565,9 @@ export default {
     getLine (item) {
       console.log(item)
     },
-    // ggg () {
-    //   // console.log(123)
-    //   console.log(this.stationsDatasAll)
-    //   const isClose = this.stationsDatasAll.some(item => item.isSee)
-    //   console.log(isClose)
-    //   if (!isClose) {
-    //     return
-    //   }
-    //   this.stationsDatasAll.forEach(item => {
-    //     item.isSee = false
-    //   })
-    // },
     getDetail (event, item) {
-      // console.log(point)
-      // console.log(item)
-      // console.log(e)
-      // console.log(item)
-      // console.log(e)
       this.currenPoint = event.point
       this.details = item
-      // // console.log(item)
-      // console.log(target)
-      // console.log(point)
-      // console.log(pixel)
-      // this.details = data
-      // return (item) => {
-      //   console.log(item)
-      // }
       this.isSee = true
     },
     clearDetail () {
@@ -660,8 +642,10 @@ export default {
     handleMarkerClick (marker) {
       Bus.$emit('handlerMarker', marker)
     },
-    handleStationClick (marker) {
-      this.stationsDatasAll.forEach((item) => {
+    handleStationClick (marker, data) {
+      console.log(marker)
+      console.log(data)
+      this.stationsDatas.forEach((item) => {
         if (item.staUuid === marker.staUuid) {
           item.isSee = true
         } else {

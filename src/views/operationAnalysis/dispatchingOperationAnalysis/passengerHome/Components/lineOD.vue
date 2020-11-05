@@ -13,7 +13,7 @@
     />
   </div>
   <div class="dom" ref="topWrapper">
-    <div class="passenger-vol" ref="wrapper" v-loading="loading">
+    <div class="passenger-voll" id="cssss" ref="wrapper" v-loading="loading">
     </div>
   </div>
 </div>
@@ -55,14 +55,14 @@ export default {
   mounted () {
     let listenResize = elementResizeDetector()
     listenResize.listenTo(this.$refs.topWrapper, (el) => {
-      this.$echarts.init(document.getElementsByClassName('passenger-vol')[0]).resize()
+      this.$echarts.init(document.getElementsByClassName('passenger-voll')[0]).resize()
     })
     setTimeout(() => {
       this._getPfODYCountListData({
         orgUuid: this.userId === '1' ? '' : this.userId,
         lineUuid: this.lineId === '' ? this.formData.lineId : this.lineId,
         lineType: this.formData.lineType,
-        uploadDate: moment(this.formData.dateYes).format('YYYY-MM-DD')
+        uploadDate: moment().format('YYYY-MM-DD')
       })
     }, 500)
   },
@@ -87,11 +87,11 @@ export default {
         orgUuid: data.orgId,
         lineUuid: data.lineId,
         lineType: data.lineType,
-        uploadDate: data
+        uploadDate: moment(data.dataCurrent).format('YYYY-MM-DD')
       })
     },
     drawLine () {
-      let charts = this.$echarts.init(document.getElementsByClassName('passenger-vol')[0])
+      let charts = this.$echarts.init(document.getElementsByClassName('passenger-voll')[0])
       charts.off('click')
       window.addEventListener('resize', () => { charts.resize() })
       charts.setOption({
@@ -125,7 +125,7 @@ export default {
         },
         series: [{
           type: 'graph',
-          top: 670,
+          top: '90%',
           layout: 'none',
           symbol: 'circle',
           color: '#7c79fc',
@@ -172,7 +172,6 @@ export default {
           res.nodes.forEach((item, index) => {
             this.lineStations.push({
               'name': item.upStaSequence + item.upStaName,
-              // 'squence': item.upStaSequence,
               'y': 50,
               'x': 400 + index * 200
             })
@@ -188,7 +187,7 @@ export default {
               'target': item.downStaSequence + item.downStaName,
               'lineStyle': {
                 'normal': {
-                  'width': 0.1 * item.payNumbers * 3,
+                  'width': 0.1 * item.payNumbers,
                   'curveness': 0.9,
                   'color': (() => {
                     if (item.payNumbers < 10) {
@@ -246,7 +245,7 @@ export default {
     width: 100%;
     box-sizing: border-box;
     height: 75%;
-    .passenger-vol {
+    .passenger-voll {
       width:100%;
       box-sizing: border-box;
       height: 100%;

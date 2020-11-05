@@ -19,7 +19,7 @@ export default {
       xData: [],
       yData: [],
       maxNum: 0,
-      id: 'vol',
+      id: 'volTo',
       grid: {},
       loading: true,
       tooltip: {}

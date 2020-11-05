@@ -186,6 +186,15 @@ export const passengerFlowApi = {
       params: {
       },
       desc: '历史回放'
+    },
+    {
+      name: 'getLineOdCountListData',
+      method: 'POST',
+      path: '/pf/lineod/getLineOdCountListData',
+      mockPath: '/pf/lineod/getLineOdCountListData',
+      params: {
+      },
+      desc: '线路od'
     }
   ]
 }

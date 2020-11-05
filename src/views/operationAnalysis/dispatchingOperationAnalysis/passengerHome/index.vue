@@ -8,9 +8,9 @@
         <passengerVol />
       </div>
       <div class="left-bottom-wrapper">
-        <div class="title">客流热力图</div>
+        <div class="title">线路OD图</div>
         <div class="map">
-          <passengerHotmap />
+          <LineOD />
         </div>
       </div>
       <div class="right-bottom-wrapper">
@@ -71,7 +71,8 @@
 <script type="text/ecmascript-6">
 import totalData from './Components/totalData.vue'
 import passengerVol from './Components/passengerVol.vue'
-import passengerHotmap from './Components/passengerHotmap.vue'
+// import passengerHotmap from './Components/passengerHotmap.vue'
+import LineOD from './Components/lineOD.vue'
 import stationEcharts from './Components/stationEcharts.vue'
 import lineEchartsTop from './Components/lineEchartsTop.vue'
 import monthEcharts from './Components/month.vue'
@@ -157,7 +158,8 @@ export default {
   components: {
     totalData,
     passengerVol,
-    passengerHotmap,
+    // passengerHotmap,
+    LineOD,
     stationEcharts,
     lineEchartsTop,
     monthEcharts
