@@ -585,7 +585,7 @@ export const aysncRoutesMap = [
     meta: {
       title: '系统管理',
       icon: 'nocturne icon-dash',
-      roles: ['/channel-management', '/params-configuration', '/device-snap-management', '/alarm-management', '/msgsend-tempmaintain']
+      roles: ['/channel-management', '/params-configuration', '/device-snap-management', '/alarm-management', '/msgsend-tempmaintain', '/alarm-type-settings']
     },
     children: [
       {
@@ -658,6 +658,16 @@ export const aysncRoutesMap = [
           title: '设备参数下发详情',
           icon: 'nocturne icon-dash',
           roles: ['/device-parameter']
+        }
+      },
+      {
+        path: 'alarm-type-settings',
+        component: _import_('systemAdmin/alarmTypeSettings/index'),
+        name: 'alarmTypeSettings',
+        meta: {
+          title: '报警等级设置',
+          icon: 'nocturne icon-dash'
+          // roles: ['/device-parameter']
         }
       }
     ]

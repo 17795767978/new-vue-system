@@ -579,6 +579,35 @@ export const tiredMonitoringApi = {
         busUuid: ''
       },
       desc: '语音详情'
+    },
+    {
+      name: 'getAlarmTypesDetail',
+      method: 'POST',
+      path: '/warntype/warnTypePage/getAlarmTypes',
+      mockPath: '/warntype/warnTypePage/getAlarmTypes',
+      params: {
+      },
+      desc: '报警设置详情'
+    },
+    // /api/alarm/type/add
+    {
+      name: 'addAlarmTypesDetail',
+      method: 'POST',
+      path: '/api/alarm/type/add',
+      mockPath: '/api/alarm/type/add',
+      params: {
+      },
+      desc: '保存报警设置'
+    },
+    // /api/alarm/type/delete
+    {
+      name: 'deleteAlarmTypesDetail',
+      method: 'POST',
+      path: '/api/alarm/type/delete',
+      mockPath: '/api/alarm/type/delete',
+      params: {
+      },
+      desc: '删除报警设置'
     }
   ]
 }
