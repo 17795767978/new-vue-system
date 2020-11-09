@@ -480,6 +480,17 @@ export const aysncRoutesMap = [
             // roles: ['/device-status']
             roles: ['/bus-realtime-monitor']
           }
+        },
+        {
+          path: 'bus-realtime-traffic-data',
+          component: _import_('operationAnalysis/fatigueMonitoring/busRealtimeTrafficData/index'),
+          name: 'busRealtimeTrafficData',
+          meta: {
+            title: '行车数据实时监控',
+            icon: 'nocturne icon-dash',
+            // roles: ['/device-status']
+            roles: ['/bus-realtime-monitor']
+          }
         }
       ]
     }
