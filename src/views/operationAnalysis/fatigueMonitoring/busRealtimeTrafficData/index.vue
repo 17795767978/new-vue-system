@@ -198,7 +198,7 @@
         </div>
       </div>
       <div class="wrapper-bottom">
-
+        <tab-view/>
       </div>
     </div>
   </div>
@@ -212,6 +212,7 @@ import VolCurrchart from './components/volCurrChart'
 import ColumnChart from './components/columnChart'
 import InfoPanel from './components/infoPanel'
 import TyreInfo from './components/tyreInfo'
+import TabView from './tabView/index'
 export default {
   name: 'busRealtimeTrafficData',
   components: {
@@ -222,7 +223,8 @@ export default {
     VolCurrchart,
     ColumnChart,
     InfoPanel,
-    TyreInfo
+    TyreInfo,
+    TabView
   },
   mounted () {
     this.$refs.carSpeedChart.drawChart(44)
