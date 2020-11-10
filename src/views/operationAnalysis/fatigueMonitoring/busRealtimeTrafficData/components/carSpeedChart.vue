@@ -65,7 +65,7 @@ export default {
           name: '正常数',
           type: 'gauge',
           center: this.center,
-          radius: '100%',
+          radius: '120%',
           min: this.rang[0], // 最小刻度
           max: this.rang[1], // 最大刻度
           startAngle: 220,
@@ -94,7 +94,7 @@ export default {
           },
           axisLabel: {
             show: true,
-            color: '#FFFFFF'
+            color: '#8391B7'
           },
           axisTick: {
             show: false

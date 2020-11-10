@@ -63,7 +63,7 @@ export default {
     width: 6px;
     height: 20px;
     margin-left: 2px;
-    border-radius: 2px;
+    border-radius: 1px;
     vertical-align: middle;
   }
   .progressNum {

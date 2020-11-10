@@ -25,14 +25,14 @@
                   text: '车速 km/h',
                   pos: ['54%', '36%']
                 }"
-                :center="['66%', '55%']"
+                :center="['60%', '60%']"
                 :titleNoRich="false"
                 :rang="[0, 160]"
               />
             </div>
             <div class="progress1">
               <progress-bar
-                style="margin-left: 100px;"
+                style="margin-left: 20%;margin-top: 10px;"
                 :dataNum="30"
               />
               <span style="
@@ -46,6 +46,7 @@
           <div class="middle-item middle-item-center">
             <indi-light
               style="margin-top: 40px;"/>
+            <equipment-status/>
           </div>
           <div class="middle-item">
             <div class="middle-item-chart">
@@ -54,9 +55,9 @@
                 id="chart2"
                 :title="{
                   text: '转速 r/min',
-                  pos: ['20%', '36%']
+                  pos: ['26%', '36%']
                 }"
-                :center="['36%', '55%']"
+                :center="['40%', '60%']"
                 :titleNoRich="true"
                 :rang="[0, 120]"
               />
@@ -65,6 +66,7 @@
             <span class="progress2">
               <div>
                 <progress-bar
+                  style="margin-top: 10px;"
                   :dataNum="70"
                   :boxNum="[20, 40, 60, 80, 100]"
                   dataColor="#9E53DD"
@@ -78,6 +80,7 @@
                 </div>
                 <div>
                   <progress-bar
+                    style="margin-top: 10px;"
                     :dataNum="60"
                     :boxNum="[20, 40, 60, 80, 100]"
                     dataColor="#2FCD6C"
@@ -94,7 +97,100 @@
           </div>
         </div>
         <div class="wrapper-top-bottom">
-
+          <div class="wrapper-top-bottom-left">
+            <div class="v-chart">
+              <vol-currchart
+                id="vchart"
+                ref="vchartRef"
+                :center="['58%', '50%']"
+                title="电池总电流 /A"
+                :titlePos="['34%', '16%']"
+              />
+            </div>
+            <div class="a-chart">
+              <vol-currchart
+                id="achart"
+                ref="achartRef"
+                :rang="[-500, 500]"
+                :center="['50%', '50%']"
+                title="电池总电压 /V"
+                :bgColor="['#FFEB65', '#394936']"
+                :titlePos="['28%', '16%']"
+              />
+            </div>
+          </div>
+          <div class="wrapper-top-bottom-center">
+            <div>
+              <column-chart
+                :val="20"
+                unit="℃"
+                label="车内温度"
+                style="margin-left: 12px;"
+              />
+            </div>
+            <div>
+              <column-chart
+                :val="86"
+                :bgColor="['#2FCD6C', '#0F4337']"
+                unit="%"
+                label="SOC"
+              />
+            </div>
+            <div>
+              <info-panel
+                style="margin-top: 20px;"
+              />
+            </div>
+            <div>
+              <column-chart
+                :val="46"
+                unit="℃"
+                label="电池最高温"
+                :bgColor="['#36DCF5', '#104653']"
+                style="margin-left: 12px;"
+              />
+            </div>
+            <div>
+              <column-chart
+                :val="23"
+                :bgColor="['#F8DC59', '#374633']"
+                label="电池最低温"
+                unit="℃"
+              />
+            </div>
+          </div>
+          <div class="wrapper-top-bottom-right">
+            <div>
+              <div>
+                <tyre-info
+                  className="bgIcon-2"
+                />
+              </div>
+              <div>
+                <tyre-info
+                  style="margin-left: -80px;"
+                  className="bgIcon-4"
+                  title="前轮2"
+                />
+              </div>
+            </div>
+            <div>
+              <div>
+                <tyre-info
+                  style="margin-top: -30px;"
+                  className="bgIcon-1"
+                  title="后轮1"
+                />
+              </div>
+              <div>
+                <tyre-info
+                  style="margin-top: -30px;margin-left: -80px;"
+                  className="bgIcon-3"
+                  title="后轮2"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="wrapper-bottom">
@@ -107,17 +203,28 @@
 import CarSpeed from './components/carSpeedChart'
 import ProgressBar from './components/progressBar'
 import IndiLight from './components/indiLight'
+import EquipmentStatus from './components/equipmentStatus'
+import VolCurrchart from './components/volCurrChart'
+import ColumnChart from './components/columnChart'
+import InfoPanel from './components/infoPanel'
+import TyreInfo from './components/tyreInfo'
 export default {
   name: 'busRealtimeTrafficData',
   components: {
     CarSpeed,
     ProgressBar,
-    IndiLight
+    IndiLight,
+    EquipmentStatus,
+    VolCurrchart,
+    ColumnChart,
+    InfoPanel,
+    TyreInfo
   },
   mounted () {
     this.$refs.carSpeedChart.drawChart(44)
     this.$refs.carRollSpeedChart.drawChart(56)
-
+    this.$refs.vchartRef.drawChart(525.6)
+    this.$refs.achartRef.drawChart(-321)
   }
 }
 </script>
@@ -144,13 +251,15 @@ export default {
     display: flex;
     flex-direction: column;
     min-width: 1100px;
+    max-width: 1300px;
+    width: 90%;
   }
   .wrapper-top {
     // flex: 2;
-    min-height: 460px;
+    min-height: 520px;
     background-image: url('./assets/topBg.png');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
     display: flex;
     flex-direction: column;
   }
@@ -162,12 +271,14 @@ export default {
     display: flex;
     flex-direction: row;
     >div{
-      color: #FFFFFF;
+      color: #D5D6D7;
       flex: 1;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
+      font-family: PingFang SC;
+      font-weight: 400;
       span {
         margin-top: 10px;
       }
@@ -206,7 +317,7 @@ export default {
     .middle-item {
       flex: 1;
       .middle-item-chart {
-        height: 80%;
+        height: 70%;
       }
     }
     .middle-item-center {
@@ -219,7 +330,48 @@ export default {
     }
   }
   .wrapper-top-bottom {
-    flex: 3;
+    flex: 3.6;
+    display: flex;
+    flex-direction: row;
+  }
+  .wrapper-top-bottom-left {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+  }
+  .wrapper-top-bottom-left>div {
+    flex: 1;
+  }
+  .wrapper-top-bottom-center {
+    flex: 1.4;
+    display: flex;
+    flex-direction: row;
+  }
+  .wrapper-top-bottom-center>div {
+    &:nth-child(1),&:nth-child(2),&:nth-child(4),&:nth-child(5) {
+      flex: 1;
+    }
+    &:nth-child(3) {
+      flex: 3;
+    }
+  }
+  .wrapper-top-bottom-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    >div {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      >div {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+    }
   }
   .progress1 {
     display: flex;
@@ -234,5 +386,8 @@ export default {
   }
   .progress2>div {
     margin-left: 20px;
+  }
+  .progress2>div:nth-child(1) {
+    margin-left: 56px;
   }
 </style>
