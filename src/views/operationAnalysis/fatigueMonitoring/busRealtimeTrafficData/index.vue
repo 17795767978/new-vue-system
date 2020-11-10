@@ -4,7 +4,7 @@
       <div class="wrapper-top">
         <div class="wrapper-top-top">
           <div>
-            <span>京BZ000001</span>
+            <span>闽SZ2231</span>
           </div>
           <div>
             <span>P</span>
@@ -13,7 +13,11 @@
             <span>D</span>
             <span>S</span>
           </div>
-          <div>起点</div>
+          <div>
+            <span style="margin-left: 40px;">起点</span>
+            <span class="kaiwang-icon"></span>
+            <span>终点</span>
+          </div>
         </div>
         <div class="wrapper-top-middle">
           <div class="middle-item">
@@ -281,6 +285,8 @@ export default {
       font-weight: 400;
       span {
         margin-top: 10px;
+        color: #A5A9AB;
+        margin-left: 12px;
       }
     }
     >div:nth-child(1) {
@@ -389,5 +395,13 @@ export default {
   }
   .progress2>div:nth-child(1) {
     margin-left: 56px;
+  }
+  .kaiwang-icon {
+    display: inline-block;
+    width: 36px;
+    height: 16px;
+    margin-bottom: 12px;
+    background-image: url('./assets/kaiwang.png');
+    background-size: 100% 100%;
   }
 </style>
