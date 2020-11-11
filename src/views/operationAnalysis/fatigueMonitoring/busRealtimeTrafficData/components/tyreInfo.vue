@@ -20,23 +20,23 @@ export default {
       type: String,
       default: 'bgIcon-1'
     },
-    tyreData: {
-      type: Object,
-      default: () => {
-        return {
-          'pressure': 0,
-          'temperature': 0
-        }
-      }
-    },
     title: {
       type: String,
       default: '前轮1'
     }
   },
+  methods: {
+    setData (arg1 = 0, arg2 = 0) {
+      this.$set(this.tyreData, 'pressure', arg1)
+      this.$set(this.tyreData, 'temperature', arg2)
+    }
+  },
   data () {
     return {
-
+      tyreData: {
+        'pressure': 0,
+        'temperature': 0
+      }
     }
   }
 }

@@ -11,9 +11,11 @@
       <div>
         <div class="dateView">
           <el-date-picker
-            size="small"
-            v-model="monData"
+            v-model="dateVal"
             type="date"
+            size="small"
+            value-format="yyyy-MM-dd"
+            :picker-options="pickerOptions"
             placeholder="选择日期">
           </el-date-picker>
         </div>
@@ -30,20 +32,76 @@
           </el-time-picker>
         </div>
         <div class="searchView">
-          <el-button size="small" :round="false">查询</el-button>
+          <el-button size="small" :round="false" @click="search">查询</el-button>
           <el-button size="small" :round="false">重置</el-button>
         </div>
       </div>
     </div>
+    <div class="carousel-container">
+      <el-carousel @change="change" ref="carousel" height="200px" :autoplay="false" :initial-index="initialIndex" indicator-position="none" arrow="nerver">
+        <el-carousel-item name="0">
+          <Echart :type="'SOC'" :selectData="selectData"/>
+        </el-carousel-item>
+        <el-carousel-item name="1">
+          <Echart :type="'SPEED'" :selectData="selectData"/>
+        </el-carousel-item>
+        <el-carousel-item name="2">
+          <Echart :type="'SOTORSPEED'" :selectData="selectData"/>
+        </el-carousel-item>
+        <el-carousel-item name="3">
+          4
+        </el-carousel-item>
+        <el-carousel-item name="4">
+          5
+        </el-carousel-item>
+      </el-carousel>
+    </div>
   </div>
 </template>
 <script>
+import Echart from './components/echarts'
+import moment from 'moment'
 export default {
+  components: {
+    Echart
+  },
+  methods: {
+    search () {
+      if (this.dateVal && this.times) {
+        this.selectData = {
+          'busNumber': this.busNumber,
+          'onlyStartTime': `${this.dateVal} ${this.times[0]}`,
+          'onlyEndTime': `${this.dateVal} ${this.times[1]}`
+        }
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择查询条件'
+        })
+      }
+    },
+    change (val) {
+      this.tabSelect = String(val)
+    }
+  },
+  watch: {
+    tabSelect (newVal) {
+      this.$refs.carousel.setActiveItem(newVal)
+    }
+  },
   data () {
     return {
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
+        }
+      },
+      initialIndex: 0,
       tabSelect: '0',
-      monData: '',
-      times: ['00:00:00', '23:00:00']
+      dateVal: moment().format('YYYY-MM-DD'),
+      times: ['00:00:00', '23:00:00'],
+      busNumber: '冀F08089D',
+      selectData: {} // 每一项的查询条件
     }
   }
 }
@@ -94,7 +152,7 @@ export default {
     border: 0;
   }
   .tab-view .tab-view-nav .el-date-editor.el-input, .el-date-editor.el-input__inner {
-    width: 120px;
+    width: 130px;
     border: 0;
   }
   .tab-view .tab-view-nav .timerView .el-date-editor.el-input, .tab-view .tab-view-nav .timerView .el-date-editor.el-input__inner {

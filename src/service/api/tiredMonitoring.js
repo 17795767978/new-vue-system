@@ -584,6 +584,15 @@ export const tiredMonitoringApi = {
       params: {
       },
       desc: 'SOC历史趋势'
+    },
+    {
+      name: 'motor1Speed',
+      method: 'POST',
+      path: '/api/can/motor1Speed',
+      mockPath: '/api/can/motor1Speed',
+      params: {
+      },
+      desc: 'SOC历史趋势'
     }
   ]
 }

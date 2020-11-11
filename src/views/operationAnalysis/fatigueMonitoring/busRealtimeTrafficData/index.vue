@@ -37,7 +37,7 @@
             <div class="progress1">
               <progress-bar
                 style="margin-left: 20%;margin-top: 10px;"
-                :dataNum="30"
+                :dataNum="electricityQuantity"
               />
               <span style="
                 margin-left: 70px;
@@ -50,7 +50,10 @@
           <div class="middle-item middle-item-center">
             <indi-light
               style="margin-top: 40px;"/>
-            <equipment-status/>
+            <equipment-status
+              :loopSpeed="loopSpeed"
+              ref="equipmentStatus"
+            />
           </div>
           <div class="middle-item">
             <div class="middle-item-chart">
@@ -71,7 +74,7 @@
               <div>
                 <progress-bar
                   style="margin-top: 10px;"
-                  :dataNum="70"
+                  :dataNum="brakPedal"
                   :boxNum="[20, 40, 60, 80, 100]"
                   dataColor="#9E53DD"
                   noDataColor="#252A4E"
@@ -85,7 +88,7 @@
                 <div>
                   <progress-bar
                     style="margin-top: 10px;"
-                    :dataNum="60"
+                    :dataNum="tractionPedal"
                     :boxNum="[20, 40, 60, 80, 100]"
                     dataColor="#2FCD6C"
                     noDataColor="#0F4337"
@@ -126,7 +129,7 @@
           <div class="wrapper-top-bottom-center">
             <div>
               <column-chart
-                :val="20"
+                :val="inCarTemperature"
                 unit="℃"
                 label="车内温度"
                 style="margin-left: 12px;"
@@ -134,7 +137,7 @@
             </div>
             <div>
               <column-chart
-                :val="86"
+                :val="socNum"
                 :bgColor="['#2FCD6C', '#0F4337']"
                 unit="%"
                 label="SOC"
@@ -147,7 +150,7 @@
             </div>
             <div>
               <column-chart
-                :val="46"
+                :val="batteryTemperatureMax"
                 unit="℃"
                 label="电池最高温"
                 :bgColor="['#36DCF5', '#104653']"
@@ -156,7 +159,7 @@
             </div>
             <div>
               <column-chart
-                :val="23"
+                :val="batteryTemperatureMin"
                 :bgColor="['#F8DC59', '#374633']"
                 label="电池最低温"
                 unit="℃"
@@ -167,11 +170,13 @@
             <div>
               <div>
                 <tyre-info
+                  ref="fortWhell1"
                   className="bgIcon-2"
                 />
               </div>
               <div>
                 <tyre-info
+                  ref="fortWhell2"
                   style="margin-left: -80px;"
                   className="bgIcon-4"
                   title="前轮2"
@@ -181,6 +186,7 @@
             <div>
               <div>
                 <tyre-info
+                  ref="rearWhell1"
                   style="margin-top: -30px;"
                   className="bgIcon-1"
                   title="后轮1"
@@ -188,6 +194,7 @@
               </div>
               <div>
                 <tyre-info
+                  ref="rearWhell2"
                   style="margin-top: -30px;margin-left: -80px;"
                   className="bgIcon-3"
                   title="后轮2"
@@ -213,6 +220,7 @@ import ColumnChart from './components/columnChart'
 import InfoPanel from './components/infoPanel'
 import TyreInfo from './components/tyreInfo'
 import TabView from './tabView/index'
+import { WSAPISEC } from '@/config/settings'
 export default {
   name: 'busRealtimeTrafficData',
   components: {
@@ -227,17 +235,69 @@ export default {
     TabView
   },
   mounted () {
-    this.$refs.carSpeedChart.drawChart(44)
-    this.$refs.carRollSpeedChart.drawChart(56)
-    this.$refs.vchartRef.drawChart(525.6)
-    this.$refs.achartRef.drawChart(-321)
+    const bus = this.$store.state.globel.carData[0].value
+    // 初始化仪表盘数据
+    this.initData()
+    // connect ws
+    this.initWebSocket(bus)
+  },
+  methods: {
+    initData () {
+      // 初始化仪表盘
+      this.$refs.carSpeedChart.drawChart(0)
+      this.$refs.carRollSpeedChart.drawChart(0)
+      this.$refs.vchartRef.drawChart(0)
+      this.$refs.achartRef.drawChart(0)
+      // 初始化轮胎
+      this.$refs.fortWhell1.setData(0, 0)
+      this.$refs.fortWhell2.setData(0, 0)
+      this.$refs.rearWhell1.setData(0, 0)
+      this.$refs.rearWhell2.setData(0, 0)
+      // 初始化设备状态 arg1: id arg2: statusCode
+      this.$refs.equipmentStatus.setData(0, 0)
+      this.$refs.equipmentStatus.setData(1, 0)
+      this.$refs.equipmentStatus.setData(2, 0)
+    },
+    initWebSocket (bus) {
+      if ('WebSocket' in window) {
+        let url = WSAPISEC + '/' + bus
+        this.ws = new WebSocket(url)
+        this.ws.onopen = () => {
+          console.log('===============推送开始=============')
+          // Web Socket 已连接上，使用 send() 方法发送数据
+          this.ws.send('发送数据')
+        }
+        this.ws.onmessage = (evt) => {
+          let data = JSON.parse(evt.data)
+          this.updata(data)
+        }
+      } else {
+        this.$message.error('浏览器不支持websocket')
+      }
+    },
+    /* 更新数据 */
+    updata (data) {
+      console.log(data)
+    }
+  },
+  data () {
+    return {
+      'electricityQuantity': 0, // 剩余电量
+      'brakPedal': 0, // 制动踏板
+      'tractionPedal': 0, // 牵引踏板
+      'inCarTemperature': 0, // 车内温度
+      'socNum': 0, // SOC
+      'batteryTemperatureMax': 0, // 电池最高温
+      'batteryTemperatureMin': 0, // 电池最低温
+      'loopSpeed': 0 // 电机转速
+    }
   }
 }
 </script>
 <style scoped lang="scss">
   .wrapper {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     background-color: #010B0E;
     display: flex;
     flex-direction: row;

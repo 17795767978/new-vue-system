@@ -25,22 +25,29 @@ export default {
       }
     }
   },
+  methods: {
+    setData (id, status) {
+      let data = this.equipmentData[id]
+      data['status'] = status
+      this.$set(this.equipmentData, id, data)
+    }
+  },
   data () {
     return {
       equipmentData: [
         {
           name: '驱动系统状态',
-          id: 1,
+          id: 0,
           status: 0 // -1 红色 0 黄色 1 绿色
         },
         {
           name: '充电状态',
-          id: 2,
+          id: 1,
           status: 0
         },
         {
           name: '电机状态',
-          id: 3,
+          id: 2,
           status: 1
         }
       ]
