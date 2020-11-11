@@ -1,11 +1,10 @@
 <template>
-  <div class="passenger-vol" ref="wrapper" v-loading="loading" >
+  <div class="passenger-vol" ref="wrapper" v-loading="loading">
     <lineEcharts :id="type" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid" :dataZoom="dataZoom"></lineEcharts>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import moment from 'moment'
 // import { max } from '../../../../../utils/max.js'
 import lineEcharts from '@/components/echarts/brokenLineDiagram'
 import { mapGetters } from 'vuex'
@@ -38,62 +37,15 @@ export default {
     ...mapGetters(['formData', 'userId'])
   },
   created () {
-    let startTime = moment().format('YYYY-MM-DD 00:00:00')
-    let endTime = moment().format('YYYY-MM-DD 23:59:59')
-    this._getFatAlarmSpeedStatistic({
-      busNumber: this.$store.state.globel.carData[0].value,
-      startTime,
-      endTime,
-      isHistory: false
-    }, this.type)
+
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
   },
   watch: {
-    selectData: {
-      deep: true,
-      handler (newV) {
-        this._getFatAlarmSpeedStatistic({
-          busNumber: newV.busNumber,
-          startTime: moment(newV.onlyStartTime).format('YYYY-MM-DD HH:mm:ss'),
-          endTime: moment(newV.onlyEndTime).format('YYYY-MM-DD HH:mm:ss'),
-          isHistory: moment(newV.onlyStartTime).format('YYYY-MM-DD') !== moment().format('YYYY-MM-DD')
-          // isHistory: true
-        }, this.type)
-      }
-    }
+
   },
   methods: {
-    _getFatAlarmSpeedStatistic (params, type) {
-      this.loading = true
-      if (type === 'SPEED') {
-        this.$api['tiredMonitoring.carSpeedEcharts'](params).then(res => {
-          this.loading = false
-          this.initCharts(res)
-        }).catch(err => {
-          this.loading = false
-          this.$message.error(err.message)
-        })
-      } if (type === 'SOTORSPEED') {
-        // 转速
-        this.$api['tiredMonitoring.motor1Speed'](params).then(res => {
-          this.loading = false
-          this.initCharts(res)
-        }).catch(err => {
-          this.loading = false
-          this.$message.error(err.message)
-        })
-      } else {
-        this.$api['tiredMonitoring.socEcharts'](params).then(res => {
-          this.loading = false
-          this.initCharts(res)
-        }).catch(err => {
-          this.loading = false
-          this.$message.error(err.message)
-        })
-      }
-    },
     initCharts (res) {
       this.lineData = [{
         name: (this.type === 'SOC' && '电池包(SOC)') || (this.type === 'SOTORSPEED' && '转速') || '车速',

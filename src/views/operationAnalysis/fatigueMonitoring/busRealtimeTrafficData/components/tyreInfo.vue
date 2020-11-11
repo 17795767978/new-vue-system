@@ -2,12 +2,12 @@
   <div class="tyre-info">
     <div :class="className">{{title}}</div>
     <div>
-      <div>
-        <span>压力:</span>
+      <div style="width: 80px;">
+        <span style="display: inline-block;width: 28px">压力:</span>
         <span>{{tyreData.pressure}}</span>
       </div>
-      <div>
-        <span>温度:</span>
+      <div style="width: 80px;">
+        <span style="display: inline-block;width: 28px">温度:</span>
         <span>{{tyreData.temperature}}℃</span>
       </div>
     </div>
@@ -27,8 +27,12 @@ export default {
   },
   methods: {
     setData (arg1 = 0, arg2 = 0) {
-      this.$set(this.tyreData, 'pressure', arg1)
-      this.$set(this.tyreData, 'temperature', arg2)
+      if (arg1 !== null) {
+        this.$set(this.tyreData, 'pressure', arg1)
+      }
+      if (arg2 !== null) {
+        this.$set(this.tyreData, 'temperature', arg2)
+      }
     }
   },
   data () {

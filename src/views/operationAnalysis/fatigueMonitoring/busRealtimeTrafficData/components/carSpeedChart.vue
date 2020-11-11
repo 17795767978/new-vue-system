@@ -35,7 +35,7 @@ export default {
       this.charts.setOption({
         title: {
           text: this.title.text,
-          subtext: this.titleNoRich ? '  ' + normal : normal + ' {subtext|/限55}',
+          subtext: this.titleNoRich ? '' + normal : normal + ' {subtext|/限55}',
           left: this.title.pos[0],
           top: this.title.pos[1],
           textStyle: {

@@ -33,20 +33,20 @@
         </div>
         <div class="searchView">
           <el-button size="small" :round="false" @click="search">查询</el-button>
-          <el-button size="small" :round="false">重置</el-button>
+          <el-button size="small" :round="false" @click="reset">重置</el-button>
         </div>
       </div>
     </div>
     <div class="carousel-container">
       <el-carousel @change="change" ref="carousel" height="200px" :autoplay="false" :initial-index="initialIndex" indicator-position="none" arrow="nerver">
         <el-carousel-item name="0">
-          <Echart :type="'SOC'" :selectData="selectData"/>
+          <Echart :type="'SOC'" ref="SOC"/>
         </el-carousel-item>
         <el-carousel-item name="1">
-          <Echart :type="'SPEED'" :selectData="selectData"/>
+          <Echart :type="'SPEED'" ref="SPEED"/>
         </el-carousel-item>
         <el-carousel-item name="2">
-          <Echart :type="'SOTORSPEED'" :selectData="selectData"/>
+          <Echart :type="'SOTORSPEED'" ref="SOTORSPEED"/>
         </el-carousel-item>
         <el-carousel-item name="3">
           4
@@ -62,32 +62,84 @@
 import Echart from './components/echarts'
 import moment from 'moment'
 export default {
+  props: {
+    busNumberProp: String
+  },
   components: {
     Echart
   },
   methods: {
-    search () {
+    reset () {
+      this.dateVal = moment().format('YYYY-MM-DD')
+      this.times = ['00:00:00', '23:59:59']
+      this.search()
+    },
+    search (showAlerm = true) {
       if (this.dateVal && this.times) {
-        this.selectData = {
+        const selectData = this.selectData = {
           'busNumber': this.busNumber,
           'onlyStartTime': `${this.dateVal} ${this.times[0]}`,
           'onlyEndTime': `${this.dateVal} ${this.times[1]}`
         }
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择查询条件'
+        this._getFatAlarmSpeedStatistic({
+          busNumber: selectData.busNumber,
+          startTime: moment(selectData.onlyStartTime).format('YYYY-MM-DD HH:mm:ss'),
+          endTime: moment(selectData.onlyEndTime).format('YYYY-MM-DD HH:mm:ss'),
+          isHistory: moment(selectData.onlyStartTime).format('YYYY-MM-DD') !== moment().format('YYYY-MM-DD')
         })
+      } else {
+        if (showAlerm) {
+          this.$message({
+            type: 'error',
+            message: '请选择查询条件'
+          })
+        }
       }
     },
     change (val) {
       this.tabSelect = String(val)
+    },
+    _getFatAlarmSpeedStatistic (params) {
+      this.$refs.SPEED.loading = true
+      this.$refs.SOC.loading = true
+      this.$refs.SOTORSPEED.loading = true
+      // SPEED
+      this.$api['tiredMonitoring.carSpeedEcharts'](params).then(res => {
+        this.$refs.SPEED.initCharts(res)
+        this.$refs.SPEED.loading = false
+      }).catch(err => {
+        this.$message.error(err.message)
+        this.$refs.SPEED.loading = false
+      })
+      // SOC
+      this.$api['tiredMonitoring.socEcharts'](params).then(res => {
+        this.$refs.SOC.initCharts(res)
+        this.$refs.SOC.loading = false
+      }).catch(err => {
+        this.$message.error(err.message)
+        this.$refs.SOC.loading = false
+      })
+      // SOTORSPEED
+      this.$api['tiredMonitoring.motor1Speed'](params).then(res => {
+        this.$refs.SOTORSPEED.initCharts(res)
+        this.$refs.SOTORSPEED.loading = false
+      }).catch(err => {
+        this.$message.error(err.message)
+        this.$refs.SOTORSPEED.loading = false
+      })
     }
   },
   watch: {
     tabSelect (newVal) {
       this.$refs.carousel.setActiveItem(newVal)
+    },
+    busNumberProp (newVal) {
+      this.busNumber = newVal
+      this.search(false)
     }
+  },
+  mounted () {
+    this.search()
   },
   data () {
     return {
@@ -99,7 +151,7 @@ export default {
       initialIndex: 0,
       tabSelect: '0',
       dateVal: moment().format('YYYY-MM-DD'),
-      times: ['00:00:00', '23:00:00'],
+      times: ['00:00:00', '23:59:59'],
       busNumber: '冀F08089D',
       selectData: {} // 每一项的查询条件
     }
@@ -164,5 +216,8 @@ export default {
     background-color: transparent;
     border: 0;
     color: #ffffff;
+  }
+  .tab-view .el-loading-mask {
+    background-color: transparent;
   }
 </style>

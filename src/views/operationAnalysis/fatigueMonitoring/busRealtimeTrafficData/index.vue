@@ -4,7 +4,18 @@
       <div class="wrapper-top">
         <div class="wrapper-top-top">
           <div>
-            <span>闽SZ2231</span>
+            <span class="busNumberCon">
+              <div class="selectBusNumber">
+                <el-select filterable size="small" v-model="busNumber" placeholder="请选择" @visible-change="focusSelect" @change="changeBusNumber">
+                  <el-option
+                    v-for="(item, index) in busNumberOptions"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+            </span>
           </div>
           <div>
             <span>P</span>
@@ -14,9 +25,9 @@
             <span>S</span>
           </div>
           <div>
-            <span style="margin-left: 40px;">起点</span>
+            <span style="margin-left: 40px;">{{startStation}}</span>
             <span class="kaiwang-icon"></span>
-            <span>终点</span>
+            <span>{{endStation}}</span>
           </div>
         </div>
         <div class="wrapper-top-middle">
@@ -27,7 +38,7 @@
                 id="chart1"
                 :title="{
                   text: '车速 km/h',
-                  pos: ['54%', '36%']
+                  pos: ['48%', '36%']
                 }"
                 :center="['60%', '60%']"
                 :titleNoRich="false"
@@ -49,6 +60,7 @@
           </div>
           <div class="middle-item middle-item-center">
             <indi-light
+              ref="indiLight"
               style="margin-top: 40px;"/>
             <equipment-status
               :loopSpeed="loopSpeed"
@@ -62,7 +74,7 @@
                 id="chart2"
                 :title="{
                   text: '转速 r/min',
-                  pos: ['26%', '36%']
+                  pos: ['28%', '36%']
                 }"
                 :center="['40%', '60%']"
                 :titleNoRich="true"
@@ -146,6 +158,7 @@
             <div>
               <info-panel
                 style="margin-top: 20px;"
+                ref="infoPanel"
               />
             </div>
             <div>
@@ -205,7 +218,7 @@
         </div>
       </div>
       <div class="wrapper-bottom">
-        <tab-view/>
+        <tab-view :busNumberProp="busNumber"/>
       </div>
     </div>
   </div>
@@ -235,7 +248,8 @@ export default {
     TabView
   },
   mounted () {
-    const bus = this.$store.state.globel.carData[0].value
+    const bus = this.busNumber = this.$store.state.globel.carData[0].value
+    this.busNumberOptions = this.$store.state.globel.carData
     // 初始化仪表盘数据
     this.initData()
     // connect ws
@@ -248,6 +262,10 @@ export default {
       this.$refs.carRollSpeedChart.drawChart(0)
       this.$refs.vchartRef.drawChart(0)
       this.$refs.achartRef.drawChart(0)
+      // 初始化小图标
+      for (let i = 0; i < 20; i++) {
+        this.$refs.indiLight.setData(i, -1)
+      }
       // 初始化轮胎
       this.$refs.fortWhell1.setData(0, 0)
       this.$refs.fortWhell2.setData(0, 0)
@@ -256,7 +274,24 @@ export default {
       // 初始化设备状态 arg1: id arg2: statusCode
       this.$refs.equipmentStatus.setData(0, 0)
       this.$refs.equipmentStatus.setData(1, 0)
-      this.$refs.equipmentStatus.setData(2, 0)
+      this.$refs.equipmentStatus.setData(2, 4)
+      // 初始化底部信息框数据 infoPanel arg1: id arg2: val
+      this.$refs.infoPanel.setData(0, '0 度')
+      this.$refs.infoPanel.setData(1, '0 度')
+      this.$refs.infoPanel.setData(2, '0 KM')
+      this.$refs.infoPanel.setData(3, '0')
+      this.$refs.infoPanel.setData(4, '0 度')
+      // 其它参数
+      this.electricityQuantity = 0 // 剩余电量
+      this.brakPedal = 0 // 制动踏板
+      this.tractionPedal = 0 // 牵引踏板
+      this.inCarTemperature = 0 // 车内温度
+      this.socNum = 0 // SOC
+      this.batteryTemperatureMax = 0 // 电池最高温
+      this.batteryTemperatureMin = 0 // 电池最低温
+      this.loopSpeed = 0 // 电机转速
+      this.startStation = '起点站'
+      this.endStation = '终点站'
     },
     initWebSocket (bus) {
       if ('WebSocket' in window) {
@@ -277,11 +312,148 @@ export default {
     },
     /* 更新数据 */
     updata (data) {
-      console.log(data)
-    }
+      // 赋值车速
+      if ('carSpeed' in data) { this.$refs.carSpeedChart.drawChart(data.carSpeed) }
+      // 充电状态
+      if ('chargingStatus' in data) {
+        const chargingStatus = (data['chargingStatus'] === '未充电' && 0) || (data['chargingStatus'] === '充电中' && 2) || (data['chargingStatus'] === '充电完成' && 1) || '充电故障'
+        this.$refs.equipmentStatus.setData(1, chargingStatus)
+      }
+      // 充电枪连接灯
+      if ('dcChargingGunConnectionStatus' in data) {
+        const typeName = data['dcChargingGunConnectionStatus']
+        let statusCode = -1
+        switch (typeName) {
+          case '未连接':
+            statusCode = -1
+            break
+          case '单枪连接':
+            statusCode = 1
+            break
+          case '双枪连接':
+            statusCode = 2
+            break
+          default:
+            statusCode = 0
+            break
+        }
+        this.$refs.indiLight.setData(14, statusCode, typeName)
+      }
+      // 电机状态
+      if ('electricalMachinery1State' in data) {
+        const electricalMachinery1StateName = data['electricalMachinery1State']
+        let electricalMachinery1State = 4
+        switch (electricalMachinery1StateName) {
+          case '耗电':
+            electricalMachinery1State = 1
+            break
+          case '发电':
+            electricalMachinery1State = 2
+            break
+          case '关闭':
+            electricalMachinery1State = 3
+            break
+          case '准备':
+            electricalMachinery1State = 4
+            break
+          case '异常':
+            electricalMachinery1State = 14
+            break
+          case '无效':
+            electricalMachinery1State = 15
+            break
+          default:
+            break
+        }
+        this.$refs.equipmentStatus.setData(2, electricalMachinery1State)
+      }
+      // 前轮1轮胎压力
+      if ('fwoTirePressure' in data) {
+        const fwoTirePressure = data['fwoTirePressure']
+        this.$refs.fortWhell1.setData(fwoTirePressure, null)
+      }
+      // 前轮1轮胎温度
+      if ('fwoTireTemperature' in data) {
+        const fwoTireTemperature = data['fwoTireTemperature']
+        this.$refs.fortWhell1.setData(null, fwoTireTemperature)
+      }
+      // 前轮2压力
+      if ('fwtTirePressure' in data) {
+        const fwtTirePressure = data['fwtTirePressure']
+        this.$refs.fortWhell2.setData(fwtTirePressure, null)
+      }
+      // 前轮2温度
+      if ('fwtTireTemperature' in data) {
+        const fwtTireTemperature = data['fwtTireTemperature']
+        this.$refs.fortWhell2.setData(null, fwtTireTemperature)
+      }
+      // 后轮1轮胎压力
+      if ('rwoTirePressure' in data) {
+        const rwoTirePressure = data['rwoTirePressure']
+        this.$refs.rearWhell1.setData(rwoTirePressure, null)
+      }
+      // 后轮1轮胎温度
+      if ('rwoTireTemperature' in data) {
+        const rwoTireTemperature = data['rwoTireTemperature']
+        this.$refs.rearWhell1.setData(null, rwoTireTemperature)
+      }
+      // 后轮2压力
+      if ('rwtTirePressure' in data) {
+        const rwtTirePressure = data['rwtTirePressure']
+        this.$refs.rearWhell2.setData(rwtTirePressure, null)
+      }
+      // 后轮2温度
+      if ('rwtTireTemperature' in data) {
+        const rwtTireTemperature = data['rwtTireTemperature']
+        this.$refs.rearWhell2.setData(null, rwtTireTemperature)
+      }
+      // 电机转速
+      if ('motor1Speed' in data) {
+        const motor1Speed = data['motor1Speed']
+        this.loopSpeed = motor1Speed
+        this.$refs.carRollSpeedChart.drawChart(motor1Speed)
+      }
+      // soc
+      if ('soc' in data) {
+        const soc = data['soc']
+        this.socNum = soc
+      }
+      // 起点站、终点站
+      if ('startStation' in data) {
+        this.startStation = data['startStation']
+      }
+      if ('endStation' in data) {
+        this.endStation = data['endStation']
+      }
+    },
+    closeWs () {
+      this.ws.close()
+      this.ws = null
+      console.log('===============推送关闭=============')
+    },
+    changeBusNumber (val) {
+      this.busNumber = val
+      this.closeWs()
+      this.initData()
+      this.initWebSocket(val)
+    },
+    focusSelect (flag) {
+      // if (flag) {
+      //   this.$nextTick(() => {
+      //     const dropdown = document.getElementsByClassName('el-select-dropdown')[0]
+      //     dropdown.classList.add('addSelectStyle')
+      //   })
+      // }
+    },
+    blurSelect () {}
   },
   data () {
     return {
+      'ws': null,
+      'busNumberOptions': [],
+      'busNumber': '',
+      'startStation': '起点站',
+      'endStation': '终点站',
       'electricityQuantity': 0, // 剩余电量
       'brakPedal': 0, // 制动踏板
       'tractionPedal': 0, // 牵引踏板
@@ -297,17 +469,18 @@ export default {
 <style scoped lang="scss">
   .wrapper {
     width: 100%;
-    // height: 100%;
+    height: 100%;
     background-color: #010B0E;
     display: flex;
     flex-direction: row;
     justify-content: center;
     overflow: auto;
     overflow-x: auto;
-    padding-top: 16px;
+    // padding-top: 16px;
     // align-items: center;
   }
   .wrapper-content {
+    margin-top: 16px;
     // width: calc(100% - 80px);
     // height: calc(100% - 20px);
     // min-width: 800px;
@@ -465,5 +638,62 @@ export default {
     margin-bottom: 12px;
     background-image: url('./assets/kaiwang.png');
     background-size: 100% 100%;
+  }
+  .busNumberCon {
+    cursor: pointer;
+  }
+  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+  ::-webkit-scrollbar{
+    width: 7px;
+    height: 7px;
+    background-color: #F5F5F5;
+  }
+
+  /*定义滚动条轨道 内阴影+圆角*/
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+  }
+
+  /*定义滑块 内阴影+圆角*/
+  ::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
+    background-color: #c8c8c8;
+  }
+</style>
+<style>
+  .addSelectStyle {
+    background-image: url('./assets/dateInputBg.png');
+    background-size: 100% 100%;
+    background-color: transparent;
+    border: 0;
+    color: #ffffff;
+  }
+  .addSelectStyle .popper__arrow::after {
+    border-bottom-color: #06498e !important;
+    top: 1px;
+    margin-left: -6px;
+    border-top-width: 0;
+  }
+  .addSelectStyle .el-select-dropdown__item.hover, .addSelectStyle .el-select-dropdown__item:hover {
+    background-color: #348ae1;
+    color: #fff;
+  }
+  .selectBusNumber .el-select {
+    background-image: url('./assets/dateInputBg.png');
+    background-size: 100% 100%;
+    background-color: transparent;
+    border: 0;
+    color: #ffffff;
+    width: 130px;
+  }
+  .selectBusNumber .el-input--small .el-input__inner {
+    background-color: transparent;
+    border: 0;
+    font-size: 16px;
   }
 </style>

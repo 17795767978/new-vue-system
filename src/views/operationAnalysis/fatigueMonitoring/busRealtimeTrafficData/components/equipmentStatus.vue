@@ -3,9 +3,17 @@
     <ul>
       <li v-for="item in equipmentData" :key="item.id">
         <span>{{item.name}}</span>
-        <span>
-          <span :class="item.status === -1 ? 'error' : item.status === 0 ? 'stand' : 'normal'"></span>
-          <span class="statusMsg">{{(item.status === -1 && '异常') || (item.status === 0 && '待机') || '正常'}}</span>
+        <span v-if="item.id === 0">
+          <span :class="item.status === -1 ? 'error' : item.status === 0 ? 'stand' : item.status === 2 ? 'loading' : 'normal'"></span>
+          <span class="statusMsg">{{(item.status === -1 && '故障') || (item.status === 0 && '待机') || (item.status === 2 && '充电') || '完成'}}</span>
+        </span>
+        <span v-if="item.id === 1">
+          <span :class="item.status === -1 ? 'error' : item.status === 0 ? 'stand' : item.status === 2 ? 'loading' : 'normal'"></span>
+          <span class="statusMsg">{{(item.status === -1 && '故障') || (item.status === 0 && '待机') || (item.status === 2 && '充电') || '完成'}}</span>
+        </span>
+        <span v-if="item.id === 2">
+          <span :class="(item.status === 1 && 'normal') || (item.status === 2 && 'loading') || (item.status === 3 && 'stand') || (item.status === 4 && 'stand') || (item.status === 14 && 'error') || 'error'"></span>
+          <span class="statusMsg">{{(item.status === 1 && '耗电') || (item.status === 2 && '发电') || (item.status === 3 && '关闭') || (item.status === 4 && '准备') || (item.status === 14 && '异常') || '无效'}}</span>
         </span>
       </li>
       <li>
@@ -38,7 +46,7 @@ export default {
         {
           name: '驱动系统状态',
           id: 0,
-          status: 0 // -1 红色 0 黄色 1 绿色
+          status: 0 // -1 红色 0 黄色 1 绿色 2 充电中
         },
         {
           name: '充电状态',
@@ -103,6 +111,38 @@ export default {
     background-color: #2FCD6C;
     vertical-align: middle;
     margin-right: 6px;
+  }
+  .loading {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #2FCD6C;
+    vertical-align: middle;
+    margin-right: 6px;
+    -webkit-animation: myAnimation 1s infinite;
+    animation: myAnimation 1s infinite
+  }
+  @-webkit-keyframes myAnimation {
+    0% {
+      opacity: 0;
+      filter: alpha(opacity=0)
+    }
+    100% {
+      opacity: 1;
+      filter: alpha(opacity=100)
+    }
+  }
+
+  @keyframes myAnimation {
+    0% {
+      opacity: 0;
+      filter: alpha(opacity=0)
+    }
+    100% {
+      opacity: 1;
+      filter: alpha(opacity=100)
+    }
   }
   .statusMsg {
     vertical-align: middle;

@@ -10,24 +10,36 @@
 </template>
 <script>
 export default {
+  methods: {
+    setData (id = 0, val = '0 度') {
+      let data = this.infoData[id]
+      data['val'] = val
+      this.$set(this.infoData, id, data)
+    }
+  },
   data () {
     return {
       infoData: [
         {
           'name': '瞬间电耗',
-          'val': '0.15 度'
+          'val': '0.15 度',
+          'id': 0
         }, {
           'name': '平均电耗',
-          'val': '0.14 度'
+          'val': '0.14 度',
+          'id': 1
         }, {
           'name': '小计历程',
-          'val': '0 KM'
+          'val': '0 KM',
+          'id': 2
         }, {
           'name': '总里程',
-          'val': '88764.70'
+          'val': '88764.70',
+          'id': 3
         }, {
           'name': '总电耗',
-          'val': '553307.12 度'
+          'val': '553307.12 度',
+          'id': 4
         }
       ]
     }
