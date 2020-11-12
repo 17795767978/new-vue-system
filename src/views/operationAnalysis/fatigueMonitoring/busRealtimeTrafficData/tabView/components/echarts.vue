@@ -66,7 +66,7 @@ export default {
       }
       this.$set(this.title, 'show', this.showTitle)
       this.lineData = [{
-        name: (this.type === 'SOC' && '电池包(SOC)') || (this.type === 'SOTORSPEED' && '转速') || (this.type === 'ELECTRIC_CURRENT' && '电流')|| (this.type === 'VOLTAGE' && '电压') || '车速',
+        name: (this.type === 'SOC' && '电池包(SOC)') || (this.type === 'SOTORSPEED' && '转速') || (this.type === 'ELECTRIC_CURRENT' && '电流') || (this.type === 'VOLTAGE' && '电压') || '车速',
         type: 'line',
         lineStyle: {
           width: 3

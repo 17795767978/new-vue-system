@@ -409,14 +409,14 @@ export default {
       }
       // 电机转速
       if ('motor1Speed' in data) {
-        const motor1Speed = data['motor1Speed']
+        const motor1Speed = Number(data['motor1Speed'])
         this.loopSpeed = motor1Speed
         this.$refs.carRollSpeedChart.drawChart(motor1Speed)
       }
       // soc
       if ('soc' in data) {
         const soc = data['soc']
-        this.socNum = soc
+        this.socNum = Number(soc)
       }
       // 起点站、终点站
       if ('startStation' in data) {

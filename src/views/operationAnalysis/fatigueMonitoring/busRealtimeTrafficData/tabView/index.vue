@@ -133,11 +133,23 @@ export default {
         this.$refs.SOTORSPEED.loading = false
       })
       // ELECTRIC_CURRENT
-      this.$refs.ELECTRIC_CURRENT.initCharts({ datas: [] })
-      this.$refs.ELECTRIC_CURRENT.loading = false
+      this.$api['tiredMonitoring.electricCurrent'](params).then(res => {
+        this.$refs.ELECTRIC_CURRENT.initCharts(res)
+        this.$refs.ELECTRIC_CURRENT.loading = false
+      }).catch(err => {
+        this.$message.error(err.message)
+        this.$refs.ELECTRIC_CURRENT.initCharts({ datas: [] })
+        this.$refs.ELECTRIC_CURRENT.loading = false
+      })
       // VOLTAGE
-      this.$refs.VOLTAGE.initCharts({ datas: [] })
-      this.$refs.VOLTAGE.loading = false
+      this.$api['tiredMonitoring.voltage'](params).then(res => {
+        this.$refs.VOLTAGE.initCharts(res)
+        this.$refs.VOLTAGE.loading = false
+      }).catch(err => {
+        this.$message.error(err.message)
+        this.$refs.VOLTAGE.initCharts({ datas: [] })
+        this.$refs.VOLTAGE.loading = false
+      })
     }
   },
   watch: {

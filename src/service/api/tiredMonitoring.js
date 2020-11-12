@@ -593,6 +593,24 @@ export const tiredMonitoringApi = {
       params: {
       },
       desc: 'SOC历史趋势'
+    },
+    {
+      name: 'electricCurrent',
+      method: 'POST',
+      path: '/api/can/electricCurrent',
+      mockPath: '/api/can/electricCurrent',
+      params: {
+      },
+      desc: '电流趋势'
+    },
+    {
+      name: 'voltage',
+      method: 'POST',
+      path: '/api/can/voltage',
+      mockPath: '/api/can/voltage',
+      params: {
+      },
+      desc: '电压趋势'
     }
   ]
 }
