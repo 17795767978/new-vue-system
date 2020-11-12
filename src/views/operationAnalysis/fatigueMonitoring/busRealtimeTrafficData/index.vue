@@ -6,7 +6,7 @@
           <div>
             <span class="busNumberCon">
               <div class="selectBusNumber">
-                <el-select filterable size="small" v-model="busNumber" placeholder="请选择" @visible-change="focusSelect" @change="changeBusNumber">
+                <el-select popper-class="addSelectStyle" filterable size="small" v-model="busNumber" placeholder="请选择" @visible-change="focusSelect" @change="changeBusNumber">
                   <el-option
                     v-for="(item, index) in busNumberOptions"
                     :key="index"
@@ -78,7 +78,7 @@
                 }"
                 :center="['40%', '60%']"
                 :titleNoRich="true"
-                :rang="[0, 120]"
+                :rang="[0, 5000]"
               />
             </div>
             <div>
@@ -667,7 +667,7 @@ export default {
 </style>
 <style>
   .addSelectStyle {
-    background-image: url('./assets/dateInputBg.png');
+    background-image: url('./assets/dropDownBg.png');
     background-size: 100% 100%;
     background-color: transparent;
     border: 0;
@@ -678,6 +678,9 @@ export default {
     top: 1px;
     margin-left: -6px;
     border-top-width: 0;
+  }
+  .addSelectStyle .popper__arrow {
+    border-bottom-color: #0c7af6!important;
   }
   .addSelectStyle .el-select-dropdown__item.hover, .addSelectStyle .el-select-dropdown__item:hover {
     background-color: #348ae1;

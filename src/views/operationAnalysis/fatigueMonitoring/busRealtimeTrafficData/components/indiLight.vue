@@ -34,7 +34,7 @@ export default {
         return require(`../assets/${index}_green.png`)
       }
       if (item.status === 2) {
-        return require(`../assets/${index}_green.png`)
+        return require(`../assets/${index}_green_2.png`)
       }
     },
     formatData (data) {

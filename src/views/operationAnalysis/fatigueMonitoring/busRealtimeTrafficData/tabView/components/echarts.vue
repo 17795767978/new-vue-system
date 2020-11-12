@@ -30,7 +30,8 @@ export default {
       maxNum: 0,
       dataZoom: [],
       grid: {},
-      loading: true
+      loading: true,
+      showTitle: true
     }
   },
   computed: {
@@ -41,14 +42,31 @@ export default {
   },
   mounted () {
     // console.log(this.$refs.wrapper.style)
+    this.title = {
+      show: this.showTitle, // 是否显示title
+      text: '暂无数据',
+      left: 'center',
+      top: 'center',
+      textStyle: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 400
+      }
+    }
   },
   watch: {
 
   },
   methods: {
     initCharts (res) {
+      if (res.datas.length === 0) {
+        this.showTitle = true
+      } else {
+        this.showTitle = false
+      }
+      this.$set(this.title, 'show', this.showTitle)
       this.lineData = [{
-        name: (this.type === 'SOC' && '电池包(SOC)') || (this.type === 'SOTORSPEED' && '转速') || '车速',
+        name: (this.type === 'SOC' && '电池包(SOC)') || (this.type === 'SOTORSPEED' && '转速') || (this.type === 'ELECTRIC_CURRENT' && '电流')|| (this.type === 'VOLTAGE' && '电压') || '车速',
         type: 'line',
         lineStyle: {
           width: 3

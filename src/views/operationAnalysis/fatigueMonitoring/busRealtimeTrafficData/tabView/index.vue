@@ -11,6 +11,7 @@
       <div>
         <div class="dateView">
           <el-date-picker
+            popper-class="tabViewDateDownBox"
             v-model="dateVal"
             type="date"
             size="small"
@@ -21,6 +22,7 @@
         </div>
         <div class="dateView timerView">
           <el-time-picker
+            popper-class="tabViewTimeDownBox"
             is-range
             value-format="HH:mm:ss"
             v-model="times"
@@ -49,10 +51,10 @@
           <Echart :type="'SOTORSPEED'" ref="SOTORSPEED"/>
         </el-carousel-item>
         <el-carousel-item name="3">
-          4
+          <Echart :type="'ELECTRIC_CURRENT'" ref="ELECTRIC_CURRENT"/>
         </el-carousel-item>
         <el-carousel-item name="4">
-          5
+          <Echart :type="'VOLTAGE'" ref="VOLTAGE"/>
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -108,6 +110,7 @@ export default {
         this.$refs.SPEED.initCharts(res)
         this.$refs.SPEED.loading = false
       }).catch(err => {
+        this.$refs.SPEED.initCharts({ datas: [] })
         this.$message.error(err.message)
         this.$refs.SPEED.loading = false
       })
@@ -116,6 +119,7 @@ export default {
         this.$refs.SOC.initCharts(res)
         this.$refs.SOC.loading = false
       }).catch(err => {
+        this.$refs.SOC.initCharts({ datas: [] })
         this.$message.error(err.message)
         this.$refs.SOC.loading = false
       })
@@ -124,9 +128,16 @@ export default {
         this.$refs.SOTORSPEED.initCharts(res)
         this.$refs.SOTORSPEED.loading = false
       }).catch(err => {
+        this.$refs.SOTORSPEED.initCharts({ datas: [] })
         this.$message.error(err.message)
         this.$refs.SOTORSPEED.loading = false
       })
+      // ELECTRIC_CURRENT
+      this.$refs.ELECTRIC_CURRENT.initCharts({ datas: [] })
+      this.$refs.ELECTRIC_CURRENT.loading = false
+      // VOLTAGE
+      this.$refs.VOLTAGE.initCharts({ datas: [] })
+      this.$refs.VOLTAGE.loading = false
     }
   },
   watch: {
@@ -219,5 +230,61 @@ export default {
   }
   .tab-view .el-loading-mask {
     background-color: transparent;
+  }
+  /* 日期选择下拉框 */
+  .tabViewDateDownBox {
+    background-image: url('../assets/dropDownBg.png');
+    background-size: 100% 100%;
+    background-color: transparent;
+    border: 0;
+    color: #ffffff;
+  }
+  .tabViewDateDownBox .el-picker-panel__icon-btn {
+    color: #0c7af6;
+  }
+  .tabViewDateDownBox .el-date-table td.disabled div {
+    background-color: #022438;
+    color: #3f5565;
+  }
+  .el-popper[x-placement^=top].tabViewDateDownBox .popper__arrow::after {
+    border-top-color: #0c7af6;
+  }
+  .el-popper[x-placement^=top].tabViewDateDownBox .popper__arrow {
+    border-top-color: #0c7af6;
+  }
+  /* 时间选择下拉框 */
+  .tabViewTimeDownBox {
+    background-image: url('../assets/dropDownBg.png');
+    background-size: 100% 100%;
+    background-color: transparent;
+    border: 0;
+    color: #ffffff;
+  }
+  .tabViewTimeDownBox .el-time-spinner__item.active:not(.disabled) {
+    color: #348ae1;
+  }
+  .tabViewTimeDownBox .el-time-spinner__item.disabled {
+    color: #3f5565;
+  }
+  .tabViewTimeDownBox .el-time-spinner__item {
+    color: #b4b9c2;
+  }
+  .tabViewTimeDownBox .el-time-spinner__item:hover:not(.disabled):not(.active) {
+    background: #3185d8
+  }
+  .tabViewTimeDownBox .el-time-range-picker__body {
+    border: 1px solid #0a6edd;
+  }
+  .tabViewTimeDownBox .el-time-panel__footer {
+    border-top: 1px solid #0a6edd;
+  }
+  .tabViewTimeDownBox .el-time-panel__btn.cancel {
+    color: #2c4351;
+  }
+  .el-popper[x-placement^=top].tabViewTimeDownBox .popper__arrow::after {
+    border-top-color: #0c7af6;
+  }
+  .el-popper[x-placement^=top].tabViewTimeDownBox .popper__arrow {
+    border-top-color: #0c7af6;
   }
 </style>
