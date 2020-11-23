@@ -403,7 +403,7 @@ export default {
       this.warnData = []
       this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
       this.isLoading = true
-      const { busId,
+      const { busUuid,
         busNumber,
         drvName,
         drvIccard,
@@ -418,7 +418,7 @@ export default {
         warnDeviceCode,
         busVideoOrder } = marker
       this.$api['homeTired.getVideoMsg']({
-        busId,
+        busId: busUuid,
         busNumber,
         samplingTime,
         busSelfcode,
