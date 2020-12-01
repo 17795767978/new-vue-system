@@ -217,7 +217,7 @@ import Subscribe from '../utils/ws.js'
 // const COLOR = ['#f00', '#f0f', '#0ff', '#00f', '#0f0', '#ff0']
 const TIME = 3 * 1000
 // const URL = 'http://121.30.214.187:12056/api/v1/basic/' // 大同
-const URL = 'http://117.34.118.30:12056/api/v1/basic/'
+const URL = 'http://203.110.221.216:12056/api/v1/basic/'
 export default {
   props: {
     isHotMap: {
@@ -535,7 +535,6 @@ export default {
         // this.lineData = res
         this.lineData = []
         this.lineDataAll = []
-        console.log(res)
         for (let item in res) {
           this.lineDataAll.push({
             lineName: res[item][0].lineName,
@@ -643,8 +642,6 @@ export default {
       Bus.$emit('handlerMarker', marker)
     },
     handleStationClick (marker, data) {
-      console.log(marker)
-      console.log(data)
       this.stationsDatas.forEach((item) => {
         if (item.staUuid === marker.staUuid) {
           item.isSee = true

@@ -82,7 +82,7 @@
             </div>
             <div class="bottom-message">
               <!-- <span class="left">舒适度： 拥挤</span> -->
-              <span class="middle">速度：{{carDetailData.positionSpeed}}KM/H</span>
+              <span class="middle">速度：{{carDetailData.warnSpeed}}KM/H</span>
               <!-- <span class="middle">车号：EF0128</span> -->
               <span class="right">时间：{{carDetailData.samplingTime}}</span>
               <!-- <span class="right">时间：2019-8-14 10:13:27</span> -->
@@ -115,7 +115,7 @@ import moment from 'moment'
 import Bus from './bus'
 const TIME = 3 * 60 * 1000
 // const URL = 'http://121.30.214.187:12056/api/v1/basic/' // 大同
-const URL = 'http://117.34.118.30:12056/api/v1/basic/'
+const URL = 'http://203.110.221.216:12056/api/v1/basic/'
 export default {
   props: {
     isHotMap: {
@@ -403,35 +403,38 @@ export default {
       this.warnData = []
       this.title = `${marker.lineName}-${marker.busNumber}-车辆详情`
       this.isLoading = true
+      console.log(marker)
       const { busUuid,
         busNumber,
-        drvName,
-        drvIccard,
-        samplingTime,
-        busSelfcode,
-        warnSpeed,
+        driverName,
+        driverUuid,
+        uploadTime,
+        busSelfCode,
+        busSpeed,
         orgName,
         lineName,
         lineType,
         positionSpeed,
         currenttrip,
         warnDeviceCode,
+        lineGroupUuid,
         busVideoOrder } = marker
       this.$api['homeTired.getVideoMsg']({
         busId: busUuid,
         busNumber,
-        samplingTime,
-        busSelfcode,
-        warnSpeed,
+        samplingTime: uploadTime,
+        busSelfcode: busSelfCode,
+        warnSpeed: busSpeed,
         orgName,
         lineName,
         lineType,
-        drvName,
-        drvIccard,
+        drvName: driverName,
+        driverUuid,
         positionSpeed,
         currenttrip,
         warnDeviceCode,
-        busVideoOrder
+        busVideoOrder,
+        lineId: lineGroupUuid
       }).then(res => {
         this.carDetailData = res
         this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')

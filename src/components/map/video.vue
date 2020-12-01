@@ -46,7 +46,6 @@ export default {
     item: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         if (this.item.warnType && this.item.warnType.length > 0) {
           if (!this.item.warnMediaList) {
             this.$message.error(`${this.item.warnTypeName}暂无视频`)
@@ -90,8 +89,8 @@ export default {
 
         this.player.on('error', () => {
           this.$message({
-            message: `视频播放出错`,
-            type: 'error'
+            message: `当前网络较差`,
+            type: 'warning'
           })
           this.player.pause()
           this.player.unload()
