@@ -11,7 +11,7 @@
 
 <script>
 import { max } from '../../../../utils/max.js'
-const TIME = 3 * 60 * 1000
+const TIME = 30 * 1000
 export default {
   props: {
     height: {
