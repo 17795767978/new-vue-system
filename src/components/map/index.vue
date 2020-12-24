@@ -10,9 +10,8 @@
       :scroll-wheel-zoom="true"
       @ready="handler"
       v-loading="loading"
-      element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.5)"
+      element-loading-background="rgba(0, 0, 0, 0.2)"
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
@@ -48,17 +47,17 @@
       </bm-control>
        <!-- 线路 -->
       <bm-polyline
-        v-for="(item, index) in lineData"
+        v-for="item in lineData"
         :key="item.lineUuid"
         :path="item.stations"
-        :stroke-color="colors[index]"
-        :stroke-opacity="0.7"
-        :stroke-weight="2"
+        :stroke-color="item.color"
+        :stroke-opacity="1"
+        :stroke-weight="2.2"
         :editing="false"
         @lineupdate="updatePolylinePath">
       </bm-polyline>
       <!-- 站点 -->
-      <bm-marker
+      <!-- <bm-marker
         v-for="marker in stationsDatas"
         :key="marker.staUuid"
         :position="{lng: marker.lng, lat: marker.lat}"
@@ -70,7 +69,7 @@
         >
         <bm-label :content="''" @click="handleStationClick(marker, stationsDatas)" :labelStyle="{padding: '3px 3px', backgroundColor: 'rgba(0,0,0,1)', border:`1px solid ${marker.color}`, borderRadius: '50%'}" :offset="{width: -5, height: -5}"/>
         <bm-label :content="`${marker.staName}`" v-if="marker.isSee" :labelStyle="{padding: '0px 0px', color: 'white', fontSize : '12px', backgroundColor: 'rgba(0,0,0,1)', border: 'hidden'}" :offset="{width: -3, height: 10}"/>
-      </bm-marker>
+      </bm-marker> -->
     </baidu-map>
     <div style="position: absolute; right: 2vw; bottom: 2vh;z-index: 1000" v-if="isSelect">
         <button v-for="(item, index) in buttonGroup" @click="getMapType(index)" :class="currentIndexMap === index ? 'active' : ''" class="primary" :key="index">{{item}}</button>
@@ -181,14 +180,15 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { BaiduMap, BmMarker, BmlHeatmap, BmControl, BmPolyline, BmLabel } from 'vue-baidu-map'
+// BmLabel
+import { BaiduMap, BmMarker, BmlHeatmap, BmControl, BmPolyline } from 'vue-baidu-map'
 import { mapStyle } from './utils/mapStyle'
-import iconCarRed from '../../assets/images/bus-red.png'
-import iconCarGreen from '../../assets/images/bus-green.png'
+import iconCarRed from '../../assets/images/bus_orange.png'
+import iconCarGreen from '../../assets/images/bus_green.png'
 import videoWrapper from './video'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-const TIME = 1 * 60 * 1000
+const TIME = 30 * 1000
 // const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
 const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
 export default {
@@ -249,7 +249,7 @@ export default {
       carDetailData: {},
       key: '',
       urlList: [],
-      colors: ['#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#11e692', '#07999c', '#FFB6C1', '#DC143C', '#191970', '#1E90FF', '#5F9EA0', '#7FFFAA', '#2E8B57', '#808000', '#FFD700', '#FF8C00', '#8B4513', '#696969'],
+      colors: ['#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#800080', '#07999c', '#FFB6C1', '#DC143C', '#191970', '#1E90FF', '#5F9EA0', '#800000', '#2E8B57', '#808000', '#FFD700', '#FF8C00', '#8B4513', '#696969'],
       lineDataAll: [],
       lineData: [],
       stationsDatas: [],
@@ -263,8 +263,8 @@ export default {
     // BmlMarkerClusterer,
     BmControl,
     videoWrapper,
-    BmPolyline,
-    BmLabel
+    BmPolyline
+    // BmLabel
   },
   beforeCreate () {
   },
@@ -303,9 +303,9 @@ export default {
     getIcon () {
       return function (marker) {
         if (marker.warnInfo) {
-          return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
+          return { url: `${iconCarRed}`, size: { width: 15, height: 14 } }
         } else {
-          return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
+          return { url: `${iconCarGreen}`, size: { width: 17, height: 17 } }
         }
       }
     },
@@ -321,7 +321,7 @@ export default {
         if (newV !== 'all') {
           this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
           this.lineData = Object.prototype.toString.call(this.lineDataAll) === '[object Array]' && this.lineDataAll.filter(item => item.lineUuid === newV)
-          this.stationsDatas = Object.prototype.toString.call(this.stationsDatasAll) === '[object Array]' && this.stationsDatasAll.filter(item => item.lineUuid === newV)
+          // this.stationsDatas = Object.prototype.toString.call(this.stationsDatasAll) === '[object Array]' && this.stationsDatasAll.filter(item => item.lineUuid === newV)
         } else {
           this.loading = true
           setTimeout(() => {
@@ -329,7 +329,7 @@ export default {
           }, 100)
           setTimeout(() => {
             this.lineData = this.lineDataAll
-            this.stationsDatas = this.stationsDatasAll
+            // this.stationsDatas = this.stationsDatasAll
             this.loading = false
           }, 1000)
         }
@@ -441,21 +441,11 @@ export default {
         }
         // console.log(this.lineDataAll)
         this.lineDataAll.forEach((item, index) => {
-          item.stations.forEach(val => {
-            if (val.mlStaUuid !== '-1') {
-              // 判断是否线路不同站点重复的情况
-              if (!this.stationsDatasAll.some(key => key.staUuid === val.staUuid)) {
-                this.stationsDatasAll.push({ ...val, isSee: false, color: this.colors[index] })
-              } else {
-                val.staUuid = val.staUuid + Math.random().toString(36).substr(3, 30)
-                this.stationsDatasAll.push({ ...val, isSee: false, color: this.colors[index] })
-              }
-            }
-          })
+          item.color = this.colors[index]
         })
-        this.stationsDatas = this.stationsDatasAll
+        // this.stationsDatas = this.stationsDatasAll
         this.lineData = this.lineDataAll
-        console.log(this.lineDataAll)
+        // console.log(this.lineDataAll)
       })
     },
     updatePolylinePath () {},
