@@ -21,9 +21,10 @@ let id = Math.random().toString(36).substr(3, 30)
 // } else {
 //   baseUrl = 'http://172.16.100.160:8081'
 // }
-const baseUrl = process.env.NODE_ENV === 'production' ? '203.110.221.216:8288' : '117.34.118.30:8288'
+const baseUrl = process.env.NODE_ENV === 'production' ? '203.110.221.216:8288' : '192.168.10.81:8081'
 export const WSAPI = `ws://${baseUrl}/websocket/mesgshow/${id}`
 export const WSAPISEC = `ws://${baseUrl}/websocket/can/${id}`
+export const WSAPIWARN = `ws://${baseUrl}/websocket/busWarnMesgShow/${id}`
 export const WSPOSITION = {
   url: 'ws://203.110.221.216:15674/ws',
   name: '车辆位置订阅',
@@ -37,10 +38,10 @@ export const API_DEFAULT_CONFIG = {
   // mockBaseUrl: 'http://113.200.35.114:9088',
   // mockBaseUrl: 'http://117.34.118.30:8089',
   // mockBaseUrl: 'http://121.30.214.189:9088',
-  mockBaseUrl: 'http://203.110.221.216:8288',
+  // mockBaseUrl: 'http://203.110.221.216:8288',
   // mockBaseUrl: 'http://117.34.118.30:8288',
   // 192.168.10.33:8081
-  // mockBaseUrl: 'http://192.168.10.81:8081',
+  mockBaseUrl: 'http://192.168.10.81:8081',
   // mockBaseUrl: 'http://117.34.118.30:8288',
   // 10.233 8089
   prodBaseUrl: 'http://203.110.221.216:8288', // 测试

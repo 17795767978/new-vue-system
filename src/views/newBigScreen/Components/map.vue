@@ -213,6 +213,7 @@ import videoWrapper from '@/components/map/video'
 import Bus from './bus.js'
 import { mapGetters } from 'vuex'
 import Subscribe from '../utils/ws.js'
+import { WSAPIWARN } from '../../../config/settings'
 // import Socket from 'sockjs-client'
 // const COLOR = ['#f00', '#f0f', '#0ff', '#00f', '#0f0', '#ff0']
 const TIME = 3 * 1000
@@ -286,6 +287,7 @@ export default {
       stationsDatasAll: [],
       parkData: [],
       ws: null,
+      wsAlarm: null,
       positionsData: []
     }
   },
@@ -308,6 +310,9 @@ export default {
     // this._getOps()
     // this._getTestWs()
     this.initSubscribe()
+    setTimeout(() => {
+      this.initWebsocketAlarm()
+    }, 1000)
   },
   mounted () {
     // this._getInitMap()
@@ -341,7 +346,7 @@ export default {
   computed: {
     getIcon () {
       return function (marker) {
-        if (marker.warnInfo) {
+        if (marker.isAlarm) {
           return { url: `${iconCarRed}`, size: { width: 87, height: 87, transform: 'scale(0.5)' } }
         } else {
           return { url: `${iconCarGreen}`, size: { width: 87, height: 87, transform: 'scale(0.5)' } }
@@ -454,6 +459,29 @@ export default {
       this.ws.createWsConnect()
       this.ws.subscribeWsConnect(url)
       this.positionsData = this.ws.assembleDatas
+    },
+    // 实时websocket报警
+    initWebsocketAlarm () {
+      let url = `${WSAPIWARN}/${sessionStorage.getItem('id')}`
+      this.wsAlarm = new WebSocket(url)
+      this.wsAlarm.onopen = () => {
+        this.wsAlarm.send('发送数据')
+      }
+      this.wsAlarm.onmessage = (data) => {
+        const warnData = JSON.parse(data.data)
+        this.positionsData.forEach(item => {
+          let currentWarnItem = warnData.filter(itm => itm.dwBusuuid === item.busUuid)[0]
+          console.log(currentWarnItem)
+          item.isAlarm = currentWarnItem ? currentWarnItem.busStatus : false
+          item.warnDeviceCode = currentWarnItem ? currentWarnItem.warnDeviceCode : ''
+          // if (warnData.filter(itm => itm.busUuid === item.busUuid).length > 0) {
+          //   item.isAlarm = true
+          // } else {
+          //   item.isAlarm = false
+          // }
+        })
+        console.log(this.positionsData)
+      }
     },
     initMap () {
       this.stationsDatasAll.forEach((item) => {
@@ -668,6 +696,7 @@ export default {
     clearTimeout(this.timerRate)
     clearTimeout(this.timerHot)
     this.ws.closeWsConnect()
+    this.wsAlarm.close()
     this.timerRate = null
     this.timerHot = null
     this.ws = null

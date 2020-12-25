@@ -432,9 +432,9 @@ export default {
         driverUuid,
         positionSpeed,
         currenttrip,
-        warnDeviceCode,
         busVideoOrder,
-        lineId: lineGroupUuid
+        lineId: lineGroupUuid,
+        warnDeviceCode
       }).then(res => {
         this.carDetailData = res
         this.carDetailData.startUpDate = moment(this.carDetailData.startUpDate).format('YYYY-MM-DD')
