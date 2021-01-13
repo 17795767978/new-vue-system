@@ -12,7 +12,7 @@
 <script>
 import noEcharts from './noEcharts.vue'
 import { max } from '../../../../utils/max.js'
-const TIME = 30 * 1000
+const TIME = 15 * 1000
 export default {
   data () {
     return {

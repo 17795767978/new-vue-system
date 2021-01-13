@@ -46,7 +46,6 @@ export default {
     item: {
       deep: true,
       handler (newV) {
-        console.log(newV)
         if (this.item.warnType && this.item.warnType.length > 0) {
           if (!this.item.warnMediaList) {
             this.$message.error(`${this.item.warnTypeName}暂无视频`)

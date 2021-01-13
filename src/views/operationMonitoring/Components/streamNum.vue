@@ -157,7 +157,7 @@
 </template>
 
 <script>
-const TIME = 0.5 * 60 * 1000
+const TIME = 15 * 1000
 export default {
   props: {
     config: {
