@@ -94,7 +94,9 @@ export default {
   methods: {
     _getDriverTable (params) {
       this.$api['tiredMonitoring.getBadDrivingBehaviorRanking'](params).then(res => {
-        this.tableData = res
+        setTimeout(() => {
+          this.tableData = res
+        }, 1000)
       })
     },
     goToDetail (row) {

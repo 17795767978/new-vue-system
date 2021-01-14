@@ -204,7 +204,7 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="address"
+          prop="warnAddress"
           label="报警位置"
           width="300"
           >
@@ -791,25 +791,24 @@ export default {
     _tableList (params) {
       this.loading = true
       this.tableData = []
-      let tableBeforeData = []
+      // let tableBeforeData = []
       this.$api['tiredMonitoring.getWarnList'](params).then(res => {
         res.list.forEach(item => {
           if (item.driverName === '0 0') {
             item.driverName = ''
           }
         })
-        res.list.forEach((item, index) => {
-          this.getPointAddress(item, index).then((data) => {
-            item.address = data.adr
-            item.index = data.idx
-            tableBeforeData.push(item)
-          })
-        })
+        // res.list.forEach((item, index) => {
+        //   this.getPointAddress(item, index).then((data) => {
+        //     item.address = data.adr
+        //     item.index = data.idx
+        //     tableBeforeData.push(item)
+        //   })
+        // })
         this.total = res.total
-        setTimeout(() => {
-          this.tableData = tableBeforeData.sort((prev, next) => prev.index - next.index)
-          this.loading = false
-        }, 500)
+        this.tableData = res.list
+        this.loading = false
+        console.log(this.tableData)
       }).catch(err => {
         this.loading = false
         this.$message.error(err.message)
@@ -1150,19 +1149,21 @@ export default {
         checkList = []
       }
       return checkList
-    },
-    getPointAddress (item, index) {
-      // eslint-disable-next-line no-undef
-      let point = new BMap.Point(Number(item.lng), Number(item.lat))
-      // eslint-disable-next-line no-undef
-      let gc = new BMap.Geocoder()
-      return new Promise((resolve, reject) => {
-        gc.getLocation(point, function (rs) {
-          let addComp = rs.addressComponents
-          resolve({ adr: `${addComp.province}${addComp.city}${addComp.district}${addComp.street}${addComp.streetNumber}`, idx: index })
-        })
-      })
     }
+    // getPointAddress (item, index) {
+    //   // eslint-disable-next-line no-undef
+    //   let point = new BMap.Point(Number(item.lng), Number(item.lat))
+    //   console.log(point)
+    //   // eslint-disable-next-line no-undef
+    //   let gc = new BMap.Geocoder()
+    //   return new Promise((resolve, reject) => {
+    //     gc.getLocation(point, function (rs) {
+    //       console.log(rs)
+    //       let addComp = rs.addressComponents
+    //       resolve({ adr: `${addComp.province}${addComp.city}${addComp.district}${addComp.street}${addComp.streetNumber}`, idx: index })
+    //     })
+    //   })
+    // }
   }
 }
 </script>
