@@ -167,6 +167,15 @@
           end-placeholder="结束日期">
       </el-date-picker>
     </el-form-item>
+    <el-form-item label="选择日期" v-if="isDateToNoDefault">
+        <el-date-picker
+          v-model="formInline.noDefaultDateArr"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+      </el-date-picker>
+    </el-form-item>
       <el-form-item label="时间" v-if="isTime">
         <el-time-select
           placeholder="起始时间"
@@ -206,6 +215,17 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="排序方式" v-if="isSortMethod">
+          <el-select v-model="formInline.sortMethod" placeholder="请选择">
+            <el-option
+              v-for="item in searchTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <slot name="last"></slot>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button type="warning" @click="onclear" v-if="isEmpty">重置</el-button>
@@ -294,7 +314,13 @@ export default {
     isWarntype: {
       type: Boolean
     },
+    isSortMethod: {
+      type: Boolean
+    },
     isDateTo: {
+      type: Boolean
+    },
+    isDateToNoDefault: {
       type: Boolean
     },
     isDefault: {
@@ -367,11 +393,13 @@ export default {
         startStation: {},
         endStation: {},
         dateArray: [],
+        noDefaultDateArr: [],
         radio: '1',
         statusNumber: '',
         selfNumber: '',
         statusType: '2',
-        onLine: ''
+        onLine: '',
+        sortMethod: 0
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -395,7 +423,16 @@ export default {
       disabled: false,
       isLinkage: false,
       downLoadStr: '',
-      downLoadLoading: false
+      downLoadLoading: false,
+      searchTypeOptions: [
+        {
+          value: 0,
+          label: '上车人数'
+        }, {
+          value: 1,
+          label: '下车人数'
+        }
+      ]
     }
   },
   created () {
@@ -721,7 +758,9 @@ export default {
         statusNumber: this.formInline.statusNumber,
         selfNumber: this.formInline.selfNumber,
         statusType: this.formInline.statusType,
-        onLine: this.formInline.onLine
+        onLine: this.formInline.onLine,
+        noDefaultDateArr: this.formInline.noDefaultDateArr,
+        sortMethod: this.formInline.sortMethod
       }
       this.$emit('configCheck', configData)
     },
@@ -751,7 +790,9 @@ export default {
         statusNumber: '',
         selfNumber: '',
         onLine: '',
-        statusType: '2'
+        statusType: '2',
+        noDefaultDateArr: [],
+        sortMethod: 0
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,
@@ -777,7 +818,9 @@ export default {
         statusNumber: this.formInline.statusNumber,
         selfNumber: this.formInline.selfNumber,
         statusType: this.formInline.statusType,
-        onLine: this.formInline.onLine
+        onLine: this.formInline.onLine,
+        noDefaultDateArr: this.formInline.noDefaultDateArr,
+        sortMethod: this.formInline.sortMethod
       }
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
@@ -846,7 +889,9 @@ export default {
         statusNumber: this.formInline.statusNumber,
         selfNumber: this.formInline.selfNumber,
         statusType: this.formInline.statusType,
-        onLine: this.formInline.onLine
+        onLine: this.formInline.onLine,
+        noDefaultDateArr: this.formInline.noDefaultDateArr,
+        sortMethod: this.formInline.sortMethod
       }
       this.$emit('configCheckMul', configData)
     },
@@ -878,7 +923,9 @@ export default {
         dateTime: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
         lineType: this.formInline.lineType,
         date: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
-        uploadDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD')
+        uploadDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
+        noDefaultDateArr: this.formInline.noDefaultDateArr,
+        sortMethod: this.formInline.sortMethod
       }).then(res => {
         this.downLoadLoading = false
         // console.log(res)

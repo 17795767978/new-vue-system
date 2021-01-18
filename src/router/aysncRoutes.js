@@ -273,6 +273,26 @@ export const aysncRoutesMap = [
             icon: 'nocturne icon-dash',
             roles: ['/line-od']
           }
+        },
+        {
+          path: 'monthly-passTraffic-report',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/monthlyPassengerTrafficReport/index'),
+          name: 'monthlyPassengerTrafficReport',
+          meta: {
+            title: '客流统计月报',
+            icon: 'nocturne icon-dash',
+            roles: ['/line-od']
+          }
+        },
+        {
+          path: 'sitepassengerflow-statistics',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/sitePassengerFlowStatistics/index'),
+          name: 'sitePassengerFlowStatistics',
+          meta: {
+            title: '站点客流量统计',
+            icon: 'nocturne icon-dash',
+            roles: ['/line-od']
+          }
         }
       ]
     },
