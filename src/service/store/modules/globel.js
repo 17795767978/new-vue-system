@@ -8,17 +8,25 @@ const globel = {
     lineData: [],
     stationData: [],
     comData: [],
-    carData: []
+    carData: [],
+    comDataSec: [],
+    lineDataSec: []
   },
   mutations: {
     LINE_DATA: (state, lineData) => {
       state.lineData = lineData
+    },
+    LINE_DATA_SEC: (state, lineData) => {
+      state.lineDataSec = lineData
     },
     STATION_DATA: (state, stationData) => {
       state.stationData = stationData
     },
     COM_DATA: (state, comData) => {
       state.comData = comData
+    },
+    COM_DATA_SEC: (state, comData) => {
+      state.comDataSec = comData
     },
     CAR_DATA: (state, carData) => {
       state.comData = carData
@@ -66,6 +74,26 @@ const globel = {
         }
       })
     },
+    // getLineSecList ({ commit }, id) {
+    //   return new Promise((resolve, reject) => {
+    //     api['wholeInformation.getLineSec']({
+    //       lineID: '',
+    //       company: id
+    //     }).then(res => {
+    //       let list = []
+    //       res.forEach(item => {
+    //         list.push({
+    //           label: item.lineNumber,
+    //           value: item.lineUuid + '+' + item.lineNumber
+    //         })
+    //       })
+    //       commit('LINE_DATA_SEC', list)
+    //       resolve(list)
+    //     }).catch(error => {
+    //       reject(error)
+    //     })
+    //   })
+    // },
     getStationList ({ commit }) {
       return new Promise((resolve, reject) => {
         api['wholeInformation.getStation']().then(res => {
@@ -96,18 +124,38 @@ const globel = {
         })
       })
     },
+    getComSecList ({ commit }) {
+      return new Promise((resolve, reject) => {
+        api['wholeInformation.getComSec']({
+          company: ''
+        }).then(res => {
+          let list = []
+          res.forEach(item => {
+            list.push({
+              label: item.company,
+              value: item.company
+            })
+          })
+          commit('COM_DATA_SEC', list)
+          resolve(list)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
     getCarList ({ commit }) {
       return new Promise((resolve, reject) => {
         if (store.getters.userId === '1') {
           api['wholeInformation.getCar']({
             orgId: '',
-            orgName: ''
+            orgName: '',
+            lineId: ''
           }).then(res => {
             let list = []
             res.forEach(item => {
               list.push({
                 label: item.busPlateNumber,
-                value: item.busUuid
+                value: item.busPlateNumber
               })
             })
             commit('CAR_DATA', list)
@@ -118,7 +166,8 @@ const globel = {
         } else {
           api['wholeInformation.getCar']({
             orgId: store.getters.userId,
-            orgName: ''
+            orgName: '',
+            lineId: ''
           }).then(res => {
             let list = []
             res.forEach(item => {

@@ -1,0 +1,192 @@
+<template>
+  <div class="passenger-vol" ref="wrapper" v-loading="loading">
+    <lineEcharts id="id" :data="lineData" :title="title" :legend="legend" :XData="xData" :YData="yData" :maxNum="maxNum" :grid="grid"></lineEcharts>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+import { max } from '../../../../../utils/max.js'
+import lineEcharts from '@/components/echarts/brokenLineDiagram'
+export default {
+  props: {
+    sendStations: {
+      type: Array
+    },
+    isBigScreen: {
+      type: Boolean
+    }
+  },
+  data () {
+    return {
+      lineData: [],
+      // width: 100,
+      title: {},
+      height: '',
+      legend: {},
+      xData: [],
+      yData: [],
+      maxNum: 0,
+      id: 'station',
+      grid: {},
+      loading: true,
+      skinType: null
+    }
+  },
+  created () {
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+    this._getHotstations({
+      orgId,
+      staUuids: []
+    })
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
+  },
+  mounted () {
+    // console.log(this.$refs.wrapper.style)
+  },
+  watch: {
+    sendStations (newV) {
+      let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+      this._getHotstations({
+        orgId,
+        staUuids: newV
+      })
+    },
+    '$store.state.views.activeNight': {
+      handler (newV) {
+        let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
+        this.skinType = +newV
+        this._getHotstations({
+          orgId,
+          staUuids: this.sendStations
+        })
+      }
+    }
+  },
+  methods: {
+    _getHotstations (params) {
+      this.loading = true
+      this.$api['passengerSimple.getHotstations'](params).then(res => {
+        this.loading = false
+        this.title = {}
+        this.lineData = [{
+          name: '上车客流',
+          type: 'bar',
+          data: res.datas[0],
+          barWidth: this.isBigScreen ? 5 : 13,
+          itemStyle: {
+            // 柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
+            emphasis: {
+              barBorderRadius: 30
+            },
+            normal: {
+              // 柱形图圆角，初始化效果
+              barBorderRadius: [0, 10, 10, 0],
+              label: {
+                show: !this.isBigScreen, // 是否展示
+                textStyle: {
+                  fontWeight: 'bolder',
+                  fontSize: 9,
+                  fontFamily: '微软雅黑',
+                  color: '#093000'
+                }
+              },
+              color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 1, [{
+                offset: 0,
+                color: '#9CDC40'
+              }, {
+                offset: 1,
+                color: '#9CDC40'
+              }])
+            }
+          }
+        }]
+        this.maxNum = max(res.datas[0])
+        this.dataLength = 2
+        this.grid = {
+          x: 90,
+          y: 70,
+          x2: 30,
+          y2: 30,
+          borderWidth: 1
+        }
+        this.legend = {
+          data: [''],
+          top: 10,
+          right: 10,
+          textStyle: {
+            color: '#8995CB',
+            fontSize: 1
+          }
+        }
+        this.yData = [
+          {
+            type: 'category',
+            data: res.xAxisNames,
+            axisPointer: {
+              type: 'shadow'
+            },
+            axisLabel: {
+              inside: false,
+              // interval: 0,
+              textStyle: {
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
+                fontSize: '10',
+                borderRadius: '6'
+              }
+            },
+            splitLine: {
+              show: false
+            }
+          }
+        ]
+        this.xData = [
+          {
+            min: 0,
+            max: this.maxNum,
+            interval: Math.ceil(this.maxNum / 6),
+            // axisLabel: {
+            //     formatter: '{value} ml'
+            // },
+            axisLabel: {
+              inside: false,
+              interval: 0,
+              textStyle: {
+                color: (() => {
+                  if (this.skinType === 1) {
+                    return '#fff'
+                  } else {
+                    return '#000'
+                  }
+                })(),
+                fontSize: '10',
+                borderRadius: '6'
+              }
+            },
+            splitLine: {
+              show: false
+            }
+          }
+        ]
+      })
+    }
+  },
+  components: {
+    lineEcharts
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.passenger-vol {
+  width:100%;
+  box-sizing: border-box;
+  height: 100%;
+  // margin-top: 14px;
+}
+</style>

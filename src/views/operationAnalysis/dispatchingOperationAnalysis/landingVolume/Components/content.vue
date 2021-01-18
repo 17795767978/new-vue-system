@@ -1,5 +1,5 @@
 <template>
-  <div class="content-wrapper">
+  <div class="content-wrapper" ref="tableWrapper">
     <el-row :gutter="24">
       <el-col :span="12" style="height: 730px; background: #f6f6f6">
         <p class="before-title" style="font-size: 18px;font-weight:600;display: inline-block;">上车人数</p>
@@ -7,12 +7,12 @@
           :header-cell-style="{background:'#e9f5fe'}"
           :data="upTableData"
           border
-          stripe
+          ref="tableLeft"
           :summary-method="getSummariesUp"
           show-summary
           class="inside-table"
           @expand-change="rowData"
-          style="width: 100%;"
+          :style="styleLeft"
           height="650"
           >
           <el-table-column type="expand" width="60" fixed>
@@ -21,7 +21,6 @@
                 :show-header="false"
                 :data="props.row.tableData"
                 ref="insideTable"
-                stripe
                 style="width: 100%;"
                 >
                 <el-table-column
@@ -115,7 +114,7 @@
           show-summary
           @expand-change="rowData"
           class="inside-table"
-          style="width: 100%"
+          :style="styleRight"
           height="650"
           >
           <el-table-column type="expand" width="60" fixed>
@@ -234,7 +233,9 @@ export default {
       expands: [],
       tableData1: [],
       getUpSummaries: [],
-      upTotle: ''
+      upTotle: '',
+      styleLeft: { width: '99%' },
+      styleRight: { width: '99%' }
     }
   },
   components: {
@@ -248,9 +249,19 @@ export default {
     selectData: {
       deep: true,
       handler () {
-        console.log(this.selectData)
+        this.styleLeft = { width: '99%' }
+        this.styleRight = { width: '99%' }
         this.upTableData = this.getTableData(true)
         this.downTableData = this.getTableData(false)
+        this.$forceUpdate()
+        setTimeout(() => {
+          this.styleLeft = {
+            width: '100%'
+          }
+          this.styleRight = {
+            width: '100%'
+          }
+        })
       }
     }
   },

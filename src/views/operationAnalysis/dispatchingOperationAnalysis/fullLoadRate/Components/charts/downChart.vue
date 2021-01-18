@@ -62,7 +62,7 @@ export default {
       type: '2',
       dateTime: dataBefore,
       startHour: '07',
-      endHour: '09'
+      endHour: '08'
     })
   },
   mounted () {
@@ -101,7 +101,7 @@ export default {
             type: '2',
             dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
             startHour: this.checkData.startTime.substring(0, 2),
-            endHour: this.checkData.endTime.substring(0, 2)
+            endHour: this.checkData.endTimeFormatter
           })
         }
         this.$emit('isUpdateToDown', false)
@@ -164,6 +164,7 @@ export default {
       }
       if (this.dataSource.length > 0) {
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
+        console.log(this.maxNum)
         this.maxRate = max(this.fullRate)
       }
       setTimeout(() => {
@@ -197,13 +198,14 @@ export default {
           // }
         },
         color: ['#249cf9', '#fdb628', '#67e0e3', '#eb6f49'],
-        // legend: {
-        //   data: this.tabType,
-        //   bottom: 10,
-        //   textStyle: {
-        //     color: '#000'
-        //   }
-        // },
+        legend: {
+          data: this.tabType,
+          selectedMode: false,
+          bottom: 10,
+          textStyle: {
+            color: '#000'
+          }
+        },
         xAxis: [
           {
             type: 'category',
@@ -235,10 +237,11 @@ export default {
         yAxis: [
           {
             type: 'value',
+            minInterval: 1,
             // name: '水量',
-            min: 0,
-            max: this.maxNum + this.maxNum / 5,
-            interval: Math.floor(this.maxNum / 5),
+            // min: 0,
+            // max: this.maxNum,
+            // interval: Math.floor(this.maxNum / 5),
             // axisLabel: {
             //     formatter: '{value} ml'
             // },
@@ -258,7 +261,7 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: this.maxRate + 10,
+            max: this.maxRate,
             interval: 20,
             splitLine: {
               show: false

@@ -92,12 +92,13 @@ export default {
             center: ['50%', '50%'],
             // roseType: 'radius',
             label: {
-              normal: {
-                show: false
-              },
-              emphasis: {
-                show: true
-              }
+              formatter: '{b}: {@2012} ({d}%)'
+              // normal: {
+              //   show: false
+              // },
+              // emphasis: {
+              //   show: true
+              // }
             },
             lableLine: {
               normal: {

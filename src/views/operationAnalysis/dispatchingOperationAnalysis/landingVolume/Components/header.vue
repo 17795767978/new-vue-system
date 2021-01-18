@@ -40,9 +40,9 @@
           placeholder="起始时间"
           v-model="formInline.startTime"
           :picker-options="{
-            start: '00:00',
+            start: '06:00',
             step: '01:00',
-            end: '24:00'
+            end: '23:00'
           }">
         </el-time-select>
         -
@@ -51,9 +51,9 @@
           style="width: 120px"
           v-model="formInline.endTime"
           :picker-options="{
-            start: '00:00',
+            start: '06:00',
             step: '01:00',
-            end: '24:00',
+            end: '23:00',
             minTime: formInline.startTime
           }">
         </el-time-select>
@@ -76,7 +76,8 @@ export default {
         station: [],
         date: [],
         startTime: '07:00',
-        endTime: '09:00'
+        endTime: '09:00',
+        endTimeFormatter: ''
       },
       loading: false,
       searchStation: '',
@@ -102,7 +103,7 @@ export default {
         endDate: this.formInline.date[1],
         stationIds: this.formInline.station,
         startHour: this.formInline.startTime.substring(0, 2),
-        endHour: this.formInline.endTime.substring(0, 2)
+        endHour: Number(this.formInline.endTime.substring(0, 2)) - 1
       })
     }
   },
@@ -161,7 +162,9 @@ export default {
       // console.log(this.selectStation);
     },
     onSubmit () {
-      console.log(this.formInline.date)
+      if (this.formInline.endTime !== '') {
+        this.formInline.endTimeFormatter = Number(this.formInline.endTime.substring(0, 2)) - 1
+      }
       if (this.formInline.date.length === 0 ||
         this.formInline.station.length === 0 ||
         this.formInline.startTime === '' ||
@@ -182,7 +185,7 @@ export default {
           endDate: this.formInline.date[1],
           stationIds: idArry,
           startHour: this.formInline.startTime.substring(0, 2),
-          endHour: this.formInline.endTime.substring(0, 2)
+          endHour: this.formInline.endTimeFormatter
         })
       }
     },

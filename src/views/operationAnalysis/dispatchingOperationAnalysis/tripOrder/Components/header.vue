@@ -49,7 +49,7 @@
           :picker-options="{
             start: '06:00',
             step: '01:00',
-            end: '24:00'
+            end: '23:00'
           }">
         </el-time-select>
         -
@@ -60,10 +60,14 @@
           :picker-options="{
             start: '06:00',
             step: '01:00',
-            end: '24:00',
+            end: '23:00',
             minTime: formInline.startHour
           }">
         </el-time-select>
+      </el-form-item>
+      <el-form-item label="查询时间">
+        <el-radio v-model="formInline.radio" label="0">当月</el-radio>
+        <el-radio v-model="formInline.radio" label="1">历史</el-radio>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -84,7 +88,9 @@ export default {
         type: '1',
         startHour: '07:00',
         endHour: '09:00',
-        busPlateNumbers: []
+        endHourFormatter: '',
+        busPlateNumbers: [],
+        radio: '0'
       },
       lineOptions: [],
       turnOptions: [{
@@ -97,28 +103,13 @@ export default {
       busOptions: [],
       pickerOptions: {
         disabledDate (time) {
-          return time.getTime() > Date.now()
-        },
-        shortcuts: [{
-          text: '今天',
-          onClick (picker) {
-            picker.$emit('pick', new Date())
-          }
-        }, {
-          text: '昨天',
-          onClick (picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick (picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
+          let date = moment(new Date()).format('YYYY-MM-01')
+          // console.log(moment(date).valueOf())
+          // console.log(moment(time.getTime()).format('YYYY-MM-DD'))
+          // console.log(moment(Date.now()).format('YYYY-MM-DD'))
+          // console.log(time.getTime() > Date.now())
+          return time.getTime() < moment(date).valueOf()
+        }
       }
     }
   },
@@ -140,6 +131,36 @@ export default {
         this._getCar(newValue)
         this.formInline.busPlateNumbers = []
       }
+    },
+    'formInline.radio': {
+      handler (newV) {
+        if (newV === '1') {
+          this.formInline.dateTime = ''
+          this.pickerOptions = {
+            disabledDate (time) {
+              let date = moment(new Date()).format('YYYY-MM-01')
+              return time.getTime() >= moment(date).valueOf()
+            }
+          }
+        } else {
+          this.pickerOptions = {
+            disabledDate (time) {
+              let date = moment(new Date()).format('YYYY-MM-01')
+              return time.getTime() < moment(date).valueOf()
+            }
+          }
+        }
+      }
+    },
+    'formInline.dateTime': {
+      handler (newV) {
+        let selectDate = moment(newV).valueOf()
+        let currentDate = moment().format('YYYY-MM-DD')
+        if (selectDate >= moment(currentDate).valueOf()) {
+          this.$message.error('只能选择当天之前的日期')
+          this.formInline.dateTime = ''
+        }
+      }
     }
   },
   methods: {
@@ -160,6 +181,9 @@ export default {
       })
     },
     onSubmit () {
+      if (this.formInline.endHour !== '') {
+        this.formInline.endHourFormatter = Number(this.formInline.endHour.substring(0, 2)) - 1
+      }
       if (this.formInline.lineId === '' || this.formInline.dateTime === '' || this.formInline.dateTime === null || this.formInline.type === '' || this.formInline.startHour === null || this.formInline.endHour === null) {
         this.$message.error('请填写完整的查询条件')
       } else {

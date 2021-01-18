@@ -15,13 +15,23 @@ const getters = {
   token: state => state.user.token,
   roles: state => state.user.roles,
   initLineId: state => state.user.initLineId,
+  formData: state => state.user.formData,
   // 路由
   addRouters: state => state.routers.addRouters,
   asyncRouter: state => state.routers.router,
   homepage: state => state.routers.homepage,
   // 页面
   cachedViews: state => state.views.cachedViews,
-  visitedViews: state => state.views.visitedViews
+  visitedViews: state => state.views.visitedViews,
+  // echarts状态
+  renderId: state => state.query.renderId,
+  queryId: state => state.query.queryId,
+  // m默认搜索条件
+  defaultSearch: state => state.defaultSearch.defaultSearch,
+  // router路由的参数
+  routerData: state => state.routerData.data,
+  // 导出内容序列化
+  formDown: state => state.defaultSearch.formDown
 }
 
 export default getters

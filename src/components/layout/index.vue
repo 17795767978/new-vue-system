@@ -2,7 +2,7 @@
   <div class="layout">
     <sidebar v-bind:style="{width: sidebarState.width}"></sidebar>
     <div class="main-content" v-bind:style="{width:`calc(100% - ${sidebarState.width})`}">
-        <headers></headers>
+      <headers></headers>
       <tag-tabs></tag-tabs>
       <app-main class="main-wrapper" id="mainWrapper"></app-main>
     </div>

@@ -2,7 +2,7 @@
   <div class="header-wrapper">
     <header>
      <el-row :gutter="24">
-       <el-col :span="8" class="data-style">
+       <el-col :span="8" class="data-style" :class="skinType === 0 ? 'white-skin' : ''">
          <span style="margin-right: 30px;">{{dataNow}}</span>
          <i v-if="weather.indexOf('晴') !== -1" class="iconfont icon-tianqi-qing" style="color: #ff0"></i>
          <i v-else-if="weather.indexOf('雨') !== -1" class="iconfont icon-tianqi-yu"></i>
@@ -15,7 +15,7 @@
          <span style="margin-left: 30px;">{{temperature}}</span>
        </el-col>
        <el-col :span="8">
-        <h1 class="font">{{title}}</h1>
+        <h1 class="font" :class="skinType === 0 ? 'white-skin' : ''">{{title}}</h1>
        </el-col>
        <el-col :span="8">
        </el-col>
@@ -31,8 +31,9 @@ import { Row, Col } from 'element-ui'
 export default {
   data () {
     return {
+      skinType: 0, // 皮肤 0 白色 1 黑色
       dataNow: '',
-      title: '邢台公交管理综合分析决策系统',
+      title: '公交管理综合分析决策系统',
       timer: null,
       temperature: '',
       weather: ''
@@ -60,7 +61,7 @@ export default {
             this._getWeather()
           }, 10 * 60 * 1000)
         } else {
-          this.$message.warning('暂无数据')
+          this.$message.warning('暂无天气信息')
         }
       })
     }
@@ -68,11 +69,17 @@ export default {
   components: {
     'el-row': Row,
     'el-col': Col
+  },
+  mounted () {
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.white-skin {
+  color: #000000!important;
+}
 .header-wrapper {
   width: 100%;
   .data-style {

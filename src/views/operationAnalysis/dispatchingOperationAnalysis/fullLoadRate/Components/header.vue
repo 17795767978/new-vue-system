@@ -27,9 +27,9 @@
           placeholder="起始时间"
           v-model="formInline.startTime"
           :picker-options="{
-            start: '00:00',
+            start: '06:00',
             step: '01:00',
-            end: '24:00'
+            end: '23:00'
           }">
         </el-time-select>
         -
@@ -38,9 +38,9 @@
           class="font-style"
           v-model="formInline.endTime"
           :picker-options="{
-            start: '00:00',
+            start: '06:00',
             step: '01:00',
-            end: '24:00',
+            end: '23:00',
             minTime: formInline.startTime
           }">
         </el-time-select>
@@ -72,7 +72,8 @@ export default {
         date: '',
         type: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        endTimeFormatter: ''
         // typeUp: '',
         // typeDown: '',
         // typeStream: '',
@@ -122,6 +123,9 @@ export default {
   },
   methods: {
     onSubmit () {
+      if (this.formInline.endTime !== '') {
+        this.formInline.endTimeFormatter = Number(this.formInline.endTime.substring(0, 2)) - 1
+      }
       if (this.formInline.date === '' ||
         this.formInline.date === null ||
         this.formInline.value === '' ||

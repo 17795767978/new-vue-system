@@ -56,7 +56,15 @@ export default {
     },
     isClear () {
       if (this.isClear) {
-        this._lineTree()
+        if (this.userId === '1') {
+          this._lineTree({
+            orgId: ''
+          })
+        } else {
+          this._lineTree({
+            orgId: this.userId
+          })
+        }
       }
       this.$emit('isClearTo')
     }
@@ -65,39 +73,43 @@ export default {
   methods: {
     _lineTree (params) {
       this.$api['tiredMonitoring.getLineBusTree'](params).then(res => {
-        let levelOne = res.filter(list => list.levelsType === '0')
-        let levelTwo = res.filter(list => list.levelsType === '1')
-        let levelThree = res.filter(list => list.levelsType === '2')
-        let levelFour = res.filter(list => list.levelsType === '3')
-        this.lineList = []
-        this.lineList.length = levelOne.length
-        levelOne.forEach((level, index) => {
-          this.lineList[index] = {
-            id: level.id,
-            levelsType: '0',
-            name: level.name,
-            children: []
-          }
-        })
-        this.lineList[0].children.length = levelTwo.length
-        levelTwo.forEach((level, index) => {
-          this.lineList[0].children[index] = {
-            id: level.id,
-            name: level.name,
-            levelsType: '1',
-            pId: level.pId,
-            children: []
-          }
-        })
-        this.lineList[0].children.forEach((child, index) => {
-          child.children = levelThree.filter(lv => lv.pId === child.id)
-        })
-        this.lineList[0].children.forEach((child, index) => {
-          child.children.forEach(i => {
-            i.children = []
-            i.children = levelFour.filter(lv => lv.pId === i.id)
+        if (res.length && res.length > 1) {
+          let levelOne = res.filter(list => list.levelsType === '0')
+          let levelTwo = res.filter(list => list.levelsType === '1')
+          let levelThree = res.filter(list => list.levelsType === '2')
+          let levelFour = res.filter(list => list.levelsType === '3')
+          this.lineList = []
+          this.lineList.length = levelOne.length
+          levelOne.forEach((level, index) => {
+            this.lineList[index] = {
+              id: level.id,
+              levelsType: '0',
+              name: level.name,
+              children: []
+            }
           })
-        })
+          this.lineList[0].children.length = levelTwo.length
+          levelTwo.forEach((level, index) => {
+            this.lineList[0].children[index] = {
+              id: level.id,
+              name: level.name,
+              levelsType: '1',
+              pId: level.pId,
+              children: []
+            }
+          })
+          this.lineList[0].children.forEach((child, index) => {
+            child.children = levelThree.filter(lv => lv.pId === child.id)
+          })
+          this.lineList[0].children.forEach((child, index) => {
+            child.children.forEach(i => {
+              i.children = []
+              i.children = levelFour.filter(lv => lv.pId === i.id)
+            })
+          })
+        } else if (res.length && res.length === 1) {
+          this.lineList = res
+        }
       })
     },
     filterNode (value, data) {

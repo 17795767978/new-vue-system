@@ -1,111 +1,72 @@
 <template>
-  <div class="dashboard-container cont-container">
-    <el-row>
-      <span class="main-title">邢台公交管理综合分析决策系统</span>
-    </el-row>
-    <el-row class="main-card" :gutter="50">
-      <el-col style="margin-left: 50px;" :span="8">
-        <h3 style="font-size: 20px;">运营监控</h3>
-        <div class="tab-con" :class="isScreen ? '' : 'tab-con-dis'" @click="goToContral()">
+    <div class="homePage-container" :class="skinType === 0 ? 'whiteSkinBg' : 'blackSkinBg'">
+        <div :class="skinType === 0 ? 'whiteSkinRightBottom' : ''" @click="downLoad"></div>
+        <div class="homePage-title blackSkin-title" :class="skinType === 0 ? 'whiteSkin-title' : 'blackSkin-title'">
+            <span>公交综合运营监控分析系统</span>
         </div>
-      </el-col>
-      <el-col :span="7">
-        <h3 style="font-size: 20px;">调度运营分析</h3>
-        <div class="tab-ans">
-          <ul class="item-fam">
-            <li class="item-font" :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in operationAnalysis" :key="index" @click="goToChart(item)">
-              <div class="inside-font">
-                <img :src="item.icon" width="30" height="30" class="img-font"/>
-              </div>
-              <p style="text-align: center; font-size: 13px;">{{item.name}}</p>
-            </li>
-          </ul>
-          <ul class="item-fam">
-            <li class="item-font" :class="item.admin ? '' : 'simple-font-dis'" v-for="(item, index) in simple" :key="index"  @click="goToTimeAna(item)">
-              <div class="inside-font">
-                <img :src="item.icon" width="30" height="30" class="img-font"/>
-              </div>
-              <p style="text-align: center; font-size: 13px;">{{item.name}}</p>
-            </li>
-          </ul>
+        <div class="homePage-content">
+            <div class="homePage-content-item">
+                <cell-view :skinType="skinType" :cellData = "menuResults[0]" @onChangeCard="onChangeCard"></cell-view>
+            </div>
+             <div class="homePage-content-item">
+                 <cell-view :skinType="skinType" :cellData = "menuResults[1]" @onChangeCard="onChangeCard"></cell-view>
+                 <cell-view :skinType="skinType" :cellData = "menuResults[2]" @onChangeCard="onChangeCard"></cell-view>
+            </div>
         </div>
-      </el-col>
-      <el-col :span="7">
-        <h3 style="font-size: 20px;">疲劳监测</h3>
-        <div class="tab-contral">
-          <ul class="item-fam">
-            <li class="item-font"  :class="item.admin ? '' : 'item-font-dis'" v-for="(item, index) in tiredContral" :key="index" @click="goToAlarm(item)">
-              <div class="inside-font">
-                <img :src="item.icon" width="40" height="40" class="img-font"/>
-              </div>
-              <p style="text-align: center; font-size: 13px;">{{item.name}}</p>
-            </li>
-          </ul>
-        </div>
-      </el-col>
-    </el-row>
-  </div>
+    </div>
 </template>
-
 <script>
-import iconHomeKlfx from '../../assets/images/homeIcon/klfx.png'
-import iconHomeFctc from '../../assets/images/homeIcon/fctc.png'
-import iconHomeMzl from '../../assets/images/homeIcon/mzl.png'
-import iconHomeXlzd from '../../assets/images/homeIcon/xlzd.png'
-import iconHomeYlyl from '../../assets/images/homeIcon/ylyl.png'
-import iconHomeKlgf from '../../assets/images/homeIcon/klgf.png'
-import iconHomeYxsj from '../../assets/images/homeIcon/yxsj.png'
-import iconHomeBjfx from '../../assets/images/homeIcon/bjfx.png'
-import iconHomeBjlx from '../../assets/images/homeIcon/bjlx.png'
-import iconHomeBjzx from '../../assets/images/homeIcon/bjzx.png'
-import iconHomeBjzt from '../../assets/images/homeIcon/bjzt.png'
-const PER_ANA = [
-  { name: '客流高峰时刻分析', icon: iconHomeKlfx, path: '/timeTable-analysis', admin: false },
-  { name: '车辆发车趟次时序图', icon: iconHomeFctc, path: '/trip-order', admin: false },
-  { name: '区间满载率查询', icon: iconHomeMzl, path: '/full-load-rate', admin: false },
-  { name: '线路站点登降量查询', icon: iconHomeXlzd, path: '/landing-volume', admin: false },
-  { name: '客流运力运量分析', icon: iconHomeYlyl, path: '/passenger-transport-capacity', admin: false },
-  { name: '线路客流高峰断面分析', icon: iconHomeKlgf, path: '/section-analysis', admin: false }
-]
-const SIMPLE = [
-  { name: '线路站间运行时间分析', icon: iconHomeYxsj, path: '/runtime-analysis', admin: false },
-  { name: '客流数据查询', icon: iconHomeMzl, path: '/search-passenger', admin: false }
-]
-const TIRED_CONTRAL = [
-  { name: '报警中心', icon: iconHomeBjzx, path: '/alarm-center', admin: false },
-  { name: '设备状态', icon: iconHomeBjzt, path: '/device-status', admin: false },
-  { name: '报警分析', icon: iconHomeBjfx, path: '/alarm-analysis', admin: false },
-  { name: '报警类型管理', icon: iconHomeBjlx, path: '/alarm-management', admin: false }
-]
+import CellView from './components/CellView'
+import image from '../../assets/images/homePageIcon/bgImg/首页浅色背景插画.png'
+
+/**
+ * @description 公交运营监控系控制台
+ * @method plumLi
+ * @date 2020/03/23
+ */
 export default {
   name: 'Homepage',
-  data () {
-    return {
-      operationAnalysis: [],
-      simple: [],
-      tiredContral: [],
-      rolesTem: [],
-      isScreen: false,
-      isScreenTo: []
-    }
-  },
   components: {
-  },
-  computed: {
-  },
-  mounted () {
-    let roles = this.$store.getters.roles
-    this.isScreen = roles.some(role => role.path.indexOf('/chart-analysis') > -1)
-    this.isScreenTo = roles.filter(role => role.title === '运营监控')
-    if (roles !== 'error') {
-      this.getRoles(roles)
-      this.checkRoles()
-    } else {
-      window.location.reload()
-      this.$store.dispatch('userLogout')
-    }
+    CellView
   },
   methods: {
+
+    /**
+     * 根据菜单类型选择进入不同的路由
+     */
+    onChangeCard (e) {
+      switch (e.type) {
+        case 'control':
+          if (this.isScreen) {
+            this.$router.push(`/newBigScreen/newBigScreen-analysis`)
+          } else {
+            this.$message.warning('权限不足，无法进入此页面')
+          }
+          break
+        case 'chart' :
+          if (e.hasRole) {
+            let path = `/operation-analysis${e.path}`
+            this.$router.push(path)
+          } else {
+            this.$message.warning('权限不足，无法进入此页面')
+          }
+          break
+        case 'alarm' :
+          if (e.hasRole) {
+            let path = `/fatigue-monitoring${e.path}`
+            this.$router.push(path)
+          } else {
+            this.$message.warning('权限不足，无法进入此页面')
+          }
+          break
+        default:
+          break
+      }
+    },
+
+    /**
+     * 获取当前角色的路由数列
+     */
     getRoles (roles) {
       let roleData = []
       function filterRoles (roles) {
@@ -120,219 +81,175 @@ export default {
       }
       filterRoles(roles)
       this.rolesTem = roleData
+      console.log(roleData)
     },
+
+    /**
+     * 为每一个菜单数据赋值 是否拥有权限
+     */
     checkRoles () {
-      let anaPer = PER_ANA
-      let simple = SIMPLE
-      let tired = TIRED_CONTRAL
-      anaPer.forEach(item => {
-        let isPer = this.rolesTem.some(role => item.path === role)
-        if (isPer) {
-          item.admin = true
-        } else {
-          item.admin = false
-        }
+      this.menuResults.forEach(item => {
+        item.child.forEach(cdItem => {
+          const pathStr = cdItem.path
+          let hasRole = this.rolesTem.some(role => pathStr === role)
+          cdItem.hasRole = hasRole
+        })
       })
-      simple.forEach(item => {
-        let isSimple = this.rolesTem.some(role => item.path === role)
-        if (isSimple) {
-          item.admin = true
-        } else {
-          item.admin = false
+    },
+    downLoad () {
+      let a = document.createElement('a')
+      a.download = 'pic'
+      a.href = image
+      this.$message.success('正在下载')
+      setTimeout(() => {
+        window.open(image)
+        a.click()
+      }, 500)
+    }
+  },
+  watch: {
+    '$store.state.views.activeNight' (val) {
+      val ? this.skinType = 1 : this.skinType = 0
+    }
+  },
+  mounted () {
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
+    let roles = this.$store.getters.roles
+    this.isScreen = roles.some(role => role.path.indexOf('/chart-analysis') > -1)
+    this.isScreenTo = roles.filter(role => role.title === '运营监控')
+    if (roles !== 'error') {
+      this.getRoles(roles)
+      this.checkRoles()
+    } else {
+      window.location.reload()
+      this.$store.dispatch('userLogout')
+    }
+  },
+  data () {
+    return {
+      skinType: 0, // 皮肤 0 白色 1 黑色
+      rolesTem: [], // 权限路由
+      isScreen: false, // 是否全屏
+      isScreenTo: [],
+      menuResults: [ // 菜单数据
+        {
+          name: '实时综合运营监控', // 分组名称
+          allCol: false, // 是否为单个按钮
+          child: [ // 菜单数据
+            [
+              { name: '' /* 菜单名称 */, hasRole: true /* 是否有访问权限 */, type: 'control' /* 菜单类型 */, icon: require('../../assets/images/homePageIcon/smallIcon/sszhyyjk.png') /* 图标资源 */, path: '/newBigScreen/newBigScreen-analysis' /* 路由 */, bgColor: '#3388E4' /* 按钮背景色 */, width: 246 } // width: 自定义按钮宽度
+            ]
+          ]
+        }, {
+          name: '调度运营分析',
+          allCol: true,
+          child: [
+            [
+              { name: '客流首页', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsy.png'), bgColor: '#009cad', path: '/passenger-home', colspan: 1 },
+              { name: '客流实时统计', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsstj.png'), bgColor: '#1f3856', path: '/realtime-passenger-flow', colspan: 1 },
+              { name: '客流高峰时刻分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klgfskfx.png'), bgColor: '#1f3856', path: '/timeTable-analysis', colspan: 1 },
+              { name: '车辆发车趟次时序图', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/clfctccxt.png'), bgColor: '#1f3856', path: '/trip-order', colspan: 1 }
+            ], [
+              { name: '区间满载率查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/qjmzlcx.png'), bgColor: '#1f3856', path: '/full-load-rate', colspan: 1 },
+              { name: '线路站点登降量查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzddjlcx.png'), bgColor: '#1f3856', path: '/landing-volume', colspan: 1 },
+              { name: '客流运力运量分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klylylfx.png'), bgColor: '#1f3856', path: '/passenger-transport-capacity', colspan: 1 },
+              { name: '客流数据明细查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klylylfx.png'), bgColor: '#1f3856', path: '/search-passenger', colspan: 1 }
+            ], [
+              { name: '线路客流高峰断面分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlklgfdmfx.png'), bgColor: '#1f3856', path: '/section-analysis', colspan: 1 },
+              { name: '客流数据查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klsjcx.png'), bgColor: '#1f3856', path: '/search-passenger-flow', colspan: 1 },
+              { name: '线路站间运行时间分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzjyxsjfx.png'), bgColor: '#1f3856', path: '/runtime-analysis', colspan: 2 }
+            ], [
+              { name: '单车客流详情分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/dcklxqfx.png'), bgColor: '#1f3856', path: '/simple-passenger-flow', colspan: 2 },
+              { name: '单车客流统计', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/dckltj.png'), bgColor: '#1f3856', path: '/bus-passenger', colspan: 2 }
+            ], [
+              { name: '线路客流查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlklcx.png'), bgColor: '#1f3856', path: '/line-passenger-flow', colspan: 1 },
+              { name: '线路站点客流查询', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlzdklcx.png'), bgColor: '#1f3856', path: '/comprehensive-query', colspan: 1 },
+              { name: '客流热力分析', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/klrlfx.png'), bgColor: '#1f3856', path: '/hot-map', colspan: 1 },
+              { name: '线路OD', type: 'chart', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/xlOD.png'), bgColor: '#1f3856', path: '/line-od', colspan: 1 }
+            ]
+          ]
+        }, {
+          // name: '安全运营',
+          // allCol: true,
+          // child: [
+          // [
+          //   { name: '安全运营首页', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjlxgl.png'), bgColor: '#009cad', path: '/alarm-home', colspan: 1 },
+          //   { name: '驾驶行为监测', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/jsxwjc.png'), bgColor: '#1f3856', path: '/alarm-center', colspan: 1 },
+          //   { name: '设备状态', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/cbzt.png'), bgColor: '#1f3856', path: '/device-status', colspan: 1 },
+          //   { name: '报警分析', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjfx.png'), bgColor: '#1f3856', path: '/alarm-analysis', colspan: 1 }
+          // ], [
+          //   { name: '报警类型管理', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/bjlxgl.png'), bgColor: '#1f3856', path: '/alarm-management', colspan: 2 },
+          //   { name: '数据质量排查', type: 'alarm', hasRole: true, icon: require('../../assets/images/homePageIcon/smallIcon/sjzlpc.png'), bgColor: '#1f3856', path: '/status-management', colspan: 1 }
+          // ]
+
+          // ]
         }
-      })
-      tired.forEach(item => {
-        let isPer = this.rolesTem.some(role => item.path === role)
-        if (isPer) {
-          item.admin = true
-        } else {
-          item.admin = false
-        }
-      })
-      this.operationAnalysis = anaPer
-      this.simple = simple
-      this.tiredContral = tired
-    },
-    goToContral () {
-      if (this.isScreen) {
-        let path = this.isScreenTo[0].children[0].path
-        this.$router.push(`/chart-analysis${path}`)
-      } else {
-        this.$message.warning('权限不足，无法进入此页面')
-      }
-    },
-    goToChart (e) {
-      if (e.admin) {
-        let path = `/operation-analysis${e.path}`
-        this.$router.push(path)
-      } else {
-        this.$message.warning('权限不足，无法进入此页面')
-      }
-    },
-    goToTimeAna (e) {
-      if (e.admin) {
-        let path = `/operation-analysis${e.path}`
-        this.$router.push(path)
-      } else {
-        this.$message.warning('权限不足，无法进入此页面')
-      }
-    },
-    goToAlarm (e) {
-      if (e.admin) {
-        let path = `/fatigue-monitoring${e.path}`
-        this.$router.push(path)
-      } else {
-        this.$message.warning('权限不足，无法进入此页面')
-      }
+      ]
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.dashboard-container  {
-  padding: 20px;
-  box-sizing: border-box;
-  .main-title {
-    margin-top: 50px;
-    font-size: 30px;
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-    font-weight: bold;
-    margin-bottom: 50px;
-    margin-left: 50px;
-    display: block;
-  }
-  .main-card {
-    .tab-con {
-      width: 100%;
-      height: 400px;
-      background-image: url(../../assets/images/yunying.png);
+<style scoped>
+    .homePage-container {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+    }
+    .homePage-title {
+        width: 100%;
+        font-size: 22px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        min-height: 74px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        font-weight: bold;
+    }
+    .blackSkinBg {
+        background-image: url('../../assets/images/homePageIcon/bgImg/blackSkinBg.png');
+    }
+    .whiteSkinRightBottom {
+      width: 20vw;
+      height: 25vh;
+      background-image: url('../../assets/images/homePageIcon/bgImg/首页浅色背景插画.png');
       background-repeat: no-repeat;
-      background-size: 100% 100%;
-      color: #fff;
-      background-color: #4fa3e4;
-      border-radius: 12px;
+      position: absolute;
+      right: 0;
+      bottom: 0;
     }
-    .tab-con:hover {
-      background-color: #2089db;
-      transform: scale(0.99)
+    .whiteSkinBg {
+        background-image: url('../../assets/images/homePageIcon/bgImg/normalBg.png');
+        background-size: 100% 100%;
     }
-    .tab-con-dis {
-      background-color: #999 !important
+    .blackSkin-title {
+        color: #ffffff;
+        background-image: url('../../assets/images/homePageIcon/bgImg/blackSkin-title.png');
     }
-    .tab-ans {
-      width: 100%;
-      height: 400px;
-      color: #fff;
-      .item-fam {
+    .whiteSkin-title {
+        color: #000000;
+        background-image: url('../../assets/images/homePageIcon/bgImg/normal-title.png');
+    }
+    .homePage-content {
         width: 100%;
         display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        .item-font {
-          width: 32%;
-          height: 133px;
-          background-color:  #4fa3e4;
-          margin-bottom: 8px;
-          border-radius: 6px;
-          .inside-font {
-            width: 100%;
-            height: 80px;
-            position:relative;
-            .img-font {
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              margin-left: -15px;
-              margin-top: 10px;
-            }
-          }
-        }
-        .item-font-dis {
-          background-color: #999 !important
-        }
-        .item-font:hover{
-          background-color: #2089db;
-          transform: scale(0.96)
-        }
-        .item-font-dis:hover {
-          background-color: #666;
-          transform: scale(0.96)
-        }
-      }
-      .simple-font {
-        width: 100%;
-        height: 118px;
-        background-color:  #4fa3e4;
-        border-radius: 6px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        .simple-inside-font {
-          width: 49%;
-          height: 60px;
-          position:relative;
-          .simple-img-font {
-            position: absolute;
-            // left: 50%;
-            margin-left: -20px;
-            margin-top: 20px;
-          }
-        }
-      }
-      .simple-font-dis {
-        background-color: #999 !important
-      }
-      .simple-font:hover {
-        background-color: #2089db;
-        transform: scale(0.97)
-      }
-      .simple-font-dis:hover {
-        background-color: #666;
-        transform: scale(0.97)
-      }
+        flex-direction: column;
+        height: auto;
+        padding: 2vh 5vw;
+        box-sizing: border-box;
     }
-    .tab-contral {
-       width: 100%;
-      height: 400px;
-      color: #fff;
-      .item-fam {
-        width: 100%;
+    .homePage-content-item:nth-child(2) {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        .item-font {
-          width: 48%;
-          height: 195px;
-          background-color:  #4fa3e4;
-          margin-bottom: 8px;
-          border-radius: 6px;
-          .inside-font {
-            width: 100%;
-            height: 120px;
-            position:relative;
-            .img-font {
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              margin-left: -20px;
-              margin-top: 10px;
-            }
-          }
-        }
-        .item-font-dis {
-          background-color: #999 !important
-        }
-        .item-font:hover {
-          background-color: #2089db;
-          transform: scale(0.97)
-        }
-        .item-font-dis:hover {
-          background-color: #666;
-          transform: scale(0.96)
-        }
-      }
+        flex-direction: row;
     }
-  }
-}
+    .homePage-content-item > div {
+        margin-left: 10px;
+        margin-top: 12px;
+        margin-right: 3vw;
+    }
 </style>

@@ -8,12 +8,14 @@
       <h2 class="title">客流高峰断面分析</h2>
       <Chart :chartData="chartData"></Chart>
     </div>
+    <introduceWrapper :msg="msg"/>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import headerNav from './Components/header'
 import Chart from './Components/chart'
+import introduceWrapper from '@/components/introduce/'
 // import contentWrapper from './Components/content';
 // import moment from 'moment'
 export default {
@@ -24,12 +26,17 @@ export default {
       checkData: {},
       chartData: {},
       isUpdate: false,
-      nowTime: ''
+      nowTime: '',
+      msg: {
+        methods: '线路客流高峰断面分析将纵坐标将一天24小时以1小时为单位分为n个时间段，横坐标以线路上的站点为空间单位，通过散点图的圆的大小表示断面客流的人数多少，圆圈越大断面客流越多。',
+        aim: '通过该分析直观掌握同一线路在不同时刻的最大最小断面，为线路配车，调度方案调整以及评价提供决策支持。'
+      }
     }
   },
   components: {
     headerNav,
-    Chart
+    Chart,
+    introduceWrapper
     // contentWrapper
   },
   mounted () {

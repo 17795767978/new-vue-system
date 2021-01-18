@@ -40,7 +40,7 @@ export default {
     perNum () {
       if (this.deviceCount && this.deviceCount !== '0') {
         let num = this.onlineDeviceCount / this.deviceCount * 100
-        return JSON.stringify(num).substring(0, 5)
+        return num.toFixed(2)
       } else {
         return '——'
       }

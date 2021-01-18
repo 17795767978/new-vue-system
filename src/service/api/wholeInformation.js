@@ -8,6 +8,20 @@ export const wholeInformationApi = {
       desc: '获取线路信息'
     },
     {
+      name: 'getLineSec',
+      method: 'POST',
+      path: '/api/net/data/busline/getLineListData',
+      mockPath: '/api/net/data/busline/getLineListData',
+      desc: '--获取线网线路信息--'
+    },
+    {
+      name: 'getComSec',
+      method: 'POST',
+      path: '/api/net/data/busline/getCompanyListData',
+      mockPath: '/api/net/data/busline/getCompanyListData',
+      desc: '--获取线网机构信息--'
+    },
+    {
       name: 'getStation',
       method: 'POST',
       path: '/zhfxpt/analysis/getStations',
@@ -40,6 +54,55 @@ export const wholeInformationApi = {
       mockPath: '/api/base/common/getCityCoordinatePoints',
       params: {},
       desc: '获取城市坐标'
+    },
+    {
+      name: 'getAllBaseStationNamesListData',
+      method: 'POST',
+      path: '/api/net/data/basestation/getAllBaseStationNamesListData',
+      mockPath: '/api/net/data/basestation/getAllBaseStationNamesListData',
+      params: {},
+      desc: '站位列表'
+    },
+    {
+      name: 'videoInfo',
+      method: 'POST',
+      path: '/api/base/video/param/info/list',
+      mockPath: '/api/base/video/param/info/list',
+      params: {},
+      desc: '视频通道'
+    },
+    {
+      name: 'videoInfoAdd',
+      method: 'POST',
+      path: '/api/base/bus/video/info/add',
+      mockPath: '/api/base/bus/video/info/add',
+      params: {
+      },
+      desc: '车辆视频位置关系-新增'
+    },
+    {
+      name: 'videoList',
+      method: 'POST',
+      path: '/api/base/bus/video/info/list',
+      mockPath: '/api/base/bus/video/info/list',
+      params: {},
+      desc: '车辆视频位置关系-列表'
+    },
+    {
+      name: 'videoUpdateList',
+      method: 'POST',
+      path: '/api/base/bus/video/info/update',
+      mockPath: '/api/base/bus/video/info/update',
+      params: {},
+      desc: '车辆视频位置关系-更新'
+    },
+    {
+      name: 'getDevType',
+      method: 'POST',
+      path: '/zhfxpt/getDevType',
+      mockPath: '/zhfxpt/getDevType',
+      params: {},
+      desc: '设备列表'
     }
   ]
 }

@@ -103,7 +103,7 @@ export default {
         tooltip: {
           position: 'top',
           formatter: function (params) {
-            return params.name + '---客流高峰值:' + params.value[2]
+            return params.name + '---断面客流值:' + params.value[2]
           }
         },
         grid: {
@@ -147,7 +147,7 @@ export default {
           // type: 'effectScatter',
           symbolSize: (val) => {
             if (this.valueNum < 50) {
-              return val[2] * 0.5
+              return val[2] * 1.5
             } else if (this.valueNum > 50 && this.valueNum < 100) {
               return val[2] * 0.4
             } else if (this.valueNum > 100 && this.valueNum < 150) {

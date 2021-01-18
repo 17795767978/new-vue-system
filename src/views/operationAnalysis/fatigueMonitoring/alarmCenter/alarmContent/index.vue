@@ -48,17 +48,18 @@ export default {
     mapDetail
   },
   created () {
-    this.$route.query.id = JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
-    this._warnInfoDetail()
+    // this.$route.query.id = JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
+    this._warnInfoDetail(this.$route.query.id)
   },
   activated () {
-    this._warnInfoDetail()
+    // this.$route.query.id = JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
+    this._warnInfoDetail(this.$route.query.id)
   },
   watch: {},
   methods: {
-    _warnInfoDetail () {
+    _warnInfoDetail (params) {
       this.$api['tiredMonitoring.getWarnDetail']({
-        warnUuid: JSON.parse(JSON.stringify(sessionStorage.getItem('id')))
+        warnUuid: params
       }).then(res => {
         this.busDetails = res
       })

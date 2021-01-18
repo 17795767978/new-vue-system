@@ -1,0 +1,100 @@
+<template>
+  <div>
+    <Search
+      :isOrg='true'
+      :isLine="true"
+      :isBus="false"
+      :isTime="false"
+      :isTurn="true"
+      :isMonth="false"
+      :isDataCurrent="true"
+      :isEmpty="true"
+      :isDownload="activeName === 'second'"
+      :isDefault="true"
+      :isWarntype="false"
+      :downLoadName="downLoadName"
+      @configCheck="getSearch"
+    />
+    <div class="content-wrapper">
+      <el-tabs style="width: 100%;" v-model="activeName">
+        <el-tab-pane label="OD图" name="first">
+          <div class="table">
+            <Echarts :selectData="selectData"/>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="OD表格" name="second">
+          <Table :selectData="selectData"/>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    <introduceWrapper :msg="msg"/>
+  </div>
+</template>
+
+<script>
+import Search from '@/components/searchAlarm'
+import Table from './Components/table'
+import Echarts from './Components/echarts'
+import Immutable from 'immutable'
+import introduceWrapper from '@/components/introduce/'
+export default {
+  name: 'lineOD',
+  data () {
+    return {
+      selectData: {},
+      echartsData: {},
+      activeName: 'first',
+      downLoadName: 'downLoad.getLineOdCountListDataExport',
+      msg: {
+        methods: '图中横坐标为线路该方向上的站点，弧线代表一个站到另外一个站的人流总数，颜色从绿色到橘红色，颜色越深线条越粗代表人流总数越大，鼠标放在某条弧线上会显示该OD的详情',
+        aim: '图中横坐标为线路该方向上的站点，弧线代表一个站到另外一个站的人流总数，颜色从绿色到橘红色，颜色越深线条越粗代表人流总数越大，鼠标放在某条弧线上会显示该OD的详情'
+      }
+    }
+  },
+  methods: {
+    getSearch (data) {
+      if (data.lineId === '' || data.lineType === '') {
+        this.$message.warning('请选择完整的查询条件')
+      } else {
+        this.activeName = 'first'
+        this.selectData = data
+      }
+    }
+  },
+  mounted () {
+    let map1 = {
+      a: {
+        c: 2
+      },
+      b: 2
+    }
+    let map2 = Immutable.Map(map1)
+    let map3 = Immutable.Map(map1)
+    Immutable.fromJS(map2)
+    map2 = map2.toJS()
+    console.log(Immutable.is(map3, map2))
+  },
+  components: {
+    Search,
+    Table,
+    Echarts,
+    introduceWrapper
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.content-wrapper {
+  width: 100%;
+  height: calc(100vh - 16vh);
+  padding: 2vh 2vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  .table {
+    width: 100%;
+    height: 75vh;
+    box-sizing: border-box;
+  }
+}
+</style>

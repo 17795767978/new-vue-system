@@ -68,7 +68,7 @@ export default {
       type: '1',
       dateTime: dataBefore,
       startHour: '07',
-      endHour: '09'
+      endHour: '08'
     })
   },
   mounted () {
@@ -112,7 +112,7 @@ export default {
             type: '1',
             dateTime: moment(this.checkData.date).format('YYYY-MM-DD'),
             startHour: this.checkData.startTime.substring(0, 2),
-            endHour: this.checkData.endTime.substring(0, 2)
+            endHour: this.checkData.endTimeFormatter
           })
         }
         this.$emit('isUpdateToUp', false)
@@ -179,6 +179,7 @@ export default {
       if (this.dataSource.length > 0) {
         this.maxNum = max([max(this.upPersonNum), max(this.downPersonNum), max(this.passengerFlow)])
         this.maxRate = max(this.fullRate)
+        console.log(this.maxRate)
       }
       setTimeout(() => {
         this.drawLine()
@@ -213,13 +214,14 @@ export default {
           // }
         },
         color: ['#249cf9', '#fdb628', '#67e0e3', '#eb6f49'],
-        // legend: {
-        //   data: this.tabType,
-        //   bottom: 10,
-        //   textStyle: {
-        //     color: '#000'
-        //   }
-        // },
+        legend: {
+          data: this.tabType,
+          bottom: 10,
+          selectedMode: false,
+          textStyle: {
+            color: '#000'
+          }
+        },
         xAxis: [
           {
             type: 'category',
@@ -254,12 +256,13 @@ export default {
           {
             type: 'value',
             // name: '水量',
-            min: 0,
-            max: this.maxNum + this.maxNum / 5,
-            interval: Math.floor(this.maxNum / 5),
+            // min: 0,
+            // max: this.maxNum + this.maxNum / 5,
+            // interval: Math.floor(this.maxNum / 5),
             // axisLabel: {
             //     formatter: '{value} ml'
             // },
+            minInterval: 1,
             splitLine: {
               show: false
             },
@@ -276,7 +279,7 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: this.maxRate + 10,
+            max: this.maxRate,
             interval: 20,
             splitLine: {
               show: false

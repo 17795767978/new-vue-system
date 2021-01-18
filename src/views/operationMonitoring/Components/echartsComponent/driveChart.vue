@@ -15,6 +15,7 @@ const TIME = 3 * 60 * 1000
 export default {
   data () {
     return {
+      activeNight: 0,
       loading: true,
       changeData: [],
       badDrivingBehavior: [],
@@ -27,10 +28,12 @@ export default {
   created () {
     let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._badDrivingBehavior({
-      orgId
+      orgId,
+      warnTypes: []
     })
   },
   mounted () {
+    this.$store.state.views.activeNight ? this.skinType = 1 : this.skinType = 0
     // setTimeout(() => {
     //   this.drawLine();
     //   this.loading = false;
@@ -62,18 +65,19 @@ export default {
       let driveLine = this.$echarts.init(document.getElementById('drive-chart'))
       window.addEventListener('resize', () => { driveLine.resize() })
       driveLine.setOption({
-        title: {
-          text: '不良驾驶行为统计',
-          left: 'center',
-          textStyle: {
-            'color': '#fff'
-          }
-        },
+        // title: {
+        //   text: '不良驾驶行为统计',
+        //   left: 'center',
+        //   textStyle: {
+        //     'color': this.skinType === 0 ? '#000000' : '#ffffff',
+        //     'fontSize': 14
+        //   }
+        // },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
-        color: ['#ffa45e', '#c8e49d', '#fedd00', '#7ce1de', '#f3b3cc', '#dc3971'],
+        color: ['#ff2bd0', '#00ffff', '#ff840b', '#ff31a0', '#fedd00'],
         series: [
           // {
           //   name: '面积模式',
@@ -88,6 +92,9 @@ export default {
             type: 'pie',
             radius: '55%',
             center: ['50%', '60%'],
+            label: {
+              formatter: '{b}: {@2012} ({d}%)'
+            },
             // roseType: 'area',
             data: this.badDrivingBehavior
           }

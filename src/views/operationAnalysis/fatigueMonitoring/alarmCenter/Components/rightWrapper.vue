@@ -114,6 +114,12 @@
         </el-table-column>
         <el-table-column
           align="center"
+          prop="speed"
+          label="报警速度(km/h)"
+          >
+        </el-table-column>
+        <el-table-column
+          align="center"
           prop="warnTime"
           label="报警时间"
           :formatter="formatterTime"
@@ -146,17 +152,19 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-      <span>数据量可能过大，请耐心等待(如果数据量超过10000条，默认下载前10000条信息)</span>
+      <span>导出只支持最大下载量为1048576条，如果超过1048576条默认下载前1048576条</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <downloadExcel
+        <el-button type="primary" @click="getExcel">确认</el-button>
+        <!-- <downloadExcel
           :data= "json_data"
           type="xls"
           style="display: inline-block; margin-left: 10px;"
           name= "报警中心报表.xls"
-        >
-        <el-button type="primary" @click="getExcel" :loading="downloadLoading">{{code}}</el-button>
-        </downloadExcel>
+        > -->
+        <!-- warnExport -->
+
+        <!-- </downloadExcel> -->
       </span>
     </el-dialog>
   </div>
@@ -164,7 +172,7 @@
 
 <script type="text/ecmascript-6">
 // import { tableList, alarmType, downLoad } from 'server/interface'
-import downloadExcel from 'vue-json-excel'
+// import downloadExcel from 'vue-json-excel'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {
@@ -174,7 +182,7 @@ export default {
     }
   },
   components: {
-    downloadExcel
+    // downloadExcel
   },
   data () {
     return {
@@ -250,7 +258,9 @@ export default {
     setTimeout(() => {
       this.formInline.timeValue = [timeStart, timeEnd]
     }, 20)
-    // console.log(this.formInline);
+    if (this.userId !== '1') {
+      this.formInline.orgId = this.userId
+    }
   },
   activeted () {
   },
@@ -259,13 +269,14 @@ export default {
       deep: true,
       handler (newValue) {
         // 车偏号 联动
+        console.log(newValue)
         this.changeBusPlateNumber()
         this.formInline.timeValue.forEach(time => {
           time = moment(time).format('YYYY-MM-DD HH:mm:ss')
         })
         if (newValue.levelsType !== '0') {
           this._tableList({
-            orgId: this.formInline.orgId, // 组织机构id
+            orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
             lineId: this.formInline.lineId, // 线路id
             busUuid: this.formInline.busUuid, // 车辆id
             devCode: this.formInline.devCode, // 设备号
@@ -290,17 +301,18 @@ export default {
   },
   methods: {
     _alarmType (params) {
-      this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
-        let dataArr = res
-        this.warnOptions = []
-        this.formInline.warnTypeId = []
-        dataArr.forEach((list, index) => {
-          this.warnOptions[index] = {
-            label: list.value,
-            value: list.code
-          }
-        })
-      })
+      this.warnOptions = []
+      // this.$api['tiredMonitoring.getWarntypes'](params).then(res => {
+      //   let dataArr = res
+      //   this.warnOptions = []
+      //   this.formInline.warnTypeId = []
+      //   dataArr.forEach((list, index) => {
+      //     this.warnOptions[index] = {
+      //       label: list.value,
+      //       value: list.code
+      //     }
+      //   })
+      // })
     },
     _tableList (params) {
       this.loading = true
@@ -337,8 +349,10 @@ export default {
     },
     handleCurrentChange (val) {
       this.pageNum = val
+      console.log(this.userId)
+      console.log(this.formInline.orgId)
       this._tableList({
-        orgId: this.userId !== '1' ? this.formInline.orgId : '', // 组织机构id
+        orgId: this.formInline.orgId.length > 0 ? this.formInline.orgId : '', // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号
@@ -353,7 +367,6 @@ export default {
       })
     },
     handleClick (row) {
-      sessionStorage.setItem('id', row.warnUuid)
       this.$router.push({
         name: 'alarmContent',
         query: {
@@ -402,8 +415,44 @@ export default {
       this.$emit('clear')
     },
     onSave () {
-      this.$api['tiredMonitoring.getWarnList']({
-        orgId: this.formInline.orgId, // 组织机构id
+      this.centerDialogVisible = true
+      // this.$api['tiredMonitoring.getWarnList']({
+      //   orgId: this.formInline.orgId, // 组织机构id
+      //   lineId: this.formInline.lineId, // 线路id
+      //   busUuid: this.formInline.busUuid, // 车辆id
+      //   devCode: this.formInline.devCode, // 设备号
+      //   busPlateNumber: this.formInline.busPlateNumber, // 车牌号
+      //   busSelfCode: this.formInline.busSelfCode, // 自编号
+      //   warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
+      //   warnTypeId: this.formInline.warnTypeId, // 报警类型
+      //   startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
+      //   endTime: this.formInline.timeValue[1],
+      //   pageSize: 10000,
+      //   pageNum: 1
+      // }).then(res => {
+      //   let excelArr = []
+      //   res.list.forEach((item, index) => {
+      //     item.warnTime = moment(item.warnTime).format('YYYY-MM-DD HH:mm:ss')
+      //     excelArr[index] = {
+      //       '所属公司': item.orgName,
+      //       '所属线路': item.lineName,
+      //       '车牌号': item.busPlateNumber,
+      //       '车辆自编号': item.busSelfCode,
+      //       '设备编号': item.devCode,
+      //       '报警级别(级)': item.warnLevel,
+      //       '报警类型': item.warnTypeName,
+      //       '报警速度': item.speed,
+      //       '报警时间': item.warnTime
+      //     }
+      //   })
+      //   this.json_data = excelArr
+      //   this.downloadLoading = false
+      //   this.code = '下载'
+      // })
+    },
+    getExcel () {
+      this.$api['downLoad.warnExport']({
+        orgId: this.formInline.orgId === '1' ? '' : this.formInline.orgId, // 组织机构id
         lineId: this.formInline.lineId, // 线路id
         busUuid: this.formInline.busUuid, // 车辆id
         devCode: this.formInline.devCode, // 设备号
@@ -412,37 +461,16 @@ export default {
         warnLevel: this.formInline.warnLevel, // 报警等级  （一级：1；二级：2；三级：3）
         warnTypeId: this.formInline.warnTypeId, // 报警类型
         startTime: this.formInline.timeValue[0], // 时间格式   开始结束默认查近7天的
-        endTime: this.formInline.timeValue[1],
-        pageSize: 10000,
-        pageNum: 1
+        endTime: this.formInline.timeValue[1]
       }).then(res => {
-        let excelArr = []
-        res.list.forEach((item, index) => {
-          item.warnTime = moment(item.warnTime).format('YYYY-MM-DD HH:mm:ss')
-          excelArr[index] = {
-            '所属公司': item.orgName,
-            '所属线路': item.lineName,
-            '车牌号': item.busPlateNumber,
-            '车辆自编号': item.busSelfCode,
-            '设备编号': item.devCode,
-            '报警级别(级)': item.warnLevel,
-            '报警类型': item.warnTypeName,
-            '报警时间': item.warnTime
-          }
-        })
-        this.json_data = excelArr
-        this.downloadLoading = false
-        this.code = '下载'
-        this.centerDialogVisible = true
-      })
-    },
-    getExcel () {
-      this.centerDialogVisible = false
-      if (this.json_data.length > 0) {
+        // console.log(res)
+        window.open(res.url)
+        // window.location.href = res.url
+        this.centerDialogVisible = false
         this.$message.success('正在下载中。。。')
-      } else {
-        this.$message.warning('暂无数据')
-      }
+      }).catch((err) => {
+        this.$message.error(err.message)
+      })
     }
   }
 }

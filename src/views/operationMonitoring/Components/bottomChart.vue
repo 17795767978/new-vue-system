@@ -19,7 +19,7 @@
                 <span v-if="list[1] === '打电话。'" style="color: #eadf00;">{{list[1]}}</span>
                 <span v-if="list[1] === '抽烟。'" style="color: #fa8a96;">{{list[1]}}</span>
                 <span v-if="list[1] === '分神驾驶。'" style="color: #e9a475;">{{list[1]}}</span>
-                <span v-if="list[1] === '疲劳驾驶。'" style="color: #dc3971;">{{list[1]}}</span>
+                <span v-if="list[1] === '疲劳驾驶。'" style="color: #00ff00;">{{list[1]}}</span>
                 <span v-if="list[1] === '驾驶员异常。'" style="color: #e8f19c;">{{list[1]}}</span>
               </p>
             </vueSeamless>

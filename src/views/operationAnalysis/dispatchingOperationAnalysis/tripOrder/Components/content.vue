@@ -45,14 +45,15 @@ export default {
   },
   created () {
     let date = new Date()
-    date = moment(date).format('YYYY-MM-DD')
+    date = moment(date).subtract(1, 'day').format('YYYY-MM-DD')
     this._tripOrder({
       lineId: this.initLineId,
       dateTime: date,
       type: '1',
       startHour: '07',
-      endHour: '09',
-      busPlateNumbers: []
+      endHour: '08',
+      busPlateNumbers: [],
+      isHistory: '0'
     })
   },
   mounted () {
@@ -69,8 +70,9 @@ export default {
           dateTime: this.selectData.dateTime,
           type: this.selectData.type,
           startHour: this.selectData.startHour.substring(0, 2),
-          endHour: this.selectData.endHour.substring(0, 2),
-          busPlateNumbers: this.selectData.busPlateNumbers
+          endHour: this.selectData.endHourFormatter,
+          busPlateNumbers: this.selectData.busPlateNumbers,
+          isHistory: this.selectData.radio
         })
       }
       this.$emit('isUpdateTo', false)
@@ -81,7 +83,6 @@ export default {
       this.$api['schedulingAnalysis.getSequenceChartDatas'](params).then(res => {
         this.beforeDate = false
         this.echartDatas = res.datas
-        console.log('initData', this.echartDatas)
         this.carData = res.legendNames
         // Object.freeze(this.echartDatas)
         this.echartDatas.forEach((date, index) => {
@@ -107,6 +108,12 @@ export default {
         // console.log(abs.map((a) => moment(a).format('YYYY-MM-DD HH:mm:ss')))
         this.maxDate = max(abs)
         this.minDate = min(abs)
+        // console.log(this.maxDate)
+        // console.log(this.minDate)
+        if (this.minDate === this.maxDate) {
+          const date = moment(this.maxDate).format('YYYY-MM-DD 06:00:00')
+          this.minDate = moment(date).valueOf()
+        }
         if (this.echartDatas.length > 0) {
           this.$refs.chartWrapper.style.display = 'block'
           setTimeout(() => {
@@ -193,7 +200,7 @@ export default {
               color: '#666'
             },
             formatter: function (val) {
-              return moment(val).format('HH:mm:ss')
+              return moment(val).format('YYYY-MM-DD HH:mm:ss')
             }
           }
         },

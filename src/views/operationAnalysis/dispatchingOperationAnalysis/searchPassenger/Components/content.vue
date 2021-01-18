@@ -1,5 +1,9 @@
 <template>
   <div class="table-wrapper" v-loading="loading">
+    <div class="total">
+      <span style="font-size: 1vw;margin-right: 1vw;">上车人数: {{totalOnPersonCount}}</span>
+      <span style="font-size: 1vw;">下车人数: {{totalOffPersonCount}}</span>
+    </div>
     <el-table
       :data="tableData"
       element-loading-text="拼命加载中"
@@ -41,7 +45,7 @@
         width="60"
         label="方向">
         <template slot-scope="scope">
-          {{scope.row.pfrLineType === '1' ? '上行' : '下行'}}
+          {{scope.row.pfrLineType === 1 ? '上行' : '下行'}}
         </template>
       </el-table-column>
       <el-table-column
@@ -142,7 +146,9 @@ export default {
       pageSize: 15,
       downLoadData: [],
       loading: true,
-      isDisabled: false
+      isDisabled: false,
+      totalOnPersonCount: 0,
+      totalOffPersonCount: 0
     }
   },
   computed: {
@@ -180,7 +186,11 @@ export default {
         this.pageNumber = 1
         this.selectData.pageNumber = this.pageNumber
         this.selectData.pageSize = 15
-        this._passengerFlow(this.selectData)
+        let select = JSON.parse(JSON.stringify(this.selectData))
+        if (this.selectData.orgId === '1') {
+          select.orgId = ''
+        }
+        this._passengerFlow(select, this.selectData.radio)
         this.$emit('isUpdateTo')
       }
     },
@@ -194,21 +204,38 @@ export default {
     }
   },
   methods: {
-    _passengerFlow (params) {
+    _passengerFlow (params, type) {
       this.loading = true
       this.isDisabled = true
-      this.$api['passengerFlow.list'](params).then(res => {
-        this.tableData = res.list
-        this.total = res.total
-        this.$message.success('数据已更新')
-        this.loading = false
-        this.isDisabled = false
-      }).catch((error) => {
-        console.log(error)
-        this.$message.error(error.message)
-        this.loading = false
-        this.isDisabled = false
-      })
+      if (type === '1') {
+        this.$api['passengerFlow.todayList'](params).then(res => {
+          this.tableData = res.pageInfo.list
+          this.total = res.pageInfo.total
+          this.totalOnPersonCount = res.totalOnPersonCount
+          this.totalOffPersonCount = res.totalOffPersonCount
+          this.$message.success('数据已更新')
+          this.loading = false
+          this.isDisabled = false
+        }).catch((error) => {
+          this.$message.error(error.message)
+          this.loading = false
+          this.isDisabled = false
+        })
+      } else {
+        this.$api['passengerFlow.list'](params).then(res => {
+          this.tableData = res.pageInfo.list
+          this.total = res.pageInfo.total
+          this.totalOnPersonCount = res.totalOnPersonCount
+          this.totalOffPersonCount = res.totalOffPersonCount
+          this.$message.success('数据已更新')
+          this.loading = false
+          this.isDisabled = false
+        }).catch((error) => {
+          this.$message.error(error.message)
+          this.loading = false
+          this.isDisabled = false
+        })
+      }
     },
     downLoadList (params) {
       this.$emit('getData', [], 0)
@@ -219,6 +246,7 @@ export default {
             '机构名称': item.orgName,
             '线路': item.pfrLineName,
             '车辆': item.prfBusPlateNumber,
+            '方向': item.pfrLineType === 1 ? '上行' : '下行',
             '站序': item.pfrStationSeq,
             '站点名称': item.pfrStationName,
             '趟次': item.pfrTripTime,
@@ -247,7 +275,12 @@ export default {
       this.selectData.pageNumber = val
       this.selectData.pageSize = 15
       this.pageNumber = val
-      this._passengerFlow({ ...this.selectData })
+      let select = JSON.parse(JSON.stringify(this.selectData))
+      if (this.selectData.orgId === '1') {
+        select.orgId = ''
+      }
+      this._passengerFlow(select, this.selectData.radio)
+      // this._passengerFlow({ ...this.selectData }, this.selectData.radio)
     }
   }
 }
@@ -256,7 +289,7 @@ export default {
 <style lang="scss" scoped>
 .table-wrapper {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 5px;
   padding: 20px 20px;
   box-sizing: border-box;
 }

@@ -11,13 +11,18 @@
       tag="ul"> -->
         <li v-for="item in shortcuts" v-beautiContext:menu="item" :key="item.name" @click="goToMenu(item)" :class="{active: activeMenu.name === item.name }">
           <el-tooltip :content="item.meta.title" placement="bottom-start" :enterable="false">
-            <span v-if="item.meta.icon !==''" :class="item.meta.icon"></span>
-            <span v-else>{{ item.meta.title !== '' ? item.meta.title.substring(0,2) : 'icon' }}</span>
+            <span>{{item.meta.title}}</span>
+            <!-- <span v-else>{{ item.meta.title !== '' ? item.meta.title.substring(0,2) : 'icon' }}</span> -->
           </el-tooltip>
           <i class="active-dot" :style="{background: theme}"></i>
         </li>
       <!-- </transition-group> -->
     </draggable>
+    <el-switch
+      v-model="$store.state.views.activeNight"
+      :active-text="$store.state.views.activeNight ? '关闭夜间风格' : '开启夜间风格'"
+     >
+    </el-switch>
   </div>
 </template>
 <script>
