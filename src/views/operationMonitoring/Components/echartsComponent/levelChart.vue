@@ -7,7 +7,7 @@
 </template>
 
 <script>
-const TIME = 3 * 60 * 1000
+const TIME = 15 * 1000
 export default {
   data () {
     return {

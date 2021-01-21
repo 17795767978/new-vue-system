@@ -10,7 +10,8 @@
       :scroll-wheel-zoom="true"
       @ready="handler"
       v-loading="loading"
-      element-loading-background="rgba(0, 0, 0, 0)"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.2)"
     >
       <!-- animation="BMAP_ANIMATION_DROP" -->
       <!-- animation="BMAP_ANIMATION_BOUNCE" -->
@@ -44,6 +45,31 @@
           </el-form-item>
         </el-form>
       </bm-control>
+       <!-- 线路 -->
+      <bm-polyline
+        v-for="item in lineData"
+        :key="item.lineUuid"
+        :path="item.stations"
+        :stroke-color="item.color"
+        :stroke-opacity="1"
+        :stroke-weight="2.2"
+        :editing="false"
+        @lineupdate="updatePolylinePath">
+      </bm-polyline>
+      <!-- 站点 -->
+      <!-- <bm-marker
+        v-for="marker in stationsDatas"
+        :key="marker.staUuid"
+        :position="{lng: marker.lng, lat: marker.lat}"
+        :title="`${marker.lineName}-${marker.staName}站`"
+        :icon="getIconStation"
+        class="arrow_box"
+        :top="true"
+        :zIndex="1000"
+        >
+        <bm-label :content="''" @click="handleStationClick(marker, stationsDatas)" :labelStyle="{padding: '3px 3px', backgroundColor: 'rgba(0,0,0,1)', border:`1px solid ${marker.color}`, borderRadius: '50%'}" :offset="{width: -5, height: -5}"/>
+        <bm-label :content="`${marker.staName}`" v-if="marker.isSee" :labelStyle="{padding: '0px 0px', color: 'white', fontSize : '12px', backgroundColor: 'rgba(0,0,0,1)', border: 'hidden'}" :offset="{width: -3, height: 10}"/>
+      </bm-marker> -->
     </baidu-map>
     <div style="position: absolute; right: 2vw; bottom: 2vh;z-index: 1000" v-if="isSelect">
         <button v-for="(item, index) in buttonGroup" @click="getMapType(index)" :class="currentIndexMap === index ? 'active' : ''" class="primary" :key="index">{{item}}</button>
@@ -154,14 +180,15 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { BaiduMap, BmMarker, BmlHeatmap, BmControl } from 'vue-baidu-map'
+// BmLabel
+import { BaiduMap, BmMarker, BmlHeatmap, BmControl, BmPolyline } from 'vue-baidu-map'
 import { mapStyle } from './utils/mapStyle'
-import iconCarRed from '../../assets/images/bus-red.png'
-import iconCarGreen from '../../assets/images/bus-green.png'
+import iconCarRed from '../../assets/images/bus_orange.png'
+import iconCarGreen from '../../assets/images/bus_green.png'
 import videoWrapper from './video'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-const TIME = 3 * 60 * 1000
+const TIME = 15 * 1000
 // const URL = 'http://61.157.184.120:12056/api/v1/basic/' // 宜宾
 const URL = 'http://192.168.0.55:12056/api/v1/basic/' // 邢台
 export default {
@@ -198,7 +225,7 @@ export default {
       lineOptions: [],
       zoom: 3,
       ak: '7vVOlMOKr03PaWX82WajF6m',
-      seeZoom: 15,
+      seeZoom: 17,
       markersAll: [],
       markers: [],
       hotdata: [],
@@ -221,7 +248,12 @@ export default {
       monitorData: [],
       carDetailData: {},
       key: '',
-      urlList: []
+      urlList: [],
+      colors: ['#1694ff', '#12f6fa', '#00c0fe', '#14afb2', '#7299f2', '#800080', '#07999c', '#FFB6C1', '#DC143C', '#191970', '#1E90FF', '#5F9EA0', '#800000', '#2E8B57', '#808000', '#FFD700', '#FF8C00', '#8B4513', '#696969'],
+      lineDataAll: [],
+      lineData: [],
+      stationsDatas: [],
+      stationsDatasAll: []
     }
   },
   components: {
@@ -230,7 +262,9 @@ export default {
     BmMarker,
     // BmlMarkerClusterer,
     BmControl,
-    videoWrapper
+    videoWrapper,
+    BmPolyline
+    // BmLabel
   },
   beforeCreate () {
   },
@@ -238,7 +272,11 @@ export default {
     // this._getOps()
   },
   mounted () {
+    let orgId = this.$store.getters.userId === '1' ? '' : this.$store.getters.userId
     this._getInitMap()
+    this._getLineNetInfos({
+      orgId
+    })
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
       this.lineOptions.push({
@@ -265,21 +303,35 @@ export default {
     getIcon () {
       return function (marker) {
         if (marker.warnInfo) {
-          return { url: `${iconCarRed}`, size: { width: 13, height: 15 } }
+          return { url: `${iconCarRed}`, size: { width: 15, height: 14 } }
         } else {
-          return { url: `${iconCarGreen}`, size: { width: 13, height: 15 } }
+          return { url: `${iconCarGreen}`, size: { width: 17, height: 17 } }
         }
       }
+    },
+    getIconStation () {
+      return { url: `${iconCarGreen}`, size: { width: 0, height: 0 } }
     },
     ...mapGetters(['formData'])
   },
   watch: {
     'formInline.value': {
       handler (newV) {
+        console.log(newV)
         if (newV !== 'all') {
           this.markers = Object.prototype.toString.call(this.markersAll) === '[object Array]' && this.markersAll.filter(item => item.lineGroupUuid === newV)
+          this.lineData = Object.prototype.toString.call(this.lineDataAll) === '[object Array]' && this.lineDataAll.filter(item => item.lineUuid === newV)
+          // this.stationsDatas = Object.prototype.toString.call(this.stationsDatasAll) === '[object Array]' && this.stationsDatasAll.filter(item => item.lineUuid === newV)
         } else {
-          this.markers = this.markersAll
+          this.loading = true
+          setTimeout(() => {
+            this.markers = this.markersAll
+          }, 100)
+          setTimeout(() => {
+            this.lineData = this.lineDataAll
+            // this.stationsDatas = this.stationsDatasAll
+            this.loading = false
+          }, 1000)
         }
       }
     },
@@ -368,9 +420,42 @@ export default {
     },
     _getOps () {
       this.$api['wholeInformation.getCityCoordinatePoints']().then(res => {
-        console.log(res)
         this.center.lat = res.lat
         this.center.lng = res.lng
+      })
+    },
+    _getLineNetInfos (params) {
+      this.stationsDatas = []
+      this.stationsDatasAll = []
+      this.$api['homeMap.getLineNetInfos'](params).then(res => {
+        // this.lineData = res
+        this.lineData = []
+        this.lineDataAll = []
+        for (let item in res) {
+          this.lineDataAll.push({
+            lineName: res[item][0].lineName,
+            lineUuid: res[item][0].lineUuid,
+            lineType: res[item][0].lineType,
+            stations: res[item]
+          })
+        }
+        // console.log(this.lineDataAll)
+        this.lineDataAll.forEach((item, index) => {
+          item.color = this.colors[index]
+        })
+        // this.stationsDatas = this.stationsDatasAll
+        this.lineData = this.lineDataAll
+        // console.log(this.lineDataAll)
+      })
+    },
+    updatePolylinePath () {},
+    handleStationClick (marker, data) {
+      this.stationsDatas.forEach((item) => {
+        if (item.staUuid === marker.staUuid) {
+          item.isSee = true
+        } else {
+          item.isSee = false
+        }
       })
     },
     _positionRating (params) {
@@ -430,7 +515,7 @@ export default {
     _getVideo (item) {
     },
     handler ({ BMap, map }) {
-      this.zoom = 13
+      this.zoom = 15
       // this.center = this.center
       this._getOps()
       this.isLoading = false

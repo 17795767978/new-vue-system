@@ -101,7 +101,7 @@ export const aysncRoutesMap = [
         title: '调度运营分析',
         icon: 'nocturne icon-dash',
         path: 'runtime-analysis',
-        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', 'search-passenger', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/simple-passenger-flow', '/bus-passenger', '/line-passenger-flow', '/comprehensive-query', '/hot-map', '/line-od']
+        roles: ['/timeTable-analysis', '/passenger-home', '/realtime-passenger-flow', 'search-passenger', '/section-analysis', '/trip-order', '/full-load-rate', '/landing-volume', '/runtime-analysis', '/passenger-transport-capacity', '/simple-passenger-flow', '/bus-passenger', '/line-passenger-flow', '/comprehensive-query', '/hot-map', '/line-od', '/passenger-flow-log-query']
       },
       children: [
         {
@@ -272,6 +272,16 @@ export const aysncRoutesMap = [
             title: '线路OD',
             icon: 'nocturne icon-dash',
             roles: ['/line-od']
+          }
+        },
+        {
+          path: 'passenger-flow-log-query',
+          component: _import_('operationAnalysis/dispatchingOperationAnalysis/passengerFlowLogQuery/index'),
+          name: 'passengerFlowLogQuery',
+          meta: {
+            title: '客流数据排查',
+            icon: 'nocturne icon-dash',
+            roles: ['/passenger-flow-log-query']
           }
         },
         {
@@ -584,6 +594,41 @@ export const aysncRoutesMap = [
       //     roles: ['/chart-analysis/all']
       //   }
       // }
+    ]
+  },
+  {
+    path: '/device-management',
+    component: Layout,
+    name: 'deviceManagement',
+    meta: {
+      title: '设备管理',
+      icon: 'nocturne icon-dash'
+      // roles: ['/vehicleAndDevice', '/device']
+      // roles: ['/line-od', '/device']
+    },
+    children: [
+      {
+        path: 'vehicle-device',
+        component: _import_('deviceManagement/vehicleAndDevice/index'),
+        name: 'vehicleAndDevice',
+        meta: {
+          title: '车辆与设备绑定',
+          icon: 'nocturne icon-dash'
+          // roles: ['/vehicle-device']
+          // roles: ['/line-od']
+        }
+      },
+      {
+        path: 'device',
+        component: _import_('deviceManagement/device/index'),
+        name: 'deviceMan',
+        meta: {
+          title: '设备管理',
+          icon: 'nocturne icon-dash'
+          // roles: ['/device']
+          // roles: ['/line-od']
+        }
+      }
     ]
   },
   {

@@ -39,17 +39,17 @@
       <el-table-column
         prop="upPayNumber"
         align="center"
-        label="登量（人次）">
+        label="上车人数（人次）">
       </el-table-column>
       <el-table-column
         prop="downPayNumber"
         align="center"
-        label="降量（人次）">
+        label="下车人数（人次）">
       </el-table-column>
       <el-table-column
         prop="passNumber"
         align="center"
-        label="通过量（人次）">
+        label="断面客流（人次）">
       </el-table-column>
       <!-- <el-table-column
         prop="approval"

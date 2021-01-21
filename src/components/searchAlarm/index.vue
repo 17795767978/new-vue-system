@@ -24,7 +24,7 @@
       <el-form-item label="选择线路" v-if="islineIdRepeat">
         <el-select style="width: 200px" filterable v-model="formInline.lineIds" multiple collapse-tags placeholder="请选择">
           <el-option
-            v-for="item in lineOptions"
+            v-for="item in lineOptionsAddAll"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -61,6 +61,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="车辆自编号" v-if="isSelfNum">
+        <el-input class="font-style" v-model="formInline.selfNumber"></el-input>
+      </el-form-item>
       <el-form-item label="方向" v-if="isTurn">
         <el-select class="font-style" v-model="formInline.lineType" placeholder="请选择">
           <el-option
@@ -71,6 +74,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="设备号" v-if="isStatusNum">
+        <el-input class="font-style" v-model="formInline.statusNumber"></el-input>
+      </el-form-item>
       <el-form-item label="设备类型" v-if="isStatusType">
         <el-select class="font-style" v-model="formInline.statusType" placeholder="请选择">
           <el-option
@@ -80,12 +86,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="输入设备号" v-if="isStatusNum">
-        <el-input class="font-style" v-model="formInline.statusNumber"></el-input>
-      </el-form-item>
-      <el-form-item label="输入自编号" v-if="isSelfNum">
-        <el-input class="font-style" v-model="formInline.selfNumber"></el-input>
       </el-form-item>
       <el-form-item label="月份" v-if="isMonth">
         <el-date-picker
@@ -397,9 +397,10 @@ export default {
         radio: '1',
         statusNumber: '',
         selfNumber: '',
-        statusType: '2',
+        statusType: '',
         onLine: '',
         sortMethod: 0
+
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -412,8 +413,16 @@ export default {
         value: '2',
         label: '下行'
       }],
-      statusOptions: [],
+      statusOptions: [{
+        value: '10',
+        label: '客流'
+      },
+      {
+        value: '1',
+        label: 'ADAS'
+      }],
       lineOptions: [],
+      lineOptionsAddAll: [],
       lineOptionsSec: [],
       carOptions: [],
       warnOptions: [],
@@ -444,6 +453,7 @@ export default {
     })
     this.$store.dispatch('getLineList').then(res => {
       this.lineOptions = res
+      this.lineOptionsAddAll = [...res, { label: '全选', value: 'all' }]
     })
     this.$store.dispatch('getCarList').then(res => {
       this.carOptions = res
@@ -547,6 +557,7 @@ export default {
             })
           })
           this.lineOptions = list
+          this.lineOptionsAddAll = [...list, { label: '全选', value: 'all' }]
         })
         this.$api['wholeInformation.getCar']({
           lineId: '',
@@ -596,6 +607,13 @@ export default {
         }
       }
     },
+    'formInline.lineIds': {
+      handler (newValue) {
+        if (newValue.indexOf('all') > -1) {
+          this.formInline.lineIds = this.lineOptions.map(item => item.value)
+        }
+      }
+    },
     'formInline.startStation': {
       handler (newV) {
         if (newV !== '') {
@@ -618,11 +636,13 @@ export default {
           if (this.userId === '1') {
             this.$store.dispatch('getLineList').then(res => {
               this.lineOptions = res
+              this.lineOptionsAddAll = [...res, { label: '全选', value: 'all' }]
               this.formInline.lineId = this.lineOptions[0].value
             })
           } else {
             this.$store.dispatch('getLineList', this.userId).then(res => {
               this.lineOptions = res
+              this.lineOptionsAddAll = [...res, { label: '全选', value: 'all' }]
               this.formInline.lineId = this.lineOptions[0].value
             })
           }
@@ -639,7 +659,6 @@ export default {
     'formInline.radio': {
       handler (newV) {
         if (newV === '1') {
-          console.log(this.formInline.dataCurrent)
           this.formInline.valueTime = [moment().format('YYYY-MM-DD 00:00:00'), moment().format('YYYY-MM-DD 23:59:59')]
           this.formInline.dataCurrent = moment().format('YYYY-MM-DD')
           this.formInline.dateArray = [this.formInline.dataCurrent, this.formInline.dataCurrent]
@@ -671,7 +690,7 @@ export default {
   },
   methods: {
     _getDevType () {
-      this.statusOptions = []
+      // this.statusOptions = []
       // this.$api['wholeInformation.getDevType']().then(res => {
       //   let list = []
       //   res.forEach(item => {
@@ -790,7 +809,7 @@ export default {
         statusNumber: '',
         selfNumber: '',
         onLine: '',
-        statusType: '2',
+        statusType: '',
         noDefaultDateArr: [],
         sortMethod: 0
       }
@@ -825,6 +844,7 @@ export default {
       this.$emit('configCheck', configData)
       this.$store.dispatch('getLineList').then(res => {
         this.lineOptions = res
+        this.lineOptionsAddAll = [...res, { label: '全选', value: 'all' }]
       })
       this.$store.dispatch('getComList').then(res => {
         this.comOptions = res
@@ -896,12 +916,9 @@ export default {
       this.$emit('configCheckMul', configData)
     },
     getExcel () {
-      console.log(this.formInline)
-      console.log(this.select)
       let lineArr = []
       this.downLoadLoading = true
       if (this.formInline.lineLineId && this.formInline.lineLineId !== '') {
-        console.log(this.formInline.lineLineId)
         lineArr = this.formInline.lineLineId.split('+')
       }
       this.$api[`${this.downLoadName}`]({
@@ -924,6 +941,11 @@ export default {
         lineType: this.formInline.lineType,
         date: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
         uploadDate: moment(this.formInline.dataCurrent).format('YYYY-MM-DD'),
+        pfrOrgUuid: this.formInline.orgId === '1' ? '' : this.formInline.orgId,
+        pfrLineUuid: this.formInline.lineId,
+        pfrBusNumber: this.formInline.busNumber,
+        prfDevCode: this.formInline.statusNumber,
+        pfrUploadTime: this.isDataCurrent ? moment(this.formInline.dataCurrent).format('YYYY-MM-DD') : '',
         noDefaultDateArr: this.formInline.noDefaultDateArr,
         sortMethod: this.formInline.sortMethod
       }).then(res => {

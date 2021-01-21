@@ -19,6 +19,16 @@ export const homeMapApi = {
         orgId: ''
       },
       desc: '线路站点热力数据'
+    },
+    {
+      name: 'getLineNetInfos',
+      method: 'POST',
+      path: '/api/bus/line/getLineNetInfos',
+      mockPath: '/api/bus/line/getLineNetInfos',
+      params: {
+        orgId: ''
+      },
+      desc: '线路规划点'
     }
   ]
 }

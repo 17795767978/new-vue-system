@@ -190,7 +190,7 @@ export default {
                     'fontSize': 16
                   },
                   'show': true,
-                  'formatter': `上车人数:${item.payNumbers}`
+                  'formatter': `客流量(人次):${item.payNumbers}`
                 }
               }
             })
