@@ -294,5 +294,29 @@ export const passengerFlowApi = {
       },
       desc: '客流数据排查导出'
     }
+  ],
+  mptReport: [
+    {
+      name: 'passengerFlowMonthStatistics',
+      method: 'POST',
+      path: '/zhfxpt/passengerFlowMonthStatistics',
+      mockPath: '/zhfxpt/passengerFlowMonthStatistics',
+      params: {},
+      desc: '获取月报数据'
+    }, {
+      name: 'stationPassengerFlowStatistics',
+      method: 'POST',
+      path: '/zhfxpt/analysis/stationPassengerFlowStatistics',
+      mockPath: '/zhfxpt/analysis/stationPassengerFlowStatistics',
+      params: {},
+      desc: '站点客流量统计'
+    }, {
+      name: 'getStationPassengerFlowExport',
+      method: 'POST',
+      path: '/zhfxpt/analysis/getStationPassengerFlowExport',
+      mockPath: '/zhfxpt/analysis/getStationPassengerFlowExport',
+      params: {},
+      desc: '导出站点客流量统计'
+    }
   ]
 }

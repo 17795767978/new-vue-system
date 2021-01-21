@@ -170,6 +170,7 @@
     <el-form-item label="选择日期" v-if="isDateToNoDefault">
         <el-date-picker
           v-model="formInline.noDefaultDateArr"
+          value-format="yyyy-MM-dd"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -399,8 +400,7 @@ export default {
         selfNumber: '',
         statusType: '',
         onLine: '',
-        sortMethod: 0
-
+        sortMethod: 'getOnNumber'
       },
       searchStationOptions: [],
       stationOptions: [],
@@ -435,10 +435,10 @@ export default {
       downLoadLoading: false,
       searchTypeOptions: [
         {
-          value: 0,
+          value: 'getOnNumber',
           label: '上车人数'
         }, {
-          value: 1,
+          value: 'getOffNumber　',
           label: '下车人数'
         }
       ]
@@ -811,7 +811,7 @@ export default {
         onLine: '',
         statusType: '',
         noDefaultDateArr: [],
-        sortMethod: 0
+        sortMethod: 'getOnNumber'
       }
       let configData = {
         orgId: this.userId === '1' ? '' : this.userId,

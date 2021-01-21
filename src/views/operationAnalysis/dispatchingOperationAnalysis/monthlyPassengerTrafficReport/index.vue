@@ -2,14 +2,13 @@
   <div>
     <!-- 查询区 -->
     <Search
-      isOrg
-      isLine
       isDateToNoDefault
       isEmpty
       @configCheck="getSearch"
     />
     <!-- TABLE区 -->
     <el-table
+      v-loading="loading"
       :data="tableData"
       element-loading-text="拼命加载中"
       border
@@ -28,34 +27,40 @@
       </el-table-column>
       <el-table-column
         align="center"
-        prop="COMPY_NAME"
+        prop="orgName"
         label="公司"
-        width="120">
+        width="220">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="LINE_NAME"
+        prop="lineName"
         label="线路"
         width="120">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="UP_SUM"
+        prop="payTimeInterval"
+        label="日期"
+        width="220">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="sumUpPayNumber"
         label="上车总数">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="DOWM_SUM"
+        prop="sumDownPayNumber"
         label="下车总数">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="AVERAGE_UP_DAILY"
+        prop="avgUpPayNumber"
         label="平均上车/天">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="AVERAGE_DOWN_DAILY"
+        prop="avgDownPayNumber"
         label="平均下车/天">
       </el-table-column>
     </el-table>
@@ -67,6 +72,7 @@
       @current-change="handleCurrentChange"
       layout="prev, pager, next"
       :page-size="pageSize"
+      :pager-count="5"
       :total="total">
     </el-pagination>
     <span class="demonstration" style="float: right; margin-top: 20px; line-height: 36px;">共{{total}}条</span>
@@ -79,42 +85,52 @@ export default {
   components: { Search },
   methods: {
     getSearch (event) {
-
+      const noDefaultDateArr = event.noDefaultDateArr
+      this.params = {
+        'startDate': noDefaultDateArr[0] || null,
+        'endDate': noDefaultDateArr[1] || null
+      }
+      this.initList()
+    },
+    initList () {
+      this.pageNumber = 1
+      this.getList()
+    },
+    getList () {
+      this.loading = true
+      this.$api['mptReport.passengerFlowMonthStatistics'](Object.assign({}, this.params, {
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize
+      })).then(res => {
+        this.tableData = res.list
+        this.total = res.total
+        this.loading = false
+      }).catch(err => {
+        this.$message.error('数据获取失败')
+        console.log(err)
+        this.loading = false
+      })
     },
     /* 分页查询 */
     handleCurrentChange (val) {
       this.pageNumber = val
     }
   },
+  mounted () {
+    this.initList()
+  },
   data () {
     return {
+      isDisabled: false,
+      loading: false,
+      params: {
+        'startDate': null,
+        'endDate': null
+      },
       pageNumber: 1,
       pageSize: 15,
       total: 0,
-      tableData: [
-        {
-          COMPY_NAME: '富吉公交',
-          LINE_NAME: '101',
-          UP_SUM: '91179',
-          DOWM_SUM: '91133',
-          AVERAGE_UP_DAILY: '4342',
-          AVERAGE_DOWN_DAILY: '4340'
-        }, {
-          COMPY_NAME: '富吉公交',
-          LINE_NAME: '102',
-          UP_SUM: '91179',
-          DOWM_SUM: '91133',
-          AVERAGE_UP_DAILY: '4342',
-          AVERAGE_DOWN_DAILY: '4340'
-        }, {
-          COMPY_NAME: '富吉公交',
-          LINE_NAME: '102',
-          UP_SUM: '91179',
-          DOWM_SUM: '91133',
-          AVERAGE_UP_DAILY: '4342',
-          AVERAGE_DOWN_DAILY: '4340'
-        }
-      ]
+      tableData: []
     }
   }
 }
