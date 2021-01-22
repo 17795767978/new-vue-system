@@ -46,7 +46,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        prop="getOnNumber"
+        prop="getOffNumber"
         label="下车人数">
       </el-table-column>
       <el-table-column
@@ -94,9 +94,13 @@ export default {
       this.getList()
     },
     getList () {
+      if (this.params.startDate === null || this.params.endDate === null) {
+        this.$message.warning('查询日期不可为空')
+        return false
+      }
       this.loading = true
       this.$api['mptReport.stationPassengerFlowStatistics'](Object.assign({}, this.params, {
-        pageNumber: this.pageNumber,
+        pageNum: this.pageNumber,
         pageSize: this.pageSize
       })).then(res => {
         // this.tableData = res

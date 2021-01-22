@@ -438,7 +438,7 @@ export default {
           value: 'getOnNumber',
           label: '上车人数'
         }, {
-          value: 'getOffNumber　',
+          value: 'getOffNumber',
           label: '下车人数'
         }
       ]

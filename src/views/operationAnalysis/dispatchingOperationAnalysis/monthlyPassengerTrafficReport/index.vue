@@ -5,6 +5,8 @@
       isDateToNoDefault
       isEmpty
       @configCheck="getSearch"
+      isDownload
+      downLoadName="mptReport.getpassengerFlowMonthStatisticsExport"
     />
     <!-- TABLE区 -->
     <el-table
@@ -97,9 +99,13 @@ export default {
       this.getList()
     },
     getList () {
+      if (this.params.startDate === null || this.params.endDate === null) {
+        this.$message.warning('查询日期不可为空')
+        return false
+      }
       this.loading = true
       this.$api['mptReport.passengerFlowMonthStatistics'](Object.assign({}, this.params, {
-        pageNumber: this.pageNumber,
+        pageNum: this.pageNumber,
         pageSize: this.pageSize
       })).then(res => {
         this.tableData = res.list

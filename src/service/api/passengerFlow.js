@@ -317,6 +317,13 @@ export const passengerFlowApi = {
       mockPath: '/zhfxpt/analysis/getStationPassengerFlowExport',
       params: {},
       desc: '导出站点客流量统计'
+    }, {
+      name: 'getpassengerFlowMonthStatisticsExport',
+      method: 'POST',
+      path: '/zhfxpt/getpassengerFlowMonthStatisticsExport',
+      mockPath: '/zhfxpt/getpassengerFlowMonthStatisticsExport',
+      params: {},
+      desc: '月报导出接口'
     }
   ]
 }
