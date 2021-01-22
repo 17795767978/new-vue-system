@@ -104,12 +104,15 @@ export default {
         return false
       }
       this.loading = true
-      this.$api['mptReport.passengerFlowMonthStatistics'](Object.assign({}, this.params, {
-        pageNum: this.pageNumber,
-        pageSize: this.pageSize
-      })).then(res => {
-        this.tableData = res.list
-        this.total = res.total
+      this.$api['mptReport.passengerFlowMonthStatistics'](this.params).then(res => {
+        // this.tableData = res.list
+        var result = []
+        for (let i = 0; i < res.length; i += this.pageSize) {
+          result.push(res.slice(i, i + this.pageSize))
+        }
+        this.copyData = result
+        this.tableData = result[0]
+        this.total = res.length
         this.loading = false
       }).catch(err => {
         this.$message.error('数据获取失败')
@@ -120,6 +123,7 @@ export default {
     /* 分页查询 */
     handleCurrentChange (val) {
       this.pageNumber = val
+      this.tableData = this.copyData[val - 1]
     }
   },
   mounted () {

@@ -116,6 +116,7 @@ export default {
     /* 分页查询 */
     handleCurrentChange (val) {
       this.pageNumber = val
+      this.getList()
     }
   },
   data () {
