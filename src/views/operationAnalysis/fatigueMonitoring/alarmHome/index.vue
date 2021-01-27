@@ -148,10 +148,15 @@ export default {
         let url = `${WSAPI}/${sessionStorage.getItem('id')}`
         this.$refs.audioWrapper.pause()
         this.ws = new WebSocket(url)
-        this.ws.onopen = () => {
+        let urlArr = url.split('/')
+        console.log(urlArr)
+        this.ws.onopen = (res) => {
           console.log('===============安全运营报警推送开始=============')
           // Web Socket 已连接上，使用 send() 方法发送数据
-          this.ws.send('发送数据')
+          this.ws.send(JSON.stringify({
+            userId: urlArr[urlArr.length - 1],
+            clientId: urlArr[urlArr.length - 2]
+          }))
         }
         this.ws.onmessage = (evt) => {
           let data = evt.data
@@ -160,6 +165,14 @@ export default {
           if (this.diaData.length > 0) {
             this.$refs.audioWrapper.play()
           }
+          setTimeout(() => {
+            this.ws.send(JSON.stringify({
+              code: '200'
+            }))
+          }, 10)
+        }
+        this.ws.onerror = (err) => {
+          console.log(err)
         }
       } else {
         this.$message.error('浏览器不支持websocket')

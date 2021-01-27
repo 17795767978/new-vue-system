@@ -608,6 +608,16 @@ export const tiredMonitoringApi = {
       params: {
       },
       desc: '删除报警设置'
+    },
+    {
+      // downLoadName
+      name: 'equipmentAlarmExport',
+      method: 'POST',
+      path: '/safe/control/export',
+      mockPath: '/safe/control/export',
+      params: {
+      },
+      desc: '设备托管导出'
     }
   ]
 }

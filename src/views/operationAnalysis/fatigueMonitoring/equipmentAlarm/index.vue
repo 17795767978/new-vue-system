@@ -8,6 +8,8 @@
       isDeviceCode
       isDevType
       isEmpty
+      isDownload
+      :downLoadName="downLoadName"
       :rateParams="rateParams"
       @configCheck="getSearch" />
       <div class="table">
@@ -25,7 +27,8 @@ export default {
   data () {
     return {
       selectData: {},
-      rateParams: {}
+      rateParams: {},
+      downLoadName: 'tiredMonitoring.equipmentAlarmExport'
     }
   },
   mounted () {
