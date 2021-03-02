@@ -115,7 +115,7 @@ const TIME = 0.5 * 60 * 1000
 export default {
   data () {
     return {
-      title: '定线接驳车运营管理',
+      title: '雄安新区容东片区定线接驳车运营管理',
       backHome: '返回首页',
       fullScreen: '全屏展示',
       loading: false,
