@@ -88,7 +88,9 @@ export default {
       time: 0,
       tableObj: {},
       chartsObj: {},
-      isProcessingResult: false
+      isProcessingResult: false,
+      timer: null,
+      count: 0
     }
   },
   components: {
@@ -125,6 +127,13 @@ export default {
       handler (newV) {
 
       }
+    },
+    count (newV) {
+      console.log(newV)
+      if (newV > 90) {
+        this.ws.close()
+        this.openWs()
+      }
     }
   },
   methods: {
@@ -149,7 +158,6 @@ export default {
         this.$refs.audioWrapper.pause()
         this.ws = new WebSocket(url)
         let urlArr = url.split('/')
-        console.log(urlArr)
         this.ws.onopen = (res) => {
           console.log('===============安全运营报警推送开始=============')
           // Web Socket 已连接上，使用 send() 方法发送数据
@@ -159,6 +167,10 @@ export default {
           }))
         }
         this.ws.onmessage = (evt) => {
+          this.timer && clearInterval(this.timer)
+          this.timer = null
+          this.count = 0
+          this.timeoutTo()
           let data = evt.data
           this.wsData = JSON.parse(data)
           this.diaData = this.wsData
@@ -201,6 +213,11 @@ export default {
       this.tableObj = {}
       this._getApi(data, 'charts')
     },
+    timeoutTo () {
+      this.timer = setInterval(() => {
+        this.count++
+      }, 1000)
+    },
     _getApi (data, type) {
       let params = {
         orgId: this.currentData.orgId === '1' ? '' : this.currentData.orgId,
@@ -234,7 +251,9 @@ export default {
     this.closeWs()
     this.chartsObj = {}
     this.tableObj = {}
-    console.log(1231231313)
+    this.count = 0
+    clearInterval(this.timer)
+    this.timer = null
   }
 }
 </script>
