@@ -14,7 +14,7 @@
     "element-resize-detector": "^1.1.15",
     "element-ui": "^2.8.2",
     "lodash": "^4.17.11",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "progressbar.js": "^1.0.1",
     "screenfull": "^4.2.0",
     "v-charts": "^1.19.0",
